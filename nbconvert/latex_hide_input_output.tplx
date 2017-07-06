@@ -16,9 +16,10 @@
 	\usepackage{caption}
 	\captionsetup{justification=raggedright,
 	singlelinecheck=false,format=hang,labelfont={it,bf}} 
+	% Places the float at precisely the location in the LaTeX code
+	\usepackage{float}
 
 	\usepackage{hyperref}
-	\usepackage{cleveref} % clever naming of references MUST BE LOADED AFTER HYPERREF
 	
 	% bibliography formatting
 	\usepackage[numbers, square, super, sort&compress]{natbib}
@@ -59,7 +60,7 @@
 	\renewcommand{\sectionmark}[1]{\markleft{\thesection\ #1}}
 	\ofoot{\pagemark}
 	\cfoot{}
-	
+		
 	% or if not using koma:
 	%\usepackage{titlesec}
 	%\titleclass{\section}{top}
@@ -74,14 +75,18 @@
 % Author and Title from metadata
 ((* block maketitle *))
 
-	\begin{titlepage}
+  ((*- if nb.metadata["latex_metadata"]: -*))
 
+	\begin{titlepage}
+		
+	((*- if nb.metadata["latex_metadata"]["logo"]: -*))
 	\begin{flushright}
-		% a hack to briefly override what nbconvert sets
+		% a hack to briefly override what nbconvert sets as path
 	    \renewcommand{\includegraphics}[1]{\Oldincludegraphics[width=0.4\textwidth]{#1}}
-		\includegraphics{ICL_crest_logo}
+		\includegraphics{((( nb.metadata["latex_metadata"]["logo"] )))}
 	    \renewcommand{\includegraphics}[1]{\Oldincludegraphics[width=.8\maxwidth]{#1}}
 	\end{flushright}
+	((*- endif *))
 
 	\begin{center}
 
@@ -107,16 +112,23 @@
 		\begin{minipage}{0.39\textwidth}
 		\begin{flushleft} \Large
 		\emph{Author:}\\
-			Christopher \textsc{Sewell}\\
-			\href{mailto:c.sewell14@imperial.ac.uk}{c.sewell14@imperial.ac.uk}
+			((*- if nb.metadata["latex_metadata"]["author"]: -*))
+			((( nb.metadata["latex_metadata"]["author"] )))\\
+			((*- endif *))
+			((*- if nb.metadata["latex_metadata"]["email"]: -*))
+			\href{mailto:((( nb.metadata["latex_metadata"]["email"] )))}{((( nb.metadata["latex_metadata"]["email"] )))}
+			((*- endif *))
 		\end{flushleft}
 		\end{minipage}
 		\hspace{\fill}
 		\begin{minipage}{0.39\textwidth}
 		\begin{flushright} \Large
+			((*- if nb.metadata["latex_metadata"]["supervisors"]: -*))
 			\emph{Supervisors:} \\
-			Prof. Nic \textsc{Harrison}\\
-			Prof. Peter \textsc{Haynes}
+			((*- for i in nb.metadata["latex_metadata"]["supervisors"] *))
+			  ((( nb.metadata["latex_metadata"]["supervisors"][loop.index-1] )))
+			((*- endfor *))
+			((*- endif *))
 		\end{flushright}
 		\end{minipage}
 		\end{center}   
@@ -126,26 +138,42 @@
 
 	\begin{minipage}{0.8\textwidth}
 	\begin{center}  
-	\Large
-	Submitted in part fulfilment of the requirements for on-going assessment of the degree of Doctor of Philosophy
+	((*- if nb.metadata["latex_metadata"]["tagline"]: -*))
+	\LARGE{((( nb.metadata["latex_metadata"]["tagline"] )))}
+	((*- endif *))
 	\end{center} 
 	\end{minipage}
         
 	\vspace{0.8cm}
         
-	\Large
-	Department of Physics\\
-	Imperial College London\\
+	((*- if nb.metadata["latex_metadata"]["institution"]: -*))
+		((*- for i in nb.metadata["latex_metadata"]["supervisors"] *))
+		  \LARGE{((( nb.metadata["latex_metadata"]["institution"][loop.index-1] )))}\\
+		((*- endfor *))
+	((*- endif *))
+
+	\vspace{0.4cm}
+
 	\today
         
 	\end{center}
 	\end{titlepage}	
+
+ ((*- else -*))
+ 
+	\title{((( resources.metadata.name | escape_latex )))}
+	\date{\today}
+	\maketitle	
+	
+ ((*- endif *))
+ 
 ((* endblock maketitle *))
 
 ((* block abstract *))\tableofcontents((* endblock abstract *))
 
 ((* block bibliography *))
-\bibliographystyle{plainnat}
+% sort citations by order of first appearance
+\bibliographystyle{unsrtnat}
 \bibliography{bibliography}
 ((* endblock bibliography *))
 
@@ -200,43 +228,99 @@
 % ===================
 
 ((*- block data_png -*))
-((*- if cell.metadata.latex_figure: -*))
-	((*- if cell.metadata.latex_figure.widefigure: -*))
-	    ((( draw_widefigure_with_caption(output.metadata.filenames['image/png'], cell.metadata.latex_figure.caption, cell.metadata.latex_figure.label) )))
-	((*- else -*))	
-		((( draw_figure_with_caption(output.metadata.filenames['image/png'], cell.metadata.latex_figure.caption, cell.metadata.latex_figure.label) )))
+	((*- if cell.metadata.latex_figure: -*))
+		((*- if cell.metadata.latex_figure.widefigure: -*))
+			((*- if cell.metadata.latex_figure.placement: -*))
+			    ((( draw_widefigure_with_place(output.metadata.filenames['image/png'], 
+				cell.metadata.latex_figure.caption, cell.metadata.latex_figure.label,
+				cell.metadata.latex_figure.placement) )))
+			((*- else -*))	
+			    ((( draw_widefigure_with_caption(output.metadata.filenames['image/png'], 
+				cell.metadata.latex_figure.caption, cell.metadata.latex_figure.label) )))
+			((*- endif *))
+		((*- else -*))	
+			((*- if cell.metadata.latex_figure.placement: -*))
+			    ((( draw_figure_with_place(output.metadata.filenames['image/png'], 
+				cell.metadata.latex_figure.caption, cell.metadata.latex_figure.label,
+				cell.metadata.latex_figure.placement) )))
+			((*- else -*))	
+			    ((( draw_figure_with_caption(output.metadata.filenames['image/png'], 
+				cell.metadata.latex_figure.caption, cell.metadata.latex_figure.label) )))
+			((*- endif *))
+		((*- endif *))
 	((*- endif *))
-((*- endif *))
 ((*- endblock -*))
 
 ((*- block data_jpg -*))
-((*- if cell.metadata.latex_figure: -*))
-	((*- if cell.metadata.latex_figure.widefigure: -*))
-	    ((( draw_widefigure_with_caption(output.metadata.filenames['image/jpeg'], cell.metadata.latex_figure.caption, cell.metadata.latex_figure.label) )))
-	((*- else -*))	
-		((( draw_figure_with_caption(output.metadata.filenames['image/jpeg'], cell.metadata.latex_figure.caption, cell.metadata.latex_figure.label) )))
+	((*- if cell.metadata.latex_figure: -*))
+		((*- if cell.metadata.latex_figure.widefigure: -*))
+			((*- if cell.metadata.latex_figure.placement: -*))
+			    ((( draw_widefigure_with_place(output.metadata.filenames['image/jpeg'], 
+				cell.metadata.latex_figure.caption, cell.metadata.latex_figure.label,
+				cell.metadata.latex_figure.placement) )))
+			((*- else -*))	
+			    ((( draw_widefigure_with_caption(output.metadata.filenames['image/jpeg'], 
+				cell.metadata.latex_figure.caption, cell.metadata.latex_figure.label) )))
+			((*- endif *))
+		((*- else -*))	
+			((*- if cell.metadata.latex_figure.placement: -*))
+			    ((( draw_figure_with_place(output.metadata.filenames['image/jpeg'], 
+				cell.metadata.latex_figure.caption, cell.metadata.latex_figure.label,
+				cell.metadata.latex_figure.placement) )))
+			((*- else -*))	
+			    ((( draw_figure_with_caption(output.metadata.filenames['image/jpeg'], 
+				cell.metadata.latex_figure.caption, cell.metadata.latex_figure.label) )))
+			((*- endif *))
+		((*- endif *))
 	((*- endif *))
-((*- endif *))
 ((*- endblock -*))
 
 ((*- block data_svg -*))
-((*- if cell.metadata.latex_figure: -*))
-	((*- if cell.metadata.latex_figure.widefigure: -*))
-	    ((( draw_widefigure_with_caption(output.metadata.filenames['image/svg+xml'], cell.metadata.latex_figure.caption, cell.metadata.latex_figure.label) )))
-	((*- else -*))	
-		((( draw_figure_with_caption(output.metadata.filenames['image/svg+xml'], cell.metadata.latex_figure.caption, cell.metadata.latex_figure.label) )))
+	((*- if cell.metadata.latex_figure: -*))
+		((*- if cell.metadata.latex_figure.widefigure: -*))
+			((*- if cell.metadata.latex_figure.placement: -*))
+			    ((( draw_widefigure_with_place(output.metadata.filenames['image/svg+xml'], 
+				cell.metadata.latex_figure.caption, cell.metadata.latex_figure.label,
+				cell.metadata.latex_figure.placement) )))
+			((*- else -*))	
+			    ((( draw_widefigure_with_caption(output.metadata.filenames['image/svg+xml'], 
+				cell.metadata.latex_figure.caption, cell.metadata.latex_figure.label) )))
+			((*- endif *))
+		((*- else -*))	
+			((*- if cell.metadata.latex_figure.placement: -*))
+			    ((( draw_figure_with_place(output.metadata.filenames['image/svg+xml'], 
+				cell.metadata.latex_figure.caption, cell.metadata.latex_figure.label,
+				cell.metadata.latex_figure.placement) )))
+			((*- else -*))	
+			    ((( draw_figure_with_caption(output.metadata.filenames['image/svg+xml'], 
+				cell.metadata.latex_figure.caption, cell.metadata.latex_figure.label) )))
+			((*- endif *))
+		((*- endif *))
 	((*- endif *))
-((*- endif *))
 ((*- endblock -*))
 
 ((*- block data_pdf -*))
-((*- if cell.metadata.latex_figure: -*))
-	((*- if cell.metadata.latex_figure.widefigure: -*))
-	    ((( draw_widefigure_with_caption(output.metadata.filenames['application/pdf'], cell.metadata.latex_figure.caption, cell.metadata.latex_figure.label) )))
-	((*- else -*))	
-		((( draw_figure_with_caption(output.metadata.filenames['application/pdf'], cell.metadata.latex_figure.caption, cell.metadata.latex_figure.label) )))
+	((*- if cell.metadata.latex_figure: -*))
+		((*- if cell.metadata.latex_figure.widefigure: -*))
+			((*- if cell.metadata.latex_figure.placement: -*))
+			    ((( draw_widefigure_with_place(output.metadata.filenames['application/pdf'], 
+				cell.metadata.latex_figure.caption, cell.metadata.latex_figure.label,
+				cell.metadata.latex_figure.placement) )))
+			((*- else -*))	
+			    ((( draw_widefigure_with_caption(output.metadata.filenames['application/pdf'], 
+				cell.metadata.latex_figure.caption, cell.metadata.latex_figure.label) )))
+			((*- endif *))
+		((*- else -*))	
+			((*- if cell.metadata.latex_figure.placement: -*))
+			    ((( draw_figure_with_place(output.metadata.filenames['application/pdf'], 
+				cell.metadata.latex_figure.caption, cell.metadata.latex_figure.label,
+				cell.metadata.latex_figure.placement) )))
+			((*- else -*))	
+			    ((( draw_figure_with_caption(output.metadata.filenames['application/pdf'], 
+				cell.metadata.latex_figure.caption, cell.metadata.latex_figure.label) )))
+			((*- endif *))
+		((*- endif *))
 	((*- endif *))
-((*- endif *))
 ((*- endblock -*))
 
 % Draw a figure using the graphicx package.
@@ -263,13 +347,43 @@
 ((*- endblock figure_wide -*))
 ((*- endmacro *))
 
+% Draw a figure using the graphicx package.
+((* macro draw_figure_with_place(filename, caption, label, place) -*))
+((* set filename = filename | posix_path *))
+((*- block figure_place scoped -*))
+    \begin{figure}[((( place )))]
+        \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{((( filename )))}\end{center}
+        \caption{((( caption )))}
+        \label{((( label )))}
+    \end{figure}
+((*- endblock figure_place -*))
+((*- endmacro *))
+
+% Draw a figure using the graphicx package.
+((* macro draw_widefigure_with_place(filename, caption, label, place) -*))
+((* set filename = filename | posix_path *))
+((*- block figure_wide_place scoped -*))
+    \begin{figure*}[((( place )))]
+        \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{((( filename )))}\end{center}
+        \caption{((( caption )))}
+        \label{((( label )))}
+    \end{figure*}
+((*- endblock figure_wide_place -*))
+((*- endmacro *))
+
 % add table and equation captions
 % ===================
 
 ((* block data_latex -*))
 ((*- if cell.metadata.latex_table: -*))
-    ((( table_with_caption(output.data['text/latex'],
-	cell.metadata.latex_table.caption, cell.metadata.latex_table.label) )))
+	((*- if cell.metadata.latex_table.placement: -*))
+	    ((( table_with_placement(output.data['text/latex'],
+		cell.metadata.latex_table.caption, cell.metadata.latex_table.label,
+		cell.metadata.latex_table.placement) )))
+	((*- else -*))	
+	    ((( table_with_caption(output.data['text/latex'],
+		cell.metadata.latex_table.caption, cell.metadata.latex_table.label) )))
+	((*- endif *))
 ((*- elif cell.metadata.latex_equation: -*))
 	((*- if cell.metadata.latex_equation.label: -*))
     	((( equation_with_label(output.data['text/latex'],
@@ -291,6 +405,17 @@
     \end{table}
 ((*- endblock table -*))
 ((*- endmacro *))
+% same but with placement argument
+((* macro table_with_placement(table, caption, label, placement) -*))
+((*- block table_place scoped -*))
+    \begin{table}[((( placement )))]
+        \caption{((( caption )))}
+        \label{((( label )))}
+		\centering
+		((( table )))
+    \end{table}
+((*- endblock table_place -*))
+((*- endmacro *))
 
 % label an equation.
 ((* macro equation_without_label(eqn) -*))
@@ -304,8 +429,7 @@
 % label an equation.
 ((* macro equation_with_label(eqn, label) -*))
 ((*- block equation_label scoped -*))
-    \begin{equation}
-        \label{((( label )))}
+    \begin{equation}\label{((( label )))}
 		((( eqn | remove_dollars )))
     \end{equation}
 ((*- endblock equation_label -*))
