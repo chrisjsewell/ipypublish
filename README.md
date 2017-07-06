@@ -38,9 +38,6 @@ For tables, enter in cell metadata:
 	  }
 
 label is optional
-NB: two dollar signs are required, i.e. 
-
-	\$$equation\$$
 
 ## Citations
 
