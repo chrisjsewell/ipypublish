@@ -9,9 +9,11 @@ See ![notebooks/Example.ipynb](converted/Example.pdf) and ![converted/Example.pd
 
 1. Create a notebook with some content!
 2. optionaly create a .bib file and logo image
-3. Adjust the notebook and cell metadata. The default latex template (latex_hide_input_output.tplx) outputs all raw/markdown cells (unless tagged latex_ignore), and then only output cells with figure, table or equation tags.
+3. Adjust the notebook and cell metadata. 
 4. Run the run_nbconvert.sh script for either the specific notebook, or a folder containing multiple notebooks. 
 5. A converted folder will be created, into which final .tex .pdf and _viewpdf.html files will be output, named by the notebook or folder input
+
+The default latex template (latex_hide_input_output.tplx) outputs all raw/markdown cells (unless tagged latex_ignore), and then only output cells with latex_figure, latex_table or latex_equation meta tags (see Metadata Tags).
 
 ## Setup
 
@@ -63,6 +65,7 @@ For titlepage, enter in notebook metadata:
 - all keys are optional
 - if there is no title, then the notebook filename will be used
 - if run_nbconvert.sh is called on a folder, then the meta data from the first notebook will be used
+- logo should be the name (without extension) of the logo, then use e.g. `run_nbconvert.sh -l logos/logo_example.png Example.ipynb`
 
 To ignore a markdown cell:
 
