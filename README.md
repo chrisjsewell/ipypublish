@@ -67,7 +67,7 @@ The current `nbconvert --to pdf` does not correctly resolve references and citat
  
 ## Metadata Tags
 
-For titlepage, enter in notebook metadata:
+For **titlepage**, enter in notebook metadata:
 
   "latex_metadata": {
     "author": "Authors Name",
@@ -91,11 +91,11 @@ For titlepage, enter in notebook metadata:
 - if run_nbconvert.sh is called on a folder, then the meta data from the first notebook will be used
 - logo should be the name (without extension) of the logo, then use e.g. `run_nbconvert.sh -l logos/logo_example.png Example.ipynb`
 
-To ignore a markdown cell:
+To  **ignore a markdown cell **:
 
 	"latex_ignore" : true
 
-For figures, enter in cell metadata:
+For  **figures**, enter in cell metadata:
 
 	  "latex_figure": {
 	    "caption": "Figure caption.",
@@ -107,7 +107,7 @@ For figures, enter in cell metadata:
 - `placement` is optional and constitutes using a placement arguments for the figure (e.g. \begin{figure}[H]). See https://www.sharelatex.com/learn/Positioning_images_and_tables.
 - `widefigure` is optional and constitutes expanding the figure to the page width (i.e. \begin{figure*}) (placement arguments will then be ignored)
 
-For tables, enter in cell metadata:
+For  **tables**, enter in cell metadata:
 
 	  "latex_table": {
 	    "caption": "Table caption.",
@@ -120,7 +120,7 @@ For tables, enter in cell metadata:
 - `alternate` is optional and constitutes using alternating colors for the table rows (e.g. \rowcolors{2}{gray!25}{white}). See https://tex.stackexchange.com/a/5365/107738.
 
 
-For equations, enter in cell metadata:
+For  **equations**, enter in cell metadata:
 
 	  "latex_equation": {
 	    "label": "eqn:elabel"
