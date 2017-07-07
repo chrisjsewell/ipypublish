@@ -5,6 +5,15 @@ A workflow for creating/editing publication ready scientific reports from one or
 
 See ![notebooks/Example.ipynb](converted/Example.pdf) and ![converted/Example.pdf](converted/Example.pdf) for an example of the potential input/output.
 
+- [Workflow](#worklow)
+- [Setup](#setup)
+- [Setting up a Notebook ](#setting-up-a-notebook)
+- [Running run_nbconvert script](#running_run_nbconvert-script)
+- [Metadata Tags](#metadata-tags)
+- [Citations and Bibliography](#citations-and-bibliography)
+- [Miscellaneous](#miscellaneous)
+- [Acknowledgements](#Acknowledgements)
+
 ## Workflow
 
 1. Create a notebook with some content!
@@ -42,7 +51,7 @@ To use this script, in the first cell of a notebook, insert:
 	
 It is recommended that you also set this cell as an initialisation cell (i.e. have `"init_cell": true` in the metadata)
 
-## run_nbconvert script
+## Running run_nbconvert script
 
 To see all options for this script:
 
