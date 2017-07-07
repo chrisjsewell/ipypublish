@@ -6,7 +6,7 @@ A workflow for creating/editing publication ready scientific reports from one or
 See ![notebooks/Example.ipynb](converted/Example.pdf) and ![converted/Example.pdf](converted/Example.pdf) for an example of the potential input/output.
 
 - [Workflow](#worklow)
-- [Setup](#setup)
+- [Setting up the environment](#setting_up_the_environment)
 - [Setting up a Notebook ](#setting-up-a-notebook)
 - [Running run_nbconvert script](#running_run_nbconvert-script)
 - [Metadata Tags](#metadata-tags)
@@ -24,7 +24,7 @@ See ![notebooks/Example.ipynb](converted/Example.pdf) and ![converted/Example.pd
 
 The default latex template (latex_hide_input_output.tplx) outputs all raw/markdown cells (unless tagged latex_ignore), and then only output cells with latex_figure, latex_table or latex_equation meta tags (see Metadata Tags).
 
-## Setup
+## Setting up the environment
 
 Using [Conda](https://conda.io/docs/) is recommended:
 
