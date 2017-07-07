@@ -6,13 +6,13 @@ A workflow for creating/editing publication ready scientific reports from one or
 See ![notebooks/Example.ipynb](converted/Example.pdf) and ![converted/Example.pdf](converted/Example.pdf) for an example of the potential input/output.
 
 - [Workflow](#worklow)
-- [Setting up the environment](#setting_up_the_environment)
+- [Setting up the environment](#setting-up-the-environment)
 - [Setting up a Notebook ](#setting-up-a-notebook)
-- [Running run_nbconvert script](#running_run_nbconvert-script)
+- [Running run_nbconvert script](#running-run_nbconvert-script)
 - [Metadata Tags](#metadata-tags)
 - [Citations and Bibliography](#citations-and-bibliography)
 - [Miscellaneous](#miscellaneous)
-- [Acknowledgements](#Acknowledgements)
+- [Acknowledgements](#acknowledgements)
 
 ## Workflow
 
@@ -85,7 +85,7 @@ For **titlepage**, enter in notebook metadata:
     ],
     "logo": "logo_example"
   },
-	
+
 - all keys are optional
 - if there is no title, then the notebook filename will be used
 - if run_nbconvert.sh is called on a folder, then the meta data from the first notebook will be used
