@@ -91,7 +91,7 @@ For **titlepage**, enter in notebook metadata:
 - if run_nbconvert.sh is called on a folder, then the meta data from the first notebook will be used
 - logo should be the name (without extension) of the logo, then use e.g. `run_nbconvert.sh -l logos/logo_example.png Example.ipynb`
 
-To  **ignore a markdown cell **:
+To  **ignore a markdown cell**:
 
 	"latex_ignore" : true
 
