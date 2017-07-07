@@ -69,22 +69,26 @@ The current `nbconvert --to pdf` does not correctly resolve references and citat
 
 For **titlepage**, enter in notebook metadata:
 
-  "latex_metadata": {
-    "author": "Authors Name",
-    "email": "authors@email.com",
-    "supervisors": [
-      "First Supervisor",
-      "Second Supervisor"
-    ],
-    "title": "Main-Title",
-    "subtitle": "Sub-Title",
-    "tagline": "A tagline for the report.",
-    "institution": [
-      "Institution1",
-      "Institution2"
-    ],
-    "logo": "logo_example"
-  },
+```json
+{
+	"latex_metadata": {
+	"author": "Authors Name",
+	"email": "authors@email.com",
+	"supervisors": [
+	"First Supervisor",
+	"Second Supervisor"
+	],
+	"title": "Main-Title",
+	"subtitle": "Sub-Title",
+	"tagline": "A tagline for the report.",
+	"institution": [
+	"Institution1",
+	"Institution2"
+	],
+	"logo": "logo_example"
+	}
+}
+```
 
 - all keys are optional
 - if there is no title, then the notebook filename will be used
