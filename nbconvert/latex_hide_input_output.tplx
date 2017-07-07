@@ -16,8 +16,11 @@
 	\usepackage{caption}
 	\captionsetup{justification=raggedright,
 	singlelinecheck=false,format=hang,labelfont={it,bf}} 
-	% Places the float at precisely the location in the LaTeX code
+	% Places the float at precisely the location in the LaTeX code (with H)
 	\usepackage{float}
+	
+	% for use of \rowcolors to create tables with alternating colors
+	\usepackage[table]{xcolor} 
 
 	\usepackage{hyperref}
 	
@@ -375,15 +378,29 @@
 % ===================
 
 ((* block data_latex -*))
+
 ((*- if cell.metadata.latex_table: -*))
 	((*- if cell.metadata.latex_table.placement: -*))
-	    ((( table_with_placement(output.data['text/latex'],
-		cell.metadata.latex_table.caption, cell.metadata.latex_table.label,
-		cell.metadata.latex_table.placement) )))
+		((*- if cell.metadata.latex_table.alternate: -*))
+		    ((( table_with_place_alt(output.data['text/latex'],
+			cell.metadata.latex_table.caption, cell.metadata.latex_table.label,
+			cell.metadata.latex_table.placement, cell.metadata.latex_table.alternate) )))
+		((*- else -*))	
+		    ((( table_with_placement(output.data['text/latex'],
+			cell.metadata.latex_table.caption, cell.metadata.latex_table.label,
+			cell.metadata.latex_table.placement) )))
+		((*- endif *))
 	((*- else -*))	
-	    ((( table_with_caption(output.data['text/latex'],
-		cell.metadata.latex_table.caption, cell.metadata.latex_table.label) )))
+		((*- if cell.metadata.latex_table.alternate: -*))
+		    ((( table_with_alt(output.data['text/latex'],
+			cell.metadata.latex_table.caption, cell.metadata.latex_table.label,
+			cell.metadata.latex_table.alternate) )))
+		((*- else -*))	
+		    ((( table_with_caption(output.data['text/latex'],
+			cell.metadata.latex_table.caption, cell.metadata.latex_table.label) )))
+		((*- endif *))
 	((*- endif *))
+
 ((*- elif cell.metadata.latex_equation: -*))
 	((*- if cell.metadata.latex_equation.label: -*))
     	((( equation_with_label(output.data['text/latex'],
@@ -392,6 +409,7 @@
     	((( equation_without_label(output.data['text/latex']) )))
 	((*- endif *))	
 ((*- endif *))
+
 ((* endblock data_latex *))
 
 % caption and label a table.
@@ -415,6 +433,31 @@
 		((( table )))
     \end{table}
 ((*- endblock table_place -*))
+((*- endmacro *))
+
+% caption and label a table, with alternating colors
+((* macro table_with_alt(table, caption, label, altcolor) -*))
+((*- block table_alt scoped -*))
+    \begin{table}
+        \caption{((( caption )))}
+        \label{((( label )))}
+		\centering
+		\rowcolors{2}{(((altcolor)))}{white}
+		((( table )))
+    \end{table}
+((*- endblock table_alt -*))
+((*- endmacro *))
+% same but with placement argument, with alternating colors
+((* macro table_with_place_alt(table, caption, label, placement, altcolor) -*))
+((*- block table_place_alt scoped -*))
+    \begin{table}[((( placement )))]
+        \caption{((( caption )))}
+        \label{((( label )))}
+		\centering
+		\rowcolors{2}{(((altcolor)))}{white}
+		((( table )))
+    \end{table}
+((*- endblock table_place_alt -*))
 ((*- endmacro *))
 
 % label an equation.

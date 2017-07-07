@@ -91,9 +91,12 @@ For tables, enter in cell metadata:
 	    "caption": "Table caption.",
 	    "label": "tbl:tlabel"
 	    "placement": "H"
+        "alternate": "gray!20"
 	  }
 
 - `placement` is optional and constitutes using a placement arguments for the table (e.g. \begin{table}[H]). See https://www.sharelatex.com/learn/Positioning_images_and_tables.
+- `alternate` is optional and constitutes using alternating colors for the table rows (e.g. \rowcolors{2}{gray!25}{white}). See https://tex.stackexchange.com/a/5365/107738.
+
 
 For equations, enter in cell metadata:
 
