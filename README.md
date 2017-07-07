@@ -29,6 +29,19 @@ For a more extensive setup of useful packages:
 
 	conda create --name ipyreport -c conda-forge -c matsci --file conda_packages.txt
 
+## Setting up a Notebook 
+
+For improved latex/pdf output, ![notebooks/ipynb_latex_setup.py](notebooks/ipynb_latex_setup.py) contains import and setup code for the notebook and a number of common packages and functions, including:
+
+- numpy, matplotlib, pandas, sympy, ...
+- `images_hconcat`, `images_vconcat` and `images_gridconcat` functions, which use the PIL/Pillow package to create a single image from multiple images (with specified arrangement)
+
+To use this script, in the first cell of a notebook, insert:
+
+	from ipynb_latex_setup import *
+	
+It is recommended that you also set this cell as an initialisation cell (i.e. have `"init_cell": true` in the metadata)
+
 ## run_nbconvert script
 
 To see all options for this script:
@@ -124,66 +137,6 @@ Can use:
 	<cite data-cite="kirkeminde_thermodynamic_2012">(Kirkeminde, 2012)</cite> 
 	
 to make it look better in html, but not specifically available for drag and drop in Zotero 
-
-## Notebook code for improved latex/pdf output
-
-	%matplotlib inline
-	%config InlineBackend.figure_format = 'svg'
-	import matplotlib as mpl
-	mpl.rcParams['figure.figsize'] = (5.0, 2.5)
-	import matplotlib.pyplot as plt
-
-	import pandas as pd
-	import numpy as np
-	pd.set_option('display.latex.repr',True)
-	pd.set_option('display.latex.longtable',False)
-	pd.set_option('display.latex.escape',False)
-	import sympy
-	sympy.init_printing(use_latex=True)
-
-	from IPython.display import Image, Latex
-
-	from PIL import Image as PImage
-	def read_images(paths):
-	    return [PImage.open(i).convert("RGBA") for i in paths]
-	def images_hconcat(images, width=700,height=700, 
-	                   gap=0,aspaths=True):
-		""" concatenate multiple images horizontally """
-	    images = read_images(images) if aspaths else images
-	    widths, heights = zip(*(i.size for i in images))
-	    total_width = sum(widths) + gap*len(images)
-	    max_height = max(heights)
-	    new_im = PImage.new('RGBA', (total_width, max_height))
-	    x_offset = 0
-	    for im in images:
-	        new_im.paste(im, (x_offset,0),mask=im)
-	        x_offset += im.size[0] + gap
-	    new_im.thumbnail((width,height), PImage.ANTIALIAS)
-	    return new_im
-	def images_vconcat(images, width=700,height=700, 
-	                   gap=0, aspaths=True):
-		""" concatenate multiple images vertically """
-	    images = read_images(images) if aspaths else images
-	    widths, heights = zip(*(i.size for i in images))
-	    max_width = max(widths)
-	    total_height = sum(heights) + gap*len(images)
-	    new_im = PImage.new('RGBA', (max_width, total_height))
-	    y_offset = 0
-	    for im in images:
-	        new_im.paste(im, (0,y_offset),mask=im)
-	        y_offset += im.size[1] + gap
-	    new_im.thumbnail((width,height), PImage.ANTIALIAS)
-	    return new_im
-	def images_gridconcat(pathslist,width=700,height=700,
-	                     aspaths=True,hgap=0,vgap=0):
-		""" concatenate multiple images in a grid 
-		
-		pathslist : list of lists
-		"""
-	    himages = [images_hconcat(paths,gap=hgap,aspaths=aspaths) for paths in pathslist]
-	    new_im = images_vconcat(himages,gap=vgap,aspaths=False)
-	    new_im.thumbnail((width,height), PImage.ANTIALIAS)
-	    return new_im
 	
 ## Miscellaneous
 
