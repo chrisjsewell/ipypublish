@@ -116,6 +116,8 @@ Using Zotero's Firefox plugin and https://github.com/retorquere/zotero-better-bi
 - \usepackage{doi} turns the DOI numbers into url links
 
     - in Zotero-Better-Bibtex I have the option set to only export DOI, if both DOI and URL are present.
+	
+Please note, at the time of writing, Better BibTeX does not support Zotero 5.0 ([issue#555](https://github.com/retorquere/zotero-better-bibtex/issues/555)). For now I have turned off auto-updates of Zotero, though this is probably not wise for long ([Zotero 5 Discussion](https://forums.zotero.org/discussion/comment/277434/#Comment_277434)).
 
 Can use: 
 
