@@ -181,7 +181,6 @@
 ((* endblock bibliography *))
 
 % only show cells that are figures, or tables
-% Todo sympy formula
 
 ((* block input_group *))
 ((* endblock input_group *))
@@ -213,8 +212,8 @@
 ((*- endif *))
 ((* endblock display_data *))
 
-((* block execute_result scoped *))
 % remove Out[] prompts
+((* block execute_result scoped *))
 ((* block data_priority scoped *))
 ((*- if cell.metadata.latex_figure: -*))
 ((( super() )))
@@ -226,6 +225,23 @@
 ((* endblock *))
 ((* endblock execute_result *))
 
+% get table and equation captions
+% ===================
+
+((* macro caption_variable(name,caption) -*))
+((*- block caption_variable scoped -*))
+\newcommand{\ky(((name)))}{(((caption)))}
+((*- endblock caption_variable -*))
+((*- endmacro *))
+
+((* block markdowncell -*))
+((*- if cell.metadata.latex_caption: -*))
+((( caption_variable(cell.metadata.latex_caption | create_key,
+                     cell.source | first_para ) )))
+((*- else -*))
+((( super() )))
+((*- endif *))
+((* endblock markdowncell *))
 
 % add figure captions
 % ===================
@@ -326,13 +342,21 @@
 	((*- endif *))
 ((*- endblock -*))
 
+% add table and equation captions
+% ===================
+
 % Draw a figure using the graphicx package.
 ((* macro draw_figure_with_caption(filename, caption, label) -*))
 ((* set filename = filename | posix_path *))
+((* set ckey = label | create_key *))
 ((*- block figure scoped -*))
     \begin{figure}
         \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{((( filename )))}\end{center}
-        \caption{((( caption )))}
+		\ifdefined\ky((( ckey )))
+		 \caption{\ky((( ckey )))}
+		\else
+		 \caption{((( caption )))}
+		\fi
         \label{((( label )))}
     \end{figure}
 ((*- endblock figure -*))
@@ -341,10 +365,15 @@
 % Draw a figure using the graphicx package.
 ((* macro draw_widefigure_with_caption(filename, caption, label) -*))
 ((* set filename = filename | posix_path *))
+((* set ckey = label | create_key *))
 ((*- block figure_wide scoped -*))
     \begin{figure*}
         \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{((( filename )))}\end{center}
-        \caption{((( caption )))}
+		\ifdefined\ky((( ckey )))
+		 \caption{\ky((( ckey )))}
+		\else
+		 \caption{((( caption )))}
+		\fi
         \label{((( label )))}
     \end{figure*}
 ((*- endblock figure_wide -*))
@@ -353,10 +382,15 @@
 % Draw a figure using the graphicx package.
 ((* macro draw_figure_with_place(filename, caption, label, place) -*))
 ((* set filename = filename | posix_path *))
+((* set ckey = label | create_key *))
 ((*- block figure_place scoped -*))
     \begin{figure}[((( place )))]
         \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{((( filename )))}\end{center}
-        \caption{((( caption )))}
+		\ifdefined\ky((( ckey )))
+		 \caption{\ky((( ckey )))}
+		\else
+		 \caption{((( caption )))}
+		\fi
         \label{((( label )))}
     \end{figure}
 ((*- endblock figure_place -*))
@@ -365,17 +399,22 @@
 % Draw a figure using the graphicx package.
 ((* macro draw_widefigure_with_place(filename, caption, label, place) -*))
 ((* set filename = filename | posix_path *))
+((* set ckey = label | create_key *))
 ((*- block figure_wide_place scoped -*))
     \begin{figure*}[((( place )))]
         \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{((( filename )))}\end{center}
-        \caption{((( caption )))}
+		\ifdefined\ky((( ckey )))
+		 \caption{\ky((( ckey )))}
+		\else
+		 \caption{((( caption )))}
+		\fi
         \label{((( label )))}
     \end{figure*}
 ((*- endblock figure_wide_place -*))
 ((*- endmacro *))
 
-% add table and equation captions
-% ===================
+% equations
+% =========
 
 ((* block data_latex -*))
 
@@ -414,9 +453,14 @@
 
 % caption and label a table.
 ((* macro table_with_caption(table, caption, label) -*))
+((* set ckey = label | create_key *))
 ((*- block table scoped -*))
     \begin{table}
-        \caption{((( caption )))}
+		\ifdefined\ky((( ckey )))
+		 \caption{\ky((( ckey )))}
+		\else
+		 \caption{((( caption )))}
+		\fi
         \label{((( label )))}
 		\centering
 		((( table )))
@@ -425,9 +469,14 @@
 ((*- endmacro *))
 % same but with placement argument
 ((* macro table_with_placement(table, caption, label, placement) -*))
+((* set ckey = label | create_key *))
 ((*- block table_place scoped -*))
     \begin{table}[((( placement )))]
-        \caption{((( caption )))}
+		\ifdefined\ky((( ckey )))
+		 \caption{\ky((( ckey )))}
+		\else
+		 \caption{((( caption )))}
+		\fi
         \label{((( label )))}
 		\centering
 		((( table )))
@@ -437,9 +486,14 @@
 
 % caption and label a table, with alternating colors
 ((* macro table_with_alt(table, caption, label, altcolor) -*))
+((* set ckey = label | create_key *))
 ((*- block table_alt scoped -*))
     \begin{table}
-        \caption{((( caption )))}
+		\ifdefined\ky((( ckey )))
+		 \caption{\ky((( ckey )))}
+		\else
+		 \caption{((( caption )))}
+		\fi
         \label{((( label )))}
 		\centering
 		\rowcolors{2}{(((altcolor)))}{white}
@@ -449,9 +503,14 @@
 ((*- endmacro *))
 % same but with placement argument, with alternating colors
 ((* macro table_with_place_alt(table, caption, label, placement, altcolor) -*))
+((* set ckey = label | create_key *))
 ((*- block table_place_alt scoped -*))
     \begin{table}[((( placement )))]
-        \caption{((( caption )))}
+		\ifdefined\ky((( ckey )))
+		 \caption{\ky((( ckey )))}
+		\else
+		 \caption{((( caption )))}
+		\fi
         \label{((( label )))}
 		\centering
 		\rowcolors{2}{(((altcolor)))}{white}
@@ -477,5 +536,6 @@
     \end{equation}
 ((*- endblock equation_label -*))
 ((*- endmacro *))
+
 
 

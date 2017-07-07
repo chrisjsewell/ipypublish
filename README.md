@@ -10,6 +10,7 @@ See ![notebooks/Example.ipynb](converted/Example.pdf) and ![converted/Example.pd
 - [Setting up a Notebook ](#setting-up-a-notebook)
 - [Running run_nbconvert script](#running-run_nbconvert-script)
 - [Metadata Tags](#metadata-tags)
+    - [**NEW** Captions in a Markdown cell](#captions-in-a-markdown-cell)
 - [Citations and Bibliography](#citations-and-bibliography)
 - [Miscellaneous](#miscellaneous)
 - [Acknowledgements](#acknowledgements)
@@ -131,6 +132,44 @@ For  **equations**, enter in cell metadata:
 	  }
 
 label is optional
+
+### Captions in a Markdown cell
+
+Especially for long captions, it would be prefered that captions can be viewed and edited in a notebook Markdown cell, rather than hidden in the metadata. Enter the following (experimental) approach, implemented in `latex_hide_input_output`.
+
+If a **markdown cell** has the metadata tag:
+
+	"latex_caption": "fig:example_mpl"
+
+Then, instead of it being input directly into the .tex file, it will be stored as a variable;
+
+- the variable's name is created from the latex_caption value
+- the variable's value is the first paragraph of the markdown text (i.e. nothing after a \n) 
+
+If a subsequent **figure or table** cell has a label matching any stored variable name, for example:
+
+	"latex_figure": {
+	"caption": "",
+	"label": "fig:example_mpl",
+	}
+
+Then its caption will be overriden with that variable. 
+
+The manner in which this works can be found in ![converted/Example.tex](converted/Example.tex):
+
+	\newcommand{\kyfigcexampleumpl}{A matplotlib figure, with the caption set in the markdowncell above the figure.}
+
+	\begin{figure}
+	        \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{Example_files/Example_14_0.pdf}\end{center}
+			\ifdefined\kyfigcexampleumpl
+			 \caption{\kyfigcexampleumpl}
+			\else
+			 \caption{}
+			\fi
+	        \label{fig:example_mpl}
+	    \end{figure}
+
+Note, this approach has the implicit contraint that markdown caption cells must be above the corresponding figure/table to be output in the latex/pdf.
 
 ## Citations and Bibliography
 
