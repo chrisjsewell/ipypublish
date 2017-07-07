@@ -102,7 +102,7 @@ if [ ! -d "converted" ]; then
 	mkdir converted
 fi
 cp "${nconvert_path}/${ipynb_name}.pdf"  "converted/${ipynb_name}.pdf"
-cp "${nconvert_path}/${ipynb_name}.pdf"  "converted/${ipynb_name}.tex"
+cp "${nconvert_path}/${ipynb_name}.tex"  "converted/${ipynb_name}.tex"
 sed 's/{name_of_pdf_here}/'"${ipynb_name}.pdf"'/' < "${nconvert_path}/view_pdf.html" > "converted/${ipynb_name}_viewpdf.html"
 
 rm -f "${nconvert_path}/${ipynb_name}.pdf"
