@@ -106,12 +106,16 @@ For equations, enter in cell metadata:
 
 label is optional
 
-## Citations
+## Citations and Bibliography
 
 Using Zotero's Firefox plugin and https://github.com/retorquere/zotero-better-bibtex/releases/tag/1.6.100 for;
 
 - automated .bib file updating 
 - drag and drop cite keys \cite{kirkeminde_thermodynamic_2012}
+- `latexmk -bibtex -pdf` (in run_nbconvert.sh) handles creation of the bibliography
+- \usepackage{doi} turns the DOI numbers into url links
+
+    - in Zotero-Better-Bibtex I have the option set to only export DOI, if both DOI and URL are present.
 
 Can use: 
 
