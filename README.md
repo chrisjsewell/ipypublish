@@ -12,6 +12,7 @@ See ![notebooks/Example.ipynb](converted/Example.pdf) and ![converted/Example.pd
 - [Metadata Tags](#metadata-tags)
     - [**NEW** Captions in a Markdown cell](#captions-in-a-markdown-cell)
 - [Citations and Bibliography](#citations-and-bibliography)
+- [Dealing with external data](#dealing-with-external-data)
 - [Miscellaneous](#miscellaneous)
 - [Acknowledgements](#acknowledgements)
 
@@ -201,6 +202,50 @@ Can use:
 	
 to make it look better in html, but not specifically available for drag and drop in Zotero 
 	
+## Dealing with external data
+
+A goal for scientific publishing is automated reproducibility of analyses, which the Jupyter notebook excels at. But, more than that, it should be possible to efficiently reproduce the analysis with different data sets. This entails having **one point of access** to a data set within the notebook, rather than having copy-pasted data into variables, i.e. this:
+
+    data = read_in_data('data_key')
+    variable1 = data.key1
+    variable2 = data.key2
+    ...
+
+rather than this:
+
+    variable1 = 12345
+    variable2 = 'something'
+    ...
+
+The best-practice for this (in my opinion) is to use the JSON format (as long as the data isn't [relational](http://www.sarahmei.com/blog/2013/11/11/why-you-should-never-use-mongodb/)), because it is:
+
+- applicable for any data structure
+- lightweight and easy to read and edit
+- has a simple read/write mapping to python objects  (using [json](https://docs.python.org/3.6/library/json.html))
+- widely used (especially in web technologies)
+
+A good way to store multiple bits of JSON data is in a [mongoDB](https://docs.mongodb.com/manual/administration/install-community/) and accessing it via [pymongo](https://api.mongodb.com/python/current/). This will also make it easy to move all the data to a cloud server at a later time, if required.
+
+    conda install pymongo
+
+But, if the data is coming from files output from different simulation or experimental code, where the user has no control of the output format. Then writing JSON parsers may be the way to go, and this is where  [jsonextended](https://github.com/chrisjsewell/jsonextended) comes in, which implements:
+
+- a lightweight plugin system to define bespoke classes for parsing different file extensions and data types.
+- a 'lazy loader' for treating an entire directory structure as a nested dictionary.
+
+For example:
+
+```python
+from jsonextended import plugins, edict
+plugins.load_plugins_dir('path/to/folder_of_parsers','parsers')
+data = edict.LazyLoad('path/to/data')
+variable1 = data.folder1.file1_json.key1
+variable2 = data[['folder1','file1.json','key2']]
+variable3 = data[['folder1','file2.csv','key1']]
+variable4 = data[['folder2','subfolder1','file3.other','key1']]
+...    
+```
+
 ## Miscellaneous
 
 I also use the Firefox Split Pannel extension to view the {name}_viewpdf.html page and monitor changes to the pdf.
