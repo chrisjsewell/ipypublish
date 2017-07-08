@@ -34,7 +34,7 @@ and [Pandoc](http://pandoc.org) (for conversion to latex):
 
 	conda create --name ipyreport -c conda-forge jupyter pandoc
 	
-For converting to PDF, nbconvert uses the TeX document preparation ecosystem, which can be installed from:
+For converting to PDF, the TeX document preparation ecosystem is required (an in particular [latexmk](http://mg.readthedocs.io/latexmk.html)), which can be installed from:
 
 - Linux: [TeX Live](http://tug.org/texlive/)
 - macOS (OS X): [MacTeX](http://tug.org/mactex/)
