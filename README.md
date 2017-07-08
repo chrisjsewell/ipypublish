@@ -27,18 +27,29 @@ The default latex template (latex_hide_input_output.tplx) outputs all raw/markdo
 
 ## Setting up the environment
 
-Using [Conda](https://conda.io/docs/) is recommended:
+Using [Conda](https://conda.io/docs/) is recommended for package management, 
+in order to create self contained environments with specific versions of packages. 
+The main packages required are the Jupyter notebook, Jupyter [nbconvert](https://nbconvert.readthedocs.io/en/latest/index.html) 
+and [Pandoc](http://pandoc.org) (for conversion to latex):
 
-	conda create --name ipyreport -c conda-forge jupyter
+	conda create --name ipyreport -c conda-forge jupyter pandoc
+	
+For converting to PDF, nbconvert uses the TeX document preparation ecosystem, which can be installed from:
 
-For helpful tools in the notebook (like toc sidebar):
+- Linux: [TeX Live](http://tug.org/texlive/)
+- macOS (OS X): [MacTeX](http://tug.org/mactex/)
+- Windows: [MikTex](http://www.miktex.org/)
+
+For helpful extensions to the notebooks core capabilities (like a toc sidebar):
 
 	conda install --name ipyreport jupyter_contrib_nbextensions
 	
-For a more extensive setup of useful packages:
+A more extensive setup of useful packages (used to create the example) 
+are listed in ![conda_packages.txt](conda_packages.txt) 
+and an environment can be created directly from this using conda:
 
 	conda create --name ipyreport -c conda-forge -c matsci --file conda_packages.txt
-
+	
 ## Setting up a Notebook 
 
 For improved latex/pdf output, ![notebooks/ipynb_latex_setup.py](notebooks/ipynb_latex_setup.py) contains import and setup code for the notebook and a number of common packages and functions, including:
