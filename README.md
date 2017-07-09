@@ -217,7 +217,7 @@ rather than this:
     variable2 = 'something'
     ...
 
-The best-practice for this (in my opinion) is to use the JSON format (as long as the data isn't [relational](http://www.sarahmei.com/blog/2013/11/11/why-you-should-never-use-mongodb/)), because it is:
+The best-practice for accessing heirarchical data (in my opinion) is to use the JSON format (as long as the data isn't [relational](http://www.sarahmei.com/blog/2013/11/11/why-you-should-never-use-mongodb/)), because it is:
 
 - applicable for any data structure
 - lightweight and easy to read and edit
@@ -228,7 +228,7 @@ A good way to store multiple bits of JSON data is in a [mongoDB](https://docs.mo
 
     conda install pymongo
 
-But, if the data is coming from files output from different simulation or experimental code, where the user has no control of the output format. Then writing JSON parsers may be the way to go, and this is where  [jsonextended](https://github.com/chrisjsewell/jsonextended) comes in, which implements:
+But, if the data is coming from files output from different simulation or experimental code, where the user has no control of the output format. Then writing JSON parsers may be the way to go, and this is where [jsonextended](https://github.com/chrisjsewell/jsonextended) comes in, which implements:
 
 - a lightweight plugin system to define bespoke classes for parsing different file extensions and data types.
 - a 'lazy loader' for treating an entire directory structure as a nested dictionary.
@@ -245,6 +245,10 @@ variable3 = data[['folder1','file2.csv','key1']]
 variable4 = data[['folder2','subfolder1','file3.other','key1']]
 ...    
 ```
+If you are dealing with numerical data arrays which are to large to be loaded directly in to memory, 
+then the [h5py](http://docs.h5py.org/en/latest/index.html) interface to the [HDF5](http://hdfgroup.org/) binary data format,
+allows for the manipultion of even multi-terabyte datasets stored on disk, as if they were real NumPy arrays. 
+These files are also supported by [jsonextended](https://github.com/chrisjsewell/jsonextended) lazy loading.
 
 ## Miscellaneous
 
