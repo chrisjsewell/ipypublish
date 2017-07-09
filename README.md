@@ -21,10 +21,11 @@ See ![notebooks/Example.ipynb](converted/Example.pdf) and ![converted/Example.pd
 1. Create a notebook with some content!
 2. optionally create a .bib file and logo image
 3. Adjust the notebook and cell metadata. 
-4. Clone this repository and run the run_nbconvert.sh script for either the specific notebook, or a folder containing multiple notebooks. 
+4. Clone the ipypublish [GitHub repository](https://github.com/chrisjsewell/ipypublish) and run the run_nbconvert.sh script for either the specific notebook, or a folder containing multiple notebooks. 
 5. A converted folder will be created, into which final .tex .pdf and _viewpdf.html files will be output, named by the notebook or folder input
 
-The default latex template (latex_hide_input_output.tplx) outputs all raw/markdown cells (unless tagged latex_ignore), and then only output cells with latex_figure, latex_table or latex_equation meta tags (see Metadata Tags).
+The default latex template (latex_hide_input_output.tplx) outputs all raw/markdown cells (unless tagged latex_ignore), and then only output cells with latex [Metadata Tags](#metadata-tags). 
+See [Example.ipynb](https://github.com/chrisjsewell/ipypublish/blob/master/notebooks/Example.ipynb) and [Example.pdf](https://github.com/chrisjsewell/ipypublish/blob/master/converted/Example.pdf) for an example of the potential input and output.
 
 ## Setting up the environment
 
@@ -53,15 +54,17 @@ and an environment can be created directly from this using conda:
 	
 ## Setting up a Notebook 
 
-For improved latex/pdf output, ![notebooks/ipynb_latex_setup.py](notebooks/ipynb_latex_setup.py) contains import and setup code for the notebook and a number of common packages and functions, including:
+For improved latex/pdf output, [ipynb_latex_setup.py](https://github.com/chrisjsewell/ipypublish/blob/master/conda_packages.txt) contains import and setup code for the notebook and a number of common packages and functions, including:
 
 - numpy, matplotlib, pandas, sympy, ...
 - `images_hconcat`, `images_vconcat` and `images_gridconcat` functions, which use the PIL/Pillow package to create a single image from multiple images (with specified arrangement)
 
 To use this script, in the first cell of a notebook, insert:
 
-	from ipynb_latex_setup import *
-	
+```python
+from ipynb_latex_setup import *
+```
+
 It is recommended that you also set this cell as an initialisation cell (i.e. have `"init_cell": true` in the metadata)
 
 ## Running run_nbconvert script
@@ -110,28 +113,40 @@ For **titlepage**, enter in notebook metadata:
 
 To  **ignore a markdown cell**:
 
+```json
+{
 	"latex_ignore" : true
+}
+```
 
 For  **figures**, enter in cell metadata:
 
+```json
+{
 	  "latex_figure": {
 	    "caption": "Figure caption.",
 	    "label": "fig:flabel",
-	    "placement": "H"
+	    "placement": "H",
 	    "widefigure": false
 	  }
+}
+```
 
 - `placement` is optional and constitutes using a placement arguments for the figure (e.g. \begin{figure}[H]). See https://www.sharelatex.com/learn/Positioning_images_and_tables.
 - `widefigure` is optional and constitutes expanding the figure to the page width (i.e. \begin{figure*}) (placement arguments will then be ignored)
 
 For  **tables**, enter in cell metadata:
 
-	  "latex_table": {
+```json
+{
+"latex_table": {
 	    "caption": "Table caption.",
-	    "label": "tbl:tlabel"
-	    "placement": "H"
-        "alternate": "gray!20"
+	    "label": "tbl:tlabel",
+	    "placement": "H",
+            "alternate": "gray!20"
 	  }
+}
+```
 
 - `placement` is optional and constitutes using a placement arguments for the table (e.g. \begin{table}[H]). See https://www.sharelatex.com/learn/Positioning_images_and_tables.
 - `alternate` is optional and constitutes using alternating colors for the table rows (e.g. \rowcolors{2}{gray!25}{white}). See https://tex.stackexchange.com/a/5365/107738.
@@ -139,9 +154,13 @@ For  **tables**, enter in cell metadata:
 
 For  **equations**, enter in cell metadata:
 
+```json
+{
 	  "latex_equation": {
 	    "label": "eqn:elabel"
 	  }
+}
+```
 
 label is optional
 
@@ -151,7 +170,11 @@ Especially for long captions, it would be prefered that captions can be viewed a
 
 If a **markdown cell** has the metadata tag:
 
+```json
+{
 	"latex_caption": "fig:example_mpl"
+}
+```
 
 Then, instead of it being input directly into the .tex file, it will be stored as a variable;
 
@@ -160,26 +183,32 @@ Then, instead of it being input directly into the .tex file, it will be stored a
 
 If a subsequent **figure or table** cell has a label matching any stored variable name, for example:
 
+```json
+{
 	"latex_figure": {
 	"caption": "",
-	"label": "fig:example_mpl",
+	"label": "fig:example_mpl"
 	}
+}
+```
 
 Then its caption will be overriden with that variable. 
 
-The manner in which this works can be found in ![converted/Example.tex](converted/Example.tex):
+The manner in which this works can be found in [Example.tex](https://github.com/chrisjsewell/ipypublish/blob/master/converted/):
 
-	\newcommand{\kyfigcexampleumpl}{A matplotlib figure, with the caption set in the markdowncell above the figure.}
+```latex
+\newcommand{\kyfigcexampleumpl}{A matplotlib figure, with the caption set in the markdowncell above the figure.}
 
-	\begin{figure}
-	        \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{Example_files/Example_14_0.pdf}\end{center}
-			\ifdefined\kyfigcexampleumpl
-			 \caption{\kyfigcexampleumpl}
-			\else
-			 \caption{}
-			\fi
-	        \label{fig:example_mpl}
-	    \end{figure}
+\begin{figure}
+    \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{Example_files/Example_14_0.pdf}\end{center}
+    \ifdefined\kyfigcexampleumpl
+	\caption{\kyfigcexampleumpl}
+    \else
+	\caption{}
+    \fi
+    \label{fig:example_mpl}
+\end{figure}
+```
 
 Note, this approach has the implicit contraint that markdown caption cells must be above the corresponding figure/table to be output in the latex/pdf.
 
@@ -198,30 +227,36 @@ Please note, at the time of writing, Better BibTeX does not support Zotero 5.0 (
 
 Can use: 
 
-	<cite data-cite="kirkeminde_thermodynamic_2012">(Kirkeminde, 2012)</cite> 
-	
+```html
+<cite data-cite="kirkeminde_thermodynamic_2012">(Kirkeminde, 2012)</cite> 
+```
+
 to make it look better in html, but not specifically available for drag and drop in Zotero 
 	
 ## Dealing with external data
 
 A goal for scientific publishing is automated reproducibility of analyses, which the Jupyter notebook excels at. But, more than that, it should be possible to efficiently reproduce the analysis with different data sets. This entails having **one point of access** to a data set within the notebook, rather than having copy-pasted data into variables, i.e. this:
 
-    data = read_in_data('data_key')
-    variable1 = data.key1
-    variable2 = data.key2
-    ...
+```python
+data = read_in_data('data_key')
+variable1 = data.key1
+variable2 = data.key2
+...
+```
 
 rather than this:
 
-    variable1 = 12345
-    variable2 = 'something'
-    ...
+```python
+variable1 = 12345
+variable2 = 'something'
+...
+```
 
 The best-practice for accessing heirarchical data (in my opinion) is to use the JSON format (as long as the data isn't [relational](http://www.sarahmei.com/blog/2013/11/11/why-you-should-never-use-mongodb/)), because it is:
 
 - applicable for any data structure
 - lightweight and easy to read and edit
-- has a simple read/write mapping to python objects  (using [json](https://docs.python.org/3.6/library/json.html))
+- has a simple read/write mapping to python objects (using [json](https://docs.python.org/3.6/library/json.html))
 - widely used (especially in web technologies)
 
 A good way to store multiple bits of JSON data is in a [mongoDB](https://docs.mongodb.com/manual/administration/install-community/) and accessing it via [pymongo](https://api.mongodb.com/python/current/). This will also make it easy to move all the data to a cloud server at a later time, if required.
@@ -245,6 +280,7 @@ variable3 = data[['folder1','file2.csv','key1']]
 variable4 = data[['folder2','subfolder1','file3.other','key1']]
 ...    
 ```
+
 If you are dealing with numerical data arrays which are to large to be loaded directly in to memory, 
 then the [h5py](http://docs.h5py.org/en/latest/index.html) interface to the [HDF5](http://hdfgroup.org/) binary data format,
 allows for the manipultion of even multi-terabyte datasets stored on disk, as if they were real NumPy arrays. 
@@ -258,6 +294,8 @@ I also use the Firefox Split Pannel extension to view the {name}_viewpdf.html pa
 
 I took strong influence from:
 
-- http://blog.juliusschulz.de/blog/ultimate-ipython-notebook#cite2c
-- https://livingthing.danmackinlay.name/jupyter.html
-- Notebook concatination adapted from https://github.com/jupyter/nbconvert/issues/253
+- [Julius Schulz](http://blog.juliusschulz.de/blog/ultimate-ipython-notebook)
+- [Dan Mackinlay](https://livingthing.danmackinlay.name/jupyter.html)
+- Notebook concatination was adapted from [nbconvert issue#253](https://github.com/jupyter/nbconvert/issues/253)
+
+
