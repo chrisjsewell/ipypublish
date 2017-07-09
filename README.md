@@ -21,7 +21,7 @@ See ![notebooks/Example.ipynb](converted/Example.pdf) and ![converted/Example.pd
 1. Create a notebook with some content!
 2. optionally create a .bib file and logo image
 3. Adjust the notebook and cell metadata. 
-4. Run the run_nbconvert.sh script for either the specific notebook, or a folder containing multiple notebooks. 
+4. Clone this repository and run the run_nbconvert.sh script for either the specific notebook, or a folder containing multiple notebooks. 
 5. A converted folder will be created, into which final .tex .pdf and _viewpdf.html files will be output, named by the notebook or folder input
 
 The default latex template (latex_hide_input_output.tplx) outputs all raw/markdown cells (unless tagged latex_ignore), and then only output cells with latex_figure, latex_table or latex_equation meta tags (see Metadata Tags).
