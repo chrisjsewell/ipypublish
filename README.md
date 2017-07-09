@@ -19,7 +19,7 @@ See ![notebooks/Example.ipynb](converted/Example.pdf) and ![converted/Example.pd
 ## Workflow
 
 1. Create a notebook with some content!
-2. optionaly create a .bib file and logo image
+2. optionally create a .bib file and logo image
 3. Adjust the notebook and cell metadata. 
 4. Run the run_nbconvert.sh script for either the specific notebook, or a folder containing multiple notebooks. 
 5. A converted folder will be created, into which final .tex .pdf and _viewpdf.html files will be output, named by the notebook or folder input
