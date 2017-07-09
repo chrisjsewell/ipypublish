@@ -185,7 +185,7 @@ Note, this approach has the implicit contraint that markdown caption cells must 
 
 ## Citations and Bibliography
 
-Using Zotero's Firefox plugin and https://github.com/retorquere/zotero-better-bibtex/releases/tag/1.6.100 for;
+Using Zotero's Firefox plugin and [Zotero Better Bibtex](https://github.com/retorquere/zotero-better-bibtex/releases/tag/1.6.100) for;
 
 - automated .bib file updating 
 - drag and drop cite keys \cite{kirkeminde_thermodynamic_2012}
