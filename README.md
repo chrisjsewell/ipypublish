@@ -1,5 +1,5 @@
 # ipypublish
-A workflow for creating/editing publication ready scientific reports from one or more Jupyter Notebooks, without leaving the browser!
+A workflow for creating and editing publication ready scientific reports, from one or more Jupyter Notebooks, without leaving the browser!
 
 ![WorkFlow Example](/example_workflow.gif)
 
