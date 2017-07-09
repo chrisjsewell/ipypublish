@@ -8,6 +8,11 @@ at top of workbook, use
 
 """
 
+# Py2/Py3 compatibility
+# =====================
+from __future__ import print_function as _print_function
+from __future__ import division as _division
+
 # IPYTHON
 # =======
 from IPython import get_ipython
