@@ -8,13 +8,15 @@ See ![notebooks/Example.ipynb](converted/Example.pdf) and ![converted/Example.pd
 - [Workflow](#worklow)
 - [Setting up the environment](#setting-up-the-environment)
 - [Setting up a Notebook ](#setting-up-a-notebook)
-- [Running run_nbconvert script](#running-run_nbconvert-script)
+- [Converting Notebooks](#converting-notebooks)
+    - [Creating a bespoke converter](#creating-a-bespoke-converter)
 - [Latex Metadata Tags](#latex-metadata-tags)
-    - [**NEW** Captions in a Markdown cell](#captions-in-a-markdown-cell)
+    - [Captions in a Markdown cell](#captions-in-a-markdown-cell)
 - [Citations and Bibliography](#citations-and-bibliography)
 - [Dealing with external data](#dealing-with-external-data)
 - [Miscellaneous](#miscellaneous)
 - [Acknowledgements](#acknowledgements)
+
 
 ## Workflow
 
@@ -67,9 +69,9 @@ from ipynb_latex_setup import *
 
 It is recommended that you also set this cell as an initialisation cell (i.e. have `"init_cell": true` in the metadata)
 
-## Running run_nbconvert script
+## Converting Notebooks
 
-To see all options for this script:
+The run_nbconvert script handles parsing the notebooks to nbconvert, with the appropriate converter. To see all options for this script:
 
 	./run_nbconvert.sh -h
 
@@ -79,14 +81,64 @@ For example, to convert the Example.ipynb notebook:
 
 If a folder is input, then the .ipynb files it contains are processed and combined in 'natural' sorted order, i.e. 2_name.ipynb before 10_name.ipynb
 
-Currently, three output fomatters are availiable (in the nbconvert/scripts folder):
+Currently, three output converters are availiable out-the-box (in the nbconvert/scripts folder):
 
-- latex_ipypublish_main.py is the default and converts to latex according to metadata tags.
-- latex_standard_article.py is the standard latex article template, which comes with nbconvert.
-- html_toc_toggle_input.py converts the entire notebook(s) to html and provides a table of contents sidebar and a button to toggle input code on/off 
+- latex_ipypublish_main.py is the default and converts to latex according to metadata tags.replicates the standard latex article template, which comes with nbconvert.
+- html_toc_toggle_input.py converts the entire notebook(s) to html and adds a table of contents sidebar and a button to toggle input code on/off. 
 
 The current `nbconvert --to pdf` does not correctly resolve references and citations (since it copies the files to a temporary directory). Therefore nbconvert is only used for the initial `nbconvert --to latex` phase, followed by using `latexmk` to create the pdf and correctly resolve everything.
- 
+
+### Creating a bespoke converter
+
+nbconvert uses [Jinja templates](https://jinja2.readthedocs.io/en/latest/intro.html) to specify the rules for how each element of the notebook should be converted, and also what each section of the latex file should contain. To create a [custom template](https://nbconvert.readthedocs.io/en/latest/customizing.html#Custom-Templates) they employ an inheritance method to build up this template. However, in my experience this makes it;
+
+1. non-trivial to understand the full conversion process (having to go through the inheritance tree to find where particular methods have been implemented/overriden)  
+2. difficult to swap in/out multiple rules
+
+To improve this, ipypublish implements a pluginesque system to systematically append to blank template placeholders. For example, to create a document (with standard formatting) with a natbib bibliography where only input markdown is output, we could create the following dictionary:
+
+```python
+
+my_tplx_dict = { 
+'meta_docstring':'with a natbib bibliography',
+
+'notebook_input_markdown':r"""
+    ((( cell.source | citation2latex | strip_files_prefix | convert_pandoc('markdown', 'json',extra_args=[]) | resolve_references | convert_pandoc('json','latex') )))
+""",
+
+'document_packages':r"""
+	\usepackage[numbers, square, super, sort&compress]{natbib}
+	\usepackage{doi} % hyperlink doi's	
+""",
+
+'document_bibliography':r"""
+\bibliographystyle{unsrtnat} % sort citations by order of first appearance
+\bibliography{bibliography}
+"""
+
+}
+```
+
+The converter would then look like this:
+
+```python
+
+from latex.create_tplx import create_tplx
+from latex.standard import standard_article as doc
+from latex.standard import standard_definitions as defs
+from latex.standard import standard_packages as package
+
+create_tplx('created.tplx',
+    [package.tplx_dict,defs.tplx_dict,doc.tplx_dict,
+    my_tplx_dict])
+
+c = get_config() 
+c.NbConvertApp.export_format = 'latex'   
+c.TemplateExporter.filters = c.Exporter.filters = {}
+c.Exporter.template_file = 'created.tplx'
+
+```
+
 ## Latex Metadata Tags
 
 For **titlepage**, enter in notebook metadata:

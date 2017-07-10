@@ -1,7 +1,7 @@
 """ create the an article in the standard nbconvert format
 
 """
-import os
+
 from latex.create_tplx import create_tplx
 from latex.standard import standard_article as doc
 from latex.standard import in_out_prompts as prompts
