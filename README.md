@@ -361,6 +361,8 @@ These files are also supported by [jsonextended](https://github.com/chrisjsewell
 
 I also use the Firefox Split Pannel extension to view the {name}_viewpdf.html page and monitor changes to the pdf.
 
+[bookbook](https://github.com/takluyver/bookbook) is another package with some conversion capabilities.
+
 ## Acknowledgements
 
 I took strong influence from:
