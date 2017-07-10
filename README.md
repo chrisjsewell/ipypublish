@@ -9,7 +9,7 @@ See ![notebooks/Example.ipynb](converted/Example.pdf) and ![converted/Example.pd
 - [Setting up the environment](#setting-up-the-environment)
 - [Setting up a Notebook ](#setting-up-a-notebook)
 - [Running run_nbconvert script](#running-run_nbconvert-script)
-- [Metadata Tags](#metadata-tags)
+- [Latex Metadata Tags](#latex-metadata-tags)
     - [**NEW** Captions in a Markdown cell](#captions-in-a-markdown-cell)
 - [Citations and Bibliography](#citations-and-bibliography)
 - [Dealing with external data](#dealing-with-external-data)
@@ -24,7 +24,7 @@ See ![notebooks/Example.ipynb](converted/Example.pdf) and ![converted/Example.pd
 4. Clone the ipypublish [GitHub repository](https://github.com/chrisjsewell/ipypublish) and run the run_nbconvert.sh script for either the specific notebook, or a folder containing multiple notebooks. 
 5. A converted folder will be created, into which final .tex .pdf and _viewpdf.html files will be output, named by the notebook or folder input
 
-The default latex template (latex_hide_input_output.tplx) outputs all raw/markdown cells (unless tagged latex_ignore), and then only output cells with latex [Metadata Tags](#metadata-tags). 
+The default latex template outputs all markdown cells (unless tagged latex_ignore), and then only code and output cells with [latex metadata tags](#latex-metadata-tags). 
 See [Example.ipynb](https://github.com/chrisjsewell/ipypublish/blob/master/notebooks/Example.ipynb) and [Example.pdf](https://github.com/chrisjsewell/ipypublish/blob/master/converted/Example.pdf) for an example of the potential input and output.
 
 ## Setting up the environment
@@ -79,9 +79,15 @@ For example, to convert the Example.ipynb notebook:
 
 If a folder is input, then the .ipynb files it contains are processed and combined in 'natural' sorted order, i.e. 2_name.ipynb before 10_name.ipynb
 
+Currently, three output fomatters are availiable (in the nbconvert/scripts folder):
+
+- latex_ipypublish_main.py is the default and converts to latex according to metadata tags.
+- latex_standard_article.py is the standard latex article template, which comes with nbconvert.
+- html_toc_toggle_input.py converts the entire notebook(s) to html and provides a table of contents sidebar and a button to toggle input code on/off 
+
 The current `nbconvert --to pdf` does not correctly resolve references and citations (since it copies the files to a temporary directory). Therefore nbconvert is only used for the initial `nbconvert --to latex` phase, followed by using `latexmk` to create the pdf and correctly resolve everything.
  
-## Metadata Tags
+## Latex Metadata Tags
 
 For **titlepage**, enter in notebook metadata:
 
@@ -111,13 +117,26 @@ For **titlepage**, enter in notebook metadata:
 - if run_nbconvert.sh is called on a folder, then the meta data from the first notebook will be used
 - logo should be the name (without extension) of the logo, then use e.g. `run_nbconvert.sh -l logos/logo_example.png Example.ipynb`
 
-To  **ignore a markdown cell**:
+To  **output ignore a markdown cell**:
 
 ```json
 {
 	"latex_ignore" : true
 }
 ```
+
+To  **output a code cell**:
+
+```json
+{
+	"latex_code" : {
+		"exec_number":true
+	}
+}
+```
+
+- `exec number` is optional and contitutes showing the current execution number of the cell.
+
 
 For  **figures**, enter in cell metadata:
 
@@ -166,7 +185,7 @@ label is optional
 
 ### Captions in a Markdown cell
 
-Especially for long captions, it would be prefered that captions can be viewed and edited in a notebook Markdown cell, rather than hidden in the metadata. Enter the following (experimental) approach, implemented in `latex_hide_input_output`.
+Especially for long captions, it would be prefered that captions can be viewed and edited in a notebook Markdown cell, rather than hidden in the metadata. This can be achieved using the default latex template:
 
 If a **markdown cell** has the metadata tag:
 

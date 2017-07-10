@@ -105,6 +105,18 @@ if _pil_present:
                    
         """
         images = images_read(images) if aspaths else images
+        if not isinstance(width,list):
+            widths = [width for _ in images] 
+        else:
+            widths = width[:]
+            width = sum(widths)
+        if not isinstance(height,list):
+            heights = [height for _ in images]
+        else:
+            heights = height[:]
+            height = sum(heights) + gap*(len(images)-1)
+        for im,w,h in zip(images,widths,heights):
+            im.thumbnail((w,h), PImage.ANTIALIAS)
         widths, heights = zip(*(i.size for i in images))
         total_width = sum(widths) + gap*len(images)
         max_height = max(heights)
@@ -115,6 +127,7 @@ if _pil_present:
             x_offset += im.size[0] + gap
         new_im.thumbnail((width,height), PImage.ANTIALIAS)
         return new_im
+
     def images_vconcat(images, width=700,height=700, 
                        gap=0, aspaths=True):
         """concatenate multiple images vertically 
@@ -123,6 +136,10 @@ if _pil_present:
         ----------
         images : list
             if aspaths=True, list of path strings, else list of PIL.Image instances
+        width : int or list of ints
+            if a list, must be same length as number of images
+        height : int or list of ints
+            if a list, must be same length as number of images
         gap : int
             size of space between images
     
@@ -132,6 +149,18 @@ if _pil_present:
                    
         """
         images = images_read(images) if aspaths else images
+        if not isinstance(width,list):
+            widths = [width for _ in images] 
+        else:
+            widths = width[:]
+            width = sum(widths)
+        if not isinstance(height,list):
+            heights = [height for _ in images]
+        else:
+            heights = height[:]
+            height = sum(heights) + gap*(len(images)-1)
+        for im,w,h in zip(images,widths,heights):
+            im.thumbnail((w,h), PImage.ANTIALIAS)
         widths, heights = zip(*(i.size for i in images))
         max_width = max(widths)
         total_height = sum(heights) + gap*len(images)
@@ -142,6 +171,7 @@ if _pil_present:
             y_offset += im.size[1] + gap
         new_im.thumbnail((width,height), PImage.ANTIALIAS)
         return new_im
+
     def images_gridconcat(pathslist,width=700,height=700,
                          aspaths=True,hgap=0,vgap=0):
         """concatenate multiple images in a grid 

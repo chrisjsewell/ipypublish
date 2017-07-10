@@ -2,7 +2,7 @@
 
 bib_path=""
 logo_path=""
-latex_format="latex_hide_input_output.py"
+output_format="latex_ipypublish_main.py"
 nconvert_path="nbconvert"
 
 # bib_path=${2:-"bibliographies/example.bib"}
@@ -16,7 +16,7 @@ where:
     -h  show this help text
     -b  path to bibliography
     -l  path to title page logo
-    -f  latex format file to use (default: ${latex_format})
+    -f  output format file to use (default: ${output_format})
     -n  path to nbconvert folder (default: ${nconvert_path})
 "
 
@@ -30,7 +30,7 @@ while getopts ':hb:l:f:n:' option; do
        ;;
     l) logo_path=$OPTARG
        ;;
-    f) latex_format=$OPTARG
+    f) output_format=$OPTARG
        ;;
     n) nconvert_path=$OPTARG
        ;;
@@ -60,9 +60,19 @@ if [ ! -e "$bib_path" ]; then
 	exit
 fi
 
+if [ ! -e "${nconvert_path}/scripts/${output_format}" ]; then
+	echo "ERROR: ${output_format} does not exist"
+	exit
+fi
+
+rm -f "${nconvert_path}/${ipynb_name}".*
+if [ -d "${nconvert_path}/${ipynb_name}_files" ]; then
+	rm -rf "${nconvert_path}/${ipynb_name}_files"
+fi
+
 if [[ -d "$ipynb_path" ]]; then
 	echo "Merging all notebooks in directory..."
-	python "${nconvert_path}/nbmerge.py" "$ipynb_path" > "${nconvert_path}/${ipynb_name}.ipynb"
+	python "${nconvert_path}/scripts/nbmerge.py" "$ipynb_path" > "${nconvert_path}/${ipynb_name}.ipynb"
 else
 	cp "${ipynb_path}" "${nconvert_path}/${ipynb_name}.ipynb"
 fi
@@ -76,43 +86,45 @@ fi
 
 cd "${nconvert_path}"
 
-jupyter nbconvert "${ipynb_name}.ipynb" --config "${latex_format}"
+cp "scripts/${output_format}" "${output_format}"
+
+jupyter nbconvert "${ipynb_name}.ipynb" --config "${output_format}"
+
+rm -r "${output_format}"
 
 if [ ! -e "${ipynb_name}.tex" ]; then
-	echo "ERROR: latex file not created"
-	cd ..
-	exit
+	if [ ! -e "${ipynb_name}.html" ]; then	
+		echo "Error: no latex or html file created"
+		cd -
+		exit
+	else
+		cd -
+		if [ ! -d "converted" ]; then
+			mkdir converted
+		fi
+		cp "${nconvert_path}/${ipynb_name}.html"  "converted/${ipynb_name}.html"
+		echo "output copied to: converted/${ipynb_name}.html"
+				
+	fi
+else
+	latexmk -bibtex -pdf "${ipynb_name}.tex"
+	cd -
+
+	if [ ! -d "converted" ]; then
+		mkdir converted
+	fi
+	cp "${nconvert_path}/${ipynb_name}.pdf"  "converted/${ipynb_name}.pdf"
+	cp "${nconvert_path}/${ipynb_name}.tex"  "converted/${ipynb_name}.tex"
+	sed 's/{name_of_pdf_here}/'"${ipynb_name}.pdf"'/' < "${nconvert_path}/scripts/view_pdf.html" > "converted/${ipynb_name}_viewpdf.html"
+	echo "output copied to: converted/${ipynb_name}.*"
+
+	rm -rf "${nconvert_path}/${ipynb_name}_files"	
 fi
 
-##post-processing hacks
-##---------------------
-# by default captions are set to not have labels, need to remove this
-sed -i.bak '/DeclareCaptionLabelFormat/d' "${ipynb_name}.tex"
-sed -i.bak '/captionsetup{labelformat=nolabel}/d' "${ipynb_name}.tex"
-# clereref must be loaded after anything that changes the referencing system
-sed -i.bak 's=\\begin{document}=\\usepackage{cleveref}&=g' "${ipynb_name}.tex"
-sed -i.bak 's=\\begin{document}=\\creflabelformat{equation}{#2#1#3}&=g' "${ipynb_name}.tex"
-rm -f "${ipynb_name}.tex.bak"
-
-latexmk -bibtex -pdf "${ipynb_name}.tex"
-./cleantex.sh "${ipynb_name}"
-cd -
-
-if [ ! -d "converted" ]; then
-	mkdir converted
+rm -f "${nconvert_path}/${ipynb_name}".*
+if [[ -e "${bib_path}" ]]; then
+	rm -f  "${nconvert_path}/bibliography.bib"
 fi
-cp "${nconvert_path}/${ipynb_name}.pdf"  "converted/${ipynb_name}.pdf"
-cp "${nconvert_path}/${ipynb_name}.tex"  "converted/${ipynb_name}.tex"
-sed 's/{name_of_pdf_here}/'"${ipynb_name}.pdf"'/' < "${nconvert_path}/view_pdf.html" > "converted/${ipynb_name}_viewpdf.html"
-
-rm -f "${nconvert_path}/${ipynb_name}.pdf"
-rm -f "${nconvert_path}/${ipynb_name}.tex"
-rm -f "${nconvert_path}/${ipynb_name}.ipynb"
-
-if [[ -e "${nconvert_path}/bibliography.bib" ]]; then
-	rm -f "${nconvert_path}/bibliography.bib"
+if [[ -e "${logo_path}" ]]; then
+	rm -f  "${nconvert_path}/${logo_path##*/}"
 fi
-if [[ -e "${nconvert_path}/${logo_path##*/}" ]]; then
-	rm -f "${nconvert_path}/${logo_path##*/}"
-fi
-

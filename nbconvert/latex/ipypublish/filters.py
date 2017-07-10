@@ -1,3 +1,15 @@
+def wrap_latex(input, max_length=75, **kwargs):
+    if len(input)>max_length:
+        # remove double dollars, as they don't allow word wrap
+        if len(input) > 3:
+            if input[0:2]=='$$' and input[-2:]=='$$':
+                input = input[1:-1]
+        # change \left( and \right) to \bigg( and \bigg), as they allow word wrap
+        input = input.replace(r'\left(',r'\big(')
+        input = input.replace(r'\right)',r'\big)')
+    
+    return input
+
 def remove_dollars(input, **kwargs):
     """remove dollars from start/end of file"""
     while input.startswith('$'):
@@ -13,7 +25,7 @@ def first_para(input, **kwargs):
 import re
 from collections import OrderedDict
 
-def write_roman(num):
+def _write_roman(num):
     roman = OrderedDict()
     roman[1000] = "M"
     roman[900] = "CM"
@@ -41,8 +53,8 @@ def write_roman(num):
 
     return "".join([a for a in roman_num(num)])
 
-def repl(match):
-    return write_roman(int(match.group(0)))
+def _repl(match):
+    return _write_roman(int(match.group(0)))
 def create_key(input, **kwargs):
     """create sanitized key string which only contains lowercase letters,
     (semi)colons as c, underscores as u and numbers as roman numerals
@@ -52,15 +64,8 @@ def create_key(input, **kwargs):
     'figcauxnamelvi'
     
     """
-    input = re.compile(r"\d+").sub(repl, input)
+    input = re.compile(r"\d+").sub(_repl, input)
     input = input.replace(':','c')
     input = input.replace(';','c')
     input = input.replace('_','u')    
     return re.sub('[^a-zA-Z]+', '', str(input)).lower()   
-    
-c = get_config() 
-c.NbConvertApp.export_format = 'latex'   
-c.TemplateExporter.filters = c.Exporter.filters = {'remove_dollars': remove_dollars,
-                                                    'first_para': first_para,
-                                                    'create_key': create_key}
-c.Exporter.template_file = 'latex_hide_input_output.tplx'

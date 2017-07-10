@@ -1,133 +1,15 @@
+tplx_dict = { 
+'meta_docstring':'with the input code wrapped and framed',
 
-
-((*- extends 'article.tplx' -*))
-
-((* block docclass *))
-
-	\documentclass[10pt,parskip=half]{scrartcl}
-	\usepackage[a4paper,total={6in, 9in}]{geometry}
-	\usepackage{microtype} % improves the spacing between words and letters
-	\usepackage{placeins} % placement of figures
-	
-	% ensure new section starts on new page
-	\addtokomafont{section}{\clearpage}
-	% or if not using koma:
-	%\usepackage{titlesec}
-	%\titleclass{\section}{top}
-	%\newcommand\sectionbreak{\clearpage}
-	
+'document_packages':r"""
 	% For framing 
     \usepackage{tikz} % Needed to box output/input
     \usepackage{scrextend} % Used to indent output
     \usepackage{needspace} % Make prompts follow contents
     \usepackage{framed} % Used to draw output that spans multiple pages
+""",
 
-((* endblock docclass *))
-
-%==============================================================================
-% Front Pages
-%==============================================================================
-% Author and Title from metadata
-((* block maketitle *))
-
-	((*- if nb.metadata["latex_metadata"]: -*))
-
-		((*- if nb.metadata["latex_metadata"]["title"]: -*))
-		    \title{((( nb.metadata["latex_metadata"]["title"] )))}
-		((*- else -*))
-			\title{((( resources.metadata.name | escape_latex )))}
-		((*- endif *))
-
-		((*- if nb.metadata["latex_metadata"]["author"]: -*))
-		    \author{((( nb.metadata["latex_metadata"]["author"] )))}
-		((*- else -*))
-		    \author{Chris J Sewell}
-		((*- endif *))
-		
-	((*- else -*))
-		\title{((( resources.metadata.name | escape_latex )))}
-		\author{Chris J Sewell}
-	((*- endif *))
-
-	\date{\today}
-	\maketitle
-	
-((* endblock maketitle *))
-
-((* block abstract *))\tableofcontents((* endblock abstract *))
-
-((* block bibliography *))
-\bibliographystyle{ieeetr}
-\bibliography{bibliography}
-((* endblock bibliography *))
-
-%==============================================================================
-% Formatting Output
-%==============================================================================
-
-% wrap text from stream (e.g. text from print commands)
-((* block stream scoped *))
-			\begin{Verbatim}[commandchars=\\\{\}]
-((( output.text | wrap_text(75) | escape_latex )))
-			\end{Verbatim}
-((* endblock stream *))
-% wrap text from diplay_data (i.e from display commands)
-((* block display_data scoped *))
-    ((*- for type in output.data | filter_data_type -*))
-        ((*- if type in ['text/plain']*))
-			\begin{Verbatim}[commandchars=\\\{\}]
-((( output.data['text/plain'] | wrap_text(75) | escape_latex )))
-			\end{Verbatim}
-        ((*- elif type in ['text/latex']*))
-			((( output.data['text/latex'] | wrap_latex )))
-        ((* else -*))
-            ((( super() )))
-        ((*- endif -*))
-    ((*- endfor -*))
-((* endblock display_data *))
-% remove Out[] prompts from Output cells and wrap text
-((* block execute_result scoped *))
-    ((*- for type in output.data | filter_data_type -*))
-        ((*- if type in ['text/plain']*))
-			\begin{Verbatim}[commandchars=\\\{\}]
-((( output.data['text/plain'] | wrap_text(75) | escape_latex )))
-			\end{Verbatim}
-        ((*- elif type in ['text/latex']*))
-			((( output.data['text/latex'] | wrap_latex )))
-        ((* else -*))
-            ((* block data_priority scoped *))
-            ((( super() )))
-            ((* endblock *))
-        ((*- endif -*))
-    ((*- endfor -*))
-((* endblock execute_result *))
-
-%==============================================================================
-% Framing Input
-%==============================================================================
-
-% Name: draw_prompt
-% Purpose: Renders an output/input prompt for notebook style pdfs
-((* macro draw_prompt(prompt, number, color, space) -*))
-    \begin{minipage}{\cellleftmargin}%
-    \hfill%
-    {\smaller%
-    \tt%
-    \color{(((color)))}%
-    (((prompt)))[(((number)))]:}%
-    \hspace{\inputpadding}%
-    \hspace{(((space)))}%
-    \hspace{3pt}%
-    \end{minipage}%
-((*- endmacro *))
-
-% Custom definitions
-((* block definitions *))
-    ((( super() )))
-
-    % Pygments definitions
-    ((( resources.latex.pygments_definitions )))
-
+'document_definitions':r"""
     % NB prompt colors
     \definecolor{nbframe-border}{rgb}{0.867,0.867,0.867}
     \definecolor{nbframe-bg}{rgb}{0.969,0.969,0.969}
@@ -228,15 +110,22 @@
       }; \par}%
     {\endMakeFramed}
 
-((* endblock definitions *))
+""",
 
-((* block input_group scoped *))
-    % Add contents below.
+'notebook_input':r"""
+
+((*- if cell.metadata.latex_code: -*))
+
+((*- if cell.metadata.latex_code.exec_number: -*))
+    ((* set exec_number = cell.execution_count *))
+((*- else -*))
+    ((* set exec_number = "" *))
+((*- endif *))
 
 {%\par%
 %\vspace{-1\baselineskip}%
 %\needspace{4\baselineskip}}%
-\begin{notebookcell}[((( cell.execution_count )))]%
+\begin{notebookcell}[((( exec_number )))]%
 \begin{addmargin}[\cellleftmargin]{0.1pt}% left, right
 {\smaller%
 \par%
@@ -248,6 +137,27 @@
 \end{addmargin}
 \end{notebookcell}
 
-((* endblock input_group *))
+((*- endif *))
 
+""",
+
+'jinja_macros':r"""
+
+% Purpose: Renders an output/input prompt for notebook style pdfs
+((* macro draw_prompt(prompt, number, color, space) -*))
+    \begin{minipage}{\cellleftmargin}%
+    \hfill%
+    {\smaller%
+    \tt%
+    \color{(((color)))}%
+    (((prompt)))[(((number)))]:}%
+    \hspace{\inputpadding}%
+    \hspace{(((space)))}%
+    \hspace{3pt}%
+    \end{minipage}%
+((*- endmacro *))
+
+"""
+
+}
 
