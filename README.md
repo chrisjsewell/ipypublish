@@ -5,6 +5,7 @@ A workflow for creating and editing publication ready scientific reports, from o
 
 See ![notebooks/Example.ipynb](converted/Example.pdf) and ![converted/Example.pdf](converted/Example.pdf) for an example of the potential input/output.
 
+- [Design Philosophy](#design-philosophy)
 - [Workflow](#worklow)
 - [Setting up the environment](#setting-up-the-environment)
 - [Setting up a Notebook ](#setting-up-a-notebook)
@@ -16,6 +17,16 @@ See ![notebooks/Example.ipynb](converted/Example.pdf) and ![converted/Example.pd
 - [Dealing with external data](#dealing-with-external-data)
 - [Miscellaneous](#miscellaneous)
 - [Acknowledgements](#acknowledgements)
+
+
+## Design Philosophy
+
+In essence, the dream is to have the ultimate hybrid of Jupyter Notebook, WYSIWYG editor (e.g. MS Word) and document preparation system (e.g. [TexMaker](http://www.xm1math.net/texmaker/)), being able to:
+
+- Dynamically (and reproducibly) explore data, run code and output the results
+- Dynamically edit and visualise the basic components of the document (text, math, figures, tables, references, citations, etc).
+- Have precise control over what elements are output to the final document and how they are layed out and typeset.
+     - Also be able to output the same source document to different layouts and formats (pdf, html, presentation slides, etc).
 
 ## Workflow
 
