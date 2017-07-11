@@ -13,6 +13,10 @@ at top of workbook, use
 from __future__ import print_function as _print_function
 from __future__ import division as _division
 
+# PYTHON
+# =======
+from collections import OrderedDict
+
 # IPYTHON
 # =======
 from IPython import get_ipython
