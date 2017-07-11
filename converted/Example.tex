@@ -1,114 +1,30 @@
 
-% Default to the notebook output style
-
-    
-
-
-% Inherit from the specified cell style.
 
 
 
 
-    
+
+	 
+		
 
 	\documentclass[10pt,parskip=half,
 	toc=sectionentrywithdots,
 	bibliography=totocnumbered,
 	captions=tableheading,numbers=noendperiod]{scrartcl}
+ 	
 	
-	\usepackage[a4paper,total={6in, 9in}]{geometry}
-	\usepackage{microtype} % improves the spacing between words and letters
-	\usepackage[section]{placeins} % placement of figures
-	% align captions to left (indented)
-	\usepackage{caption}
-	\captionsetup{justification=raggedright,
-	singlelinecheck=false,format=hang,labelfont={it,bf}} 
-	% Places the float at precisely the location in the LaTeX code (with H)
-	\usepackage{float}
 	
-	% for use of \rowcolors to create tables with alternating colors
-	\usepackage[table]{xcolor} 
-
-	\usepackage{hyperref}
 	
-	% bibliography formatting
-	\usepackage[numbers, square, super, sort&compress]{natbib}
-	% hyperlink doi's
-	\usepackage{doi}	
-	
-	% number figures, tables and equations by section
-	\usepackage{chngcntr}
-	\counterwithout{figure}{section}
-	\counterwithout{table}{section}
-	\counterwithout{equation}{section}
-	\makeatletter
-	\@addtoreset{table}{section}
-	\@addtoreset{figure}{section}
-	\@addtoreset{equation}{section}
-	\makeatother
-	\renewcommand\thetable{\thesection.\arabic{table}}
-	\renewcommand\thefigure{\thesection.\arabic{figure}}
-	\renewcommand\theequation{\thesection.\arabic{equation}}
-	
-	% ensure new section starts on new page
-	\addtokomafont{section}{\clearpage}
-	
-	\usepackage[colorinlistoftodos,obeyFinal]{todonotes} % to mark to-dos
-	
-	% header/footer
-	\usepackage[footsepline=0.25pt]{scrlayer-scrpage}
-	% shift foot down so space between sep line
-	\ModifyLayer[addvoffset=.6ex]{scrheadings.foot.odd}
-	\ModifyLayer[addvoffset=.6ex]{scrheadings.foot.even}
-	\ModifyLayer[addvoffset=.6ex]{scrheadings.foot.oneside}
-	\ModifyLayer[addvoffset=.6ex]{plain.scrheadings.foot.odd}
-	\ModifyLayer[addvoffset=.6ex]{plain.scrheadings.foot.even}
-	\ModifyLayer[addvoffset=.6ex]{plain.scrheadings.foot.oneside}
-	\pagestyle{scrheadings}
-	\clearscrheadfoot{}
-	\ifoot{\leftmark}
-	\renewcommand{\sectionmark}[1]{\markleft{\thesection\ #1}}
-	\ofoot{\pagemark}
-	\cfoot{}
 		
-	% or if not using koma:
-	%\usepackage{titlesec}
-	%\titleclass{\section}{top}
-	%\newcommand\sectionbreak{\clearpage}
-	
-	%\renewcommand\labelenumi{\theenumi.}% Default is arabic: 1.
-	%\renewcommand\labelenumii{(\theenumii)}% Default is alph: (a)
-	%\renewcommand\labelenumiii{\theenumiii.}% Default is roman: i.	
 
 
-    
-    
-    \usepackage[T1]{fontenc}
-    % Nicer default font (+ math font) than Computer Modern for most use cases
+    \usepackage[T1]{fontenc} % Nicer default font (+ math font) than Computer Modern for most use cases
     \usepackage{mathpazo}
-
-    % Basic figure setup, for now with no caption control since it's done
-    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
     \usepackage{graphicx}
-    % We will generate all images so they have a width \maxwidth. This means
-    % that they will get their normal width if they fit onto the page, but
-    % are scaled down if they would overflow the margins.
-    \makeatletter
-    \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth
-    \else\Gin@nat@width\fi}
-    \makeatother
-    \let\Oldincludegraphics\includegraphics
-    % Set max figure width to be 80% of text width, for now hardcoded.
-    \renewcommand{\includegraphics}[1]{\Oldincludegraphics[width=.8\maxwidth]{#1}}
-    % Ensure that by default, figures have no caption (until we provide a
-    % proper Figure object with a Caption API and a way to capture that
-    % in the conversion process - todo).
-    \usepackage{caption}
-
+    \usepackage{caption}    
     \usepackage{adjustbox} % Used to constrain images to a maximum size 
-    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage[table]{xcolor} % Allow colors to be defined
     \usepackage{enumerate} % Needed for markdown enumerations to work
-    \usepackage{geometry} % Used to adjust the document margins
     \usepackage{amsmath} % Equations
     \usepackage{amssymb} % Equations
     \usepackage{textcomp} % defines textquotesingle
@@ -132,89 +48,51 @@
     \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
     \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
                                 % normalem makes italics be italics, not underlines
-    
 
-    
-    
-    % Colors for the hyperref package
-    \definecolor{urlcolor}{rgb}{0,.145,.698}
-    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
-    \definecolor{citecolor}{rgb}{.12,.54,.11}
 
-    % ANSI colors
-    \definecolor{ansi-black}{HTML}{3E424D}
-    \definecolor{ansi-black-intense}{HTML}{282C36}
-    \definecolor{ansi-red}{HTML}{E75C58}
-    \definecolor{ansi-red-intense}{HTML}{B22B31}
-    \definecolor{ansi-green}{HTML}{00A250}
-    \definecolor{ansi-green-intense}{HTML}{007427}
-    \definecolor{ansi-yellow}{HTML}{DDB62B}
-    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
-    \definecolor{ansi-blue}{HTML}{208FFB}
-    \definecolor{ansi-blue-intense}{HTML}{0065CA}
-    \definecolor{ansi-magenta}{HTML}{D160C4}
-    \definecolor{ansi-magenta-intense}{HTML}{A03196}
-    \definecolor{ansi-cyan}{HTML}{60C6C8}
-    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
-    \definecolor{ansi-white}{HTML}{C5C1B4}
-    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
 
-    % commands and environments needed by pandoc snippets
-    % extracted from the output of `pandoc -s`
-    \providecommand{\tightlist}{%
-      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
-    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
-    % Add ',fontsize=\small' for more characters per line
-    \newenvironment{Shaded}{}{}
-    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
-    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
-    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
-    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
-    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
-    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
-    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
-    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
-    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
-    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
-    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
-    \newcommand{\RegionMarkerTok}[1]{{#1}}
-    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
-    \newcommand{\NormalTok}[1]{{#1}}
-    
-    % Additional commands for more recent versions of Pandoc
-    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
-    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
-    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
-    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
-    \newcommand{\ImportTok}[1]{{#1}}
-    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
-    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
-    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
-    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
-    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
-    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
-    \newcommand{\BuiltInTok}[1]{{#1}}
-    \newcommand{\ExtensionTok}[1]{{#1}}
-    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
-    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
-    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
-    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
-    
-    
-    % Define a nice break command that doesn't care if a line doesn't already
-    % exist.
-    \def\br{\hspace*{\fill} \\* }
-    % Math Jax compatability definitions
-    \def\gt{>}
-    \def\lt{<}
-    % Document parameters
-    \title{Example}
-    
-    
-    
+	\usepackage{microtype} % improves the spacing between words and letters
+	\usepackage{placeins} % placement of figures
+    % could use \usepackage[section]{placeins} but placing in subsection in command section
+	% Places the float at precisely the location in the LaTeX code (with H)
+	\usepackage{float}
+	\usepackage[colorinlistoftodos,obeyFinal,textwidth=.8in]{todonotes} % to mark to-dos
+	% number figures, tables and equations by section
+	\usepackage{chngcntr}
+	% header/footer
+	\usepackage[footsepline=0.25pt]{scrlayer-scrpage}
 
-    % Pygments definitions
-    
+
+
+	% bibliography formatting
+	\usepackage[numbers, square, super, sort&compress]{natbib}
+	% hyperlink doi's
+	\usepackage{doi}	
+
+
+
+    % define a code float
+    \usepackage{newfloat} % to define a new float types
+    \DeclareFloatingEnvironment[
+        fileext=frm,placement={!ht},
+        within=section,name=Code]{codecell}
+        
+    \usepackage{listings} % a package for wrapping code in a box
+    \usepackage[framemethod=tikz]{mdframed} % to fram code
+
+ 
+	
+	
+	
+    	
+    		
+		
+		
+		
+
+
+% Pygments definitions
+
 \makeatletter
 \def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
     \let\PY@ul=\relax \let\PY@tc=\relax%
@@ -316,15 +194,138 @@
 \makeatother
 
 
-    % Exact colors from NB
-    \definecolor{incolor}{rgb}{0.0, 0.0, 0.5}
-    \definecolor{outcolor}{rgb}{0.545, 0.0, 0.0}
+% ANSI colors
+\definecolor{ansi-black}{HTML}{3E424D}
+\definecolor{ansi-black-intense}{HTML}{282C36}
+\definecolor{ansi-red}{HTML}{E75C58}
+\definecolor{ansi-red-intense}{HTML}{B22B31}
+\definecolor{ansi-green}{HTML}{00A250}
+\definecolor{ansi-green-intense}{HTML}{007427}
+\definecolor{ansi-yellow}{HTML}{DDB62B}
+\definecolor{ansi-yellow-intense}{HTML}{B27D12}
+\definecolor{ansi-blue}{HTML}{208FFB}
+\definecolor{ansi-blue-intense}{HTML}{0065CA}
+\definecolor{ansi-magenta}{HTML}{D160C4}
+\definecolor{ansi-magenta-intense}{HTML}{A03196}
+\definecolor{ansi-cyan}{HTML}{60C6C8}
+\definecolor{ansi-cyan-intense}{HTML}{258F8F}
+\definecolor{ansi-white}{HTML}{C5C1B4}
+\definecolor{ansi-white-intense}{HTML}{A1A6B2}
+
+% commands and environments needed by pandoc snippets
+% extracted from the output of `pandoc -s`
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\newenvironment{Shaded}{}{}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+\newcommand{\RegionMarkerTok}[1]{{#1}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+\newcommand{\NormalTok}[1]{{#1}}
+
+% Additional commands for more recent versions of Pandoc
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+\newcommand{\ImportTok}[1]{{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+\newcommand{\BuiltInTok}[1]{{#1}}
+\newcommand{\ExtensionTok}[1]{{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+
+
+% Define a nice break command that doesn't care if a line doesn't already
+% exist.
+\def\br{\hspace*{\fill} \\* }
+
+% Math Jax compatability definitions
+\def\gt{>}
+\def\lt{<}
 
 
 
-    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.95}
+
+\lstdefinestyle{mystyle}{
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily,
+    breakatwhitespace=false,         
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=10pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+  breaklines=true,
+  postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
+}
+ 
+\lstset{style=mystyle} 
+
+\surroundwithmdframed[
+  hidealllines=true,
+  backgroundcolor=backcolour,
+  innerleftmargin=20pt,
+  innertopmargin=2pt,
+  innerbottommargin=0pt]{lstlisting}
+
+
+				
+	
+
+	
+		
+			
+
+ % Used to adjust the document margins
+\usepackage{geometry}
+\geometry{tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in,
+nohead,includefoot,footskip=25pt}
+% you can use showframe option to check the margins visually 
+
+		
+		
+
+	% ensure new section starts on new page
+	\addtokomafont{section}{\clearpage}
+
     % Prevent overflowing lines due to hard-to-break entities
     \sloppy 
+
     % Setup hyperref package
     \hypersetup{
       breaklinks=true,  % so long urls are correctly broken across lines
@@ -333,20 +334,73 @@
       linkcolor=linkcolor,
       citecolor=citecolor,
       }
-    % Slightly bigger margins than the latex defaults
-    
-    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
-    
+
+    % ensure figures are placed within subsections
+    \makeatletter
+    \AtBeginDocument{%
+      \expandafter\renewcommand\expandafter\subsection\expandafter
+        {\expandafter\@fb@secFB\subsection}%
+      \newcommand\@fb@secFB{\FloatBarrier
+        \gdef\@fb@afterHHook{\@fb@topbarrier \gdef\@fb@afterHHook{}}}%
+      \g@addto@macro\@afterheading{\@fb@afterHHook}%
+      \gdef\@fb@afterHHook{}%
+    }
+    \makeatother
+
+	% number figures, tables and equations by section
+	\usepackage{chngcntr}
+	\counterwithout{figure}{section}
+	\counterwithout{table}{section}
+	\counterwithout{equation}{section}
+	\makeatletter
+	\@addtoreset{table}{section}
+	\@addtoreset{figure}{section}
+	\@addtoreset{equation}{section}
+	\makeatother
+	\renewcommand\thetable{\thesection.\arabic{table}}
+	\renewcommand\thefigure{\thesection.\arabic{figure}}
+	\renewcommand\theequation{\thesection.\arabic{equation}}
+
+    % align captions to left (indented)
+	\captionsetup{justification=raggedright,
+	singlelinecheck=false,format=hang,labelfont={it,bf}} 
+
+	% shift footer down so space between separation line
+	\ModifyLayer[addvoffset=.6ex]{scrheadings.foot.odd}
+	\ModifyLayer[addvoffset=.6ex]{scrheadings.foot.even}
+	\ModifyLayer[addvoffset=.6ex]{scrheadings.foot.oneside}
+	\ModifyLayer[addvoffset=.6ex]{plain.scrheadings.foot.odd}
+	\ModifyLayer[addvoffset=.6ex]{plain.scrheadings.foot.even}
+	\ModifyLayer[addvoffset=.6ex]{plain.scrheadings.foot.oneside}
+	\pagestyle{scrheadings}
+	\clearscrheadfoot{}
+	\ifoot{\leftmark}
+	\renewcommand{\sectionmark}[1]{\markleft{\thesection\ #1}}
+	\ofoot{\pagemark}
+	\cfoot{}
+
+	
+	
+	
     
 
-    \usepackage{cleveref}\creflabelformat{equation}{#2#1#3}\begin{document}
+% clereref must be loaded after anything that changes the referencing system
+\usepackage{cleveref}
+\creflabelformat{equation}{#2#1#3}
+
+
+% make the code float work with cleverref
+\crefname{codecell}{code}{codes}
+\Crefname{codecell}{code}{codes}
+
     
-    
-    \begin{titlepage}\begin{flushright}
-		% a hack to briefly override what nbconvert sets as path
-	    \renewcommand{\includegraphics}[1]{\Oldincludegraphics[width=0.4\textwidth]{#1}}
-		\includegraphics{logo_example}
-	    \renewcommand{\includegraphics}[1]{\Oldincludegraphics[width=.8\maxwidth]{#1}}
+
+	
+	\begin{document}
+
+	
+		\begin{titlepage}\begin{flushright}
+		\includegraphics[width=0.7\textwidth]{logo_example}
 	\end{flushright}
 
 	\begin{center}
@@ -393,23 +447,29 @@
         
 	\end{center}
 	\end{titlepage}
- 
-
-    \tableofcontents
-    
-
-    
 
 
-    \section{Markdown}\label{markdown}
+		
+		
+			
+		
+		
+
+\begingroup
+\let\cleardoublepage\relax
+\let\clearpage\relax\tableofcontents\listoffigures\listoftables\listof{codecell}{List of Code}
+\endgroup
+
+	
+	
+	
 
 
+\section{Markdown}\label{markdown}
 
-    \subsection{General}\label{general}
+\subsection{General}\label{general}
 
-
-
-    Some markdown text.
+Some markdown text.
 
 A list:
 
@@ -432,14 +492,10 @@ A numbered list
   something else
 \end{enumerate}
 
+\subsection{References and Citations}\label{references-and-citations}
 
-
-    \subsection{References and Citations}\label{references-and-citations}
-
-
-
-    References to \cref{fig:example}, \cref{tbl:example} and
-\cref{eqn:example_sympy}.
+References to \cref{fig:example}, \cref{tbl:example},
+\cref{eqn:example_sympy} and \cref{code:example_mpl}.
 
 Referencing multiple items:
 \cref{fig:example,fig:example_h,fig:example_v}.
@@ -448,27 +504,22 @@ A latex citation.\cite{zelenyak_molecular_2016}
 
 A html citation.\cite{kirkeminde_thermodynamic_2012}
 
+\subsection{Todo notes}\label{todo-notes}
 
+\todo[inline]{an inline todo}
 
-    \subsection{Todo notes}\label{todo-notes}
+Some text.\todo{a todo in the margins}
 
-
-
-    \todo[inline]{remember something to add}
-
-Some text.\todo{a comment}
-
-
-
-    \section{Images and Figures}\label{images-and-figures}
+\section{Images and Figures}\label{images-and-figures}
 
 
 
 
 
-    
-\begin{figure}[H]
+    \begin{figure}[!bh]
         \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{Example_files/Example_9_0.jpeg}\end{center}
+
+        
 		\ifdefined\kyfigcexample
 		 \caption{\kyfigcexample}
 		\else
@@ -476,15 +527,16 @@ Some text.\todo{a comment}
 		\fi
         \label{fig:example}
     \end{figure}
-    
-
-
-
-
 
     
-\begin{figure}
+
+
+
+
+    \begin{figure}
         \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{Example_files/Example_10_0.png}\end{center}
+
+        
 		\ifdefined\kyfigcexampleuh
 		 \caption{\kyfigcexampleuh}
 		\else
@@ -492,15 +544,16 @@ Some text.\todo{a comment}
 		\fi
         \label{fig:example_h}
     \end{figure}
-    
-
-
-
-
 
     
-\begin{figure}
+
+
+
+
+    \begin{figure}
         \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{Example_files/Example_11_0.png}\end{center}
+
+        
 		\ifdefined\kyfigcexampleuv
 		 \caption{\kyfigcexampleuv}
 		\else
@@ -508,15 +561,16 @@ Some text.\todo{a comment}
 		\fi
         \label{fig:example_v}
     \end{figure}
-    
-
-
-
-
 
     
-\begin{figure}
+
+
+
+
+    \begin{figure}
         \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{Example_files/Example_12_0.png}\end{center}
+
+        
 		\ifdefined\kyfigcexampleugrid
 		 \caption{\kyfigcexampleugrid}
 		\else
@@ -524,16 +578,33 @@ Some text.\todo{a comment}
 		\fi
         \label{fig:example_grid}
     \end{figure}
-    
 
+    
+\subsection{Displaying a plot with its
+code}\label{displaying-a-plot-with-its-code}
 
 \newcommand{\kyfigcexampleumpl}{A matplotlib figure, with the caption set in the markdowncell above the figure.}
 
+\newcommand{\kycodecexampleumpl}{The plotting code for a matplotlib figure (\cref{fig:example_mpl}).}
+
+\begin{codecell}
+        \ifdefined\kycodecexampleumpl
+         \caption{\kycodecexampleumpl}
+        \else
+        \fi\label{code:example_mpl}
+
+\begin{lstlisting}[language=Python]
+plt.scatter(np.random.rand(10), np.random.rand(10), 
+            label='data label')
+plt.ylabel(r'a y label with latex $\alpha$')
+plt.legend();
+\end{lstlisting}\end{codecell}
 
 
-    
 \begin{figure}
-        \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{Example_files/Example_14_0.pdf}\end{center}
+        \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{Example_files/Example_16_0.pdf}\end{center}
+
+        
 		\ifdefined\kyfigcexampleumpl
 		 \caption{\kyfigcexampleumpl}
 		\else
@@ -541,26 +612,39 @@ Some text.\todo{a comment}
 		\fi
         \label{fig:example_mpl}
     \end{figure}
-    
-
-
 
     \section{Tables (with pandas)}\label{tables-with-pandas}
 
+\newcommand{\kycodecexampleupd}{The plotting code for a pandas Dataframe table (\cref{tbl:example}).}
 
+\begin{codecell}[H]
+        \ifdefined\kycodecexampleupd
+         \caption{\kycodecexampleupd}
+        \else
+        \fi\label{code:example_pd}
+
+\begin{lstlisting}[language=Python]
+df = pd.DataFrame(np.random.rand(3,4),columns=['a','b','c','d'])
+df.a = ['$\delta$','x','y']
+df.b = ['l','m','n']
+df.set_index(['a','b'])
+df.round(3)
+\end{lstlisting}\end{codecell}
 
 
 
     \begin{table}[H]
-		\ifdefined\kytblcexample
-		 \caption{\kytblcexample}
-		\else
-		 \caption{An example of a table created with pandas dataframe.}
-		\fi
-        \label{tbl:example}
-		\centering
-		\rowcolors{2}{gray!20}{white}
-		\begin{tabular}{lllrr}
+    
+    
+	\ifdefined\kytblcexample
+	 \caption{\kytblcexample}
+	\else
+	 \caption{An example of a table created with pandas dataframe.}
+	\fi
+    \label{tbl:example}
+    
+    \centering\rowcolors{2}{gray!20}{white}
+    \begin{tabular}{lllrr}
 \toprule
 {} &         a &  b &      c &      d \\
 \midrule
@@ -573,46 +657,62 @@ Some text.\todo{a comment}
     \end{table}
 
 
+
     
-
-
-
-    \section{Equations (with ipython or
+\section{Equations (with ipython or
 sympy)}\label{equations-with-ipython-or-sympy}
 
 
 
 
 
-    \begin{equation}\label{eqn:example_ipy}
-		 a = b+c 
+    \begin{equation}\label{eqn:example_ipy}	
+	 a = b+c 
     \end{equation}
 
 
+
     
+\newcommand{\kycodecexampleusym}{The plotting code for a sympy equation (\cref{eqn:example_sympy}).}
+
+\begin{codecell}[H]
+        \ifdefined\kycodecexampleusym
+         \caption{\kycodecexampleusym}
+        \else
+        \fi\label{code:example_sym}
+
+\begin{lstlisting}[language=Python]
+f = sym.Function('f')
+y,n = sym.symbols(r'y \alpha')
+f = y(n)-2*y(n-1/sym.pi)-5*y(n-2)
+sym.rsolve(f,y(n),[1,4])
+\end{lstlisting}\end{codecell}
 
 
 
-
-
-    \begin{equation}\label{eqn:example_sympy}
-		\left(\sqrt{5} i\right)^{\alpha} \left(\frac{1}{2} - \frac{2 i}{5} \sqrt{5}\right) + \left(- \sqrt{5} i\right)^{\alpha} \left(\frac{1}{2} + \frac{2 i}{5} \sqrt{5}\right)
+    \begin{equation}\label{eqn:example_sympy}	
+	\left(\sqrt{5} i\right)^{\alpha} \left(\frac{1}{2} - \frac{2 i}{5} \sqrt{5}\right) + \left(- \sqrt{5} i\right)^{\alpha} \left(\frac{1}{2} + \frac{2 i}{5} \sqrt{5}\right)
     \end{equation}
 
 
+
     
 
 
 
 
+	
+	
+    	
+			
 
-
-    % Add a bibliography block to the postdoc
-    
-    
 % sort citations by order of first appearance
 \bibliographystyle{unsrtnat}
 \bibliography{bibliography}
 
+		
+		
     
-    \end{document}
+	
+	\end{document}
+

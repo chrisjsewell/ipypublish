@@ -141,11 +141,13 @@ c.Exporter.template_file = 'created.tplx'
 
 ## Latex Metadata Tags
 
+### Document Tags
+
 For **titlepage**, enter in notebook metadata:
 
 ```json
 {
-	"latex_metadata": {
+	"latex_titlepage": {
 	"author": "Authors Name",
 	"email": "authors@email.com",
 	"supervisors": [
@@ -169,6 +171,19 @@ For **titlepage**, enter in notebook metadata:
 - if run_nbconvert.sh is called on a folder, then the meta data from the first notebook will be used
 - logo should be the name (without extension) of the logo, then use e.g. `run_nbconvert.sh -l logos/logo_example.png Example.ipynb`
 
+To control the output of **contents tables**:
+
+```json
+{
+  "latex_toc": true,
+  "latex_listfigures": true,
+  "latex_listtables": true,
+  "latex_listcode": true,
+}
+```
+
+### Cell Tags
+
 To  **output ignore a markdown cell**:
 
 ```json
@@ -177,17 +192,24 @@ To  **output ignore a markdown cell**:
 }
 ```
 
-To  **output a code cell**:
+To  **output a code block**:
 
 ```json
 {
-	"latex_code" : {
-		"exec_number":true
-	}
+  "latex_code": {
+    "asfloat": true,
+    "caption": "",
+    "label": "code:example_sym",
+    "widefigure": false,
+    "placement": "H"
+  },
 }
 ```
 
-- `exec number` is optional and contitutes showing the current execution number of the cell.
+all extra tags are optional:
+
+- `asfloat` contitutes whether the code is wrapped in a codecell (float) environment or is inline.
+- all other tags work the same as figure (below).
 
 
 For  **figures**, enter in cell metadata:
@@ -203,7 +225,7 @@ For  **figures**, enter in cell metadata:
 }
 ```
 
-- `placement` is optional and constitutes using a placement arguments for the figure (e.g. \begin{figure}[H]). See https://www.sharelatex.com/learn/Positioning_images_and_tables.
+- `placement` is optional and constitutes using a placement arguments for the figure (e.g. \begin{figure}[H]). See [Positioning_images_and_tables](https://www.sharelatex.com/learn/Positioning_images_and_tables).
 - `widefigure` is optional and constitutes expanding the figure to the page width (i.e. \begin{figure*}) (placement arguments will then be ignored)
 
 For  **tables**, enter in cell metadata:
@@ -219,8 +241,8 @@ For  **tables**, enter in cell metadata:
 }
 ```
 
-- `placement` is optional and constitutes using a placement arguments for the table (e.g. \begin{table}[H]). See https://www.sharelatex.com/learn/Positioning_images_and_tables.
-- `alternate` is optional and constitutes using alternating colors for the table rows (e.g. \rowcolors{2}{gray!25}{white}). See https://tex.stackexchange.com/a/5365/107738.
+- `placement` is optional and constitutes using a placement arguments for the table (e.g. \begin{table}[H]). See [Positioning_images_and_tables](https://www.sharelatex.com/learn/Positioning_images_and_tables).
+- `alternate` is optional and constitutes using alternating colors for the table rows (e.g. \rowcolors{2}{gray!25}{white}). See (https://tex.stackexchange.com/a/5365/107738)[https://tex.stackexchange.com/a/5365/107738].
 
 
 For  **equations**, enter in cell metadata:
@@ -237,7 +259,7 @@ label is optional
 
 ### Captions in a Markdown cell
 
-Especially for long captions, it would be prefered that captions can be viewed and edited in a notebook Markdown cell, rather than hidden in the metadata. This can be achieved using the default latex template:
+Especially for long captions, it would be prefered that they can be viewed and edited in a notebook Markdown cell, rather than hidden in the metadata. This can be achieved using the default latex template:
 
 If a **markdown cell** has the metadata tag:
 
@@ -252,7 +274,7 @@ Then, instead of it being input directly into the .tex file, it will be stored a
 - the variable's name is created from the latex_caption value
 - the variable's value is the first paragraph of the markdown text (i.e. nothing after a \n) 
 
-If a subsequent **figure or table** cell has a label matching any stored variable name, for example:
+If a subsequent **figure, table or code** cell has a label matching any stored variable name, for example:
 
 ```json
 {

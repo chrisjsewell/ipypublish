@@ -6,16 +6,23 @@ tplx_dict = {
 	toc=sectionentrywithdots,
 	bibliography=totocnumbered,
 	captions=tableheading,numbers=noendperiod]{scrartcl}
+""",
 
+'document_margins':r"""
+ % Used to adjust the document margins
+\usepackage{geometry}
+\geometry{tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in,
+nohead,includefoot,footskip=25pt}
+% you can use showframe option to check the margins visually 
 """,
 
 'document_packages':r"""
-	\usepackage[a4paper,total={6in, 9in}]{geometry}
 	\usepackage{microtype} % improves the spacing between words and letters
-	\usepackage[section]{placeins} % placement of figures
+	\usepackage{placeins} % placement of figures
+    % could use \usepackage[section]{placeins} but placing in subsection in command section
 	% Places the float at precisely the location in the LaTeX code (with H)
 	\usepackage{float}
-	\usepackage[colorinlistoftodos,obeyFinal]{todonotes} % to mark to-dos
+	\usepackage[colorinlistoftodos,obeyFinal,textwidth=.8in]{todonotes} % to mark to-dos
 	% number figures, tables and equations by section
 	\usepackage{chngcntr}
 	% header/footer
@@ -46,6 +53,18 @@ tplx_dict = {
       linkcolor=linkcolor,
       citecolor=citecolor,
       }
+
+    % ensure figures are placed within subsections
+    \makeatletter
+    \AtBeginDocument{%
+      \expandafter\renewcommand\expandafter\subsection\expandafter
+        {\expandafter\@fb@secFB\subsection}%
+      \newcommand\@fb@secFB{\FloatBarrier
+        \gdef\@fb@afterHHook{\@fb@topbarrier \gdef\@fb@afterHHook{}}}%
+      \g@addto@macro\@afterheading{\@fb@afterHHook}%
+      \gdef\@fb@afterHHook{}%
+    }
+    \makeatother
 
 	% number figures, tables and equations by section
 	\usepackage{chngcntr}

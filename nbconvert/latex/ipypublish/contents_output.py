@@ -105,9 +105,9 @@ cell.metadata) )))
 		\ifdefined\ky((( ckey )))
 		 \caption{\ky((( ckey )))}
 		\else
-		 \caption{ ((( meta.latex_figure.caption ))) }
+		 \caption{((( meta.latex_figure.caption )))}
 		\fi
-        \label{ ((( meta.latex_figure.label ))) }
+        \label{((( meta.latex_figure.label )))}
     \end{figure}
 
 ((*- endblock figure -*))
