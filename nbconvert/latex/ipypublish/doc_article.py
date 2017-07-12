@@ -79,6 +79,30 @@ nohead,includefoot,footskip=25pt}
 	\renewcommand\thetable{\thesection.\arabic{table}}
 	\renewcommand\thefigure{\thesection.\arabic{figure}}
 	\renewcommand\theequation{\thesection.\arabic{equation}}
+    
+    ((*- if nb.metadata.latex_doc: *))
+
+        % set global options for float placement
+        \makeatletter
+          \providecommand*\setfloatlocations[2]{\@namedef{fps@#1}{#2}}
+        \makeatother
+
+        ((*- if nb.metadata.latex_doc.table: -*))
+        ((*- if nb.metadata.latex_doc.table.placement: *))   
+         
+        \setfloatlocations{table}{((( nb.metadata.latex_doc.table.placement )))}
+
+        ((*- endif *))
+        ((*- endif *))
+        ((*- if nb.metadata.latex_doc.figure: -*))
+        ((*- if nb.metadata.latex_doc.figure.placement: *))   
+         
+        \setfloatlocations{figure}{((( nb.metadata.latex_doc.figure.placement )))}
+        
+        ((*- endif *))
+        ((*- endif *))
+    
+    ((*- endif *))
 
     % align captions to left (indented)
 	\captionsetup{justification=raggedright,
