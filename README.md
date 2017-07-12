@@ -213,7 +213,7 @@ To override the default **placement of figures and tables**:
     "figure": {
       "placement": "!bp"
       }
-    "figure": {
+    "table": {
       "placement": "!bp"
       }
   }
