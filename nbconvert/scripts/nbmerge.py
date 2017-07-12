@@ -25,7 +25,7 @@ def merge_notebooks(directory, ignore_prefix='_'):
     
     merged = None
     for fname in natural_sort(glob.glob(os.path.join(directory,'*.ipynb'))):
-        if fname.startswith(ignore_prefix):
+        if os.path.basename(fname).startswith(ignore_prefix):
             continue
         with io.open(fname, 'r', encoding='utf-8') as f:
             nb = nbformat.read(f, as_version=4)
