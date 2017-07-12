@@ -21,10 +21,12 @@ def natural_sort(l):
     alphanum_key = lambda key: [ convert(c) for c in re.split('([0-9]+)', key) ] 
     return sorted(l, key = alphanum_key)
     
-def merge_notebooks(directory):
+def merge_notebooks(directory, ignore_prefix='_'):
     
     merged = None
     for fname in natural_sort(glob.glob(os.path.join(directory,'*.ipynb'))):
+        if fname.startswith(ignore_prefix):
+            continue
         with io.open(fname, 'r', encoding='utf-8') as f:
             nb = nbformat.read(f, as_version=4)
         if merged is None:

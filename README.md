@@ -90,7 +90,7 @@ For example, to convert the Example.ipynb notebook:
 
 	./run_nbconvert.sh -b bibliographies/example.bib -l logos/logo_example.png notebooks/Example.ipynb
 
-If a folder is input, then the .ipynb files it contains are processed and combined in 'natural' sorted order, i.e. 2_name.ipynb before 10_name.ipynb
+If a folder is input, then the .ipynb files it contains are processed and combined in 'natural' sorted order, i.e. 2_name.ipynb before 10_name.ipynb. By default, notebooks beginning '_' are ignored.
 
 Currently, three output converters are availiable out-the-box (in the nbconvert/scripts folder):
 

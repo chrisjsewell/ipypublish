@@ -88,9 +88,9 @@ A latex document
 %% Notebook Input
 %% ==============
 
-((* block input scoped *))
+((* block any_cell scoped *))
 	{notebook_input}
-((* endblock input *))
+((* endblock any_cell *))
 
 ((* block rawcell scoped *))
 	{notebook_input_raw}
