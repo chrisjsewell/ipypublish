@@ -157,7 +157,7 @@ All information additional information, used to specify how a particular noteboo
 
 ```json
 {
-		"doc": {}
+		"latex_doc": {}
 }
 ```
 
