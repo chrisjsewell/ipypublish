@@ -294,7 +294,7 @@ label is optional
 
 Especially for long captions, it would be prefered that they can be viewed and edited in a notebook Markdown cell, rather than hidden in the metadata. This can be achieved using the default latex template:
 
-If a **markdown cell** has the metadata tag:
+If a **markdown input** or **latex output** cell has the metadata tag:
 
 ```json
 {
@@ -340,7 +340,7 @@ The manner in which this works can be found in [Example.tex](https://github.com/
 \end{figure}
 ```
 
-Note, this approach has the implicit contraint that markdown caption cells must be above the corresponding figure/table to be output in the latex/pdf.
+Note, this approach has the implicit contraint that caption cells must be above the corresponding figure/table to be output in the latex/pdf.
 
 ## Citations and Bibliography
 

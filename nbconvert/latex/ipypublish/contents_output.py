@@ -81,6 +81,10 @@ tplx_dict = {
     	((( output.data['text/latex'] | remove_dollars )))
         \end{equation}
     
+    ((*- elif cell.metadata.latex_doc.caption: -*))
+
+        \newcommand{\ky(((cell.metadata.latex_doc.caption | create_key)))}{(((output.data['text/latex'] | first_para)))}
+
     ((*- endif *))
 ((*- endif *))
 """,
