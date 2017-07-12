@@ -452,22 +452,20 @@ nohead,includefoot,footskip=25pt}
 		
 		
 			
-		
-		
-
-\begingroup
-\let\cleardoublepage\relax
-\let\clearpage\relax\tableofcontents\listoffigures\listoftables\listof{codecell}{List of Code}
-\endgroup
+		\begingroup
+    \let\cleardoublepage\relax
+    \let\clearpage\relax\tableofcontents\listoffigures\listoftables\listof{codecell}{List of Code}
+    \endgroup
 
 	
 	
 	
-
 
 \section{Markdown}\label{markdown}
 
+
 \subsection{General}\label{general}
+
 
 Some markdown text.
 
@@ -492,7 +490,9 @@ A numbered list
   something else
 \end{enumerate}
 
+
 \subsection{References and Citations}\label{references-and-citations}
+
 
 References to \cref{fig:example}, \cref{tbl:example},
 \cref{eqn:example_sympy} and \cref{code:example_mpl}.
@@ -504,11 +504,14 @@ A latex citation.\cite{zelenyak_molecular_2016}
 
 A html citation.\cite{kirkeminde_thermodynamic_2012}
 
+
 \subsection{Todo notes}\label{todo-notes}
+
 
 \todo[inline]{an inline todo}
 
 Some text.\todo{a todo in the margins}
+
 
 \section{Images and Figures}\label{images-and-figures}
 
@@ -532,7 +535,6 @@ Some text.\todo{a todo in the margins}
 
 
 
-
     \begin{figure}
         \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{Example_files/Example_10_0.png}\end{center}
 
@@ -546,7 +548,6 @@ Some text.\todo{a todo in the margins}
     \end{figure}
 
     
-
 
 
 
@@ -566,7 +567,6 @@ Some text.\todo{a todo in the margins}
 
 
 
-
     \begin{figure}
         \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{Example_files/Example_12_0.png}\end{center}
 
@@ -583,9 +583,12 @@ Some text.\todo{a todo in the margins}
 \subsection{Displaying a plot with its
 code}\label{displaying-a-plot-with-its-code}
 
+
 \newcommand{\kyfigcexampleumpl}{A matplotlib figure, with the caption set in the markdowncell above the figure.}
 
+
 \newcommand{\kycodecexampleumpl}{The plotting code for a matplotlib figure (\cref{fig:example_mpl}).}
+
 
 \begin{codecell}
         \ifdefined\kycodecexampleumpl
@@ -599,7 +602,6 @@ plt.scatter(np.random.rand(10), np.random.rand(10),
 plt.ylabel(r'a y label with latex $\alpha$')
 plt.legend();
 \end{lstlisting}\end{codecell}
-
 
 \begin{figure}
         \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{Example_files/Example_16_0.pdf}\end{center}
@@ -615,7 +617,9 @@ plt.legend();
 
     \section{Tables (with pandas)}\label{tables-with-pandas}
 
+
 \newcommand{\kycodecexampleupd}{The plotting code for a pandas Dataframe table (\cref{tbl:example}).}
+
 
 \begin{codecell}[H]
         \ifdefined\kycodecexampleupd
@@ -632,19 +636,18 @@ df.round(3)
 \end{lstlisting}\end{codecell}
 
 
-
     \begin{table}[H]
     
+        
+    	\ifdefined\kytblcexample
+    	 \caption{\kytblcexample}
+    	\else
+    	 \caption{An example of a table created with pandas dataframe.}
+    	\fi
+        \label{tbl:example}
     
-	\ifdefined\kytblcexample
-	 \caption{\kytblcexample}
-	\else
-	 \caption{An example of a table created with pandas dataframe.}
-	\fi
-    \label{tbl:example}
-    
-    \centering\rowcolors{2}{gray!20}{white}
-    \begin{tabular}{lllrr}
+        \centering\rowcolors{2}{gray!20}{white}
+        \begin{tabular}{lllrr}
 \toprule
 {} &         a &  b &      c &      d \\
 \midrule
@@ -654,7 +657,7 @@ df.round(3)
 \bottomrule
 \end{tabular}
 
-    \end{table}
+        \end{table}
 
 
 
@@ -667,13 +670,14 @@ sympy)}\label{equations-with-ipython-or-sympy}
 
 
     \begin{equation}\label{eqn:example_ipy}	
-	 a = b+c 
-    \end{equation}
+    	 a = b+c 
+        \end{equation}
 
 
 
     
 \newcommand{\kycodecexampleusym}{The plotting code for a sympy equation (\cref{eqn:example_sympy}).}
+
 
 \begin{codecell}[H]
         \ifdefined\kycodecexampleusym
@@ -689,17 +693,13 @@ sym.rsolve(f,y(n),[1,4])
 \end{lstlisting}\end{codecell}
 
 
-
     \begin{equation}\label{eqn:example_sympy}	
-	\left(\sqrt{5} i\right)^{\alpha} \left(\frac{1}{2} - \frac{2 i}{5} \sqrt{5}\right) + \left(- \sqrt{5} i\right)^{\alpha} \left(\frac{1}{2} + \frac{2 i}{5} \sqrt{5}\right)
-    \end{equation}
+    	\left(\sqrt{5} i\right)^{\alpha} \left(\frac{1}{2} - \frac{2 i}{5} \sqrt{5}\right) + \left(- \sqrt{5} i\right)^{\alpha} \left(\frac{1}{2} + \frac{2 i}{5} \sqrt{5}\right)
+        \end{equation}
 
 
 
     
-
-
-
 
 	
 	

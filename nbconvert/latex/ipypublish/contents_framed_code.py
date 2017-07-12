@@ -56,52 +56,54 @@ tplx_dict = {
 """,
 
 'notebook_input':r"""
+((*- if cell.metadata.latex_doc: -*))
 
-((*- if cell.metadata.latex_code: -*))
+((*- if cell.metadata.latex_doc.code: -*))
 
-((*- if cell.metadata.latex_code.asfloat: -*))
-    ((*- if cell.metadata.latex_code.placement: -*))
-        ((*- if cell.metadata.latex_code.widefigure: -*))
-    \begin{codecell*}[((cell.metadata.latex_code.placement)))]
+((*- if cell.metadata.latex_doc.code.asfloat: -*))
+    ((*- if cell.metadata.latex_doc.code.placement: -*))
+        ((*- if cell.metadata.latex_doc.code.widefigure: -*))
+    \begin{codecell*}[((cell.metadata.latex_doc.code.placement)))]
         ((*- else -*))
-    \begin{codecell}[(((cell.metadata.latex_code.placement)))]
+    \begin{codecell}[(((cell.metadata.latex_doc.code.placement)))]
         ((*- endif *))
     ((*- else -*))
-        ((*- if cell.metadata.latex_code.widefigure: -*))
+        ((*- if cell.metadata.latex_doc.code.widefigure: -*))
     \begin{codecell*}
         ((*- else -*))
     \begin{codecell}
         ((*- endif *))
     ((*- endif *))
 
-    ((*- if cell.metadata.latex_code.label: -*))
-        ((* set ckey = cell.metadata.latex_code.label | create_key *))
+    ((*- if cell.metadata.latex_doc.code.label: -*))
+        ((* set ckey = cell.metadata.latex_doc.code.label | create_key *))
         \ifdefined\ky((( ckey )))
          \caption{\ky((( ckey )))}
         \else
-         ((*- if cell.metadata.latex_code.caption: -*))
-         \caption{((( cell.metadata.latex_code.caption )))}
+         ((*- if cell.metadata.latex_doc.code.caption: -*))
+         \caption{((( cell.metadata.latex_doc.code.caption )))}
          ((*- endif *))
         \fi
-    ((*- elif cell.metadata.latex_code.caption: -*))
-    \caption{((( cell.metadata.latex_code.caption )))}
+    ((*- elif cell.metadata.latex_doc.code.caption: -*))
+    \caption{((( cell.metadata.latex_doc.code.caption )))}
     ((*- endif *))
 ((*- endif *))
 
-((*- if cell.metadata.latex_code.label: -*))
-\label{((( cell.metadata.latex_code.label )))}
+((*- if cell.metadata.latex_doc.code.label: -*))
+\label{((( cell.metadata.latex_doc.code.label )))}
 ((*- endif *))
 
 \begin{lstlisting}[language=Python]
 ((( cell.source )))
 \end{lstlisting}
 
-((*- if cell.metadata.latex_code.asfloat: -*))
+((*- if cell.metadata.latex_doc.code.asfloat: -*))
 \end{codecell}
 ((*- endif *))
 
 ((*- endif *))
 
+((*- endif *))
 """,
 
 'jinja_macros':r"""

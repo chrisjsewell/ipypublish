@@ -1,59 +1,87 @@
 tplx_dict = { 
 'meta_docstring':'with the main ipypublish content',
 
-'notebook_input_markdown':r"""
-((*- if cell.metadata.latex_ignore: -*))
-((*- elif cell.metadata.latex_caption: -*))
-    \newcommand{\ky(((cell.metadata.latex_caption | create_key)))}{(((cell.source | first_para)))}
+'notebook_input':r"""
+((*- if cell.metadata.latex_doc: -*))
+    ((*- if cell.metadata.latex_doc.ignore: -*))
+    ((*- else -*))	
+    ((( super() )))
+    ((*- endif *))
 ((*- else -*))	
-    ((( cell.source | citation2latex | strip_files_prefix | convert_pandoc('markdown', 'json',extra_args=[]) | resolve_references | convert_pandoc('json','latex'))))
+    ((( super() )))
 ((*- endif *))
 """,
 
-'notebook_output':r"""
-((*- if cell.metadata.latex_ignore: -*))
+'notebook_input_markdown':r"""
+((*- if cell.metadata.latex_doc: -*))
+    ((*- if cell.metadata.latex_doc.caption: -*))
+        \newcommand{\ky(((cell.metadata.latex_doc.caption | create_key)))}{(((cell.source | first_para)))}
+    ((*- else -*))	
+        ((( cell.source | citation2latex | strip_files_prefix | convert_pandoc('markdown', 'json',extra_args=[]) | resolve_references | convert_pandoc('json','latex'))))
+    ((*- endif *))
 ((*- else -*))	
-((( super() )))
+    ((( cell.source | citation2latex | strip_files_prefix | convert_pandoc('markdown', 'json',extra_args=[]) | resolve_references | convert_pandoc('json','latex'))))
+((*- endif *))
+
+""",
+
+'notebook_output':r"""
+((*- if cell.metadata.latex_doc: -*))
+    ((*- if cell.metadata.latex_doc.ignore: -*))
+    ((*- else -*))	
+    ((( super() )))
+    ((*- endif *))
+((*- else -*))	
+    ((( super() )))
 ((*- endif *))
 """,
 
 'notebook_output_stream':r"""
-((( super() )))
+((*- if cell.metadata.latex_doc: -*))
+    ((*- if cell.metadata.latex_doc.ignore: -*))
+    ((*- else -*))	
+    ((( super() )))
+    ((*- endif *))
+((*- else -*))	
+    ((( super() )))
+((*- endif *))
 """,
 
 'notebook_output_latex':r"""
-((*- if cell.metadata.latex_table: -*))
-    ((*- if cell.metadata.latex_table.placement: -*))
-    \begin{table}[(((cell.metadata.latex_table.placement)))]
-    ((*- else -*))	
-    \begin{table}
-    ((*- endif *))
+((*- if cell.metadata.latex_doc: -*))
+    ((*- if cell.metadata.latex_doc.table: -*))
+        ((*- if cell.metadata.latex_doc.table.placement: -*))
+        \begin{table}[(((cell.metadata.latex_doc.table.placement)))]
+        ((*- else -*))	
+        \begin{table}
+        ((*- endif *))
     
-    ((* set ckey = cell.metadata.latex_table.label | create_key *))
-	\ifdefined\ky((( ckey )))
-	 \caption{\ky((( ckey )))}
-	\else
-	 \caption{((( cell.metadata.latex_table.caption )))}
-	\fi
-    \label{((( cell.metadata.latex_table.label )))}
+        ((* set ckey = cell.metadata.latex_doc.table.label | create_key *))
+    	\ifdefined\ky((( ckey )))
+    	 \caption{\ky((( ckey )))}
+    	\else
+    	 \caption{((( cell.metadata.latex_doc.table.caption )))}
+    	\fi
+        \label{((( cell.metadata.latex_doc.table.label )))}
     
-    \centering
-    ((*- if cell.metadata.latex_table.alternate: -*))
-    \rowcolors{2}{(((cell.metadata.latex_table.alternate)))}{white}
-    ((*- endif *))
-    ((( output.data['text/latex'] )))
-    \end{table}
+        \centering
+        ((*- if cell.metadata.latex_doc.table.alternate: -*))
+        \rowcolors{2}{(((cell.metadata.latex_doc.table.alternate)))}{white}
+        ((*- endif *))
+        ((( output.data['text/latex'] )))
+        \end{table}
     
-((*- elif cell.metadata.latex_equation: -*))
+    ((*- elif cell.metadata.latex_doc.equation: -*))
 
-	((*- if cell.metadata.latex_equation.label: -*))
-    \begin{equation}\label{((( cell.metadata.latex_equation.label )))}
-	((*- else -*))	
-    \begin{equation}
-	((*- endif *))	
-	((( output.data['text/latex'] | remove_dollars )))
-    \end{equation}
+    	((*- if cell.metadata.latex_doc.equation.label: -*))
+        \begin{equation}\label{((( cell.metadata.latex_doc.equation.label )))}
+    	((*- else -*))	
+        \begin{equation}
+    	((*- endif *))	
+    	((( output.data['text/latex'] | remove_dollars )))
+        \end{equation}
     
+    ((*- endif *))
 ((*- endif *))
 """,
 
@@ -82,18 +110,19 @@ cell.metadata) )))
 
 'jinja_macros':r"""
 ((* macro draw_figure(filename, meta) -*))
-((*- if meta.latex_figure: -*))
+((*- if meta.latex_doc: -*))
+((*- if meta.latex_doc.figure: -*))
 ((* set filename = filename | posix_path *))
 ((*- block figure scoped -*))
 
-    ((*- if meta.latex_figure.placement: -*))
-        ((*- if meta.latex_figure.widefigure: -*))
-    \begin{figure*}[(((meta.latex_figure.placement)))]
+    ((*- if meta.latex_doc.figure.placement: -*))
+        ((*- if meta.latex_doc.figure.widefigure: -*))
+    \begin{figure*}[(((meta.latex_doc.figure.placement)))]
         ((*- else -*))
-    \begin{figure}[(((meta.latex_figure.placement)))]
+    \begin{figure}[(((meta.latex_doc.figure.placement)))]
         ((*- endif *))
     ((*- else -*))
-        ((*- if meta.latex_figure.widefigure: -*))
+        ((*- if meta.latex_doc.figure.widefigure: -*))
     \begin{figure*}
         ((*- else -*))
     \begin{figure}
@@ -101,16 +130,17 @@ cell.metadata) )))
     ((*- endif *))
         \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{((( filename )))}\end{center}
 
-        ((* set ckey = meta.latex_figure.label | create_key *))
+        ((* set ckey = meta.latex_doc.figure.label | create_key *))
 		\ifdefined\ky((( ckey )))
 		 \caption{\ky((( ckey )))}
 		\else
-		 \caption{((( meta.latex_figure.caption )))}
+		 \caption{((( meta.latex_doc.figure.caption )))}
 		\fi
-        \label{((( meta.latex_figure.label )))}
+        \label{((( meta.latex_doc.figure.label )))}
     \end{figure}
 
 ((*- endblock figure -*))
+((*- endif *))
 ((*- endif *))
 ((*- endmacro *))
 """

@@ -121,6 +121,7 @@ else
 		latexmk -bibtex -pdf "${ipynb_name}.tex" | tee latex_to_pdf.log
 		cd -
 		cp "${nconvert_path}/latex_to_pdf.log"  "converted/${ipynb_name}.latex_to_pdf.log"
+		rm -r "${nconvert_path}/latex_to_pdf.log"
 		sed 's/{name_of_pdf_here}/'"${ipynb_name}.pdf"'/' < "${nconvert_path}/scripts/view_pdf.html" > "converted/${ipynb_name}_viewpdf.html"
 		cp "${nconvert_path}/${ipynb_name}.pdf"  "converted/${ipynb_name}.pdf"
 	else
