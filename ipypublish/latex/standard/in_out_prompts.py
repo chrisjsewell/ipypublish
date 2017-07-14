@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 tplx_dict = { 
+'overwrite':['notebook_output','notebook_input_code'],
 'meta_docstring':'with in/out prompts',
 'document_definitions':"""
 
@@ -9,7 +10,7 @@ tplx_dict = {
     \definecolor{outcolor}{rgb}{0.545, 0.0, 0.0}
     
 """,
-'notebook_input':"""
+'notebook_input_code':"""
     ((( add_prompt(cell.source | highlight_code(strip_verbatim=True, metadata=cell.metadata), cell, 'In ', 'incolor') )))
 
 """,
@@ -21,7 +22,7 @@ tplx_dict = {
 \texttt{\color{outcolor}Out[{\color{outcolor}((( cell.execution_count )))}]:}((( super() )))
             ((*- endif -*))
         ((*- endif -*))
-        
+
 """,
 'jinja_macros':r"""
 % Purpose: Renders an output/input prompt

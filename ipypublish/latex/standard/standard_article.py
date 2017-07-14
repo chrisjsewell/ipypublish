@@ -42,6 +42,7 @@ tplx_dict = {
     \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
                                 % normalem makes italics be italics, not underlines
 
+    \usepackage{todonotes} % to mark to-dos
 """,
 
 'document_definitions':r"""
@@ -68,6 +69,12 @@ tplx_dict = {
     \DeclareCaptionLabelFormat{nolabel}{}
     \captionsetup{labelformat=nolabel}
 
+""",
+
+'document_header_end':r"""
+% clereref must be loaded after anything that changes the referencing system
+\usepackage{cleveref}
+\creflabelformat{equation}{#2#1#3}
 """,
 
 'document_commands':r"""

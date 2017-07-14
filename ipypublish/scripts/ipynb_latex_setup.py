@@ -19,13 +19,19 @@ from collections import OrderedDict
 
 # IPYTHON
 # =======
-from IPython import get_ipython
-ipython = get_ipython()
-ipython.magic("config InlineBackend.figure_format = 'svg'")
-ipython.magic("matplotlib inline")
-from IPython.display import Image, Latex
-from IPython.display import set_matplotlib_formats
-set_matplotlib_formats('pdf', 'svg')
+try:
+    from IPython import get_ipython
+    from IPython.display import Image, Latex
+    from IPython.display import set_matplotlib_formats
+    _ipy_present = True
+except NameError:
+    _ipy_present = False
+if _ipy_present:
+    ipython = get_ipython()
+    if ipython is not None:
+        ipython.magic("config InlineBackend.figure_format = 'svg'")
+        ipython.magic("matplotlib inline")
+        set_matplotlib_formats('pdf', 'svg')
 
 # NUMPY
 # =====

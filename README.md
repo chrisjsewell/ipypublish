@@ -3,7 +3,7 @@ A workflow for creating and editing publication ready scientific reports, from o
 
 ![WorkFlow Example](/example_workflow.gif)
 
-See ![notebooks/Example.ipynb](converted/Example.pdf) and ![converted/Example.pdf](converted/Example.pdf) for an example of the potential input/output.
+See ![notebooks/Example.ipynb](example/notebooks/Example.pdf) and ![converted/Example.pdf](converted/Example.pdf) for an example of the potential input/output.
 
 - [Design Philosophy](#design-philosophy)
 - [Workflow](#worklow)
@@ -34,11 +34,11 @@ In essence, the dream is to have the ultimate hybrid of Jupyter Notebook, WYSIWY
 1. Create a notebook with some content!
 2. optionally create a .bib file and logo image
 3. Adjust the notebook and cell metadata. 
-4. Clone the ipypublish [GitHub repository](https://github.com/chrisjsewell/ipypublish) and run the run_nbconvert.sh script for either the specific notebook, or a folder containing multiple notebooks. 
+4. Clone the ipypublish [GitHub repository](https://github.com/chrisjsewell/ipypublish) and run the nbpublish.py script for either the specific notebook, or a folder containing multiple notebooks. 
 5. A converted folder will be created, into which final .tex .pdf and _viewpdf.html files will be output, named by the notebook or folder input
 
 The default latex template outputs all markdown cells (unless tagged latex_ignore), and then only code and output cells with [latex metadata tags](#latex-metadata-tags). 
-See [Example.ipynb](https://github.com/chrisjsewell/ipypublish/blob/master/notebooks/Example.ipynb) and [Example.pdf](https://github.com/chrisjsewell/ipypublish/blob/master/converted/Example.pdf) for an example of the potential input and output.
+See [Example.ipynb](https://github.com/chrisjsewell/ipypublish/blob/master/example/notebooks/Example.ipynb) and [Example.pdf](https://github.com/chrisjsewell/ipypublish/blob/master/converted/Example.pdf) for an example of the potential input and output.
 
 ## Setting up the environment
 
@@ -75,24 +75,24 @@ For improved latex/pdf output, [ipynb_latex_setup.py](https://github.com/chrisjs
 To use this script, in the first cell of a notebook, insert:
 
 ```python
-from ipynb_latex_setup import *
+from ipypublish.ipynb_latex_setup import *
 ```
 
 It is recommended that you also set this cell as an initialisation cell (i.e. have `"init_cell": true` in the metadata)
 
 ## Converting Notebooks
 
-The run_nbconvert script handles parsing the notebooks to nbconvert, with the appropriate converter. To see all options for this script:
+The nbpublish.py script handles parsing the notebooks to nbconvert, with the appropriate converter. To see all options for this script:
 
-	./run_nbconvert.sh -h
+	python nbpublish.py -h
 
 For example, to convert the Example.ipynb notebook:
 
-	./run_nbconvert.sh -b bibliographies/example.bib -l logos/logo_example.png notebooks/Example.ipynb
+	python nbpublish.py example/notebooks/Example.ipynb
 
 If a folder is input, then the .ipynb files it contains are processed and combined in 'natural' sorted order, i.e. 2_name.ipynb before 10_name.ipynb. By default, notebooks beginning '_' are ignored.
 
-Currently, three output converters are availiable out-the-box (in the nbconvert/scripts folder):
+Currently, three output converters are availiable out-the-box (in the scripts folder):
 
 - latex_ipypublish_main.py is the default and converts cells to latex according to metadata tags on an 'opt in' basis.
 - latex_standard_article.py replicates the standard latex article template, which comes with nbconvert.
@@ -135,19 +135,17 @@ The converter would then look like this:
 
 ```python
 
-from latex.create_tplx import create_tplx
-from latex.standard import standard_article as doc
-from latex.standard import standard_definitions as defs
-from latex.standard import standard_packages as package
+from ipypublish.latex.create_tplx import create_tplx
+from ipypublish.latex.standard import standard_article as doc
+from ipypublish.latex.standard import standard_definitions as defs
+from ipypublish.latex.standard import standard_packages as package
 
-create_tplx('created.tplx',
-    [package.tplx_dict,defs.tplx_dict,doc.tplx_dict,
-    my_tplx_dict])
+oformat = 'Latex'
+template = create_tplx([package.tplx_dict,defs.tplx_dict,
+		     doc.tplx_dict,my_tplx_dict])
 
-c = get_config() 
-c.NbConvertApp.export_format = 'latex'   
-c.TemplateExporter.filters = c.Exporter.filters = {}
-c.Exporter.template_file = 'created.tplx'
+config = {'TemplateExporter.filters':{},
+          'Exporter.filters':{}}
 
 ```
 
@@ -162,6 +160,18 @@ All information additional information, used to specify how a particular noteboo
 ```
 
 ### Document Tags
+
+To specify where the **bibliography** is:
+
+```json
+{
+"latex_doc": {
+	"bibliography" : "path/to/bibliograph.bib"
+	}
+}
+```
+
+The path can be absolute or relative.
 
 For **titlepage**, enter in notebook metadata:
 
@@ -182,15 +192,15 @@ For **titlepage**, enter in notebook metadata:
 	  "Institution1",
 	  "Institution2"
 	],
-	"logo": "logo_example"
+	"logo": "path/to/logo_example.png"
   }
 }
 ```
 
 - all keys are optional
 - if there is no title, then the notebook filename will be used
-- if run_nbconvert.sh is called on a folder, then the meta data from the first notebook will be used
-- logo should be the name (without extension) of the logo, then use e.g. `run_nbconvert.sh -l logos/logo_example.png Example.ipynb`
+- if nbpublish.py is called on a folder, then the meta data from the first notebook will be used
+- logo should be the path (absolute or relative) to a logo image file
 
 To control the output of **contents tables**:
 
@@ -365,7 +375,7 @@ Using Zotero's Firefox plugin and [Zotero Better Bibtex](https://github.com/reto
 
 - automated .bib file updating 
 - drag and drop cite keys \cite{kirkeminde_thermodynamic_2012}
-- `latexmk -bibtex -pdf` (in run_nbconvert.sh) handles creation of the bibliography
+- `latexmk -bibtex -pdf` (in nbpublish.py) handles creation of the bibliography
 - \usepackage{doi} turns the DOI numbers into url links
 
     - in Zotero-Better-Bibtex I have the option set to only export DOI, if both DOI and URL are present.

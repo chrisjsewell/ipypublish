@@ -3,9 +3,23 @@
 tplx_dict = { 
 'meta_docstring':'with standard nbconvert input/output content',
 
+'notebook_input':"""
+ ((( super() )))
+""",
+
+'notebook_input_code':"""
+    ((( cell.source | highlight_code(strip_verbatim=True, metadata=cell.metadata) )))
+
+""",
+
+
 'notebook_input_markdown':"""
     ((( cell.source | citation2latex | strip_files_prefix | convert_pandoc('markdown', 'json',extra_args=[]) | resolve_references | convert_pandoc('json','latex'))))
 
+""",
+
+'notebook_output':"""
+ ((( super() )))
 """,
 
 'notebook_output_text':r"""

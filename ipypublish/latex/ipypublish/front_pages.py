@@ -10,8 +10,9 @@ tplx_dict = {
 	\begin{titlepage}
 		
 	((*- if nb.metadata["latex_doc"]["titlepage"]["logo"]: -*))
+    ((* set filename = nb.metadata.latex_doc.titlepage.logo | posix_path *))
 	\begin{flushright}
-		\includegraphics[width=0.7\textwidth]{((( nb.metadata["latex_doc"]["titlepage"]["logo"] )))}
+		\includegraphics[width=0.7\textwidth]{((( filename )))}
 	\end{flushright}
 	((*- endif *))
 

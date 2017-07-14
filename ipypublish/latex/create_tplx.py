@@ -30,15 +30,15 @@ A latex document
 
 ((* block header *))
 
-	((* block docclass *)) 
+	((*- block docclass *)) 
 		{document_docclass} 	
-	((* endblock docclass *))
+	((* endblock docclass -*))
 	
-	((* block packages *))
+	((*- block packages *))
 		{document_packages} 
 	((* endblock packages *))
 	
-	((* block definitions *))
+	((*- block definitions *))
     	((* block date *))((* endblock date *))
     	((* block author *))((* endblock author *))	
 		((* block title *))((* endblock title *))
@@ -47,7 +47,7 @@ A latex document
 				
 	((* endblock definitions *))
 
-	((* block commands *))
+	((*- block commands *))
 		((* block margins *))
 			{document_margins}
 		((* endblock margins *))
@@ -88,9 +88,13 @@ A latex document
 %% Notebook Input
 %% ==============
 
-((* block any_cell scoped *))
+((*- block any_cell scoped *))
 	{notebook_input}
 ((* endblock any_cell *))
+
+((* block input scoped *))
+	{notebook_input_code}
+((* endblock input *))
 
 ((* block rawcell scoped *))
 	{notebook_input_raw}
@@ -108,7 +112,7 @@ A latex document
 %% ================
 
 % Redirect execute_result to display data priority.
-((* block execute_result scoped *))
+((*- block execute_result scoped *))
     ((* block data_priority scoped *))
 		{notebook_output}
     ((* endblock *))
@@ -134,7 +138,7 @@ A latex document
 	{notebook_output_latex}
 ((* endblock data_latex *))
 
-((* block data_markdown -*))
+((*- block data_markdown -*))
 	{notebook_output_markdown}
 ((* endblock data_markdown *))
 
@@ -161,8 +165,24 @@ A latex document
 {jinja_macros}
 """
 
-def create_tplx(outpath, tplx_dicts=(), outline=TPLX_OUTLINE):
-
+def create_tplx(tplx_dicts=(),outpath=None):
+    """ build a latex jinja template from multiple dictionaries,
+    specifying fragments of the template to insert a specific points
+                
+    if a tplx_dict contains the key "overwrite", 
+    then its value should be a list of keys,
+    such that these key values overwrite any entries before
+                
+    Parameters
+    ----------
+    tplx_dicts: list of dicts
+    outpath: str
+        if not None, output template to file
+    outline : dict
+        the outline jinja template
+    
+    """
+    outline=TPLX_OUTLINE
     tplx_sections={
     'meta_docstring':'',
 
@@ -182,6 +202,7 @@ def create_tplx(outpath, tplx_dicts=(), outline=TPLX_OUTLINE):
     'document_postdoc':'',
 
     'notebook_input':'',
+    'notebook_input_code':'',
     'notebook_input_raw':'',
     'notebook_input_markdown':'',
     'notebook_input_unknown':'',
@@ -201,14 +222,23 @@ def create_tplx(outpath, tplx_dicts=(), outline=TPLX_OUTLINE):
     'jinja_macros':''}
     
     for i, tplx_dict in enumerate(tplx_dicts):
+        if 'overwrite' in tplx_dict:
+            overwrite = tplx_dict.pop('overwrite')
+        else:
+            overwrite = []
         for key,val in tplx_dict.items():
             if key not in tplx_sections:
                 raise ValueError(
                 '{0} from tplx_dict {1} not in outline tplx section'.format(key,i))
-            tplx_sections[key] = tplx_sections[key]+'\n'+val
+            if key in overwrite:
+                tplx_sections[key] = val
+            else:
+                tplx_sections[key] = tplx_sections[key]+'\n'+val
 
-    outline =  outline.format(**tplx_sections)  
-    with open(outpath,'w') as f:
-        f.write(outline)
-    return
+    outline =  outline.format(**tplx_sections) 
     
+    if outpath is not None: 
+        with open(outpath,'w') as f:
+            f.write(outline)
+        return
+    return outline
