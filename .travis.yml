@@ -24,8 +24,6 @@ matrix:
         - export PATH=$PATH:/usr/texbin:/Library/TeX/texbin
         - sudo tlmgr update --self
         - sudo tlmgr install latexmk
-
-matrix:
   allow_failures:
     - os: osx
       
