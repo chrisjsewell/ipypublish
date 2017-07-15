@@ -16,6 +16,7 @@ matrix:
       dist: trusty
     - os: osx
       language: generic
+      env: ALLOW_FAILURE=true
       before_install:
         - brew update
         - brew install python3
@@ -23,11 +24,14 @@ matrix:
         - source env/bin/activate
         - brew install pandoc
         - brew upgrade wget
-        - wget http://mirror.ctan.org/systems/mac/mactex/BasicTeX.pkg -O BasicTeX.pkg
+        - sudo wget http://mirror.ctan.org/systems/mac/mactex/BasicTeX.pkg -O BasicTeX.pkg
         - sudo installer -pkg BasicTeX.pkg -target /
         - export PATH=$PATH:/usr/texbin:/Library/TeX/texbin
         - sudo tlmgr update --self
         - sudo tlmgr install latexmk
+  allow_failures:
+    - os: osx
+    - env: ALLOW_FAILURE=true
       
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update ; fi
