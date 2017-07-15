@@ -95,6 +95,15 @@ try:
 except ImportError:
     _pil_present = False
 if _pil_present:
+    def create_test_image(size=(50,50)):
+        from io import BytesIO
+        file = BytesIO()
+        image = PImage.new('RGBA', size=size, color=(155, 0, 0))
+        image.save(file, 'png')
+        file.name = 'test.png'
+        file.seek(0)
+        return file
+        
     def images_read(paths):
         """read a list of image paths to a list of PIL.IMAGE instances """
         return [PImage.open(i).convert("RGBA") for i in paths]
@@ -106,29 +115,55 @@ if _pil_present:
         ----------
         images : list
             if aspaths=True, list of path strings, else list of PIL.Image instances
+        width : int or list of ints
+            maximum width of final image, or of individual images
+        height : int or list of ints
+            maximum height of final image, or of individual images
         gap : int
             size of space between images
     
         Returns
         -------
         image : PIL.Image
-                   
+                       
+        Examples
+        --------
+        >>> img_path = create_test_image(size=(50,50))
+        >>> img = images_hconcat([img_path,img_path])
+        >>> img.size
+        (100, 50)
+
+        >>> img_path = create_test_image(size=(50,50))
+        >>> img = images_hconcat([img_path,img_path],width=40,height=40)
+        >>> img.size
+        (40, 20)
+
+        >>> img_path = create_test_image(size=(50,50))
+        >>> img = images_hconcat([img_path,img_path],width=[40,30])
+        >>> img.size
+        (70, 40)
+
+        >>> img_path = create_test_image(size=(50,50))
+        >>> img = images_hconcat([img_path,img_path],gap=10)
+        >>> img.size
+        (110, 50)
+                         
         """
         images = images_read(images) if aspaths else images
         if not isinstance(width,list):
-            widths = [width for _ in images] 
+            widths = [width for _ in images]             
         else:
             widths = width[:]
-            width = sum(widths)
+            width = sum(widths) + gap*(len(images)-1)
         if not isinstance(height,list):
             heights = [height for _ in images]
         else:
             heights = height[:]
-            height = sum(heights) + gap*(len(images)-1)
+            height = sum(heights)
         for im,w,h in zip(images,widths,heights):
             im.thumbnail((w,h), PImage.ANTIALIAS)
         widths, heights = zip(*(i.size for i in images))
-        total_width = sum(widths) + gap*len(images)
+        total_width = sum(widths) + gap*(len(images)-1)
         max_height = max(heights)
         new_im = PImage.new('RGBA', (total_width, max_height))
         x_offset = 0
@@ -147,15 +182,38 @@ if _pil_present:
         images : list
             if aspaths=True, list of path strings, else list of PIL.Image instances
         width : int or list of ints
-            if a list, must be same length as number of images
+            maximum width of final image, or of individual images
         height : int or list of ints
-            if a list, must be same length as number of images
+            maximum height of final image, or of individual images
         gap : int
             size of space between images
     
         Returns
         -------
         image : PIL.Image
+                       
+        Examples
+        --------
+        >>> img_path = create_test_image(size=(50,50))
+        >>> img = images_vconcat([img_path,img_path])
+        >>> img.size
+        (50, 100)
+
+        >>> img_path = create_test_image(size=(50,50))
+        >>> img = images_vconcat([img_path,img_path],width=40,height=40)
+        >>> img.size
+        (20, 40)
+
+        >>> img_path = create_test_image(size=(50,50))
+        >>> img = images_vconcat([img_path,img_path],width=[40,30])
+        >>> img.size
+        (40, 70)
+
+        >>> img_path = create_test_image(size=(50,50))
+        >>> img = images_vconcat([img_path,img_path],gap=10)
+        >>> img.size
+        (50, 110)
+        
                    
         """
         images = images_read(images) if aspaths else images
@@ -173,7 +231,7 @@ if _pil_present:
             im.thumbnail((w,h), PImage.ANTIALIAS)
         widths, heights = zip(*(i.size for i in images))
         max_width = max(widths)
-        total_height = sum(heights) + gap*len(images)
+        total_height = sum(heights) + gap*(len(images)-1)
         new_im = PImage.new('RGBA', (max_width, total_height))
         y_offset = 0
         for im in images:
