@@ -27,6 +27,8 @@ matrix:
         - export PATH=$PATH:/usr/texbin:/Library/TeX/texbin
         - sudo tlmgr update --self
         - sudo tlmgr install latexmk
+  allow_failure:
+      - env: ALLOW_FAILURE=true
       
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update ; fi
