@@ -12,7 +12,6 @@ matrix:
       python: 3.6
       dist: trusty
       env: ALLOW_FAILURE=false
-  allow_failures:
     - os: osx
       language: generic
       env: ALLOW_FAILURE=false
@@ -23,7 +22,7 @@ matrix:
         - source env/bin/activate
         - brew install pandoc
         - brew upgrade wget
-        - sudo wget http://mirror.ctan.org/systems/mac/mactex/BasicTeX.pkg -O BasicTeX.pkg
+        - travis_retry sudo wget http://mirror.ctan.org/systems/mac/mactex/BasicTeX.pkg -O BasicTeX.pkg
         - sudo installer -pkg BasicTeX.pkg -target /
         - export PATH=$PATH:/usr/texbin:/Library/TeX/texbin
         - travis_retry sudo tlmgr update --self
