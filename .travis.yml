@@ -31,6 +31,7 @@ matrix:
         - sudo tlmgr install collectbox
         - sudo tlmgr install ucs
         - sudo tlmgr install enumitem
+        - sudo tlmgr install placeins
       
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update ; fi
