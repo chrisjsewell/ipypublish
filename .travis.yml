@@ -1,16 +1,16 @@
 language: python
 
 matrix:
-    include:
-        - os: linux
-          sudo: required
-          python: 2.7
-          dist: trusty # required for lates versions of pandoc and latexmk
-        - os: linux
-          sudo: required
-          python: 3.6
-		  dist: trusty
-
+ include:
+    - os: linux
+      sudo: required
+      python: 2.7
+      dist: trusty # required for lates versions of pandoc and latexmk
+    - os: linux
+      sudo: required
+      python: 3.6
+	  dist: trusty
+	  
 before_install:
   - pip install -U pip setuptools wheel  
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update ; fi
