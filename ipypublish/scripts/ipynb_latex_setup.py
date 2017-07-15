@@ -24,7 +24,7 @@ try:
     from IPython.display import Image, Latex
     from IPython.display import set_matplotlib_formats
     _ipy_present = True
-except NameError:
+except ImportError:
     _ipy_present = False
 if _ipy_present:
     ipython = get_ipython()
@@ -45,7 +45,7 @@ except NameError:
 try:
     import matplotlib as mpl
     _mpl_present = True
-except NameError:
+except ImportError:
     _mpl_present = False
     
 if _mpl_present:
@@ -69,10 +69,10 @@ if _mpl_present:
 try:
     import pandas as pd
     _pandas_present = True
-except NameError:
+except ImportError:
     _pandas_present = False
 
-if _pandas_present:
+if _pandas_present and ipython:
     pd.set_option('display.latex.repr',True)
     pd.set_option('display.latex.longtable',False)
     pd.set_option('display.latex.escape',False)
@@ -82,7 +82,7 @@ if _pandas_present:
 try:
     import sympy as sym
     _sympy_present = True
-except NameError:
+except ImportError:
     _sympy_present = False
 if _sympy_present:
     sym.init_printing(use_latex=True)
@@ -92,7 +92,7 @@ if _sympy_present:
 try:
     from PIL import Image as PImage
     _pil_present = True
-except NameError:
+except ImportError:
     _pil_present = False
 if _pil_present:
     def images_read(paths):
@@ -211,7 +211,7 @@ if _pil_present:
 try:
     from jsonextended import ejson, edict
     _jsonextended_present = True
-except NameError:
+except ImportError:
     _jsonextended_present = False
 if _jsonextended_present:
     from jsonextended import plugins as eplugins

@@ -60,7 +60,7 @@ def create_key(input, **kwargs):
     (semi)colons as c, underscores as u and numbers as roman numerals
     in this way the keys with different input should mainly be unique
     
-    >>> sanitize_key('fig:A_10name56')
+    >>> create_key('fig:A_10name56')
     'figcauxnamelvi'
     
     """
