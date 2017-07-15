@@ -1,8 +1,7 @@
 language: python
 
-matrix:
-  allow_failures:
-    - os: osx
+env:
+- TEST=true
 
 matrix:
  include:
@@ -10,12 +9,10 @@ matrix:
       sudo: required
       python: 2.7
       dist: trusty # required for lates versions of pandoc and latexmk
-      env: Python=2.7
     - os: linux
       sudo: required
       python: 3.6
       dist: trusty
-      env: Python=3.6
     - os: osx
       language: generic
       env: ALLOW_FAILURE=true
