@@ -5,31 +5,9 @@ A workflow for creating and editing publication ready scientific
 reports, from one or more Jupyter Notebooks, without leaving the
 browser!
 
-.. figure:: /example_workflow.gif
-   :alt: WorkFlow Example
 
-   WorkFlow Example
-
-See |notebooks/Example.ipynb| and |converted/Example.pdf| for an example
+See example/notebooks/Example.ipynb and converted/Example.pdf for an example
 of the potential input/output.
-
--  `Design Philosophy <#design-philosophy>`__
--  `Workflow <#worklow>`__
--  `Setting up the environment <#setting-up-the-environment>`__
--  `Setting up a Notebook <#setting-up-a-notebook>`__
--  `Converting Notebooks <#converting-notebooks>`__
-
-   -  `Creating a bespoke converter <#creating-a-bespoke-converter>`__
-
--  `Latex Metadata Tags <#latex-metadata-tags>`__
-
-   -  `Captions in a Markdown cell <#captions-in-a-markdown-cell>`__
-
--  `Citations and Bibliography <#citations-and-bibliography>`__
--  `Live Slideshows <#live-slideshows>`__
--  `Dealing with external data <#dealing-with-external-data>`__
--  `Miscellaneous <#miscellaneous>`__
--  `Acknowledgements <#acknowledgements>`__
 
 Design Philosophy
 -----------------
@@ -396,7 +374,7 @@ For **tables**, enter in cell metadata:
 -  ``alternate`` is optional and constitutes using alternating colors
    for the table rows (e.g. :raw-latex:`\rowcolors{2}{gray!25}{white}`).
    See
-   (https://tex.stackexchange.com/a/5365/107738)[https://tex.stackexchange.com/a/5365/107738].
+   https://tex.stackexchange.com/a/5365/107738.
 
 For **equations**, enter in cell metadata:
 
@@ -512,9 +490,8 @@ The `Reveal.js - Jupyter/IPython Slideshow Extension
 (RISE) <https://github.com/damianavila/RISE>`__ notebook extension
 offers rendering as a Reveal.js-based slideshow, where you can execute
 code or show to the audience whatever you can show/do inside the
-notebook itself! Click on the image to see a demo:
+notebook itself!
 
-|RISE Demo|
 
 Dealing with external data
 --------------------------
@@ -617,8 +594,3 @@ I took strong influence from:
 -  Notebook concatination was adapted from `nbconvert
    issue#253 <https://github.com/jupyter/nbconvert/issues/253>`__
 
-.. |notebooks/Example.ipynb| image:: example/notebooks/Example.pdf
-.. |converted/Example.pdf| image:: converted/Example.pdf
-.. |conda\_packages.txt| image:: conda_packages.txt
-.. |RISE Demo| image:: https://img.youtube.com/vi/sXyFa_r1nxA/0.jpg
-   :target: https://www.youtube.com/watch?v=sXyFa_r1nxA
