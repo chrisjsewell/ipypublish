@@ -13,6 +13,7 @@ before_install:
   - sudo apt-get -qq update 
   - sudo apt-get install -y pandoc
   - sudo apt-get install -y texlive
+  - sudo apt-get install texlive-latex-extra # required for som styles
   - sudo apt-get install -y latexmk
 
 install:
