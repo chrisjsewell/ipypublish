@@ -6,10 +6,12 @@ matrix:
       sudo: required
       python: 2.7
       dist: trusty # required for lates versions of pandoc and latexmk
+      env: ALLOW_FAILURE=false
     - os: linux
       sudo: required
       python: 3.6
       dist: trusty
+      env: ALLOW_FAILURE=false
     - os: osx
       language: generic
       env: ALLOW_FAILURE=true
