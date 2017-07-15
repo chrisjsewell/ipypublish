@@ -8,9 +8,10 @@ python:
 
 before_install:
   - pip install -U pip setuptools wheel
-  - sudo apt-get -qq update
-  - sudo apt-get install -y latexmk
-  #- sudo apt-get install -y pandoc out-of-date version 
+  - sudo apt-get -qq update 
+  #- sudo apt-get install -y latexmk # out-of-date versions
+  #- sudo apt-get install -y pandoc # out-of-date versions
+  - sudo apt-get install -y texlive
   - wget https://github.com/jgm/pandoc/releases/download/1.19.2.1/pandoc-1.19.2.1-1-amd64.deb
   - sudo dpkg -i pandoc-1.19.2.1-1-amd64.deb
 
