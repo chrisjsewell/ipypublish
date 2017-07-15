@@ -27,9 +27,7 @@ matrix:
         - export PATH=$PATH:/usr/texbin:/Library/TeX/texbin
         - sudo tlmgr update --self
         - sudo tlmgr install latexmk
-  allow_failure:
-      - os: osx
-      - env: ALLOW_FAILURE=true
+        - sudo tlmgr install adjustbox
       
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update ; fi
