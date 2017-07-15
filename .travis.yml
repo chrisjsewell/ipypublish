@@ -17,8 +17,13 @@ matrix:
         - brew install python3
         - virtualenv env -p python3
         - source env/bin/activate
-        - brew install caskroom/cask/brew-cask
-        - brew cask install basictex
+        - brew install wget
+        - wget http://mirror.ctan.org/systems/mac/mactex/BasicTex.pkg -O /temp/BasicTeX.pkg
+        - sudo installer -pkg /temp/BasicTeX.pkg -target /
+        - export PATH=$PATH:/usr/texbin:/Library/TeX/texbin
+            
+  allow_failures:
+    - os: osx
       
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update ; fi
