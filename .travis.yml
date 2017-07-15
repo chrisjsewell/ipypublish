@@ -47,6 +47,7 @@ before_install:
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y texlive ; fi
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y texlive-latex-extra ; fi
 # need up-to-date koma-script
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo tlmgr init-usertree ; fi
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo tlmgr install --reinstall koma-script ; fi
 #- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y texlive-latex-recommended  ; fi
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y latexmk ; fi
