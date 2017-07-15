@@ -1,13 +1,18 @@
 ipypublish
 ==========
 
+**Project**: https://github.com/chrisjsewell/ipypublish
+
+.. image:: https://travis-ci.org/chrisjsewell/ipypublish.svg?branch=master
+    :target: https://travis-ci.org/chrisjsewell/ipypublish
+
 A workflow for creating and editing publication ready scientific
 reports, from one or more Jupyter Notebooks, without leaving the
 browser!
 
+.. image:: https://github.com/chrisjsewell/ipypublish/raw/master/example_workflow.gif
 
-See example/notebooks/Example.ipynb and converted/Example.pdf for an example
-of the potential input/output.
+For an example of the potential input/output, see `Example.ipynb <https://github.com/chrisjsewell/ipypublish/raw/master/example/notebooks/Example.ipynb>`__  and `Example.pdf <https://github.com/chrisjsewell/ipypublish/raw/master/converted/Example.pdf>`__ .
 
 Design Philosophy
 -----------------
@@ -79,7 +84,7 @@ sidebar):
     conda install --name ipyreport jupyter_contrib_nbextensions
 
 A more extensive setup of useful packages (used to create the example)
-are listed in |conda\_packages.txt| and an environment can be created
+are listed in conda\_packages.txt and an environment can be created
 directly from this using conda:
 
 ::
@@ -372,9 +377,8 @@ For **tables**, enter in cell metadata:
    for the table (e.g. \\begin{table}[H]). See
    `Positioning\_images\_and\_tables <https://www.sharelatex.com/learn/Positioning_images_and_tables>`__.
 -  ``alternate`` is optional and constitutes using alternating colors
-   for the table rows (e.g. :raw-latex:`\rowcolors{2}{gray!25}{white}`).
-   See
-   https://tex.stackexchange.com/a/5365/107738.
+   for the table rows (e.g. \rowcolors{2}{gray!25}{white}).
+   See https://tex.stackexchange.com/a/5365/107738.
 
 For **equations**, enter in cell metadata:
 
@@ -412,7 +416,7 @@ stored as a variable;
 
 -  the variable's name is created from the latex\_caption value
 -  the variable's value is the first paragraph of the markdown text
-   (i.e. nothing after a :raw-latex:`\n`)
+   (i.e. nothing after a `\n`)
 
 If a subsequent **figure, table or code** cell has a label matching any
 stored variable name, for example:
@@ -459,10 +463,10 @@ for;
 
 -  automated .bib file updating
 -  drag and drop cite keys
-   :raw-latex:`\cite{kirkeminde_thermodynamic_2012}`
+   ``\cite{kirkeminde_thermodynamic_2012}``
 -  ``latexmk -bibtex -pdf`` (in nbpublish.py) handles creation of the
    bibliography
--  :raw-latex:`\usepackage{doi}` turns the DOI numbers into url links
+-  ``\usepackage{doi}`` turns the DOI numbers into url links
 
    -  in Zotero-Better-Bibtex I have the option set to only export DOI,
       if both DOI and URL are present.
