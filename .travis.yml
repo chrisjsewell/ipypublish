@@ -32,6 +32,7 @@ matrix:
         - sudo tlmgr install ucs
         - sudo tlmgr install enumitem
         - sudo tlmgr install placeins
+        - sudo tlmgr install todonotes
       
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update ; fi
