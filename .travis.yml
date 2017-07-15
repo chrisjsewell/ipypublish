@@ -2,33 +2,33 @@ language: python
 
 matrix:
   allow_failures:
-    - os: osx
+	- os: osx
 
 matrix:
  include:
-    - os: linux
-      sudo: required
-      python: 2.7
-      dist: trusty # required for lates versions of pandoc and latexmk
-    - os: linux
-      sudo: required
-      python: 3.6
-      dist: trusty
-    - os: osx
-      language: generic
-      before_install:
-        - brew update
-        - brew install python3
-        - virtualenv env -p python3
-        - source env/bin/activate
+	- os: linux
+	  sudo: required
+	  python: 2.7
+	  dist: trusty # required for lates versions of pandoc and latexmk
+	- os: linux
+	  sudo: required
+	  python: 3.6
+	  dist: trustys
+	- os: osx
+	  language: generic
+	  before_install:
+		- brew update
+		- brew install python3
+		- virtualenv env -p python3
+		- source env/bin/activate
 		- brew install pandoc
-        - brew upgrade wget
-        - wget http://mirror.ctan.org/systems/mac/mactex/BasicTex.pkg -O BasicTeX.pkg
-        - sudo installer -pkg BasicTeX.pkg -target /
-        - export PATH=$PATH:/usr/texbin:/Library/TeX/texbin
-        - sudo tlmgr update --self
-        - sudo tlmgr install latexmk
-      
+		- brew upgrade wget
+		- wget http://mirror.ctan.org/systems/mac/mactex/BasicTex.pkg -O BasicTeX.pkg
+		- sudo installer -pkg BasicTeX.pkg -target /
+		- export PATH=$PATH:/usr/texbin:/Library/TeX/texbin
+		- sudo tlmgr update --self
+		- sudo tlmgr install latexmk
+	  
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update ; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y pandoc ; fi
@@ -37,17 +37,17 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y texlive-latex-extra ; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y latexmk ; fi
 
-  - pip install -U pip setuptools wheel  
+  - pip install -U pip setuptools wheel	 
 
 install:
-    - travis_wait pip install -r requirements.txt
-    - pip install -r test_requirements.txt
-    - pip install .
-    - pip install --quiet coverage
-    - pip install --quiet coveralls
+	- travis_wait pip install -r requirements.txt
+	- pip install -r test_requirements.txt
+	- pip install .
+	- pip install --quiet coverage
+	- pip install --quiet coveralls
 
 script:
-    - nosetests -v --nocapture --with-doctest --with-coverage --exe --cover-package=ipypublish
+	- nosetests -v --nocapture --with-doctest --with-coverage --exe --cover-package=ipypublish
 
 after_success:
-    - coveralls
+	- coveralls
