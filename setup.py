@@ -50,5 +50,5 @@ with io.open('README.rst') as readme:
         zip_safe=True,
         packages = find_packages(),
         package_data={'': []},
-        scripts=['nbpublish.py'],
+        scripts=['bin/nbpublish'],
     )

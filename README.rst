@@ -290,7 +290,7 @@ To override the default **placement of figures and tables**:
     "latex_doc": {
         "figure": {
           "placement": "!bp"
-          }
+          },
         "table": {
           "placement": "!bp"
           }
