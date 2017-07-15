@@ -58,14 +58,20 @@ Setting up the environment
 
 Using `Conda <https://conda.io/docs/>`__ is recommended for package
 management, in order to create self contained environments with specific
-versions of packages. The main packages required are the Jupyter
-notebook, Jupyter
+versions of packages. The main external packages required are the Jupyter notebook, Jupyter
 `nbconvert <https://nbconvert.readthedocs.io/en/latest/index.html>`__
 and `Pandoc <http://pandoc.org>`__ (for conversion to latex):
 
 ::
 
     conda create --name ipyreport -c conda-forge jupyter pandoc
+
+ipypublish can then be installed into this environment:
+
+::
+
+	source activate ipyreport
+	pip install ipypublish
 
 For converting to PDF, the TeX document preparation ecosystem is
 required (an in particular
@@ -75,6 +81,10 @@ installed from:
 -  Linux: `TeX Live <http://tug.org/texlive/>`__
 -  macOS (OS X): `MacTeX <http://tug.org/mactex/>`__
 -  Windows: `MikTex <http://www.miktex.org/>`__
+
+ipypublish is automatically **tested** on update against **python 2.7 and 3.6**, for both **Linux and OSX**, using `Travis CI <https://en.wikipedia.org/wiki/Travis_CI>`__. Therefore, to troubleshoot any installation/run issues, 
+it is best to look at the `travis config <https://github.com/chrisjsewell/ipypublish/blob/master/.travis.yml>`__ 
+and `travis test runs <https://travis-ci.org/chrisjsewell/ipypublish>`__ for working configurations.
 
 For helpful extensions to the notebooks core capabilities (like a toc
 sidebar):
@@ -94,8 +104,7 @@ directly from this using conda:
 Setting up a Notebook
 ---------------------
 
-For improved latex/pdf output,
-`ipynb\_latex\_setup.py <https://github.com/chrisjsewell/ipypublish/blob/master/conda_packages.txt>`__
+For improved latex/pdf output, ipynb\_latex\_setup.py
 contains import and setup code for the notebook and a number of common
 packages and functions, including:
 
@@ -121,13 +130,13 @@ the appropriate converter. To see all options for this script:
 
 ::
 
-    python nbpublish.py -h
+    nbpublish -h
 
 For example, to convert the Example.ipynb notebook:
 
 ::
 
-    python nbpublish.py example/notebooks/Example.ipynb
+    nbpublish -pdf example/notebooks/Example.ipynb
 
 If a folder is input, then the .ipynb files it contains are processed
 and combined in 'natural' sorted order, i.e. 2\_name.ipynb before

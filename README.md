@@ -36,9 +36,9 @@ In essence, the dream is to have the ultimate hybrid of Jupyter Notebook, WYSIWY
 ## Workflow
 
 1. Create a notebook with some content!
-2. optionally create a .bib file and logo image
+2. optionally create a .bib file and external images
 3. Adjust the notebook and cell metadata. 
-4. Clone the ipypublish [GitHub repository](https://github.com/chrisjsewell/ipypublish) and run the nbpublish.py script for either the specific notebook, or a folder containing multiple notebooks. 
+4. install ipypublish and run the `nbpublish` for either the specific notebook, or a folder containing multiple notebooks. 
 5. A converted folder will be created, into which final .tex .pdf and _viewpdf.html files will be output, named by the notebook or folder input
 
 The default latex template outputs all markdown cells (unless tagged latex_ignore), and then only code and output cells with [latex metadata tags](#latex-metadata-tags). 
@@ -48,16 +48,24 @@ See [Example.ipynb](https://github.com/chrisjsewell/ipypublish/blob/master/examp
 
 Using [Conda](https://conda.io/docs/) is recommended for package management, 
 in order to create self contained environments with specific versions of packages. 
-The main packages required are the Jupyter notebook, Jupyter [nbconvert](https://nbconvert.readthedocs.io/en/latest/index.html) 
-and [Pandoc](http://pandoc.org) (for conversion to latex):
+The main external packages required are the Jupyter notebook, and [Pandoc](http://pandoc.org) (for conversion of file formats):
 
 	conda create --name ipyreport -c conda-forge jupyter pandoc
+	
+ipypublish can then be installed into this environment:
+
+	source activate ipyreport
+	pip install ipypublish
 	
 For converting to PDF, the TeX document preparation ecosystem is required (an in particular [latexmk](http://mg.readthedocs.io/latexmk.html)), which can be installed from:
 
 - Linux: [TeX Live](http://tug.org/texlive/)
 - macOS (OS X): [MacTeX](http://tug.org/mactex/)
 - Windows: [MikTex](http://www.miktex.org/)
+
+ipypublish is automatically **tested** on update against **python 2.7 and 3.6**, for both **Linux and OSX**, using [Travis CI](https://en.wikipedia.org/wiki/Travis_CI). Therefore, to troubleshoot any installation/run issues, 
+it is best to look at the [travis config](https://github.com/chrisjsewell/ipypublish/blob/master/.travis.yml) 
+and [travis test runs](https://travis-ci.org/chrisjsewell/ipypublish) for working configurations.
 
 For helpful extensions to the notebooks core capabilities (like a toc sidebar):
 
@@ -71,7 +79,7 @@ and an environment can be created directly from this using conda:
 	
 ## Setting up a Notebook 
 
-For improved latex/pdf output, [ipynb_latex_setup.py](https://github.com/chrisjsewell/ipypublish/blob/master/conda_packages.txt) contains import and setup code for the notebook and a number of common packages and functions, including:
+For improved latex/pdf output, `ipynb_latex_setup.py` contains import and setup code for the notebook and a number of common packages and functions, including:
 
 - numpy, matplotlib, pandas, sympy, ...
 - `images_hconcat`, `images_vconcat` and `images_gridconcat` functions, which use the PIL/Pillow package to create a single image from multiple images (with specified arrangement)
@@ -88,11 +96,11 @@ It is recommended that you also set this cell as an initialisation cell (i.e. ha
 
 The nbpublish.py script handles parsing the notebooks to nbconvert, with the appropriate converter. To see all options for this script:
 
-	python nbpublish.py -h
+	nbpublish -h
 
-For example, to convert the Example.ipynb notebook:
+For example, to convert the Example.ipynb notebook directly to pdf:
 
-	python nbpublish.py example/notebooks/Example.ipynb
+	nbpublish -pdf example/notebooks/Example.ipynb
 
 If a folder is input, then the .ipynb files it contains are processed and combined in 'natural' sorted order, i.e. 2_name.ipynb before 10_name.ipynb. By default, notebooks beginning '_' are ignored.
 
