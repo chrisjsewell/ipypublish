@@ -1,6 +1,10 @@
 language: python
 
 matrix:
+  allow_failures:
+    - os: osx
+
+matrix:
  include:
     - os: linux
       sudo: required
