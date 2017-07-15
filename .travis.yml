@@ -40,13 +40,14 @@ matrix:
     - travis_retry sudo tlmgr install biblatex
     - travis_retry sudo tlmgr install needspace
     - travis_retry sudo tlmgr install collection-fontsrecommended
-    # need latest version
-    - travis_retry sudo tlmgr install --reinstall koma-script 
+
 before_install:
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update ; fi
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y pandoc ; fi
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y texlive ; fi
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y texlive-latex-extra
+  ; fi
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y texlive-latex-recommended
   ; fi
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y latexmk ; fi
 - pip install -U pip setuptools wheel
