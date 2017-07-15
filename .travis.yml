@@ -17,7 +17,7 @@ matrix:
         - brew install python3
         - virtualenv env -p python3
         - source env/bin/activate
-		- brew install pandoc
+        - brew install pandoc
         - brew upgrade wget
         - wget http://mirror.ctan.org/systems/mac/mactex/BasicTex.pkg -O BasicTeX.pkg
         - sudo installer -pkg BasicTeX.pkg -target /
