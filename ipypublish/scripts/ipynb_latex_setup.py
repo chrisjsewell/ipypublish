@@ -249,9 +249,13 @@ if _pil_present:
         pathslist : list of lists
             if aspaths=True, list of path strings, else list of PIL.Image instances
             each sub list constitutes a row
+        width : int 
+            maximum width of final image
+        height : int
+            maximum height of final image
         hgap : int
             size of horizontal space between images
-        hgap : int
+        vgap : int
             size of vertical space between images
     
         Returns
