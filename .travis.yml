@@ -59,7 +59,6 @@ script:
 after_success:
 - coveralls
 deploy:
-  matrix:
   - provider: pypi
     distributions: bdist_wheel
     server: https://test.pypi.org/legacy/
