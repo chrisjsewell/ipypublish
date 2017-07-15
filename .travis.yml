@@ -39,6 +39,7 @@ matrix:
         - travis_retry sudo tlmgr install cleveref
         - travis_retry sudo tlmgr install biblatex
         - travis_retry sudo tlmgr install needspace
+        - travis_retry sudo tlmgr install collection-fontsrecommended
       
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update ; fi
