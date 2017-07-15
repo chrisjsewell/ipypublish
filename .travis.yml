@@ -17,6 +17,8 @@ matrix:
         - brew install python3
         - virtualenv env -p python3
         - source env/bin/activate
+		- brew install caskroom/cask/brew-cask
+		- brew cask install basictex
       
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update ; fi
