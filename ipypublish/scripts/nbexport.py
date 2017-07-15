@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import logging
 
 import nbconvert
 
@@ -39,8 +40,10 @@ def export_notebook(nb,format,config,template):
     class MyExporter(getattr(nbconvert, format+'Exporter')):
         """override the default template"""
         template_file = 'my_template'
-    
+
+    logging.info('running nbconvert')    
     exporter = MyExporter(
                     config=c,
                     extra_loaders=[jinja_template])
+                    
     return exporter.from_notebook_node(nb), exporter.file_extension

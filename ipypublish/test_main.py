@@ -1,7 +1,8 @@
+import os, tempfile, shutil
 from nose.tools import eq_, raises
 from ipypublish.utils import MockPath
-from ipypublish.scripts import nbmerge, nbexport
-
+from ipypublish.scripts import nbmerge, nbexport, pdfexport
+from ipypublish.main import publish
     
 class Test_main(object):
     def setup(self):
@@ -100,7 +101,7 @@ class Test_main(object):
      "nbformat_minor": 2
 }""")
         self.directory = MockPath('dir1',structure=[self.file1,self.file2])
-
+        
     def test_nbmerge_one_notebook(self):
         nb, path = nbmerge.merge_notebooks(self.file1)
         eq_(nb.metadata.test_name,"notebook1")
@@ -176,3 +177,58 @@ test123
         (body, resources), exe = nbexport.export_notebook(nb,'HTML',config,template)
         eq_(exe,'.html')        
         eq_(body.strip(),'hallo')
+        
+    def test_pdf_export(self):
+
+        tex_content = """
+\begin{document}
+
+\end{document}
+"""
+        out_folder = tempfile.mkdtemp()
+        tex_path = os.path.join(out_folder,'test.tex')
+        pdf_path = os.path.join(out_folder,'test.pdf')
+        try:
+            with open(tex_path,'w') as f:
+                f.write(tex_content)
+            pdfexport.export_pdf(tex_path,out_folder)
+            assert os.path.exists(pdf_path)
+        finally:
+            shutil.rmtree(out_folder)    
+            
+    def test_publish_file1_latex(self):
+        
+        out_folder = tempfile.mkdtemp()
+        tex_path = os.path.join(out_folder,'2test.tex')
+        try:
+            publish(self.file1,outpath=out_folder)
+            assert os.path.exists(tex_path)
+        finally:
+            shutil.rmtree(out_folder)    
+
+    def test_publish_file1_pdf(self):
+        
+        out_folder = tempfile.mkdtemp()
+        tex_path = os.path.join(out_folder,'2test.tex')
+        pdf_path = os.path.join(out_folder,'2test.pdf')
+        try:
+            publish(self.file1,outpath=out_folder,create_pdf=True)
+            assert os.path.exists(tex_path)
+            assert os.path.exists(pdf_path)
+        finally:
+            shutil.rmtree(out_folder)    
+
+    def test_publish_folder1_latex(self):
+        
+        out_folder = tempfile.mkdtemp()
+        tex_path = os.path.join(out_folder,'dir1.tex')
+        try:
+            publish(self.directory,outpath=out_folder)
+            assert os.path.exists(tex_path)
+        finally:
+            shutil.rmtree(out_folder)    
+
+    # TODO files with internal files
+    # TODO files with external files
+        
+        
