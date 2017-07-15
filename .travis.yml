@@ -25,8 +25,8 @@ matrix:
         - wget http://mirror.ctan.org/systems/mac/mactex/BasicTex.pkg -O BasicTeX.pkg
         - sudo installer -pkg BasicTeX.pkg -target /
         - export PATH=$PATH:/usr/texbin:/Library/TeX/texbin
-		- sudo tlmgr update --self
-		- sudo tlmgr install latexmk
+        - sudo tlmgr update --self
+        - sudo tlmgr install latexmk
       
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update ; fi
