@@ -38,6 +38,7 @@ matrix:
         - travis_retry sudo tlmgr install mdframed
         - travis_retry sudo tlmgr install cleveref
         - travis_retry sudo tlmgr install biblatex
+        - travis_retry sudo tlmgr install needspace
       
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update ; fi
