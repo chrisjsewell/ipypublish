@@ -23,7 +23,7 @@ matrix:
         - source env/bin/activate
         - brew install pandoc
         - brew upgrade wget
-        - wget http://mirror.ctan.org/systems/mac/mactex/BasicTex.pkg -O BasicTeX.pkg
+        - wget http://mirror.ctan.org/systems/mac/mactex/BasicTeX.pkg -O BasicTeX.pkg
         - sudo installer -pkg BasicTeX.pkg -target /
         - export PATH=$PATH:/usr/texbin:/Library/TeX/texbin
         - sudo tlmgr update --self
