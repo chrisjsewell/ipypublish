@@ -1,0 +1,25 @@
+language: python
+
+python:
+    - "2.7"
+    - "3.4"
+    - "3.5"
+    - "3.6"
+
+before_install:
+  - pip install -U pip setuptools wheel
+  - sudo apt-get -qq update
+  - sudo apt-get install -y latexmk
+
+install:
+    - travis_wait pip install -r requirements.txt
+    - pip install -r test_requirements.txt
+    - pip install .
+    - pip install --quiet coverage
+    - pip install --quiet coveralls
+
+script:
+    - nosetests -v --nocapture --with-doctest --with-coverage --exe --cover-package=ipypublish
+
+after_success:
+    - coveralls
