@@ -14,7 +14,7 @@ matrix:
       env: ALLOW_FAILURE=false
     - os: osx
       language: generic
-      env: ALLOW_FAILURE=true
+      env: ALLOW_FAILURE=false
       before_install:
         - brew update
         - brew install python3
@@ -28,7 +28,10 @@ matrix:
         - sudo tlmgr update --self
         - sudo tlmgr install latexmk
         - sudo tlmgr install adjustbox
-      
+        - sudo tlmgr install collectbox
+        - sudo tlmgr install ucs
+  allow_failures:
+      - env: ALLOW_FAILURE=true       
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update ; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y pandoc ; fi
