@@ -12,6 +12,7 @@ matrix:
       python: 3.6
       dist: trusty
       env: ALLOW_FAILURE=false
+  allow_failures:
     - os: osx
       language: generic
       env: ALLOW_FAILURE=false
