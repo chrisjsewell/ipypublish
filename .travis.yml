@@ -7,9 +7,9 @@ python:
     - "3.6"
 		
 os:
-	- linux
-	- osx
-	
+  - linux
+  - osx
+  	
 dist: trusty # required for lates versions of pandoc and latexmk
 
 before_install:
