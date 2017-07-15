@@ -5,10 +5,6 @@ python:
 #    - "3.4"
 #    - "3.5"
     - "3.6"
-		
-os:
-  - linux
-  - osx
   	
 dist: trusty # required for lates versions of pandoc and latexmk
 
