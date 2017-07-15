@@ -28,6 +28,7 @@ matrix:
         - sudo tlmgr update --self
         - sudo tlmgr install latexmk
   allow_failure:
+      - os: osx
       - env: ALLOW_FAILURE=true
       
 before_install:
