@@ -16,7 +16,7 @@ matrix:
       language: generic
       env: ALLOW_FAILURE=false
       before_install:
-        - brew update
+        - travis_wait brew update
         - brew install python3
         - virtualenv env -p python3
         - source env/bin/activate
@@ -35,6 +35,9 @@ matrix:
         - sudo tlmgr install todonotes
         - sudo tlmgr install chngcntr
         - sudo tlmgr install doi
+        - sudo tlmgr install mdframed
+        - sudo tlmgr install cleveref
+        - sudo tlmgr install biblatex
       
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update ; fi
