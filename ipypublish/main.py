@@ -16,7 +16,7 @@ try:
 except ImportError:
     import pathlib2 as pathlib
         
-from ipypublish import scripts
+from ipypublish import export_plugins
 from ipypublish.scripts.nbmerge import merge_notebooks
 from ipypublish.scripts.nbexport import export_notebook
 from ipypublish.scripts.pdfexport import export_pdf
@@ -135,7 +135,7 @@ def publish(ipynb_path,
 
     logging.info('getting output format from exporter plugin')
     try:
-        outplugin = getattr(scripts, outformat)
+        outplugin = getattr(export_plugins, outformat)
     except AttributeError as err:
         logging.error('the exporter plugin does not exist: {}'.format(outformat))
         raise ValueError('the exporter plugin does not exist: {}'.format(outformat))
@@ -196,17 +196,6 @@ def publish(ipynb_path,
     logging.info('process finished successfully')
     return outpath
         
-if __name__ == '__main__':
-    import funcargparse
-    from funcargparse import FuncArgParser
-    parser = FuncArgParser()
-    parser.setup_args(publish)
-    parser.update_short(outformat='f')
-    parser.update_short(outpath='o')    
-    parser.update_short(dump_files='d')
-    parser.update_short(create_pdf='pdf')    
-    parser.create_arguments()
-    parser.parse2func()
         
         
         

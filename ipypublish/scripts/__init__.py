@@ -1,5 +1,1 @@
-from ipypublish.scripts import (latex_ipypublish_main, 
-                                latex_standard_article,
-								html_standard,
-                                html_toc_toggle,
-                                slides_standard)
+from ipypublish.scripts import *

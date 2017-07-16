@@ -206,6 +206,16 @@ test123
         finally:
             shutil.rmtree(out_folder)    
 
+    def test_publish_folder1_latex(self):
+        
+        out_folder = tempfile.mkdtemp()
+        tex_path = os.path.join(out_folder,'dir1.tex')
+        try:
+            publish(self.directory,outpath=out_folder)
+            assert os.path.exists(tex_path)
+        finally:
+            shutil.rmtree(out_folder)    
+
     def test_publish_file1_pdf(self):
         
         out_folder = tempfile.mkdtemp()
@@ -235,16 +245,6 @@ test123
         try:
             publish(self.file1,outformat='slides_standard',outpath=out_folder)
             assert os.path.exists(html_path)
-        finally:
-            shutil.rmtree(out_folder)    
-
-    def test_publish_folder1_latex(self):
-        
-        out_folder = tempfile.mkdtemp()
-        tex_path = os.path.join(out_folder,'dir1.tex')
-        try:
-            publish(self.directory,outpath=out_folder)
-            assert os.path.exists(tex_path)
         finally:
             shutil.rmtree(out_folder)    
 
