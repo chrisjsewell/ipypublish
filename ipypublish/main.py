@@ -147,8 +147,6 @@ def publish(ipynb_path,
     oconfig['ExtractOutputPreprocessor.output_filename_template'] = files_folder+'/{unique_key}_{cell_index}_{index}{extension}'
     
     (body, resources), exe = export_notebook(final_nb, oformat,oconfig,otemplate)
-    
-    print(resources['reveal']['url_prefix'])
 
     # reduce multiple blank lines to single
     body = re.sub(r'\n\s*\n', '\n\n', body) 
