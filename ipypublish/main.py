@@ -190,8 +190,8 @@ def publish(ipynb_path,
                    convert_in_temp=pdf_in_temp,
                    html_viewer=True,
                    debug_mode=pdf_debug):
-            logging.error('pdf export returned false')
-            raise RuntimeError('the pdf export failed')
+            logging.error('pdf export returned false, try running with pdf_debug=True')
+            raise RuntimeError('the pdf export failed, try running with pdf_debug=True')
         
     logging.info('process finished successfully')
     return outpath

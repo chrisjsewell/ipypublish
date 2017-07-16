@@ -138,11 +138,11 @@ def export_pdf(texpath, outdir, files_path=None,
             view_pdf = VIEW_PDF.format(pdf_name=texname+'.pdf')
             with open(os.path.join(outdir,texname+'.view_pdf.html'),'w') as f:
                 f.write(view_pdf)
-        return False
+        return True
     else:
         logging.error('pdf conversion failed: '
                       'Try running with pdf_debug=True')
-        return True
+        return False
         
 def run_conversion(texpath, out_folder, files_folder=None, debug_mode=False):
     """ run latexmk conversion
