@@ -218,6 +218,26 @@ test123
         finally:
             shutil.rmtree(out_folder)    
 
+    def test_publish_file1_html(self):
+        
+        out_folder = tempfile.mkdtemp()
+        html_path = os.path.join(out_folder,'2test.html')
+        try:
+            publish(self.file1,outformat='html_toc_toggle',outpath=out_folder)
+            assert os.path.exists(html_path)
+        finally:
+            shutil.rmtree(out_folder)    
+
+    def test_publish_file1_slides(self):
+        
+        out_folder = tempfile.mkdtemp()
+        html_path = os.path.join(out_folder,'2test.slides.html')
+        try:
+            publish(self.file1,outformat='slides_standard',outpath=out_folder)
+            assert os.path.exists(html_path)
+        finally:
+            shutil.rmtree(out_folder)    
+
     def test_publish_folder1_latex(self):
         
         out_folder = tempfile.mkdtemp()
