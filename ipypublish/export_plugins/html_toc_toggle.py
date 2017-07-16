@@ -1,6 +1,6 @@
-""" create html with a table of contents 
-and toggleable input code cells
-
+"""html in standard nbconvert format, 
+but with a table of contents 
+and toggle buttons for showing/hiding code & output cells
 """
 
 from ipypublish.html.create_tpl import create_tpl

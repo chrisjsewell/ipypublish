@@ -16,7 +16,7 @@ try:
 except ImportError:
     import pathlib2 as pathlib
         
-from ipypublish import export_plugins
+from ipypublish.scripts import export_plugins
 from ipypublish.scripts.nbmerge import merge_notebooks
 from ipypublish.scripts.nbexport import export_notebook
 from ipypublish.scripts.pdfexport import export_pdf
@@ -134,19 +134,19 @@ def publish(ipynb_path,
                                                             os.path.basename(logo))
 
     logging.info('getting output format from exporter plugin')
-    try:
-        outplugin = getattr(export_plugins, outformat)
-    except AttributeError as err:
-        logging.error('the exporter plugin does not exist: {}'.format(outformat))
-        raise ValueError('the exporter plugin does not exist: {}'.format(outformat))
+    plugins = export_plugins.get()
+    if not outformat in plugins:
+        logging.error("the exporter plugin '{}' does not exist".format(outformat)
+                      +", acceptable names: {}".format(list(plugins.keys())))
+        raise ValueError("the exporter plugin '{}' does not exist".format(outformat)
+                      +", acceptable names: {}".format(list(plugins.keys())))
+    oplugin = plugins[outformat]
         
-    oformat = outplugin.oformat
-    otemplate = outplugin.template
-    oconfig = outplugin.config
     # ensure file paths point towards the right folder
-    oconfig['ExtractOutputPreprocessor.output_filename_template'] = files_folder+'/{unique_key}_{cell_index}_{index}{extension}'
+    oplugin['config']['ExtractOutputPreprocessor.output_filename_template'] = files_folder+'/{unique_key}_{cell_index}_{index}{extension}'
     
-    (body, resources), exe = export_notebook(final_nb, oformat,oconfig,otemplate)
+    (body, resources), exe = export_notebook(final_nb, 
+                             oplugin['oformat'],oplugin['config'],oplugin['template'])
 
     # reduce multiple blank lines to single
     body = re.sub(r'\n\s*\n', '\n\n', body) 
@@ -182,7 +182,7 @@ def publish(ipynb_path,
             shutil.copyfile(external_path,
                 os.path.join(outfilespath,os.path.basename(external_path)))
      
-    if create_pdf and oformat.lower()=='latex':
+    if create_pdf and oplugin['oformat'].lower()=='latex':
         logging.info('running pdf conversion')   
         
         if not export_pdf(outpath, outdir=outdir, 

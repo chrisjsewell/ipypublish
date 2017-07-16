@@ -1,7 +1,6 @@
-""" create the an article in the ipypublish format;
-only output with metadata tags
-but also with framed input code
-
+"""latex article in the main ipypublish format:
+- only output cells with metadata tags are used
+- code, figures, tables and code are formatted accordingly
 """
 from ipypublish.latex.create_tplx import create_tplx
 from ipypublish.latex.standard import standard_definitions as defs

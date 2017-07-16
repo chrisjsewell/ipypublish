@@ -1,6 +1,5 @@
 #!/usr/bin/env python
-"""
-standard nbconvert html output
+"""html in standard nbconvert format
 """
 
 from ipypublish.html.create_tpl import create_tpl

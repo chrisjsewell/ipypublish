@@ -1,6 +1,4 @@
-""" create 
-an article in the standard nbconvert format
-
+"""latex article in the standard nbconvert format
 """
 
 from ipypublish.latex.create_tplx import create_tplx
