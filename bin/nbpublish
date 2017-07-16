@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import os, sys, logging
 from ipypublish.main import publish
                 
 def nbpublish(ipynb_path,
@@ -34,12 +35,27 @@ def nbpublish(ipynb_path,
         the logging level
               
     """
+    ipynb_name = os.path.splitext(os.path.basename(ipynb_path))[0]
+    outdir = os.path.join(os.getcwd(),'converted') if outpath is None else outpath 
+    if not os.path.exists(outdir):
+      os.mkdir(outdir)
+              
+    root = logging.getLogger()
+    root.setLevel(logging.DEBUG)
+    slogger = logging.StreamHandler(sys.stdout)
+    slogger.setLevel(getattr(logging,loglevel.upper()))
+    formatter = logging.Formatter('%(levelname)s:%(module)s:%(message)s')
+    slogger.setFormatter(formatter)
+    root.addHandler(slogger)
+    flogger = logging.FileHandler(os.path.join(outdir,ipynb_name+'.nbpub.log'), 'w')
+    flogger.setLevel(getattr(logging,loglevel.upper()))
+    root.addHandler(flogger)
+
     return publish(ipynb_path,
                   outformat=outformat,
                   outpath=outpath, dump_files=dump_files,
                   ignore_prefix=ignore_prefix,
-                  create_pdf=create_pdf, pdf_in_temp=pdf_in_temp, pdf_debug=pdf_debug,
-                  loglevel=loglevel) 
+                  create_pdf=create_pdf, pdf_in_temp=pdf_in_temp, pdf_debug=pdf_debug) 
                          
 if __name__ == '__main__':
     import funcargparse

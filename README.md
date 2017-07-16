@@ -106,9 +106,9 @@ If a folder is input, then the .ipynb files it contains are processed and combin
 
 Currently, three output converters are availiable out-the-box (in the scripts folder):
 
-- latex_ipypublish_main.py is the default and converts cells to latex according to metadata tags on an 'opt in' basis.
-- latex_standard_article.py replicates the standard latex article template, which comes with nbconvert.
-- html_toc_toggle_input.py converts the entire notebook(s) to html and adds a table of contents sidebar and a button to toggle input code on/off. 
+- latex_ipypublish is the default and converts cells to latex according to metadata tags on an 'opt in' basis.
+- latex_standard_article replicates the standard latex article template, which comes with nbconvert.
+- html_toc_toggle converts the entire notebook(s) to html and adds a table of contents sidebar and a button to toggle input code on/off. 
 
 The current `nbconvert --to pdf` does not correctly resolve references and citations (since it copies the files to a temporary directory). Therefore nbconvert is only used for the initial `nbconvert --to latex` phase, followed by using `latexmk` to create the pdf and correctly resolve everything.
 

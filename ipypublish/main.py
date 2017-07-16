@@ -32,8 +32,7 @@ def publish(ipynb_path,
             outformat='latex_ipypublish_main',
             outpath=None, dump_files=False,
             ignore_prefix='_',
-            create_pdf=False, pdf_in_temp=False, pdf_debug=False,
-            loglevel='INFO'):
+            create_pdf=False, pdf_in_temp=False, pdf_debug=False):
     """ convert one or more Jupyter notebooks to a published format
 
     paths can be string of an existing file or folder,
@@ -62,9 +61,10 @@ def publish(ipynb_path,
     loglevel: str
         the logging level
               
-    Examples
+    Returns
     --------
-              
+    outpath: str
+     path to output file   
     
     """
     if isinstance(ipynb_path,basestring):
@@ -75,17 +75,6 @@ def publish(ipynb_path,
     outdir = os.path.join(os.getcwd(),'converted') if outpath is None else outpath 
     if not os.path.exists(outdir):
         os.mkdir(outdir)
-
-    root = logging.getLogger()
-    root.setLevel(logging.DEBUG)
-    slogger = logging.StreamHandler(sys.stdout)
-    slogger.setLevel(getattr(logging,loglevel.upper()))
-    formatter = logging.Formatter('%(levelname)s:%(module)s:%(message)s')
-    slogger.setFormatter(formatter)
-    root.addHandler(slogger)
-    flogger = logging.FileHandler(os.path.join(outdir,ipynb_name+'.nbpub.log'), 'w')
-    flogger.setLevel(getattr(logging,loglevel.upper()))
-    root.addHandler(flogger)
     
     logging.info('started ipypublish at {0}'.format(time.strftime("%c")))
     logging.info('logging to: {}'.format(os.path.join(outdir,ipynb_name+'.nbpub.log')))    
@@ -158,6 +147,8 @@ def publish(ipynb_path,
     oconfig['ExtractOutputPreprocessor.output_filename_template'] = files_folder+'/{unique_key}_{cell_index}_{index}{extension}'
     
     (body, resources), exe = export_notebook(final_nb, oformat,oconfig,otemplate)
+    
+    print(resources['reveal']['url_prefix'])
 
     # reduce multiple blank lines to single
     body = re.sub(r'\n\s*\n', '\n\n', body) 
@@ -196,13 +187,16 @@ def publish(ipynb_path,
     if create_pdf and oformat.lower()=='latex':
         logging.info('running pdf conversion')   
         
-        export_pdf(outpath, outdir=outdir, 
+        if not export_pdf(outpath, outdir=outdir, 
                    files_path=outfilespath,
                    convert_in_temp=pdf_in_temp,
                    html_viewer=True,
-                   debug_mode=pdf_debug)
+                   debug_mode=pdf_debug):
+            logging.error('pdf export returned false')
+            raise RuntimeError('the pdf export failed')
         
-    logging.info('process finished')
+    logging.info('process finished successfully')
+    return outpath
         
 if __name__ == '__main__':
     import funcargparse

@@ -1,49 +1,15 @@
-{%- extends 'full.tpl' -%}
 
-{%- block header -%}
-{{ super() }}
-
-<script>
-code_show=true; 
-function code_toggle() {
- if (code_show){
- $('div.input').hide();
- } else {
- $('div.input').show();
- }
- code_show = !code_show
-} 
-$( document ).ready(code_toggle);
-</script>
-
-<form action="javascript:code_toggle()">
-	<input type="submit" value="Toggle Input Code">
-</form>
-
-<style>
-.sidebar-wrapper { /* Move down to accomodate button */
-	margin-top: 35px;
-}
-form {
-  /* Just to center the form on the page */
-  margin: 0 auto;
-  height: 25px;
-  width: 150px;
-  align:center;
-  text-align:center;
-  position: fixed;
-
-  /* To see the limits of the form */
-  padding: 1px;
-  border: 1px solid #CCC;
-  border-radius: 1px;
-}
-</style>
-
-<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+tpl_dict = {
+    
+'meta_docstring':'number headers and add sidebar with hyperlinked table of contents',
+    
+'html_header':r"""
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
+
+
 
 <style>  /* defined here in case the main.css below cannot be loaded */
 .lev1 {margin-left: 80px}
@@ -83,4 +49,8 @@ $( document ).ready(function(){
     });
 </script>
 
-{%- endblock header -%}
+
+""",
+
+
+}
