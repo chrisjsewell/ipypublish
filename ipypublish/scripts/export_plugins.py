@@ -19,11 +19,11 @@ try:
 except ImportError as err:
     load_source = lambda modname, fname: imp.load_source(modname, fname)
 
-def get_module_path(module):
+def _get_module_path(module):
     """return a directory path to a module"""
     return pathlib.Path(os.path.dirname(os.path.abspath(inspect.getfile(module))))
 
-def get_modules(path):
+def _get_modules(path):
     """ get modules from a directory   
     
     Properties
@@ -41,7 +41,7 @@ def get_modules(path):
     >>> mod1 = MockPath('mod1.py', is_file=True,
     ... content="name='modname1'")
     >>> dir = MockPath(structure=[mod1])
-    >>> modules, errors = get_modules(dir)
+    >>> modules, errors = _get_modules(dir)
     >>> errors
     []
     >>> list(modules.keys())
@@ -83,8 +83,18 @@ def get_modules(path):
     return modules, load_errors
 
 _plugins_dict = {}
+
 def add_directory(path):
-    modules, load_errors = get_modules(path)
+    """ add a directory of export plugin modules to the existing dict
+    
+    plugins must have: oformat, template and config attributes and a doc string  
+    
+    Properties
+    ----------
+    path : str or path-like
+
+    """
+    modules, load_errors = _get_modules(path)
     for mod_name, mod in modules.items():
         try:
              descript = getattr(mod,'__doc__')
@@ -99,7 +109,7 @@ def add_directory(path):
                                    'config':config}        
 
 from ipypublish import export_plugins
-add_directory(get_module_path(export_plugins))
+add_directory(_get_module_path(export_plugins))
 
 def get():
     """ return export plugins    
