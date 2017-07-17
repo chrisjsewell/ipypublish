@@ -20,13 +20,6 @@ from ipypublish.scripts import export_plugins
 from ipypublish.scripts.nbmerge import merge_notebooks
 from ipypublish.scripts.nbexport import export_notebook
 from ipypublish.scripts.pdfexport import export_pdf
-
-def resolve_path(fpath, filepath):
-    """resolve a relative path, w.r.t. another filepath """
-    if not os.path.isabs(fpath):
-        fpath = os.path.join(os.path.dirname(str(filepath)),fpath)
-        fpath = os.path.abspath(fpath)
-    return fpath
                 
 def publish(ipynb_path,
             outformat='latex_ipypublish_main',
@@ -85,54 +78,6 @@ def publish(ipynb_path,
                         ignore_prefix=ignore_prefix)
     logging.debug('notebooks meta path: {}'.format(meta_path))
 
-    # retrieve external file paths from metadata,
-    # resolving where they are, if the path is relative
-    # make sure that the link points to a single folder
-
-    logging.info('resolving external file paths')
-
-    external_files = []
-    # TODO do this individually for known keys in metadata, but should come up with more consistent method
-    if hasattr(final_nb.metadata, 'latex_doc'):
-                
-        if hasattr(final_nb.metadata.latex_doc, 'files'):
-            mfiles = []
-            for fpath in final_nb.metadata.latex_doc.files:
-                fpath = resolve_path(fpath, meta_path)
-                if not os.path.exists(fpath):
-                    logging.warning('file in metadata does not exist'
-                                    ': {}'.format(fpath))
-                else:
-                    external_files.append(fpath)
-                mfiles.append(os.path.join(files_folder, os.path.basename(fpath)))   
-
-            final_nb.metadata.latex_doc.files = mfiles
-        
-        if hasattr(final_nb.metadata.latex_doc, 'bibliography'):                    
-            bib = final_nb.metadata.latex_doc.bibliography
-            bib = resolve_path(bib, meta_path)
-            if not os.path.exists(bib):
-                logging.warning('bib in metadata does not exist'
-                                ': {}'.format(bib))
-            else:
-                external_files.append(bib)
-
-            final_nb.metadata.latex_doc.bibliography = os.path.join(files_folder,
-                                                            os.path.basename(bib))
-            
-        if hasattr(final_nb.metadata.latex_doc, 'titlepage'):
-            if hasattr(final_nb.metadata.latex_doc.titlepage, 'logo'):
-                logo = final_nb.metadata.latex_doc.titlepage.logo
-                logo = resolve_path(logo, meta_path)
-                if not os.path.exists(logo):
-                    logging.warning('logo in metadata does not exist'
-                                    ': {}'.format(logo))
-                else:
-                    external_files.append(logo)
-
-                final_nb.metadata.latex_doc.titlepage.logo = os.path.join(files_folder,
-                                                            os.path.basename(logo))
-
     logging.info('getting output format from exporter plugin')
     plugins = export_plugins.get()
     if not outformat in plugins:
@@ -144,6 +89,9 @@ def publish(ipynb_path,
         
     # ensure file paths point towards the right folder
     oplugin['config']['ExtractOutputPreprocessor.output_filename_template'] = files_folder+'/{unique_key}_{cell_index}_{index}{extension}'
+    oplugin['config']['LatexDocLinks.metapath'] = str(meta_path)
+    oplugin['config']['LatexDocLinks.filesfolder'] = str(files_folder)
+
     logging.debug('{}'.format(oplugin['config']))
     
     ##for debugging
@@ -184,7 +132,7 @@ def publish(ipynb_path,
         for internal_path, fcontents in internal_files.items():
             with open(os.path.join(outdir, internal_path), "wb") as fh:
                 fh.write(fcontents)
-        for external_path in external_files:
+        for external_path in resources['external_file_paths']:
             shutil.copyfile(external_path,
                 os.path.join(outfilespath,os.path.basename(external_path)))
      

@@ -5,6 +5,7 @@
 - removes latex tags (like \cite{abc})
 """
 import re
+import logging
 
 from ipypublish.html.create_tpl import create_tpl
 from ipypublish.html.standard import slides
@@ -22,9 +23,11 @@ def remove_tex_tags(input, **kwargs):
     return ''.join(re.split(latex_regex, input))  
 
 _filters = {'remove_tex_tags':remove_tex_tags}
+
             
 config = {'TemplateExporter.filters':_filters,
-          'Exporter.filters':_filters}
+          'Exporter.filters':_filters,}
+#          'Exporter.preprocessors':[SlidePreProcess]}
 
 template = create_tpl([
     content.tpl_dict, content_tagging.tpl_dict,

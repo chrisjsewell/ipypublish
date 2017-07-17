@@ -30,7 +30,7 @@ def nbpublish(ipynb_path,
     create_pdf: bool
         convert to pdf (if converting to latex)
     pdf_in_temp: bool
-        run pdf conversion in a temporary folder
+        run pdf conversion in a temporary folder and only copy back the .pdf file
     pdf_debug: bool
         run latexmk in interactive mode
     loglevel: str
@@ -116,9 +116,9 @@ if __name__ == '__main__':
                         default='_')
     parser.add_argument("-pdf","--create-pdf", action="store_true",
                         help='convert to pdf (only if converting to latex)')
-    parser.add_argument("--pdf-in-temp", action="store_true",
-                        help='run pdf conversion in a temporary folder')
-    parser.add_argument("--pdf-debug", action="store_true",
+    parser.add_argument("-ptemp","--pdf-in-temp", action="store_true",
+                        help='run pdf conversion in a temporary folder and only copy back the .pdf file')
+    parser.add_argument("-pbug","--pdf-debug", action="store_true",
                         help='run latexmk in interactive mode')
     parser.add_argument("-log","--log-level", type=str, default='info',
                         choices=['debug','info','warning','error'],

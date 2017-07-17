@@ -11,6 +11,7 @@ from ipypublish.latex.ipypublish import contents_output as output
 from ipypublish.latex.ipypublish import contents_framed_code as code
 from ipypublish.latex.ipypublish import front_pages as title
 from ipypublish.latex.ipypublish.filters import remove_dollars, first_para, create_key
+from ipypublish.preprocessors.latex_doc import LatexDocLinks
 
 oformat = 'Latex'
 template = create_tplx([p.tplx_dict for p in 
@@ -21,4 +22,5 @@ _filters = {'remove_dollars': remove_dollars,
             'create_key': create_key}
             
 config = {'TemplateExporter.filters':_filters,
-          'Exporter.filters':_filters}
+          'Exporter.filters':_filters,
+          'Exporter.preprocessors':[LatexDocLinks]}
