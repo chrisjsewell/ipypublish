@@ -1,5 +1,4 @@
 pathlib
-funcargparse
 nbconvert
 nbformat
 jinja2

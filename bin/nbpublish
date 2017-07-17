@@ -1,13 +1,15 @@
 #!/usr/bin/env python
 import os, sys, logging
+import argparse
 from ipypublish.main import publish
+from ipypublish.scripts import export_plugins
                 
 def nbpublish(ipynb_path,
               outformat='latex_ipypublish_main',
               outpath=None, dump_files=False,
               ignore_prefix='_',
               create_pdf=False, pdf_in_temp=False, pdf_debug=False,
-              loglevel='INFO'):
+              log_level='INFO'):
     """ convert one or more Jupyter notebooks to a published format
 
     paths can be string of an existing file or folder,
@@ -22,17 +24,17 @@ def nbpublish(ipynb_path,
     outpath : path_like
         path to output converted files
     dump_files: bool
-        whether to write files from nbconvert (containing images, etc) to outpath
+        write files from nbconvert (containing images, etc) to outpath
     ignore_prefix: str
         ignore ipynb files with this prefix                
     create_pdf: bool
-        whether to convert to pdf (if converting to latex)
+        convert to pdf (if converting to latex)
     pdf_in_temp: bool
-        whether to run pdf conversion in a temporary folder
+        run pdf conversion in a temporary folder
     pdf_debug: bool
-        if True, run latexmk in interactive mode
+        run latexmk in interactive mode
     loglevel: str
-        the logging level
+        the logging level (debug, info, critical, ...)
               
     """
     ipynb_name = os.path.splitext(os.path.basename(ipynb_path))[0]
@@ -43,12 +45,12 @@ def nbpublish(ipynb_path,
     root = logging.getLogger()
     root.setLevel(logging.DEBUG)
     slogger = logging.StreamHandler(sys.stdout)
-    slogger.setLevel(getattr(logging,loglevel.upper()))
+    slogger.setLevel(getattr(logging,log_level.upper()))
     formatter = logging.Formatter('%(levelname)s:%(module)s:%(message)s')
     slogger.setFormatter(formatter)
     root.addHandler(slogger)
     flogger = logging.FileHandler(os.path.join(outdir,ipynb_name+'.nbpub.log'), 'w')
-    flogger.setLevel(getattr(logging,loglevel.upper()))
+    flogger.setLevel(getattr(logging,log_level.upper()))
     root.addHandler(flogger)
 
     return publish(ipynb_path,
@@ -56,18 +58,72 @@ def nbpublish(ipynb_path,
                   outpath=outpath, dump_files=dump_files,
                   ignore_prefix=ignore_prefix,
                   create_pdf=create_pdf, pdf_in_temp=pdf_in_temp, pdf_debug=pdf_debug) 
-                         
-if __name__ == '__main__':
-    import funcargparse
-    from funcargparse import FuncArgParser
-    parser = FuncArgParser()
-    parser.setup_args(nbpublish)
-    parser.update_short(outformat='f')
-    parser.update_short(outpath='o')    
-    parser.update_short(dump_files='d')
-    parser.update_short(create_pdf='pdf')    
-    parser.create_arguments()
-    parser.parse2func()
+
+def list_outformats():
+    """ print list all available output formats and descriptions
+    
+    Parameters
+    ----------
+    type: str
+        list for a specific type (Html, Latex, Slide, ...)
+    """
+    plugins = export_plugins.get()
+    outstr = 'Available Output Formats\n'
+    outstr +='------------------------'
+    for plugin_name in sorted(plugins.keys()):
+        outstr += '\n- {}:'.format(plugin_name)
+        space = '  '
+        for line in plugins[plugin_name]['descript'].split('\n'):
+            outstr += '\n' + space + line
         
+    return outstr
+
+class CustomFormatter(argparse.ArgumentDefaultsHelpFormatter, 
+                     argparse.RawDescriptionHelpFormatter,
+                     argparse.MetavarTypeHelpFormatter):
+    pass
+    
+class MyParser(argparse.ArgumentParser):
+    def error(self, message):
+        sys.stderr.write('error: %s\n' % message)
+        self.print_help()
+        sys.exit(2)
+                     
+if __name__ == '__main__':
+    plugins = export_plugins.get()
+
+    parser = MyParser(
+        description='convert one or more Jupyter notebooks to a published format',
+        epilog=list_outformats(),
+        formatter_class=CustomFormatter
+    )
+    parser.add_argument("filepath", type=str, 
+                        help='notebook file or directory', metavar='filepath')
+    parser.add_argument("-f","--outformat", type=str, 
+                        choices=list(plugins.keys()), metavar='str',
+                        help='output format to use (see available below)', default='latex_ipypublish_main')
+    parser.add_argument("-o","--outpath", type=str,
+                        help='path to output converted files', 
+                        default=os.path.join(os.getcwd(),'converted'))
+    parser.add_argument("-d","--dump-files", action="store_true",
+                        help='dump external files, linked to in the document, into the outpath')
+    parser.add_argument("-i","--ignore-prefix", type=str,
+                        help='ignore ipynb files with this prefix',
+                        default='_')
+    parser.add_argument("-pdf","--create-pdf", action="store_true",
+                        help='convert to pdf (only if converting to latex)')
+    parser.add_argument("--pdf-in-temp", action="store_true",
+                        help='run pdf conversion in a temporary folder')
+    parser.add_argument("--pdf-debug", action="store_true",
+                        help='run latexmk in interactive mode')
+    parser.add_argument("-log","--log-level", type=str, default='info',
+                        choices=['debug','info','warning','error'],
+                        help='the logging level to output to screen/file')
+
+    args = parser.parse_args()
+    
+    options = vars(args)
+    filepath = options.pop('filepath')
+    nbpublish(filepath, **options)   
         
         
