@@ -1,22 +1,9 @@
 
 
-
-
-
-
-	 
-		
-
 	\documentclass[10pt,parskip=half,
 	toc=sectionentrywithdots,
 	bibliography=totocnumbered,
 	captions=tableheading,numbers=noendperiod]{scrartcl}
- 	
-	
-	
-	
-		
-
 
     \usepackage[T1]{fontenc} % Nicer default font (+ math font) than Computer Modern for most use cases
     \usepackage{mathpazo}
@@ -49,8 +36,6 @@
     \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
                                 % normalem makes italics be italics, not underlines
 
-
-
 	\usepackage{microtype} % improves the spacing between words and letters
 	\usepackage{placeins} % placement of figures
     % could use \usepackage[section]{placeins} but placing in subsection in command section
@@ -62,34 +47,19 @@
 	% header/footer
 	\usepackage[footsepline=0.25pt]{scrlayer-scrpage}
 
-
-
 	% bibliography formatting
 	\usepackage[numbers, square, super, sort&compress]{natbib}
 	% hyperlink doi's
 	\usepackage{doi}	
-
-
 
     % define a code float
     \usepackage{newfloat} % to define a new float types
     \DeclareFloatingEnvironment[
         fileext=frm,placement={!ht},
         within=section,name=Code]{codecell}
-        
+
     \usepackage{listings} % a package for wrapping code in a box
     \usepackage[framemethod=tikz]{mdframed} % to fram code
-
- 
-	
-	
-	
-    	
-    		
-		
-		
-		
-
 
 % Pygments definitions
 
@@ -193,7 +163,6 @@
 \def\PYZrb{]}
 \makeatother
 
-
 % ANSI colors
 \definecolor{ansi-black}{HTML}{3E424D}
 \definecolor{ansi-black-intense}{HTML}{282C36}
@@ -253,7 +222,6 @@
 \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
 \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
 
-
 % Define a nice break command that doesn't care if a line doesn't already
 % exist.
 \def\br{\hspace*{\fill} \\* }
@@ -262,14 +230,10 @@
 \def\gt{>}
 \def\lt{<}
 
-
-
     % Colors for the hyperref package
     \definecolor{urlcolor}{rgb}{0,.145,.698}
     \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
     \definecolor{citecolor}{rgb}{.12,.54,.11}
-
-
 
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
@@ -293,7 +257,7 @@
   breaklines=true,
   postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
 }
- 
+
 \lstset{style=mystyle} 
 
 \surroundwithmdframed[
@@ -303,22 +267,11 @@
   innertopmargin=2pt,
   innerbottommargin=0pt]{lstlisting}
 
-
-				
-	
-
-	
-		
-			
-
  % Used to adjust the document margins
 \usepackage{geometry}
 \geometry{tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in,
 nohead,includefoot,footskip=25pt}
 % you can use showframe option to check the margins visually 
-
-		
-		
 
 	% ensure new section starts on new page
 	\addtokomafont{section}{\clearpage}
@@ -361,6 +314,11 @@ nohead,includefoot,footskip=25pt}
 	\renewcommand\thefigure{\thesection.\arabic{figure}}
 	\renewcommand\theequation{\thesection.\arabic{equation}}
 
+        % set global options for float placement
+        \makeatletter
+          \providecommand*\setfloatlocations[2]{\@namedef{fps@#1}{#2}}
+        \makeatother
+
     % align captions to left (indented)
 	\captionsetup{justification=raggedright,
 	singlelinecheck=false,format=hang,labelfont={it,bf}} 
@@ -379,38 +337,29 @@ nohead,includefoot,footskip=25pt}
 	\ofoot{\pagemark}
 	\cfoot{}
 
-	
-	
-	
-    
-
 % clereref must be loaded after anything that changes the referencing system
 \usepackage{cleveref}
 \creflabelformat{equation}{#2#1#3}
-
 
 % make the code float work with cleverref
 \crefname{codecell}{code}{codes}
 \Crefname{codecell}{code}{codes}
 
-    
-
-	
 	\begin{document}
 
-	
-		\begin{titlepage}\begin{flushright}
-		\includegraphics[width=0.7\textwidth]{logo_example}
+		\begin{titlepage}
+	\begin{flushright}
+		\includegraphics[width=0.7\textwidth]{Example_files/logo_example.png}
 	\end{flushright}
 
 	\begin{center}
 
 	\vspace*{1cm}
-        
+
 	\Huge\textbf{Main-Title}
 
 	\vspace{0.5cm}\LARGE{Sub-Title}
-        
+
 	\vspace{1.5cm}
 
 	\begin{minipage}{0.8\textwidth}   
@@ -436,7 +385,7 @@ nohead,includefoot,footskip=25pt}
 	\begin{center}\LARGE{A tagline for the report.}
 	\end{center} 
 	\end{minipage}
-        
+
 	\vspace{0.8cm}
 		  \LARGE{Institution1}\\
 		  \LARGE{Institution2}\\
@@ -444,28 +393,18 @@ nohead,includefoot,footskip=25pt}
 	\vspace{0.4cm}
 
 	\today
-        
+
 	\end{center}
 	\end{titlepage}
 
-
-		
-		
-			
 		\begingroup
     \let\cleardoublepage\relax
     \let\clearpage\relax\tableofcontents\listoffigures\listoftables\listof{codecell}{List of Code}
     \endgroup
 
-	
-	
-	
-
 \section{Markdown}\label{markdown}
 
-
 \subsection{General}\label{general}
-
 
 Some markdown text.
 
@@ -490,9 +429,7 @@ A numbered list
   something else
 \end{enumerate}
 
-
 \subsection{References and Citations}\label{references-and-citations}
-
 
 References to \cref{fig:example}, \cref{tbl:example},
 \cref{eqn:example_sympy} and \cref{code:example_mpl}.
@@ -504,25 +441,17 @@ A latex citation.\cite{zelenyak_molecular_2016}
 
 A html citation.\cite{kirkeminde_thermodynamic_2012}
 
-
 \subsection{Todo notes}\label{todo-notes}
-
 
 \todo[inline]{an inline todo}
 
 Some text.\todo{a todo in the margins}
 
-
 \section{Images and Figures}\label{images-and-figures}
 
-
-
-
-
     \begin{figure}[!bh]
-        \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{Example_files/Example_9_0.jpeg}\end{center}
+        \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{Example_files/output_9_0.jpeg}\end{center}
 
-        
 		\ifdefined\kyfigcexample
 		 \caption{\kyfigcexample}
 		\else
@@ -531,14 +460,9 @@ Some text.\todo{a todo in the margins}
         \label{fig:example}
     \end{figure}
 
-    
-
-
-
     \begin{figure}
-        \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{Example_files/Example_10_0.png}\end{center}
+        \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{Example_files/output_10_0.png}\end{center}
 
-        
 		\ifdefined\kyfigcexampleuh
 		 \caption{\kyfigcexampleuh}
 		\else
@@ -547,14 +471,9 @@ Some text.\todo{a todo in the margins}
         \label{fig:example_h}
     \end{figure}
 
-    
-
-
-
     \begin{figure}
-        \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{Example_files/Example_11_0.png}\end{center}
+        \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{Example_files/output_11_0.png}\end{center}
 
-        
 		\ifdefined\kyfigcexampleuv
 		 \caption{\kyfigcexampleuv}
 		\else
@@ -563,14 +482,9 @@ Some text.\todo{a todo in the margins}
         \label{fig:example_v}
     \end{figure}
 
-    
-
-
-
     \begin{figure}
-        \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{Example_files/Example_12_0.png}\end{center}
+        \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{Example_files/output_12_0.png}\end{center}
 
-        
 		\ifdefined\kyfigcexampleugrid
 		 \caption{\kyfigcexampleugrid}
 		\else
@@ -579,18 +493,25 @@ Some text.\todo{a todo in the margins}
         \label{fig:example_grid}
     \end{figure}
 
-    
 \subsection{Displaying a plot with its
 code}\label{displaying-a-plot-with-its-code}
 
-
 \newcommand{\kyfigcexampleumpl}{A matplotlib figure, with the caption set in the markdowncell above the figure.}
-
 
 \newcommand{\kycodecexampleumpl}{The plotting code for a matplotlib figure (\cref{fig:example_mpl}).}
 
+\begin{figure}
+        \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{Example_files/output_16_0.pdf}\end{center}
 
-\begin{codecell}
+		\ifdefined\kyfigcexampleumpl
+		 \caption{\kyfigcexampleumpl}
+		\else
+		 \caption{}
+		\fi
+        \label{fig:example_mpl}
+    \end{figure}
+
+    \begin{codecell}
         \ifdefined\kycodecexampleumpl
          \caption{\kycodecexampleumpl}
         \else
@@ -603,23 +524,31 @@ plt.ylabel(r'a y label with latex $\alpha$')
 plt.legend();
 \end{lstlisting}\end{codecell}
 
-\begin{figure}
-        \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{Example_files/Example_16_0.pdf}\end{center}
-
-        
-		\ifdefined\kyfigcexampleumpl
-		 \caption{\kyfigcexampleumpl}
-		\else
-		 \caption{}
-		\fi
-        \label{fig:example_mpl}
-    \end{figure}
-
-    \section{Tables (with pandas)}\label{tables-with-pandas}
-
+\section{Tables (with pandas)}\label{tables-with-pandas}
 
 \newcommand{\kycodecexampleupd}{The plotting code for a pandas Dataframe table (\cref{tbl:example}).}
 
+    \begin{table}[H]
+
+    	\ifdefined\kytblcexample
+    	 \caption{\kytblcexample}
+    	\else
+    	 \caption{An example of a table created with pandas dataframe.}
+    	\fi
+        \label{tbl:example}
+
+        \centering\rowcolors{2}{gray!20}{white}
+        \begin{tabular}{lllrr}
+\toprule
+{} &         a &  b &      c &      d \\
+\midrule
+0 &  $\delta$ &  l &  0.583 &  0.279 \\
+1 &         x &  m &  0.914 &  0.021 \\
+2 &         y &  n &  0.333 &  0.116 \\
+\bottomrule
+\end{tabular}
+
+        \end{table}
 
 \begin{codecell}[H]
         \ifdefined\kycodecexampleupd
@@ -635,49 +564,18 @@ df.set_index(['a','b'])
 df.round(3)
 \end{lstlisting}\end{codecell}
 
-
-    \begin{table}[H]
-    
-        
-    	\ifdefined\kytblcexample
-    	 \caption{\kytblcexample}
-    	\else
-    	 \caption{An example of a table created with pandas dataframe.}
-    	\fi
-        \label{tbl:example}
-    
-        \centering\rowcolors{2}{gray!20}{white}
-        \begin{tabular}{lllrr}
-\toprule
-{} &         a &  b &      c &      d \\
-\midrule
-0 &  $\delta$ &  l &  0.583 &  0.279 \\
-1 &         x &  m &  0.914 &  0.021 \\
-2 &         y &  n &  0.333 &  0.116 \\
-\bottomrule
-\end{tabular}
-
-        \end{table}
-
-
-
-    
 \section{Equations (with ipython or
 sympy)}\label{equations-with-ipython-or-sympy}
-
-
-
-
 
     \begin{equation}\label{eqn:example_ipy}	
     	 a = b+c 
         \end{equation}
 
-
-
-    
 \newcommand{\kycodecexampleusym}{The plotting code for a sympy equation (\cref{eqn:example_sympy}).}
 
+    \begin{equation}\label{eqn:example_sympy}	
+    	\left(\sqrt{5} i\right)^{\alpha} \left(\frac{1}{2} - \frac{2 i}{5} \sqrt{5}\right) + \left(- \sqrt{5} i\right)^{\alpha} \left(\frac{1}{2} + \frac{2 i}{5} \sqrt{5}\right)
+        \end{equation}
 
 \begin{codecell}[H]
         \ifdefined\kycodecexampleusym
@@ -692,27 +590,9 @@ f = y(n)-2*y(n-1/sym.pi)-5*y(n-2)
 sym.rsolve(f,y(n),[1,4])
 \end{lstlisting}\end{codecell}
 
-
-    \begin{equation}\label{eqn:example_sympy}	
-    	\left(\sqrt{5} i\right)^{\alpha} \left(\frac{1}{2} - \frac{2 i}{5} \sqrt{5}\right) + \left(- \sqrt{5} i\right)^{\alpha} \left(\frac{1}{2} + \frac{2 i}{5} \sqrt{5}\right)
-        \end{equation}
-
-
-
-    
-
-	
-	
-    	
-			
-
 % sort citations by order of first appearance
 \bibliographystyle{unsrtnat}
-\bibliography{bibliography}
+\bibliography{Example_files/example.bib}
 
-		
-		
-    
-	
 	\end{document}
 

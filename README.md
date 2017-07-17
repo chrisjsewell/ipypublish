@@ -1,9 +1,13 @@
+[![Build Status](https://travis-ci.org/chrisjsewell/ipypublish.svg?branch=master)](https://travis-ci.org/chrisjsewell/ipypublish)
+[![Coverage Status](https://coveralls.io/repos/github/chrisjsewell/ipypublish/badge.svg?branch=master)](https://coveralls.io/github/chrisjsewell/ipypublish?branch=master)
+[![PyPI](https://img.shields.io/pypi/v/ipypublish.svg)](https://pypi.python.org/pypi/ipypublish/)
+
 # ipypublish
 A workflow for creating and editing publication ready scientific reports, from one or more Jupyter Notebooks, without leaving the browser!
 
 ![WorkFlow Example](/example_workflow.gif)
 
-See ![notebooks/Example.ipynb](converted/Example.pdf) and ![converted/Example.pdf](converted/Example.pdf) for an example of the potential input/output.
+See ![notebooks/Example.ipynb](example/notebooks/Example.pdf) and ![converted/Example.pdf](converted/Example.pdf) for an example of the potential input/output.
 
 - [Design Philosophy](#design-philosophy)
 - [Workflow](#worklow)
@@ -32,28 +36,36 @@ In essence, the dream is to have the ultimate hybrid of Jupyter Notebook, WYSIWY
 ## Workflow
 
 1. Create a notebook with some content!
-2. optionally create a .bib file and logo image
+2. optionally create a .bib file and external images
 3. Adjust the notebook and cell metadata. 
-4. Clone the ipypublish [GitHub repository](https://github.com/chrisjsewell/ipypublish) and run the run_nbconvert.sh script for either the specific notebook, or a folder containing multiple notebooks. 
+4. install ipypublish and run the `nbpublish` for either the specific notebook, or a folder containing multiple notebooks. 
 5. A converted folder will be created, into which final .tex .pdf and _viewpdf.html files will be output, named by the notebook or folder input
 
 The default latex template outputs all markdown cells (unless tagged latex_ignore), and then only code and output cells with [latex metadata tags](#latex-metadata-tags). 
-See [Example.ipynb](https://github.com/chrisjsewell/ipypublish/blob/master/notebooks/Example.ipynb) and [Example.pdf](https://github.com/chrisjsewell/ipypublish/blob/master/converted/Example.pdf) for an example of the potential input and output.
+See [Example.ipynb](https://github.com/chrisjsewell/ipypublish/blob/master/example/notebooks/Example.ipynb) and [Example.pdf](https://github.com/chrisjsewell/ipypublish/blob/master/converted/Example.pdf) for an example of the potential input and output.
 
 ## Setting up the environment
 
 Using [Conda](https://conda.io/docs/) is recommended for package management, 
 in order to create self contained environments with specific versions of packages. 
-The main packages required are the Jupyter notebook, Jupyter [nbconvert](https://nbconvert.readthedocs.io/en/latest/index.html) 
-and [Pandoc](http://pandoc.org) (for conversion to latex):
+The main external packages required are the Jupyter notebook, and [Pandoc](http://pandoc.org) (for conversion of file formats):
 
 	conda create --name ipyreport -c conda-forge jupyter pandoc
+	
+ipypublish can then be installed into this environment:
+
+	source activate ipyreport
+	pip install ipypublish
 	
 For converting to PDF, the TeX document preparation ecosystem is required (an in particular [latexmk](http://mg.readthedocs.io/latexmk.html)), which can be installed from:
 
 - Linux: [TeX Live](http://tug.org/texlive/)
 - macOS (OS X): [MacTeX](http://tug.org/mactex/)
 - Windows: [MikTex](http://www.miktex.org/)
+
+ipypublish is automatically **tested** on update against **python 2.7 and 3.6**, for both **Linux and OSX**, using [Travis CI](https://en.wikipedia.org/wiki/Travis_CI). Therefore, to troubleshoot any installation/run issues, 
+it is best to look at the [travis config](https://github.com/chrisjsewell/ipypublish/blob/master/.travis.yml) 
+and [travis test runs](https://travis-ci.org/chrisjsewell/ipypublish) for working configurations.
 
 For helpful extensions to the notebooks core capabilities (like a toc sidebar):
 
@@ -67,7 +79,7 @@ and an environment can be created directly from this using conda:
 	
 ## Setting up a Notebook 
 
-For improved latex/pdf output, [ipynb_latex_setup.py](https://github.com/chrisjsewell/ipypublish/blob/master/conda_packages.txt) contains import and setup code for the notebook and a number of common packages and functions, including:
+For improved latex/pdf output, `ipynb_latex_setup.py` contains import and setup code for the notebook and a number of common packages and functions, including:
 
 - numpy, matplotlib, pandas, sympy, ...
 - `images_hconcat`, `images_vconcat` and `images_gridconcat` functions, which use the PIL/Pillow package to create a single image from multiple images (with specified arrangement)
@@ -75,28 +87,28 @@ For improved latex/pdf output, [ipynb_latex_setup.py](https://github.com/chrisjs
 To use this script, in the first cell of a notebook, insert:
 
 ```python
-from ipynb_latex_setup import *
+from ipypublish.ipynb_latex_setup import *
 ```
 
 It is recommended that you also set this cell as an initialisation cell (i.e. have `"init_cell": true` in the metadata)
 
 ## Converting Notebooks
 
-The run_nbconvert script handles parsing the notebooks to nbconvert, with the appropriate converter. To see all options for this script:
+The nbpublish.py script handles parsing the notebooks to nbconvert, with the appropriate converter. To see all options for this script:
 
-	./run_nbconvert.sh -h
+	nbpublish -h
 
-For example, to convert the Example.ipynb notebook:
+For example, to convert the Example.ipynb notebook directly to pdf:
 
-	./run_nbconvert.sh -b bibliographies/example.bib -l logos/logo_example.png notebooks/Example.ipynb
+	nbpublish -pdf example/notebooks/Example.ipynb
 
 If a folder is input, then the .ipynb files it contains are processed and combined in 'natural' sorted order, i.e. 2_name.ipynb before 10_name.ipynb. By default, notebooks beginning '_' are ignored.
 
-Currently, three output converters are availiable out-the-box (in the nbconvert/scripts folder):
+Currently, three output converters are availiable out-the-box (in the scripts folder):
 
-- latex_ipypublish_main.py is the default and converts cells to latex according to metadata tags on an 'opt in' basis.
-- latex_standard_article.py replicates the standard latex article template, which comes with nbconvert.
-- html_toc_toggle_input.py converts the entire notebook(s) to html and adds a table of contents sidebar and a button to toggle input code on/off. 
+- latex_ipypublish is the default and converts cells to latex according to metadata tags on an 'opt in' basis.
+- latex_standard_article replicates the standard latex article template, which comes with nbconvert.
+- html_toc_toggle converts the entire notebook(s) to html and adds a table of contents sidebar and a button to toggle input code on/off. 
 
 The current `nbconvert --to pdf` does not correctly resolve references and citations (since it copies the files to a temporary directory). Therefore nbconvert is only used for the initial `nbconvert --to latex` phase, followed by using `latexmk` to create the pdf and correctly resolve everything.
 
@@ -135,19 +147,17 @@ The converter would then look like this:
 
 ```python
 
-from latex.create_tplx import create_tplx
-from latex.standard import standard_article as doc
-from latex.standard import standard_definitions as defs
-from latex.standard import standard_packages as package
+from ipypublish.latex.create_tplx import create_tplx
+from ipypublish.latex.standard import standard_article as doc
+from ipypublish.latex.standard import standard_definitions as defs
+from ipypublish.latex.standard import standard_packages as package
 
-create_tplx('created.tplx',
-    [package.tplx_dict,defs.tplx_dict,doc.tplx_dict,
-    my_tplx_dict])
+oformat = 'Latex'
+template = create_tplx([package.tplx_dict,defs.tplx_dict,
+		     doc.tplx_dict,my_tplx_dict])
 
-c = get_config() 
-c.NbConvertApp.export_format = 'latex'   
-c.TemplateExporter.filters = c.Exporter.filters = {}
-c.Exporter.template_file = 'created.tplx'
+config = {'TemplateExporter.filters':{},
+          'Exporter.filters':{}}
 
 ```
 
@@ -162,6 +172,18 @@ All information additional information, used to specify how a particular noteboo
 ```
 
 ### Document Tags
+
+To specify where the **bibliography** is:
+
+```json
+{
+"latex_doc": {
+	"bibliography" : "path/to/bibliograph.bib"
+	}
+}
+```
+
+The path can be absolute or relative.
 
 For **titlepage**, enter in notebook metadata:
 
@@ -182,15 +204,15 @@ For **titlepage**, enter in notebook metadata:
 	  "Institution1",
 	  "Institution2"
 	],
-	"logo": "logo_example"
+	"logo": "path/to/logo_example.png"
   }
 }
 ```
 
 - all keys are optional
 - if there is no title, then the notebook filename will be used
-- if run_nbconvert.sh is called on a folder, then the meta data from the first notebook will be used
-- logo should be the name (without extension) of the logo, then use e.g. `run_nbconvert.sh -l logos/logo_example.png Example.ipynb`
+- if nbpublish.py is called on a folder, then the meta data from the first notebook will be used
+- logo should be the path (absolute or relative) to a logo image file
 
 To control the output of **contents tables**:
 
@@ -212,7 +234,7 @@ To override the default **placement of figures and tables**:
 "latex_doc": {
     "figure": {
       "placement": "!bp"
-      }
+      },
     "table": {
       "placement": "!bp"
       }
@@ -365,7 +387,7 @@ Using Zotero's Firefox plugin and [Zotero Better Bibtex](https://github.com/reto
 
 - automated .bib file updating 
 - drag and drop cite keys \cite{kirkeminde_thermodynamic_2012}
-- `latexmk -bibtex -pdf` (in run_nbconvert.sh) handles creation of the bibliography
+- `latexmk -bibtex -pdf` (in nbpublish.py) handles creation of the bibliography
 - \usepackage{doi} turns the DOI numbers into url links
 
     - in Zotero-Better-Bibtex I have the option set to only export DOI, if both DOI and URL are present.
