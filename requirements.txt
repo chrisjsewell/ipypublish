@@ -3,5 +3,4 @@ nbconvert
 nbformat
 jinja2
 traitlets
-numpy
 tornado
