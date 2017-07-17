@@ -80,7 +80,7 @@ def list_outformats():
 
 class CustomFormatter(argparse.ArgumentDefaultsHelpFormatter, 
                      argparse.RawDescriptionHelpFormatter,
-                     argparse.MetavarTypeHelpFormatter):
+                     ):
     pass
     
 class MyParser(argparse.ArgumentParser):
@@ -102,12 +102,12 @@ if __name__ == '__main__':
     parser.add_argument("-f","--outformat", type=str, 
                         choices=list(plugins.keys()), metavar='str',
                         help='output format to use (see available below)', default='latex_ipypublish_main')
-    parser.add_argument("-o","--outpath", type=str,
+    parser.add_argument("-o","--outpath", type=str, metavar='str',
                         help='path to output converted files', 
                         default=os.path.join(os.getcwd(),'converted'))
     parser.add_argument("-d","--dump-files", action="store_true",
                         help='dump external files, linked to in the document, into the outpath')
-    parser.add_argument("-i","--ignore-prefix", type=str,
+    parser.add_argument("-i","--ignore-prefix", type=str, metavar='str',
                         help='ignore ipynb files with this prefix',
                         default='_')
     parser.add_argument("-pdf","--create-pdf", action="store_true",
