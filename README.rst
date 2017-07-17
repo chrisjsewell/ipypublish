@@ -117,7 +117,7 @@ To use this script, in the first cell of a notebook, insert:
 
 .. code:: python
 
-    from ipypublish.ipynb_latex_setup import *
+    from ipypublish.scripts.ipynb_latex_setup import *
 
 It is recommended that you also set this cell as an initialisation cell
 (i.e. have ``"init_cell": true`` in the metadata)
@@ -125,7 +125,7 @@ It is recommended that you also set this cell as an initialisation cell
 Converting Notebooks
 --------------------
 
-The nbpublish.py script handles parsing the notebooks to nbconvert, with
+The **nbpublish** script handles parsing the notebooks to nbconvert, with
 the appropriate converter. To see all options for this script:
 
 ::
@@ -142,16 +142,19 @@ If a folder is input, then the .ipynb files it contains are processed
 and combined in 'natural' sorted order, i.e. 2\_name.ipynb before
 10\_name.ipynb. By default, notebooks beginning '\_' are ignored.
 
-Currently, three output converters are availiable out-the-box (in the
-scripts folder):
+All available converters are also listed by ``nbpublish -h``. Two of note are:
 
 -  latex\_ipypublish\_main.py is the default and converts cells to latex
    according to metadata tags on an 'opt in' basis.
 -  latex\_standard\_article.py replicates the standard latex article
    template, which comes with nbconvert.
 -  html\_toc\_toggle\_input.py converts the entire notebook(s) to html
-   and adds a table of contents sidebar and a button to toggle input
-   code on/off.
+   and adds a table of contents sidebar and a button to toggle 
+   input code and output cells visible/hidden.
+- slides_standard converts the notebook to
+  `reveal.js <http://lab.hakim.se/reveal-js/#/>`__ slides, according to the standard
+  nbconvert slide metadata. See the Live Slideshows section for
+  using **nbpresent** to serve these slides to a webbrowser. 
 
 The current ``nbconvert --to pdf`` does not correctly resolve references
 and citations (since it copies the files to a temporary directory).
@@ -498,6 +501,12 @@ and drop in Zotero
 
 Live Slideshows
 ---------------
+
+The **nbpresent** script handles serving `reveal.js <http://lab.hakim.se/reveal-js/#/>`__ slides to a webbrowser. To see all options for this script:
+
+::
+
+	nbpresent -h
 
 The `Reveal.js - Jupyter/IPython Slideshow Extension
 (RISE) <https://github.com/damianavila/RISE>`__ notebook extension

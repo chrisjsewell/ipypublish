@@ -87,14 +87,14 @@ For improved latex/pdf output, `ipynb_latex_setup.py` contains import and setup 
 To use this script, in the first cell of a notebook, insert:
 
 ```python
-from ipypublish.ipynb_latex_setup import *
+from ipypublish.scripts.ipynb_latex_setup import *
 ```
 
 It is recommended that you also set this cell as an initialisation cell (i.e. have `"init_cell": true` in the metadata)
 
 ## Converting Notebooks
 
-The nbpublish.py script handles parsing the notebooks to nbconvert, with the appropriate converter. To see all options for this script:
+The nbpublish script handles parsing the notebooks to nbconvert, with the appropriate converter. To see all options for this script:
 
 	nbpublish -h
 
@@ -104,11 +104,11 @@ For example, to convert the Example.ipynb notebook directly to pdf:
 
 If a folder is input, then the .ipynb files it contains are processed and combined in 'natural' sorted order, i.e. 2_name.ipynb before 10_name.ipynb. By default, notebooks beginning '_' are ignored.
 
-Currently, three output converters are availiable out-the-box (in the scripts folder):
+All available converters are also listed by `nbpublish -h`. Three of note are:
 
 - latex_ipypublish is the default and converts cells to latex according to metadata tags on an 'opt in' basis.
-- latex_standard_article replicates the standard latex article template, which comes with nbconvert.
-- html_toc_toggle converts the entire notebook(s) to html and adds a table of contents sidebar and a button to toggle input code on/off. 
+- html_toc_toggle converts the entire notebook(s) to html and adds a table of contents sidebar and a button to toggle input code and output cells visible/hidden. 
+- slides_standard converts the notebook to [reveal.js](http://lab.hakim.se/reveal-js/#/) slides, according to the standard nbconvert slide metadata. See the [Live Slideshows](#live-slideshows) section for using `nbpresent` to serve these slides to a webbrowser. 
 
 The current `nbconvert --to pdf` does not correctly resolve references and citations (since it copies the files to a temporary directory). Therefore nbconvert is only used for the initial `nbconvert --to latex` phase, followed by using `latexmk` to create the pdf and correctly resolve everything.
 
@@ -404,7 +404,11 @@ to make it look better in html, but not specifically available for drag and drop
 	
 ## Live Slideshows
 
-The [Reveal.js - Jupyter/IPython Slideshow Extension (RISE)](https://github.com/damianavila/RISE) notebook extension offers rendering as a Reveal.js-based slideshow, where you can execute code or show to the audience whatever you can show/do inside the notebook itself! Click on the image to see a demo:
+The **nbpresent** script handles serving [reveal.js](http://lab.hakim.se/reveal-js/#/) slides to a webbrowser. To see all options for this script:
+
+	nbpresent -h
+
+Additionally, the [Reveal.js - Jupyter/IPython Slideshow Extension (RISE)](https://github.com/damianavila/RISE) notebook extension offers rendering as a Reveal.js-based slideshow, where you can execute code or show to the audience whatever you can show/do inside the notebook itself! Click on the image to see a demo:
 
 [![RISE Demo](https://img.youtube.com/vi/sXyFa_r1nxA/0.jpg)](https://www.youtube.com/watch?v=sXyFa_r1nxA) 
 
