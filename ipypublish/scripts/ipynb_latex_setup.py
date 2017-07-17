@@ -37,7 +37,7 @@ if _ipy_present:
 # =====
 try:
     import numpy as np
-except NameError:
+except ImportError:
     pass
 
 # MATPLOTLIB
