@@ -9,6 +9,7 @@ http://nbconvert.readthedocs.io/en/latest/customizing.html#Template-structure
 http://nbconvert.readthedocs.io/en/latest/api/exporters.html#nbconvert.exporters.TemplateExporter
 
 """
+import logging
 
 # % filter_data_type returns the first available format in the data priority
 # ((* block execute_result scoped *))
@@ -222,15 +223,18 @@ def create_tplx(tplx_dicts=(),outpath=None):
     'jinja_macros':''}
     
     for i, tplx_dict in enumerate(tplx_dicts):
-        if 'overwrite' in tplx_dict:
-            overwrite = tplx_dict.pop('overwrite')
+        if 'overwrite' in list(tplx_dict.keys()):
+            overwrite = tplx_dict['overwrite']
         else:
             overwrite = []
+        logging.debug('overwrite keys: {}'.format(overwrite))
         for key,val in tplx_dict.items():
-            if key not in tplx_sections:
+            if key == 'overwrite':
+                pass            
+            elif key not in tplx_sections:
                 raise ValueError(
                 '{0} from tplx_dict {1} not in outline tplx section'.format(key,i))
-            if key in overwrite:
+            elif key in overwrite:
                 tplx_sections[key] = val
             else:
                 tplx_sections[key] = tplx_sections[key]+'\n'+val

@@ -43,14 +43,18 @@ def nbpublish(ipynb_path,
       os.mkdir(outdir)
               
     root = logging.getLogger()
+    root.handlers = [] # remove any existing handlers
     root.setLevel(logging.DEBUG)
     slogger = logging.StreamHandler(sys.stdout)
     slogger.setLevel(getattr(logging,log_level.upper()))
     formatter = logging.Formatter('%(levelname)s:%(module)s:%(message)s')
     slogger.setFormatter(formatter)
+    slogger.propogate = False
     root.addHandler(slogger)
     flogger = logging.FileHandler(os.path.join(outdir,ipynb_name+'.nbpub.log'), 'w')
     flogger.setLevel(getattr(logging,log_level.upper()))
+    flogger.setFormatter(formatter)
+    flogger.propogate = False
     root.addHandler(flogger)
 
     return publish(ipynb_path,

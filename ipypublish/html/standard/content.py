@@ -8,16 +8,16 @@ tpl_dict = {
   {{ super() }}
 """,
  
-'notebook_input':r"""
-  {{ super() }}
-""",
-
 'notebook_input_markdown':r"""
 {{ cell.source  | markdown2html | strip_files_prefix }}
 """,
 
 'notebook_input_code':r"""
+<div class="inner_cell">
+<div class="input_area">
 {{ cell.source | highlight_code(metadata=cell.metadata) }}
+</div>
+</div>
 """,
 
 'notebook_input_unknown':r"""

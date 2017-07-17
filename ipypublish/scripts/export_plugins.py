@@ -2,6 +2,7 @@ import os, glob, inspect
 import imp
 import uuid
 import warnings
+import logging
 
 #py 2/3 compatibility
 try:
@@ -106,10 +107,14 @@ def add_directory(path):
         _plugins_dict[mod_name] = {'descript':descript,
                                    'oformat':oformat,
                                    'template':template,
-                                   'config':config}        
+                                   'config':config}    
+    return load_errors    
 
 from ipypublish import export_plugins
-add_directory(_get_module_path(export_plugins))
+logging.debug('loading builtin plugins')
+load_errors = add_directory(_get_module_path(export_plugins))
+if load_errors:
+    raise IOError('errors in buitlin plugins loading: {}'.format('\n'.join(['{0}: {1}'.format(a,b) for a,b in load_errors])))
 
 def get():
     """ return export plugins    

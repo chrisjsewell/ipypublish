@@ -144,6 +144,12 @@ def publish(ipynb_path,
         
     # ensure file paths point towards the right folder
     oplugin['config']['ExtractOutputPreprocessor.output_filename_template'] = files_folder+'/{unique_key}_{cell_index}_{index}{extension}'
+    logging.debug('{}'.format(oplugin['config']))
+    
+    ##for debugging
+    # tpath = os.path.join(outdir, ipynb_name+'.template.tpl')
+    # with open(tpath, "w") as fh:
+    #     fh.write(str(oplugin['template']))
     
     (body, resources), exe = export_notebook(final_nb, 
                              oplugin['oformat'],oplugin['config'],oplugin['template'])

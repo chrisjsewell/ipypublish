@@ -29,6 +29,7 @@ def nbpresent(inpath,
     
     """
     root = logging.getLogger()
+    root.handlers = [] # remove any existing handlers
     root.setLevel(logging.DEBUG)
     slogger = logging.StreamHandler(sys.stdout)
     slogger.setLevel(getattr(logging,log_level.upper()))

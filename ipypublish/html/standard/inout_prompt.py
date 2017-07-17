@@ -4,7 +4,7 @@ tpl_dict = {
     
 'meta_docstring':'with standard nbconvert input/output prompts',
  
-'notebook_input_prompt':r"""
+'notebook_input_code_prompt':r"""
 <div class="prompt input_prompt">
 {%- if cell.execution_count is defined -%}
 {%- if resources.global_content_filter.include_input_prompt-%}

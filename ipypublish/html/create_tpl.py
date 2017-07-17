@@ -9,6 +9,7 @@ http://nbconvert.readthedocs.io/en/latest/customizing.html#Template-structure
 http://nbconvert.readthedocs.io/en/latest/api/exporters.html#nbconvert.exporters.TemplateExporter
 
 """
+import logging
 
 TPL_OUTLINE = r"""
 <!-- A html document --> 
@@ -52,55 +53,35 @@ TPL_OUTLINE = r"""
 {{% endblock any_cell %}}
 
 {{% block input_group -%}}
-<div class="input_code">
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-{notebook_input}
-</div>
-</div>
-</div>
+{notebook_input_code_pre}
+{{{{ super() }}}}
+{notebook_input_code_post}
 {{% endblock input_group %}}
 
 {{% block in_prompt -%}}
-{notebook_input_prompt}
+{notebook_input_code_prompt}
 {{%- endblock in_prompt %}}
 
 {{% block input scoped %}}
-<div class="inner_cell">
-<div class="input_area">
 {notebook_input_code}
-</div>
-</div>
 {{% endblock input %}}
 
 {{% block rawcell scoped %}}
-<div class="input_raw">
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
+{notebook_input_raw_pre}
 {notebook_input_raw}
-</div>
-</div>
-</div>
-</div>
+{notebook_input_raw_post}
 {{% endblock rawcell %}}
 
 {{% block markdowncell scoped %}}
-<div class="input_markdown">
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
+{notebook_input_markdown_pre}
 {notebook_input_markdown}
-</div>
-</div>
-</div>
-</div>
+{notebook_input_markdown_post}
 {{% endblock markdowncell %}}
 
 {{% block unknowncell scoped %}}
-<div class="input_unknown">
+{notebook_input_unknown_pre}
 {notebook_input_unknown}
-</div>
+{notebook_input_unknown_post}
 {{% endblock unknowncell %}}
 
 %% Notebook Outbook
@@ -123,124 +104,94 @@ TPL_OUTLINE = r"""
 {{% endblock execute_result %}}
 
 {{% block error %}}
-<div class="output_subarea output_text output_error">
-<pre>
+{notebook_output_error_pre}
 {notebook_output_error}
-</pre>
-</div>
+{notebook_output_error_post}
 {{% endblock error %}}
 
 {{% block traceback_line %}}
- <div class="output_traceback">
+{notebook_output_traceback_pre}
 {notebook_output_traceback}
-</div>
+{notebook_output_traceback_post}
 {{% endblock traceback_line %}}
 
 {{% block data_text %}}
-<div class="output_text output_subarea {{{{ extra_class }}}}">
-<pre>
+{notebook_output_text_pre}
 {notebook_output_text}
-</pre>
-</div>
+{notebook_output_text_post}
 {{% endblock data_text %}}
 
-{{% block data_latex -%}}
-<div class="output_latex output_subarea {{{{ extra_class }}}}">
+{{% block data_latex %}}
+{notebook_output_latex_pre}
 {notebook_output_latex}
-</div>
+{notebook_output_latex_post}
 {{% endblock data_latex %}}
 
 
 {{% block stream_stdout %}}
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
+{notebook_output_stream_stdout_pre}
 {notebook_output_stream_stdout}
-</pre>
-</div>
+{notebook_output_stream_stdout_post}
 {{% endblock stream_stdout %}}
+
 {{% block stream_stderr %}}
- <div class="output_subarea output_stream output_stderr output_text">
- <pre>
+{notebook_output_stream_stderr_pre}
 {notebook_output_stream_stderr}
-</pre>
-</div>
+{notebook_output_stream_stderr_post}
 {{% endblock stream_stderr %}}
 
 {{%- block data_markdown -%}}
-<div class="output_markdown rendered_html output_subarea {{{{ extra_class }}}}">
+{notebook_output_markdown_pre}
 {notebook_output_markdown}
-</div>
+{notebook_output_markdown_post}
 {{% endblock data_markdown %}}
 
 {{%- block data_jpg -%}}
-<div class="output_image output_jpeg output_subarea {{{{ extra_class }}}}">
-	{notebook_output_jpg}
-</div>
+{notebook_output_jpg_pre}
+{notebook_output_jpg}
+{notebook_output_jpg_post}
 {{%- endblock data_jpg -%}}
 
 {{%- block data_png -%}}
-<div class="output_image output_png output_subarea {{{{ extra_class }}}}">
-	{notebook_output_png}
-</div>
+{notebook_output_png_pre}
+{notebook_output_png}
+{notebook_output_png_post}
 {{%- endblock data_png -%}}
 
 {{%- block data_svg -%}}
-<div class="output_image output_svg output_subarea {{{{ extra_class }}}}">
-	{notebook_output_svg}
-</div>
+{notebook_output_svg_pre}	
+{notebook_output_svg}
+{notebook_output_svg_post}
 {{%- endblock data_svg -%}}
 
 {{%- block data_pdf -%}}
-<div class="output_pdf output_subarea {{{{ extra_class }}}}">
-	{notebook_output_pdf}
-</div>
+{notebook_output_pdf_pre}
+{notebook_output_pdf}
+{notebook_output_pdf_post}
 {{%- endblock -%}}
 
 {{% block data_html -%}}
-<div class="output_html rendered_html output_subarea {{{{ extra_class }}}}">
+{notebook_output_html_pre}
 {notebook_output_html}
-</div>
+{notebook_output_html_post}
 {{% endblock data_html%}}
 
 {{%- block data_javascript scoped %}}
-{{% set div_id = uuid4() %}}
-<div id="{{ div_id }}"></div>
-<div class="output_subarea output_javascript {{{{ extra_class }}}}">
-<script type="text/javascript">
-var element = $('#{{ div_id }}');
+{notebook_output_javascript_pre}
 {notebook_output_javascript}
-</script>
-</div>
+{notebook_output_javascript_post}
 {{%- endblock -%}}
 
 {{%- block data_widget_state scoped %}}
-{{% set div_id = uuid4() %}}
-{{% set datatype_list = output.data | filter_data_type %}} 
-{{% set datatype = datatype_list[0]%}} 
-<div id="{{ div_id }}"></div>
-<div class="output_subarea output_widget_state {{{{ extra_class }}}}">
-<script type="text/javascript">
-var element = $('#{{ div_id }}');
-</script>
-<script type="{{ datatype }}">
-	{notebook_output_widget_state}
-</script>
-</div>
+{notebook_output_widget_state_pre}
+{notebook_output_widget_state}
+{notebook_output_widget_state_post}
 {{%- endblock data_widget_state -%}}
 
 {{%- block data_widget_view scoped %}}
-{{% set div_id = uuid4() %}}
-{{% set datatype_list = output.data | filter_data_type %}} 
-{{% set datatype = datatype_list[0]%}} 
-<div id="{{ div_id }}"></div>
-<div class="output_subarea output_widget_view {{{{ extra_class }}}}">
-<script type="text/javascript">
-var element = $('#{{ div_id }}');
-</script>
-<script type="{{ datatype }}">
-	{notebook_output_widget_view}
-</script>
-</div>
+{notebook_output_widget_view_pre}
+{notebook_output_widget_view}
+{notebook_output_widget_view_post}
 {{%- endblock data_widget_view -%}}
 
 %% Jinja Macros
@@ -277,12 +228,19 @@ def create_tpl(tpl_dicts=(),outpath=None):
     
     'notebook_all':'',
 
-    'notebook_input':'',
-    'notebook_input_prompt':'',
+    'notebook_input_code_prompt':'',
     'notebook_input_code':'',
     'notebook_input_raw':'',
     'notebook_input_markdown':'',
     'notebook_input_unknown':'',
+    'notebook_input_code_pre':'',
+    'notebook_input_raw_pre':'',
+    'notebook_input_markdown_pre':'',
+    'notebook_input_unknown_pre':'',
+    'notebook_input_code_post':'',
+    'notebook_input_raw_post':'',
+    'notebook_input_markdown_post':'',
+    'notebook_input_unknown_post':'',
 
     'notebook_output':'',
     'notebook_output_prompt':'',
@@ -302,18 +260,52 @@ def create_tpl(tpl_dicts=(),outpath=None):
     'notebook_output_widget_state':'',
     'notebook_output_widget_view':'',
 
+    'notebook_output_text_pre':'',
+    'notebook_output_error_pre':'',
+    'notebook_output_traceback_pre':'',
+    'notebook_output_stream_stderr_pre':'',
+    'notebook_output_stream_stdout_pre':'',
+    'notebook_output_latex_pre':'',
+    'notebook_output_markdown_pre':'',
+    'notebook_output_png_pre':'',
+    'notebook_output_jpg_pre':'',
+    'notebook_output_svg_pre':'',
+    'notebook_output_pdf_pre':'',
+    'notebook_output_html_pre':'',
+    'notebook_output_javascript_pre':'',
+    'notebook_output_widget_state_pre':'',
+    'notebook_output_widget_view_pre':'',
+    'notebook_output_text_post':'',
+    'notebook_output_error_post':'',
+    'notebook_output_traceback_post':'',
+    'notebook_output_stream_stderr_post':'',
+    'notebook_output_stream_stdout_post':'',
+    'notebook_output_latex_post':'',
+    'notebook_output_markdown_post':'',
+    'notebook_output_png_post':'',
+    'notebook_output_jpg_post':'',
+    'notebook_output_svg_post':'',
+    'notebook_output_pdf_post':'',
+    'notebook_output_html_post':'',
+    'notebook_output_javascript_post':'',
+    'notebook_output_widget_state_post':'',
+    'notebook_output_widget_view_post':'',
+
     'jinja_macros':''}
     
     for i, tpl_dict in enumerate(tpl_dicts):
-        if 'overwrite' in tpl_dict:
-            overwrite = tpl_dict.pop('overwrite')
+        if 'overwrite' in list(tpl_dict.keys()):
+            overwrite = tpl_dict['overwrite']
         else:
             overwrite = []
+        logging.debug('overwrite keys: {}'.format(overwrite))
         for key,val in tpl_dict.items():
-            if key not in tpl_sections:
+            if key == 'overwrite':
+                pass
+            elif key not in tpl_sections:
                 raise ValueError(
                 '{0} from tpl_dict {1} not in outline tpl section'.format(key,i+1))
-            if key in overwrite:
+            elif key in overwrite:
                 tpl_sections[key] = val
             else:
                 tpl_sections[key] = tpl_sections[key]+'\n'+val
