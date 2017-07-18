@@ -7,7 +7,7 @@ A workflow for creating and editing publication ready scientific reports, from o
 
 ![WorkFlow Example](/example_workflow.gif)
 
-See ![notebooks/Example.ipynb](example/notebooks/Example.pdf), ![converted/Example.pdf](converted/Example.pdf) and ![Example.slides.html](https://chrisjsewell.github.io/ipypublish/Example.slides.html#/) for an example of the potential input/output.
+See [notebooks/Example.ipynb](example/notebooks/Example.pdf), [converted/Example.pdf](converted/Example.pdf) and [Example.slides.html](https://chrisjsewell.github.io/ipypublish/Example.slides.html#/) for an example of the potential input/output.
 
 - [Design Philosophy](#design-philosophy)
 - [Workflow](#worklow)
