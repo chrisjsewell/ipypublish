@@ -74,19 +74,26 @@ tplx_dict = {
     \begin{codecell}
         ((*- endif *))
     ((*- endif *))
+    
+
+    ((* set captionfound = false *))
 
     ((*- if cell.metadata.latex_doc.code.label: -*))
-        ((* set ckey = cell.metadata.latex_doc.code.label | create_key *))
-        \ifdefined\ky((( ckey )))
-         \caption{\ky((( ckey )))}
-        \else
-         ((*- if cell.metadata.latex_doc.code.caption: -*))
-         \caption{((( cell.metadata.latex_doc.code.caption )))}
+         ((*- if resources.captions: -*))
+             ((*- if resources.captions[cell.metadata.latex_doc.code.label]: -*))
+                 \caption{((( resources.captions[cell.metadata.latex_doc.code.label] )))}
+                 ((* set captionfound = true *))
+             ((*- endif *))
          ((*- endif *))
-        \fi
-    ((*- elif cell.metadata.latex_doc.code.caption: -*))
+    ((*- endif *))
+
+
+    ((*- if captionfound == false -*))
+    ((*- if cell.metadata.latex_doc.code.caption: -*))
     \caption{((( cell.metadata.latex_doc.code.caption )))}
     ((*- endif *))
+    ((*- endif *))
+
 ((*- endif *))
 
 ((*- if cell.metadata.latex_doc.code.label: -*))

@@ -450,72 +450,37 @@ Some text.\todo{a todo in the margins}
 \section{Images and Figures}\label{images-and-figures}
 
     \begin{figure}[!bh]
-        \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{Example_files/output_9_0.jpeg}\end{center}
-
-		\ifdefined\kyfigcexample
-		 \caption{\kyfigcexample}
-		\else
-		 \caption{A nice picture.}
-		\fi
+        \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{Example_files/output_9_0.jpeg}\end{center}\caption{A nice picture.}
         \label{fig:example}
     \end{figure}
 
     \begin{figure}
-        \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{Example_files/output_10_0.png}\end{center}
-
-		\ifdefined\kyfigcexampleuh
-		 \caption{\kyfigcexampleuh}
-		\else
-		 \caption{Horizontally aligned images.}
-		\fi
+        \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{Example_files/output_10_0.png}\end{center}\caption{Horizontally aligned images.}
         \label{fig:example_h}
     \end{figure}
 
     \begin{figure}
-        \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{Example_files/output_11_0.png}\end{center}
-
-		\ifdefined\kyfigcexampleuv
-		 \caption{\kyfigcexampleuv}
-		\else
-		 \caption{Vertically aligned images.}
-		\fi
+        \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{Example_files/output_11_0.png}\end{center}\caption{Vertically aligned images.}
         \label{fig:example_v}
     \end{figure}
 
     \begin{figure}
-        \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{Example_files/output_12_0.png}\end{center}
-
-		\ifdefined\kyfigcexampleugrid
-		 \caption{\kyfigcexampleugrid}
-		\else
-		 \caption{Images aligned in a grid.}
-		\fi
+        \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{Example_files/output_12_0.png}\end{center}\caption{Images aligned in a grid.}
         \label{fig:example_grid}
     \end{figure}
 
 \subsection{Displaying a plot with its
 code}\label{displaying-a-plot-with-its-code}
 
-\newcommand{\kyfigcexampleumpl}{A matplotlib figure, with the caption set in the markdowncell above the figure.}
-
-\newcommand{\kycodecexampleumpl}{The plotting code for a matplotlib figure (\cref{fig:example_mpl}).}
-
 \begin{figure}
-        \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{Example_files/output_16_0.pdf}\end{center}
-
-		\ifdefined\kyfigcexampleumpl
-		 \caption{\kyfigcexampleumpl}
-		\else
-		 \caption{}
-		\fi
+        \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{Example_files/output_16_0.pdf}\end{center}\caption{A matplotlib figure, with the caption set in the markdowncell above the figure.}
         \label{fig:example_mpl}
     \end{figure}
 
     \begin{codecell}
-        \ifdefined\kycodecexampleumpl
-         \caption{\kycodecexampleumpl}
-        \else
-        \fi\label{code:example_mpl}
+
+    \caption{The plotting code for a matplotlib figure (\cref{fig:example_mpl}).}
+                 \label{code:example_mpl}
 
 \begin{lstlisting}[language=Python]
 plt.scatter(np.random.rand(10), np.random.rand(10), 
@@ -526,15 +491,8 @@ plt.legend();
 
 \section{Tables (with pandas)}\label{tables-with-pandas}
 
-\newcommand{\kycodecexampleupd}{The plotting code for a pandas Dataframe table (\cref{tbl:example}).}
+    \begin{table}[H]\caption{An example of a table created with pandas dataframe.}
 
-    \begin{table}[H]
-
-    	\ifdefined\kytblcexample
-    	 \caption{\kytblcexample}
-    	\else
-    	 \caption{An example of a table created with pandas dataframe.}
-    	\fi
         \label{tbl:example}
 
         \centering\rowcolors{2}{gray!20}{white}
@@ -551,10 +509,9 @@ plt.legend();
         \end{table}
 
 \begin{codecell}[H]
-        \ifdefined\kycodecexampleupd
-         \caption{\kycodecexampleupd}
-        \else
-        \fi\label{code:example_pd}
+
+    \caption{The plotting code for a pandas Dataframe table (\cref{tbl:example}).}
+                 \label{code:example_pd}
 
 \begin{lstlisting}[language=Python]
 df = pd.DataFrame(np.random.rand(3,4),columns=['a','b','c','d'])
@@ -571,17 +528,14 @@ sympy)}\label{equations-with-ipython-or-sympy}
     	 a = b+c 
         \end{equation}
 
-\newcommand{\kycodecexampleusym}{The plotting code for a sympy equation (\cref{eqn:example_sympy}).}
-
     \begin{equation}\label{eqn:example_sympy}	
     	\left(\sqrt{5} i\right)^{\alpha} \left(\frac{1}{2} - \frac{2 i}{5} \sqrt{5}\right) + \left(- \sqrt{5} i\right)^{\alpha} \left(\frac{1}{2} + \frac{2 i}{5} \sqrt{5}\right)
         \end{equation}
 
 \begin{codecell}[H]
-        \ifdefined\kycodecexampleusym
-         \caption{\kycodecexampleusym}
-        \else
-        \fi\label{code:example_sym}
+
+    \caption{The plotting code for a sympy equation (\cref{eqn:example_sympy}).}
+                 \label{code:example_sym}
 
 \begin{lstlisting}[language=Python]
 f = sym.Function('f')

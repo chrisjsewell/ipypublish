@@ -21,7 +21,7 @@ class LatexDocLinks(Preprocessor):
             fpath = os.path.join(os.path.dirname(str(filepath)),fpath)
             fpath = os.path.abspath(fpath)
         return fpath
-
+        
     def preprocess(self, nb, resources):
         
         logging.info('resolving external file paths'+
@@ -69,4 +69,14 @@ class LatexDocLinks(Preprocessor):
                                                                os.path.basename(logo))
         resources.setdefault("external_file_paths", [])
         resources['external_file_paths'] += external_files
+        
+        final_cells = []
+        for cell in nb.cells:
+            if hasattr(cell.metadata, 'latex_doc'):
+                if hasattr(cell.metadata.latex_doc, 'caption'):
+                    resources.setdefault('captions',{})[cell.metadata.latex_doc.caption] = cell.source.split(r'\n')[0]
+                    continue
+            final_cells.append(cell)
+        nb.cells = final_cells                    
+        
         return nb, resources

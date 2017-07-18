@@ -13,16 +13,7 @@ tplx_dict = {
 """,
 
 'notebook_input_markdown':r"""
-((*- if cell.metadata.latex_doc: -*))
-    ((*- if cell.metadata.latex_doc.caption: -*))
-        \newcommand{\ky(((cell.metadata.latex_doc.caption | create_key)))}{(((cell.source | first_para)))}
-    ((*- else -*))	
-        ((( cell.source | citation2latex | strip_files_prefix | convert_pandoc('markdown', 'json',extra_args=[]) | resolve_references | convert_pandoc('json','latex'))))
-    ((*- endif *))
-((*- else -*))	
-    ((( cell.source | citation2latex | strip_files_prefix | convert_pandoc('markdown', 'json',extra_args=[]) | resolve_references | convert_pandoc('json','latex'))))
-((*- endif *))
-
+((( cell.source | citation2latex | strip_files_prefix | convert_pandoc('markdown', 'json',extra_args=[]) | resolve_references | convert_pandoc('json','latex'))))
 """,
 
 'notebook_output':r"""
@@ -56,12 +47,16 @@ tplx_dict = {
         \begin{table}
         ((*- endif *))
     
-        ((* set ckey = cell.metadata.latex_doc.table.label | create_key *))
-    	\ifdefined\ky((( ckey )))
-    	 \caption{\ky((( ckey )))}
-    	\else
-    	 \caption{((( cell.metadata.latex_doc.table.caption )))}
-    	\fi
+        ((*- if resources.captions: -*))
+            ((*- if resources.captions[cell.metadata.latex_doc.table.label]: -*))
+             \caption{((( resources.captions[cell.metadata.latex_doc.table.label] )))}
+            ((*- else -*))   
+             \caption{((( cell.metadata.latex_doc.table.caption )))}
+            ((*- endif *))
+        ((*- else -*))
+         \caption{((( cell.metadata.latex_doc.table.caption )))}
+        ((*- endif *))
+
         \label{((( cell.metadata.latex_doc.table.label )))}
     
         \centering
@@ -81,10 +76,6 @@ tplx_dict = {
     	((( output.data['text/latex'] | remove_dollars )))
         \end{equation}
     
-    ((*- elif cell.metadata.latex_doc.caption: -*))
-
-        \newcommand{\ky(((cell.metadata.latex_doc.caption | create_key)))}{(((output.data['text/latex'] | first_para)))}
-
     ((*- endif *))
 ((*- endif *))
 """,
@@ -134,12 +125,15 @@ cell.metadata) )))
     ((*- endif *))
         \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{((( filename )))}\end{center}
 
-        ((* set ckey = meta.latex_doc.figure.label | create_key *))
-		\ifdefined\ky((( ckey )))
-		 \caption{\ky((( ckey )))}
-		\else
-		 \caption{((( meta.latex_doc.figure.caption )))}
-		\fi
+        ((*- if resources.captions: -*))
+            ((*- if resources.captions[meta.latex_doc.figure.label]: -*))
+             \caption{((( resources.captions[meta.latex_doc.figure.label] )))}
+            ((*- else -*))   
+             \caption{((( meta.latex_doc.figure.caption )))}
+            ((*- endif *))
+        ((*- else -*))
+         \caption{((( meta.latex_doc.figure.caption )))}
+        ((*- endif *))
         \label{((( meta.latex_doc.figure.label )))}
     \end{figure}
 
