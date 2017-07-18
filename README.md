@@ -210,7 +210,7 @@ dict2 = {'notebook_input':'b'}
 template = create_tplx([dict1,dict2])
 ```
 
-would show a, then b. But, if you want to redefine a particular(s) section;
+would show a, then b. But, if you want to redefine a particular section(s);
 
 ```python
 dict1 = {'notebook_input':'a'}
