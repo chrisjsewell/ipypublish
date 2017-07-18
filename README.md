@@ -411,7 +411,8 @@ The **nbpresent** script handles serving [reveal.js](http://lab.hakim.se/reveal-
 
 	nbpresent -h
 	
-Note that, for offline use, simply download the lates version of reveal.js [here](https://github.com/hakimel/reveal.js/releases), rename the entire folder to reveal.js and place it in the same folder as the converted .slides.html file.
+Note that, for offline use, simply download the lates version of reveal.js [here](https://github.com/hakimel/reveal.js/releases), rename the entire folder to reveal.js and place it in the same folder as the converted .slides.html file. The slides can also be save to PDF my appending `pdf-export` to the url (see [here](https://github.com/hakimel/reveal.js#pdf-export) for details).
+
 
 Additionally, the [Reveal.js - Jupyter/IPython Slideshow Extension (RISE)](https://github.com/damianavila/RISE) notebook extension offers rendering as a Reveal.js-based slideshow, where you can execute code or show to the audience whatever you can show/do inside the notebook itself! Click on the image to see a demo:
 

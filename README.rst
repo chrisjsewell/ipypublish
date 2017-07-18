@@ -509,7 +509,7 @@ The **nbpresent** script handles serving `reveal.js <http://lab.hakim.se/reveal-
 
 	nbpresent -h
 	
-Note that, **for offline use**, simply download the lates version of reveal.js `here <https://github.com/hakimel/reveal.js/releases>`__, rename the entire folder to reveal.js and place it in the same folder as the converted .slides.html file.
+Note that, **for offline use**, simply download the lates version of reveal.js `here <https://github.com/hakimel/reveal.js/releases>`__, rename the entire folder to reveal.js and place it in the same folder as the converted .slides.html file. The slides can also be save to PDF my appending `pdf-export` to the url (see `here <https://github.com/hakimel/reveal.js#pdf-export>`__ for details).
 
 The `Reveal.js - Jupyter/IPython Slideshow Extension
 (RISE) <https://github.com/damianavila/RISE>`__ notebook extension
