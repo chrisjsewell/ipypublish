@@ -88,6 +88,13 @@ class MyParser(argparse.ArgumentParser):
         sys.exit(2)
     
 if __name__ == '__main__':
+    
+    local_plugin_dir = os.path.join(os.getcwd(),'ipypublish_plugins')
+    if os.path.exists(local_plugin_dir):
+        load_errors = export_plugins.add_directory(local_plugin_dir)
+        if load_errors:
+            raise IOError('errors in loading external plugins: {}'.format('\n'.join(['{0}: {1}'.format(a,b) for a,b in load_errors])))
+    
     plugins = export_plugins.get()
 
     parser = MyParser(

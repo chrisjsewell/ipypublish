@@ -117,52 +117,110 @@ The current `nbconvert --to pdf` does not correctly resolve references and citat
 
 ### Creating a bespoke converter
 
-nbconvert uses [Jinja templates](https://jinja2.readthedocs.io/en/latest/intro.html) to specify the rules for how each element of the notebook should be converted, and also what each section of the latex file should contain. To create a [custom template](https://nbconvert.readthedocs.io/en/latest/customizing.html#Custom-Templates) they employ an inheritance method to build up this template. However, in my experience this makes it;
+On instatiation, ipypublish loads all converter plugins in its internal export_plugins folder. Additionally, when nbpublish or nbpresent are called, if a folder named **ipypublish_plugins** is present in the current working directory, they will load all plugins in this folder. Programatically, it is the `ipypublish.export_plugins.add_directory` function which is being called and adding modules to an internal dictionary.
 
-1. non-trivial to understand the full conversion process (having to go through the inheritance tree to find where particular methods have been implemented/overriden)  
-2. difficult to swap in/out multiple rules
+A plugin is a python (.py) file with at least the following four variables (i.e. it's interface spec):
 
-To improve this, ipypublish implements a pluginesque system to systematically append to blank template placeholders. For example, to create a document (with standard formatting) with a natbib bibliography where only input markdown is output, we could create the following dictionary:
+1. a **docstring** describing its output format
+2. an **oformat** string,  specifying a base exporter prefix (for any of the exporters listed [here](https://nbconvert.readthedocs.io/en/latest/api/exporters.html#specialized-exporter-classes))
+3. a **config** dictionary, containing any configuration option (as a string) listed [here](https://nbconvert.readthedocs.io/en/latest/api/exporters.html#specialized-exporter-classes). This is mainly to supply preprocessors (which act on the notbook object before it is parsed) or filters (which are functions supplied to the jinja template).
+4. a **template** string, specifying the [Jinja templates](https://jinja2.readthedocs.io/en/latest/intro.html), which contains rules for how each element of the notebook should be converted, and also what each section of the latex file should contain. 
+
+So a simple plugin would look like this (create_tplx will be explained below) 
 
 ```python
-
-my_tplx_dict = { 
-'meta_docstring':'with a natbib bibliography',
-
-'notebook_input_markdown':r"""
-    ((( cell.source | citation2latex | strip_files_prefix | convert_pandoc('markdown', 'json',extra_args=[]) | resolve_references | convert_pandoc('json','latex') )))
-""",
-
-'document_packages':r"""
-	\usepackage[numbers, square, super, sort&compress]{natbib}
-	\usepackage{doi} % hyperlink doi's	
-""",
-
-'document_bibliography':r"""
-\bibliographystyle{unsrtnat} % sort citations by order of first appearance
-\bibliography{bibliography}
+"""this exporter exports a .tex file with nothing in it
 """
+from ipypublish.latex.create_tplx import create_tplx
+oformat = 'Latex'
+config = {}
+template = create_tplx()
 
-}
 ```
 
-The converter would then look like this:
+This is similar to how nbconvert works, except for one key difference, 
+the plugin must specify the entire jinja template (rather than using a default one).
+The advantage of this, is that the plugin has complete control over the look of the final document.
+
+To aid in the creation of the jinja template, the `create_tplx` (for latex) and `create_tpl` (for html) functions
+work by creating an inital *skeleton* template, with placeholders in all the relevant [structural blocks](https://nbconvert.readthedocs.io/en/latest/customizing.html#Template-structure). 
+They then take a list of *fragment* dictionaries which progressively append input to the relevant blocks. 
+So, for instance:   
 
 ```python
+"""exports a .tex file containing 
+some latex setup and
+only input markdown cells from the notebook 
+"""
+from ipypublish.latex.create_tplx import create_tplx
+oformat = 'Latex'
+config = {}
+
+doc_dict = {
+	'document_docclass':r'\documentclass[11pt]{article}',
+	'document_packages':r"""
+	\usepackage{caption}
+	 \usepackage{amsmath}
+	"""
+}
+
+mkdown_dict = {
+  'notebook_input_markdown':r"""
+ 	((( cell.source | citation2latex | strip_files_prefix | convert_pandoc('markdown', 'json',extra_args=[]) | resolve_references | convert_pandoc('json','latex') )))
+	"""
+}
+
+template = create_tplx([doc_dict,mkdown_dict])
+
+```
+
+This approach allows independant aspects of the document to be 
+stored separately then pieced together in the desired manner. 
+ipypublish stores all of the standard fragments in separate modules,
+for instance the latex_standard_article plugin looks like this: 
+
+```python
+"""latex article in the standard nbconvert format
+"""
 
 from ipypublish.latex.create_tplx import create_tplx
 from ipypublish.latex.standard import standard_article as doc
-from ipypublish.latex.standard import standard_definitions as defs
 from ipypublish.latex.standard import standard_packages as package
+from ipypublish.latex.standard import standard_definitions as defs
+from ipypublish.latex.standard import standard_contents as content
+from ipypublish.latex.standard import in_out_prompts as prompts
 
 oformat = 'Latex'
-template = create_tplx([package.tplx_dict,defs.tplx_dict,
-		     doc.tplx_dict,my_tplx_dict])
+template = create_tplx(
+    [package.tplx_dict,defs.tplx_dict,doc.tplx_dict,
+    content.tplx_dict,prompts.tplx_dict])
 
-config = {'TemplateExporter.filters':{},
-          'Exporter.filters':{}}
+config = {}
 
 ```
+
+Now, if you wanted mainly the same output format but without input and output prompts shown,
+simply copy this plugin but remove the prompts.tplx_dict.
+
+Lastly, as default, sections are appended to, so;
+
+```python
+dict1 = {'notebook_input':'a'}
+dict2 = {'notebook_input':'b'}
+template = create_tplx([dict1,dict2])
+```
+
+would show a, then b. But, if you want to redefine a particular(s) section;
+
+```python
+dict1 = {'notebook_input':'a'}
+dict2 = {
+	'overwrite':['notebook_input'],
+	'notebook_input':'b'}
+template = create_tplx([dict1,dict2])
+```
+
+will only show b.
 
 ## Latex Metadata Tags
 
