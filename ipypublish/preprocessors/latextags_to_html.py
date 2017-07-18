@@ -92,7 +92,7 @@ class LatexTagsToHTML(Preprocessor):
         Example
         -------
 
-        >>> source = '''
+        >>> source = r'''
         ... References to \\cref{fig:example}, \\cref{tbl:example}, \\cref{eqn:example_sympy} and \\cref{code:example_mpl}.
         ... 
         ... Referencing multiple items: \\cref{fig:example,fig:example_h,fig:example_v}.
