@@ -17,7 +17,7 @@ remove latex tags and code cells """,
 """,
 
 'notebook_input_markdown':r"""
-{{ cell.source | remove_tex_tags | markdown2html | strip_files_prefix }}
+{{ cell.source | markdown2html | strip_files_prefix }}
 """,
 
 'html_body_start':r"""

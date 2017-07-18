@@ -4,3 +4,4 @@ nbformat
 jinja2
 traitlets
 tornado
+bibtexparser

@@ -11888,9 +11888,9 @@ $( document ).ready(function(){
 <div class="input">
 
 <div class="prompt input_prompt">In&nbsp;[1]:</div>
+
 <div class="inner_cell">
 <div class="input_area">
-
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">ipypublish.ipynb_latex_setup</span> <span class="k">import</span> <span class="o">*</span>
 </pre></div>
 
@@ -11964,9 +11964,9 @@ $( document ).ready(function(){
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 
-<p>References to \cref{fig:example}, \cref{tbl:example}, \cref{eqn:example_sympy} and \cref{code:example_mpl}.</p>
-<p>Referencing multiple items: \cref{fig:example,fig:example_h,fig:example_v}.</p>
-<p>A latex citation.\cite{zelenyak_molecular_2016}</p>
+<p>References to <a href="#fig:example">ref. 1</a>, <a href="#tbl:example">ref. 2</a>, <a href="#eqn:example_sympy">ref. 3</a> and <a href="#code:example_mpl">ref. 4</a>.</p>
+<p>Referencing multiple items: <a href="#fig:example">ref. 1</a>, <a href="#fig:example_h">ref. 5</a> and <a href="#fig:example_v">ref. 6</a>.</p>
+<p>A latex citation.[<a href="https://doi.org/10.1134/S0018143916050209">Zelenyak <em>et al</em>, 2016.</a>]</p>
 <p>A html citation.<cite data-cite="kirkeminde_thermodynamic_2012">(Kirkeminde, 2012)</cite></p>
 
 </div>
@@ -11991,8 +11991,7 @@ $( document ).ready(function(){
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 
-<p>\todo[inline]{an inline todo}</p>
-<p>Some text.\todo{a todo in the margins}</p>
+<p>Some text.</p>
 
 </div>
 </div>
@@ -12016,9 +12015,9 @@ $( document ).ready(function(){
 <div class="input">
 
 <div class="prompt input_prompt">In&nbsp;[3]:</div>
+
 <div class="inner_cell">
 <div class="input_area">
-
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="s1">&#39;../images/example.jpg&#39;</span><span class="p">,</span><span class="n">height</span><span class="o">=</span><span class="mi">400</span><span class="p">)</span>
 </pre></div>
 
@@ -13062,9 +13061,9 @@ height=400
 <div class="input">
 
 <div class="prompt input_prompt">In&nbsp;[4]:</div>
+
 <div class="inner_cell">
 <div class="input_area">
-
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">images_hconcat</span><span class="p">([</span><span class="s1">&#39;../images/example.jpg&#39;</span><span class="p">,</span>
                <span class="s1">&#39;../images/example.jpg&#39;</span><span class="p">],</span>
                <span class="n">width</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">gap</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
@@ -14599,9 +14598,9 @@ Hdb/gs7VCa9OeHXCqxNevQgfXuW14+WHxav/PyM3DC1Ltde3AAAAAElFTkSuQmCC
 <div class="input">
 
 <div class="prompt input_prompt">In&nbsp;[5]:</div>
+
 <div class="inner_cell">
 <div class="input_area">
-
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">images_vconcat</span><span class="p">([</span><span class="s1">&#39;../images/example.jpg&#39;</span><span class="p">,</span>
                <span class="s1">&#39;../images/example.jpg&#39;</span><span class="p">],</span>
                <span class="n">height</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">gap</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
@@ -17260,9 +17259,9 @@ Pzp+dPzo+NHxo+NHx4+OHx0/On50/Oj4//vx/wVsPkzyLurC2QAAAABJRU5ErkJggg==
 <div class="input">
 
 <div class="prompt input_prompt">In&nbsp;[6]:</div>
+
 <div class="inner_cell">
 <div class="input_area">
-
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">images_gridconcat</span><span class="p">([[</span><span class="n">_</span><span class="p">,</span><span class="n">_</span><span class="p">]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;../images/example.jpg&#39;</span><span class="p">,</span>
                <span class="s1">&#39;../images/example.jpg&#39;</span><span class="p">]],</span>
                <span class="n">height</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">vgap</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">hgap</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
@@ -20461,7 +20460,7 @@ SUVORK5CYII=
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 
-<p>The plotting code for a matplotlib figure (\cref{fig:example_mpl}).</p>
+<p>The plotting code for a matplotlib figure (<a href="#fig:example_mpl">ref. 7</a>).</p>
 
 </div>
 </div>
@@ -20473,9 +20472,9 @@ SUVORK5CYII=
 <div class="input">
 
 <div class="prompt input_prompt">In&nbsp;[5]:</div>
+
 <div class="inner_cell">
 <div class="input_area">
-
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> 
             <span class="n">label</span><span class="o">=</span><span class="s1">&#39;data label&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;a y label with latex $\alpha$&#39;</span><span class="p">)</span>
@@ -21298,7 +21297,7 @@ z
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 
-<p>The plotting code for a pandas Dataframe table (\cref{tbl:example}).</p>
+<p>The plotting code for a pandas Dataframe table (<a href="#tbl:example">ref. 2</a>).</p>
 
 </div>
 </div>
@@ -21310,9 +21309,9 @@ z
 <div class="input">
 
 <div class="prompt input_prompt">In&nbsp;[8]:</div>
+
 <div class="inner_cell">
 <div class="input_area">
-
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="s1">&#39;b&#39;</span><span class="p">,</span><span class="s1">&#39;c&#39;</span><span class="p">,</span><span class="s1">&#39;d&#39;</span><span class="p">])</span>
 <span class="n">df</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;$\delta$&#39;</span><span class="p">,</span><span class="s1">&#39;x&#39;</span><span class="p">,</span><span class="s1">&#39;y&#39;</span><span class="p">]</span>
 <span class="n">df</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;l&#39;</span><span class="p">,</span><span class="s1">&#39;m&#39;</span><span class="p">,</span><span class="s1">&#39;n&#39;</span><span class="p">]</span>
@@ -21404,9 +21403,9 @@ z
 <div class="input">
 
 <div class="prompt input_prompt">In&nbsp;[9]:</div>
+
 <div class="inner_cell">
 <div class="input_area">
-
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">Latex</span><span class="p">(</span><span class="s1">&#39;$$ a = b+c $$&#39;</span><span class="p">)</span>
 </pre></div>
 
@@ -21434,7 +21433,7 @@ $$ a = b+c $$
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 
-<p>The plotting code for a sympy equation (\cref{eqn:example_sympy}).</p>
+<p>The plotting code for a sympy equation (<a href="#eqn:example_sympy">ref. 3</a>).</p>
 
 </div>
 </div>
@@ -21446,9 +21445,9 @@ $$ a = b+c $$
 <div class="input">
 
 <div class="prompt input_prompt">In&nbsp;[10]:</div>
+
 <div class="inner_cell">
 <div class="input_area">
-
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="n">sym</span><span class="o">.</span><span class="n">Function</span><span class="p">(</span><span class="s1">&#39;f&#39;</span><span class="p">)</span>
 <span class="n">y</span><span class="p">,</span><span class="n">n</span> <span class="o">=</span> <span class="n">sym</span><span class="o">.</span><span class="n">symbols</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;y \alpha&#39;</span><span class="p">)</span>
 <span class="n">f</span> <span class="o">=</span> <span class="n">y</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">y</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="n">sym</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span><span class="o">-</span><span class="mi">5</span><span class="o">*</span><span class="n">y</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>

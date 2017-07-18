@@ -52,7 +52,7 @@ class LatexDocLinks(Preprocessor):
                                     ': {}'.format(bib))
                 else:
                     external_files.append(bib)
-                    resources['bibliopath'] = external_files
+                    resources['bibliopath'] = bib
 
                 nb.metadata.latex_doc.bibliography = os.path.join(self.filesfolder,
                                                                 os.path.basename(bib))

@@ -12,7 +12,7 @@ browser!
 
 .. image:: https://github.com/chrisjsewell/ipypublish/raw/master/example_workflow.gif
 
-For an example of the potential input/output, see `Example.ipynb <https://github.com/chrisjsewell/ipypublish/raw/master/example/notebooks/Example.ipynb>`__  and `Example.pdf <https://github.com/chrisjsewell/ipypublish/raw/master/converted/Example.pdf>`__ .
+For an example of the potential input/output, see `Example.ipynb <https://github.com/chrisjsewell/ipypublish/raw/master/example/notebooks/Example.ipynb>`__ , `Example.pdf <https://github.com/chrisjsewell/ipypublish/raw/master/converted/Example.pdf>`__ and `Example.slides.html <https://chrisjsewell.github.io/ipypublish/Example.slides.html#/>`__.
 
 Design Philosophy
 -----------------
@@ -48,9 +48,8 @@ Workflow
 The default latex template outputs all markdown cells (unless tagged
 latex\_ignore), and then only code and output cells with `latex metadata
 tags <#latex-metadata-tags>`__. See
-`Example.ipynb <https://github.com/chrisjsewell/ipypublish/blob/master/example/notebooks/Example.ipynb>`__
-and
-`Example.pdf <https://github.com/chrisjsewell/ipypublish/blob/master/converted/Example.pdf>`__
+`Example.ipynb <https://github.com/chrisjsewell/ipypublish/blob/master/example/notebooks/Example.ipynb>`__, 
+`Example.pdf <https://github.com/chrisjsewell/ipypublish/blob/master/converted/Example.pdf>`__ and `Example.slides.html <https://chrisjsewell.github.io/ipypublish/Example.slides.html#/>`__
 for an example of the potential input and output.
 
 Setting up the environment
@@ -144,17 +143,19 @@ and combined in 'natural' sorted order, i.e. 2\_name.ipynb before
 
 All available converters are also listed by ``nbpublish -h``. Two of note are:
 
--  latex\_ipypublish\_main.py is the default and converts cells to latex
+-  **latex\_ipypublish\_main** is the default and converts cells to latex
    according to metadata tags on an 'opt in' basis.
--  latex\_standard\_article.py replicates the standard latex article
+-  **latex\_standard\_article** replicates the standard latex article
    template, which comes with nbconvert.
--  html\_toc\_toggle\_input.py converts the entire notebook(s) to html
+-  **html\_ipypublish** converts the entire notebook(s) to html
    and adds a table of contents sidebar and a button to toggle 
-   input code and output cells visible/hidden.
-- slides_standard converts the notebook to
-  `reveal.js <http://lab.hakim.se/reveal-js/#/>`__ slides, according to the standard
-  nbconvert slide metadata. See the Live Slideshows section for
-  using **nbpresent** to serve these slides to a webbrowser. 
+   input code and output cells visible/hidden,
+   with latex citations and references resolved.
+-  **slides\_ipypublish** converts the notebook to
+   `reveal.js <http://lab.hakim.se/reveal-js/#/>`__ slides, 
+   with latex citations and references resolved. 
+   See the Live Slideshows section for
+   using **nbpresent** to serve these slides to a webbrowser. 
 
 The current ``nbconvert --to pdf`` does not correctly resolve references
 and citations (since it copies the files to a temporary directory).
@@ -507,6 +508,8 @@ The **nbpresent** script handles serving `reveal.js <http://lab.hakim.se/reveal-
 ::
 
 	nbpresent -h
+	
+Note that, **for offline use**, simply download the lates version of reveal.js `here <https://github.com/hakimel/reveal.js/releases>`__, rename the entire folder to reveal.js and place it in the same folder as the converted .slides.html file.
 
 The `Reveal.js - Jupyter/IPython Slideshow Extension
 (RISE) <https://github.com/damianavila/RISE>`__ notebook extension

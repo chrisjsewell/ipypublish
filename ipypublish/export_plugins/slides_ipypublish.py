@@ -1,8 +1,8 @@
 #!/usr/bin/env python
-"""revel.js slides in the ipypublish format;
+r"""revel.js slides in the ipypublish format;
 - splits titles and sub-titles into separate slides
 - removes code cells
-- removes latex tags (like \cite{abc})
+- converts or removes (if no converter) latex tags (like \cite{abc}, \ref{})
 """
 import re
 import logging
@@ -13,24 +13,20 @@ from ipypublish.html.standard import content
 from ipypublish.html.standard import content_tagging
 from ipypublish.html.standard import mathjax
 from ipypublish.html.standard import widgets
-from ipypublish.html.ipypublish import slides_title_pages
+from ipypublish.html.ipypublish import slides_latex
+from ipypublish.preprocessors.latex_doc import LatexDocLinks
+from ipypublish.preprocessors.latextags_to_html import LatexTagsToHTML
 
 oformat = 'Slides'  
 
-def remove_tex_tags(input, **kwargs):
-    r"""remove latex tags like \cite{abc} or \todo[color]{stuff} """
-    latex_regex = r"\\(?:[^a-zA-Z]|[a-zA-Z]+[*=']?)(?:\[.*?\])?{.*?}"  
-    return ''.join(re.split(latex_regex, input))  
-
-_filters = {'remove_tex_tags':remove_tex_tags}
-
+_filters = {}
             
 config = {'TemplateExporter.filters':_filters,
-          'Exporter.filters':_filters,}
-#          'Exporter.preprocessors':[SlidePreProcess]}
+          'Exporter.filters':_filters,
+          'Exporter.preprocessors':[LatexDocLinks,LatexTagsToHTML]}
 
 template = create_tpl([
     content.tpl_dict, content_tagging.tpl_dict,
     mathjax.tpl_dict, widgets.tpl_dict, 
-    slides.tpl_dict, slides_title_pages.tpl_dict,
+    slides.tpl_dict, slides_latex.tpl_dict,
 ])

@@ -7,7 +7,7 @@ A workflow for creating and editing publication ready scientific reports, from o
 
 ![WorkFlow Example](/example_workflow.gif)
 
-See ![notebooks/Example.ipynb](example/notebooks/Example.pdf) and ![converted/Example.pdf](converted/Example.pdf) for an example of the potential input/output.
+See ![notebooks/Example.ipynb](example/notebooks/Example.pdf), ![converted/Example.pdf](converted/Example.pdf) and ![Example.slides.html](https://chrisjsewell.github.io/ipypublish/Example.slides.html#/) for an example of the potential input/output.
 
 - [Design Philosophy](#design-philosophy)
 - [Workflow](#worklow)
@@ -42,7 +42,7 @@ In essence, the dream is to have the ultimate hybrid of Jupyter Notebook, WYSIWY
 5. A converted folder will be created, into which final .tex .pdf and _viewpdf.html files will be output, named by the notebook or folder input
 
 The default latex template outputs all markdown cells (unless tagged latex_ignore), and then only code and output cells with [latex metadata tags](#latex-metadata-tags). 
-See [Example.ipynb](https://github.com/chrisjsewell/ipypublish/blob/master/example/notebooks/Example.ipynb) and [Example.pdf](https://github.com/chrisjsewell/ipypublish/blob/master/converted/Example.pdf) for an example of the potential input and output.
+See [Example.ipynb](https://github.com/chrisjsewell/ipypublish/blob/master/example/notebooks/Example.ipynb), [Example.pdf](https://github.com/chrisjsewell/ipypublish/blob/master/converted/Example.pdf) and ![Example.slides.html](https://chrisjsewell.github.io/ipypublish/Example.slides.html#/) for an example of the potential input and output.
 
 ## Setting up the environment
 
@@ -106,9 +106,9 @@ If a folder is input, then the .ipynb files it contains are processed and combin
 
 All available converters are also listed by `nbpublish -h`. Three of note are:
 
-- latex_ipypublish is the default and converts cells to latex according to metadata tags on an 'opt in' basis.
-- html_toc_toggle converts the entire notebook(s) to html and adds a table of contents sidebar and a button to toggle input code and output cells visible/hidden. 
-- slides_standard converts the notebook to [reveal.js](http://lab.hakim.se/reveal-js/#/) slides, according to the standard nbconvert slide metadata. See the [Live Slideshows](#live-slideshows) section for using `nbpresent` to serve these slides to a webbrowser. 
+- **latex_ipypublish** is the default and converts cells to latex according to metadata tags on an 'opt in' basis.
+- **html_ipypublish** converts the entire notebook(s) to html and adds a table of contents sidebar and a button to toggle input code and output cells visible/hidden, with latex citations and references resolved. 
+- **slides_ipypublish** converts the notebook to [reveal.js](http://lab.hakim.se/reveal-js/#/) slides, with latex citations and references resolved. See the [Live Slideshows](#live-slideshows) section for using `nbpresent` to serve these slides to a webbrowser. 
 
 The current `nbconvert --to pdf` does not correctly resolve references and citations (since it copies the files to a temporary directory). Therefore nbconvert is only used for the initial `nbconvert --to latex` phase, followed by using `latexmk` to create the pdf and correctly resolve everything.
 
@@ -407,6 +407,8 @@ to make it look better in html, but not specifically available for drag and drop
 The **nbpresent** script handles serving [reveal.js](http://lab.hakim.se/reveal-js/#/) slides to a webbrowser. To see all options for this script:
 
 	nbpresent -h
+	
+Note that, for offline use, simply download the lates version of reveal.js [here](https://github.com/hakimel/reveal.js/releases), rename the entire folder to reveal.js and place it in the same folder as the converted .slides.html file.
 
 Additionally, the [Reveal.js - Jupyter/IPython Slideshow Extension (RISE)](https://github.com/damianavila/RISE) notebook extension offers rendering as a Reveal.js-based slideshow, where you can execute code or show to the audience whatever you can show/do inside the notebook itself! Click on the image to see a demo:
 

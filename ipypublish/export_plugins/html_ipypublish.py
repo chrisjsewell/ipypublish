@@ -1,6 +1,8 @@
-"""html in standard nbconvert format, 
-but with a table of contents 
-and toggle buttons for showing/hiding code & output cells
+"""html in standard nbconvert format, but with 
+- a table of contents 
+- toggle buttons for showing/hiding code & output cells
+- converts or removes (if no converter) latex tags (like \cite{abc}, \ref{})
+
 """
 
 from ipypublish.html.create_tpl import create_tpl
@@ -12,10 +14,13 @@ from ipypublish.html.standard import widgets
 from ipypublish.html.standard import inout_prompt
 from ipypublish.html.ipypublish import toc_sidebar
 from ipypublish.html.ipypublish import toggle_buttons
+from ipypublish.preprocessors.latex_doc import LatexDocLinks
+from ipypublish.preprocessors.latextags_to_html import LatexTagsToHTML
 
 oformat = 'HTML'   
 config = {'TemplateExporter.filters':{},
-          'Exporter.filters':{}}
+          'Exporter.filters':{},
+          'Exporter.preprocessors':[LatexDocLinks,LatexTagsToHTML]}
 
 template = create_tpl([
     document.tpl_dict, 

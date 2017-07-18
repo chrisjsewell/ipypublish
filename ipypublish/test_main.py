@@ -333,7 +333,7 @@ test123
         out_folder = tempfile.mkdtemp()
         html_path = os.path.join(out_folder,'2test.html')
         try:
-            publish(self.file1,outformat='html_toc_toggle',outpath=out_folder)
+            publish(self.file1,outformat='html_ipypublish',outpath=out_folder)
             assert os.path.exists(html_path)
         finally:
             shutil.rmtree(out_folder)    
@@ -343,7 +343,7 @@ test123
         out_folder = tempfile.mkdtemp()
         html_path = os.path.join(out_folder,'2test.slides.html')
         try:
-            publish(self.file1,outformat='slides_standard',outpath=out_folder)
+            publish(self.file1,outformat='slides_ipypublish',outpath=out_folder)
             assert os.path.exists(html_path)
         finally:
             shutil.rmtree(out_folder)    
