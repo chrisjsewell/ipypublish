@@ -31,6 +31,7 @@ class LatexTagsToHTML(Preprocessor):
                             help="the regex to identify latex tags").tag(config=True)
     bibformat = traits.Unicode("{author}, {year}.",
                             help=r"the format to output \cite{} tags found in the bibliography").tag(config=True)
+    labelbycolon = traits.Bool(True,help=r'create reference label based on text before colon, e.g. \ref{fig:example} -> fig 1')
     
     def __init__(self, *args, **kwargs):
         # a dictionary to keep track of references, so they each get a different number
@@ -112,29 +113,46 @@ class LatexTagsToHTML(Preprocessor):
         """        
         new = source           
         for tag in re.findall(self.regex, source):
+            
+            if tag.startswith('\\label'):
+                new = new.replace(tag, r'<a id="{label}" class="anchor-link" name="#{label}"></a>'.format(label=tag[7:-1]))
 
-            if tag.startswith('\\cref'):
+            elif tag.startswith('\\cref'):
                 names = tag[6:-1].split(',')
                 html = []
                 for name in names:
-                    if name in self.refs:
-                        id = self.refs[name]
+                    if self.labelbycolon:
+                        ref_name = name.split(':')[0] if ':' in name else 'ref'
                     else:
-                        id = len(self.refs) + 1
-                        self.refs[name] = id
-                    html.append(r'<a href="#{0}">ref. {1}</a>'.format(name, id))
+                        ref_name = 'ref'
+                    if not ref_name in self.refs:
+                        self.refs[ref_name] = {}
+                    refs = self.refs[ref_name]
+                    if name in refs:
+                        id = refs[name]
+                    else:
+                        id = len(refs) + 1
+                        refs[name] = id
+                    html.append(r'<a href="#{0}">{1}. {2}</a>'.format(name,ref_name,id))
                 new = new.replace(tag, self.rreplace(', '.join(html),',',' and'))
 
             elif tag.startswith('\\ref'):
                 names = tag[5:-1].split(',')
                 html = []
                 for name in names:
-                    if name in self.refs:
-                        id = self.refs[name]
+                    if self.labelbycolon:
+                        ref_name = name.split(':')[0] if ':' in name else 'ref'
                     else:
-                        id = len(self.refs) + 1
-                        self.refs[name] = id
-                    html.append(r'<a href="#{0}">ref. {1}</a>'.format(name, id))
+                        ref_name = 'ref'
+                    if not ref_name in self.refs:
+                        self.refs[ref_name] = {}
+                    refs = self.refs[ref_name]
+                    if name in refs:
+                        id = refs[name]
+                    else:
+                        id = len(refs) + 1
+                        refs[name] = id
+                    html.append(r'<a href="#{0}">{1}. {2}</a>'.format(name, ref_name, id))
                 new = new.replace(tag, ', '.join(html))
 
             elif tag.startswith('\\cite'):
