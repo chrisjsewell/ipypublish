@@ -124,7 +124,7 @@ a.anchor-link {
 """,
 
 'html_body_end':r"""
-
+</section>
 </div>
 </div>
 
@@ -175,7 +175,7 @@ require(
         };
 
         Reveal.addEventListener('slidechanged', update_scroll);
-
+        Reveal.configure({ slideNumber: 'c/t' });
     }
 );
 </script>

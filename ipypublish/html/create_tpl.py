@@ -307,6 +307,9 @@ def create_tpl(tpl_dicts=(),outpath=None):
                 '{0} from tpl_dict {1} not in outline tpl section'.format(key,i+1))
             elif key in overwrite:
                 tpl_sections[key] = val
+            # if its pre then add befor existing (if post add after)
+            elif '_pre' in key:
+                tpl_sections[key] = val+'\n'+tpl_sections[key]
             else:
                 tpl_sections[key] = tpl_sections[key]+'\n'+val
 

@@ -24,8 +24,6 @@ class LatexDocLinks(Preprocessor):
 
     def preprocess(self, nb, resources):
         
-        logging.info(resources['filesfolder'])
-        
         logging.info('resolving external file paths'+
                      ' in latex_doc metadata to: {}'.format(self.metapath)) 
         external_files = []

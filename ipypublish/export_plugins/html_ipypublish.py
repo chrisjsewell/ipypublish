@@ -11,9 +11,10 @@ from ipypublish.html.standard import content
 from ipypublish.html.standard import content_tagging
 from ipypublish.html.standard import mathjax
 from ipypublish.html.standard import widgets
-from ipypublish.html.standard import inout_prompt
+#from ipypublish.html.standard import inout_prompt
 from ipypublish.html.ipypublish import toc_sidebar
 from ipypublish.html.ipypublish import toggle_buttons
+from ipypublish.html.ipypublish import latex_doc
 from ipypublish.preprocessors.latex_doc import LatexDocLinks
 from ipypublish.preprocessors.latextags_to_html import LatexTagsToHTML
 
@@ -26,7 +27,8 @@ template = create_tpl([
     document.tpl_dict, 
     content.tpl_dict, content_tagging.tpl_dict, 
     mathjax.tpl_dict, widgets.tpl_dict, 
-    inout_prompt.tpl_dict, 
+#    inout_prompt.tpl_dict, 
     toggle_buttons.tpl_dict, toc_sidebar.tpl_dict, 
+    latex_doc.tpl_dict
 ])
 

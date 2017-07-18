@@ -13,7 +13,8 @@ from ipypublish.html.standard import content
 from ipypublish.html.standard import content_tagging
 from ipypublish.html.standard import mathjax
 from ipypublish.html.standard import widgets
-from ipypublish.html.ipypublish import slides_latex
+from ipypublish.html.ipypublish import latex_doc
+from ipypublish.html.ipypublish import slides_mkdown
 from ipypublish.preprocessors.latex_doc import LatexDocLinks
 from ipypublish.preprocessors.latextags_to_html import LatexTagsToHTML
 
@@ -28,5 +29,6 @@ config = {'TemplateExporter.filters':_filters,
 template = create_tpl([
     content.tpl_dict, content_tagging.tpl_dict,
     mathjax.tpl_dict, widgets.tpl_dict, 
-    slides.tpl_dict, slides_latex.tpl_dict,
+    slides.tpl_dict, slides_mkdown.tpl_dict,
+    latex_doc.tpl_dict
 ])
