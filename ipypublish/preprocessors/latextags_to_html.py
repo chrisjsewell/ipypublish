@@ -103,9 +103,9 @@ class LatexTagsToHTML(Preprocessor):
         >>> processor = LatexTagsToHTML()
         >>> print(processor.convert(source))
         <BLANKLINE>
-        References to <a href="#fig:example">ref. 1</a>, <a href="#tbl:example">ref. 2</a>, <a href="#eqn:example_sympy">ref. 3</a> and <a href="#code:example_mpl">ref. 4</a>.
+        References to <a href="#fig:example">fig. 1</a>, <a href="#tbl:example">tbl. 1</a>, <a href="#eqn:example_sympy">eqn. 1</a> and <a href="#code:example_mpl">code. 1</a>.
         <BLANKLINE>
-        Referencing multiple items: <a href="#fig:example">ref. 1</a>, <a href="#fig:example_h">ref. 5</a> and <a href="#fig:example_v">ref. 6</a>.
+        Referencing multiple items: <a href="#fig:example">fig. 1</a>, <a href="#fig:example_h">fig. 2</a> and <a href="#fig:example_v">fig. 3</a>.
         <BLANKLINE>
         An unknown latex tag.
         <BLANKLINE>
