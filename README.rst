@@ -12,7 +12,7 @@ browser!
 
 .. image:: https://github.com/chrisjsewell/ipypublish/raw/master/example_workflow.gif
 
-For an example of the potential input/output, see `Example.ipynb <https://github.com/chrisjsewell/ipypublish/raw/master/example/notebooks/Example.ipynb>`__ , `Example.pdf <https://github.com/chrisjsewell/ipypublish/raw/master/converted/Example.pdf>`__ and `Example.slides.html <https://chrisjsewell.github.io/ipypublish/Example.slides.html#/>`__.
+For an example of the potential input/output, see `Example.ipynb <https://github.com/chrisjsewell/ipypublish/raw/master/example/notebooks/Example.ipynb>`__ , `Example.pdf <https://chrisjsewell.github.io/ipypublish/Example.view_pdf.html>`__, `Example.html <https://chrisjsewell.github.io/ipypublish/Example.html>`__ and `Example.slides.html <https://chrisjsewell.github.io/ipypublish/Example.slides.html#/>`__.
 
 Design Philosophy
 -----------------
@@ -49,7 +49,7 @@ The default latex template outputs all markdown cells (unless tagged
 latex\_ignore), and then only code and output cells with `latex metadata
 tags <#latex-metadata-tags>`__. See
 `Example.ipynb <https://github.com/chrisjsewell/ipypublish/blob/master/example/notebooks/Example.ipynb>`__, 
-`Example.pdf <https://github.com/chrisjsewell/ipypublish/blob/master/converted/Example.pdf>`__ and `Example.slides.html <https://chrisjsewell.github.io/ipypublish/Example.slides.html#/>`__
+`Example.pdf <https://chrisjsewell.github.io/ipypublish/Example.view_pdf.html>`__ and `Example.slides.html <https://chrisjsewell.github.io/ipypublish/Example.slides.html#/>`__
 for an example of the potential input and output.
 
 Setting up the environment

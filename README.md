@@ -7,7 +7,9 @@ A workflow for creating and editing publication ready scientific reports, from o
 
 ![WorkFlow Example](/example_workflow.gif)
 
-See [notebooks/Example.ipynb](example/notebooks/Example.pdf), [converted/Example.pdf](converted/Example.pdf) and [Example.slides.html](https://chrisjsewell.github.io/ipypublish/Example.slides.html#/) for an example of the potential input/output.
+See [Example.ipynb](example/notebooks/Example.pdf), [Example.pdf](https://chrisjsewell.github.io/ipypublish/Example.view_pdf.html),
+[Example.html](https://chrisjsewell.github.io/ipypublish/Example.html) and 
+[Example.slides.html](https://chrisjsewell.github.io/ipypublish/Example.slides.html#/) for an example of the potential input/output.
 
 - [Design Philosophy](#design-philosophy)
 - [Workflow](#worklow)
@@ -42,7 +44,7 @@ In essence, the dream is to have the ultimate hybrid of Jupyter Notebook, WYSIWY
 5. A converted folder will be created, into which final .tex .pdf and _viewpdf.html files will be output, named by the notebook or folder input
 
 The default latex template outputs all markdown cells (unless tagged latex_ignore), and then only code and output cells with [latex metadata tags](#latex-metadata-tags). 
-See [Example.ipynb](https://github.com/chrisjsewell/ipypublish/blob/master/example/notebooks/Example.ipynb), [Example.pdf](https://github.com/chrisjsewell/ipypublish/blob/master/converted/Example.pdf),
+See [Example.ipynb](https://github.com/chrisjsewell/ipypublish/blob/master/example/notebooks/Example.ipynb), [Example.pdf](https://chrisjsewell.github.io/ipypublish/Example.view_pdf.html),
 [Example.html](https://chrisjsewell.github.io/ipypublish/Example.html) and [Example.slides.html](https://chrisjsewell.github.io/ipypublish/Example.slides.html#/) for examples of the potential input and output.
 
 ## Setting up the environment
