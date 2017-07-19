@@ -232,6 +232,8 @@ All information additional information, used to specify how a particular noteboo
 }
 ```
 
+To access metadata, in the Jupyter Notebook Toolbar, go to View -> Cell Toolbar -> Edit Metadata and a button will appear above each cell.
+
 ### Document Tags
 
 To specify where the **bibliography** is:
