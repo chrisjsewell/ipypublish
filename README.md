@@ -109,7 +109,7 @@ If a folder is input, then the .ipynb files it contains are processed and combin
 
 All available converters are also listed by `nbpublish -h`. Three of note are:
 
-- **latex_ipypublish** is the default and converts cells to latex according to metadata tags on an 'opt in' basis.
+- **latex_ipypublish** is the **default** and converts cells to latex according to metadata tags on an 'opt in' basis. Note that, for this converter, **no code cells or output** will appear in the final tex/pdf document unless they have a suitable [latex_doc metadata tag](#latex-metadata-tags).
 - **html_ipypublish** converts the entire notebook(s) to html and adds a table of contents sidebar and a button to toggle input code and output cells visible/hidden, with latex citations and references resolved. 
 - **slides_ipypublish** converts the notebook to [reveal.js](http://lab.hakim.se/reveal-js/#/) slides, with latex citations and references resolved. See the [Live Slideshows](#live-slideshows) section for using `nbpresent` to serve these slides to a webbrowser. 
 
@@ -394,7 +394,7 @@ label is optional
 
 ### Captions in a Markdown cell
 
-Especially for long captions, it would be prefered that they can be viewed and edited in a notebook Markdown cell, rather than hidden in the metadata. This can be achieved using the default latex template:
+Especially for long captions, it would be prefered that they can be viewed and edited in a notebook Markdown cell, rather than hidden in the metadata. This can be achieved using the default ipypublish converters:
 
 If a **markdown input** or **latex output** cell has the metadata tag:
 
@@ -406,43 +406,25 @@ If a **markdown input** or **latex output** cell has the metadata tag:
 }
 ```
 
-Then, instead of it being input directly into the .tex file, it will be stored as a variable;
+Then, during the the postprocessor stage, this cell will be removed from the notebook object, and its text stored as a *resource*;
 
-- the variable's name is created from the latex_caption value
-- the variable's value is the first paragraph of the markdown text (i.e. nothing after a \n) 
+- the cell's text is the first paragraph of the markdown string, i.e. nothing after a newline (\n) 
+- if there are multiple instance of the same cation name, then only the last instance will be stored
 
-If a subsequent **figure, table or code** cell has a label matching any stored variable name, for example:
+During the jinja templating, if a **figure, table or code** cell has a label matching any stored caption name, for example:
 
 ```json
 {
 "latex_doc": {
 	"figure": {
-	"caption": "",
-	"label": "fig:example_mpl"
+	  "caption": "",
+	  "label": "fig:example_mpl"
 	}
   }
 }
 ```
 
-Then its caption will be overriden with that variable. 
-
-The manner in which this works can be found in [Example.tex](https://github.com/chrisjsewell/ipypublish/blob/master/converted/):
-
-```latex
-\newcommand{\kyfigcexampleumpl}{A matplotlib figure, with the caption set in the markdowncell above the figure.}
-
-\begin{figure}
-    \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{Example_files/Example_14_0.pdf}\end{center}
-    \ifdefined\kyfigcexampleumpl
-	\caption{\kyfigcexampleumpl}
-    \else
-	\caption{}
-    \fi
-    \label{fig:example_mpl}
-\end{figure}
-```
-
-Note, this approach has the implicit contraint that caption cells must be above the corresponding figure/table to be output in the latex/pdf.
+Then its caption will be overriden with the stored text. 
 
 ## Citations and Bibliography
 
