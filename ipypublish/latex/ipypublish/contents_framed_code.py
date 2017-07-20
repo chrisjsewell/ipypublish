@@ -97,7 +97,7 @@ tplx_dict = {
 
 ((*- if meta.latex_doc: -*))
 
-((*- if type in meta.latex_doc -*))
+((*- if meta.latex_doc[type] -*))
 
 ((*- if meta.latex_doc[type].asfloat: -*))
     ((*- if meta.latex_doc[type].placement: -*))
