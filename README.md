@@ -120,7 +120,9 @@ The current `nbconvert --to pdf` does not correctly resolve references and citat
 
 ### Creating a bespoke converter
 
-On instatiation, ipypublish loads all converter plugins in its internal export_plugins folder. Additionally, when nbpublish or nbpresent are called, if a folder named **ipypublish_plugins** is present in the current working directory, they will load all plugins in this folder. Programatically, it is the `ipypublish.export_plugins.add_directory` function which is being called and adding modules to an internal dictionary.
+On instatiation, ipypublish loads all converter plugins in its internal [export_plugins](https://github.com/chrisjsewell/ipypublish/tree/master/ipypublish/export_plugins) folder. Additionally, when `nbpublish` or `nbpresent` are called, if a folder named **ipypublish_plugins** is present in the current working directory, they will load all plugins in this folder. Programatically, it is the `ipypublish.export_plugins.add_directory` function which is being called and adding modules to an internal dictionary.
+
+The simplest application of this, would be to copy the [latex_ipypublish_all.py](https://github.com/chrisjsewell/ipypublish/blob/master/ipypublish/export_plugins/latex_ipypublish_all.py) file (or the html/slides variants) and make changes to the `cell_defaults` and `nb_defaults` dictionaries to suit your output needs.
 
 A plugin is a python (.py) file with at least the following four variables (i.e. it's interface spec):
 
