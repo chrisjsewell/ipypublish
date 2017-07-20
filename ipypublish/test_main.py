@@ -333,7 +333,7 @@ test123
         out_folder = tempfile.mkdtemp()
         html_path = os.path.join(out_folder,'2test.html')
         try:
-            publish(self.file1,outformat='html_ipypublish',outpath=out_folder)
+            publish(self.file1,outformat='html_ipypublish_main',outpath=out_folder)
             assert os.path.exists(html_path)
         finally:
             shutil.rmtree(out_folder)    
@@ -343,10 +343,19 @@ test123
         out_folder = tempfile.mkdtemp()
         html_path = os.path.join(out_folder,'2test.slides.html')
         try:
-            publish(self.file1,outformat='slides_ipypublish',outpath=out_folder)
+            publish(self.file1,outformat='slides_ipypublish_main',outpath=out_folder)
             assert os.path.exists(html_path)
         finally:
-            shutil.rmtree(out_folder)    
+            shutil.rmtree(out_folder)   
+            
+    def test_publish_run_all_plugins(self):
+        from ipypublish.scripts import export_plugins
+        for plugin_name in export_plugins.get().keys():
+            out_folder = tempfile.mkdtemp()
+            try:
+                publish(self.file1,outformat=plugin_name,outpath=out_folder)
+            finally:
+                shutil.rmtree(out_folder)    
 
     # TODO files with internal files
     # TODO files with external files

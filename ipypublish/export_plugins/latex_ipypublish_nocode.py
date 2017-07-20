@@ -1,6 +1,8 @@
 """latex article in the main ipypublish format:
-- only output cells with metadata tags are used
-- code, figures, tables and code are formatted accordingly
+- all input markdown
+- all output is rendered
+- a basic titlepage and table of contents  
+- only code/error cells with metadata tags are used
 """
 from ipypublish.latex.create_tplx import create_tplx
 from ipypublish.latex.standard import standard_definitions as defs
@@ -12,6 +14,8 @@ from ipypublish.latex.ipypublish import contents_framed_code as code
 from ipypublish.latex.ipypublish import front_pages as title
 from ipypublish.filters.filters import remove_dollars, first_para, create_key, dict_to_kwds
 from ipypublish.preprocessors.latex_doc import LatexDocLinks
+from ipypublish.preprocessors.latex_doc_defaults import MetaDefaults
+
 
 oformat = 'Latex'
 template = create_tplx([p.tplx_dict for p in 
@@ -21,7 +25,34 @@ _filters = {'remove_dollars': remove_dollars,
             'first_para': first_para,
             'create_key': create_key,
         'dict_to_kwds':dict_to_kwds}
+        
+cell_defaults = {
+  "latex_doc": {
+    "figure": {
+      "placement": "H"
+    },
+    "table": {
+      "placement": "H"
+    },
+    "equation": True,
+    "text": True,
+    "code":False,
+    "error":False
+  }
+}
+
+nb_defaults={
+"latex_doc": {
+  "titlepage":{},
+  "toc": True,
+  "listfigures": False,
+  "listtables": False,
+  "listcode": False,
+  }
+}
             
 config = {'TemplateExporter.filters':_filters,
           'Exporter.filters':_filters,
-          'Exporter.preprocessors':[LatexDocLinks]}
+          'Exporter.preprocessors':[MetaDefaults,LatexDocLinks],
+          'MetaDefaults.cell_defaults':cell_defaults,
+          'MetaDefaults.nb_defaults':nb_defaults}

@@ -109,7 +109,6 @@ def publish(ipynb_path,
     # make sure references refer to correct slides
     if 'refslide' in resources:
         for k,v in resources['refslide'].items():
-            print(k)
             body = body.replace('{{id_home_prefix}}{0}'.format(k),'#/'+str(v)+k)
 
     # filter internal files by those that are referenced in the document body

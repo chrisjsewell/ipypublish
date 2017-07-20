@@ -108,7 +108,7 @@ if __name__ == '__main__':
     parser.add_argument("-f","--outformat", type=str, 
                         choices=list(plugins.keys()), metavar='str',
                         help='output format to use (see available below)', 
-                        default='slides_ipypublish')
+                        default='slides_ipypublish_main')
     parser.add_argument("-o","--outpath", type=str, metavar='str',
                         help='path to output converted files', 
                         default=os.path.join(os.getcwd(),'converted'))

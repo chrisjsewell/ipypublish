@@ -47,17 +47,19 @@ tplx_dict = {
         \begin{table}
         ((*- endif *))
     
-        ((*- if resources.captions: -*))
+        ((*- if resources.captions and cell.metadata.latex_doc.table.label -*))
             ((*- if resources.captions[cell.metadata.latex_doc.table.label]: -*))
              \caption{((( resources.captions[cell.metadata.latex_doc.table.label] )))}
-            ((*- else -*))   
+            ((*- elif cell.metadata.latex_doc.table.caption -*))   
              \caption{((( cell.metadata.latex_doc.table.caption )))}
             ((*- endif *))
-        ((*- else -*))
+        ((*- elif cell.metadata.latex_doc.table.caption -*))
          \caption{((( cell.metadata.latex_doc.table.caption )))}
         ((*- endif *))
 
+        ((*- if cell.metadata.latex_doc.table.label -*))
         \label{((( cell.metadata.latex_doc.table.label )))}
+        ((*- endif *))
     
         \centering
         ((*- if cell.metadata.latex_doc.table.alternate: -*))
@@ -131,10 +133,12 @@ cell.metadata) )))
             ((*- else -*))   
              \caption{((( meta.latex_doc.figure.caption )))}
             ((*- endif *))
-        ((*- else -*))
-         \caption{((( meta.latex_doc.figure.caption )))}
+        ((*- elif meta.latex_doc.figure.caption: -*))
+             \caption{((( meta.latex_doc.figure.caption )))}
         ((*- endif *))
+        ((*- if meta.latex_doc.figure.label: -*))
         \label{((( meta.latex_doc.figure.label )))}
+        ((*- endif *))
     \end{figure}
 
 ((*- endblock figure -*))

@@ -8,6 +8,12 @@ tplx_dict = {
     \DeclareFloatingEnvironment[
         fileext=frm,placement={!ht},
         within=section,name=Code]{codecell}
+    \DeclareFloatingEnvironment[
+        fileext=frm,placement={!ht},
+        within=section,name=Text]{textcell}
+    \DeclareFloatingEnvironment[
+        fileext=frm,placement={!ht},
+        within=section,name=Text]{errorcell}
         
     \usepackage{listings} % a package for wrapping code in a box
     \usepackage[framemethod=tikz]{mdframed} % to fram code
@@ -18,6 +24,12 @@ tplx_dict = {
 % make the code float work with cleverref
 \crefname{codecell}{code}{codes}
 \Crefname{codecell}{code}{codes}
+% make the text float work with cleverref
+\crefname{textcell}{text}{texts}
+\Crefname{textcell}{text}{texts}
+% make the text float work with cleverref
+\crefname{errorcell}{error}{errors}
+\Crefname{errorcell}{error}{errors}
 """,
 
 'document_definitions':r"""
@@ -40,7 +52,8 @@ tplx_dict = {
     showstringspaces=false,
     showtabs=false,                  
     tabsize=2,
-  breaklines=true,
+    breaklines=true,
+    literate={\-}{}{0\discretionary{-}{}{-}},
   postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
 }
  
@@ -49,39 +62,65 @@ tplx_dict = {
 \surroundwithmdframed[
   hidealllines=true,
   backgroundcolor=backcolour,
-  innerleftmargin=20pt,
-  innertopmargin=2pt,
+  innerleftmargin=0pt,
+  innerrightmargin=0pt,
+  innertopmargin=0pt,
   innerbottommargin=0pt]{lstlisting}
 
 """,
 
-'notebook_input':r"""
-((*- if cell.metadata.latex_doc: -*))
+'notebook_input_code':r"""
+((( draw_text(cell.metadata,cell.source,"code",
+"language=Python,numbers=left,xleftmargin=20pt,xrightmargin=5pt,belowskip=5pt,aboveskip=5pt") )))
+""",
 
-((*- if "code" in cell.metadata.latex_doc -*))
+'notebook_output_text':r"""
+((( draw_text(cell.metadata,output.data['text/plain'],"text",
+"language=Tex,numbers=none,xrightmargin=5pt") )))
+""",
 
-((*- if cell.metadata.latex_doc.code.asfloat: -*))
-    ((*- if cell.metadata.latex_doc.code.placement: -*))
-        ((*- if cell.metadata.latex_doc.code.widefigure: -*))
-    \begin{codecell*}[((cell.metadata.latex_doc.code.placement)))]
+'notebook_output_stream':r"""
+((( draw_text(cell.metadata,output.text | escape_latex | ansi2latex,"text",
+              "language=Tex,numbers=none,xrightmargin=5pt,belowskip=2pt,aboveskip=2pt") )))
+""",
+
+'notebook_output_error':r"""
+((( super() )))
+""",
+'notebook_output_traceback':"""
+((( draw_text(cell.metadata,line | indent | strip_ansi | escape_latex,"error",
+              "language=Python,numbers=none,xrightmargin=5pt,belowskip=2pt,aboveskip=2pt") )))
+""",
+
+'jinja_macros':r"""
+((* macro draw_text(meta,source,type,options) -*))
+
+((*- if meta.latex_doc: -*))
+
+((*- if type in meta.latex_doc -*))
+
+((*- if meta.latex_doc[type].asfloat: -*))
+    ((*- if meta.latex_doc[type].placement: -*))
+        ((*- if meta.latex_doc[type].widefigure: -*))
+    \begin{(((type)))cell*}[((meta.latex_doc[type].placement)))]
         ((*- else -*))
-    \begin{codecell}[(((cell.metadata.latex_doc.code.placement)))]
+    \begin{(((type)))cell}[(((meta.latex_doc[type].placement)))]
         ((*- endif *))
     ((*- else -*))
-        ((*- if cell.metadata.latex_doc.code.widefigure: -*))
-    \begin{codecell*}
+        ((*- if meta.latex_doc[type].widefigure: -*))
+    \begin{(((type)))cell*}
         ((*- else -*))
-    \begin{codecell}
+    \begin{(((type)))cell}
         ((*- endif *))
     ((*- endif *))
     
 
     ((* set captionfound = false *))
 
-    ((*- if cell.metadata.latex_doc.code.label: -*))
+    ((*- if meta.latex_doc[type].label: -*))
          ((*- if resources.captions: -*))
-             ((*- if resources.captions[cell.metadata.latex_doc.code.label]: -*))
-                 \caption{((( resources.captions[cell.metadata.latex_doc.code.label] )))}
+             ((*- if resources.captions[meta.latex_doc[type].label]: -*))
+                 \caption{((( resources.captions[meta.latex_doc[type].label] )))}
                  ((* set captionfound = true *))
              ((*- endif *))
          ((*- endif *))
@@ -89,31 +128,33 @@ tplx_dict = {
 
 
     ((*- if captionfound == false -*))
-    ((*- if cell.metadata.latex_doc.code.caption: -*))
-    \caption{((( cell.metadata.latex_doc.code.caption )))}
+    ((*- if meta.latex_doc[type].caption: -*))
+    \caption{((( meta.latex_doc[type].caption )))}
     ((*- endif *))
     ((*- endif *))
 
 ((*- endif *))
 
-((*- if cell.metadata.latex_doc.code.label: -*))
-\label{((( cell.metadata.latex_doc.code.label )))}
+((*- if meta.latex_doc[type].label: -*))
+\label{((( meta.latex_doc[type].label )))}
 ((*- endif *))
 
-\begin{lstlisting}[language=Python]
-((( cell.source )))
+((*- if meta.latex_doc[type].format: -*))
+\begin{lstlisting}[((( meta.latex_doc[type].format | dict_to_kwds(options) )))]
+((*- else -*))
+\begin{lstlisting}[((( options )))]
+((*- endif *))
+((( source )))
 \end{lstlisting}
 
-((*- if cell.metadata.latex_doc.code.asfloat: -*))
-\end{codecell}
+((*- if meta.latex_doc[type].asfloat: -*))
+\end{(((type)))cell}
 ((*- endif *))
 
 ((*- endif *))
 
 ((*- endif *))
-""",
-
-'jinja_macros':r"""
+((*- endmacro *))
 """
 
 }

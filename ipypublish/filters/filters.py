@@ -69,3 +69,25 @@ def create_key(input, **kwargs):
     input = input.replace(';','c')
     input = input.replace('_','u')    
     return re.sub('[^a-zA-Z]+', '', str(input)).lower()   
+
+def dict_to_kwds(dct, kwdstr):
+    """ convert a dictionary to a string of keywords
+    
+    Parameters
+    ----------
+    kwdstr: str
+        additional keyword strings
+    
+    Examples
+    --------
+    >>> dict_to_kwds({"a":1,"c":3},'a=1,b=2')
+    'a=1,c=3,b=2,'
+    
+    """
+    string = ''
+    for key in sorted(dct.keys()):
+        string += '{0}={1},'.format(key,dct[key])
+    for kwd in kwdstr.split(","):
+        if not kwd.split('=')[0]+'=' in string:
+            string += kwd + ','
+    return string    

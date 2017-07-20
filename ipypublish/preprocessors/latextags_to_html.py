@@ -188,6 +188,8 @@ class LatexTagsToHTML(Preprocessor):
             
             if "latex_doc" in cell['metadata']:
                 for key in cell['metadata']["latex_doc"]:
+                    if not isinstance(key,dict):
+                        continue
                     if "caption" in cell['metadata']["latex_doc"][key]:
                         text = cell['metadata']["latex_doc"][key]["caption"]
                         cell['metadata']["latex_doc"][key]["caption"] = self.convert(text,resources)

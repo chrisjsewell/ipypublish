@@ -29,19 +29,19 @@ class LatexDocLinks(Preprocessor):
         external_files = []
         if hasattr(nb.metadata, 'latex_doc'):
                 
-            if hasattr(nb.metadata.latex_doc, 'files'):
-                mfiles = []
-                for fpath in nb.metadata.latex_doc.files:
-                    fpath = self.resolve_path(fpath, self.metapath)
-                    if not os.path.exists(fpath):
-                        logging.warning('file in metadata does not exist'
-                                        ': {}'.format(fpath))
-                    else:
-                        external_files.append(fpath)
-                    mfiles.append(os.path.join(self.filesfolder, os.path.basename(fpath)))   
-
-                nb.metadata.latex_doc.files = mfiles
-        
+            # if hasattr(nb.metadata.latex_doc, 'files'):
+            #     mfiles = []
+            #     for fpath in nb.metadata.latex_doc.files:
+            #         fpath = self.resolve_path(fpath, self.metapath)
+            #         if not os.path.exists(fpath):
+            #             logging.warning('file in metadata does not exist'
+            #                             ': {}'.format(fpath))
+            #         else:
+            #             external_files.append(fpath)
+            #         mfiles.append(os.path.join(self.filesfolder, os.path.basename(fpath)))
+            #
+            #     nb.metadata.latex_doc.files = mfiles
+                        
             if hasattr(nb.metadata.latex_doc, 'bibliography'):                    
                 bib = nb.metadata.latex_doc.bibliography
                 bib = self.resolve_path(bib, self.metapath)

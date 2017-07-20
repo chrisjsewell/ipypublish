@@ -95,6 +95,8 @@ from ipypublish.scripts.ipynb_latex_setup import *
 
 It is recommended that you also set this cell as an initialisation cell (i.e. have `"init_cell": true` in the metadata)
 
+For existing notebooks: the **nb_ipypublish_all** and **nb_ipypublish_nocode** converters (see below) can be helpful for outputting a notebook, with identical content to that input, but with default metatags defining how content is to be output.
+
 ## Converting Notebooks
 
 The nbpublish script handles parsing the notebooks to nbconvert, with the appropriate converter. To see all options for this script:
@@ -109,9 +111,10 @@ If a folder is input, then the .ipynb files it contains are processed and combin
 
 All available converters are also listed by `nbpublish -h`. Three of note are:
 
-- **latex_ipypublish** is the **default** and converts cells to latex according to metadata tags on an 'opt in' basis. Note that, for this converter, **no code cells or output** will appear in the final tex/pdf document unless they have a suitable [latex_doc metadata tag](#latex-metadata-tags).
-- **html_ipypublish** converts the entire notebook(s) to html and adds a table of contents sidebar and a button to toggle input code and output cells visible/hidden, with latex citations and references resolved. 
-- **slides_ipypublish** converts the notebook to [reveal.js](http://lab.hakim.se/reveal-js/#/) slides, with latex citations and references resolved. See the [Live Slideshows](#live-slideshows) section for using `nbpresent` to serve these slides to a webbrowser. 
+- **latex_ipypublish_main_** is the **default** and converts cells to latex according to metadata tags on an 'opt in' basis. Note that, for this converter, **no code cells or output** will appear in the final tex/pdf document unless they have a suitable [latex_doc metadata tag](#latex-metadata-tags).
+- **html_ipypublish_main** converts the entire notebook(s) to html and adds a table of contents sidebar and a button to toggle input code and output cells visible/hidden, with latex citations and references resolved. 
+- **slides_ipypublish_main** converts the notebook to [reveal.js](http://lab.hakim.se/reveal-js/#/) slides, with latex citations and references resolved. See the [Live Slideshows](#live-slideshows) section for using `nbpresent` to serve these slides to a webbrowser. 
+- The **all** and **nocode** variants of these converters preprocess a copy of the notebook, to add default metadata tags to the notebook and all cells, such that all output is rendered (with or without the code)
 
 The current `nbconvert --to pdf` does not correctly resolve references and citations (since it copies the files to a temporary directory). Therefore nbconvert is only used for the initial `nbconvert --to latex` phase, followed by using `latexmk` to create the pdf and correctly resolve everything.
 
@@ -261,7 +264,13 @@ All information additional information, used to specify how a particular noteboo
 }
 ```
 
-To access metadata, in the Jupyter Notebook Toolbar, go to View -> Cell Toolbar -> Edit Metadata and a button will appear above each cell.
+To access metadata, in the Jupyter Notebook Toolbar:
+
+- For notebook level: go to Edit -> Edit Notebook Metadata
+- For cell level: go to View -> Cell Toolbar -> Edit Metadata and a button will appear above each cell.
+
+**Please note**, setting a value to `"value":{}` is the same as `"value":false` so,
+if you are not setting additional options, use `"value":true`.
 
 ### Document Tags
 
@@ -355,6 +364,7 @@ To  **output a code block**:
 {
 "latex_doc": {
   "code": {
+	"format" : {},
     "asfloat": true,
     "caption": "",
     "label": "code:example_sym",
@@ -367,7 +377,30 @@ To  **output a code block**:
 
 all extra tags are optional:
 
-- use `"code":true` if using no tags **not** `"code":{}`
+- `format` can contain any keywords related to the latex [Listings](https://en.wikibooks.org/wiki/LaTeX/Source_Code_Listings) package (such as syntax highlighting colors)
+- `asfloat` contitutes whether the code is wrapped in a codecell (float) environment or is inline.
+- all other tags work the same as figure (below).
+
+To  **output text produced by the code** (e.g. *via* the `print` command):
+
+```json
+{
+"latex_doc": {
+  "text": {
+	"format" : {},
+    "asfloat": true,
+    "caption": "",
+    "label": "code:example_sym",
+    "widefigure": false,
+    "placement": "H"
+    }
+  }
+}
+```
+
+all extra tags are optional:
+
+- `format` can contain any keywords related to the latex [Listings](https://en.wikibooks.org/wiki/LaTeX/Source_Code_Listings) package (such as syntax highlighting colors)
 - `asfloat` contitutes whether the code is wrapped in a codecell (float) environment or is inline.
 - all other tags work the same as figure (below).
 
@@ -387,10 +420,11 @@ For **figures** (i.e. any graphics output by the code), enter in cell metadata:
 }
 ```
 
+- `caption` and `label` are optional
 - `placement` is optional and constitutes using a placement arguments for the figure (e.g. \begin{figure}[H]). See [Positioning_images_and_tables](https://www.sharelatex.com/learn/Positioning_images_and_tables).
 - `widefigure` is optional and constitutes expanding the figure to the page width (i.e. \begin{figure*}) (placement arguments will then be ignored)
 
-For  **tables**, enter in cell metadata:
+For  **tables** (e.g. those output by `pandas`), enter in cell metadata:
 
 ```json
 {
@@ -405,11 +439,12 @@ For  **tables**, enter in cell metadata:
 }
 ```
 
+- `caption` and `label` are optional
 - `placement` is optional and constitutes using a placement arguments for the table (e.g. \begin{table}[H]). See [Positioning_images_and_tables](https://www.sharelatex.com/learn/Positioning_images_and_tables).
 - `alternate` is optional and constitutes using alternating colors for the table rows (e.g. \rowcolors{2}{gray!25}{white}). See (https://tex.stackexchange.com/a/5365/107738)[https://tex.stackexchange.com/a/5365/107738].
 
 
-For  **equations**, enter in cell metadata:
+For  **equations** (e.g. thos output by `sympy`), enter in cell metadata:
 
 ```json
 {
@@ -421,7 +456,7 @@ For  **equations**, enter in cell metadata:
 }
 ```
 
-label is optional
+- label is optional
 
 ### Captions in a Markdown cell
 

@@ -1,4 +1,4 @@
-import os, logging, json
+import os, logging
 from nbconvert.preprocessors import Preprocessor
 import traitlets as traits
 
@@ -29,40 +29,44 @@ class LatexDocHTML(Preprocessor):
             fpath = os.path.abspath(fpath)
         return fpath
         
-    def create_embed_cell(self, meta):
+    def create_embed_cell(self, cell):
         """ a new cell, based on embedded html file
         """
-        fpath = self.resolve_path(meta.latex_doc.embed_file, self.metapath)
+        fpath = self.resolve_path(cell.metadata.latex_doc.embed_file.filepath, self.metapath)
         if not os.path.exists(fpath):
             logging.warning('file in embed metadata does not exist'
                             ': {}'.format(fpath))
             return False
-        try:
-            embed_data = json.load(fpath)
-        except:
-            logging.warning('file in embed metadata is not formatted correctly'
-                            ': {}'.format(fpath))    
+        
+        with open(fpath) as f:
+            embed_data = f.read()
             return False        
-        if 'body' not in embed_data:
-            logging.warning('file in embed metadata does not contain a body key'
-                            ': {}'.format(fpath))    
-            return False                    
-
-        if 'head' in embed_data:
-            if not hasattr(nb.metadata, 'latex_doc'):
-                nb.metadata.latex_doc = {}
-            if not hasattr(nb.metadata.latex_doc, 'html_head'):
-                nb.metadata.latex_doc.html_head = []
-            for head in embed_data['head']:
-                if head not in nb.metadata.latex_doc.html_head:
-                    nb.metadata.latex_doc.html_head.append(head)
-
+            
+        body = embed_data.split('<html>')[1]
+        body = embed_data.split('</head>')[1]
+        body = body.split('</html>')[0]
+        # if 'body' not in embed_data:
+        #     logging.warning('file in embed metadata does not contain a body key'
+        #                     ': {}'.format(fpath))
+        #     return False
+        #
+        # if 'head' in embed_data:
+        #     if not hasattr(nb.metadata, 'latex_doc'):
+        #         nb.metadata.latex_doc = {}
+        #     if not hasattr(nb.metadata.latex_doc, 'html_head'):
+        #         nb.metadata.latex_doc.html_head = []
+        #     for head in embed_data['head']:
+        #         if head not in nb.metadata.latex_doc.html_head:
+        #             nb.metadata.latex_doc.html_head.append(head)
+        cell.metadata.pop('embed_file')
+        newmeta = cell.metadata.copy()
+        newmeta['float'] = {'caption':'a','label':'b'}
         newcell = {
         "cell_type": "code",
         "execution_count": 0,
-        "metadata": {'latex_doc':{'html':meta}},
+        "metadata": {'latex_doc':{'html':newmeta}},
         "outputs": [
-        {"data": {"text/html": embed_data['body']},
+        {"data": {"text/html": body},
          "execution_count": 0,
          "metadata": {},
          "output_type": "execute_result"}],
@@ -77,16 +81,21 @@ class LatexDocHTML(Preprocessor):
         
         final_cells = []
         float_count = dict([('figure',0),('table',0),('code',0)])
-        for cell in nb.cells:
+        for i, cell in enumerate(nb.cells):
             if hasattr(cell.metadata, 'latex_doc'):
                 if hasattr(cell.metadata.latex_doc, 'embed_file'):
-                    newcell = self.create_embed_cell(nb, cell.metadata)
-                    if newcell:
-                        final_cells.append(newcell)
+                    if hasattr(nb.metadata.latex_doc.embed_html,'filepath'): 
+                        newcell = self.create_embed_cell(nb, cell)
+                        if newcell:
+                            final_cells.append(newcell)
+                    else:
+                        logging.warning('cell {} has no filepath key in its metadata.embed_html'.format(i)) 
                         
                 for floattype, floatabbr in [('figure','fig.'),('table','tbl.'),('code','code')]:
                     if floattype in cell.metadata.latex_doc:
                         float_count[floattype] += 1
+                        if not isinstance(cell.metadata.latex_doc[floattype],dict):
+                            continue
                         if 'caption' in cell.metadata.latex_doc[floattype]:
                             newcaption =  '<b>{0} {1}: </b>'.format(floattype.capitalize(),float_count[floattype]) + cell.metadata.latex_doc[floattype].caption
                             cell.metadata.latex_doc[floattype].caption = newcaption

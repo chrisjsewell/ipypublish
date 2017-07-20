@@ -57,6 +57,12 @@
     \DeclareFloatingEnvironment[
         fileext=frm,placement={!ht},
         within=section,name=Code]{codecell}
+    \DeclareFloatingEnvironment[
+        fileext=frm,placement={!ht},
+        within=section,name=Text]{textcell}
+    \DeclareFloatingEnvironment[
+        fileext=frm,placement={!ht},
+        within=section,name=Text]{errorcell}
 
     \usepackage{listings} % a package for wrapping code in a box
     \usepackage[framemethod=tikz]{mdframed} % to fram code
@@ -254,7 +260,8 @@
     showstringspaces=false,
     showtabs=false,                  
     tabsize=2,
-  breaklines=true,
+    breaklines=true,
+    literate={\-}{}{0\discretionary{-}{}{-}},
   postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
 }
 
@@ -263,8 +270,9 @@
 \surroundwithmdframed[
   hidealllines=true,
   backgroundcolor=backcolour,
-  innerleftmargin=20pt,
-  innertopmargin=2pt,
+  innerleftmargin=0pt,
+  innerrightmargin=0pt,
+  innertopmargin=0pt,
   innerbottommargin=0pt]{lstlisting}
 
  % Used to adjust the document margins
@@ -344,6 +352,12 @@ nohead,includefoot,footskip=25pt}
 % make the code float work with cleverref
 \crefname{codecell}{code}{codes}
 \Crefname{codecell}{code}{codes}
+% make the text float work with cleverref
+\crefname{textcell}{text}{texts}
+\Crefname{textcell}{text}{texts}
+% make the text float work with cleverref
+\crefname{errorcell}{error}{errors}
+\Crefname{errorcell}{error}{errors}
 
 	\begin{document}
 
@@ -447,53 +461,62 @@ A html citation.\cite{kirkeminde_thermodynamic_2012}
 
 Some text.\todo{a todo in the margins}
 
+\section{Text Output}\label{text-output}
+
+\begin{lstlisting}[backgroundcolor=\color{blue!10},language=Tex,numbers=none,xrightmargin=5pt,belowskip=2pt,aboveskip=2pt,]
+
+This is some printed text,
+with a nicely formatted output.
+
+\end{lstlisting}
+
 \section{Images and Figures}\label{images-and-figures}
 
     \begin{figure}[!bh]
-        \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{Example_files/output_9_0.jpeg}\end{center}\caption{A nice picture.}
-        \label{fig:example}
+        \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{Example_files/output_11_0.jpeg}\end{center}\caption{A nice picture.}\label{fig:example}
     \end{figure}
 
     \begin{figure}
-        \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{Example_files/output_10_0.png}\end{center}\caption{Horizontally aligned images.}
-        \label{fig:example_h}
+        \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{Example_files/output_12_0.png}\end{center}\caption{Horizontally aligned images.}\label{fig:example_h}
     \end{figure}
 
     \begin{figure}
-        \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{Example_files/output_11_0.png}\end{center}\caption{Vertically aligned images.}
-        \label{fig:example_v}
+        \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{Example_files/output_13_0.png}\end{center}\caption{Vertically aligned images.}\label{fig:example_v}
     \end{figure}
 
     \begin{figure}
-        \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{Example_files/output_12_0.png}\end{center}\caption{Images aligned in a grid.}
-        \label{fig:example_grid}
+        \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{Example_files/output_14_0.png}\end{center}\caption{Images aligned in a grid.}\label{fig:example_grid}
     \end{figure}
 
 \subsection{Displaying a plot with its
 code}\label{displaying-a-plot-with-its-code}
 
-\begin{figure}
-        \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{Example_files/output_16_0.pdf}\end{center}\caption{A matplotlib figure, with the caption set in the markdowncell above the figure.}
-        \label{fig:example_mpl}
-    \end{figure}
+\begin{codecell}
 
-    \begin{codecell}
-
-    \caption{The plotting code for a matplotlib figure (\cref{fig:example_mpl}).}
-                 \label{code:example_mpl}
-
-\begin{lstlisting}[language=Python]
+    \caption{The plotting code for a matplotlib figure (\cref{fig:example_mpl}).}\label{code:example_mpl}\begin{lstlisting}[language=Python,numbers=left,xleftmargin=20pt,xrightmargin=5pt,belowskip=5pt,aboveskip=5pt]
 plt.scatter(np.random.rand(10), np.random.rand(10), 
             label='data label')
 plt.ylabel(r'a y label with latex $\alpha$')
 plt.legend();
 \end{lstlisting}\end{codecell}
 
+\begin{figure}
+        \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{Example_files/output_18_0.pdf}\end{center}\caption{A matplotlib figure, with the caption set in the markdowncell above the figure.}\label{fig:example_mpl}
+    \end{figure}
+
 \section{Tables (with pandas)}\label{tables-with-pandas}
 
-    \begin{table}[H]\caption{An example of a table created with pandas dataframe.}
+\begin{codecell}[H]
 
-        \label{tbl:example}
+    \caption{The plotting code for a pandas Dataframe table (\cref{tbl:example}).}\label{code:example_pd}\begin{lstlisting}[language=Python,numbers=left,xleftmargin=20pt,xrightmargin=5pt,belowskip=5pt,aboveskip=5pt]
+df = pd.DataFrame(np.random.rand(3,4),columns=['a','b','c','d'])
+df.a = ['$\delta$','x','y']
+df.b = ['l','m','n']
+df.set_index(['a','b'])
+df.round(3)
+\end{lstlisting}\end{codecell}
+
+    \begin{table}[H]\caption{An example of a table created with pandas dataframe.}\label{tbl:example}
 
         \centering\rowcolors{2}{gray!20}{white}
         \begin{tabular}{lllrr}
@@ -508,19 +531,6 @@ plt.legend();
 
         \end{table}
 
-\begin{codecell}[H]
-
-    \caption{The plotting code for a pandas Dataframe table (\cref{tbl:example}).}
-                 \label{code:example_pd}
-
-\begin{lstlisting}[language=Python]
-df = pd.DataFrame(np.random.rand(3,4),columns=['a','b','c','d'])
-df.a = ['$\delta$','x','y']
-df.b = ['l','m','n']
-df.set_index(['a','b'])
-df.round(3)
-\end{lstlisting}\end{codecell}
-
 \section{Equations (with ipython or
 sympy)}\label{equations-with-ipython-or-sympy}
 
@@ -528,21 +538,24 @@ sympy)}\label{equations-with-ipython-or-sympy}
     	 a = b+c 
         \end{equation}
 
-    \begin{equation}\label{eqn:example_sympy}	
-    	\left(\sqrt{5} i\right)^{\alpha} \left(\frac{1}{2} - \frac{2 i}{5} \sqrt{5}\right) + \left(- \sqrt{5} i\right)^{\alpha} \left(\frac{1}{2} + \frac{2 i}{5} \sqrt{5}\right)
-        \end{equation}
-
 \begin{codecell}[H]
 
-    \caption{The plotting code for a sympy equation (\cref{eqn:example_sympy}).}
-                 \label{code:example_sym}
-
-\begin{lstlisting}[language=Python]
+    \caption{The plotting code for a sympy equation (\cref{eqn:example_sympy}).}\label{code:example_sym}\begin{lstlisting}[language=Python,numbers=left,xleftmargin=20pt,xrightmargin=5pt,belowskip=5pt,aboveskip=5pt]
 f = sym.Function('f')
 y,n = sym.symbols(r'y \alpha')
 f = y(n)-2*y(n-1/sym.pi)-5*y(n-2)
 sym.rsolve(f,y(n),[1,4])
 \end{lstlisting}\end{codecell}
+
+    \begin{equation}\label{eqn:example_sympy}	
+    	\left(\sqrt{5} i\right)^{\alpha} \left(\frac{1}{2} - \frac{2 i}{5} \sqrt{5}\right) + \left(- \sqrt{5} i\right)^{\alpha} \left(\frac{1}{2} + \frac{2 i}{5} \sqrt{5}\right)
+        \end{equation}
+
+\section{Embedded HTML}\label{embedded-html}
+
+HTML was created using
+\href{https://ipyvolume.readthedocs.io}{ipyvolume}, and will render
+below in .html type outputs:
 
 % sort citations by order of first appearance
 \bibliographystyle{unsrtnat}
