@@ -2,7 +2,8 @@ tpl_dict = {
     
 'meta_docstring':""" caption and label elements according to latex_doc meta tags  """,
 'overwrite':['notebook_output','notebook_all','notebook_input_markdown',
-            'notebook_input_code','notebook_input_code_pre','notebook_input_code_post'],
+            'notebook_input_code','notebook_input_code_pre','notebook_input_code_post',
+            'notebook_output_text','notebook_output_stream_stderr','notebook_output_stream_stdout'],
 "globals":r"{% set slidenumber = [] %}",
 
 
@@ -88,11 +89,40 @@ figure figcaption {
 {{ super() }}    
     {%- elif cell.metadata.latex_doc.equation: -%}
 {{ super() }}    
+    {%- elif cell.metadata.latex_doc.text: -%}
+{{ super() }}    
+    {%- elif cell.metadata.latex_doc.error: -%}
+{{ super() }}    
     {%- endif %}   
 {%- else -%}
-{{ super() }}
+
 {%- endif %}
 """,
+
+'notebook_output_text':r"""
+{%- if cell.metadata.latex_doc: -%}
+    {%- if cell.metadata.latex_doc.text: -%}
+{{- output.data['text/plain'] | ansi2html -}}
+    {%- endif %}
+{%- endif %}
+""",
+
+'notebook_output_stream_stderr':r"""
+{%- if cell.metadata.latex_doc: -%}
+    {%- if cell.metadata.latex_doc.text: -%}
+{{- output.text | ansi2html -}}
+    {%- endif %}
+{%- endif %}
+""",
+
+'notebook_output_stream_stdout':r"""
+{%- if cell.metadata.latex_doc: -%}
+    {%- if cell.metadata.latex_doc.text: -%}
+{{- output.text | ansi2html -}}
+    {%- endif %}
+{%- endif %}
+""",
+
 
 'notebook_output_latex_pre':r"""
 {{ make_figure_pre(cell.metadata) }}
