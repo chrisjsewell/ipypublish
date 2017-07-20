@@ -463,7 +463,7 @@ Some text.\todo{a todo in the margins}
 
 \section{Text Output}\label{text-output}
 
-\todo{test}\begin{lstlisting}[backgroundcolor=\color{blue!10},language=Tex,numbers=none,xrightmargin=5pt,belowskip=2pt,aboveskip=2pt,]
+\begin{lstlisting}[backgroundcolor=\color{blue!10},language=Tex,numbers=none,xrightmargin=5pt,belowskip=2pt,aboveskip=2pt,]
 
 This is some printed text,
 with a nicely formatted output.
@@ -491,7 +491,7 @@ with a nicely formatted output.
 \subsection{Displaying a plot with its
 code}\label{displaying-a-plot-with-its-code}
 
-\todo{test}\begin{codecell}
+\begin{codecell}
 
     \caption{The plotting code for a matplotlib figure (\cref{fig:example_mpl}).}\label{code:example_mpl}\begin{lstlisting}[language=Python,numbers=left,xleftmargin=20pt,xrightmargin=5pt,belowskip=5pt,aboveskip=5pt]
 plt.scatter(np.random.rand(10), np.random.rand(10), 
@@ -506,7 +506,7 @@ plt.legend();
 
 \section{Tables (with pandas)}\label{tables-with-pandas}
 
-\todo{test}\begin{codecell}[H]
+\begin{codecell}[H]
 
     \caption{The plotting code for a pandas Dataframe table (\cref{tbl:example}).}\label{code:example_pd}\begin{lstlisting}[language=Python,numbers=left,xleftmargin=20pt,xrightmargin=5pt,belowskip=5pt,aboveskip=5pt]
 df = pd.DataFrame(np.random.rand(3,4),columns=['a','b','c','d'])
@@ -538,7 +538,7 @@ sympy)}\label{equations-with-ipython-or-sympy}
     	 a = b+c 
         \end{equation}
 
-\todo{test}\begin{codecell}[H]
+\begin{codecell}[H]
 
     \caption{The plotting code for a sympy equation (\cref{eqn:example_sympy}).}\label{code:example_sym}\begin{lstlisting}[language=Python,numbers=left,xleftmargin=20pt,xrightmargin=5pt,belowskip=5pt,aboveskip=5pt]
 f = sym.Function('f')
