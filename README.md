@@ -202,7 +202,7 @@ config = {}
 Now, if you wanted mainly the same output format but without input and output prompts shown,
 simply copy this plugin but remove the prompts.tplx_dict.
 
-Lastly, as default, sections are appended to, so;
+By default, sections are appended to, so;
 
 ```python
 dict1 = {'notebook_input':'a'}
@@ -221,6 +221,35 @@ template = create_tplx([dict1,dict2])
 ```
 
 will only show b.
+
+Note that, the `create_tpl` template additionally has *pre* and *post* placeholder. 
+This is helpful for wrapping cells in extra html tags. For instance:
+
+```python
+
+dict1 = {
+  'notebook_input_markdown_pre':r"<div class="inner">",
+  'notebook_input_markdown':"test",
+  'notebook_input_markdown_post':r"</div>",
+}
+dict2 = {
+  'notebook_input_markdown_pre':r"<div class="outer">",
+  'notebook_input_markdown_post':r"</div>",
+}
+
+template = create_tpl([dict1,dict2])
+
+```
+
+will result in a template containing:
+
+```html
+<div class="outer">
+<div class="inner">
+test
+</div>
+</div>
+```
 
 ## Latex Metadata Tags
 
@@ -268,6 +297,7 @@ For **titlepage**, enter in notebook metadata:
 	  "Institution2"
 	],
 	"logo": "path/to/logo_example.png"
+	}
   }
 }
 ```
@@ -337,11 +367,12 @@ To  **output a code block**:
 
 all extra tags are optional:
 
+- use `"code":true` if using no tags **not** `"code":{}`
 - `asfloat` contitutes whether the code is wrapped in a codecell (float) environment or is inline.
 - all other tags work the same as figure (below).
 
 
-For  **figures**, enter in cell metadata:
+For **figures** (i.e. any graphics output by the code), enter in cell metadata:
 
 ```json
 {

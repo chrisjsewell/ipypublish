@@ -11901,22 +11901,6 @@ figure figcaption {
    <div tabindex="-1" id="notebook" class="border-box-sizing">
      <div class="container" id="notebook-container">
 
- <div class="input_code">
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-<div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">ipypublish.scripts.ipynb_latex_setup</span> <span class="k">import</span> <span class="o">*</span>
-</pre></div>
-
-</div>
-</div>
-
-</div>
-</div>
-</div>
-
 <div class="input_markdown">
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
@@ -11980,7 +11964,7 @@ figure figcaption {
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 
-<p>References to <a href="#fig:example">fig. 1</a>, <a href="#tbl:example">tbl. 1</a>, <a href="#eqn:example_sympy">eqn. 1</a> and <a href="#code:example_mpl">code. 1</a>.</p>
+<p>References to <a href="#fig:example">fig. 1</a>, <a href="#tbl:example">tbl. 1</a>, <a href="#eqn:example_sympy">eqn. 1</a> and <a href="#code:example_mpl">code 1</a>.</p>
 <p>Referencing multiple items: <a href="#fig:example">fig. 1</a>, <a href="#fig:example_h">fig. 2</a> and <a href="#fig:example_v">fig. 3</a>.</p>
 <p>A latex citation.[<a href="https://doi.org/10.1134/S0018143916050209">Zelenyak <em>et al</em>, 2016.</a>]</p>
 <p>A html citation.<cite data-cite="kirkeminde_thermodynamic_2012">(Kirkeminde, 2012)</cite></p>
@@ -12026,25 +12010,9 @@ figure figcaption {
 </div>
 </div>
 
-<div class="input_code">
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-<div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="s1">&#39;../images/example.jpg&#39;</span><span class="p">,</span><span class="n">height</span><span class="o">=</span><span class="mi">400</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-
-</div>
-</div>
-</div>
-
 <div class="output_area">
 
-<figure class='figure'>
+<figure class='figure'><a id="fig:example" class="anchor-link" name="#fig:example"></a>
 
 <div class="output_image output_jpeg output_subarea output_execute_result">
 <img src="data:image/jpeg;base64,/9j/4RB6RXhpZgAATU0AKgAAAAgABwESAAMAAAABAAEAAAEaAAUAAAABAAAAYgEbAAUAAAABAAAA
@@ -13068,33 +13036,15 @@ height=400
 
 </div>
 
-<a id="fig:example" class="anchor-link" name="#fig:example"></a><figcaption><b>Figure</b>: A nice picture.</figcaption>
+<figcaption><b>Figure 1: </b>A nice picture.</figcaption>
 
 </figure>
 
 </div>
 
-<div class="input_code">
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-<div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">images_hconcat</span><span class="p">([</span><span class="s1">&#39;../images/example.jpg&#39;</span><span class="p">,</span>
-               <span class="s1">&#39;../images/example.jpg&#39;</span><span class="p">],</span>
-               <span class="n">width</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">gap</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-
-</div>
-</div>
-</div>
-
 <div class="output_area">
 
-<figure class='figure'>
+<figure class='figure'><a id="fig:example_h" class="anchor-link" name="#fig:example_h"></a>
 
 <div class="output_image output_png output_subarea output_execute_result">
 <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAADICAYAAAA0n5+2AAEAAElEQVR4nOz9aaxtSXbfif1WDHvv
@@ -14607,33 +14557,15 @@ Hdb/gs7VCa9OeHXCqxNevQgfXuW14+WHxav/PyM3DC1Ltde3AAAAAElFTkSuQmCC
 
 </div>
 
-<a id="fig:example_h" class="anchor-link" name="#fig:example_h"></a><figcaption><b>Figure</b>: Horizontally aligned images.</figcaption>
+<figcaption><b>Figure 2: </b>Horizontally aligned images.</figcaption>
 
 </figure>
 
 </div>
 
-<div class="input_code">
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-<div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">images_vconcat</span><span class="p">([</span><span class="s1">&#39;../images/example.jpg&#39;</span><span class="p">,</span>
-               <span class="s1">&#39;../images/example.jpg&#39;</span><span class="p">],</span>
-               <span class="n">height</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">gap</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-
-</div>
-</div>
-</div>
-
 <div class="output_area">
 
-<figure class='figure'>
+<figure class='figure'><a id="fig:example_v" class="anchor-link" name="#fig:example_v"></a>
 
 <div class="output_image output_png output_subarea output_execute_result">
 <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARgAAAGQCAYAAAB1bX85AAEAAElEQVR4nMz9ebBt2X3fh31+a9r7
@@ -17270,33 +17202,15 @@ Pzp+dPzo+NHxo+NHx4+OHx0/On50/Oj4//vx/wVsPkzyLurC2QAAAABJRU5ErkJggg==
 
 </div>
 
-<a id="fig:example_v" class="anchor-link" name="#fig:example_v"></a><figcaption><b>Figure</b>: Vertically aligned images.</figcaption>
+<figcaption><b>Figure 3: </b>Vertically aligned images.</figcaption>
 
 </figure>
 
 </div>
 
-<div class="input_code">
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-<div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">images_gridconcat</span><span class="p">([[</span><span class="n">_</span><span class="p">,</span><span class="n">_</span><span class="p">]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;../images/example.jpg&#39;</span><span class="p">,</span>
-               <span class="s1">&#39;../images/example.jpg&#39;</span><span class="p">]],</span>
-               <span class="n">height</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">vgap</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">hgap</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-
-</div>
-</div>
-</div>
-
 <div class="output_area">
 
-<figure class='figure'>
+<figure class='figure'><a id="fig:example_grid" class="anchor-link" name="#fig:example_grid"></a>
 
 <div class="output_image output_png output_subarea output_execute_result">
 <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAbsAAAEsCAYAAABaCh3lAAEAAElEQVR4nLz9ebQtWXrQB/6+PUTE
@@ -20449,7 +20363,7 @@ SUVORK5CYII=
 
 </div>
 
-<a id="fig:example_grid" class="anchor-link" name="#fig:example_grid"></a><figcaption><b>Figure</b>: Images aligned in a grid.</figcaption>
+<figcaption><b>Figure 4: </b>Images aligned in a grid.</figcaption>
 
 </figure>
 
@@ -20467,12 +20381,14 @@ SUVORK5CYII=
 </div>
 </div>
 
+<br><b>Code 1: </b>The plotting code for a matplotlib figure (<a href="#/-1fig:example_mpl">fig. 5</a>).
 <div class="input_code">
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
+<div class="input">  
 
 <div class="inner_cell">
-<div class="input_area">
+<div class="input_area"><a id="code:example_mpl" class="anchor-link" name="#code:example_mpl"></a>
+
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> 
             <span class="n">label</span><span class="o">=</span><span class="s1">&#39;data label&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;a y label with latex $\alpha$&#39;</span><span class="p">)</span>
@@ -20480,15 +20396,15 @@ SUVORK5CYII=
 </pre></div>
 
 </div>
-</div>
+</div>   
 
 </div>
 </div>
-</div>
+</div>   
 
 <div class="output_area">
 
-<figure class='figure'>
+<figure class='figure'><a id="fig:example_mpl" class="anchor-link" name="#fig:example_mpl"></a>
 
 <div class="output_image output_svg output_subarea ">
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
@@ -21276,7 +21192,7 @@ z
 
 </div>
 
-<a id="fig:example_mpl" class="anchor-link" name="#fig:example_mpl"></a><figcaption><b>Figure</b>: A matplotlib figure, with the caption set in the markdowncell above the figure.</figcaption>            
+<figcaption><b>Figure 5: </b>A matplotlib figure, with the caption set in the markdowncell above the figure.</figcaption>
 
 </figure>
 
@@ -21294,12 +21210,14 @@ z
 </div>
 </div>
 
+<br><b>Code 2: </b>The plotting code for a pandas Dataframe table (<a href="#/-1tbl:example">tbl. 1</a>).
 <div class="input_code">
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
+<div class="input">  
 
 <div class="inner_cell">
-<div class="input_area">
+<div class="input_area"><a id="code:example_pd" class="anchor-link" name="#code:example_pd"></a>
+
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="s1">&#39;b&#39;</span><span class="p">,</span><span class="s1">&#39;c&#39;</span><span class="p">,</span><span class="s1">&#39;d&#39;</span><span class="p">])</span>
 <span class="n">df</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;$\delta$&#39;</span><span class="p">,</span><span class="s1">&#39;x&#39;</span><span class="p">,</span><span class="s1">&#39;y&#39;</span><span class="p">]</span>
 <span class="n">df</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;l&#39;</span><span class="p">,</span><span class="s1">&#39;m&#39;</span><span class="p">,</span><span class="s1">&#39;n&#39;</span><span class="p">]</span>
@@ -21308,16 +21226,15 @@ z
 </pre></div>
 
 </div>
-</div>
+</div>   
 
 </div>
 </div>
-</div>
+</div>   
 
 <div class="output_area">
 
-<figure class='figure'>
-        <figcaption><b>Table</b>: An example of a table created with pandas dataframe.</figcaption><a id="tbl:example" class="anchor-link" name="#tbl:example"></a>
+<figure class='figure'><figcaption><b>Table 1: </b>An example of a table created with pandas dataframe.</figcaption><a id="tbl:example" class="anchor-link" name="#tbl:example"></a>
 
 <div class="output_html rendered_html output_subarea output_execute_result">
 
@@ -21389,22 +21306,6 @@ z
 </div>
 </div>
 
-<div class="input_code">
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-<div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">Latex</span><span class="p">(</span><span class="s1">&#39;$$ a = b+c $$&#39;</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-
-</div>
-</div>
-</div>
-
 <div class="output_area">
 
 <div class="output_latex output_subarea output_execute_result">
@@ -21417,12 +21318,14 @@ $$ a = b+c $$
 
 </div>
 
+<br><b>Code 3: </b>The plotting code for a sympy equation (<a href="#/-1eqn:example_sympy">eqn. 1</a>).
 <div class="input_code">
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
+<div class="input">  
 
 <div class="inner_cell">
-<div class="input_area">
+<div class="input_area"><a id="code:example_sym" class="anchor-link" name="#code:example_sym"></a>
+
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="n">sym</span><span class="o">.</span><span class="n">Function</span><span class="p">(</span><span class="s1">&#39;f&#39;</span><span class="p">)</span>
 <span class="n">y</span><span class="p">,</span><span class="n">n</span> <span class="o">=</span> <span class="n">sym</span><span class="o">.</span><span class="n">symbols</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;y \alpha&#39;</span><span class="p">)</span>
 <span class="n">f</span> <span class="o">=</span> <span class="n">y</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">y</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="n">sym</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span><span class="o">-</span><span class="mi">5</span><span class="o">*</span><span class="n">y</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
@@ -21430,11 +21333,11 @@ $$ a = b+c $$
 </pre></div>
 
 </div>
-</div>
+</div>   
 
 </div>
 </div>
-</div>
+</div>   
 
 <div class="output_area">
 

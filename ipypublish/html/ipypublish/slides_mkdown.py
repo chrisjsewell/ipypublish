@@ -4,7 +4,9 @@ tpl_dict = {
 remove code cells """,
 
 "overwrite":['notebook_all', 
-'notebook_input_code','notebook_input_code_pre','notebook_input_code_post'],
+'notebook_input_markdown'],
+
+"globals":r"{% set slidenumber = [] %}",
 
 # don't use slide meta tags at present
 'notebook_all':'{{ super() }}',
@@ -15,22 +17,24 @@ remove code cells """,
         {%- if cell.source[2] == '#' -%}
 
         {%- else -%}
+            {% if slidenumber | length != 0 %}
 </section>
 <section>
+            {%- endif -%}
+            {% if slidenumber.append('1') %}{% endif %}   
         {%- endif -%}
     {%- else -%}
+            {% if slidenumber | length != 0 %}
 </section>
 <section>
+            {%- endif -%}
+           {% if slidenumber.append('1') %}{% endif %}  
     {%- endif -%}
 {%- endif -%}
 """,
 
-# remove all code
-'notebook_input_code_pre':r"""
-""",
-'notebook_input_code_post':r"""
-""",
-'notebook_input_code':r"""
+'notebook_input_markdown':r"""
+{{ cell.source  | markdown2html | strip_files_prefix }}
 """,
 
 

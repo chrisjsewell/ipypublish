@@ -91,6 +91,8 @@ def publish(ipynb_path,
     oplugin['config']['ExtractOutputPreprocessor.output_filename_template'] = files_folder+'/{unique_key}_{cell_index}_{index}{extension}'
     oplugin['config']['LatexDocLinks.metapath'] = str(meta_path)
     oplugin['config']['LatexDocLinks.filesfolder'] = str(files_folder)
+    oplugin['config']['LatexDocHTML.metapath'] = str(meta_path)
+    oplugin['config']['LatexDocHTML.filesfolder'] = str(files_folder)
 
     logging.debug('{}'.format(oplugin['config']))
     
@@ -104,6 +106,11 @@ def publish(ipynb_path,
 
     # reduce multiple blank lines to single
     body = re.sub(r'\n\s*\n', '\n\n', body) 
+    # make sure references refer to correct slides
+    if 'refslide' in resources:
+        for k,v in resources['refslide'].items():
+            print(k)
+            body = body.replace('{{id_home_prefix}}{0}'.format(k),'#/'+str(v)+k)
 
     # filter internal files by those that are referenced in the document body
     if resources['outputs']:

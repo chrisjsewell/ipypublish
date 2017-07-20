@@ -25,6 +25,14 @@ class LatexTagsToHTML(Preprocessor):
     1. attempt to process them into a html friendly format
     2. remove them entirely if this is not possible
     
+    for \ref or \cref,  attempts to use resources.refmap to map labels to reference names
+    for labels not found in resources.refmap
+    the reference name is '<name> <number>', where;
+    - <name> is either ref of, if labelbycolon is True and the label has a colon, all text before the colon
+    - <number> iterate by order of first appearance of a particular label
+    
+    NB: should be applied after LatexDocHTML, if you want resources.refmap to be available
+    
     """
     
     regex = traits.Unicode(r"\\(?:[^a-zA-Z]|[a-zA-Z]+[*=']?)(?:\[.*?\])?{.*?}", 
@@ -87,7 +95,32 @@ class LatexTagsToHTML(Preprocessor):
         else:
             return text       
                 
-    def convert(self, source):
+    def replace_reflabel(self,name,resources):
+        """ find a suitable html replacement for a reference label
+        
+        the links are left with a format hook in them: {id_home_prefix}, 
+        so that an nbconvert filter can later replace it
+        this is particularly useful for slides, which require a prefix #/<slide_number><label>
+        """
+        if 'refmap' in resources:
+            if name in resources['refmap']:
+                return r'<a href="{{id_home_prefix}}{0}">{1}</a>'.format(name,resources['refmap'][name])
+                
+        if self.labelbycolon:
+            ref_name = name.split(':')[0] if ':' in name else 'ref'
+        else:
+            ref_name = 'ref'
+        if not ref_name in self.refs:
+            self.refs[ref_name] = {}
+        refs = self.refs[ref_name]
+        if name in refs:
+            id = refs[name]
+        else:
+            id = len(refs) + 1
+            refs[name] = id
+        return r'<a href="{{id_home_prefix}}{0}">{1}. {2}</a>'.format(name,ref_name,id)
+        
+    def convert(self, source, resources):
         """ convert a a string with tags in
         
         Example
@@ -101,11 +134,11 @@ class LatexTagsToHTML(Preprocessor):
         ... An unknown latex tag.\\unknown{zelenyak_molecular_2016}
         ... '''        
         >>> processor = LatexTagsToHTML()
-        >>> print(processor.convert(source))
+        >>> print(processor.convert(source,{}))
         <BLANKLINE>
-        References to <a href="#fig:example">fig. 1</a>, <a href="#tbl:example">tbl. 1</a>, <a href="#eqn:example_sympy">eqn. 1</a> and <a href="#code:example_mpl">code. 1</a>.
+        References to <a href="{id_home_prefix}fig:example">fig. 1</a>, <a href="{id_home_prefix}tbl:example">tbl. 1</a>, <a href="{id_home_prefix}eqn:example_sympy">eqn. 1</a> and <a href="{id_home_prefix}code:example_mpl">code. 1</a>.
         <BLANKLINE>
-        Referencing multiple items: <a href="#fig:example">fig. 1</a>, <a href="#fig:example_h">fig. 2</a> and <a href="#fig:example_v">fig. 3</a>.
+        Referencing multiple items: <a href="{id_home_prefix}fig:example">fig. 1</a>, <a href="{id_home_prefix}fig:example_h">fig. 2</a> and <a href="{id_home_prefix}fig:example_v">fig. 3</a>.
         <BLANKLINE>
         An unknown latex tag.
         <BLANKLINE>
@@ -115,45 +148,21 @@ class LatexTagsToHTML(Preprocessor):
         for tag in re.findall(self.regex, source):
             
             if tag.startswith('\\label'):
-                new = new.replace(tag, r'<a id="{label}" class="anchor-link" name="#{label}"></a>'.format(label=tag[7:-1]))
-
-            elif tag.startswith('\\cref'):
-                names = tag[6:-1].split(',')
-                html = []
-                for name in names:
-                    if self.labelbycolon:
-                        ref_name = name.split(':')[0] if ':' in name else 'ref'
-                    else:
-                        ref_name = 'ref'
-                    if not ref_name in self.refs:
-                        self.refs[ref_name] = {}
-                    refs = self.refs[ref_name]
-                    if name in refs:
-                        id = refs[name]
-                    else:
-                        id = len(refs) + 1
-                        refs[name] = id
-                    html.append(r'<a href="#{0}">{1}. {2}</a>'.format(name,ref_name,id))
-                new = new.replace(tag, self.rreplace(', '.join(html),',',' and'))
+                new = new.replace(tag, r'<a id="{label}" class="anchor-link" name="#{label}">&#182;</a>'.format(label=tag[7:-1]))
 
             elif tag.startswith('\\ref'):
                 names = tag[5:-1].split(',')
                 html = []
                 for name in names:
-                    if self.labelbycolon:
-                        ref_name = name.split(':')[0] if ':' in name else 'ref'
-                    else:
-                        ref_name = 'ref'
-                    if not ref_name in self.refs:
-                        self.refs[ref_name] = {}
-                    refs = self.refs[ref_name]
-                    if name in refs:
-                        id = refs[name]
-                    else:
-                        id = len(refs) + 1
-                        refs[name] = id
-                    html.append(r'<a href="#{0}">{1}. {2}</a>'.format(name, ref_name, id))
-                new = new.replace(tag, ', '.join(html))
+                    html.append(self.replace_reflabel(name,resources))
+                new = new.replace(tag, self.rreplace(', '.join(html),',',' and'))
+
+            elif tag.startswith('\\cref'):
+                names = tag[6:-1].split(',')
+                html = []
+                for name in names:
+                    html.append(self.replace_reflabel(name,resources))
+                new = new.replace(tag, self.rreplace(', '.join(html),',',' and'))
 
             elif tag.startswith('\\cite'):
                 names = tag[6:-1].split(',')
@@ -170,14 +179,22 @@ class LatexTagsToHTML(Preprocessor):
         return new
         
     def preprocess(self, nb, resources):
+                
         logging.info('converting latex tags to html')
         if resources['bibliopath']:            
             self.read_bibliography(resources['bibliopath'])
             
         for cell in nb.cells:
+            
+            if "latex_doc" in cell['metadata']:
+                for key in cell['metadata']["latex_doc"]:
+                    if "caption" in cell['metadata']["latex_doc"][key]:
+                        text = cell['metadata']["latex_doc"][key]["caption"]
+                        cell['metadata']["latex_doc"][key]["caption"] = self.convert(text,resources)
+                
             if not cell['cell_type'] == "markdown":
-                continue
-         
-            cell['source'] = self.convert(cell['source']) 
+                continue         
+            cell['source'] = self.convert(cell['source'],resources) 
 
+        resources['refslide'] = {}
         return nb, resources

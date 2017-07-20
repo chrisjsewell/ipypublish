@@ -1,25 +1,10 @@
 tpl_dict = {
     
 'meta_docstring':""" caption and label elements according to latex_doc meta tags  """,
-'overwrite':['notebook_output','notebook_all'],
-# using: https://tympanus.net/codrops/2013/05/02/automatic-figure-numbering-with-css-counters/
-# .figure figcaption {
-#     font-weight: 700;
-#     text-transform: uppercase;
-#     letter-spacing: 2px;
-#     font-size: 0.8em;
-#     padding: .5em;
-#     text-align: center;
-#     color: #fff;
-#     background: #f5bca8;
-# }
+'overwrite':['notebook_output','notebook_all','notebook_input_markdown',
+            'notebook_input_code','notebook_input_code_pre','notebook_input_code_post'],
+"globals":r"{% set slidenumber = [] %}",
 
-# .article {
-#     counter-reset: figures;}
-# .figure-figure .figure figcaption {
-#     counter-increment: figures;}
-# .figure-figure .figure figcaption:before {
-#     content: 'Figure ' counter(figures) ': ';}
 
 "html_header":r"""
 
@@ -53,6 +38,48 @@ figure figcaption {
 {%- endif %}
 """,
 
+
+'notebook_input_code_pre':r"""
+{%- if cell.metadata.latex_doc: -%}
+{%- if cell.metadata.latex_doc.code: -%}
+{%- if cell.metadata.latex_doc.code.caption: -%}
+<br>{{cell.metadata.latex_doc.code.caption}}
+{%- endif %}
+<div class="input_code">
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+{%- endif %}   
+{%- endif %}  
+""",
+'notebook_input_code':r"""
+{%- if cell.metadata.latex_doc: -%}
+{%- if cell.metadata.latex_doc.code: -%}
+<div class="inner_cell">
+<div class="input_area">
+{%- if cell.metadata.latex_doc.code.label: -%}
+<a id="{{cell.metadata.latex_doc.code.label}}" class="anchor-link" name="#{{cell.metadata.latex_doc.code.label}}"></a>
+{% if resources.refslide.setdefault(cell.metadata.latex_doc.code.label, slidenumber | length - 1) %}{% endif %} 
+{%- endif %}
+{{ cell.source | highlight_code(metadata=cell.metadata) }}
+</div>
+</div>
+{%- endif %}   
+{%- endif %}   
+""",
+'notebook_input_code_post':r"""
+{%- if cell.metadata.latex_doc: -%}
+{%- if cell.metadata.latex_doc.code: -%}
+</div>
+</div>
+</div>
+{%- endif %}   
+{%- endif %}   
+""",
+
+'notebook_input_markdown':r"""
+{{ cell.source  | markdown2html | strip_files_prefix | replace_string("{id_home_prefix}","#") }}
+""",
+
 'notebook_output':r"""
 {%- if cell.metadata.latex_doc: -%}
     {%- if cell.metadata.latex_doc.figure: -%}
@@ -61,9 +88,6 @@ figure figcaption {
 {{ super() }}    
     {%- elif cell.metadata.latex_doc.equation: -%}
 {{ super() }}    
-    {%- elif cell.metadata.latex_doc.code: -%}
-{{ super() }}    
-    {%- else -%}
     {%- endif %}   
 {%- else -%}
 {{ super() }}
@@ -142,6 +166,10 @@ figure figcaption {
 {%- if meta.latex_doc: -%}
     {%- if meta.latex_doc.figure: -%}
 <figure class='figure'>
+    {%- if meta.latex_doc.figure.label: -%}
+<a id="{{meta.latex_doc.figure.label}}" class="anchor-link" name="#{{meta.latex_doc.figure.label}}"></a>
+    {% if resources.refslide.setdefault(meta.latex_doc.figure.label, slidenumber | length - 1) %}{% endif %} 
+    {%- endif %}
     {%- endif %}
 {%- endif %}
 {%- endmacro %}
@@ -149,22 +177,9 @@ figure figcaption {
 {% macro make_figure_post(meta) -%}
 {%- if meta.latex_doc: -%}
     {%- if meta.latex_doc.figure: -%}
-        {% set captionfound = false %}
     
-        {%- if meta.latex_doc.figure.label: -%}
-<a id="{{meta.latex_doc.figure.label}}" class="anchor-link" name="#{{meta.latex_doc.figure.label}}"></a>
-            {%- if resources.captions: -%}
-            {%- if resources.captions[meta.latex_doc.figure.label]: -%}
-<figcaption><b>Figure</b>: {{resources.captions[meta.latex_doc.figure.label]}}</figcaption>            
-            {% set captionfound = false %}
-            {%- endif %}
-            {%- endif %}
-        {%- endif %}
-
-        {%- if captionfound == false -%}
         {%- if meta.latex_doc.figure.caption: -%}
-<figcaption><b>Figure</b>: {{meta.latex_doc.figure.caption}}</figcaption>
-        {%- endif %}
+<figcaption>{{meta.latex_doc.figure.caption}}</figcaption>
         {%- endif %}
 
 </figure>
@@ -176,26 +191,17 @@ figure figcaption {
 {%- if meta.latex_doc: -%}
     {%- if meta.latex_doc.table: -%}
 <figure class='figure'>
-        {% set captionfound = false %}
-        {%- if meta.latex_doc.table.label: -%}
-            {%- if resources.captions: -%}
-            {%- if resources.captions[meta.latex_doc.table.label]: -%}
-<figcaption><b>Table</b>: {{resources.captions[meta.latex_doc.table.label]}}</figcaption>            
-            {% set captionfound = false %}
-            {%- endif %}
-            {%- endif %}
+
+        {%- if meta.latex_doc.table.caption: -%}
+<figcaption>{{meta.latex_doc.table.caption}}</figcaption>
         {%- endif %}
 
-        {%- if captionfound == false -%}
-        {%- if meta.latex_doc.table.caption: -%}
-<figcaption><b>Table</b>: {{meta.latex_doc.table.caption}}</figcaption>
-        {%- endif %}
-        {%- endif %}        
-        
         {%- if meta.latex_doc.table.label: -%}
 <a id="{{meta.latex_doc.table.label}}" class="anchor-link" name="#{{meta.latex_doc.table.label}}"></a>
+           {% if resources.refslide.setdefault(meta.latex_doc.table.label, slidenumber | length - 1) %}{% endif %} 
         {%- endif %}
     {%- endif %}
+
 {%- endif %}
 {%- endmacro %}
 
@@ -219,9 +225,10 @@ figure figcaption {
     {%- if meta.latex_doc.equation: -%}
         {%- if meta.latex_doc.equation.label: -%}
 <a id="{{meta.latex_doc.equation.label}}" class="anchor-link" name="#{{meta.latex_doc.equation.label}}"></a>
+           {% if resources.refslide.setdefault(meta.latex_doc.equation.label, slidenumber | length - 1) %}{% endif %} 
         {%- endif %}
         {%- if meta.latex_doc.equation.caption: -%}
-<div><b>Equation</b>: {{meta.latex_doc.equation.caption}}</div>
+<div>{{meta.latex_doc.equation.caption}}</div>
         {%- endif %}
     {%- endif %}
 {%- endif %}

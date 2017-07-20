@@ -66,7 +66,7 @@ tplx_dict = {
         ((( output.data['text/latex'] )))
         \end{table}
     
-    ((*- elif cell.metadata.latex_doc.equation: -*))
+    ((*- elif "equation" in cell.metadata.latex_doc: -*))
 
     	((*- if cell.metadata.latex_doc.equation.label: -*))
         \begin{equation}\label{((( cell.metadata.latex_doc.equation.label )))}

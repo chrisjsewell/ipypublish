@@ -58,7 +58,7 @@ tplx_dict = {
 'notebook_input':r"""
 ((*- if cell.metadata.latex_doc: -*))
 
-((*- if cell.metadata.latex_doc.code: -*))
+((*- if "code" in cell.metadata.latex_doc -*))
 
 ((*- if cell.metadata.latex_doc.code.asfloat: -*))
     ((*- if cell.metadata.latex_doc.code.placement: -*))

@@ -18,6 +18,8 @@ TPL_OUTLINE = r"""
 
 {{%- extends 'display_priority.tpl' -%}}
 
+{globals}
+
 %% HTML Setup
 %% ====================
 
@@ -220,6 +222,7 @@ def create_tpl(tpl_dicts=(),outpath=None):
     outline=TPL_OUTLINE
     tpl_sections={
     'meta_docstring':'',
+    'globals':'',
 
     'html_header':'',
     'html_body_start':'',
