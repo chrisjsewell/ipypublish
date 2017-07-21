@@ -524,6 +524,8 @@ using the `embed_html` tag, then treating it as any other output in the notebook
 }
 ```
 
+A possible workflow is then to have a single notebook cell with a static image of the widget in the output, and a path to the embed html in the metadata so that a) if you export to latex/pdf, you get the static image or b) if you export to html/reveal slides, you get the html. 
+
 An example of how this works is in the [Example.ipynb](example/notebooks/Example.pdf), and the 
 [Example.html](https://chrisjsewell.github.io/ipypublish/Example.html#Embedded-HTML-6) and 
 [Example.slides.html](https://chrisjsewell.github.io/ipypublish/Example.slides.html#/9) outputs. 
