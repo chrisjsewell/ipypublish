@@ -2,6 +2,7 @@ ipypublish
 ==========
 
 **Project**: https://github.com/chrisjsewell/ipypublish
+
 **Webpage**: https://chrisjsewell.github.io/ipypublish
 
 .. image:: https://travis-ci.org/chrisjsewell/ipypublish.svg?branch=master
