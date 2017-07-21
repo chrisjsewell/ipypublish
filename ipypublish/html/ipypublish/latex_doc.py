@@ -1,3 +1,24 @@
+# .figure img {
+#     margin: 0 auto;
+#     display: block;
+#     max-width: 100%;
+# }
+# .figure {
+#     padding: 0.9em;
+#     background: #fff;
+#     margin: 0 auto 1em;
+#     display:table;
+# }
+# figure figcaption {
+#     text-align: left;
+# }
+
+# .ipycaption { display: block; float:left; margin-left: 0; }
+# .ipyfigure { display: -ms-flex; display: -webkit-flex; display: flex;}
+# .ipyfigure>div { flex:1; }
+# .ipytable { display: -ms-flex; display: -webkit-flex; display: flex;}
+# .ipytable>div { flex:1; }
+
 tpl_dict = {
     
 'meta_docstring':""" caption and label elements according to latex_doc meta tags  """,
@@ -11,20 +32,12 @@ tpl_dict = {
 
 <!--[if IE lte 8]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
-<style>
-.figure {
-	padding: 0.9em;
-	background: #fff;
-	margin: 0 auto 1em;
-}
-.figure img {
-	margin: 0 auto;
-	display: block;
-	max-width: 100%;
-}
-figure figcaption {
-    text-align: left;
-}
+<style type="text/css">
+.ipyfigure { display: -ms-flex; display: -webkit-flex; display: flex;}
+.ipyfigure>div { flex:1; }
+.ipytable { display: -ms-flex; display: -webkit-flex; display: flex;}
+.ipytable>div { flex:1; }
+
 </style>
 """,
 
@@ -123,6 +136,12 @@ figure figcaption {
 {%- endif %}
 """,
 
+'notebook_output_pre':r"""
+{{ table_caption(cell.metadata) }}
+""",
+'notebook_output_post':r"""
+{{ figure_caption(cell.metadata) }}
+""",
 
 'notebook_output_latex_pre':r"""
 {{ make_figure_pre(cell.metadata) }}
@@ -195,7 +214,8 @@ figure figcaption {
 {% macro make_figure_pre(meta) -%}
 {%- if meta.latex_doc: -%}
     {%- if meta.latex_doc.figure: -%}
-<figure class='figure'>
+
+
     {%- if meta.latex_doc.figure.label: -%}
 <a id="{{meta.latex_doc.figure.label}}" class="anchor-link" name="#{{meta.latex_doc.figure.label}}"></a>
     {% if resources.refslide.setdefault(meta.latex_doc.figure.label, slidenumber | length - 1) %}{% endif %} 
@@ -207,24 +227,32 @@ figure figcaption {
 {% macro make_figure_post(meta) -%}
 {%- if meta.latex_doc: -%}
     {%- if meta.latex_doc.figure: -%}
-    
-        {%- if meta.latex_doc.figure.caption: -%}
-<figcaption>{{meta.latex_doc.figure.caption}}</figcaption>
-        {%- endif %}
 
-</figure>
     {%- endif %}
+{%- endif %}
+{%- endmacro %}
+
+{% macro figure_caption(meta) -%}
+{%- if meta.latex_doc: -%}
+{%- if meta.latex_doc.figure: -%}
+{%- if meta.latex_doc.figure.caption: -%}
+<div class="output_area">
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+{{meta.latex_doc.figure.caption}}
+</div>
+</div>
+</div>
+</div>
+{%- endif %}
+{%- endif %}
 {%- endif %}
 {%- endmacro %}
 
 {% macro make_table_pre(meta) -%}
 {%- if meta.latex_doc: -%}
     {%- if meta.latex_doc.table: -%}
-<figure class='figure'>
-
-        {%- if meta.latex_doc.table.caption: -%}
-<figcaption>{{meta.latex_doc.table.caption}}</figcaption>
-        {%- endif %}
 
         {%- if meta.latex_doc.table.label: -%}
 <a id="{{meta.latex_doc.table.label}}" class="anchor-link" name="#{{meta.latex_doc.table.label}}"></a>
@@ -238,7 +266,7 @@ figure figcaption {
 {% macro make_table_post(meta) -%}
 {%- if meta.latex_doc: -%}
     {%- if meta.latex_doc.table: -%}
-</figure>
+
     {%- endif %}
 {%- endif %}
 {%- endmacro %}
@@ -257,10 +285,25 @@ figure figcaption {
 <a id="{{meta.latex_doc.equation.label}}" class="anchor-link" name="#{{meta.latex_doc.equation.label}}"></a>
            {% if resources.refslide.setdefault(meta.latex_doc.equation.label, slidenumber | length - 1) %}{% endif %} 
         {%- endif %}
-        {%- if meta.latex_doc.equation.caption: -%}
-<div>{{meta.latex_doc.equation.caption}}</div>
-        {%- endif %}
     {%- endif %}
+{%- endif %}
+{%- endmacro %}
+
+{% macro table_caption(meta) -%}
+{%- if meta.latex_doc: -%}
+{%- if meta.latex_doc.table: -%}
+{%- if meta.latex_doc.table.caption: -%}
+<div class="output_area">
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html"> 
+{{meta.latex_doc.table.caption}}
+</div>
+</div>
+</div>
+</div>
+{%- endif %}
+{%- endif %}
 {%- endif %}
 {%- endmacro %}
 

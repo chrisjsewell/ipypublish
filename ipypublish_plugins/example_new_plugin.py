@@ -1,8 +1,8 @@
-r"""html in ipypublish format, preprocessed with default metadata tags 
+"""html in standard nbconvert format, but with 
 - a table of contents 
 - toggle buttons for showing/hiding code & output cells
 - converts or removes (if no converter) latex tags (like \cite{abc}, \ref{})
-- all code/errors/output is shown unless tagged otherwise
+
 """
 
 from ipypublish.html.create_tpl import create_tpl
@@ -19,40 +19,12 @@ from ipypublish.preprocessors.latex_doc import LatexDocLinks
 from ipypublish.preprocessors.latex_doc_html import LatexDocHTML
 from ipypublish.preprocessors.latextags_to_html import LatexTagsToHTML
 from ipypublish.filters.replace_string import replace_string
-from ipypublish.preprocessors.latex_doc_defaults import MetaDefaults
-
-cell_defaults = {
-  "latex_doc": {
-    "figure": {
-      "placement": "H"
-    },
-    "table": {
-      "placement": "H"
-    },
-    "equation": True,
-    "text": True,
-    "code":True,
-    "error":True
-  }
-}
-
-nb_defaults={
-"latex_doc": {
-  "titlepage":{},
-  "toc": True,
-  "listfigures": True,
-  "listtables": True,
-  "listcode": True,
-  }
-}
 
 oformat = 'HTML'   
 config = {'TemplateExporter.filters':{'replace_string':replace_string},
           'Exporter.filters':{'replace_string':replace_string},
-          'Exporter.preprocessors':[MetaDefaults,LatexDocLinks,LatexDocHTML,LatexTagsToHTML],
-          'MetaDefaults.cell_defaults':cell_defaults,
-          'MetaDefaults.nb_defaults':nb_defaults}
-          
+          'Exporter.preprocessors':[LatexDocLinks,LatexDocHTML,LatexTagsToHTML]}
+
 template = create_tpl([
     document.tpl_dict, 
     content.tpl_dict, content_tagging.tpl_dict, 

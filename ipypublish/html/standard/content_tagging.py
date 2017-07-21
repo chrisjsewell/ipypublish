@@ -46,6 +46,12 @@ tpl_dict = {
 </div>
 """,
 
+'notebook_output_pre':r"""
+<div class="output_area">""",
+'notebook_output_post':r"""
+</div>
+""",
+
 'notebook_output_error_pre':r"""
 <div class="output_subarea output_text output_error">
 <pre>

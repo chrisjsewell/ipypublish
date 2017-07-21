@@ -19,7 +19,6 @@ class LatexDocHTML(Preprocessor):
     
 
     def __init__(self, *args, **kwargs):
-        #self.fignums = {'figure':{},'table':{},'code'} 
         super(LatexDocHTML, self).__init__( *args, **kwargs)
 
     def resolve_path(self, fpath, filepath):
@@ -32,24 +31,26 @@ class LatexDocHTML(Preprocessor):
     def create_embed_cell(self, cell):
         """ a new cell, based on embedded html file
         """
-        fpath = self.resolve_path(cell.metadata.latex_doc.embed_file.filepath, self.metapath)
+        fpath = self.resolve_path(cell.metadata.latex_doc.embed_html.filepath, self.metapath)
+        logging.info('attmepting to embed html in notebook from:'
+                            ': {}'.format(fpath))
         if not os.path.exists(fpath):
-            logging.warning('file in embed metadata does not exist'
+            logging.warning('file in embed html metadata does not exist'
                             ': {}'.format(fpath))
             return False
         
         with open(fpath) as f:
             embed_data = f.read()
-            return False        
-            
-        body = embed_data.split('<html>')[1]
-        body = embed_data.split('</head>')[1]
-        body = body.split('</html>')[0]
-        # if 'body' not in embed_data:
-        #     logging.warning('file in embed metadata does not contain a body key'
-        #                     ': {}'.format(fpath))
-        #     return False
-        #
+        logging.debug('length of embedding html {}'.format(len(embed_data)))
+           
+        if '<body>' in embed_data and r'</body>' in embed_data:
+            pass#body = embed_data.split('<body>')[1]
+            #body = embed_data.split('</body>')[0]
+        else:
+            logging.warning('file in embed html metadata does not contain a <body> key, using entire file'
+                            ': {}'.format(fpath))
+            return False
+
         # if 'head' in embed_data:
         #     if not hasattr(nb.metadata, 'latex_doc'):
         #         nb.metadata.latex_doc = {}
@@ -58,21 +59,26 @@ class LatexDocHTML(Preprocessor):
         #     for head in embed_data['head']:
         #         if head not in nb.metadata.latex_doc.html_head:
         #             nb.metadata.latex_doc.html_head.append(head)
-        cell.metadata.pop('embed_file')
-        newmeta = cell.metadata.copy()
-        newmeta['float'] = {'caption':'a','label':'b'}
-        newcell = {
-        "cell_type": "code",
-        "execution_count": 0,
-        "metadata": {'latex_doc':{'html':newmeta}},
-        "outputs": [
-        {"data": {"text/html": body},
+
+        cell.outputs.append({"data": {"text/html": embed_data},
          "execution_count": 0,
          "metadata": {},
-         "output_type": "execute_result"}],
-        "source": [
-        ""]}
-        return newcell
+         "output_type": "execute_result"})
+        #meta = cell.metadata.latex_doc.pop('embed_html')
+        # newcell = {
+        # "cell_type": "code",
+        # "execution_count": 0,
+        # "metadata": {'latex_doc':{'figure':meta}},
+        # "outputs": [
+        # {"data": {"text/html": body},
+        #  "execution_count": 0,
+        #  "metadata": {},
+        #  "output_type": "execute_result"}],
+        # "source": [
+        # ""]}
+
+        logging.info('successfuly embedded html in cell')
+        return cell
         
     def preprocess(self, nb, resources):
         
@@ -80,18 +86,20 @@ class LatexDocHTML(Preprocessor):
                      ' in latex_doc metadata to: {}'.format(self.metapath)) 
         
         final_cells = []
-        float_count = dict([('figure',0),('table',0),('code',0)])
+        float_count = dict([('figure',0),('table',0),('code',0),('text',0),('error',0)])
         for i, cell in enumerate(nb.cells):
             if hasattr(cell.metadata, 'latex_doc'):
-                if hasattr(cell.metadata.latex_doc, 'embed_file'):
-                    if hasattr(nb.metadata.latex_doc.embed_html,'filepath'): 
-                        newcell = self.create_embed_cell(nb, cell)
-                        if newcell:
-                            final_cells.append(newcell)
+                if hasattr(cell.metadata.latex_doc, 'embed_html'):
+                    if hasattr(cell.metadata.latex_doc.embed_html,'filepath'): 
+                        self.create_embed_cell(cell)
+                        # newcell = self.create_embed_cell(cell)
+                        # if newcell:
+                        #     final_cells.append(newcell)
                     else:
                         logging.warning('cell {} has no filepath key in its metadata.embed_html'.format(i)) 
                         
-                for floattype, floatabbr in [('figure','fig.'),('table','tbl.'),('code','code')]:
+                for floattype, floatabbr in [('figure','fig.'),('table','tbl.'),('code','code'),
+                                              ('text','text'),('error','error')]:
                     if floattype in cell.metadata.latex_doc:
                         float_count[floattype] += 1
                         if not isinstance(cell.metadata.latex_doc[floattype],dict):

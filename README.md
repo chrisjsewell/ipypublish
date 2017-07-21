@@ -17,8 +17,9 @@ See [Example.ipynb](example/notebooks/Example.pdf), [Example.pdf](https://chrisj
 - [Setting up a Notebook ](#setting-up-a-notebook)
 - [Converting Notebooks](#converting-notebooks)
     - [Creating a bespoke converter](#creating-a-bespoke-converter)
-- [Latex Metadata Tags](#latex-metadata-tags)
+- [Metadata Tags](#metadata-tags)
     - [Captions in a Markdown cell](#captions-in-a-markdown-cell)
+	- [Embedding Interactive HTML](#embedding-interactive-html)
 - [Citations and Bibliography](#citations-and-bibliography)
 - [Live Slideshows](#live-slideshows)
 - [Dealing with external data](#dealing-with-external-data)
@@ -256,9 +257,10 @@ test
 </div>
 ```
 
-## Latex Metadata Tags
+## Metadata Tags
 
-All information additional information, used to specify how a particular notebook/cell in latex is represented, is stored in the metadata under:
+All information additional information, used to specify how a particular notebook/cell will be represented
+when converted, is stored in the metadata under:
 
 ```json
 {
@@ -493,6 +495,38 @@ During the jinja templating, if a **figure, table or code** cell has a label mat
 ```
 
 Then its caption will be overriden with the stored text. 
+
+### Embedding Interactive HTML
+
+Packages built on [IPywidgets](http://ipywidgets.readthedocs.io), 
+like [PythreeJS](https://github.com/jovyan/pythreejs), 
+[Pandas3JS](https://github.com/chrisjsewell/pandas3js) 
+and the excellent [IPyvolume](https://ipyvolume.readthedocs.io/en/latest/), 
+are making it increasingly easier to render complex, interactive html in the notebook. 
+IPywidgets offers a [save notebook with widgets](http://ipywidgets.readthedocs.io/en/latest/embedding.html) feature, however, this can greatly increase the size of the notebook.
+
+
+A better solution, recently offered, is to save a [html snippet](http://ipywidgets.readthedocs.io/en/latest/embedding.html#embeddable-html-snippet) 
+of the current widget state to file. 
+This file can be re-embedded into the notebook, at the conversion stage, 
+using the `embed_html` tag, the treating it as any other output in the notebook.
+
+```json
+{
+  "latex_doc": {
+    "embed_html": {
+      "filepath": "path/to/embed.html"
+    },
+    "figure": {
+      "caption": "An example of embedded html"
+    }
+  }
+}
+```
+
+An example of how this works is in the [Example.ipynb](example/notebooks/Example.pdf), and the 
+[Example.html](https://chrisjsewell.github.io/ipypublish/Example.html#Embedded-HTML-6) and 
+[Example.slides.html](https://chrisjsewell.github.io/ipypublish/Example.slides.html#/9) outputs. 
 
 ## Citations and Bibliography
 

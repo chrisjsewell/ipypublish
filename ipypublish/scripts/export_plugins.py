@@ -75,9 +75,10 @@ def _get_modules(path):
                 if hasattr(pypath,'maketemp'):
                     with pypath.maketemp() as f:
                         module = load_source(mod_name,f.name)
+                    pypath = pypath.name
                 else:
                     module = load_source(mod_name,str(pypath))
-            modules[os.path.splitext(pypath.name)[0]] = module   
+            modules[os.path.splitext(os.path.basename(str(pypath)))[0]] = module   
         except Exception as err:
             load_errors.append(( str(pypath),'Load Error: {}'.format(err) ))
             continue

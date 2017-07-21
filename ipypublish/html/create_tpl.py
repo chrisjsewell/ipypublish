@@ -90,10 +90,10 @@ TPL_OUTLINE = r"""
 %% ================
 
 {{% block output %}}
-<div class="output_area">
+{notebook_output_pre}
 {notebook_output_prompt}
 {{{{ super() }}}}
-</div>
+{notebook_output_post}
 {{% endblock output %}}
 
 % Redirect execute_result to display data priority.
@@ -263,6 +263,7 @@ def create_tpl(tpl_dicts=(),outpath=None):
     'notebook_output_widget_state':'',
     'notebook_output_widget_view':'',
 
+    'notebook_output_pre':'',
     'notebook_output_text_pre':'',
     'notebook_output_error_pre':'',
     'notebook_output_traceback_pre':'',
@@ -278,6 +279,8 @@ def create_tpl(tpl_dicts=(),outpath=None):
     'notebook_output_javascript_pre':'',
     'notebook_output_widget_state_pre':'',
     'notebook_output_widget_view_pre':'',
+
+    'notebook_output_post':'',
     'notebook_output_text_post':'',
     'notebook_output_error_post':'',
     'notebook_output_traceback_post':'',
