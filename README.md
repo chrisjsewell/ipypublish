@@ -509,7 +509,7 @@ IPywidgets offers a [save notebook with widgets](http://ipywidgets.readthedocs.i
 A better solution, recently offered, is to save a [html snippet](http://ipywidgets.readthedocs.io/en/latest/embedding.html#embeddable-html-snippet) 
 of the current widget state to file. 
 This file can be re-embedded into the notebook, at the conversion stage, 
-using the `embed_html` tag, the treating it as any other output in the notebook.
+using the `embed_html` tag, then treating it as any other output in the notebook.
 
 ```json
 {
