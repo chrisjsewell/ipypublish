@@ -391,7 +391,9 @@ To  **output text produced by the code** (e.g. *via* the `print` command):
 {
 "latex_doc": {
   "text": {
-	"format" : {},
+      "format": {
+       "basicstyle": "\\small"
+      },
     "asfloat": true,
     "caption": "",
     "label": "code:example_sym",
@@ -404,7 +406,7 @@ To  **output text produced by the code** (e.g. *via* the `print` command):
 
 all extra tags are optional:
 
-- `format` can contain any keywords related to the latex [Listings](https://en.wikibooks.org/wiki/LaTeX/Source_Code_Listings) package (such as syntax highlighting colors)
+- `format` can contain any keywords related to the latex [Listings](https://en.wikibooks.org/wiki/LaTeX/Source_Code_Listings) package (such as syntax highlighting colors). N.B. in place of `\` use `\\`.
 - `asfloat` contitutes whether the code is wrapped in a codecell (float) environment or is inline.
 - all other tags work the same as figure (below).
 
