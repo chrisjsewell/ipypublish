@@ -68,29 +68,6 @@ class LatexDocLinks(Preprocessor):
                     nb.metadata.latex_doc.titlepage.logo = os.path.join(self.filesfolder,
                                                                os.path.basename(logo))
         resources.setdefault("external_file_paths", [])
-        resources['external_file_paths'] += external_files
-        
-        logging.info('extracting caption cells') 
-        
-        # extract captions
-        final_cells = []
-        captions = {}
-        for cell in nb.cells:
-            if hasattr(cell.metadata, 'latex_doc'):
-                if hasattr(cell.metadata.latex_doc, 'caption'):
-                    captions[cell.metadata.latex_doc.caption] = cell.source.split(r'\n')[0]
-                    continue
-            final_cells.append(cell)
-        nb.cells = final_cells  
-        
-        # replace captions
-        for cell in nb.cells:
-            if hasattr(cell.metadata, 'latex_doc'):
-                for key in cell.metadata.latex_doc:
-                    if hasattr(cell.metadata.latex_doc[key], 'label'):
-                        if cell.metadata.latex_doc[key]['label'] in captions:
-                            logging.debug('replacing caption for: {}'.format(cell.metadata.latex_doc[key]['label']))
-                            cell.metadata.latex_doc[key]['caption'] = captions[cell.metadata.latex_doc[key]['label']]
-                
+        resources['external_file_paths'] += external_files               
         
         return nb, resources

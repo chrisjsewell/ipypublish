@@ -15,7 +15,8 @@ from ipypublish.html.standard import widgets
 from ipypublish.html.ipypublish import toc_sidebar
 from ipypublish.html.ipypublish import toggle_buttons
 from ipypublish.html.ipypublish import latex_doc
-from ipypublish.preprocessors.latex_doc import LatexDocLinks
+from ipypublish.preprocessors.latex_doc_links import LatexDocLinks
+from ipypublish.preprocessors.latex_doc_captions import LatexCaptions
 from ipypublish.preprocessors.latex_doc_html import LatexDocHTML
 from ipypublish.preprocessors.latextags_to_html import LatexTagsToHTML
 from ipypublish.filters.replace_string import replace_string
@@ -23,7 +24,7 @@ from ipypublish.filters.replace_string import replace_string
 oformat = 'HTML'   
 config = {'TemplateExporter.filters':{'replace_string':replace_string},
           'Exporter.filters':{'replace_string':replace_string},
-          'Exporter.preprocessors':[LatexDocLinks,LatexDocHTML,LatexTagsToHTML]}
+          'Exporter.preprocessors':[LatexDocLinks,LatexDocHTML,LatexTagsToHTML,LatexCaptions]}
 
 template = create_tpl([
     document.tpl_dict, 

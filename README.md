@@ -3,7 +3,7 @@
 [![PyPI](https://img.shields.io/pypi/v/ipypublish.svg)](https://pypi.python.org/pypi/ipypublish/)
 
 # ipypublish
-A workflow for creating and editing publication ready scientific reports, from one or more Jupyter Notebooks, without leaving the browser!
+A workflow for creating and editing publication ready scientific reports and presentations, from one or more Jupyter Notebooks, without leaving the browser!
 
 ![WorkFlow Example](/example_workflow.gif)
 
@@ -131,6 +131,7 @@ A plugin is a python (.py) file with at least the following four variables (i.e.
 2. an **oformat** string,  specifying a base exporter prefix (for any of the exporters listed [here](https://nbconvert.readthedocs.io/en/latest/api/exporters.html#specialized-exporter-classes))
 3. a **config** dictionary, containing any configuration option (as a string) listed [here](https://nbconvert.readthedocs.io/en/latest/api/exporters.html#specialized-exporter-classes). This is mainly to supply preprocessors (which act on the notbook object before it is parsed) or filters (which are functions supplied to the jinja template).
 4. a **template** string, specifying the [Jinja templates](https://jinja2.readthedocs.io/en/latest/intro.html), which contains rules for how each element of the notebook should be converted, and also what each section of the latex file should contain. 
+5. It is not required, but recommended, to also include the version number of ipypublish which the plugin was written for.
 
 So a simple plugin would look like this (create_tplx will be explained below) 
 

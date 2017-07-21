@@ -92,9 +92,6 @@ class LatexDocHTML(Preprocessor):
                 if hasattr(cell.metadata.latex_doc, 'embed_html'):
                     if hasattr(cell.metadata.latex_doc.embed_html,'filepath'): 
                         self.create_embed_cell(cell)
-                        # newcell = self.create_embed_cell(cell)
-                        # if newcell:
-                        #     final_cells.append(newcell)
                     else:
                         logging.warning('cell {} has no filepath key in its metadata.embed_html'.format(i)) 
                         

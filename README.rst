@@ -9,7 +9,7 @@ ipypublish
     :target: https://travis-ci.org/chrisjsewell/ipypublish
 
 A workflow for creating and editing publication ready scientific
-reports, from one or more Jupyter Notebooks, without leaving the
+reports and presentations, from one or more Jupyter Notebooks, without leaving the
 browser!
 
 .. image:: https://github.com/chrisjsewell/ipypublish/raw/master/example_workflow.gif

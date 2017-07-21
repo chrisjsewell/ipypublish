@@ -15,7 +15,8 @@ from ipypublish.html.standard import mathjax
 from ipypublish.html.standard import widgets
 from ipypublish.html.ipypublish import latex_doc
 from ipypublish.html.ipypublish import slides_mkdown
-from ipypublish.preprocessors.latex_doc import LatexDocLinks
+from ipypublish.preprocessors.latex_doc_links import LatexDocLinks
+from ipypublish.preprocessors.latex_doc_captions import LatexCaptions
 from ipypublish.preprocessors.latex_doc_html import LatexDocHTML
 from ipypublish.preprocessors.latextags_to_html import LatexTagsToHTML
 from ipypublish.filters.replace_string import replace_string
@@ -26,7 +27,7 @@ _filters = {'replace_string':replace_string}
             
 config = {'TemplateExporter.filters':_filters,
           'Exporter.filters':_filters,
-          'Exporter.preprocessors':[LatexDocLinks,LatexDocHTML,LatexTagsToHTML]}
+          'Exporter.preprocessors':[LatexDocLinks,LatexDocHTML,LatexTagsToHTML,LatexCaptions]}
 
 template = create_tpl([
     content.tpl_dict, content_tagging.tpl_dict,
