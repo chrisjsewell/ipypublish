@@ -25,7 +25,10 @@ tpl_dict = {
 'overwrite':['notebook_output','notebook_all','notebook_input_markdown',
             'notebook_input_code','notebook_input_code_pre','notebook_input_code_post',
             'notebook_output_text','notebook_output_stream_stderr','notebook_output_stream_stdout'],
-"globals":r"{% set slidenumber = [] %}",
+"globals":r"""
+{% set slidecolumn = [] %}"
+{% set sliderow = {} %}"
+""",
 
 
 "html_header":r"""
@@ -72,7 +75,8 @@ tpl_dict = {
 <div class="input_area">
 {%- if cell.metadata.latex_doc.code.label: -%}
 <a id="{{cell.metadata.latex_doc.code.label}}" class="anchor-link" name="#{{cell.metadata.latex_doc.code.label}}"></a>
-{% if resources.refslide.setdefault(cell.metadata.latex_doc.code.label, slidenumber | length - 1) %}{% endif %} 
+{% if resources.refslide.setdefault(cell.metadata.latex_doc.code.label, 
+            (slidecolumn | length - 1,sliderow.get('len',[]) | length)) %}{% endif %} 
 {%- endif %}
 {{ cell.source | highlight_code(metadata=cell.metadata) }}
 </div>
@@ -218,7 +222,8 @@ tpl_dict = {
 
     {%- if meta.latex_doc.figure.label: -%}
 <a id="{{meta.latex_doc.figure.label}}" class="anchor-link" name="#{{meta.latex_doc.figure.label}}"></a>
-    {% if resources.refslide.setdefault(meta.latex_doc.figure.label, slidenumber | length - 1) %}{% endif %} 
+    {% if resources.refslide.setdefault(meta.latex_doc.figure.label, 
+        (slidecolumn | length - 1,sliderow.get('len',[]) | length)) %}{% endif %} 
     {%- endif %}
     {%- endif %}
 {%- endif %}
@@ -256,7 +261,8 @@ tpl_dict = {
 
         {%- if meta.latex_doc.table.label: -%}
 <a id="{{meta.latex_doc.table.label}}" class="anchor-link" name="#{{meta.latex_doc.table.label}}"></a>
-           {% if resources.refslide.setdefault(meta.latex_doc.table.label, slidenumber | length - 1) %}{% endif %} 
+           {% if resources.refslide.setdefault(meta.latex_doc.table.label, 
+               (slidecolumn | length - 1,sliderow.get('len',[]) | length)) %}{% endif %} 
         {%- endif %}
     {%- endif %}
 
@@ -283,7 +289,8 @@ tpl_dict = {
     {%- if meta.latex_doc.equation: -%}
         {%- if meta.latex_doc.equation.label: -%}
 <a id="{{meta.latex_doc.equation.label}}" class="anchor-link" name="#{{meta.latex_doc.equation.label}}"></a>
-           {% if resources.refslide.setdefault(meta.latex_doc.equation.label, slidenumber | length - 1) %}{% endif %} 
+           {% if resources.refslide.setdefault(meta.latex_doc.equation.label, 
+               (slidecolumn | length - 1,sliderow.get('len',[]) | length)) %}{% endif %} 
         {%- endif %}
     {%- endif %}
 {%- endif %}

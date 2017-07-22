@@ -6,7 +6,10 @@ remove code cells """,
 "overwrite":['notebook_all', 
 'notebook_input_markdown'],
 
-"globals":r"{% set slidenumber = [] %}",
+"globals":r"""
+{% set slidecolumn = [] %}"
+{% set sliderow = {} %}"
+""",
 
 # don't use slide meta tags at present
 'notebook_all':'{{ super() }}',
@@ -17,18 +20,18 @@ remove code cells """,
         {%- if cell.source[2] == '#' -%}
 
         {%- else -%}
-            {% if slidenumber | length != 0 %}
+            {% if slidecolumn | length != 0 %}
 </section>
 <section>
             {%- endif -%}
-            {% if slidenumber.append('1') %}{% endif %}   
+            {% if slidecolumn.append('1') %}{% endif %}   
         {%- endif -%}
     {%- else -%}
-            {% if slidenumber | length != 0 %}
+            {% if slidecolumn | length != 0 %}
 </section>
 <section>
             {%- endif -%}
-           {% if slidenumber.append('1') %}{% endif %}  
+           {% if slidecolumn.append('1') %}{% endif %}  
     {%- endif -%}
 {%- endif -%}
 """,

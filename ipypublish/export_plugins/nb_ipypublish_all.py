@@ -1,6 +1,6 @@
 """original notebook with default metadata tags added (where not already present) to set
-- code/error tags to True
-- all output tags set to True
+- code/error tags to True, unless already set
+- all output tags set to True, unless already set
 - a basic titlepage, table of contents and tables of figures/tables/code
 """
 from ipypublish.latex.create_tplx import create_tplx

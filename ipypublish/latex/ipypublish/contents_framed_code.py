@@ -76,12 +76,12 @@ tplx_dict = {
 
 'notebook_output_text':r"""
 ((( draw_text(cell.metadata,output.data['text/plain'],"text",
-"language=Tex,numbers=none,xrightmargin=5pt") )))
+"language={},postbreak={},numbers=none,xrightmargin=7pt,breakindent=0pt,aboveskip=5pt,belowskip=5pt") )))
 """,
 
 'notebook_output_stream':r"""
 ((( draw_text(cell.metadata,output.text | escape_latex | ansi2latex,"text",
-              "language=Tex,numbers=none,xrightmargin=5pt,belowskip=2pt,aboveskip=2pt") )))
+"language={},postbreak={},numbers=none,xrightmargin=7pt,belowskip=5pt,aboveskip=5pt,breakindent=0pt") )))
 """,
 
 'notebook_output_error':r"""
@@ -89,7 +89,7 @@ tplx_dict = {
 """,
 'notebook_output_traceback':"""
 ((( draw_text(cell.metadata,line | indent | strip_ansi | escape_latex,"error",
-              "language=Python,numbers=none,xrightmargin=5pt,belowskip=2pt,aboveskip=2pt") )))
+"language=Python,numbers=none,xrightmargin=5pt,belowskip=2pt,aboveskip=2pt") )))
 """,
 
 'jinja_macros':r"""

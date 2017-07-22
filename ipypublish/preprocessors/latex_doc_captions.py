@@ -3,12 +3,10 @@ from nbconvert.preprocessors import Preprocessor
 import traitlets as traits
 
 class LatexCaptions(Preprocessor):
-    """ a preprocessor to resolve file paths in the latex_doc metadata section 
-    
-    retrieve external file paths from metadata,
-    resolve where they are, if the path is relative
-    make sure that the link points to a single folder
-    add 'external_file_paths' and 'bibliopath' (if present) to resources
+    """ a preprocessor to 
+    1. find cells with a latex_doc.caption meta-tag, 
+       extract the caption and label to a dict and remove the cell
+    2. find cells with the found labels and replace their captions
     
     """
             

@@ -7,8 +7,7 @@ with mathjax loaded
 with jupyter wigets
 marks up html with slide tags, based on metadata
  caption and label elements according to latex_doc meta tags  
-sets markdown main titles (with one #) as their own slides, 
-remove code cells  -->
+marks up html with slide tags, based on metadata -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -11857,11 +11856,22 @@ a.anchor-link {
 .ipytable { display: -ms-flex; display: -webkit-flex; display: flex;}
 .ipytable>div { flex:1; }
 
+</style>
+
+<style type="text/css">
+/* numbering headings */
+body { counter-reset: H1; } 	/* Create the counter for H1 */
+h1:before {
+  content: counter(H1) ". "; 	/* Print the H1 number */
+  counter-increment: H1; 	/* Add 1 to next H1 */
+}
 </style></head>
  <body>
 
 <div class="reveal">
 <div class="slides">
+
+<section>
 <section>
 
 <div class="input_markdown">
@@ -11877,7 +11887,9 @@ a.anchor-link {
 </div>
 
 </section>
-<section><div class="input_markdown">
+<section>
+
+<div class="input_markdown">
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -11912,7 +11924,9 @@ a.anchor-link {
 </div>
 
 </section>
-<section><div class="input_markdown">
+<section>
+
+<div class="input_markdown">
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -11929,8 +11943,8 @@ a.anchor-link {
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 
-<p>References to <a href="#/5fig:example">fig. 1</a>, <a href="#/7tbl:example">tbl. 1</a>, <a href="#/8eqn:example_sympy">eqn. 1</a> and <a href="#/6code:example_mpl">code 1</a>.</p>
-<p>Referencing multiple items: <a href="#/5fig:example">fig. 1</a>, <a href="#/5fig:example_h">fig. 2</a> and <a href="#/5fig:example_v">fig. 3</a>.</p>
+<p>References to <a href="#/2/0fig:example">fig. 1</a>, <a href="#/3/0tbl:example">tbl. 1</a>, <a href="#/4/0eqn:example_sympy">eqn. 1</a> and <a href="#/2/0code:example_mpl">code 1</a>.</p>
+<p>Referencing multiple items: <a href="#/2/0fig:example">fig. 1</a>, <a href="#/2/0fig:example_h">fig. 2</a> and <a href="#/2/0fig:example_v">fig. 3</a>.</p>
 <p>A latex citation.[<a href="https://doi.org/10.1134/S0018143916050209">Zelenyak <em>et al</em>, 2016.</a>]</p>
 <p>A html citation.<cite data-cite="kirkeminde_thermodynamic_2012">(Kirkeminde, 2012)</cite></p>
 
@@ -11940,7 +11954,9 @@ a.anchor-link {
 </div>
 
 </section>
-<section><div class="input_markdown">
+<section>
+
+<div class="input_markdown">
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -11965,7 +11981,12 @@ a.anchor-link {
 </div>
 
 </section>
-<section><div class="input_markdown">
+</section>  
+
+<section>
+<section>
+
+<div class="input_markdown">
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -11990,7 +12011,12 @@ with a nicely formatted output.
 </div>
 
 </section>
-<section><div class="input_markdown">
+</section>  
+
+<section>
+<section>
+
+<div class="input_markdown">
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -20386,7 +20412,9 @@ SUVORK5CYII=
 </div>
 
 </section>
-<section><div class="input_markdown">
+<section>
+
+<div class="input_markdown">
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -20398,7 +20426,7 @@ SUVORK5CYII=
 </div>
 </div>
 
-<br>The plotting code for a matplotlib figure (<a href="#/5fig:example_mpl">fig. 5</a>).
+<br>The plotting code for a matplotlib figure (<a href="#/2/0fig:example_mpl">fig. 5</a>).
 <div class="input_code">
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">  
@@ -21207,7 +21235,12 @@ A matplotlib figure, with the caption set in the markdowncell above the figure.
 </div>
 
 </section>
-<section><div class="input_markdown">
+</section>  
+
+<section>
+<section>
+
+<div class="input_markdown">
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -21219,7 +21252,7 @@ A matplotlib figure, with the caption set in the markdowncell above the figure.
 </div>
 </div>
 
-<br>The plotting code for a pandas Dataframe table (<a href="#/7tbl:example">tbl. 1</a>).
+<br>The plotting code for a pandas Dataframe table (<a href="#/3/0tbl:example">tbl. 1</a>).
 <div class="input_code">
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">  
@@ -21312,7 +21345,12 @@ A matplotlib figure, with the caption set in the markdowncell above the figure.
 </div>
 
 </section>
-<section><div class="input_markdown">
+</section>  
+
+<section>
+<section>
+
+<div class="input_markdown">
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -21336,7 +21374,7 @@ $$ a = b+c $$
 
 </div>
 
-<br>The plotting code for a sympy equation (<a href="#/8eqn:example_sympy">eqn. 1</a>).
+<br>The plotting code for a sympy equation (<a href="#/4/0eqn:example_sympy">eqn. 1</a>).
 <div class="input_code">
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">  
@@ -21370,7 +21408,12 @@ $$\left(\sqrt{5} i\right)^{\alpha} \left(\frac{1}{2} - \frac{2 i}{5} \sqrt{5}\ri
 </div>
 
 </section>
-<section><div class="input_markdown">
+</section>  
+
+<section>
+<section>
+
+<div class="input_markdown">
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -21434,6 +21477,17 @@ and will render below in .html type outputs:</p>
 </div>
 </div>
 </div>
+
+<div class="output_area">
+
+</div>
+
+<div class="output_area">
+
+</div>
+
+</section>
+</section>
 
 </section>
 </div>

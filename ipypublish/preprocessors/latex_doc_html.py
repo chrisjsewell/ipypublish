@@ -1,5 +1,6 @@
 import os, logging
 from nbconvert.preprocessors import Preprocessor
+from nbformat.notebooknode import NotebookNode
 import traitlets as traits
 
 class LatexDocHTML(Preprocessor):
@@ -60,10 +61,10 @@ class LatexDocHTML(Preprocessor):
         #         if head not in nb.metadata.latex_doc.html_head:
         #             nb.metadata.latex_doc.html_head.append(head)
 
-        cell.outputs.append({"data": {"text/html": embed_data},
+        cell.outputs.append(NotebookNode({"data": {"text/html": embed_data},
          "execution_count": 0,
          "metadata": {},
-         "output_type": "execute_result"})
+         "output_type": "execute_result"}))
         #meta = cell.metadata.latex_doc.pop('embed_html')
         # newcell = {
         # "cell_type": "code",

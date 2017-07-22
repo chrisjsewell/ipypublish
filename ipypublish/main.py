@@ -108,8 +108,8 @@ def publish(ipynb_path,
     body = re.sub(r'\n\s*\n', '\n\n', body) 
     # make sure references refer to correct slides
     if 'refslide' in resources:
-        for k,v in resources['refslide'].items():
-            body = body.replace('{{id_home_prefix}}{0}'.format(k),'#/'+str(v)+k)
+        for k,(col,row) in resources['refslide'].items():
+            body = body.replace('{{id_home_prefix}}{0}'.format(k),'#/{0}/{1}{2}'.format(col,row,k))
 
     # filter internal files by those that are referenced in the document body
     if resources['outputs']:
