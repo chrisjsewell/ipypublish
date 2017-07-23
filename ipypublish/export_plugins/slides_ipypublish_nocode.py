@@ -60,6 +60,7 @@ config = {'TemplateExporter.filters':_filters,
           'MarkdownSlides.row_level':0,
           'MarkdownSlides.header_slide':False,
           'MarkdownSlides.max_cells':0,
+          'MarkdownSlides.autonumbering':True,
           'MetaDefaults.cell_defaults':cell_defaults,
           'MetaDefaults.nb_defaults':nb_defaults,
           }

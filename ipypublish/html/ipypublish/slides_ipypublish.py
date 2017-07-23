@@ -9,17 +9,6 @@ tpl_dict = {
 {% set sliderow = {} %}"
 """,
 
-'html_header':r"""
-<style type="text/css">
-/* numbering headings */
-body { counter-reset: H1; } 	/* Create the counter for H1 */
-h1:before {
-  content: counter(H1) ". "; 	/* Print the H1 number */
-  counter-increment: H1; 	/* Add 1 to next H1 */
-}
-</style>
-""",
-
 'html_body_start':r"""
 <div class="reveal">
 <div class="slides">

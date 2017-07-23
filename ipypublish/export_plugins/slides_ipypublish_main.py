@@ -33,6 +33,7 @@ config = {'TemplateExporter.filters':_filters,
           'MarkdownSlides.row_level':0,
           'MarkdownSlides.header_slide':False,
           'MarkdownSlides.max_cells':0,
+          'MarkdownSlides.autonumbering':True,
           }
 
 template = create_tpl([

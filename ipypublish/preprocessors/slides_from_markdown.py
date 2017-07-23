@@ -55,12 +55,75 @@ class FinalCells(object):
         return True
    
 def is_header(line,max_level):
-    """if max_level is 0 assumes all headers ok"""
+    """if max_level is 0 assumes all headers ok
+    
+    Examples
+    --------
+    >>> is_header("abc",0)
+    False
+    >>> is_header("#",0)
+    False
+    >>> is_header("# title",0)
+    True
+    >>> is_header("### title",3)
+    True
+    >>> is_header("### title",2)
+    False
+        
+    """
     if max_level:
         return len(re.findall('^#{{1,{0}}} .+'.format(max_level),line))>0
     else:
-        return len(re.findall('^#* .+',line))>0        
+        return len(re.findall('^#* .+',line))>0   
+
+def header_level(line):
+    """
     
+    Examples
+    --------
+    >>> header_level('# title')
+    1
+    >>> header_level('### title')
+    3
+    """  
+    i=0
+    title = line + 'e'
+    while title[0] == "#":
+        i+=1
+        title = title[1:]
+    return i  
+
+def number_title(line,current_levels):
+    """
+    
+    Examples
+    --------
+    >>> number_title("# title",[])
+    ('# 1. title', [1])
+    >>> number_title("## title",[])
+    ('## 1.1. title', [1, 1])
+    >>> number_title("# title",[1,1])
+    ('# 2. title', [2])
+    >>> number_title("## title",[2,1])
+    ('## 2.2. title', [2, 2])
+    >>> number_title("### title a#bc",[2])
+    ('### 2.1.1. title a#bc', [2, 1, 1])
+    >>> number_title("### title a#bc",[2,1,2,3])
+    ('### 2.1.3. title a#bc', [2, 1, 3])
+    """
+    level = header_level(line)
+    assert level > 0
+    if len(current_levels) < level:
+        while len(current_levels) < level:
+            current_levels.append(1)
+    else:
+        current_levels = current_levels[:level]
+        current_levels[-1] += 1 
+    hashes, title = line.split(' ',1)
+    numbers = '.'.join([str(i) for i in current_levels])+'.'
+    new = ' '.join([hashes,numbers,title])
+    return new, current_levels
+        
 class MarkdownSlides(Preprocessor):
     """ a preprocessor to setup the notebook as an ipyslideshow,
     according to a set of rules 
@@ -80,6 +143,7 @@ class MarkdownSlides(Preprocessor):
     row_level = traits.Integer(0,min=0, help='maximum header level for new rows (0 indicates no maximum)').tag(config=True)
     header_slide = traits.Bool(False,help='if True, make the first header in a column appear on its own slide').tag(config=True)
     max_cells = traits.Integer(0,min=0,help='maximum number of nb cells per slide (0 indicates no maximum)').tag(config=True)
+    autonumbering = traits.Bool(False,help='append section numbering to titles, e.g. 1.1.1 Title').tag(config=True)
 
     latex_doc = traits.Bool(True,help='if True, obey latex_doc tags')
             
@@ -89,6 +153,7 @@ class MarkdownSlides(Preprocessor):
         latexdoc_tags = ['code','error','table','equation','figure','text']
         # break up titles
         cells_in_slide = 0
+        header_levels = []
         final_cells = FinalCells(self.header_slide)
         for i, cell in enumerate(nb.cells):
             
@@ -134,6 +199,9 @@ class MarkdownSlides(Preprocessor):
 
             nonheader_lines = []
             for line in cell.source.split('\n'):
+                
+                if is_header(line,0) and self.autonumbering:
+                    line, header_levels = number_title(line, header_levels[:])
                 
                 if is_header(line,self.column_level):
                     if nonheader_lines:

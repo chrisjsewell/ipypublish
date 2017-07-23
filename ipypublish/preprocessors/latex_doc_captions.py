@@ -20,8 +20,20 @@ class LatexCaptions(Preprocessor):
         for cell in nb.cells:
             if hasattr(cell.metadata, 'latex_doc'):
                 if hasattr(cell.metadata.latex_doc, 'caption'):
-                    captions[cell.metadata.latex_doc.caption] = cell.source.split(r'\n')[0]
-                    continue
+                    if cell.cell_type == 'markdown':
+                        capt = cell.source.split(r'\n')[0]
+                        captions[cell.metadata.latex_doc.caption] = capt
+                        continue
+                    #TODO can outputs have more than one item in its list?
+                    elif cell.cell_type == 'code':
+                        if "text/latex" in cell.outputs[0].get('data',{}):
+                            capt = cell.outputs[0].data["text/latex"].split(r'\n')[0]
+                            captions[cell.metadata.latex_doc.caption] = capt
+                            continue
+                        elif "text/plain" in cell.outputs[0].get('data',{}):
+                            capt = cell.outputs[0].data["text/plain"].split(r'\n')[0]
+                            captions[cell.metadata.latex_doc.caption] = capt
+                            continue
             final_cells.append(cell)
         nb.cells = final_cells  
         
