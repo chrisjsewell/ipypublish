@@ -469,7 +469,7 @@ For  **equations** (e.g. thos output by `sympy`), enter in cell metadata:
 
 Especially for long captions, it would be prefered that they can be viewed and edited in a notebook Markdown cell, rather than hidden in the metadata. This can be achieved using the default ipypublish converters:
 
-If a **markdown input** or **latex output** cell has the metadata tag:
+If a **markdown cell** or **code cell with latex/text output** has the metadata tag:
 
 ```json
 {
