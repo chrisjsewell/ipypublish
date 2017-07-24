@@ -12,7 +12,7 @@ class Test_main(object):
       {
        "cell_type": "markdown",
        "metadata": {},
-       "source": ["hallo"]
+       "source": ["# a title\n","\n","some text\n"]
       },
       {
        "cell_type": "code",
@@ -230,7 +230,7 @@ test123
         nb, path = nbmerge.merge_notebooks(self.file1)
         (body, resources), exe = nbexport.export_notebook(nb,'Latex',config,template)
         eq_(exe,'.tex')        
-        eq_(body.strip(),'hallo')
+        eq_(body.strip(),'# a title\n\nsome text')
         
     def test_nbexport_html_empty(self):
         template = ''
@@ -263,7 +263,7 @@ test123
         nb, path = nbmerge.merge_notebooks(self.file1)
         (body, resources), exe = nbexport.export_notebook(nb,'HTML',config,template)
         eq_(exe,'.html')        
-        eq_(body.strip(),'hallo')
+        eq_(body.strip(),'# a title\n\nsome text')
         
     def test_pdf_export(self):
 
