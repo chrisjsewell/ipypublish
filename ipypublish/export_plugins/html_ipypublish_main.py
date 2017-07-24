@@ -24,7 +24,8 @@ from ipypublish.filters.replace_string import replace_string
 oformat = 'HTML'   
 config = {'TemplateExporter.filters':{'replace_string':replace_string},
           'Exporter.filters':{'replace_string':replace_string},
-          'Exporter.preprocessors':[LatexDocLinks,LatexDocHTML,LatexTagsToHTML,LatexCaptions]}
+          'Exporter.preprocessors':[LatexDocLinks,LatexDocHTML,LatexTagsToHTML,LatexCaptions],
+          'LatexCaptions.add_prefix':True}
 
 template = create_tpl([
     document.tpl_dict, 

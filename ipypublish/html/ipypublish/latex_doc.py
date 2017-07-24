@@ -60,7 +60,7 @@ tpl_dict = {
 {%- if cell.metadata.latex_doc: -%}
 {%- if cell.metadata.latex_doc.code: -%}
 {%- if cell.metadata.latex_doc.code.caption: -%}
-<br>{{cell.metadata.latex_doc.code.caption}}
+<br>{{cell.metadata.latex_doc.code.caption | replace_string("{id_home_prefix}","#")}}
 {%- endif %}
 <div class="input_code">
 <div class="cell border-box-sizing code_cell rendered">
@@ -219,7 +219,6 @@ tpl_dict = {
 {%- if meta.latex_doc: -%}
     {%- if meta.latex_doc.figure: -%}
 
-
     {%- if meta.latex_doc.figure.label: -%}
 <a id="{{meta.latex_doc.figure.label}}" class="anchor-link" name="#{{meta.latex_doc.figure.label}}"></a>
     {% if resources.refslide.setdefault(meta.latex_doc.figure.label, 
@@ -245,7 +244,7 @@ tpl_dict = {
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-{{meta.latex_doc.figure.caption}}
+{{meta.latex_doc.figure.caption | replace_string("{id_home_prefix}","#")}}
 </div>
 </div>
 </div>
@@ -304,7 +303,7 @@ tpl_dict = {
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html"> 
-{{meta.latex_doc.table.caption}}
+{{meta.latex_doc.table.caption | replace_string("{id_home_prefix}","#")}}
 </div>
 </div>
 </div>

@@ -4,14 +4,13 @@ from nbformat.notebooknode import NotebookNode
 import traitlets as traits
 
 class LatexDocHTML(Preprocessor):
-    """ processing of latex_doc metatags, specific to html
+    r""" processing of latex_doc metatags, specific to html
     
-    add prefixes to figure/table/code captions, with correct numbering
-    add reference naming lookup to resources
-    import embedded html files
-    
-    NB: if there are captions in markdown cells, 
-    then should be applied after LatexDocLinks, in order to have captions with correct numbering
+    - import embedded html files
+    - add refmap key to references for {label:reference name} lookup
+      e.g. {"fig:test":"fig. 1"}
+    - add caption_prefix tag for floats with correct numbering/name
+      e.g. cell.metadata.latex_doc.figure.caption_prefix = "Figure 1: "
     
     """
     
@@ -102,9 +101,7 @@ class LatexDocHTML(Preprocessor):
                         float_count[floattype] += 1
                         if not isinstance(cell.metadata.latex_doc[floattype],dict):
                             continue
-                        if 'caption' in cell.metadata.latex_doc[floattype]:
-                            newcaption =  '<b>{0} {1}: </b>'.format(floattype.capitalize(),float_count[floattype]) + cell.metadata.latex_doc[floattype].caption
-                            cell.metadata.latex_doc[floattype].caption = newcaption
+                        cell.metadata.latex_doc[floattype]['caption_prefix'] = '<b>{0} {1}:</b> '.format(floattype.capitalize(),float_count[floattype])
                         if 'label' in cell.metadata.latex_doc[floattype]:
                             resources.setdefault('refmap',{})[cell.metadata.latex_doc[floattype]['label']] = '{0} {1}'.format(floatabbr,float_count[floattype])
                     

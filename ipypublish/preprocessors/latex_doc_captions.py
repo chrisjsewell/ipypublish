@@ -9,6 +9,8 @@ class LatexCaptions(Preprocessor):
     2. find cells with the found labels and replace their captions
     
     """
+    
+    add_prefix = traits.Bool(False,help="add float type/number prefix to caption (from caption_prefix tag)").tag(config=True)
             
     def preprocess(self, nb, resources):
                 
@@ -20,6 +22,7 @@ class LatexCaptions(Preprocessor):
         for cell in nb.cells:
             if hasattr(cell.metadata, 'latex_doc'):
                 if hasattr(cell.metadata.latex_doc, 'caption'):
+                                        
                     if cell.cell_type == 'markdown':
                         capt = cell.source.split(r'\n')[0]
                         captions[cell.metadata.latex_doc.caption] = capt
@@ -34,6 +37,7 @@ class LatexCaptions(Preprocessor):
                             capt = cell.outputs[0].data["text/plain"].split(r'\n')[0]
                             captions[cell.metadata.latex_doc.caption] = capt
                             continue
+
             final_cells.append(cell)
         nb.cells = final_cells  
         
@@ -45,6 +49,13 @@ class LatexCaptions(Preprocessor):
                         if cell.metadata.latex_doc[key]['label'] in captions:
                             logging.debug('replacing caption for: {}'.format(cell.metadata.latex_doc[key]['label']))
                             cell.metadata.latex_doc[key]['caption'] = captions[cell.metadata.latex_doc[key]['label']]
-                
+                            
+                    # add float type/number prefix to caption, if required
+                    if self.add_prefix:
+                        if hasattr(cell.metadata.latex_doc[key], 'caption'):
+                            if hasattr(cell.metadata.latex_doc[key], 'caption_prefix'):                    
+                                newcaption = cell.metadata.latex_doc[key].caption_prefix + cell.metadata.latex_doc[key].caption
+                                cell.metadata.latex_doc[key].caption = newcaption
+                    
         
         return nb, resources

@@ -39,7 +39,7 @@ class LatexTagsToHTML(Preprocessor):
                             help="the regex to identify latex tags").tag(config=True)
     bibformat = traits.Unicode("{author}, {year}.",
                             help=r"the format to output \cite{} tags found in the bibliography").tag(config=True)
-    labelbycolon = traits.Bool(True,help=r'create reference label based on text before colon, e.g. \ref{fig:example} -> fig 1')
+    labelbycolon = traits.Bool(True,help=r'create reference label based on text before colon, e.g. \ref{fig:example} -> fig 1').tag(config=True)
     
     def __init__(self, *args, **kwargs):
         # a dictionary to keep track of references, so they each get a different number

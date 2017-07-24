@@ -6,7 +6,7 @@ tpl_dict = {
 
 "globals":r"""
 {% set slidecolumn = [] %}"
-{% set sliderow = {} %}"
+{% set sliderow = {'len':[]} %}"
 """,
 
 'html_body_start':r"""
@@ -26,9 +26,9 @@ tpl_dict = {
 {%- endif -%}
 
 {%- if cell.metadata.ipyslides == 'first_cell' -%}
-<section>
 {% if slidecolumn.append('1') %}{% endif %}  
-{% if sliderow.clear() %}{% endif %}  
+{% if sliderow.update({'len':[]}) %}{% endif %}  
+<section>
 {{ super() }}
 {%- endif -%}
 
@@ -41,7 +41,7 @@ tpl_dict = {
 
 {%- if cell.metadata.ipyslides == 'horizontalbreak_after_novertical' -%}
 {% if slidecolumn.append('1') %}{% endif %}  
-{% if sliderow.clear() %}{% endif %}  
+{% if sliderow.update({'len':[]}) %}{% endif %}  
 <section>
 {{ super() }}
 </section>
@@ -49,7 +49,7 @@ tpl_dict = {
 
 {%- if cell.metadata.ipyslides == 'horizontalbreak_after_plusvertical' -%}
 {% if slidecolumn.append('1') %}{% endif %}  
-{% if sliderow.clear() %}{% endif %}  
+{% if sliderow.update({'len':[]}) %}{% endif %}  
 <section>
 <section>
 {{ super() }}
@@ -59,7 +59,7 @@ tpl_dict = {
 
 {%- if cell.metadata.ipyslides == 'horizontalbreak_after' -%}
 {% if slidecolumn.append('1') %}{% endif %}  
-{% if sliderow.clear() %}{% endif %}  
+{% if sliderow.update({'len':[]}) %}{% endif %}  
 <section>
 <section>
 {{ super() }}
@@ -71,7 +71,7 @@ tpl_dict = {
 {%- endif -%}
 
 {%- if cell.metadata.ipyslides == 'verticalbreak_after' -%}
-{% if sliderow.get('len',[]).append('1') %}{% endif %} 
+{% if sliderow['len'].append('1') %}{% endif %} 
 </section>
 <section>
 {{ super() }}

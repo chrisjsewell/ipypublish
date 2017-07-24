@@ -52,7 +52,8 @@ config = {'TemplateExporter.filters':{'replace_string':replace_string},
           'Exporter.filters':{'replace_string':replace_string},
           'Exporter.preprocessors':[MetaDefaults,LatexDocLinks,LatexDocHTML,LatexTagsToHTML,LatexCaptions],
           'MetaDefaults.cell_defaults':cell_defaults,
-          'MetaDefaults.nb_defaults':nb_defaults}
+          'MetaDefaults.nb_defaults':nb_defaults,
+          'LatexCaptions.add_prefix':True}
           
 template = create_tpl([
     document.tpl_dict, 

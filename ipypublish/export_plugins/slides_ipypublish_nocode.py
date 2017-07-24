@@ -63,7 +63,7 @@ config = {'TemplateExporter.filters':_filters,
           'MarkdownSlides.autonumbering':True,
           'MetaDefaults.cell_defaults':cell_defaults,
           'MetaDefaults.nb_defaults':nb_defaults,
-          }
+          'LatexCaptions.add_prefix':True}
 
 template = create_tpl([
     content.tpl_dict, content_tagging.tpl_dict,
