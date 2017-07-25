@@ -26,7 +26,7 @@ _filters = {'remove_dollars': remove_dollars,
         'dict_to_kwds':dict_to_kwds}
         
 cell_defaults = {
-  "latex_doc": {
+  "ipub": {
     "figure": {
       "placement": "H"
     },
@@ -41,7 +41,7 @@ cell_defaults = {
 }
 
 nb_defaults={
-"latex_doc": {
+"ipub": {
   "titlepage":{},
   "toc": True,
   "listfigures": True,

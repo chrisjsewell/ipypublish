@@ -4,13 +4,13 @@ from nbformat.notebooknode import NotebookNode
 import traitlets as traits
 
 class LatexDocHTML(Preprocessor):
-    r""" processing of latex_doc metatags, specific to html
+    r""" processing of ipub metatags, specific to html
     
     - import embedded html files
     - add refmap key to references for {label:reference name} lookup
       e.g. {"fig:test":"fig. 1"}
     - add caption_prefix tag for floats with correct numbering/name
-      e.g. cell.metadata.latex_doc.figure.caption_prefix = "Figure 1: "
+      e.g. cell.metadata.ipub.figure.caption_prefix = "Figure 1: "
     
     """
     
@@ -31,7 +31,7 @@ class LatexDocHTML(Preprocessor):
     def create_embed_cell(self, cell):
         """ a new cell, based on embedded html file
         """
-        fpath = self.resolve_path(cell.metadata.latex_doc.embed_html.filepath, self.metapath)
+        fpath = self.resolve_path(cell.metadata.ipub.embed_html.filepath, self.metapath)
         logging.info('attmepting to embed html in notebook from:'
                             ': {}'.format(fpath))
         if not os.path.exists(fpath):
@@ -52,23 +52,23 @@ class LatexDocHTML(Preprocessor):
             return False
 
         # if 'head' in embed_data:
-        #     if not hasattr(nb.metadata, 'latex_doc'):
-        #         nb.metadata.latex_doc = {}
-        #     if not hasattr(nb.metadata.latex_doc, 'html_head'):
-        #         nb.metadata.latex_doc.html_head = []
+        #     if not hasattr(nb.metadata, 'ipub'):
+        #         nb.metadata.ipub = {}
+        #     if not hasattr(nb.metadata.ipub, 'html_head'):
+        #         nb.metadata.ipub.html_head = []
         #     for head in embed_data['head']:
-        #         if head not in nb.metadata.latex_doc.html_head:
-        #             nb.metadata.latex_doc.html_head.append(head)
+        #         if head not in nb.metadata.ipub.html_head:
+        #             nb.metadata.ipub.html_head.append(head)
 
         cell.outputs.append(NotebookNode({"data": {"text/html": embed_data},
          "execution_count": 0,
          "metadata": {},
          "output_type": "execute_result"}))
-        #meta = cell.metadata.latex_doc.pop('embed_html')
+        #meta = cell.metadata.ipub.pop('embed_html')
         # newcell = {
         # "cell_type": "code",
         # "execution_count": 0,
-        # "metadata": {'latex_doc':{'figure':meta}},
+        # "metadata": {'ipub':{'figure':meta}},
         # "outputs": [
         # {"data": {"text/html": body},
         #  "execution_count": 0,
@@ -83,27 +83,27 @@ class LatexDocHTML(Preprocessor):
     def preprocess(self, nb, resources):
         
         logging.info('processing notebook for html output'+
-                     ' in latex_doc metadata to: {}'.format(self.metapath)) 
+                     ' in ipub metadata to: {}'.format(self.metapath)) 
         
         final_cells = []
         float_count = dict([('figure',0),('table',0),('code',0),('text',0),('error',0)])
         for i, cell in enumerate(nb.cells):
-            if hasattr(cell.metadata, 'latex_doc'):
-                if hasattr(cell.metadata.latex_doc, 'embed_html'):
-                    if hasattr(cell.metadata.latex_doc.embed_html,'filepath'): 
+            if hasattr(cell.metadata, 'ipub'):
+                if hasattr(cell.metadata.ipub, 'embed_html'):
+                    if hasattr(cell.metadata.ipub.embed_html,'filepath'): 
                         self.create_embed_cell(cell)
                     else:
                         logging.warning('cell {} has no filepath key in its metadata.embed_html'.format(i)) 
                         
                 for floattype, floatabbr in [('figure','fig.'),('table','tbl.'),('code','code'),
                                               ('text','text'),('error','error')]:
-                    if floattype in cell.metadata.latex_doc:
+                    if floattype in cell.metadata.ipub:
                         float_count[floattype] += 1
-                        if not isinstance(cell.metadata.latex_doc[floattype],dict):
+                        if not isinstance(cell.metadata.ipub[floattype],dict):
                             continue
-                        cell.metadata.latex_doc[floattype]['caption_prefix'] = '<b>{0} {1}:</b> '.format(floattype.capitalize(),float_count[floattype])
-                        if 'label' in cell.metadata.latex_doc[floattype]:
-                            resources.setdefault('refmap',{})[cell.metadata.latex_doc[floattype]['label']] = '{0} {1}'.format(floatabbr,float_count[floattype])
+                        cell.metadata.ipub[floattype]['caption_prefix'] = '<b>{0} {1}:</b> '.format(floattype.capitalize(),float_count[floattype])
+                        if 'label' in cell.metadata.ipub[floattype]:
+                            resources.setdefault('refmap',{})[cell.metadata.ipub[floattype]['label']] = '{0} {1}'.format(floatabbr,float_count[floattype])
                     
             final_cells.append(cell)
         nb.cells = final_cells                    

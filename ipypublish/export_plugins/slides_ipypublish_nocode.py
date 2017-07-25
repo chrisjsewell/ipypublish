@@ -28,7 +28,7 @@ oformat = 'Slides'
 _filters = {'replace_string':replace_string}
             
 cell_defaults = {
-  "latex_doc": {
+  "ipub": {
     "figure": {
       "placement": "H"
     },
@@ -43,7 +43,7 @@ cell_defaults = {
 }
 
 nb_defaults={
-"latex_doc": {
+"ipub": {
   "titlepage":{},
   "toc": True,
   "listfigures": False,

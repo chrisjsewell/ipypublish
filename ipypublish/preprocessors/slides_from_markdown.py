@@ -130,9 +130,9 @@ class MarkdownSlides(Preprocessor):
     
     - respect existing 'slideshow.notes' and 'slideshow.skip' cell tags
     - markdown cells containaing # headers are broken into individual cells
-    - if latex_doc=True, 
-        - any cells where latex_doc.ignore=True is set to 'skip'
-        - any code cells with no other latex_doc tags are set to 'skip'
+    - if ipub=True, 
+        - any cells where ipub.ignore=True is set to 'skip'
+        - any code cells with no other ipub tags are set to 'skip'
     - any header level >= column_level starts a new column
     - else, any header level >= row_level starts a new row
     - if max_cells is not 0, then breaks to a new row after <max_cells> cells
@@ -145,7 +145,7 @@ class MarkdownSlides(Preprocessor):
     max_cells = traits.Integer(0,min=0,help='maximum number of nb cells per slide (0 indicates no maximum)').tag(config=True)
     autonumbering = traits.Bool(False,help='append section numbering to titles, e.g. 1.1.1 Title').tag(config=True)
 
-    latex_doc = traits.Bool(True,help='if True, obey latex_doc tags')
+    ipub = traits.Bool(True,help='if True, obey ipub tags')
             
     def preprocess(self, nb, resources):
                 
@@ -161,8 +161,8 @@ class MarkdownSlides(Preprocessor):
             cell.metadata.slideshow = cell.metadata.get('slideshow', NotebookNode())
             cell.metadata.slideshow.slide_type = cell.metadata.slideshow.get('slide_type', '-')
             cell.metadata.ipyslides = cell.metadata.get('ipyslides', NotebookNode()) 
-            if self.latex_doc:               
-                cell.metadata.latex_doc = cell.metadata.get('latex_doc', NotebookNode())                
+            if self.ipub:               
+                cell.metadata.ipub = cell.metadata.get('ipub', NotebookNode())                
             
             # ignore these cells 
             if cell.metadata.slideshow.slide_type == 'skip':
@@ -176,14 +176,14 @@ class MarkdownSlides(Preprocessor):
                 continue
 
             if not cell.cell_type == "markdown":
-                if cell.metadata.latex_doc and self.latex_doc:
-                    if cell.metadata.latex_doc.get('ignore',False):
-                        if cell.metadata.latex_doc.ignore:
+                if cell.metadata.ipub and self.ipub:
+                    if cell.metadata.ipub.get('ignore',False):
+                        if cell.metadata.ipub.ignore:
                             cell.metadata.ipyslides = 'skip'
                             final_cells.append(cell)
                             continue      
                     #TODO this doesn't test if the data is actually available to be output                  
-                    if not any([cell.metadata.latex_doc.get(typ,False) for typ in latexdoc_tags]):
+                    if not any([cell.metadata.ipub.get(typ,False) for typ in latexdoc_tags]):
                         cell.metadata.ipyslides = 'skip'
                         final_cells.append(cell)
                         continue                                                

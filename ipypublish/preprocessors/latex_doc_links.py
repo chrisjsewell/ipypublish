@@ -3,7 +3,7 @@ from nbconvert.preprocessors import Preprocessor
 import traitlets as traits
 
 class LatexDocLinks(Preprocessor):
-    """ a preprocessor to resolve file paths in the latex_doc metadata section 
+    """ a preprocessor to resolve file paths in the ipub metadata section 
     
     retrieve external file paths from metadata,
     resolve where they are, if the path is relative
@@ -25,13 +25,13 @@ class LatexDocLinks(Preprocessor):
     def preprocess(self, nb, resources):
         
         logging.info('resolving external file paths'+
-                     ' in latex_doc metadata to: {}'.format(self.metapath)) 
+                     ' in ipub metadata to: {}'.format(self.metapath)) 
         external_files = []
-        if hasattr(nb.metadata, 'latex_doc'):
+        if hasattr(nb.metadata, 'ipub'):
                 
-            # if hasattr(nb.metadata.latex_doc, 'files'):
+            # if hasattr(nb.metadata.ipub, 'files'):
             #     mfiles = []
-            #     for fpath in nb.metadata.latex_doc.files:
+            #     for fpath in nb.metadata.ipub.files:
             #         fpath = self.resolve_path(fpath, self.metapath)
             #         if not os.path.exists(fpath):
             #             logging.warning('file in metadata does not exist'
@@ -40,10 +40,10 @@ class LatexDocLinks(Preprocessor):
             #             external_files.append(fpath)
             #         mfiles.append(os.path.join(self.filesfolder, os.path.basename(fpath)))
             #
-            #     nb.metadata.latex_doc.files = mfiles
+            #     nb.metadata.ipub.files = mfiles
                         
-            if hasattr(nb.metadata.latex_doc, 'bibliography'):                    
-                bib = nb.metadata.latex_doc.bibliography
+            if hasattr(nb.metadata.ipub, 'bibliography'):                    
+                bib = nb.metadata.ipub.bibliography
                 bib = self.resolve_path(bib, self.metapath)
                 if not os.path.exists(bib):
                     logging.warning('bib in metadata does not exist'
@@ -52,12 +52,12 @@ class LatexDocLinks(Preprocessor):
                     external_files.append(bib)
                     resources['bibliopath'] = bib
 
-                nb.metadata.latex_doc.bibliography = os.path.join(self.filesfolder,
+                nb.metadata.ipub.bibliography = os.path.join(self.filesfolder,
                                                                 os.path.basename(bib))
             
-            if hasattr(nb.metadata.latex_doc, 'titlepage'):
-                if hasattr(nb.metadata.latex_doc.titlepage, 'logo'):
-                    logo = nb.metadata.latex_doc.titlepage.logo
+            if hasattr(nb.metadata.ipub, 'titlepage'):
+                if hasattr(nb.metadata.ipub.titlepage, 'logo'):
+                    logo = nb.metadata.ipub.titlepage.logo
                     logo = self.resolve_path(logo, self.metapath)
                     if not os.path.exists(logo):
                         logging.warning('logo in metadata does not exist'
@@ -65,7 +65,7 @@ class LatexDocLinks(Preprocessor):
                     else:
                         external_files.append(logo)
 
-                    nb.metadata.latex_doc.titlepage.logo = os.path.join(self.filesfolder,
+                    nb.metadata.ipub.titlepage.logo = os.path.join(self.filesfolder,
                                                                os.path.basename(logo))
         resources.setdefault("external_file_paths", [])
         resources['external_file_paths'] += external_files               

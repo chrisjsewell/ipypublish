@@ -21,7 +21,7 @@
 
 tpl_dict = {
     
-'meta_docstring':""" caption and label elements according to latex_doc meta tags  """,
+'meta_docstring':""" caption and label elements according to ipub meta tags  """,
 'overwrite':['notebook_output','notebook_all','notebook_input_markdown',
             'notebook_input_code','notebook_input_code_pre','notebook_input_code_post',
             'notebook_output_text','notebook_output_stream_stderr','notebook_output_stream_stdout'],
@@ -45,8 +45,8 @@ tpl_dict = {
 """,
 
 'notebook_all':r"""
-{%- if cell.metadata.latex_doc: -%}
-    {%- if cell.metadata.latex_doc.ignore: -%}
+{%- if cell.metadata.ipub: -%}
+    {%- if cell.metadata.ipub.ignore: -%}
     {%- else -%}
 {{ super() }}
     {%- endif %}
@@ -57,10 +57,10 @@ tpl_dict = {
 
 
 'notebook_input_code_pre':r"""
-{%- if cell.metadata.latex_doc: -%}
-{%- if cell.metadata.latex_doc.code: -%}
-{%- if cell.metadata.latex_doc.code.caption: -%}
-<br>{{cell.metadata.latex_doc.code.caption | replace_string("{id_home_prefix}","#")}}
+{%- if cell.metadata.ipub: -%}
+{%- if cell.metadata.ipub.code: -%}
+{%- if cell.metadata.ipub.code.caption: -%}
+<br>{{cell.metadata.ipub.code.caption | replace_string("{id_home_prefix}","#")}}
 {%- endif %}
 <div class="input_code">
 <div class="cell border-box-sizing code_cell rendered">
@@ -69,13 +69,13 @@ tpl_dict = {
 {%- endif %}  
 """,
 'notebook_input_code':r"""
-{%- if cell.metadata.latex_doc: -%}
-{%- if cell.metadata.latex_doc.code: -%}
+{%- if cell.metadata.ipub: -%}
+{%- if cell.metadata.ipub.code: -%}
 <div class="inner_cell">
 <div class="input_area">
-{%- if cell.metadata.latex_doc.code.label: -%}
-<a id="{{cell.metadata.latex_doc.code.label}}" class="anchor-link" name="#{{cell.metadata.latex_doc.code.label}}"></a>
-{% if resources.refslide.setdefault(cell.metadata.latex_doc.code.label, 
+{%- if cell.metadata.ipub.code.label: -%}
+<a id="{{cell.metadata.ipub.code.label}}" class="anchor-link" name="#{{cell.metadata.ipub.code.label}}"></a>
+{% if resources.refslide.setdefault(cell.metadata.ipub.code.label, 
             (slidecolumn | length - 1,sliderow.get('len',[]) | length)) %}{% endif %} 
 {%- endif %}
 {{ cell.source | highlight_code(metadata=cell.metadata) }}
@@ -85,8 +85,8 @@ tpl_dict = {
 {%- endif %}   
 """,
 'notebook_input_code_post':r"""
-{%- if cell.metadata.latex_doc: -%}
-{%- if cell.metadata.latex_doc.code: -%}
+{%- if cell.metadata.ipub: -%}
+{%- if cell.metadata.ipub.code: -%}
 </div>
 </div>
 </div>
@@ -99,16 +99,16 @@ tpl_dict = {
 """,
 
 'notebook_output':r"""
-{%- if cell.metadata.latex_doc: -%}
-    {%- if cell.metadata.latex_doc.figure: -%}
+{%- if cell.metadata.ipub: -%}
+    {%- if cell.metadata.ipub.figure: -%}
 {{ super() }}    
-    {%- elif cell.metadata.latex_doc.table: -%}
+    {%- elif cell.metadata.ipub.table: -%}
 {{ super() }}    
-    {%- elif cell.metadata.latex_doc.equation: -%}
+    {%- elif cell.metadata.ipub.equation: -%}
 {{ super() }}    
-    {%- elif cell.metadata.latex_doc.text: -%}
+    {%- elif cell.metadata.ipub.text: -%}
 {{ super() }}    
-    {%- elif cell.metadata.latex_doc.error: -%}
+    {%- elif cell.metadata.ipub.error: -%}
 {{ super() }}    
     {%- endif %}   
 {%- else -%}
@@ -117,24 +117,24 @@ tpl_dict = {
 """,
 
 'notebook_output_text':r"""
-{%- if cell.metadata.latex_doc: -%}
-    {%- if cell.metadata.latex_doc.text: -%}
+{%- if cell.metadata.ipub: -%}
+    {%- if cell.metadata.ipub.text: -%}
 {{- output.data['text/plain'] | ansi2html -}}
     {%- endif %}
 {%- endif %}
 """,
 
 'notebook_output_stream_stderr':r"""
-{%- if cell.metadata.latex_doc: -%}
-    {%- if cell.metadata.latex_doc.text: -%}
+{%- if cell.metadata.ipub: -%}
+    {%- if cell.metadata.ipub.text: -%}
 {{- output.text | ansi2html -}}
     {%- endif %}
 {%- endif %}
 """,
 
 'notebook_output_stream_stdout':r"""
-{%- if cell.metadata.latex_doc: -%}
-    {%- if cell.metadata.latex_doc.text: -%}
+{%- if cell.metadata.ipub: -%}
+    {%- if cell.metadata.ipub.text: -%}
 {{- output.text | ansi2html -}}
     {%- endif %}
 {%- endif %}
@@ -216,12 +216,12 @@ tpl_dict = {
 'jinja_macros':r"""
 
 {% macro make_figure_pre(meta) -%}
-{%- if meta.latex_doc: -%}
-    {%- if meta.latex_doc.figure: -%}
+{%- if meta.ipub: -%}
+    {%- if meta.ipub.figure: -%}
 
-    {%- if meta.latex_doc.figure.label: -%}
-<a id="{{meta.latex_doc.figure.label}}" class="anchor-link" name="#{{meta.latex_doc.figure.label}}"></a>
-    {% if resources.refslide.setdefault(meta.latex_doc.figure.label, 
+    {%- if meta.ipub.figure.label: -%}
+<a id="{{meta.ipub.figure.label}}" class="anchor-link" name="#{{meta.ipub.figure.label}}"></a>
+    {% if resources.refslide.setdefault(meta.ipub.figure.label, 
         (slidecolumn | length - 1,sliderow.get('len',[]) | length)) %}{% endif %} 
     {%- endif %}
     {%- endif %}
@@ -229,22 +229,22 @@ tpl_dict = {
 {%- endmacro %}
 
 {% macro make_figure_post(meta) -%}
-{%- if meta.latex_doc: -%}
-    {%- if meta.latex_doc.figure: -%}
+{%- if meta.ipub: -%}
+    {%- if meta.ipub.figure: -%}
 
     {%- endif %}
 {%- endif %}
 {%- endmacro %}
 
 {% macro figure_caption(meta) -%}
-{%- if meta.latex_doc: -%}
-{%- if meta.latex_doc.figure: -%}
-{%- if meta.latex_doc.figure.caption: -%}
+{%- if meta.ipub: -%}
+{%- if meta.ipub.figure: -%}
+{%- if meta.ipub.figure.caption: -%}
 <div class="output_area">
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-{{meta.latex_doc.figure.caption | replace_string("{id_home_prefix}","#")}}
+{{meta.ipub.figure.caption | replace_string("{id_home_prefix}","#")}}
 </div>
 </div>
 </div>
@@ -255,12 +255,12 @@ tpl_dict = {
 {%- endmacro %}
 
 {% macro make_table_pre(meta) -%}
-{%- if meta.latex_doc: -%}
-    {%- if meta.latex_doc.table: -%}
+{%- if meta.ipub: -%}
+    {%- if meta.ipub.table: -%}
 
-        {%- if meta.latex_doc.table.label: -%}
-<a id="{{meta.latex_doc.table.label}}" class="anchor-link" name="#{{meta.latex_doc.table.label}}"></a>
-           {% if resources.refslide.setdefault(meta.latex_doc.table.label, 
+        {%- if meta.ipub.table.label: -%}
+<a id="{{meta.ipub.table.label}}" class="anchor-link" name="#{{meta.ipub.table.label}}"></a>
+           {% if resources.refslide.setdefault(meta.ipub.table.label, 
                (slidecolumn | length - 1,sliderow.get('len',[]) | length)) %}{% endif %} 
         {%- endif %}
     {%- endif %}
@@ -269,26 +269,26 @@ tpl_dict = {
 {%- endmacro %}
 
 {% macro make_table_post(meta) -%}
-{%- if meta.latex_doc: -%}
-    {%- if meta.latex_doc.table: -%}
+{%- if meta.ipub: -%}
+    {%- if meta.ipub.table: -%}
 
     {%- endif %}
 {%- endif %}
 {%- endmacro %}
 
 {% macro make_equation_pre(meta) -%}
-{%- if meta.latex_doc: -%}
-    {%- if meta.latex_doc.equation: -%}
+{%- if meta.ipub: -%}
+    {%- if meta.ipub.equation: -%}
     {%- endif %}
 {%- endif %}
 {%- endmacro %}
 
 {% macro make_equation_post(meta) -%}
-{%- if meta.latex_doc: -%}
-    {%- if meta.latex_doc.equation: -%}
-        {%- if meta.latex_doc.equation.label: -%}
-<a id="{{meta.latex_doc.equation.label}}" class="anchor-link" name="#{{meta.latex_doc.equation.label}}"></a>
-           {% if resources.refslide.setdefault(meta.latex_doc.equation.label, 
+{%- if meta.ipub: -%}
+    {%- if meta.ipub.equation: -%}
+        {%- if meta.ipub.equation.label: -%}
+<a id="{{meta.ipub.equation.label}}" class="anchor-link" name="#{{meta.ipub.equation.label}}"></a>
+           {% if resources.refslide.setdefault(meta.ipub.equation.label, 
                (slidecolumn | length - 1,sliderow.get('len',[]) | length)) %}{% endif %} 
         {%- endif %}
     {%- endif %}
@@ -296,14 +296,14 @@ tpl_dict = {
 {%- endmacro %}
 
 {% macro table_caption(meta) -%}
-{%- if meta.latex_doc: -%}
-{%- if meta.latex_doc.table: -%}
-{%- if meta.latex_doc.table.caption: -%}
+{%- if meta.ipub: -%}
+{%- if meta.ipub.table: -%}
+{%- if meta.ipub.table.caption: -%}
 <div class="output_area">
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html"> 
-{{meta.latex_doc.table.caption | replace_string("{id_home_prefix}","#")}}
+{{meta.ipub.table.caption | replace_string("{id_home_prefix}","#")}}
 </div>
 </div>
 </div>

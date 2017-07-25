@@ -186,13 +186,13 @@ class LatexTagsToHTML(Preprocessor):
             
         for cell in nb.cells:
             
-            if "latex_doc" in cell['metadata']:
-                for key in cell['metadata']["latex_doc"]:
+            if "ipub" in cell['metadata']:
+                for key in cell['metadata']["ipub"]:
                     if not isinstance(key,dict):
                         continue
-                    if "caption" in cell['metadata']["latex_doc"][key]:
-                        text = cell['metadata']["latex_doc"][key]["caption"]
-                        cell['metadata']["latex_doc"][key]["caption"] = self.convert(text,resources)
+                    if "caption" in cell['metadata']["ipub"][key]:
+                        text = cell['metadata']["ipub"][key]["caption"]
+                        cell['metadata']["ipub"][key]["caption"] = self.convert(text,resources)
                 
             if not cell['cell_type'] == "markdown":
                 continue         

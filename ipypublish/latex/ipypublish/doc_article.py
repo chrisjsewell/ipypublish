@@ -80,24 +80,24 @@ nohead,includefoot,footskip=25pt}
 	\renewcommand\thefigure{\thesection.\arabic{figure}}
 	\renewcommand\theequation{\thesection.\arabic{equation}}
     
-    ((*- if nb.metadata.latex_doc: *))
+    ((*- if nb.metadata.ipub: *))
 
         % set global options for float placement
         \makeatletter
           \providecommand*\setfloatlocations[2]{\@namedef{fps@#1}{#2}}
         \makeatother
 
-        ((*- if nb.metadata.latex_doc.table: -*))
-        ((*- if nb.metadata.latex_doc.table.placement: *))   
+        ((*- if nb.metadata.ipub.table: -*))
+        ((*- if nb.metadata.ipub.table.placement: *))   
          
-        \setfloatlocations{table}{((( nb.metadata.latex_doc.table.placement )))}
+        \setfloatlocations{table}{((( nb.metadata.ipub.table.placement )))}
 
         ((*- endif *))
         ((*- endif *))
-        ((*- if nb.metadata.latex_doc.figure: -*))
-        ((*- if nb.metadata.latex_doc.figure.placement: *))   
+        ((*- if nb.metadata.ipub.figure: -*))
+        ((*- if nb.metadata.ipub.figure.placement: *))   
          
-        \setfloatlocations{figure}{((( nb.metadata.latex_doc.figure.placement )))}
+        \setfloatlocations{figure}{((( nb.metadata.ipub.figure.placement )))}
         
         ((*- endif *))
         ((*- endif *))

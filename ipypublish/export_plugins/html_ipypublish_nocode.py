@@ -25,7 +25,7 @@ from ipypublish.preprocessors.latex_doc_defaults import MetaDefaults
 oformat = 'HTML'   
 
 cell_defaults = {
-  "latex_doc": {
+  "ipub": {
     "figure": {
       "placement": "H"
     },
@@ -40,7 +40,7 @@ cell_defaults = {
 }
 
 nb_defaults={
-"latex_doc": {
+"ipub": {
   "titlepage":{},
   "toc": True,
   "listfigures": False,

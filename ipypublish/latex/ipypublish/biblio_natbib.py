@@ -9,9 +9,9 @@ tplx_dict = {
 """,
 
 'document_bibliography':r"""
-((*- if nb.metadata.latex_doc: -*))
-((*- if nb.metadata.latex_doc.bibliography: -*))
-((* set filename = nb.metadata.latex_doc.bibliography | posix_path *))
+((*- if nb.metadata.ipub: -*))
+((*- if nb.metadata.ipub.bibliography: -*))
+((* set filename = nb.metadata.ipub.bibliography | posix_path *))
 
 % sort citations by order of first appearance
 \bibliographystyle{unsrtnat}

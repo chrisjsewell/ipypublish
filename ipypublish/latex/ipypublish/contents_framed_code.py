@@ -95,19 +95,19 @@ tplx_dict = {
 'jinja_macros':r"""
 ((* macro draw_text(meta,source,type,options) -*))
 
-((*- if meta.latex_doc: -*))
+((*- if meta.ipub: -*))
 
-((*- if meta.latex_doc[type] -*))
+((*- if meta.ipub[type] -*))
 
-((*- if meta.latex_doc[type].asfloat: -*))
-    ((*- if meta.latex_doc[type].placement: -*))
-        ((*- if meta.latex_doc[type].widefigure: -*))
-    \begin{(((type)))cell*}[((meta.latex_doc[type].placement)))]
+((*- if meta.ipub[type].asfloat: -*))
+    ((*- if meta.ipub[type].placement: -*))
+        ((*- if meta.ipub[type].widefigure: -*))
+    \begin{(((type)))cell*}[((meta.ipub[type].placement)))]
         ((*- else -*))
-    \begin{(((type)))cell}[(((meta.latex_doc[type].placement)))]
+    \begin{(((type)))cell}[(((meta.ipub[type].placement)))]
         ((*- endif *))
     ((*- else -*))
-        ((*- if meta.latex_doc[type].widefigure: -*))
+        ((*- if meta.ipub[type].widefigure: -*))
     \begin{(((type)))cell*}
         ((*- else -*))
     \begin{(((type)))cell}
@@ -117,10 +117,10 @@ tplx_dict = {
 
     ((* set captionfound = false *))
 
-    ((*- if meta.latex_doc[type].label: -*))
+    ((*- if meta.ipub[type].label: -*))
          ((*- if resources.captions: -*))
-             ((*- if resources.captions[meta.latex_doc[type].label]: -*))
-                 \caption{((( resources.captions[meta.latex_doc[type].label] )))}
+             ((*- if resources.captions[meta.ipub[type].label]: -*))
+                 \caption{((( resources.captions[meta.ipub[type].label] )))}
                  ((* set captionfound = true *))
              ((*- endif *))
          ((*- endif *))
@@ -128,26 +128,26 @@ tplx_dict = {
 
 
     ((*- if captionfound == false -*))
-    ((*- if meta.latex_doc[type].caption: -*))
-    \caption{((( meta.latex_doc[type].caption )))}
+    ((*- if meta.ipub[type].caption: -*))
+    \caption{((( meta.ipub[type].caption )))}
     ((*- endif *))
     ((*- endif *))
 
 ((*- endif *))
 
-((*- if meta.latex_doc[type].label: -*))
-\label{((( meta.latex_doc[type].label )))}
+((*- if meta.ipub[type].label: -*))
+\label{((( meta.ipub[type].label )))}
 ((*- endif *))
 
-((*- if meta.latex_doc[type].format: -*))
-\begin{lstlisting}[((( meta.latex_doc[type].format | dict_to_kwds(options) )))]
+((*- if meta.ipub[type].format: -*))
+\begin{lstlisting}[((( meta.ipub[type].format | dict_to_kwds(options) )))]
 ((*- else -*))
 \begin{lstlisting}[((( options )))]
 ((*- endif *))
 ((( source )))
 \end{lstlisting}
 
-((*- if meta.latex_doc[type].asfloat: -*))
+((*- if meta.ipub[type].asfloat: -*))
 \end{(((type)))cell}
 ((*- endif *))
 

@@ -128,7 +128,7 @@ class Test_main(object):
      ],
  "metadata": {
       "test_name": "notebook2",
-      "latex_doc": {"bibliography":"test.bib"},
+      "ipub": {"bibliography":"test.bib"},
       "kernelspec": {
        "display_name": "Python 3",
        "language": "python",

@@ -112,7 +112,7 @@ If a folder is input, then the .ipynb files it contains are processed and combin
 
 All available converters are also listed by `nbpublish -h`. Three of note are:
 
-- **latex_ipypublish_main** is the **default** and converts cells to latex according to metadata tags on an 'opt in' basis. Note that, for this converter, **no code cells or output** will appear in the final tex/pdf document unless they have a suitable [latex_doc metadata tag](#latex-metadata-tags).
+- **latex_ipypublish_main** is the **default** and converts cells to latex according to metadata tags on an 'opt in' basis. Note that, for this converter, **no code cells or output** will appear in the final tex/pdf document unless they have a suitable [ipub metadata tag](#latex-metadata-tags).
 - **html_ipypublish_main** converts the entire notebook(s) to html and adds a table of contents sidebar and a button to toggle input code and output cells visible/hidden, with latex citations and references resolved. 
 - **slides_ipypublish_main** converts the notebook to [reveal.js](http://lab.hakim.se/reveal-js/#/) slides, with latex citations and references resolved and slide partitioning by markdown headers. See the [Live Slideshows](#live-slideshows) section for using `nbpresent` to serve these slides to a webbrowser. 
 - The **all** and **nocode** variants of these converters preprocess a copy of the notebook, to add default metadata tags to the notebook and all cells, such that all output is rendered (with or without the code)
@@ -269,7 +269,7 @@ when converted, is stored in the metadata under:
 
 ```json
 {
-		"latex_doc": {}
+		"ipub": {}
 }
 ```
 
@@ -287,7 +287,7 @@ To specify where the **bibliography** is:
 
 ```json
 {
-"latex_doc": {
+"ipub": {
 	"bibliography" : "path/to/bibliograph.bib"
 	}
 }
@@ -299,7 +299,7 @@ For **titlepage**, enter in notebook metadata:
 
 ```json
 {
-"latex_doc": {
+"ipub": {
   "titlepage": {
 	"author": "Authors Name",
 	"email": "authors@email.com",
@@ -329,7 +329,7 @@ To control the output of **contents tables**:
 
 ```json
 {
-"latex_doc": {
+"ipub": {
   "toc": true,
   "listfigures": true,
   "listtables": true,
@@ -342,7 +342,7 @@ To override the default **placement of figures and tables**:
 
 ```json
 {
-"latex_doc": {
+"ipub": {
     "figure": {
       "placement": "!bp"
       },
@@ -361,7 +361,7 @@ To  **ignore any cell**:
 
 ```json
 {
-"latex_doc": {
+"ipub": {
 	"ignore" : true
 	}
 }
@@ -371,7 +371,7 @@ To  **output a code block**:
 
 ```json
 {
-"latex_doc": {
+"ipub": {
   "code": {
 	"format" : {},
     "asfloat": true,
@@ -394,7 +394,7 @@ To  **output text produced by the code** (e.g. *via* the `print` command):
 
 ```json
 {
-"latex_doc": {
+"ipub": {
   "text": {
       "format": {
        "basicstyle": "\\small"
@@ -420,7 +420,7 @@ For **figures** (i.e. any graphics output by the code), enter in cell metadata:
 
 ```json
 {
-"latex_doc": {
+"ipub": {
   "figure": {
     "caption": "Figure caption.",
     "label": "fig:flabel",
@@ -439,7 +439,7 @@ For  **tables** (e.g. those output by `pandas`), enter in cell metadata:
 
 ```json
 {
-"latex_doc": {
+"ipub": {
      "table": {
 	    "caption": "Table caption.",
 	    "label": "tbl:tlabel",
@@ -459,7 +459,7 @@ For  **equations** (e.g. thos output by `sympy`), enter in cell metadata:
 
 ```json
 {
-  "latex_doc": {
+  "ipub": {
 	  "equation": {
 	    "label": "eqn:elabel"
 	  }
@@ -477,7 +477,7 @@ If a **markdown cell** or **code cell with latex/text output** has the metadata 
 
 ```json
 {
- "latex_doc": {
+ "ipub": {
 	"caption": "fig:example_mpl"
 	}
 }
@@ -492,7 +492,7 @@ During the jinja templating, if a **figure, table or code** cell has a label mat
 
 ```json
 {
-"latex_doc": {
+"ipub": {
 	"figure": {
 	  "caption": "",
 	  "label": "fig:example_mpl"
@@ -520,7 +520,7 @@ using the `embed_html` tag, then treating it as any other output in the notebook
 
 ```json
 {
-  "latex_doc": {
+  "ipub": {
     "embed_html": {
       "filepath": "path/to/embed.html"
     },

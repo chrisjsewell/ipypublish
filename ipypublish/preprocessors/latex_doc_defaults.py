@@ -54,7 +54,7 @@ class MetaDefaults(Preprocessor):
     
     def preprocess(self, nb, resources):
         
-        logging.info('adding latex_doc defaults to notebook') 
+        logging.info('adding ipub defaults to notebook') 
 
         for keys, val in flatten(self.nb_defaults).items():
             dct = nb.metadata

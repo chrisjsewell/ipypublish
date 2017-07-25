@@ -2,8 +2,8 @@ tplx_dict = {
 'meta_docstring':'with the main ipypublish content',
 
 'notebook_input':r"""
-((*- if cell.metadata.latex_doc: -*))
-    ((*- if cell.metadata.latex_doc.ignore: -*))
+((*- if cell.metadata.ipub: -*))
+    ((*- if cell.metadata.ipub.ignore: -*))
     ((*- else -*))	
     ((( super() )))
     ((*- endif *))
@@ -17,8 +17,8 @@ tplx_dict = {
 """,
 
 'notebook_output':r"""
-((*- if cell.metadata.latex_doc: -*))
-    ((*- if cell.metadata.latex_doc.ignore: -*))
+((*- if cell.metadata.ipub: -*))
+    ((*- if cell.metadata.ipub.ignore: -*))
     ((*- else -*))	
     ((( super() )))
     ((*- endif *))
@@ -28,8 +28,8 @@ tplx_dict = {
 """,
 
 'notebook_output_stream':r"""
-((*- if cell.metadata.latex_doc: -*))
-    ((*- if cell.metadata.latex_doc.ignore: -*))
+((*- if cell.metadata.ipub: -*))
+    ((*- if cell.metadata.ipub.ignore: -*))
     ((*- else -*))	
     ((( super() )))
     ((*- endif *))
@@ -39,39 +39,39 @@ tplx_dict = {
 """,
 
 'notebook_output_latex':r"""
-((*- if cell.metadata.latex_doc: -*))
-    ((*- if cell.metadata.latex_doc.table: -*))
-        ((*- if cell.metadata.latex_doc.table.placement: -*))
-        \begin{table}[(((cell.metadata.latex_doc.table.placement)))]
+((*- if cell.metadata.ipub: -*))
+    ((*- if cell.metadata.ipub.table: -*))
+        ((*- if cell.metadata.ipub.table.placement: -*))
+        \begin{table}[(((cell.metadata.ipub.table.placement)))]
         ((*- else -*))	
         \begin{table}
         ((*- endif *))
     
-        ((*- if resources.captions and cell.metadata.latex_doc.table.label -*))
-            ((*- if resources.captions[cell.metadata.latex_doc.table.label]: -*))
-             \caption{((( resources.captions[cell.metadata.latex_doc.table.label] )))}
-            ((*- elif cell.metadata.latex_doc.table.caption -*))   
-             \caption{((( cell.metadata.latex_doc.table.caption )))}
+        ((*- if resources.captions and cell.metadata.ipub.table.label -*))
+            ((*- if resources.captions[cell.metadata.ipub.table.label]: -*))
+             \caption{((( resources.captions[cell.metadata.ipub.table.label] )))}
+            ((*- elif cell.metadata.ipub.table.caption -*))   
+             \caption{((( cell.metadata.ipub.table.caption )))}
             ((*- endif *))
-        ((*- elif cell.metadata.latex_doc.table.caption -*))
-         \caption{((( cell.metadata.latex_doc.table.caption )))}
+        ((*- elif cell.metadata.ipub.table.caption -*))
+         \caption{((( cell.metadata.ipub.table.caption )))}
         ((*- endif *))
 
-        ((*- if cell.metadata.latex_doc.table.label -*))
-        \label{((( cell.metadata.latex_doc.table.label )))}
+        ((*- if cell.metadata.ipub.table.label -*))
+        \label{((( cell.metadata.ipub.table.label )))}
         ((*- endif *))
     
         \centering
-        ((*- if cell.metadata.latex_doc.table.alternate: -*))
-        \rowcolors{2}{(((cell.metadata.latex_doc.table.alternate)))}{white}
+        ((*- if cell.metadata.ipub.table.alternate: -*))
+        \rowcolors{2}{(((cell.metadata.ipub.table.alternate)))}{white}
         ((*- endif *))
         ((( output.data['text/latex'] )))
         \end{table}
     
-    ((*- elif "equation" in cell.metadata.latex_doc: -*))
+    ((*- elif "equation" in cell.metadata.ipub: -*))
 
-    	((*- if cell.metadata.latex_doc.equation.label: -*))
-        \begin{equation}\label{((( cell.metadata.latex_doc.equation.label )))}
+    	((*- if cell.metadata.ipub.equation.label: -*))
+        \begin{equation}\label{((( cell.metadata.ipub.equation.label )))}
     	((*- else -*))	
         \begin{equation}
     	((*- endif *))	
@@ -107,19 +107,19 @@ cell.metadata) )))
 
 'jinja_macros':r"""
 ((* macro draw_figure(filename, meta) -*))
-((*- if meta.latex_doc: -*))
-((*- if meta.latex_doc.figure: -*))
+((*- if meta.ipub: -*))
+((*- if meta.ipub.figure: -*))
 ((* set filename = filename | posix_path *))
 ((*- block figure scoped -*))
 
-    ((*- if meta.latex_doc.figure.placement: -*))
-        ((*- if meta.latex_doc.figure.widefigure: -*))
-    \begin{figure*}[(((meta.latex_doc.figure.placement)))]
+    ((*- if meta.ipub.figure.placement: -*))
+        ((*- if meta.ipub.figure.widefigure: -*))
+    \begin{figure*}[(((meta.ipub.figure.placement)))]
         ((*- else -*))
-    \begin{figure}[(((meta.latex_doc.figure.placement)))]
+    \begin{figure}[(((meta.ipub.figure.placement)))]
         ((*- endif *))
     ((*- else -*))
-        ((*- if meta.latex_doc.figure.widefigure: -*))
+        ((*- if meta.ipub.figure.widefigure: -*))
     \begin{figure*}
         ((*- else -*))
     \begin{figure}
@@ -128,16 +128,16 @@ cell.metadata) )))
         \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{((( filename )))}\end{center}
 
         ((*- if resources.captions: -*))
-            ((*- if resources.captions[meta.latex_doc.figure.label]: -*))
-             \caption{((( resources.captions[meta.latex_doc.figure.label] )))}
+            ((*- if resources.captions[meta.ipub.figure.label]: -*))
+             \caption{((( resources.captions[meta.ipub.figure.label] )))}
             ((*- else -*))   
-             \caption{((( meta.latex_doc.figure.caption )))}
+             \caption{((( meta.ipub.figure.caption )))}
             ((*- endif *))
-        ((*- elif meta.latex_doc.figure.caption: -*))
-             \caption{((( meta.latex_doc.figure.caption )))}
+        ((*- elif meta.ipub.figure.caption: -*))
+             \caption{((( meta.ipub.figure.caption )))}
         ((*- endif *))
-        ((*- if meta.latex_doc.figure.label: -*))
-        \label{((( meta.latex_doc.figure.label )))}
+        ((*- if meta.ipub.figure.label: -*))
+        \label{((( meta.ipub.figure.label )))}
         ((*- endif *))
     \end{figure}
 

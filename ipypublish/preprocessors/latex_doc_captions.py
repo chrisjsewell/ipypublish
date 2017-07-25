@@ -4,7 +4,7 @@ import traitlets as traits
 
 class LatexCaptions(Preprocessor):
     """ a preprocessor to 
-    1. find cells with a latex_doc.caption meta-tag, 
+    1. find cells with a ipub.caption meta-tag, 
        extract the caption and label to a dict and remove the cell
     2. find cells with the found labels and replace their captions
     
@@ -20,22 +20,22 @@ class LatexCaptions(Preprocessor):
         final_cells = []
         captions = {}
         for cell in nb.cells:
-            if hasattr(cell.metadata, 'latex_doc'):
-                if hasattr(cell.metadata.latex_doc, 'caption'):
+            if hasattr(cell.metadata, 'ipub'):
+                if hasattr(cell.metadata.ipub, 'caption'):
                                         
                     if cell.cell_type == 'markdown':
                         capt = cell.source.split(r'\n')[0]
-                        captions[cell.metadata.latex_doc.caption] = capt
+                        captions[cell.metadata.ipub.caption] = capt
                         continue
                     #TODO can outputs have more than one item in its list?
                     elif cell.cell_type == 'code':
                         if "text/latex" in cell.outputs[0].get('data',{}):
                             capt = cell.outputs[0].data["text/latex"].split(r'\n')[0]
-                            captions[cell.metadata.latex_doc.caption] = capt
+                            captions[cell.metadata.ipub.caption] = capt
                             continue
                         elif "text/plain" in cell.outputs[0].get('data',{}):
                             capt = cell.outputs[0].data["text/plain"].split(r'\n')[0]
-                            captions[cell.metadata.latex_doc.caption] = capt
+                            captions[cell.metadata.ipub.caption] = capt
                             continue
 
             final_cells.append(cell)
@@ -43,19 +43,19 @@ class LatexCaptions(Preprocessor):
         
         # replace captions
         for cell in nb.cells:
-            if hasattr(cell.metadata, 'latex_doc'):
-                for key in cell.metadata.latex_doc:
-                    if hasattr(cell.metadata.latex_doc[key], 'label'):
-                        if cell.metadata.latex_doc[key]['label'] in captions:
-                            logging.debug('replacing caption for: {}'.format(cell.metadata.latex_doc[key]['label']))
-                            cell.metadata.latex_doc[key]['caption'] = captions[cell.metadata.latex_doc[key]['label']]
+            if hasattr(cell.metadata, 'ipub'):
+                for key in cell.metadata.ipub:
+                    if hasattr(cell.metadata.ipub[key], 'label'):
+                        if cell.metadata.ipub[key]['label'] in captions:
+                            logging.debug('replacing caption for: {}'.format(cell.metadata.ipub[key]['label']))
+                            cell.metadata.ipub[key]['caption'] = captions[cell.metadata.ipub[key]['label']]
                             
                     # add float type/number prefix to caption, if required
                     if self.add_prefix:
-                        if hasattr(cell.metadata.latex_doc[key], 'caption'):
-                            if hasattr(cell.metadata.latex_doc[key], 'caption_prefix'):                    
-                                newcaption = cell.metadata.latex_doc[key].caption_prefix + cell.metadata.latex_doc[key].caption
-                                cell.metadata.latex_doc[key].caption = newcaption
+                        if hasattr(cell.metadata.ipub[key], 'caption'):
+                            if hasattr(cell.metadata.ipub[key], 'caption_prefix'):                    
+                                newcaption = cell.metadata.ipub[key].caption_prefix + cell.metadata.ipub[key].caption
+                                cell.metadata.ipub[key].caption = newcaption
                     
         
         return nb, resources
