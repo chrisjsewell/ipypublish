@@ -123,6 +123,44 @@ The current `nbconvert --to pdf` does not correctly resolve references and citat
 	
 **To raise any issues** please include the converted/YourNotebook.nbpub.log file.
 
+### The ipypublish defaults
+
+The ipypublish 'main' converters are designed with the goal of creating a single notebook, which may contain lots of exploratory code/outputs, mixed with final output, and that can be output as both a document (latex/pdf or html) and a presentation (reveal.js). The logic behind the default output is then:
+
+- For documents: all headings and body text is generally required, but only a certain subset of code/output
+- For slides: all headings are required, but most of the body text will be left out and sustituted with 'abbreviated' versions, and only a certain subset of code/output.
+
+This leads to the following logic flow (discussed further in the [Metadata Tags](#metadata-tags) section):
+
+**latex_ipypublish_main**/**html_ipypublish_main**:
+
+- all cells: bypass "ignore" and "slideonly" tags
+- markdown cells: include all
+- code cells (input): only include if the "code" tag is present
+- code cells (output): only include if the following tags are present
+    - "figure" for png/svg/pdf/jpeg or html (html only)
+	- "table" or "equation" for latex or html (html only)
+	- "mkdown" for markdown text
+	- "text" for plain text
+
+**slides_ipypublish_main**:
+
+- all cells: bypass "ignore"
+- markdown cells: are first split into header (beggining #)/non-header components
+    - headers: include all
+	- non-headers: only include if "slide" tag
+- code cells (input): only include if the "code" tag is present
+- code cells (output): only include if the following tags are present
+    - "figure" for png/svg/pdf/jpeg/html
+	- "table" or "equation" for latex/html
+	- "mkdown" for markdown text
+	- "text" for plain text
+
+Note that this is principally envisioned for use with **one output per code cell**, but it will work in a limited capacity for multiple outputs (e.g. you will not be able to specify separate specificaions, like captions).
+
+Packages, such as pandas and matplotlib, use jupyter notebooks [rich representation](http://ipython.readthedocs.io/en/stable/config/integrating.html#rich-display) mechanics to store a single output in multiple formats. nbconvert (and hence ipypublish) then selects only the highest priority (compatible) format to be output. This allows, for example, for pandas DataFrames to be output as 
+latex tables in latex documents and html tables in html documents/slides.
+
 ### Creating a bespoke converter
 
 On instatiation, ipypublish loads all converter plugins in its internal [export_plugins](https://github.com/chrisjsewell/ipypublish/tree/master/ipypublish/export_plugins) folder. Additionally, when `nbpublish` or `nbpresent` are called, if a folder named **ipypublish_plugins** is present in the current working directory, they will load all plugins in this folder. Programatically, it is the `ipypublish.export_plugins.add_directory` function which is being called and adding modules to an internal dictionary.
@@ -357,12 +395,22 @@ See [Positioning_images_and_tables](https://www.sharelatex.com/learn/Positioning
 
 ### Cell Tags
 
-To  **ignore any cell**:
+To **ignore any cell** for all outputs:
 
 ```json
 {
 "ipub": {
 	"ignore" : true
+	}
+}
+```
+
+To mark any cell as for output to **slides only**:
+
+```json
+{
+"ipub": {
+	"slideonly" : true
 	}
 }
 ```
@@ -468,6 +516,18 @@ For  **equations** (e.g. thos output by `sympy`), enter in cell metadata:
 ```
 
 - label is optional
+
+For **slide output**:
+
+```json
+{
+  "ipub": {
+	  "slide": true
+  }
+}
+```
+
+- the value of slide can be true, "new" (to indicate the start of a new slide) or "notes"
 
 ### Captions in a Markdown cell
 

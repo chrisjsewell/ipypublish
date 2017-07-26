@@ -4,6 +4,7 @@ tplx_dict = {
 'notebook_input':r"""
 ((*- if cell.metadata.ipub: -*))
     ((*- if cell.metadata.ipub.ignore: -*))
+    ((*- elif cell.metadata.ipub.slideonly: -*))
     ((*- else -*))	
     ((( super() )))
     ((*- endif *))
@@ -19,11 +20,20 @@ tplx_dict = {
 'notebook_output':r"""
 ((*- if cell.metadata.ipub: -*))
     ((*- if cell.metadata.ipub.ignore: -*))
+    ((*- elif cell.metadata.ipub.slideonly: -*))
     ((*- else -*))	
     ((( super() )))
     ((*- endif *))
 ((*- else -*))	
     ((( super() )))
+((*- endif *))
+""",
+
+'notebook_output_markdown':"""
+((*- if cell.metadata.ipub: -*))
+    ((*- if cell.metadata.ipub.mkdown: -*))
+((( output.data['text/markdown'] | citation2latex | strip_files_prefix | convert_pandoc('markdown', 'json',extra_args=[]) | resolve_references | convert_pandoc('json','latex'))))
+((*- endif *))
 ((*- endif *))
 """,
 

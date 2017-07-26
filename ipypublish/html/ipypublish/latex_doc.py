@@ -47,6 +47,7 @@ tpl_dict = {
 'notebook_all':r"""
 {%- if cell.metadata.ipub: -%}
     {%- if cell.metadata.ipub.ignore: -%}
+    {%- elif cell.metadata.ipub.slideonly: -%}
     {%- else -%}
 {{ super() }}
     {%- endif %}
@@ -109,6 +110,8 @@ tpl_dict = {
     {%- elif cell.metadata.ipub.text: -%}
 {{ super() }}    
     {%- elif cell.metadata.ipub.error: -%}
+{{ super() }}    
+    {%- elif cell.metadata.ipub.mkdown: -%}
 {{ super() }}    
     {%- endif %}   
 {%- else -%}

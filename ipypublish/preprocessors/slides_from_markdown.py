@@ -128,11 +128,9 @@ class MarkdownSlides(Preprocessor):
     """ a preprocessor to setup the notebook as an ipyslideshow,
     according to a set of rules 
     
-    - respect existing 'slideshow.notes' and 'slideshow.skip' cell tags
     - markdown cells containaing # headers are broken into individual cells
-    - if ipub=True, 
-        - any cells where ipub.ignore=True is set to 'skip'
-        - any code cells with no other ipub tags are set to 'skip'
+    - any cells where ipub.ignore=True is set to 'skip'
+    - any code cells with no other ipub tags are set to 'skip'
     - any header level >= column_level starts a new column
     - else, any header level >= row_level starts a new row
     - if max_cells is not 0, then breaks to a new row after <max_cells> cells
@@ -144,8 +142,6 @@ class MarkdownSlides(Preprocessor):
     header_slide = traits.Bool(False,help='if True, make the first header in a column appear on its own slide').tag(config=True)
     max_cells = traits.Integer(0,min=0,help='maximum number of nb cells per slide (0 indicates no maximum)').tag(config=True)
     autonumbering = traits.Bool(False,help='append section numbering to titles, e.g. 1.1.1 Title').tag(config=True)
-
-    ipub = traits.Bool(True,help='if True, obey ipub tags')
             
     def preprocess(self, nb, resources):
                 
@@ -157,26 +153,16 @@ class MarkdownSlides(Preprocessor):
         final_cells = FinalCells(self.header_slide)
         for i, cell in enumerate(nb.cells):
             
-            # Make sure every cell has a slideshow meta tag
-            cell.metadata.slideshow = cell.metadata.get('slideshow', NotebookNode())
-            cell.metadata.slideshow.slide_type = cell.metadata.slideshow.get('slide_type', '-')
-            cell.metadata.ipyslides = cell.metadata.get('ipyslides', NotebookNode()) 
-            if self.ipub:               
-                cell.metadata.ipub = cell.metadata.get('ipub', NotebookNode())                
+            # Make sure every cell has an ipub meta tag
+            cell.metadata.ipub = cell.metadata.get('ipub', NotebookNode())                
             
-            # ignore these cells 
-            if cell.metadata.slideshow.slide_type == 'skip':
-                cell.metadata.ipyslides = 'skip'
-                final_cells.append(cell)
-                continue
-            # ignore these cells 
-            if cell.metadata.slideshow.slide_type == 'notes':
+            if cell.metadata.ipub.get('slide',False) == 'notes':
                 cell.metadata.ipyslides = 'notes'
                 final_cells.append(cell)
                 continue
 
             if not cell.cell_type == "markdown":
-                if cell.metadata.ipub and self.ipub:
+                if cell.metadata.ipub:
                     if cell.metadata.ipub.get('ignore',False):
                         if cell.metadata.ipub.ignore:
                             cell.metadata.ipyslides = 'skip'
@@ -189,6 +175,9 @@ class MarkdownSlides(Preprocessor):
                         continue                                                
                         
                 if cells_in_slide > self.max_cells and self.max_cells:
+                    cell.metadata.ipyslides  = 'verticalbreak_after'
+                    cells_in_slide = 1
+                elif cell.metadata.ipub.get('slide',False) == 'new':
                     cell.metadata.ipyslides  = 'verticalbreak_after'
                     cells_in_slide = 1
                 else:
@@ -204,8 +193,8 @@ class MarkdownSlides(Preprocessor):
                     line, header_levels = number_title(line, header_levels[:])
                 
                 if is_header(line,self.column_level):
-                    if nonheader_lines:
-                        if cells_in_slide > self.max_cells and self.max_cells:
+                    if nonheader_lines and cell.metadata.ipub.get('slide',False):
+                        if (cells_in_slide > self.max_cells and self.max_cells) or cell.metadata.ipub.slide == 'new':
                             final_cells.mkdcell(nonheader_lines,cell.metadata,'verticalbreak_after')                           
                             cells_in_slide = 1
                         else:
@@ -220,8 +209,8 @@ class MarkdownSlides(Preprocessor):
                     cells_in_slide = 1
 
                 elif is_header(line,self.row_level):
-                    if nonheader_lines:
-                        if cells_in_slide > self.max_cells and self.max_cells:
+                    if nonheader_lines and cell.metadata.ipub.get('slide',False):
+                        if (cells_in_slide > self.max_cells and self.max_cells) or cell.metadata.ipub.slide == 'new':
                             final_cells.mkdcell(nonheader_lines,cell.metadata,'verticalbreak_after')                           
                             cells_in_slide = 1
                         else:
@@ -234,8 +223,8 @@ class MarkdownSlides(Preprocessor):
                 else:
                     nonheader_lines.append(line)
 
-            if nonheader_lines:
-                if cells_in_slide > self.max_cells and self.max_cells:
+            if nonheader_lines and cell.metadata.ipub.get('slide',False):
+                if (cells_in_slide > self.max_cells and self.max_cells) or cell.metadata.ipub.slide == 'new':
                     final_cells.mkdcell(nonheader_lines,cell.metadata,'verticalbreak_after')
                     cells_in_slide = 1
                 else:

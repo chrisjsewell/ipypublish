@@ -35,6 +35,7 @@ cell_defaults = {
     },
     "equation": True,
     "text": True,
+    "mkdown": True,
     "code":True,
     "error":True
   }

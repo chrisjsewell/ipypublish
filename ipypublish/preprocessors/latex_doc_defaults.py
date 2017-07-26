@@ -1,5 +1,6 @@
 import os, logging
 from nbconvert.preprocessors import Preprocessor
+from nbformat.notebooknode import NotebookNode
 import traitlets as traits
 
 def flatten(d,key_as_tuple=True,sep='.'):
@@ -51,6 +52,7 @@ class MetaDefaults(Preprocessor):
 
     nb_defaults = traits.Dict(default_value={},help='dict of notebook level defaults').tag(config=True)    
     cell_defaults = traits.Dict(default_value={},help='dict of cell level defaults').tag(config=True)
+    overwrite = traits.Bool(False,help="whether existing values should be overwritten").tag(config=True)
     
     def preprocess(self, nb, resources):
         
@@ -60,9 +62,11 @@ class MetaDefaults(Preprocessor):
             dct = nb.metadata
             for key in keys[:-1]:
                 if key not in dct:
-                    dct[key] = {}
+                    dct[key] = NotebookNode({})
                 dct = dct[key]
             if keys[-1] not in dct:
+                dct[keys[-1]] = val
+            elif self.overwrite:
                 dct[keys[-1]] = val
                 
         for cell in nb.cells:
@@ -70,9 +74,11 @@ class MetaDefaults(Preprocessor):
                 dct = cell.metadata
                 for key in keys[:-1]:
                     if key not in dct:
-                        dct[key] = {}
+                        dct[key] = NotebookNode({})
                     dct = dct[key]
                 if keys[-1] not in dct:
+                    dct[keys[-1]] = val
+                elif self.overwrite:
                     dct[keys[-1]] = val
         
         return nb, resources
