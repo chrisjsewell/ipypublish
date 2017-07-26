@@ -156,7 +156,8 @@ This leads to the following logic flow (discussed further in the [Metadata Tags]
 	- "mkdown" for markdown text
 	- "text" for plain text
 
-Note that this is principally envisioned for use with **one output per code cell**, but it will work in a limited capacity for multiple outputs (e.g. you will not be able to specify separate specificaions, like captions).
+Note that this is principally envisioned for use with **one output per code cell**, but it will work in a limited capacity for multiple outputs (e.g. you will not be able to specify separate specificaions, like captions). 
+[TO COME: using `IPython.display(obj,metadata={"ipub":{}})` to provide specifications for individual outputs]
 
 Packages, such as pandas and matplotlib, use jupyter notebooks [rich representation](http://ipython.readthedocs.io/en/stable/config/integrating.html#rich-display) mechanics to store a single output in multiple formats. nbconvert (and hence ipypublish) then selects only the highest priority (compatible) format to be output. This allows, for example, for pandas DataFrames to be output as 
 latex tables in latex documents and html tables in html documents/slides.
@@ -315,6 +316,8 @@ To access metadata, in the Jupyter Notebook Toolbar:
 
 - For notebook level: go to Edit -> Edit Notebook Metadata
 - For cell level: go to View -> Cell Toolbar -> Edit Metadata and a button will appear above each cell.
+[TO COME: output level, using `IPython.display(obj,metadata={"ipub":{}})`]
+
 
 **Please note**, setting a value to `"value":{}` is the same as `"value":false` so,
 if you are not setting additional options, use `"value":true`.
