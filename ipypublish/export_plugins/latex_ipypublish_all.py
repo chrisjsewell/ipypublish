@@ -14,6 +14,7 @@ from ipypublish.filters.filters import remove_dollars, first_para, create_key, d
 from ipypublish.preprocessors.latex_doc_links import LatexDocLinks
 from ipypublish.preprocessors.latex_doc_captions import LatexCaptions
 from ipypublish.preprocessors.latex_doc_defaults import MetaDefaults
+from ipypublish.preprocessors.split_outputs import SplitOutputs
 
 
 oformat = 'Latex'
@@ -53,6 +54,7 @@ nb_defaults={
             
 config = {'TemplateExporter.filters':_filters,
           'Exporter.filters':_filters,
-          'Exporter.preprocessors':[MetaDefaults,LatexDocLinks,LatexCaptions],
+          'Exporter.preprocessors':[MetaDefaults,SplitOutputs,LatexDocLinks,LatexCaptions],
+          'SplitOutputs.split':True,
           'MetaDefaults.cell_defaults':cell_defaults,
           'MetaDefaults.nb_defaults':nb_defaults}

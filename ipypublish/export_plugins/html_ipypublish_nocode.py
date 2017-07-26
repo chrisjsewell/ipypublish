@@ -21,6 +21,7 @@ from ipypublish.preprocessors.latex_doc_html import LatexDocHTML
 from ipypublish.preprocessors.latextags_to_html import LatexTagsToHTML
 from ipypublish.filters.replace_string import replace_string
 from ipypublish.preprocessors.latex_doc_defaults import MetaDefaults
+from ipypublish.preprocessors.split_outputs import SplitOutputs
 
 oformat = 'HTML'   
 
@@ -52,7 +53,8 @@ nb_defaults={
 
 config = {'TemplateExporter.filters':{'replace_string':replace_string},
           'Exporter.filters':{'replace_string':replace_string},
-          'Exporter.preprocessors':[MetaDefaults,LatexDocLinks,LatexDocHTML,LatexTagsToHTML,LatexCaptions],
+          'Exporter.preprocessors':[MetaDefaults,SplitOutputs,LatexDocLinks,LatexDocHTML,LatexTagsToHTML,LatexCaptions],
+          'SplitOutputs.split':True,
           'MetaDefaults.cell_defaults':cell_defaults,
           'MetaDefaults.nb_defaults':nb_defaults,
           'LatexCaptions.add_prefix':True}

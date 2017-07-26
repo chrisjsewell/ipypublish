@@ -20,6 +20,7 @@ from ipypublish.preprocessors.latex_doc_html import LatexDocHTML
 from ipypublish.preprocessors.latextags_to_html import LatexTagsToHTML
 from ipypublish.filters.replace_string import replace_string
 from ipypublish.preprocessors.slides_from_markdown import MarkdownSlides
+from ipypublish.preprocessors.split_outputs import SplitOutputs
 
 oformat = 'Slides'  
 
@@ -27,8 +28,9 @@ _filters = {'replace_string':replace_string}
             
 config = {'TemplateExporter.filters':_filters,
           'Exporter.filters':_filters,
-          'Exporter.preprocessors':[LatexDocLinks,LatexDocHTML,LatexTagsToHTML,
+          'Exporter.preprocessors':[SplitOutputs,LatexDocLinks,LatexDocHTML,LatexTagsToHTML,
           LatexCaptions,MarkdownSlides],
+          'SplitOutputs.split':True,
           'MarkdownSlides.column_level':1,
           'MarkdownSlides.row_level':0,
           'MarkdownSlides.header_slide':False,

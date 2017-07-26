@@ -54,5 +54,6 @@ nb_defaults={
 config = {'TemplateExporter.filters':_filters,
           'Exporter.filters':_filters,
           'Exporter.preprocessors':[MetaDefaults],
+          'SplitOutputs.split':True,
           'MetaDefaults.cell_defaults':cell_defaults,
           'MetaDefaults.nb_defaults':nb_defaults}

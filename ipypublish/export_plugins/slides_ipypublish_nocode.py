@@ -22,6 +22,7 @@ from ipypublish.preprocessors.latextags_to_html import LatexTagsToHTML
 from ipypublish.filters.replace_string import replace_string
 from ipypublish.preprocessors.slides_from_markdown import MarkdownSlides
 from ipypublish.preprocessors.latex_doc_defaults import MetaDefaults
+from ipypublish.preprocessors.split_outputs import SplitOutputs
 
 oformat = 'Slides'  
 
@@ -56,13 +57,14 @@ nb_defaults={
 
 config = {'TemplateExporter.filters':_filters,
           'Exporter.filters':_filters,
-          'Exporter.preprocessors':[MetaDefaults,LatexDocLinks,LatexDocHTML,LatexTagsToHTML,
+          'Exporter.preprocessors':[MetaDefaults,SplitOutputs,LatexDocLinks,LatexDocHTML,LatexTagsToHTML,
           LatexCaptions,MarkdownSlides],
           'MarkdownSlides.column_level':1,
           'MarkdownSlides.row_level':0,
           'MarkdownSlides.header_slide':False,
           'MarkdownSlides.max_cells':0,
           'MarkdownSlides.autonumbering':True,
+          'SplitOutputs.split':True,
           'MetaDefaults.cell_defaults':cell_defaults,
           'MetaDefaults.nb_defaults':nb_defaults,
           'LatexCaptions.add_prefix':True}

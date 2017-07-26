@@ -7,7 +7,7 @@ A workflow for creating and editing publication ready scientific reports and pre
 
 ![WorkFlow Example](/example_workflow.gif)
 
-See [Example.ipynb](example/notebooks/Example.pdf), [Example.pdf](https://chrisjsewell.github.io/ipypublish/Example.view_pdf.html),
+See [Example.ipynb](example/notebooks/Example.ipynb), [Example.pdf](https://chrisjsewell.github.io/ipypublish/Example.view_pdf.html),
 [Example.html](https://chrisjsewell.github.io/ipypublish/Example.html) and 
 [Example.slides.html](https://chrisjsewell.github.io/ipypublish/Example.slides.html#/) for an example of the potential input/output.
 
@@ -156,9 +156,6 @@ This leads to the following logic flow (discussed further in the [Metadata Tags]
 	- "mkdown" for markdown text
 	- "text" for plain text
 
-Note that this is principally envisioned for use with **one output per code cell**, but it will work in a limited capacity for multiple outputs (e.g. you will not be able to specify separate specificaions, like captions). 
-[TO COME: using `IPython.display(obj,metadata={"ipub":{}})` to provide specifications for individual outputs]
-
 Packages, such as pandas and matplotlib, use jupyter notebooks [rich representation](http://ipython.readthedocs.io/en/stable/config/integrating.html#rich-display) mechanics to store a single output in multiple formats. nbconvert (and hence ipypublish) then selects only the highest priority (compatible) format to be output. This allows, for example, for pandas DataFrames to be output as 
 latex tables in latex documents and html tables in html documents/slides.
 
@@ -303,8 +300,7 @@ test
 
 ## Metadata Tags
 
-All information additional information, used to specify how a particular notebook/cell will be represented
-when converted, is stored in the metadata under:
+All information additional information, used to specify how a particular notebook/cell/output will be represented, when converted, is stored in the metadata under:
 
 ```json
 {
@@ -312,12 +308,11 @@ when converted, is stored in the metadata under:
 }
 ```
 
-To access metadata, in the Jupyter Notebook Toolbar:
+There are three levels of metadata:
 
-- For notebook level: go to Edit -> Edit Notebook Metadata
-- For cell level: go to View -> Cell Toolbar -> Edit Metadata and a button will appear above each cell.
-[TO COME: output level, using `IPython.display(obj,metadata={"ipub":{}})`]
-
+- For notebook level: in the Jupyter Notebook Toolbar go to Edit -> Edit Notebook Metadata
+- For cell level: in the Jupyter Notebook Toolbar go to View -> Cell Toolbar -> Edit Metadata and a button will appear above each cell.
+- For output level: using `IPython.display.display(obj,metadata={"ipub":{}})`, you can set metadata specific to a certain output. Options set at the output level will override options set at the cell level. for an example of this, run the [MultiOutput_Example.ipynb](example/notebooks/MultiOutput_Example.ipynb).
 
 **Please note**, setting a value to `"value":{}` is the same as `"value":false` so,
 if you are not setting additional options, use `"value":true`.

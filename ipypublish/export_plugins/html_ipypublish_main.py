@@ -20,11 +20,13 @@ from ipypublish.preprocessors.latex_doc_captions import LatexCaptions
 from ipypublish.preprocessors.latex_doc_html import LatexDocHTML
 from ipypublish.preprocessors.latextags_to_html import LatexTagsToHTML
 from ipypublish.filters.replace_string import replace_string
+from ipypublish.preprocessors.split_outputs import SplitOutputs
 
 oformat = 'HTML'   
 config = {'TemplateExporter.filters':{'replace_string':replace_string},
           'Exporter.filters':{'replace_string':replace_string},
-          'Exporter.preprocessors':[LatexDocLinks,LatexDocHTML,LatexTagsToHTML,LatexCaptions],
+          'Exporter.preprocessors':[SplitOutputs,LatexDocLinks,LatexDocHTML,LatexTagsToHTML,LatexCaptions],
+          'SplitOutputs.split':True,
           'LatexCaptions.add_prefix':True}
 
 template = create_tpl([
