@@ -166,7 +166,7 @@ def run_conversion(texpath, out_folder, files_folder=None, debug_mode=False):
  
     # run latexmk in correct folder
     with change_dir(out_folder):
-        latexmk = ['latexmk','-bibtex','-pdf']
+        latexmk = ['latexmk','-xelatex','-bibtex','-pdf']
         latexmk += [] if debug_mode else ["--interaction=batchmode"]
         logging.info('running: '+' '.join(latexmk+['<outpath>']))
         latexmk += [outpath]
