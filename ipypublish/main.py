@@ -62,7 +62,7 @@ def publish(ipynb_path,
     """
     if isinstance(ipynb_path,basestring):
         ipynb_path = pathlib.Path(ipynb_path)
-    ipynb_name = ipynb_path.name.split('.')[0]
+    ipynb_name = os.path.splitext(ipynb_path.name)[0]
     files_folder = ipynb_name+'_files'
 
     outdir = os.path.join(os.getcwd(),'converted') if outpath is None else outpath 

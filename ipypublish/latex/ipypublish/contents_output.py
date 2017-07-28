@@ -135,7 +135,13 @@ cell.metadata) )))
     \begin{figure}
         ((*- endif *))
     ((*- endif *))
-        \begin{center}\adjustimage{max size={0.9\linewidth}{0.4\paperheight}}{((( filename )))}\end{center}
+        ((*- if meta.ipub.figure.width: -*))
+        \begin{center}\adjustimage{max size={0.9\linewidth}{0.9\paperheight},width=(((meta.ipub.figure.width)))\linewidth}{((( filename )))}\end{center}
+        ((*- elif meta.ipub.figure.height: -*))
+        \begin{center}\adjustimage{max size={0.9\linewidth}{0.9\paperheight},height=(((meta.ipub.figure.height)))\paperheight}{((( filename )))}\end{center}
+        ((*- else -*))
+        \begin{center}\adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{((( filename )))}\end{center}
+        ((*- endif *))
 
         ((*- if resources.captions: -*))
             ((*- if resources.captions[meta.ipub.figure.label]: -*))

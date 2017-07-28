@@ -52,11 +52,14 @@ class SplitOutputs(Preprocessor):
             cell.outputs = []
             final_cells.append(cell)
             for output in outputs:
-                meta = merge(copy.deepcopy(cell.metadata),output.get('metadata',{}))
+                meta = copy.deepcopy(cell.metadata)
                 # don't need the code to output
                 meta.get('ipub',NotebookNode({})).code = False
+                # don't create a new slide for each output, 
+                # unless specified in output level metadata
                 if 'slide' in meta.get('ipub',NotebookNode({})):
                     meta.ipub.slide = True if meta.ipub.slide == 'new' else meta.ipub.slide
+                meta = merge(meta,output.get('metadata',{}))
                 new =  NotebookNode({
                     "cell_type": "code",
                     "source": '',

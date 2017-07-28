@@ -471,13 +471,15 @@ For **figures** (i.e. any graphics output by the code), enter in cell metadata:
     "caption": "Figure caption.",
     "label": "fig:flabel",
     "placement": "H",
-    "widefigure": false
+	"height":0.4,
+    "widefigure": false,
     }
   }
 }
 ```
 
-- `caption` and `label` are optional
+- all tags are optional
+- height/width correspond to the fraction of the page height/width, only one should be used (aspect ratio will be maintained automatically)
 - `placement` is optional and constitutes using a placement arguments for the figure (e.g. \begin{figure}[H]). See [Positioning_images_and_tables](https://www.sharelatex.com/learn/Positioning_images_and_tables).
 - `widefigure` is optional and constitutes expanding the figure to the page width (i.e. \begin{figure*}) (placement arguments will then be ignored)
 

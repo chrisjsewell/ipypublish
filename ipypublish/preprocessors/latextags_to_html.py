@@ -91,7 +91,9 @@ class LatexTagsToHTML(Preprocessor):
         if 'doi' in entry:
             return r'<a href="https://doi.org/{doi}">{text}</a>'.format(doi=entry['doi'], text=text)        
         elif 'url' in entry:
-            return r'<a href="{url}">{text}</a>'.format(doi=entry['url'], text=text) 
+            return r'<a href="{url}">{text}</a>'.format(url=entry['url'], text=text) 
+        elif 'link' in entry:
+            return r'<a href="{url}">{text}</a>'.format(url=entry['link'], text=text) 
         else:
             return text       
                 
@@ -188,8 +190,8 @@ class LatexTagsToHTML(Preprocessor):
             
             if "ipub" in cell['metadata']:
                 for key in cell['metadata']["ipub"]:
-                    if not isinstance(key,dict):
-                        continue
+                    if not isinstance(cell['metadata']["ipub"][key],dict):
+                        continue                    
                     if "caption" in cell['metadata']["ipub"][key]:
                         text = cell['metadata']["ipub"][key]["caption"]
                         cell['metadata']["ipub"][key]["caption"] = self.convert(text,resources)

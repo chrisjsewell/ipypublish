@@ -74,7 +74,7 @@ def is_header(line,max_level):
     if max_level:
         return len(re.findall('^#{{1,{0}}} .+'.format(max_level),line))>0
     else:
-        return len(re.findall('^#* .+',line))>0   
+        return len(re.findall('^#+ .+',line))>0   
 
 def header_level(line):
     """

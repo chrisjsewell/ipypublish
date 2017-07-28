@@ -27,9 +27,10 @@ class LatexCaptions(Preprocessor):
                         capt = cell.source.split(r'\n')[0]
                         captions[cell.metadata.ipub.caption] = capt
                         continue
-                    #TODO can outputs have more than one item in its list?
                     elif cell.cell_type == 'code':
-                        if "text/latex" in cell.outputs[0].get('data',{}):
+                        if not cell.outputs:
+                            pass
+                        elif "text/latex" in cell.outputs[0].get('data',{}):
                             capt = cell.outputs[0].data["text/latex"].split(r'\n')[0]
                             captions[cell.metadata.ipub.caption] = capt
                             continue

@@ -6,7 +6,7 @@ tplx_dict = {
     \usepackage[T1]{fontenc} % Nicer default font (+ math font) than Computer Modern for most use cases
     \usepackage{mathpazo}
     \usepackage{graphicx}
-    \usepackage{caption}    
+    \usepackage[skip=3pt]{caption}    
     \usepackage{adjustbox} % Used to constrain images to a maximum size 
     \usepackage[table]{xcolor} % Allow colors to be defined
     \usepackage{enumerate} % Needed for markdown enumerations to work
