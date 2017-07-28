@@ -97,7 +97,9 @@ class LatexDocHTML(Preprocessor):
                         
                 for floattype, floatabbr in [('figure','fig.'),('table','tbl.'),('code','code'),
                                               ('text','text'),('error','error')]:
-                    if floattype in cell.metadata.ipub and cell.outputs:
+                    if floattype in cell.metadata.ipub:
+                        if floattype != 'code' and "outputs" not in cell:
+                            continue
                         float_count[floattype] += 1
                         if not isinstance(cell.metadata.ipub[floattype],dict):
                             continue
