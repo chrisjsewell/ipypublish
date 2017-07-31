@@ -449,7 +449,8 @@ To  **output text produced by the code** (e.g. *via* the `print` command):
     "caption": "",
     "label": "code:example_sym",
     "widefigure": false,
-    "placement": "H"
+    "placement": "H",
+	"use_ansi": false
     }
   }
 }
@@ -459,6 +460,7 @@ all extra tags are optional:
 
 - `format` can contain any keywords related to the latex [Listings](https://en.wikibooks.org/wiki/LaTeX/Source_Code_Listings) package (such as syntax highlighting colors). N.B. in place of `\` use `\\`.
 - `asfloat` contitutes whether the code is wrapped in a codecell (float) environment or is inline.
+- if `use_ansi` is true then, instead of stripping ansi colors in latex output, they will be converted to latex, wrapped in % characters and the listings option escapechar=\% set. 
 - all other tags work the same as figure (below).
 
 
@@ -501,6 +503,7 @@ For  **tables** (e.g. those output by `pandas`), enter in cell metadata:
 - `caption` and `label` are optional
 - `placement` is optional and constitutes using a placement arguments for the table (e.g. \begin{table}[H]). See [Positioning_images_and_tables](https://www.sharelatex.com/learn/Positioning_images_and_tables).
 - `alternate` is optional and constitutes using alternating colors for the table rows (e.g. \rowcolors{2}{gray!25}{white}). See (https://tex.stackexchange.com/a/5365/107738)[https://tex.stackexchange.com/a/5365/107738].
+- if tables exceed the text width, in latex, they will be shrunk to fit 
 
 
 For  **equations** (e.g. thos output by `sympy`), enter in cell metadata:
@@ -574,15 +577,18 @@ IPywidgets offers a [save notebook with widgets](http://ipywidgets.readthedocs.i
 
 
 A better solution, recently offered, is to save a [html snippet](http://ipywidgets.readthedocs.io/en/latest/embedding.html#embeddable-html-snippet) 
-of the current widget state to file. 
-This file can be re-embedded into the notebook, at the conversion stage, 
-using the `embed_html` tag, then treating it as any other output in the notebook.
+of the current widget state to file and embed it into the html/slides output as an iframe. This is also particularly useful in reveal.js slides, 
+since the iframe content can be [*lazy loaded*](https://github.com/hakimel/reveal.js/#lazy-loading).
+To embed html, use the `embed_html` tag:
 
 ```json
 {
   "ipub": {
     "embed_html": {
-      "filepath": "path/to/embed.html"
+      "filepath": "path/to/file.html"
+	  "url": "https//path/to/url.html"
+	  "width":0.5,
+	  "height":0.5
     },
     "figure": {
       "caption": "An example of embedded html"
@@ -591,7 +597,11 @@ using the `embed_html` tag, then treating it as any other output in the notebook
 }
 ```
 
-A possible workflow is then to have a single notebook cell with a static image of the widget in the output, and a path to the embed html in the metadata so that a) if you export to latex/pdf, you get the static image or b) if you export to html/reveal slides, you get the html. 
+If the cell already contains an output, then this tag will create/overwrite the first output's "text/html" type. 
+This allows for a single notebook cell with a static image of the widget in the output, and a path to the embed html in the metadata so that a) if you export to latex/pdf, you get the static image or b) if you export to html/reveal slides, you get the html.
+
+- use either filepath or url
+- width/height refers to the fraction of the viewspace used (e.g. 0.5 width -> 50vw and 0.5 height -> 50vh)
 
 An example of how this works is in the [Example.ipynb](example/notebooks/Example.pdf), and the 
 [Example.html](https://chrisjsewell.github.io/ipypublish/Example.html#Embedded-HTML-6) and 

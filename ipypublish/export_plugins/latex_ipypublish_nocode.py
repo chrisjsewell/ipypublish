@@ -13,6 +13,7 @@ from ipypublish.latex.ipypublish import contents_output as output
 from ipypublish.latex.ipypublish import contents_framed_code as code
 from ipypublish.latex.ipypublish import front_pages as title
 from ipypublish.filters.filters import remove_dollars, first_para, create_key, dict_to_kwds
+from ipypublish.filters.ansi_listings import ansi2listings
 from ipypublish.preprocessors.latex_doc_links import LatexDocLinks
 from ipypublish.preprocessors.latex_doc_captions import LatexCaptions
 from ipypublish.preprocessors.latex_doc_defaults import MetaDefaults
@@ -26,7 +27,8 @@ template = create_tplx([p.tplx_dict for p in
 _filters = {'remove_dollars': remove_dollars,
             'first_para': first_para,
             'create_key': create_key,
-        'dict_to_kwds':dict_to_kwds}
+        'dict_to_kwds':dict_to_kwds,
+	    'ansi2listings':ansi2listings}
         
 cell_defaults = {
   "ipub": {

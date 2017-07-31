@@ -135,7 +135,7 @@ def export_pdf(texpath, outdir, files_path=None,
         logging.info('pdf conversion complete')
 
         if html_viewer:
-            view_pdf = VIEW_PDF.format(pdf_name=texname+'.pdf')
+            view_pdf = VIEW_PDF.format(pdf_name=texname.replace(' ','%20')+'.pdf')
             with open(os.path.join(outdir,texname+'.view_pdf.html'),'w') as f:
                 f.write(view_pdf)
         return True

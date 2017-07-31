@@ -67,6 +67,7 @@ config = {'TemplateExporter.filters':_filters,
           'SplitOutputs.split':True,
           'MetaDefaults.cell_defaults':cell_defaults,
           'MetaDefaults.nb_defaults':nb_defaults,
+          'LatexDocHTML.src_name':"data-src",
           'LatexCaptions.add_prefix':True}
 
 template = create_tpl([

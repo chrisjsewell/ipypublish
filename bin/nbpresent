@@ -7,7 +7,7 @@ from ipypublish.scripts import export_plugins
 
 def nbpresent(inpath, 
               outformat='slides_standard',
-              outpath=None, dump_files=False,
+              outpath=None, dump_files=True,
               ignore_prefix='_',
               log_level='INFO'):
     """ load reveal.js slides as a web server, converting from ipynb first if path extension is .ipynb
@@ -112,8 +112,8 @@ if __name__ == '__main__':
     parser.add_argument("-o","--outpath", type=str, metavar='str',
                         help='path to output converted files', 
                         default=os.path.join(os.getcwd(),'converted'))
-    parser.add_argument("-d","--dump-files", action="store_true",
-                        help='dump external files, linked to in the document, into the outpath')
+    # parser.add_argument("-d","--dump-files", action="store_true",
+    #                     help='dump external files, linked to in the document, into the outpath')
     parser.add_argument("-log","--log-level", type=str, default='info',
                         choices=['debug','info','warning','error'],
                         help='the logging level to output to screen/file')

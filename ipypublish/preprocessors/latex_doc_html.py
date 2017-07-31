@@ -16,7 +16,13 @@ class LatexDocHTML(Preprocessor):
     
     metapath = traits.Unicode('', help="the path to the meta data").tag(config=True)
     filesfolder = traits.Unicode('', help="the folder to point towards").tag(config=True)
+    src_name = traits.Unicode('src', help="for embedding, if reveal js slides use data-src (for lazy loading)").tag(config=True)
     
+    @traits.validate('src_name')
+    def _valid_value(self, proposal):
+        if proposal['value'] not in ['src','data-src']:
+            raise traits.TraitError('src_name must be src or src or data-src')
+        return proposal['value']
 
     def __init__(self, *args, **kwargs):
         super(LatexDocHTML, self).__init__( *args, **kwargs)
@@ -28,56 +34,26 @@ class LatexDocHTML(Preprocessor):
             fpath = os.path.abspath(fpath)
         return fpath
         
-    def create_embed_cell(self, cell):
+    def embed_html(self, cell, path):
         """ a new cell, based on embedded html file
         """
-        fpath = self.resolve_path(cell.metadata.ipub.embed_html.filepath, self.metapath)
-        logging.info('attmepting to embed html in notebook from:'
-                            ': {}'.format(fpath))
-        if not os.path.exists(fpath):
-            logging.warning('file in embed html metadata does not exist'
-                            ': {}'.format(fpath))
-            return False
+        logging.info('embedding html in notebook from: {}'.format(path))
         
-        with open(fpath) as f:
-            embed_data = f.read()
-        logging.debug('length of embedding html {}'.format(len(embed_data)))
-           
-        if '<body>' in embed_data and r'</body>' in embed_data:
-            pass#body = embed_data.split('<body>')[1]
-            #body = embed_data.split('</body>')[0]
+        height = int(cell.metadata.ipub.embed_html.get('height',0.5)*100)
+        width = int(cell.metadata.ipub.embed_html.get('width',0.5)*100)
+        embed_code = """
+        <iframe style="display:block; margin: 0 auto; height:{height}vh; width:{width}vw" {src}="{path}" frameborder="0" allowfullscreen></iframe>
+        """.format(src=self.src_name,path=path,height=height,width=width)
+        
+        # add to the exising output or create a new one
+        if cell.outputs:
+            cell.outputs[0]["data"]["text/html"] = embed_code
         else:
-            logging.warning('file in embed html metadata does not contain a <body> key, using entire file'
-                            ': {}'.format(fpath))
-            return False
-
-        # if 'head' in embed_data:
-        #     if not hasattr(nb.metadata, 'ipub'):
-        #         nb.metadata.ipub = {}
-        #     if not hasattr(nb.metadata.ipub, 'html_head'):
-        #         nb.metadata.ipub.html_head = []
-        #     for head in embed_data['head']:
-        #         if head not in nb.metadata.ipub.html_head:
-        #             nb.metadata.ipub.html_head.append(head)
-
-        cell.outputs.append(NotebookNode({"data": {"text/html": embed_data},
-         "execution_count": 0,
-         "metadata": {},
-         "output_type": "execute_result"}))
-        #meta = cell.metadata.ipub.pop('embed_html')
-        # newcell = {
-        # "cell_type": "code",
-        # "execution_count": 0,
-        # "metadata": {'ipub':{'figure':meta}},
-        # "outputs": [
-        # {"data": {"text/html": body},
-        #  "execution_count": 0,
-        #  "metadata": {},
-        #  "output_type": "execute_result"}],
-        # "source": [
-        # ""]}
-
-        logging.info('successfuly embedded html in cell')
+            cell.outputs.append(NotebookNode({"data": {"text/html": embed_code},
+             "execution_count": 0,
+             "metadata": {},
+             "output_type": "execute_result"}))
+             
         return cell
         
     def preprocess(self, nb, resources):
@@ -91,14 +67,23 @@ class LatexDocHTML(Preprocessor):
             if hasattr(cell.metadata, 'ipub'):
                 if hasattr(cell.metadata.ipub, 'embed_html'):
                     if hasattr(cell.metadata.ipub.embed_html,'filepath'): 
-                        self.create_embed_cell(cell)
+                        fpath = self.resolve_path(cell.metadata.ipub.embed_html.filepath, self.metapath)
+                        if not os.path.exists(fpath):
+                            logging.warning('file in embed html metadata does not exist'
+                                            ': {}'.format(fpath))
+                        else:
+                            resources.setdefault("external_file_paths", [])
+                            resources['external_file_paths'].append(fpath)             
+                            self.embed_html(cell,os.path.join(self.filesfolder, os.path.basename(fpath)))
+                    elif hasattr(cell.metadata.ipub.embed_html,'url'):    
+                        self.embed_html(cell,cell.metadata.ipub.embed_html.url)
                     else:
-                        logging.warning('cell {} has no filepath key in its metadata.embed_html'.format(i)) 
+                        logging.warning('cell {} has no filepath or url key in its metadata.embed_html'.format(i)) 
                         
                 for floattype, floatabbr in [('figure','fig.'),('table','tbl.'),('code','code'),
                                               ('text','text'),('error','error')]:
                     if floattype in cell.metadata.ipub:
-                        if floattype != 'code' and "outputs" not in cell:
+                        if floattype != 'code' and not cell.get("outputs",[]):
                             continue
                         float_count[floattype] += 1
                         if not isinstance(cell.metadata.ipub[floattype],dict):

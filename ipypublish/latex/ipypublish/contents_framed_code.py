@@ -75,20 +75,25 @@ tplx_dict = {
 """,
 
 'notebook_output_text':r"""
-((( draw_text(cell.metadata,output.data['text/plain'],"text",
+((( draw_text(cell.metadata,output.data['text/plain'] | strip_ansi,"text",
 "language={},postbreak={},numbers=none,xrightmargin=7pt,breakindent=0pt,aboveskip=5pt,belowskip=5pt") )))
 """,
 
 'notebook_output_stream':r"""
-((( draw_text(cell.metadata,output.text | escape_latex | ansi2latex,"text",
+((*- if cell.metadata.get("ipub",{}).get("text",{}).use_ansi : -*))
+((( draw_text(cell.metadata,output.text | ansi2listings("%") ,"text",
+"language={},postbreak={},numbers=none,xrightmargin=7pt,belowskip=5pt,aboveskip=5pt,breakindent=0pt,escapechar=\%") )))
+((*- else -*))
+((( draw_text(cell.metadata,output.text | strip_ansi ,"text",
 "language={},postbreak={},numbers=none,xrightmargin=7pt,belowskip=5pt,aboveskip=5pt,breakindent=0pt") )))
+((*- endif *))
 """,
 
 'notebook_output_error':r"""
 ((( super() )))
 """,
 'notebook_output_traceback':"""
-((( draw_text(cell.metadata,line | indent | strip_ansi | escape_latex,"error",
+((( draw_text(cell.metadata,line | indent | strip_ansi,"error",
 "language=Python,numbers=none,xrightmargin=5pt,belowskip=2pt,aboveskip=2pt") )))
 """,
 

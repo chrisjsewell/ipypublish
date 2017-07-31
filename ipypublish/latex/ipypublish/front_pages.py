@@ -75,7 +75,7 @@ tplx_dict = {
 	\vspace{0.8cm}
         
 	((*- if nb.metadata["ipub"]["titlepage"]["institution"]: -*))
-		((*- for i in nb.metadata["ipub"]["titlepage"]["supervisors"] *))
+		((*- for i in nb.metadata["ipub"]["titlepage"]["institution"] *))
 		  \LARGE{((( nb.metadata["ipub"]["titlepage"]["institution"][loop.index-1] )))}\\
 		((*- endfor *))
 	((*- endif *))

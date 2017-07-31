@@ -72,10 +72,12 @@ tplx_dict = {
         ((*- endif *))
     
         \centering
+		\begin{adjustbox}{max width=\textwidth}
         ((*- if cell.metadata.ipub.table.alternate: -*))
         \rowcolors{2}{(((cell.metadata.ipub.table.alternate)))}{white}
         ((*- endif *))
         ((( output.data['text/latex'] )))
+		\end{adjustbox}
         \end{table}
     
     ((*- elif "equation" in cell.metadata.ipub: -*))

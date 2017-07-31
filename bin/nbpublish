@@ -6,7 +6,7 @@ from ipypublish.scripts import export_plugins
                 
 def nbpublish(ipynb_path,
               outformat='latex_ipypublish_main',
-              outpath=None, dump_files=False,
+              outpath=None, dump_files=True,
               ignore_prefix='_',
               create_pdf=False, pdf_in_temp=False, pdf_debug=False,
               log_level='INFO'):
@@ -116,8 +116,8 @@ if __name__ == '__main__':
     parser.add_argument("-o","--outpath", type=str, metavar='str',
                         help='path to output converted files', 
                         default=os.path.join(os.getcwd(),'converted'))
-    parser.add_argument("-d","--dump-files", action="store_true",
-                        help='dump external files, linked to in the document, into the outpath')
+    # parser.add_argument("-d","--dump-files", action="store_true",
+    #                     help='dump external files, linked to in the document, into the outpath')
     parser.add_argument("-i","--ignore-prefix", type=str, metavar='str',
                         help='ignore ipynb files with this prefix',
                         default='_')

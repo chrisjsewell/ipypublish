@@ -12,6 +12,23 @@ tpl_dict = {
 'html_body_start':r"""
 <div class="reveal">
 <div class="slides">
+
+{%- if nb.metadata.ipub -%}
+{%- if nb.metadata.ipub.titlepage -%}
+<section>
+{%- if nb.metadata.ipub.titlepage.title -%}
+<h1>{{ nb.metadata.ipub.titlepage.title }}</h1>
+{%- endif -%}
+{%- if nb.metadata.ipub.titlepage.subtitle -%}
+<h3>{{ nb.metadata.ipub.titlepage.subtitle }}</h3>
+{%- endif -%}
+{%- if nb.metadata.ipub.titlepage.author -%}
+<b>by {{ nb.metadata.ipub.titlepage.author }}</b>
+{%- endif -%}
+</section>
+{%- endif -%}
+{%- endif -%}
+
 """,
     
 'notebook_all':r"""
