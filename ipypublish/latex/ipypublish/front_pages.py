@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 tplx_dict = { 
 'meta_docstring':'with the main ipypublish title and contents page setup',
 
