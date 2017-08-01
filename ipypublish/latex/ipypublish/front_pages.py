@@ -4,29 +4,29 @@
 tplx_dict = { 
 'meta_docstring':'with the main ipypublish title and contents page setup',
 
-'document_definitions':r"""
-\DeclareTranslationFallback{Author}{Author}
-\DeclareTranslation{Portuges}{Author}{Autor}
+'document_definitions':"""
+\\DeclareTranslationFallback{Author}{Author}
+\\DeclareTranslation{Portuges}{Author}{Autor}
 
-\DeclareTranslationFallback{List of Codes}{List of Codes}
-\DeclareTranslation{Catalan}{List of Codes}{Llista de Codis}
-\DeclareTranslation{Danish}{List of Codes}{Liste over Koder}
-\DeclareTranslation{German}{List of Codes}{Liste der Codes}
-\DeclareTranslation{Spanish}{List of Codes}{Lista de Códigos}
-\DeclareTranslation{French}{List of Codes}{Liste des Codes}
-\DeclareTranslation{Italian}{List of Codes}{Elenco dei Codici}
-\DeclareTranslation{Dutch}{List of Codes}{Lijst van Codes}
-\DeclareTranslation{Portuges}{List of Codes}{Lista de Códigos} 
+\\DeclareTranslationFallback{List of Codes}{List of Codes}
+\\DeclareTranslation{Catalan}{List of Codes}{Llista de Codis}
+\\DeclareTranslation{Danish}{List of Codes}{Liste over Koder}
+\\DeclareTranslation{German}{List of Codes}{Liste der Codes}
+\\DeclareTranslation{Spanish}{List of Codes}{Lista de C\\'{o}digos}
+\\DeclareTranslation{French}{List of Codes}{Liste des Codes}
+\\DeclareTranslation{Italian}{List of Codes}{Elenco dei Codici}
+\\DeclareTranslation{Dutch}{List of Codes}{Lijst van Codes}
+\\DeclareTranslation{Portuges}{List of Codes}{Lista de C\\'{o}digos} 
 
-\DeclareTranslationFallback{Supervisors}{Supervisors}
-\DeclareTranslation{Catalan}{Supervisors}{Supervisors}
-\DeclareTranslation{Danish}{Supervisors}{Vejledere}
-\DeclareTranslation{German}{Supervisors}{Vorgesetzten}
-\DeclareTranslation{Spanish}{Supervisors}{Supervisores}
-\DeclareTranslation{French}{Supervisors}{Superviseurs}
-\DeclareTranslation{Italian}{Supervisors}{Le autorità di vigilanza}
-\DeclareTranslation{Dutch}{Supervisors}{supervisors}
-\DeclareTranslation{Portuguese}{Supervisors}{Supervisores} 
+\\DeclareTranslationFallback{Supervisors}{Supervisors}
+\\DeclareTranslation{Catalan}{Supervisors}{Supervisors}
+\\DeclareTranslation{Danish}{Supervisors}{Vejledere}
+\\DeclareTranslation{German}{Supervisors}{Vorgesetzten}
+\\DeclareTranslation{Spanish}{Supervisors}{Supervisores}
+\\DeclareTranslation{French}{Supervisors}{Superviseurs}
+\\DeclareTranslation{Italian}{Supervisors}{Le autorit\\`{a} di vigilanza}
+\\DeclareTranslation{Dutch}{Supervisors}{supervisors}
+\\DeclareTranslation{Portuguese}{Supervisors}{Supervisores} 
 
 """,
 
