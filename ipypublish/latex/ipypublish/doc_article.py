@@ -6,6 +6,16 @@ tplx_dict = {
 	toc=sectionentrywithdots,
 	bibliography=totocnumbered,
 	captions=tableheading,numbers=noendperiod]{scrartcl}
+    
+((*- if nb.metadata.ipub: *))
+((*- if nb.metadata.ipub.language: *))
+%\usepackage{polyglossia}
+%\setmainlanguage{((( nb.metadata.ipub.language )))}
+%\DeclareTextCommandDefault{\nobreakspace}{\leavevmode\nobreak\ } 
+\usepackage[((( nb.metadata.ipub.language )))]{babel}
+((*- endif *))
+((*- endif *))
+
 """,
 
 'document_margins':r"""
@@ -17,6 +27,7 @@ nohead,includefoot,footskip=25pt}
 """,
 
 'document_packages':r"""
+    \usepackage{translations}
 	\usepackage{microtype} % improves the spacing between words and letters
 	\usepackage{placeins} % placement of figures
     % could use \usepackage[section]{placeins} but placing in subsection in command section

@@ -1,6 +1,32 @@
 tplx_dict = { 
 'meta_docstring':'with the main ipypublish title and contents page setup',
 
+'document_definitions':r"""
+\DeclareTranslationFallback{Author}{Author}
+\DeclareTranslation{Portuges}{Author}{Autor}
+
+\DeclareTranslationFallback{List of Codes}{List of Codes}
+\DeclareTranslation{Catalan}{List of Codes}{Llista de Codis}
+\DeclareTranslation{Danish}{List of Codes}{Liste over Koder}
+\DeclareTranslation{German}{List of Codes}{Liste der Codes}
+\DeclareTranslation{Spanish}{List of Codes}{Lista de Códigos}
+\DeclareTranslation{French}{List of Codes}{Liste des Codes}
+\DeclareTranslation{Italian}{List of Codes}{Elenco dei Codici}
+\DeclareTranslation{Dutch}{List of Codes}{Lijst van Codes}
+\DeclareTranslation{Portuges}{List of Codes}{Lista de Códigos} 
+
+\DeclareTranslationFallback{Supervisors}{Supervisors}
+\DeclareTranslation{Catalan}{Supervisors}{Supervisors}
+\DeclareTranslation{Danish}{Supervisors}{Vejledere}
+\DeclareTranslation{German}{Supervisors}{Vorgesetzten}
+\DeclareTranslation{Spanish}{Supervisors}{Supervisores}
+\DeclareTranslation{French}{Supervisors}{Superviseurs}
+\DeclareTranslation{Italian}{Supervisors}{Le autorità di vigilanza}
+\DeclareTranslation{Dutch}{Supervisors}{supervisors}
+\DeclareTranslation{Portuguese}{Supervisors}{Supervisores} 
+
+""",
+
 'document_title':r"""
 
 ((*- if nb.metadata["ipub"]: -*))    
@@ -39,7 +65,7 @@ tplx_dict = {
 		\begin{center}  
 		\begin{minipage}{0.39\textwidth}
 		\begin{flushleft} \Large
-		\emph{Author:}\\
+		\emph{\GetTranslation{Author}:}\\
 			((*- if nb.metadata["ipub"]["titlepage"]["author"]: -*))
 			((( nb.metadata["ipub"]["titlepage"]["author"] )))\\
 			((*- endif *))
@@ -52,7 +78,7 @@ tplx_dict = {
 		\begin{minipage}{0.39\textwidth}
 		\begin{flushright} \Large
 			((*- if nb.metadata["ipub"]["titlepage"]["supervisors"]: -*))
-			\emph{Supervisors:} \\
+			\emph{\GetTranslation{Supervisors}:} \\
 			((*- for i in nb.metadata["ipub"]["titlepage"]["supervisors"] *))
 			  ((( nb.metadata["ipub"]["titlepage"]["supervisors"][loop.index-1] )))
 			((*- endfor *))
@@ -114,7 +140,7 @@ tplx_dict = {
     \listoftables
     ((*- endif *))
     ((*- if nb.metadata["ipub"]["listcode"]: -*))
-    \listof{codecell}{List of Code}
+    \listof{codecell}{\GetTranslation{List of Codes}}
     ((*- endif *))
     \endgroup
 ((*- endif *))

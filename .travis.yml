@@ -26,6 +26,8 @@ matrix:
     - sudo installer -pkg BasicTeX.pkg -target /
     - export PATH=$PATH:/usr/texbin:/Library/TeX/texbin
     - travis_retry sudo tlmgr update --self
+    - travis_retry sudo tlmgr install babel
+    - travis_retry sudo tlmgr install translations
     - travis_retry sudo tlmgr install latexmk
     - travis_retry sudo tlmgr install adjustbox
     - travis_retry sudo tlmgr install collectbox
