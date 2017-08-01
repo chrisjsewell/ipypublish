@@ -319,6 +319,19 @@ if you are not setting additional options, use `"value":true`.
 
 ### Document Tags
 
+To change the **language** of the document:
+
+```json
+{
+"ipub": {
+	"language" : "french"
+	}
+}
+```
+
+where the language can be any specified in the 
+[babel](https://people.phys.ethz.ch/~ihn/latex/babel.pdf) package.
+
 To specify where the **bibliography** is:
 
 ```json
