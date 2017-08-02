@@ -559,7 +559,7 @@ pandas.DataFrame table without the index column, such that it can be output
 to both a pdf and html document:
 
 ```python
-from IPython.display import Latex, HTML, display
+from IPython.display import display
 import pandas as pd
 import numpy as np
 df = pd.DataFrame(np.random.random((3,3)))
