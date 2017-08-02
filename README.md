@@ -21,6 +21,7 @@ Or, for a practical example of the ipypublish capability, see these documents on
 - [Converting Notebooks](#converting-notebooks)
     - [Creating a bespoke converter](#creating-a-bespoke-converter)
 - [Metadata Tags](#metadata-tags)
+    - [Object Output Formats](#object-output-formats)
     - [Captions in a Markdown cell](#captions-in-a-markdown-cell)
 	- [Embedding Interactive HTML](#embedding-interactive-html)
 - [Citations and Bibliography](#citations-and-bibliography)
@@ -547,6 +548,41 @@ For **slide output**:
 ```
 
 - the value of slide can be true, "new" (to indicate the start of a new slide) or "notes"
+
+### Object Output Formats
+
+The format of the Jupyter Notebook (.ipynb) file allows for the storage of a single output in multiple formats. This is taken advantage of by packages such as matplotlib and pandas, etc to store a figure/table in both latex and html formats, which can then be selected by ipypublish based on the document type required. 
+
+Sometimes a user may wish to have greater control over the output format
+and/or which output types are to be stored. It it possible to achieve this *via* the Jupyter `display` function. For example, if we wanted to display a
+pandas.DataFrame table without the index column, such that it can be output
+to both a pdf and html document:
+
+```python
+from IPython.display import Latex, HTML, display
+import pandas as pd
+import numpy as np
+df = pd.DataFrame(np.random.random((3,3)))
+latex = df.to_latex(index=False)
+html = df.to_html(index=False)
+display({'text/latex':latex,
+         'text/html':html},raw=True)
+```
+
+If you wish to create your own object with multiple output formats,
+you should create a class with multiple `_repr_*_()` methods (as described [here](http://ipython.readthedocs.io/en/stable/config/integrating.html#rich-display)):
+
+```python
+class MyObject(object):
+    def __init__(self, text):
+        self.text = text
+
+    def _repr_latex_(self):
+        return "\\textbf{" + self.text + "}"
+
+    def _repr_html_(self):
+        return "<b>" + self.text + "</b>"
+```
 
 ### Captions in a Markdown cell
 
