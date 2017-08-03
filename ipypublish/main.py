@@ -24,7 +24,7 @@ from ipypublish.scripts.pdfexport import export_pdf
 def publish(ipynb_path,
             outformat='latex_ipypublish_main',
             outpath=None, dump_files=False,
-            ignore_prefix='_',
+            ignore_prefix='_', clear_files=False,
             create_pdf=False, pdf_in_temp=False, pdf_debug=False):
     """ convert one or more Jupyter notebooks to a published format
 
@@ -44,7 +44,9 @@ def publish(ipynb_path,
     dump_files: bool
         whether to write files from nbconvert (containing images, etc) to outpath
     ignore_prefix: str
-        ignore ipynb files with this prefix                
+        ignore ipynb files with this prefix
+    clear_files : str
+        whether to clear existing external files in outpath folder                
     create_pdf: bool
         whether to convert to pdf (if converting to latex)
     pdf_in_temp: bool
@@ -132,8 +134,10 @@ def publish(ipynb_path,
         logging.info('dumping external files to: {}'.format(outfilespath))    
         
         if os.path.exists(outfilespath):
-            shutil.rmtree(outfilespath)
-        os.mkdir(outfilespath)
+            if clear_files:
+                shutil.rmtree(outfilespath)
+        else:
+            os.mkdir(outfilespath)
             
         for internal_path, fcontents in internal_files.items():
             with open(os.path.join(outdir, internal_path), "wb") as fh:

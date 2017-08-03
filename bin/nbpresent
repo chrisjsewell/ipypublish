@@ -8,7 +8,7 @@ from ipypublish.scripts import export_plugins
 def nbpresent(inpath, 
               outformat='slides_standard',
               outpath=None, dump_files=True,
-              ignore_prefix='_',
+              ignore_prefix='_',clear_files=False,
               log_level='INFO'):
     """ load reveal.js slides as a web server, converting from ipynb first if path extension is .ipynb
     
@@ -22,6 +22,8 @@ def nbpresent(inpath,
         path to output converted files
     dump_files: bool
         whether to write files from nbconvert (containing images, etc) to outpath
+    clear_files : str
+        whether to clear existing external files in outpath folder                
     ignore_prefix: str
         ignore ipynb files with this prefix                
     loglevel: str
@@ -49,8 +51,8 @@ def nbpresent(inpath,
         inpath  = publish(inpath,
                           outformat=outformat,
                           outpath=outpath, dump_files=dump_files,
-                          ignore_prefix=ignore_prefix,
-                          create_pdf=False)
+                          ignore_prefix=ignore_prefix,clear_files=clear_files,
+                          create_pdf=False,)
 
     server = RevealServer()
     server.serve(inpath)
@@ -67,7 +69,9 @@ def list_outformats():
     outstr = 'Available Output Formats\n'
     outstr +='------------------------'
     for plugin_name in sorted(plugins.keys()):
-        if not plugins[plugin_name]['oformat'].lower() == 'slides':
+        slides = plugins[plugin_name]['oformat'].lower() == 'slides'
+        html = plugins[plugin_name]['oformat'].lower() == 'html'
+        if not (slides or html):
             continue
         outstr += '\n- {}:'.format(plugin_name)
         space = '  '
@@ -114,6 +118,8 @@ if __name__ == '__main__':
                         default=os.path.join(os.getcwd(),'converted'))
     # parser.add_argument("-d","--dump-files", action="store_true",
     #                     help='dump external files, linked to in the document, into the outpath')
+    parser.add_argument("-c","--clear-files", action="store_true",
+                        help='clear any external files which already exist in the outpath')
     parser.add_argument("-log","--log-level", type=str, default='info',
                         choices=['debug','info','warning','error'],
                         help='the logging level to output to screen/file')

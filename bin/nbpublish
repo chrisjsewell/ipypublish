@@ -7,7 +7,7 @@ from ipypublish.scripts import export_plugins
 def nbpublish(ipynb_path,
               outformat='latex_ipypublish_main',
               outpath=None, dump_files=True,
-              ignore_prefix='_',
+              ignore_prefix='_', clear_files=False,
               create_pdf=False, pdf_in_temp=False, pdf_debug=False,
               log_level='INFO'):
     """ convert one or more Jupyter notebooks to a published format
@@ -27,6 +27,8 @@ def nbpublish(ipynb_path,
         write files from nbconvert (containing images, etc) to outpath
     ignore_prefix: str
         ignore ipynb files with this prefix                
+    clear_files : str
+        whether to clear existing external files in outpath folder                
     create_pdf: bool
         convert to pdf (if converting to latex)
     pdf_in_temp: bool
@@ -60,7 +62,7 @@ def nbpublish(ipynb_path,
     return publish(ipynb_path,
                   outformat=outformat,
                   outpath=outpath, dump_files=dump_files,
-                  ignore_prefix=ignore_prefix,
+                  ignore_prefix=ignore_prefix,clear_files=clear_files,
                   create_pdf=create_pdf, pdf_in_temp=pdf_in_temp, pdf_debug=pdf_debug) 
 
 def list_outformats():
@@ -118,6 +120,8 @@ if __name__ == '__main__':
                         default=os.path.join(os.getcwd(),'converted'))
     # parser.add_argument("-d","--dump-files", action="store_true",
     #                     help='dump external files, linked to in the document, into the outpath')
+    parser.add_argument("-c","--clear-files", action="store_true",
+                        help='clear any external files which already exist in the outpath')
     parser.add_argument("-i","--ignore-prefix", type=str, metavar='str',
                         help='ignore ipynb files with this prefix',
                         default='_')

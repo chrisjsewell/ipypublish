@@ -637,8 +637,9 @@ To embed html, use the `embed_html` tag:
 {
   "ipub": {
     "embed_html": {
-      "filepath": "path/to/file.html"
-	  "url": "https//path/to/url.html"
+      "filepath": "path/to/file.html",
+      "other_files": ["path/to/file.js"],
+	  "url": "https//path/to/url.html",
 	  "width":0.5,
 	  "height":0.5
     },
@@ -653,6 +654,7 @@ If the cell already contains an output, then this tag will create/overwrite the 
 This allows for a single notebook cell with a static image of the widget in the output, and a path to the embed html in the metadata so that a) if you export to latex/pdf, you get the static image or b) if you export to html/reveal slides, you get the html.
 
 - use either filepath or url
+- other_files are files required by the html file (e.g. javascript libraries). These files will be copied to the the same folder as the html
 - width/height refers to the fraction of the viewspace used (e.g. 0.5 width -> 50vw and 0.5 height -> 50vh)
 
 An example of how this works is in the [Example.ipynb](example/notebooks/Example.pdf), and the 

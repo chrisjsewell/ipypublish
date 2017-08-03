@@ -67,14 +67,21 @@ class LatexDocHTML(Preprocessor):
             if hasattr(cell.metadata, 'ipub'):
                 if hasattr(cell.metadata.ipub, 'embed_html'):
                     if hasattr(cell.metadata.ipub.embed_html,'filepath'): 
-                        fpath = self.resolve_path(cell.metadata.ipub.embed_html.filepath, self.metapath)
-                        if not os.path.exists(fpath):
-                            logging.warning('file in embed html metadata does not exist'
-                                            ': {}'.format(fpath))
-                        else:
-                            resources.setdefault("external_file_paths", [])
-                            resources['external_file_paths'].append(fpath)             
-                            self.embed_html(cell,os.path.join(self.filesfolder, os.path.basename(fpath)))
+                        paths = [cell.metadata.ipub.embed_html.filepath]
+                        if hasattr(cell.metadata.ipub.embed_html,'other_files'):
+                            assert isinstance(cell.metadata.ipub.embed_html.other_files, list)
+                            paths += cell.metadata.ipub.embed_html.other_files
+                        for i, path in enumerate(paths):     
+                            fpath = self.resolve_path(path, self.metapath)
+                            if not os.path.exists(fpath):
+                                logging.warning('file in embed html metadata does not exist'
+                                                ': {}'.format(fpath))
+                            else:
+                                resources.setdefault("external_file_paths", [])
+                                resources['external_file_paths'].append(fpath) 
+                                if i==0:
+                                    self.embed_html(cell,os.path.join(self.filesfolder, os.path.basename(fpath)))
+                                    
                     elif hasattr(cell.metadata.ipub.embed_html,'url'):    
                         self.embed_html(cell,cell.metadata.ipub.embed_html.url)
                     else:
