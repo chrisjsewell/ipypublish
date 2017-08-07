@@ -155,24 +155,23 @@ class MarkdownSlides(Preprocessor):
             
             # Make sure every cell has an ipub meta tag
             cell.metadata.ipub = cell.metadata.get('ipub', NotebookNode())                
-            
+    
+            if cell.metadata.ipub.get('ignore',False):
+                cell.metadata.ipyslides = 'skip'
+                final_cells.append(cell)
+                continue      
+
             if cell.metadata.ipub.get('slide',False) == 'notes':
                 cell.metadata.ipyslides = 'notes'
                 final_cells.append(cell)
                 continue
 
             if not cell.cell_type == "markdown":
-                if cell.metadata.ipub:
-                    if cell.metadata.ipub.get('ignore',False):
-                        if cell.metadata.ipub.ignore:
-                            cell.metadata.ipyslides = 'skip'
-                            final_cells.append(cell)
-                            continue      
-                    #TODO this doesn't test if the data is actually available to be output                  
-                    if not any([cell.metadata.ipub.get(typ,False) for typ in latexdoc_tags]):
-                        cell.metadata.ipyslides = 'skip'
-                        final_cells.append(cell)
-                        continue                                                
+                #TODO this doesn't test if the data is actually available to be output                  
+                if not any([cell.metadata.ipub.get(typ,False) for typ in latexdoc_tags]):
+                    cell.metadata.ipyslides = 'skip'
+                    final_cells.append(cell)
+                    continue                                                
                         
                 if cells_in_slide > self.max_cells and self.max_cells:
                     cell.metadata.ipyslides  = 'verticalbreak_after'
