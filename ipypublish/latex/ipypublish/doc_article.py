@@ -38,10 +38,11 @@ nohead,includefoot,footskip=25pt}
 	\usepackage{chngcntr}
 	% header/footer
 	\usepackage[footsepline=0.25pt]{scrlayer-scrpage}
-
 """,
 
 'document_definitions':r"""
+    \setcounter{secnumdepth}{5}
+    
     % Colors for the hyperref package
     \definecolor{urlcolor}{rgb}{0,.145,.698}
     \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
