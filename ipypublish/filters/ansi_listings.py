@@ -130,7 +130,9 @@ def _ansi2anything(text, converter, escapechar):
                 fg += 8
             starttag, endtag = converter(fg, bg, bold,escapechar)
             out.append(starttag)
-            out.append(escape_latex(chunk))
+            if starttag.startswith(escapechar) and endtag.endswith(escapechar):
+                chunk = escape_latex(chunk)
+            out.append(chunk)
             out.append(endtag)
 
         while numbers:
