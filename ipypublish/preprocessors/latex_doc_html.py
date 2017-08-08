@@ -42,7 +42,7 @@ class LatexDocHTML(Preprocessor):
         height = int(cell.metadata.ipub.embed_html.get('height',0.5)*100)
         width = int(cell.metadata.ipub.embed_html.get('width',0.5)*100)
         embed_code = """
-        <iframe style="display:block; margin: 0 auto; height:{height}vh; width:{width}vw" {src}="{path}" frameborder="0" allowfullscreen></iframe>
+        <iframe style="display:block; margin: 0 auto; height:{height}vh; width:{width}vw; overflow:auto; resize:both" {src}="{path}" frameborder="0" allowfullscreen></iframe>
         """.format(src=self.src_name,path=path,height=height,width=width)
         
         # add to the exising output or create a new one
