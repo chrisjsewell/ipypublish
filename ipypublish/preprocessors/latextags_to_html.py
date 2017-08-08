@@ -146,11 +146,18 @@ class LatexTagsToHTML(Preprocessor):
         <BLANKLINE>
         
         """        
-        new = source           
+        new = source
+        in_equation = False
+        labels = []           
         for tag in re.findall(self.regex, source):
             
             if tag.startswith('\\label'):
-                new = new.replace(tag, r'<a id="{label}" class="anchor-link" name="#{label}">&#182;</a>'.format(label=tag[7:-1]))
+                link = r'<a id="{label}" class="anchor-link" name="#{label}">&#182;</a>'.format(label=tag[7:-1])
+                if in_equation:
+                    labels.append(link)
+                    new = new.replace(tag, '')
+                else:
+                    new = new.replace(tag, link)
 
             elif tag.startswith('\\ref'):
                 names = tag[5:-1].split(',')
@@ -176,6 +183,20 @@ class LatexTagsToHTML(Preprocessor):
                         html.append('Unresolved citation: {}.'.format(name))                    
                 new = new.replace(tag, '['+', '.join(html)+']')
 
+            elif any([tag.startswith('\\begin{{{0}}}'.format(env)) for env in 
+                ['equation','equation*','align','align*','multline','multline*','gather','gather*']]):
+                in_equation = True
+            elif any([tag.startswith('\\end{{{0}}}'.format(env)) for env in 
+                ['equation','equation*','align','align*','multline','multline*','gather','gather*']]):
+                new += ' '.join(labels)
+                labels = []
+                in_equation = False
+            elif any([tag.startswith('\\begin{{{0}}}'.format(env)) for env in 
+                ['split']]):
+                pass
+            elif any([tag.startswith('\\end{{{0}}}'.format(env)) for env in 
+                ['split']]):
+                pass
             else:
                 new = new.replace(tag, '')
         return new

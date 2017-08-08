@@ -1,5 +1,6 @@
 import os, logging
 from nbconvert.preprocessors import Preprocessor
+from nbformat.notebooknode import NotebookNode
 import traitlets as traits
 
 class LatexCaptions(Preprocessor):
@@ -21,6 +22,15 @@ class LatexCaptions(Preprocessor):
         captions = {}
         for cell in nb.cells:
             if hasattr(cell.metadata, 'ipub'):
+                
+                if hasattr(cell.metadata.ipub.get('equation',False),'get'):
+                    if hasattr(cell.metadata.ipub.equation.get('environment',False),'startswith'):
+                        if cell.metadata.ipub.equation.environment.startswith('breqn'):
+                            if "ipub" not in nb.metadata:
+                                nb.metadata["ipub"] = NotebookNode({'enable_breqn':True})
+                            else:
+                                nb.metadata.ipub['enable_breqn'] = True
+                
                 if hasattr(cell.metadata.ipub, 'caption'):
                                         
                     if cell.cell_type == 'markdown':

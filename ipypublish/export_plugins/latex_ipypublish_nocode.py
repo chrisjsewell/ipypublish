@@ -12,7 +12,7 @@ from ipypublish.latex.ipypublish import biblio_natbib as bib
 from ipypublish.latex.ipypublish import contents_output as output
 from ipypublish.latex.ipypublish import contents_framed_code as code
 from ipypublish.latex.ipypublish import front_pages as title
-from ipypublish.filters.filters import remove_dollars, first_para, create_key, dict_to_kwds
+from ipypublish.filters.filters import remove_dollars, first_para, create_key, dict_to_kwds, is_equation
 from ipypublish.filters.ansi_listings import ansi2listings
 from ipypublish.preprocessors.latex_doc_links import LatexDocLinks
 from ipypublish.preprocessors.latex_doc_captions import LatexCaptions
@@ -28,7 +28,8 @@ _filters = {'remove_dollars': remove_dollars,
             'first_para': first_para,
             'create_key': create_key,
         'dict_to_kwds':dict_to_kwds,
-	    'ansi2listings':ansi2listings}
+	    'ansi2listings':ansi2listings,
+        'is_equation':is_equation}
         
 cell_defaults = {
   "ipub": {
@@ -38,7 +39,7 @@ cell_defaults = {
     "table": {
       "placement": "H"
     },
-    "equation": True,
+    "equation": {'environment':'equation'},
     "text": True,
     "mkdown": True,
     "code":False,

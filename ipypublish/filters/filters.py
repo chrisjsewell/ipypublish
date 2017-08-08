@@ -91,3 +91,15 @@ def dict_to_kwds(dct, kwdstr):
         if not kwd.split('=')[0]+'=' in string:
             string += kwd + ','
     return string    
+    
+def is_equation(text):
+    
+    text = text.strip()
+    
+    if any([text.startswith('\\begin{{{0}}}'.format(env)) and text.endswith('\\end{{{0}}}'.format(env)) for env in 
+        ['equation','split','equation*','align','align*','multline','multline*','gather','gather*']]):
+        return True
+    elif text.startswith('$') and text.endswith('$'):
+        return True
+    else:
+        return False

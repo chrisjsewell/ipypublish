@@ -529,13 +529,15 @@ For  **equations** (e.g. thos output by `sympy`), enter in cell metadata:
 {
   "ipub": {
 	  "equation": {
+        "environment": "equation",
 	    "label": "eqn:elabel"
 	  }
   }
 }
 ```
 
-- label is optional
+- environment is optional and can be any of those available in [amsmath](https://www.sharelatex.com/learn/Aligning_equations_with_amsmath); 'equation', 'align','multline','gather', or their \* variants. Additionaly, 'breqn' or 'breqn\*' will select the experimental [breqn](https://ctan.org/pkg/breqn) environment to *smart* wrap long equations. 
+- label is optional and will only be used if the equation is in an environment
 
 For **slide output**:
 

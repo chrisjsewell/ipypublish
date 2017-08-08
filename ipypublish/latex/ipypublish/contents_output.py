@@ -1,6 +1,14 @@
 tplx_dict = { 
 'meta_docstring':'with the main ipypublish content',
 
+'document_packages':r"""
+((*- if nb.metadata.ipub: -*))
+((*- if nb.metadata.ipub.enable_breqn: -*))
+\usepackage{breqn}
+((*- endif *))
+((*- endif *))
+""",
+
 'notebook_input':r"""
 ((*- if cell.metadata.ipub: -*))
     ((*- if cell.metadata.ipub.ignore: -*))
@@ -50,45 +58,30 @@ tplx_dict = {
 
 'notebook_output_latex':r"""
 ((*- if cell.metadata.ipub: -*))
+
+    ((*- if cell.metadata.ipub.table and cell.metadata.ipub.equation -*))
+    
+        ((*- if output.data['text/latex'] | is_equation -*))
+            
+            ((( draw_equation(cell.metadata, output.data['text/latex']) )))
+            
+        ((*- else -*))
+        
+            ((( draw_table(cell, resources, output.data['text/latex']) )))
+        
+        ((*- endif *))
+    
+    ((*- else -*))
+    
     ((*- if cell.metadata.ipub.table: -*))
-        ((*- if cell.metadata.ipub.table.placement: -*))
-        \begin{table}[(((cell.metadata.ipub.table.placement)))]
-        ((*- else -*))	
-        \begin{table}
-        ((*- endif *))
     
-        ((*- if resources.captions and cell.metadata.ipub.table.label -*))
-            ((*- if resources.captions[cell.metadata.ipub.table.label]: -*))
-             \caption{((( resources.captions[cell.metadata.ipub.table.label] )))}
-            ((*- elif cell.metadata.ipub.table.caption -*))   
-             \caption{((( cell.metadata.ipub.table.caption )))}
-            ((*- endif *))
-        ((*- elif cell.metadata.ipub.table.caption -*))
-         \caption{((( cell.metadata.ipub.table.caption )))}
-        ((*- endif *))
+        ((( draw_table(cell, resources, output.data['text/latex']) )))
+    
+    ((*- elif cell.metadata.ipub.equation: -*))
 
-        ((*- if cell.metadata.ipub.table.label -*))
-        \label{((( cell.metadata.ipub.table.label )))}
-        ((*- endif *))
-    
-        \centering
-		\begin{adjustbox}{max width=\textwidth}
-        ((*- if cell.metadata.ipub.table.alternate: -*))
-        \rowcolors{2}{(((cell.metadata.ipub.table.alternate)))}{white}
-        ((*- endif *))
-        ((( output.data['text/latex'] )))
-		\end{adjustbox}
-        \end{table}
-    
-    ((*- elif "equation" in cell.metadata.ipub: -*))
+        ((( draw_equation(cell.metadata, output.data['text/latex']) )))
 
-    	((*- if cell.metadata.ipub.equation.label: -*))
-        \begin{equation}\label{((( cell.metadata.ipub.equation.label )))}
-    	((*- else -*))	
-        \begin{equation}
-    	((*- endif *))	
-    	((( output.data['text/latex'] | remove_dollars )))
-        \end{equation}
+    ((*- endif *))
     
     ((*- endif *))
 ((*- endif *))
@@ -163,7 +156,102 @@ cell.metadata) )))
 ((*- endif *))
 ((*- endif *))
 ((*- endmacro *))
+
+((* macro draw_table(cell, resources, text) -*))
+((*- block table scoped -*))
+
+((*- if cell.metadata.ipub.table.placement: -*))
+\begin{table}[(((cell.metadata.ipub.table.placement)))]
+((*- else -*))	
+\begin{table}
+((*- endif *))
+
+((*- if resources.captions and cell.metadata.ipub.table.label -*))
+    ((*- if resources.captions[cell.metadata.ipub.table.label]: -*))
+     \caption{((( resources.captions[cell.metadata.ipub.table.label] )))}
+    ((*- elif cell.metadata.ipub.table.caption -*))   
+     \caption{((( cell.metadata.ipub.table.caption )))}
+    ((*- endif *))
+((*- elif cell.metadata.ipub.table.caption -*))
+ \caption{((( cell.metadata.ipub.table.caption )))}
+((*- endif *))
+
+((*- if cell.metadata.ipub.table.label -*))
+\label{((( cell.metadata.ipub.table.label )))}
+((*- endif *))
+
+\centering
+\begin{adjustbox}{max width=\textwidth}
+((*- if cell.metadata.ipub.table.alternate: -*))
+\rowcolors{2}{(((cell.metadata.ipub.table.alternate)))}{white}
+((*- endif *))
+((( text )))
+\end{adjustbox}
+\end{table}
+
+((*- endblock table -*))
+((*- endmacro *))
+
+((* macro draw_equation(meta, text) -*))
+((*- block equation scoped -*))
+
+((* set environment = "none" *))
+((*- if meta.ipub.equation.environment: -*))
+    ((*- if meta.ipub.equation.environment == "none" -*))
+        ((* set environment = "none" *))
+    ((*- elif meta.ipub.equation.environment == "equation" -*))
+        ((* set environment = "equation" *))
+    ((*- elif meta.ipub.equation.environment == "equation*" -*))
+        ((* set environment = "equation*" *))
+    ((*- elif meta.ipub.equation.environment == "align" -*))
+        ((* set environment = "align" *))
+    ((*- elif meta.ipub.equation.environment == "align*" -*))
+        ((* set environment = "align*" *))
+    ((*- elif meta.ipub.equation.environment == "multline" -*))
+        ((* set environment = "multline" *))
+    ((*- elif meta.ipub.equation.environment == "multline*" -*))
+        ((* set environment = "multline*" *))
+    ((*- elif meta.ipub.equation.environment == "breqn" -*))
+        ((*- if nb.metadata.ipub: -*))
+        ((*- if nb.metadata.ipub.enable_breqn: -*))
+         ((* set environment = "dmath" *))
+        ((*- endif *))
+        ((*- endif *))
+    ((*- elif meta.ipub.equation.environment == "breqn*" -*))
+        ((*- if nb.metadata.ipub: -*))
+        ((*- if nb.metadata.ipub.enable_breqn: -*))
+         ((* set environment = "dmath*" *))
+        ((*- endif *))
+        ((*- endif *))
+    ((*- elif meta.ipub.equation.environment == "gather" -*))
+        ((* set environment = "gather" *))
+    ((*- elif meta.ipub.equation.environment == "gather*" -*))
+        ((* set environment = "gather*" *))
+    ((*- endif *))
+((*- endif *))
+
+((* if environment == "none" *))
+
+((( text )))
+
+((*- else -*))
+
+((*- if meta.ipub.equation.label and not "*" in environment -*))
+\begin{(((environment)))}\label{((( meta.ipub.equation.label )))}
+((*- else -*))
+\begin{(((environment)))}
+((*- endif *))
+((( text | remove_dollars )))
+\end{(((environment)))}
+
+((*- endif *))
+
+((*- endblock equation -*))
+((*- endmacro *))
+
 """
 
 }
+
+
 
