@@ -65,6 +65,6 @@ I took strong influence from:
    Schulz <http://blog.juliusschulz.de/blog/ultimate-ipython-notebook>`__
 -  `Dan
    Mackinlay <https://livingthing.danmackinlay.name/jupyter.html>`__
--  Notebook concatination was adapted from `nbconvert
+-  Notebook concatenation was adapted from `nbconvert
    issue#253 <https://github.com/jupyter/nbconvert/issues/253>`__
 
