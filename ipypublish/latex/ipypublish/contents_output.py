@@ -1,7 +1,7 @@
-tplx_dict = { 
-'meta_docstring':'with the main ipypublish content',
+tplx_dict = {
+    'meta_docstring': 'with the main ipypublish content',
 
-'document_packages':r"""
+    'document_packages': r"""
 ((*- if nb.metadata.ipub: -*))
 ((*- if nb.metadata.ipub.enable_breqn: -*))
 \usepackage{breqn}
@@ -9,7 +9,7 @@ tplx_dict = {
 ((*- endif *))
 """,
 
-'notebook_input':r"""
+    'notebook_input': r"""
 ((*- if cell.metadata.ipub: -*))
     ((*- if cell.metadata.ipub.ignore: -*))
     ((*- elif cell.metadata.ipub.slideonly: -*))
@@ -21,11 +21,11 @@ tplx_dict = {
 ((*- endif *))
 """,
 
-'notebook_input_markdown':r"""
+    'notebook_input_markdown': r"""
 ((( cell.source | citation2latex | strip_files_prefix | convert_pandoc('markdown', 'json',extra_args=[]) | resolve_references | convert_pandoc('json','latex'))))
 """,
 
-'notebook_output':r"""
+    'notebook_output': r"""
 ((*- if cell.metadata.ipub: -*))
     ((*- if cell.metadata.ipub.ignore: -*))
     ((*- elif cell.metadata.ipub.slideonly: -*))
@@ -37,7 +37,7 @@ tplx_dict = {
 ((*- endif *))
 """,
 
-'notebook_output_markdown':"""
+    'notebook_output_markdown': """
 ((*- if cell.metadata.ipub: -*))
     ((*- if cell.metadata.ipub.mkdown: -*))
 ((( output.data['text/markdown'] | citation2latex | strip_files_prefix | convert_pandoc('markdown', 'json',extra_args=[]) | resolve_references | convert_pandoc('json','latex'))))
@@ -45,7 +45,7 @@ tplx_dict = {
 ((*- endif *))
 """,
 
-'notebook_output_stream':r"""
+    'notebook_output_stream': r"""
 ((*- if cell.metadata.ipub: -*))
     ((*- if cell.metadata.ipub.ignore: -*))
     ((*- else -*))	
@@ -56,7 +56,7 @@ tplx_dict = {
 ((*- endif *))
 """,
 
-'notebook_output_latex':r"""
+    'notebook_output_latex': r"""
 ((*- if cell.metadata.ipub: -*))
 
     ((*- if cell.metadata.ipub.table and cell.metadata.ipub.equation -*))
@@ -87,30 +87,29 @@ tplx_dict = {
 ((*- endif *))
 """,
 
-
-#'notebook_output_markdown':'',
-'notebook_output_png':r"""
+    # 'notebook_output_markdown':'',
+    'notebook_output_png': r"""
 ((( draw_figure(output.metadata.filenames['image/png'],
 cell.metadata) )))
 
 """,
-'notebook_output_jpg':r"""
+    'notebook_output_jpg': r"""
 ((( draw_figure(output.metadata.filenames['image/jpeg'],
 cell.metadata) )))
 
 """,
-'notebook_output_svg':r"""
+    'notebook_output_svg': r"""
 ((( draw_figure(output.metadata.filenames['image/svg+xml'],
 cell.metadata) )))
 
 """,
-'notebook_output_pdf':r"""
+    'notebook_output_pdf': r"""
 ((( draw_figure(output.metadata.filenames['application/pdf'],
 cell.metadata) )))
 
 """,
 
-'jinja_macros':r"""
+    'jinja_macros': r"""
 ((* macro draw_figure(filename, meta) -*))
 ((*- if meta.ipub: -*))
 ((*- if meta.ipub.figure: -*))
@@ -252,6 +251,3 @@ cell.metadata) )))
 """
 
 }
-
-
-

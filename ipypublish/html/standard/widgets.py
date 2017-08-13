@@ -1,8 +1,8 @@
 tpl_dict = {
-    
-'meta_docstring':'with jupyter wigets',
 
-'html_header':r"""
+    'meta_docstring': 'with jupyter wigets',
+
+    'html_header': r"""
 
 {%- if "widgets" in nb.metadata -%}
 <script src="https://unpkg.com/jupyter-js-widgets@2.0.*/dist/embed.js"></script>
@@ -13,7 +13,7 @@ tpl_dict = {
 
 """,
 
-'html_footer':r"""
+    'html_footer': r"""
 
 {% set mimetype = 'application/vnd.jupyter.widget-state+json'%} 
 {% if mimetype in nb.metadata.get("widgets",{})%}

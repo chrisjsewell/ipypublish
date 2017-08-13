@@ -1,10 +1,10 @@
 tpl_dict = {
-    
-'overwrite':['notebook_all'],
-    
-'meta_docstring':'marks up html with slide tags, based on metadata',
-    
-'html_header':r"""
+
+    'overwrite': ['notebook_all'],
+
+    'meta_docstring': 'marks up html with slide tags, based on metadata',
+
+    'html_header': r"""
 
 <meta http-equiv="X-UA-Compatible" content="chrome=1" />
 
@@ -117,13 +117,13 @@ a.anchor-link {
 
 """,
 
-'html_body_start':r"""
+    'html_body_start': r"""
 <div class="reveal">
 <div class="slides">
 <section>
 """,
 
-'html_body_end':r"""
+    'html_body_end': r"""
 </section>
 </div>
 </div>
@@ -181,7 +181,7 @@ require(
 </script>
 """,
 
-'notebook_all':r"""
+    'notebook_all': r"""
 {%- if cell.metadata.get('slide_start', False) -%}
 <section>
 {%- endif -%}

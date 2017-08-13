@@ -1,7 +1,9 @@
-import os, logging
+import logging
+
+import traitlets as traits
 from nbconvert.preprocessors import Preprocessor
 from nbformat.notebooknode import NotebookNode
-import traitlets as traits
+
 
 class LatexCaptions(Preprocessor):
     """ a preprocessor to 
@@ -10,29 +12,30 @@ class LatexCaptions(Preprocessor):
     2. find cells with the found labels and replace their captions
     
     """
-    
-    add_prefix = traits.Bool(False,help="add float type/number prefix to caption (from caption_prefix tag)").tag(config=True)
-            
+
+    add_prefix = traits.Bool(False, help="add float type/number prefix to caption (from caption_prefix tag)").tag(
+        config=True)
+
     def preprocess(self, nb, resources):
-                
-        logging.info('extracting caption cells') 
-        
+
+        logging.info('extracting caption cells')
+
         # extract captions
         final_cells = []
         captions = {}
         for cell in nb.cells:
             if hasattr(cell.metadata, 'ipub'):
-                
-                if hasattr(cell.metadata.ipub.get('equation',False),'get'):
-                    if hasattr(cell.metadata.ipub.equation.get('environment',False),'startswith'):
+
+                if hasattr(cell.metadata.ipub.get('equation', False), 'get'):
+                    if hasattr(cell.metadata.ipub.equation.get('environment', False), 'startswith'):
                         if cell.metadata.ipub.equation.environment.startswith('breqn'):
                             if "ipub" not in nb.metadata:
-                                nb.metadata["ipub"] = NotebookNode({'enable_breqn':True})
+                                nb.metadata["ipub"] = NotebookNode({'enable_breqn': True})
                             else:
                                 nb.metadata.ipub['enable_breqn'] = True
-                
+
                 if hasattr(cell.metadata.ipub, 'caption'):
-                                        
+
                     if cell.cell_type == 'markdown':
                         capt = cell.source.split(r'\n')[0]
                         captions[cell.metadata.ipub.caption] = capt
@@ -40,18 +43,18 @@ class LatexCaptions(Preprocessor):
                     elif cell.cell_type == 'code':
                         if not cell.outputs:
                             pass
-                        elif "text/latex" in cell.outputs[0].get('data',{}):
+                        elif "text/latex" in cell.outputs[0].get('data', {}):
                             capt = cell.outputs[0].data["text/latex"].split(r'\n')[0]
                             captions[cell.metadata.ipub.caption] = capt
                             continue
-                        elif "text/plain" in cell.outputs[0].get('data',{}):
+                        elif "text/plain" in cell.outputs[0].get('data', {}):
                             capt = cell.outputs[0].data["text/plain"].split(r'\n')[0]
                             captions[cell.metadata.ipub.caption] = capt
                             continue
 
             final_cells.append(cell)
-        nb.cells = final_cells  
-        
+        nb.cells = final_cells
+
         # replace captions
         for cell in nb.cells:
             if hasattr(cell.metadata, 'ipub'):
@@ -60,13 +63,12 @@ class LatexCaptions(Preprocessor):
                         if cell.metadata.ipub[key]['label'] in captions:
                             logging.debug('replacing caption for: {}'.format(cell.metadata.ipub[key]['label']))
                             cell.metadata.ipub[key]['caption'] = captions[cell.metadata.ipub[key]['label']]
-                            
+
                     # add float type/number prefix to caption, if required
                     if self.add_prefix:
                         if hasattr(cell.metadata.ipub[key], 'caption'):
-                            if hasattr(cell.metadata.ipub[key], 'caption_prefix'):                    
+                            if hasattr(cell.metadata.ipub[key], 'caption_prefix'):
                                 newcaption = cell.metadata.ipub[key].caption_prefix + cell.metadata.ipub[key].caption
                                 cell.metadata.ipub[key].caption = newcaption
-                    
-        
+
         return nb, resources

@@ -8,14 +8,13 @@ at top of workbook, use
 
 """
 
+from __future__ import division as _division
 # Py2/Py3 compatibility
 # =====================
 from __future__ import print_function as _print_function
-from __future__ import division as _division
 
 # PYTHON
 # =======
-from collections import OrderedDict
 
 # IPYTHON
 # =======
@@ -23,6 +22,7 @@ try:
     from IPython import get_ipython
     from IPython.display import Image, Latex
     from IPython.display import set_matplotlib_formats
+
     _ipy_present = True
 except ImportError:
     _ipy_present = False
@@ -44,12 +44,12 @@ except ImportError:
 # ===========
 try:
     import matplotlib as mpl
+
     _mpl_present = True
 except ImportError:
     _mpl_present = False
-    
+
 if _mpl_present:
-    import matplotlib.pyplot as plt
     mpl.rcParams['savefig.dpi'] = 75
     mpl.rcParams['figure.figsize'] = (7, 4)
     mpl.rcParams['figure.autolayout'] = False
@@ -68,19 +68,21 @@ if _mpl_present:
 # ======
 try:
     import pandas as pd
+
     _pandas_present = True
 except ImportError:
     _pandas_present = False
 
 if _pandas_present and ipython:
-    pd.set_option('display.latex.repr',True)
-    pd.set_option('display.latex.longtable',False)
-    pd.set_option('display.latex.escape',False)
+    pd.set_option('display.latex.repr', True)
+    pd.set_option('display.latex.longtable', False)
+    pd.set_option('display.latex.escape', False)
 
 # SYMPY
 # =====
 try:
     import sympy as sym
+
     _sympy_present = True
 except ImportError:
     _sympy_present = False
@@ -91,11 +93,12 @@ if _sympy_present:
 # ==========================
 try:
     from PIL import Image as PImage
+
     _pil_present = True
 except ImportError:
     _pil_present = False
 if _pil_present:
-    def create_test_image(size=(50,50)):
+    def create_test_image(size=(50, 50)):
         from io import BytesIO
         file = BytesIO()
         image = PImage.new('RGBA', size=size, color=(155, 0, 0))
@@ -103,12 +106,15 @@ if _pil_present:
         file.name = 'test.png'
         file.seek(0)
         return file
-        
+
+
     def images_read(paths):
         """read a list of image paths to a list of PIL.IMAGE instances """
         return [PImage.open(i).convert("RGBA") for i in paths]
-    def images_hconcat(images, width=700,height=700, 
-                       gap=0,aspaths=True):
+
+
+    def images_hconcat(images, width=700, height=700,
+                       gap=0, aspaths=True):
         """concatenate multiple images horizontally 
     
         Properties
@@ -150,30 +156,31 @@ if _pil_present:
                          
         """
         images = images_read(images) if aspaths else images
-        if not isinstance(width,list):
-            widths = [width for _ in images]             
+        if not isinstance(width, list):
+            widths = [width for _ in images]
         else:
             widths = width[:]
-            width = sum(widths) + gap*(len(images)-1)
-        if not isinstance(height,list):
+            width = sum(widths) + gap * (len(images) - 1)
+        if not isinstance(height, list):
             heights = [height for _ in images]
         else:
             heights = height[:]
             height = sum(heights)
-        for im,w,h in zip(images,widths,heights):
-            im.thumbnail((w,h), PImage.ANTIALIAS)
+        for im, w, h in zip(images, widths, heights):
+            im.thumbnail((w, h), PImage.ANTIALIAS)
         widths, heights = zip(*(i.size for i in images))
-        total_width = sum(widths) + gap*(len(images)-1)
+        total_width = sum(widths) + gap * (len(images) - 1)
         max_height = max(heights)
         new_im = PImage.new('RGBA', (total_width, max_height))
         x_offset = 0
         for im in images:
-            new_im.paste(im, (x_offset,0),mask=im)
+            new_im.paste(im, (x_offset, 0), mask=im)
             x_offset += im.size[0] + gap
-        new_im.thumbnail((width,height), PImage.ANTIALIAS)
+        new_im.thumbnail((width, height), PImage.ANTIALIAS)
         return new_im
 
-    def images_vconcat(images, width=700,height=700, 
+
+    def images_vconcat(images, width=700, height=700,
                        gap=0, aspaths=True):
         """concatenate multiple images vertically 
     
@@ -217,31 +224,32 @@ if _pil_present:
                    
         """
         images = images_read(images) if aspaths else images
-        if not isinstance(width,list):
-            widths = [width for _ in images] 
+        if not isinstance(width, list):
+            widths = [width for _ in images]
         else:
             widths = width[:]
             width = sum(widths)
-        if not isinstance(height,list):
+        if not isinstance(height, list):
             heights = [height for _ in images]
         else:
             heights = height[:]
-            height = sum(heights) + gap*(len(images)-1)
-        for im,w,h in zip(images,widths,heights):
-            im.thumbnail((w,h), PImage.ANTIALIAS)
+            height = sum(heights) + gap * (len(images) - 1)
+        for im, w, h in zip(images, widths, heights):
+            im.thumbnail((w, h), PImage.ANTIALIAS)
         widths, heights = zip(*(i.size for i in images))
         max_width = max(widths)
-        total_height = sum(heights) + gap*(len(images)-1)
+        total_height = sum(heights) + gap * (len(images) - 1)
         new_im = PImage.new('RGBA', (max_width, total_height))
         y_offset = 0
         for im in images:
-            new_im.paste(im, (0,y_offset),mask=im)
+            new_im.paste(im, (0, y_offset), mask=im)
             y_offset += im.size[1] + gap
-        new_im.thumbnail((width,height), PImage.ANTIALIAS)
+        new_im.thumbnail((width, height), PImage.ANTIALIAS)
         return new_im
 
-    def images_gridconcat(pathslist,width=700,height=700,
-                         aspaths=True,hgap=0,vgap=0):
+
+    def images_gridconcat(pathslist, width=700, height=700,
+                          aspaths=True, hgap=0, vgap=0):
         """concatenate multiple images in a grid 
     
         Properties
@@ -263,19 +271,20 @@ if _pil_present:
         image : PIL.Image
                    
         """
-        himages = [images_hconcat(paths,gap=hgap,aspaths=aspaths) for paths in pathslist]
-        new_im = images_vconcat(himages,gap=vgap,aspaths=False)
-        new_im.thumbnail((width,height), PImage.ANTIALIAS)
+        himages = [images_hconcat(paths, gap=hgap, aspaths=aspaths) for paths in pathslist]
+        new_im = images_vconcat(himages, gap=vgap, aspaths=False)
+        new_im.thumbnail((width, height), PImage.ANTIALIAS)
         return new_im
 
 # JSONEXTENDED
 # ==========================
 try:
     from jsonextended import ejson, edict
+
     _jsonextended_present = True
 except ImportError:
     _jsonextended_present = False
 if _jsonextended_present:
     from jsonextended import plugins as eplugins
-    eplugins.load_builtin_plugins()
 
+    eplugins.load_builtin_plugins()

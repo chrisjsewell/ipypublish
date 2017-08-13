@@ -1,6 +1,9 @@
-import os, logging
-from nbconvert.preprocessors import Preprocessor
+import logging
+import os
+
 import traitlets as traits
+from nbconvert.preprocessors import Preprocessor
+
 
 class LatexDocLinks(Preprocessor):
     """ a preprocessor to resolve file paths in the ipub metadata section 
@@ -11,24 +14,24 @@ class LatexDocLinks(Preprocessor):
     add 'external_file_paths' and 'bibliopath' (if present) to resources
     
     """
-    
+
     metapath = traits.Unicode('', help="the path to the meta data").tag(config=True)
     filesfolder = traits.Unicode('', help="the folder to point towards").tag(config=True)
-    
+
     def resolve_path(self, fpath, filepath):
         """resolve a relative path, w.r.t. another filepath """
         if not os.path.isabs(fpath):
-            fpath = os.path.join(os.path.dirname(str(filepath)),fpath)
+            fpath = os.path.join(os.path.dirname(str(filepath)), fpath)
             fpath = os.path.abspath(fpath)
         return fpath
-        
+
     def preprocess(self, nb, resources):
-        
-        logging.info('resolving external file paths'+
-                     ' in ipub metadata to: {}'.format(self.metapath)) 
+
+        logging.info('resolving external file paths' +
+                     ' in ipub metadata to: {}'.format(self.metapath))
         external_files = []
         if hasattr(nb.metadata, 'ipub'):
-                
+
             # if hasattr(nb.metadata.ipub, 'files'):
             #     mfiles = []
             #     for fpath in nb.metadata.ipub.files:
@@ -41,8 +44,8 @@ class LatexDocLinks(Preprocessor):
             #         mfiles.append(os.path.join(self.filesfolder, os.path.basename(fpath)))
             #
             #     nb.metadata.ipub.files = mfiles
-                        
-            if hasattr(nb.metadata.ipub, 'bibliography'):                    
+
+            if hasattr(nb.metadata.ipub, 'bibliography'):
                 bib = nb.metadata.ipub.bibliography
                 bib = self.resolve_path(bib, self.metapath)
                 if not os.path.exists(bib):
@@ -53,8 +56,8 @@ class LatexDocLinks(Preprocessor):
                     resources['bibliopath'] = bib
 
                 nb.metadata.ipub.bibliography = os.path.join(self.filesfolder,
-                                                                os.path.basename(bib))
-            
+                                                             os.path.basename(bib))
+
             if hasattr(nb.metadata.ipub, 'titlepage'):
                 if hasattr(nb.metadata.ipub.titlepage, 'logo'):
                     logo = nb.metadata.ipub.titlepage.logo
@@ -66,8 +69,8 @@ class LatexDocLinks(Preprocessor):
                         external_files.append(logo)
 
                     nb.metadata.ipub.titlepage.logo = os.path.join(self.filesfolder,
-                                                               os.path.basename(logo))
+                                                                   os.path.basename(logo))
         resources.setdefault("external_file_paths", [])
-        resources['external_file_paths'] += external_files               
-        
+        resources['external_file_paths'] += external_files
+
         return nb, resources

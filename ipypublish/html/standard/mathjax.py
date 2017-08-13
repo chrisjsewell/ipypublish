@@ -1,8 +1,8 @@
 tpl_dict = {
-    
-'meta_docstring':'with mathjax loaded',
 
-'html_header':r"""
+    'meta_docstring': 'with mathjax loaded',
+
+    'html_header': r"""
 <!-- Load mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
 <!-- MathJax configuration -->

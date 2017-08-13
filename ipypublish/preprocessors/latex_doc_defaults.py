@@ -1,9 +1,11 @@
-import os, logging
+import logging
+
+import traitlets as traits
 from nbconvert.preprocessors import Preprocessor
 from nbformat.notebooknode import NotebookNode
-import traitlets as traits
 
-def flatten(d,key_as_tuple=True,sep='.'):
+
+def flatten(d, key_as_tuple=True, sep='.'):
     """ get nested dict as {key:val,...}, where key is tuple/string of all nested keys
 
     Parameters
@@ -28,21 +30,23 @@ def flatten(d,key_as_tuple=True,sep='.'):
     {'1.a': 'A', '2.b': 'B'}
 
     """
+
     def expand(key, value):
-        if isinstance(value,dict):
+        if isinstance(value, dict):
             if key_as_tuple:
-                return [ (key + k, v) for k, v in flatten(value,key_as_tuple).items() ]
+                return [(key + k, v) for k, v in flatten(value, key_as_tuple).items()]
             else:
-                return [ (str(key) + sep + k, v) for k, v in flatten(value,key_as_tuple).items() ]
+                return [(str(key) + sep + k, v) for k, v in flatten(value, key_as_tuple).items()]
         else:
-            return [ (key, value) ]
+            return [(key, value)]
 
     if key_as_tuple:
-        items = [ item for k, v in d.items() for item in expand((k,), v) ]
+        items = [item for k, v in d.items() for item in expand((k,), v)]
     else:
-        items = [ item for k, v in d.items() for item in expand(k, v) ]
+        items = [item for k, v in d.items() for item in expand(k, v)]
 
     return dict(items)
+
 
 class MetaDefaults(Preprocessor):
     """ a preprocessor which enters default metadata tags 
@@ -50,13 +54,13 @@ class MetaDefaults(Preprocessor):
     
     """
 
-    nb_defaults = traits.Dict(default_value={},help='dict of notebook level defaults').tag(config=True)    
-    cell_defaults = traits.Dict(default_value={},help='dict of cell level defaults').tag(config=True)
-    overwrite = traits.Bool(False,help="whether existing values should be overwritten").tag(config=True)
-    
+    nb_defaults = traits.Dict(default_value={}, help='dict of notebook level defaults').tag(config=True)
+    cell_defaults = traits.Dict(default_value={}, help='dict of cell level defaults').tag(config=True)
+    overwrite = traits.Bool(False, help="whether existing values should be overwritten").tag(config=True)
+
     def preprocess(self, nb, resources):
-        
-        logging.info('adding ipub defaults to notebook') 
+
+        logging.info('adding ipub defaults to notebook')
 
         for keys, val in flatten(self.nb_defaults).items():
             dct = nb.metadata
@@ -68,7 +72,7 @@ class MetaDefaults(Preprocessor):
                 dct[keys[-1]] = val
             elif self.overwrite:
                 dct[keys[-1]] = val
-                
+
         for cell in nb.cells:
             for keys, val in flatten(self.cell_defaults).items():
                 dct = cell.metadata
@@ -80,5 +84,5 @@ class MetaDefaults(Preprocessor):
                     dct[keys[-1]] = val
                 elif self.overwrite:
                     dct[keys[-1]] = val
-        
+
         return nb, resources

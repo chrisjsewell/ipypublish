@@ -1,15 +1,15 @@
-tplx_dict = { 
-'meta_docstring':'with standard nbconvert article setup',
+tplx_dict = {
+    'meta_docstring': 'with standard nbconvert article setup',
 
-'document_docclass':r'\documentclass[11pt]{article}',
+    'document_docclass': r'\documentclass[11pt]{article}',
 
-'document_margins':r"""
+    'document_margins': r"""
 \usepackage{geometry} % Used to adjust the document margins
 % Slightly bigger margins than the latex defaults
 \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
 """,
 
-'document_packages':r"""
+    'document_packages': r"""
 
     \usepackage[T1]{fontenc} % Nicer default font (+ math font) than Computer Modern for most use cases
     \usepackage{mathpazo}
@@ -45,7 +45,7 @@ tplx_dict = {
     \usepackage{todonotes} % to mark to-dos
 """,
 
-'document_definitions':r"""
+    'document_definitions': r"""
     % Colors for the hyperref package
     \definecolor{urlcolor}{rgb}{0,.145,.698}
     \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
@@ -71,13 +71,13 @@ tplx_dict = {
 
 """,
 
-'document_header_end':r"""
+    'document_header_end': r"""
 % clereref must be loaded after anything that changes the referencing system
 \usepackage{cleveref}
 \creflabelformat{equation}{#2#1#3}
 """,
 
-'document_commands':r"""
+    'document_commands': r"""
     % Prevent overflowing lines due to hard-to-break entities
     \sloppy 
     % Setup hyperref package
@@ -91,7 +91,7 @@ tplx_dict = {
 
 """,
 
-'document_title':r"""
+    'document_title': r"""
 \title{((( resources.metadata.name | ascii_only | escape_latex )))}
 \maketitle
 """

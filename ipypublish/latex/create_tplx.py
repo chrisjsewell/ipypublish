@@ -166,7 +166,8 @@ A latex document
 {jinja_macros}
 """
 
-def create_tplx(tplx_dicts=(),outpath=None):
+
+def create_tplx(tplx_dicts=(), outpath=None):
     """ build a latex jinja template from multiple dictionaries,
     specifying fragments of the template to insert a specific points
                 
@@ -179,70 +180,68 @@ def create_tplx(tplx_dicts=(),outpath=None):
     tplx_dicts: list of dicts
     outpath: str
         if not None, output template to file
-    outline : dict
-        the outline jinja template
-    
+
     """
-    outline=TPLX_OUTLINE
-    tplx_sections={
-    'meta_docstring':'',
+    outline = TPLX_OUTLINE
+    tplx_sections = {
+        'meta_docstring': '',
 
-    'document_docclass':'',
-    'document_packages':'',
-    'document_definitions':'',
+        'document_docclass': '',
+        'document_packages': '',
+        'document_definitions': '',
 
-    'document_margins':'',
-    'document_commands':'',
-    'document_header_end':'',
+        'document_margins': '',
+        'document_commands': '',
+        'document_header_end': '',
 
-    'document_title':'',
-    'document_abstract':'',
-    'document_predoc':'',
+        'document_title': '',
+        'document_abstract': '',
+        'document_predoc': '',
 
-    'document_bibliography':'',
-    'document_postdoc':'',
+        'document_bibliography': '',
+        'document_postdoc': '',
 
-    'notebook_input':'',
-    'notebook_input_code':'',
-    'notebook_input_raw':'',
-    'notebook_input_markdown':'',
-    'notebook_input_unknown':'',
+        'notebook_input': '',
+        'notebook_input_code': '',
+        'notebook_input_raw': '',
+        'notebook_input_markdown': '',
+        'notebook_input_unknown': '',
 
-    'notebook_output':'',
-    'notebook_output_text':'',
-    'notebook_output_error':'',
-    'notebook_output_traceback':'',
-    'notebook_output_stream':'',
-    'notebook_output_latex':'',
-    'notebook_output_markdown':'',
-    'notebook_output_png':'',
-    'notebook_output_jpg':'',
-    'notebook_output_svg':'',
-    'notebook_output_pdf':'',
+        'notebook_output': '',
+        'notebook_output_text': '',
+        'notebook_output_error': '',
+        'notebook_output_traceback': '',
+        'notebook_output_stream': '',
+        'notebook_output_latex': '',
+        'notebook_output_markdown': '',
+        'notebook_output_png': '',
+        'notebook_output_jpg': '',
+        'notebook_output_svg': '',
+        'notebook_output_pdf': '',
 
-    'jinja_macros':''}
-    
+        'jinja_macros': ''}
+
     for i, tplx_dict in enumerate(tplx_dicts):
         if 'overwrite' in list(tplx_dict.keys()):
             overwrite = tplx_dict['overwrite']
         else:
             overwrite = []
         logging.debug('overwrite keys: {}'.format(overwrite))
-        for key,val in tplx_dict.items():
+        for key, val in tplx_dict.items():
             if key == 'overwrite':
-                pass            
+                pass
             elif key not in tplx_sections:
                 raise ValueError(
-                '{0} from tplx_dict {1} not in outline tplx section'.format(key,i))
+                    '{0} from tplx_dict {1} not in outline tplx section'.format(key, i))
             elif key in overwrite:
                 tplx_sections[key] = val
             else:
-                tplx_sections[key] = tplx_sections[key]+'\n'+val
+                tplx_sections[key] = tplx_sections[key] + '\n' + val
 
-    outline =  outline.format(**tplx_sections) 
-    
-    if outpath is not None: 
-        with open(outpath,'w') as f:
+    outline = outline.format(**tplx_sections)
+
+    if outpath is not None:
+        with open(outpath, 'w') as f:
             f.write(outline)
         return
     return outline

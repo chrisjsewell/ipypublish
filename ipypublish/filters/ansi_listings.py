@@ -4,8 +4,8 @@
 # Distributed under the terms of the Modified BSD License.
 
 import re
-from  nbconvert.filters.latex import escape_latex
 
+from nbconvert.filters.latex import escape_latex
 
 __all__ = [
     'ansi2listings',
@@ -32,7 +32,8 @@ _ANSI_COLORS = (
     'ansi-white-intense',
 )
 
-def ansi2listings(text,escapechar='%%%'):
+
+def ansi2listings(text, escapechar='%'):
     """
     Convert ANSI colors to LaTeX colors.
 
@@ -40,11 +41,14 @@ def ansi2listings(text,escapechar='%%%'):
     ----------
     text : unicode
         Text containing ANSI colors to convert to LaTeX
+    escapechar: str
+        escape character
 
     """
-    return _ansi2anything(text, _latexconverter,escapechar)
+    return _ansi2anything(text, _latexconverter, escapechar)
 
-def _latexconverter(fg, bg, bold,escapechar):
+
+def _latexconverter(fg, bg, bold, escapechar):
     """
     Return start and end markup given foreground/background/bold.
 
@@ -77,10 +81,10 @@ def _latexconverter(fg, bg, bold,escapechar):
     if bold:
         starttag += r'\textbf{'
         endtag = '}' + endtag
-		
+
     starttag = escapechar + starttag
     endtag += escapechar
-	
+
     return starttag, endtag
 
 
@@ -128,7 +132,7 @@ def _ansi2anything(text, converter, escapechar):
         if chunk:
             if bold and fg in range(8):
                 fg += 8
-            starttag, endtag = converter(fg, bg, bold,escapechar)
+            starttag, endtag = converter(fg, bg, bold, escapechar)
             out.append(starttag)
             if starttag.startswith(escapechar) and endtag.endswith(escapechar):
                 chunk = escape_latex(chunk)

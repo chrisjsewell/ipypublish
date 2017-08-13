@@ -2,11 +2,11 @@
 import logging
 
 import nbconvert
-
-from traitlets.config import Config
 from jinja2 import DictLoader
+from traitlets.config import Config
 
-def export_notebook(nb,format,config,template):    
+
+def export_notebook(nb, format, config, template):
     """ exports a notebook in a particular format
     
     Parameters
@@ -27,23 +27,23 @@ def export_notebook(nb,format,config,template):
         the file extension of the exported format (e.g. .tex)
     
     """
-    jinja_template = DictLoader({'my_template':template})
+    jinja_template = DictLoader({'my_template': template})
     c = Config()
     for key, val in config.items():
         # TODO should probably not use exec, need to think of another way
         exec('c.{0} = val'.format(key)) in globals(), locals()
-        
-    if not hasattr(nbconvert, format+'Exporter'):
+
+    if not hasattr(nbconvert, format + 'Exporter'):
         logging.error('the export format is not recognised: {}'.format(format))
         raise ValueError('the export format is not recognised: {}'.format(format))
-    
-    class MyExporter(getattr(nbconvert, format+'Exporter')):
+
+    class MyExporter(getattr(nbconvert, format + 'Exporter')):
         """override the default template"""
         template_file = 'my_template'
 
-    logging.info('running nbconvert')    
+    logging.info('running nbconvert')
     exporter = MyExporter(
-                    config=c,
-                    extra_loaders=[jinja_template])
-                    
+        config=c,
+        extra_loaders=[jinja_template])
+
     return exporter.from_notebook_node(nb), exporter.file_extension

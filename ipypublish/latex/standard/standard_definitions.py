@@ -1,10 +1,10 @@
 """Standard nbconvert definitions
 """
 
-tplx_dict = { 
-'meta_docstring':'with standard nbconvert definitions',
-    
-'document_definitions':r"""
+tplx_dict = {
+    'meta_docstring': 'with standard nbconvert definitions',
+
+    'document_definitions': r"""
 
 % Pygments definitions
 ((( resources.latex.pygments_definitions )))

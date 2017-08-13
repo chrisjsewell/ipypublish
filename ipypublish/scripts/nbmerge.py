@@ -8,12 +8,10 @@ python nbmerge.py directory_name > merged.ipynb
 """
 from __future__ import print_function
 
-import io
-import os
-import sys
-import glob
-import re
 import logging
+import os
+import re
+import sys
 
 import nbformat
 
@@ -27,11 +25,13 @@ try:
 except NameError:
     basestring = str
 
-def alphanumeric_sort(l): 
+
+def alphanumeric_sort(l):
     """sort key.name alphanumeriacally """
-    convert = lambda text: int(text) if text.isdigit() else text.lower() 
-    alphanum_key = lambda key: [ convert(c) for c in re.split('([0-9]+)', key.name) ] 
-    return sorted(l, key = alphanum_key)
+    convert = lambda text: int(text) if text.isdigit() else text.lower()
+    alphanum_key = lambda key: [convert(c) for c in re.split('([0-9]+)', key.name)]
+    return sorted(l, key=alphanum_key)
+
 
 def merge_notebooks(ipynb_path, ignore_prefix='_',
                     to_str=False, as_version=4):
@@ -40,8 +40,14 @@ def merge_notebooks(ipynb_path, ignore_prefix='_',
     
     Parameters
     ----------
-    ipynb_path: str or path_like                
-        
+    ipynb_path: str or path_like
+    ignore_prefix : str
+        ignore filename starting with this prefix
+    to_str: bool
+        return as a string, else return nbformat object
+    as_version: int
+        notebook format vesion
+
     Returns
     ------
     finalnb: jupyter.notebook
@@ -49,13 +55,13 @@ def merge_notebooks(ipynb_path, ignore_prefix='_',
         path to notebook containing meta file
 
     """
-                    
-    if isinstance(ipynb_path,basestring):
+    meta_path = ''
+    if isinstance(ipynb_path, basestring):
         ipynb_path = pathlib.Path(ipynb_path)
     if not ipynb_path.exists():
         logging.error('the notebook path does not exist: {}'.format(ipynb_path))
         raise IOError('the notebook path does not exist: {}'.format(ipynb_path))
-    
+
     final_nb = None
     if ipynb_path.is_dir():
         logging.info('Merging all notebooks in directory')
@@ -76,16 +82,16 @@ def merge_notebooks(ipynb_path, ignore_prefix='_',
         meta_path = ipynb_path
     if not hasattr(final_nb.metadata, 'name'):
         final_nb.metadata.name = ''
-    final_nb.metadata.name += "_merged"                
+    final_nb.metadata.name += "_merged"
 
     if to_str:
-        if (sys.version_info > (3, 0)):
+        if sys.version_info > (3, 0):
             return nbformat.writes(final_nb)
         else:
             return nbformat.writes(final_nb).encode('utf-8')
-    
+
     if final_nb is None:
         logging.error('no acceptable notebooks found for path: {}'.format(ipynb_path.name))
         raise IOError('no acceptable notebooks found for path: {}'.format(ipynb_path.name))
-    
+
     return final_nb, meta_path

@@ -1,15 +1,15 @@
 tpl_dict = {
-    
-'overwrite':['notebook_all','html_body_start','notebook_input_markdown'],
-    
-'meta_docstring':'marks up html with slide tags, based on metadata',
 
-"globals":r"""
+    'overwrite': ['notebook_all', 'html_body_start', 'notebook_input_markdown'],
+
+    'meta_docstring': 'marks up html with slide tags, based on metadata',
+
+    "globals": r"""
 {% set slidecolumn = [] %}"
 {% set sliderow = {'len':[]} %}"
 """,
 
-'html_body_start':r"""
+    'html_body_start': r"""
 <div class="reveal">
 <div class="slides">
 
@@ -30,8 +30,8 @@ tpl_dict = {
 {%- endif -%}
 
 """,
-    
-'notebook_all':r"""
+
+    'notebook_all': r"""
 
 {%- if cell.metadata.ipyslides == 'skip' -%}
 {%- endif -%}
@@ -103,11 +103,8 @@ tpl_dict = {
 
 """,
 
-'notebook_input_markdown':r"""
+    'notebook_input_markdown': r"""
 {{ cell.source  | markdown2html | strip_files_prefix }}
 """,
 
-
 }
-
-

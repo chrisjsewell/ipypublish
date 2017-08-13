@@ -1,19 +1,22 @@
-import contextlib 
-from functools import total_ordering 
-from fnmatch import fnmatch 
-import tempfile
+import contextlib
 import os
+import tempfile
+from fnmatch import fnmatch
+from functools import total_ordering
+
 
 class _OpenRead(object):
     def __init__(self, linelist, encoding=None):
         self._linelist = linelist
         self._current_indx = 0
         self._encoding = encoding
+
     def read(self):
         text = '\n'.join(self._linelist)
         if self._encoding is not None:
             text = text.encode(self._encoding)
         return text
+
     def readline(self):
         if self._current_indx >= len(self._linelist):
             line = ''
@@ -23,22 +26,27 @@ class _OpenRead(object):
         if self._encoding is not None:
             line = line.encode(self._encoding)
         return line
+
     def __iter__(self):
         for line in self._linelist:
             if self._encoding is not None:
-                line = line.encode(self._encoding)            
+                line = line.encode(self._encoding)
             yield line
+
 
 class _OpenWrite(object):
     def __init__(self):
         self._str = ''
-    def write(self,instr):
+
+    def write(self, instr):
         self._str += instr
+
     def writelines(self, lines):
         for instr in lines:
             self.write(instr)
 
-@total_ordering 
+
+@total_ordering
 class MockPath(object):
     r"""a mock path, mimicking pathlib.Path, 
     supporting context open method for read/write
@@ -119,51 +127,55 @@ class MockPath(object):
     [MockFolder("dir1"), MockFolder("dir2"), MockFolder("dir3"), MockFile("test.txt")]
         
     """
-    def __init__(self, path='root', 
-                 is_file=False,exists=True,
-                 structure=[],content=''):
+
+    def __init__(self, path='root',
+                 is_file=False, exists=True,
+                 structure=(), content=''):
         self._path = path
         self.name = os.path.basename(path)
         self._exists = exists
         self._is_file = is_file
-        self._is_dir = not is_file        
+        self._is_dir = not is_file
         self._content = content.splitlines()
-        
+
         self.children = []
         for subobj in structure:
-            if hasattr(subobj,'keys'):            
+            if hasattr(subobj, 'keys'):
                 key = list(subobj.keys())[0]
-                self.children.append(MockPath(os.path.join(self._path,key),
+                self.children.append(MockPath(os.path.join(self._path, key),
                                               structure=subobj[key]))
-            elif isinstance(subobj,MockPath):
+            elif isinstance(subobj, MockPath):
                 self.children.append(subobj)
             else:
-                raise ValueError('items must be dict_like or MockPath: {}'.format(subobj))        
-        
+                raise ValueError('items must be dict_like or MockPath: {}'.format(subobj))
+
     def is_file(self):
         return self._is_file
+
     def is_dir(self):
         return self._is_dir
+
     def exists(self):
         return self._exists
-                        
+
     def joinpath(self, path):
         if len(os.path.split(path)[0]):
             raise NotImplementedError
         for child in self.children:
             if child.name == path:
                 return child
-                
+
         # does not yet exist, must use touch or mkdir to convert to file or folder
-        new = MockPath(path=os.path.join(self._path,path),exists=False)
+        new = MockPath(path=os.path.join(self._path, path), exists=False)
         self.children.append(new)
         return new
-        
+
     def mkdir(self):
         if not self._exists:
             self._is_file = False
             self._is_dir = True
             self._exists = True
+
     def touch(self):
         if not self._exists:
             self._is_file = True
@@ -174,30 +186,30 @@ class MockPath(object):
         for subobj in sorted(self.children):
             if subobj.exists():
                 yield subobj
-    
+
     def glob(self, regex):
         for subobj in sorted(self.children):
-            if fnmatch(subobj.name,regex):
-                yield subobj     
-    
-    @contextlib.contextmanager    
+            if fnmatch(subobj.name, regex):
+                yield subobj
+
+    @contextlib.contextmanager
     def maketemp(self):
         """make a named temporary file containing the file contents """
         if self.is_dir():
             raise IOError('[Errno 21] Is a directory: {}'.format(self.path))
-        fileTemp = tempfile.NamedTemporaryFile(mode='w+',delete = False)
+        file_temp = tempfile.NamedTemporaryFile(mode='w+', delete=False)
         try:
-            fileTemp.write('\n'.join(self._content))
-            fileTemp.close()
-            yield fileTemp
+            file_temp.write('\n'.join(self._content))
+            file_temp.close()
+            yield file_temp
         finally:
-            os.remove(fileTemp.name)        
-        
-    @contextlib.contextmanager    
+            os.remove(file_temp.name)
+
+    @contextlib.contextmanager
     def open(self, readwrite='r', encoding=None):
         if self.is_dir():
             raise IOError('[Errno 21] Is a directory: {}'.format(self.path))
-            
+
         if 'r' in readwrite:
             obj = _OpenRead(self._content, encoding)
             yield obj
@@ -208,56 +220,59 @@ class MockPath(object):
         else:
             raise ValueError('readwrite should contain r or w')
 
-    def __gt__(self,other):
+    def __gt__(self, other):
         if not hasattr(other, 'name'):
             return NotImplemented
         return self.name > other.name
-    def __eq__(self,other):
+
+    def __eq__(self, other):
         if not hasattr(other, 'name'):
             return NotImplemented
         return self.name == other.name
-        
-    def _recurse_print(self, obj, text='',indent=0,indentlvl=2,file_content=False):
+
+    def _recurse_print(self, obj, text='', indent=0, indentlvl=2, file_content=False):
         indent += indentlvl
         for subobj in sorted(obj):
             if not subobj.exists():
                 continue
-            if subobj.is_dir():            
-                text += ' '*indent + '{0}("{1}") \n'.format(self._folderstr, subobj.name)
+            if subobj.is_dir():
+                text += ' ' * indent + '{0}("{1}") \n'.format(self._folderstr, subobj.name)
                 text += self._recurse_print(subobj.children,
-                                indent=indent,file_content=file_content)
+                                            indent=indent, file_content=file_content)
             else:
                 if file_content:
-                    sep = '\n'+' '*(indent+1)
-                    text += ' '*indent + sep.join(['{0}("{1}") Contents:'.format(self._filestr,subobj.name)]+subobj._content) + '\n'
+                    sep = '\n' + ' ' * (indent + 1)
+                    text += ' ' * indent + sep.join(
+                        ['{0}("{1}") Contents:'.format(self._filestr, subobj.name)] + subobj._content) + '\n'
                 else:
-                    text += ' '*indent + '{0}("{1}") \n'.format(self._filestr,subobj.name)
-            
+                    text += ' ' * indent + '{0}("{1}") \n'.format(self._filestr, subobj.name)
+
         return text
-        
-    def to_string(self,indentlvl=2,file_content=False,color=False):
+
+    def to_string(self, indentlvl=2, file_content=False, color=False):
         """convert to string """
         if color:
-            self._folderstr = colortxt('Folder','green')
-            self._filestr = colortxt('File','blue')
+            self._folderstr = colortxt('Folder', 'green')
+            self._filestr = colortxt('File', 'blue')
         else:
             self._folderstr = 'Folder'
             self._filestr = 'File'
-        
+
         if self.is_file():
-            return '\n'.join(['{0}("{1}") Contents:'.format(self._filestr,self.name)]+self._content)
+            return '\n'.join(['{0}("{1}") Contents:'.format(self._filestr, self.name)] + self._content)
         elif self.is_dir():
-            text = '{0}("{1}") \n'.format(self._folderstr,self.name)
-            text += self._recurse_print(self.children,indentlvl=indentlvl,
+            text = '{0}("{1}") \n'.format(self._folderstr, self.name)
+            text += self._recurse_print(self.children, indentlvl=indentlvl,
                                         file_content=file_content)
-            
+
             text = text[0:-1] if text.endswith('\n') else text
             return text
         else:
             return 'MockPath({})'.format(self.name)
-        
+
     def __str__(self):
         return self.__repr__()
+
     def __repr__(self):
         if not self.exists():
             return 'MockVirtualPath("{}")'.format(self.name)
@@ -266,4 +281,4 @@ class MockPath(object):
         elif self.is_file():
             return 'MockFile("{}")'.format(self.name)
         else:
-            return 'MockPath("{}")'.format(self.name)            
+            return 'MockPath("{}")'.format(self.name)

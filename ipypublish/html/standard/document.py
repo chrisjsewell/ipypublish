@@ -1,9 +1,8 @@
-
 tpl_dict = {
-    
-'meta_docstring':'with standard nbconvert css layout',
-    
-'html_header':r"""
+
+    'meta_docstring': 'with standard nbconvert css layout',
+
+    'html_header': r"""
 <title>{{resources['metadata']['name']}}</title>
 
 {% for css in resources.inlining.css -%}
@@ -54,12 +53,12 @@ div#notebook-container{
 
 """,
 
-'html_body_start':r"""
+    'html_body_start': r"""
    <div tabindex="-1" id="notebook" class="border-box-sizing">
      <div class="container" id="notebook-container">
 """,
 
-'html_body_end':r"""
+    'html_body_end': r"""
      </div>
    </div>
 """

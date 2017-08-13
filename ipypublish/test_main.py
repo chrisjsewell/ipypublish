@@ -1,13 +1,17 @@
-import os, tempfile, shutil
-from nose.tools import eq_, raises
-from ipypublish.utils import MockPath
-from ipypublish.scripts import nbmerge, nbexport, pdfexport
+import os
+import shutil
+import tempfile
+
 from ipypublish.main import publish
-    
-class Test_main(object):
+from ipypublish.scripts import nbmerge, nbexport, pdfexport
+from ipypublish.utils import MockPath
+from nose.tools import eq_
+
+
+class TestMain(object):
     def setup(self):
-        self.file1 = MockPath('2test.ipynb',is_file=True,
-        content=r"""{
+        self.file1 = MockPath('2test.ipynb', is_file=True,
+                              content=r"""{
  "cells": [
       {
        "cell_type": "markdown",
@@ -53,8 +57,8 @@ class Test_main(object):
      "nbformat": 4,
      "nbformat_minor": 2
 }""")
-        self.file2 = MockPath('1test.ipynb',is_file=True,
-        content=r"""{
+        self.file2 = MockPath('1test.ipynb', is_file=True,
+                              content=r"""{
  "cells": [
       {
        "cell_type": "markdown",
@@ -101,8 +105,8 @@ class Test_main(object):
      "nbformat_minor": 2
 }""")
 
-        self.file_with_bib = MockPath('test_with_bib.ipynb',is_file=True,
-        content=r"""{
+        self.file_with_bib = MockPath('test_with_bib.ipynb', is_file=True,
+                                      content=r"""{
  "cells": [
       {
        "cell_type": "markdown",
@@ -150,8 +154,8 @@ class Test_main(object):
      "nbformat_minor": 2
 }""")
 
-        self.bibfile = MockPath('test.bib',is_file=True,
-        content=r"""
+        self.bibfile = MockPath('test.bib', is_file=True,
+                                content=r"""
 @article{kirkeminde_thermodynamic_2012,
   title = {Thermodynamic Control of Iron Pyrite Nanocrystal Synthesis with High Photoactivity and Stability},
   volume = {1},
@@ -187,25 +191,25 @@ class Test_main(object):
 }
 """)
 
-        self.directory = MockPath('dir1',structure=[self.file1,self.file2])
-        
+        self.directory = MockPath('dir1', structure=[self.file1, self.file2])
+
     def test_nbmerge_one_notebook(self):
         nb, path = nbmerge.merge_notebooks(self.file1)
-        eq_(nb.metadata.test_name,"notebook1")
-        eq_(len(nb.cells),2)
+        eq_(nb.metadata.test_name, "notebook1")
+        eq_(len(nb.cells), 2)
 
     def test_nbmerge_two_notebooks(self):
         nb, path = nbmerge.merge_notebooks(self.directory)
-        eq_(nb.metadata.test_name,"notebook2")
-        eq_(len(nb.cells),4)
+        eq_(nb.metadata.test_name, "notebook2")
+        eq_(len(nb.cells), 4)
 
     def test_nbexport_latex_empty(self):
         template = ''
         config = {}
         nb, path = nbmerge.merge_notebooks(self.file1)
-        (body, resources), exe = nbexport.export_notebook(nb,'Latex',config,template)
-        eq_(exe,'.tex')        
-        eq_(body,'')
+        (body, resources), exe = nbexport.export_notebook(nb, 'Latex', config, template)
+        eq_(exe, '.tex')
+        eq_(body, '')
 
     def test_nbexport_latex_mkdown1(self):
         template = """
@@ -215,9 +219,9 @@ test123
         """
         config = {}
         nb, path = nbmerge.merge_notebooks(self.file1)
-        (body, resources), exe = nbexport.export_notebook(nb,'Latex',config,template)
-        eq_(exe,'.tex')        
-        eq_(body.strip(),'test123')
+        (body, resources), exe = nbexport.export_notebook(nb, 'Latex', config, template)
+        eq_(exe, '.tex')
+        eq_(body.strip(), 'test123')
 
     def test_nbexport_latex_mkdown2(self):
         template = """
@@ -228,18 +232,18 @@ test123
         """
         config = {}
         nb, path = nbmerge.merge_notebooks(self.file1)
-        (body, resources), exe = nbexport.export_notebook(nb,'Latex',config,template)
-        eq_(exe,'.tex')        
-        eq_(body.strip(),'# a title\n\nsome text')
-        
+        (body, resources), exe = nbexport.export_notebook(nb, 'Latex', config, template)
+        eq_(exe, '.tex')
+        eq_(body.strip(), '# a title\n\nsome text')
+
     def test_nbexport_html_empty(self):
         template = ''
         config = {}
         nb, path = nbmerge.merge_notebooks(self.file1)
-        (body, resources), exe = nbexport.export_notebook(nb,'HTML',config,template)
-        eq_(exe,'.html')        
-        eq_(body,'')
-        
+        (body, resources), exe = nbexport.export_notebook(nb, 'HTML', config, template)
+        eq_(exe, '.html')
+        eq_(body, '')
+
     def test_nbexport_html_mkdown1(self):
         template = """
 {% block markdowncell scoped %}
@@ -248,9 +252,9 @@ test123
         """
         config = {}
         nb, path = nbmerge.merge_notebooks(self.file1)
-        (body, resources), exe = nbexport.export_notebook(nb,'HTML',config,template)
-        eq_(exe,'.html')        
-        eq_(body.strip(),'test123')
+        (body, resources), exe = nbexport.export_notebook(nb, 'HTML', config, template)
+        eq_(exe, '.html')
+        eq_(body.strip(), 'test123')
 
     def test_nbexport_html_mkdown2(self):
         template = """
@@ -261,10 +265,10 @@ test123
         """
         config = {}
         nb, path = nbmerge.merge_notebooks(self.file1)
-        (body, resources), exe = nbexport.export_notebook(nb,'HTML',config,template)
-        eq_(exe,'.html')        
-        eq_(body.strip(),'# a title\n\nsome text')
-        
+        (body, resources), exe = nbexport.export_notebook(nb, 'HTML', config, template)
+        eq_(exe, '.html')
+        eq_(body.strip(), '# a title\n\nsome text')
+
     def test_pdf_export(self):
 
         tex_content = """
@@ -273,50 +277,51 @@ test123
 \end{document}
 """
         out_folder = tempfile.mkdtemp()
-        tex_path = os.path.join(out_folder,'test.tex')
-        pdf_path = os.path.join(out_folder,'test.pdf')
+        tex_path = os.path.join(out_folder, 'test.tex')
+        pdf_path = os.path.join(out_folder, 'test.pdf')
         try:
-            with open(tex_path,'w') as f:
+            with open(tex_path, 'w') as f:
                 f.write(tex_content)
-            pdfexport.export_pdf(tex_path,out_folder)
+            pdfexport.export_pdf(tex_path, out_folder)
             assert os.path.exists(pdf_path)
         finally:
-            shutil.rmtree(out_folder)    
-            
+            shutil.rmtree(out_folder)
+
     def test_publish_file1_latex(self):
-        
+
         out_folder = tempfile.mkdtemp()
-        tex_path = os.path.join(out_folder,'2test.tex')
+        tex_path = os.path.join(out_folder, '2test.tex')
         try:
-            publish(self.file1,outpath=out_folder)
+            publish(self.file1, outpath=out_folder)
             assert os.path.exists(tex_path)
         finally:
-            shutil.rmtree(out_folder)    
+            shutil.rmtree(out_folder)
 
     def test_publish_folder1_latex(self):
-        
+
         out_folder = tempfile.mkdtemp()
-        tex_path = os.path.join(out_folder,'dir1.tex')
+        tex_path = os.path.join(out_folder, 'dir1.tex')
         try:
-            publish(self.directory,outpath=out_folder)
+            publish(self.directory, outpath=out_folder)
             assert os.path.exists(tex_path)
         finally:
-            shutil.rmtree(out_folder)    
+            shutil.rmtree(out_folder)
 
     def test_publish_file1_pdf(self):
-        
+
         out_folder = tempfile.mkdtemp()
-        tex_path = os.path.join(out_folder,'2test.tex')
-        pdf_path = os.path.join(out_folder,'2test.pdf')
+        tex_path = os.path.join(out_folder, '2test.tex')
+        pdf_path = os.path.join(out_folder, '2test.pdf')
         try:
-            publish(self.file1,outpath=out_folder,create_pdf=True)
+            publish(self.file1, outpath=out_folder, create_pdf=True)
             assert os.path.exists(tex_path)
             assert os.path.exists(pdf_path)
         finally:
-            shutil.rmtree(out_folder)    
+            shutil.rmtree(out_folder)
 
-    # def test_publish_withbib(self):
-    #     out_folder = tempfile.mkdtemp()
+            # def test_publish_withbib(self):
+
+    # out_folder = tempfile.mkdtemp()
     #     tex_path = os.path.join(out_folder,'test_with_bib.tex')
     #     pdf_path = os.path.join(out_folder,'test_with_bib.pdf')
     #     with self.file_with_bib.maketemp() as file_with_bib_dir:
@@ -329,35 +334,33 @@ test123
     #             shutil.rmtree(out_folder)
 
     def test_publish_file1_html(self):
-        
+
         out_folder = tempfile.mkdtemp()
-        html_path = os.path.join(out_folder,'2test.html')
+        html_path = os.path.join(out_folder, '2test.html')
         try:
-            publish(self.file1,outformat='html_ipypublish_main',outpath=out_folder)
+            publish(self.file1, outformat='html_ipypublish_main', outpath=out_folder)
             assert os.path.exists(html_path)
         finally:
-            shutil.rmtree(out_folder)    
+            shutil.rmtree(out_folder)
 
     def test_publish_file1_slides(self):
-        
+
         out_folder = tempfile.mkdtemp()
-        html_path = os.path.join(out_folder,'2test.slides.html')
+        html_path = os.path.join(out_folder, '2test.slides.html')
         try:
-            publish(self.file1,outformat='slides_ipypublish_main',outpath=out_folder)
+            publish(self.file1, outformat='slides_ipypublish_main', outpath=out_folder)
             assert os.path.exists(html_path)
         finally:
-            shutil.rmtree(out_folder)   
-            
+            shutil.rmtree(out_folder)
+
     def test_publish_run_all_plugins(self):
         from ipypublish.scripts import export_plugins
         for plugin_name in export_plugins.get().keys():
             out_folder = tempfile.mkdtemp()
             try:
-                publish(self.file1,outformat=plugin_name,outpath=out_folder)
+                publish(self.file1, outformat=plugin_name, outpath=out_folder)
             finally:
-                shutil.rmtree(out_folder)    
+                shutil.rmtree(out_folder)
 
-    # TODO files with internal files
-    # TODO files with external files
-        
-        
+                # TODO files with internal files
+                # TODO files with external files

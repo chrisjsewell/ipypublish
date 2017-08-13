@@ -20,18 +20,17 @@
 # .ipytable>div { flex:1; }
 
 tpl_dict = {
-    
-'meta_docstring':""" caption and label elements according to ipub meta tags  """,
-'overwrite':['notebook_output','notebook_all','notebook_input_markdown',
-            'notebook_input_code','notebook_input_code_pre','notebook_input_code_post',
-            'notebook_output_text','notebook_output_stream_stderr','notebook_output_stream_stdout'],
-"globals":r"""
+
+    'meta_docstring': """ caption and label elements according to ipub meta tags  """,
+    'overwrite': ['notebook_output', 'notebook_all', 'notebook_input_markdown',
+                  'notebook_input_code', 'notebook_input_code_pre', 'notebook_input_code_post',
+                  'notebook_output_text', 'notebook_output_stream_stderr', 'notebook_output_stream_stdout'],
+    "globals": r"""
 {% set slidecolumn = [] %}"
 {% set sliderow = {} %}"
 """,
 
-
-"html_header":r"""
+    "html_header": r"""
 
 <!--[if IE lte 8]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
@@ -44,7 +43,7 @@ tpl_dict = {
 </style>
 """,
 
-"html_body_start":r"""
+    "html_body_start": r"""
 {%- if nb.metadata.ipub -%}
 {%- if nb.metadata.ipub.titlepage -%}
 <section>
@@ -62,7 +61,7 @@ tpl_dict = {
 {%- endif -%}
 """,
 
-'notebook_all':r"""
+    'notebook_all': r"""
 {%- if cell.metadata.ipub: -%}
     {%- if cell.metadata.ipub.ignore: -%}
     {%- elif cell.metadata.ipub.slideonly: -%}
@@ -74,8 +73,7 @@ tpl_dict = {
 {%- endif %}
 """,
 
-
-'notebook_input_code_pre':r"""
+    'notebook_input_code_pre': r"""
 {%- if cell.metadata.ipub: -%}
 {%- if cell.metadata.ipub.code: -%}
 {%- if cell.metadata.ipub.code.caption: -%}
@@ -87,7 +85,7 @@ tpl_dict = {
 {%- endif %}   
 {%- endif %}  
 """,
-'notebook_input_code':r"""
+    'notebook_input_code': r"""
 {%- if cell.metadata.ipub: -%}
 {%- if cell.metadata.ipub.code: -%}
 <div class="inner_cell">
@@ -103,7 +101,7 @@ tpl_dict = {
 {%- endif %}   
 {%- endif %}   
 """,
-'notebook_input_code_post':r"""
+    'notebook_input_code_post': r"""
 {%- if cell.metadata.ipub: -%}
 {%- if cell.metadata.ipub.code: -%}
 </div>
@@ -113,11 +111,11 @@ tpl_dict = {
 {%- endif %}   
 """,
 
-'notebook_input_markdown':r"""
+    'notebook_input_markdown': r"""
 {{ cell.source  | markdown2html | strip_files_prefix | replace_string("{id_home_prefix}","#") }}
 """,
 
-'notebook_output':r"""
+    'notebook_output': r"""
 {%- if cell.metadata.ipub: -%}
     {%- if cell.metadata.ipub.figure: -%}
 {{ super() }}    
@@ -137,7 +135,7 @@ tpl_dict = {
 {%- endif %}
 """,
 
-'notebook_output_text':r"""
+    'notebook_output_text': r"""
 {%- if cell.metadata.ipub: -%}
     {%- if cell.metadata.ipub.text: -%}
 {{- output.data['text/plain'] | ansi2html -}}
@@ -145,7 +143,7 @@ tpl_dict = {
 {%- endif %}
 """,
 
-'notebook_output_stream_stderr':r"""
+    'notebook_output_stream_stderr': r"""
 {%- if cell.metadata.ipub: -%}
     {%- if cell.metadata.ipub.text: -%}
 {{- output.text | ansi2html -}}
@@ -153,7 +151,7 @@ tpl_dict = {
 {%- endif %}
 """,
 
-'notebook_output_stream_stdout':r"""
+    'notebook_output_stream_stdout': r"""
 {%- if cell.metadata.ipub: -%}
     {%- if cell.metadata.ipub.text: -%}
 {{- output.text | ansi2html -}}
@@ -161,80 +159,80 @@ tpl_dict = {
 {%- endif %}
 """,
 
-'notebook_output_pre':r"""
+    'notebook_output_pre': r"""
 {{ table_caption(cell.metadata) }}
 """,
-'notebook_output_post':r"""
+    'notebook_output_post': r"""
 {{ figure_caption(cell.metadata) }}
 """,
 
-'notebook_output_latex_pre':r"""
+    'notebook_output_latex_pre': r"""
 {{ make_figure_pre(cell.metadata) }}
 {{ make_table_pre(cell.metadata) }}
 {{ make_equation_pre(cell.metadata) }}
 """,
-'notebook_output_latex_post':r"""
+    'notebook_output_latex_post': r"""
 {{ make_figure_post(cell.metadata) }}
 {{ make_table_post(cell.metadata) }}
 {{ make_equation_post(cell.metadata) }}
 """,
 
-'notebook_output_png_pre':r"""
+    'notebook_output_png_pre': r"""
 {{ make_figure_pre(cell.metadata) }}
 {{ make_table_pre(cell.metadata) }}
 {{ make_equation_pre(cell.metadata) }}
 """,
-'notebook_output_png_post':r"""
+    'notebook_output_png_post': r"""
 {{ make_figure_post(cell.metadata) }}
 {{ make_table_post(cell.metadata) }}
 {{ make_equation_post(cell.metadata) }}
 """,
 
-'notebook_output_jpg_pre':r"""
+    'notebook_output_jpg_pre': r"""
 {{ make_figure_pre(cell.metadata) }}
 {{ make_table_pre(cell.metadata) }}
 {{ make_equation_pre(cell.metadata) }}
 """,
-'notebook_output_jpg_post':r"""
+    'notebook_output_jpg_post': r"""
 {{ make_figure_post(cell.metadata) }}
 {{ make_table_post(cell.metadata) }}
 {{ make_equation_post(cell.metadata) }}
 """,
 
-'notebook_output_svg_pre':r"""
+    'notebook_output_svg_pre': r"""
 {{ make_figure_pre(cell.metadata) }}
 {{ make_table_pre(cell.metadata) }}
 {{ make_equation_pre(cell.metadata) }}
 """,
-'notebook_output_svg_post':r"""
+    'notebook_output_svg_post': r"""
 {{ make_figure_post(cell.metadata) }}
 {{ make_table_post(cell.metadata) }}
 {{ make_equation_post(cell.metadata) }}
 """,
 
-'notebook_output_pdf_pre':r"""
+    'notebook_output_pdf_pre': r"""
 {{ make_figure_pre(cell.metadata) }}
 {{ make_table_pre(cell.metadata) }}
 {{ make_equation_pre(cell.metadata) }}
 """,
-'notebook_output_pdf_post':r"""
+    'notebook_output_pdf_post': r"""
 {{ make_figure_post(cell.metadata) }}
 {{ make_table_post(cell.metadata) }}
 {{ make_equation_post(cell.metadata) }}
 """,
 
-'notebook_output_html_pre':r"""
+    'notebook_output_html_pre': r"""
 {{ make_figure_pre(cell.metadata) }}
 {{ make_table_pre(cell.metadata) }}
 {{ make_equation_pre(cell.metadata) }}
 """,
-'notebook_output_html_post':r"""
+    'notebook_output_html_post': r"""
 {{ make_figure_post(cell.metadata) }}
 {{ make_table_post(cell.metadata) }}
 {{ make_equation_post(cell.metadata) }}
 """,
 
-'jinja_macros':r"""
+    'jinja_macros': r"""
 
 {% macro make_figure_pre(meta) -%}
 {%- if meta.ipub: -%}
@@ -337,4 +335,3 @@ tpl_dict = {
 """,
 
 }
-

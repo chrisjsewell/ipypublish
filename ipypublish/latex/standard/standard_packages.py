@@ -1,7 +1,7 @@
-tplx_dict = { 
-'meta_docstring':'with standard nbconvert packages',
+tplx_dict = {
+    'meta_docstring': 'with standard nbconvert packages',
 
-'document_packages':r"""
+    'document_packages': r"""
 
     \usepackage[T1]{fontenc} % Nicer default font (+ math font) than Computer Modern for most use cases
     \usepackage{mathpazo}

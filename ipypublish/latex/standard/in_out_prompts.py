@@ -1,20 +1,20 @@
 #!/usr/bin/env python
 
-tplx_dict = { 
-'overwrite':['notebook_output','notebook_input_code'],
-'meta_docstring':'with in/out prompts',
-'document_definitions':"""
+tplx_dict = {
+    'overwrite': ['notebook_output', 'notebook_input_code'],
+    'meta_docstring': 'with in/out prompts',
+    'document_definitions': """
 
     % Exact colors from NB
     \definecolor{incolor}{rgb}{0.0, 0.0, 0.5}
     \definecolor{outcolor}{rgb}{0.545, 0.0, 0.0}
     
 """,
-'notebook_input_code':"""
+    'notebook_input_code': """
     ((( add_prompt(cell.source | highlight_code(strip_verbatim=True, metadata=cell.metadata), cell, 'In ', 'incolor') )))
 
 """,
-'notebook_output':r"""
+    'notebook_output': r"""
         ((*- if resources.global_content_filter.include_output_prompt -*))
             ((*- if type in ['text/plain'] *))
 ((( add_prompt(output.data['text/plain'] | escape_latex, cell, 'Out', 'outcolor') )))
@@ -24,7 +24,7 @@ tplx_dict = {
         ((*- endif -*))
 
 """,
-'jinja_macros':r"""
+    'jinja_macros': r"""
 % Purpose: Renders an output/input prompt
 ((* macro add_prompt(text, cell, prompt, prompt_color) -*))
     ((*- if cell.execution_count is defined -*))

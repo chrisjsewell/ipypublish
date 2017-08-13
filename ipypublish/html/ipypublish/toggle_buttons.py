@@ -1,8 +1,8 @@
 tpl_dict = {
-    
-'meta_docstring':'add buttons to toggle input code and output cells',
-    
-'html_header':r"""
+
+    'meta_docstring': 'add buttons to toggle input code and output cells',
+
+    'html_header': r"""
 
 <script>
 code_show=true;
@@ -68,10 +68,9 @@ $( document ).ready(output_toggle);
 
 """,
 
-
 }
 
-  # /* To see the limits of the form */
-  # padding: 1px;
-  # border: 1px solid #CCC;
-  # border-radius: 1px;
+# /* To see the limits of the form */
+# padding: 1px;
+# border: 1px solid #CCC;
+# border-radius: 1px;

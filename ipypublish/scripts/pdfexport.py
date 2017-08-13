@@ -2,19 +2,17 @@
 """ a module for exporting latex file to pdf 
 
 """
-import os
-import subprocess
-from subprocess import Popen, PIPE, STDOUT
 import logging
+import os
 import shutil
 import tempfile
+from subprocess import Popen, PIPE, STDOUT
 
 # python 3 to 2 compatibility
 try:
     from shutil import which as exe_exists
 except ImportError:
     from distutils.spawn import find_executable as exe_exists
-
 
 VIEW_PDF = r"""
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  
@@ -74,10 +72,12 @@ VIEW_PDF = r"""
 </html>
 """
 
+
 class change_dir:
     """Context manager for changing the current working directory"""
-    def __init__(self, newPath):
-        self.newPath = os.path.expanduser(newPath)
+
+    def __init__(self, new_path):
+        self.newPath = os.path.expanduser(new_path)
 
     def __enter__(self):
         self.savedPath = os.getcwd()
@@ -85,6 +85,7 @@ class change_dir:
 
     def __exit__(self, etype, value, traceback):
         os.chdir(self.savedPath)
+
 
 # python 3 to 2 compatibility
 try:
@@ -96,88 +97,90 @@ try:
 except NameError:
     basestring = str
 
+
 def export_pdf(texpath, outdir, files_path=None,
                convert_in_temp=False, html_viewer=True,
                debug_mode=False):
-    
-    if isinstance(texpath,basestring):
+    if isinstance(texpath, basestring):
         texpath = pathlib.Path(texpath)
     if not texpath.exists() or not texpath.is_file():
         logging.error('the tex file path does not exist: {}'.format(texpath))
-        raise IOError('the tex file path does not exist: {}'.format(texpath))  
-    
-    texname = os.path.splitext(texpath.name)[0]     
-    
+        raise IOError('the tex file path does not exist: {}'.format(texpath))
+
+    texname = os.path.splitext(texpath.name)[0]
+
     if files_path is not None:
-        if isinstance(files_path,basestring):
+        if isinstance(files_path, basestring):
             files_path = pathlib.Path(files_path)
         if not files_path.exists() or not files_path.is_dir():
             logging.error('the external folder path does not exist: {}'.format(texpath))
-            raise IOError('the external folder path does not exist: {}'.format(texpath))  
-    
+            raise IOError('the external folder path does not exist: {}'.format(texpath))
+
     if not exe_exists('latexmk'):
         logging.error('requires the latexmk executable to run. See http://mg.readthedocs.io/latexmk.html#installation')
-        raise RuntimeError('requires the latexmk executable to run. See http://mg.readthedocs.io/latexmk.html#installation')
-     
-    if convert_in_temp: 
+        raise RuntimeError(
+            'requires the latexmk executable to run. See http://mg.readthedocs.io/latexmk.html#installation')
+
+    if convert_in_temp:
         out_folder = tempfile.mkdtemp()
         try:
-            exitcode = run_conversion(texpath, out_folder, files_path,debug_mode)
+            exitcode = run_conversion(texpath, out_folder, files_path, debug_mode)
             if exitcode == 0:
-                shutil.copyfile(os.path.join(out_folder, texname+'.pdf'),
-                    os.path.join(outdir,texname+'.pdf'))
+                shutil.copyfile(os.path.join(out_folder, texname + '.pdf'),
+                                os.path.join(outdir, texname + '.pdf'))
         finally:
-            shutil.rmtree(out_folder)            
+            shutil.rmtree(out_folder)
     else:
-        exitcode = run_conversion(texpath, outdir, files_path,debug_mode)
-    
+        exitcode = run_conversion(texpath, outdir, files_path, debug_mode)
+
     if exitcode == 0:
         logging.info('pdf conversion complete')
 
         if html_viewer:
-            view_pdf = VIEW_PDF.format(pdf_name=texname.replace(' ','%20')+'.pdf')
-            with open(os.path.join(outdir,texname+'.view_pdf.html'),'w') as f:
+            view_pdf = VIEW_PDF.format(pdf_name=texname.replace(' ', '%20') + '.pdf')
+            with open(os.path.join(outdir, texname + '.view_pdf.html'), 'w') as f:
                 f.write(view_pdf)
         return True
     else:
         logging.error('pdf conversion failed: '
                       'Try running with pdf_debug=True')
         return False
-        
+
+
 def run_conversion(texpath, out_folder, files_folder=None, debug_mode=False):
     """ run latexmk conversion
     """
 
     # make sure tex file in right place
-    outpath = os.path.join(out_folder,texpath.name)
-    if os.path.dirname(str(texpath)) != str(out_folder): 
-        logging.debug('copying tex file to: {}'.format(os.path.join(str(out_folder),texpath.name)))
-        shutil.copyfile(str(texpath),os.path.join(str(out_folder),texpath.name))
-    
+    outpath = os.path.join(out_folder, texpath.name)
+    if os.path.dirname(str(texpath)) != str(out_folder):
+        logging.debug('copying tex file to: {}'.format(os.path.join(str(out_folder), texpath.name)))
+        shutil.copyfile(str(texpath), os.path.join(str(out_folder), texpath.name))
+
     # make sure the external files folder is in right place
     if files_folder is not None:
         logging.debug('external files folder set')
-        outfilespath = os.path.join(out_folder,str(files_folder.name))        
-        if str(files_folder) != str(outfilespath): 
-            logging.debug('copying external files to: {}'.format(outfilespath))        
+        outfilespath = os.path.join(out_folder, str(files_folder.name))
+        if str(files_folder) != str(outfilespath):
+            logging.debug('copying external files to: {}'.format(outfilespath))
             if os.path.exists(outfilespath):
                 shutil.rmtree(outfilespath)
             shutil.copytree(str(files_folder), str(outfilespath))
- 
+
     # run latexmk in correct folder
     with change_dir(out_folder):
-        latexmk = ['latexmk','-xelatex','-bibtex','-pdf']
+        latexmk = ['latexmk', '-xelatex', '-bibtex', '-pdf']
         latexmk += [] if debug_mode else ["--interaction=batchmode"]
-        logging.info('running: '+' '.join(latexmk+['<outpath>']))
+        logging.info('running: ' + ' '.join(latexmk + ['<outpath>']))
         latexmk += [outpath]
 
         def log_latexmk_output(pipe):
             for line in iter(pipe.readline, b''):
                 logging.info('latexmk: {}'.format(line.decode("utf-8").strip()))
+
         process = Popen(latexmk, stdout=PIPE, stderr=STDOUT)
         with process.stdout:
             log_latexmk_output(process.stdout)
-        exitcode = process.wait() # 0 means success
+        exitcode = process.wait()  # 0 means success
 
     return exitcode
-       

@@ -1,9 +1,8 @@
-
 tpl_dict = {
-    
-'meta_docstring':'number headers and add sidebar with hyperlinked table of contents',
-    
-'html_header':r"""
+
+    'meta_docstring': 'number headers and add sidebar with hyperlinked table of contents',
+
+    'html_header': r"""
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
@@ -51,6 +50,5 @@ $( document ).ready(function(){
 
 
 """,
-
 
 }

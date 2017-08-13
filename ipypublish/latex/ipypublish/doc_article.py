@@ -1,7 +1,7 @@
-tplx_dict = { 
-'meta_docstring':'with the main ipypublish article setup',
+tplx_dict = {
+    'meta_docstring': 'with the main ipypublish article setup',
 
-'document_docclass':r"""
+    'document_docclass': r"""
 	\documentclass[10pt,parskip=half,
 	toc=sectionentrywithdots,
 	bibliography=totocnumbered,
@@ -18,7 +18,7 @@ tplx_dict = {
 
 """,
 
-'document_margins':r"""
+    'document_margins': r"""
  % Used to adjust the document margins
 \usepackage{geometry}
 \geometry{tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in,
@@ -26,7 +26,7 @@ nohead,includefoot,footskip=25pt}
 % you can use showframe option to check the margins visually 
 """,
 
-'document_packages':r"""
+    'document_packages': r"""
     \usepackage{translations}
 	\usepackage{microtype} % improves the spacing between words and letters
 	\usepackage{placeins} % placement of figures
@@ -40,7 +40,7 @@ nohead,includefoot,footskip=25pt}
 	\usepackage[footsepline=0.25pt]{scrlayer-scrpage}
 """,
 
-'document_definitions':r"""
+    'document_definitions': r"""
     \setcounter{secnumdepth}{5}
     
     % Colors for the hyperref package
@@ -50,7 +50,7 @@ nohead,includefoot,footskip=25pt}
 
 """,
 
-'document_commands':r"""
+    'document_commands': r"""
 	% ensure new section starts on new page
 	\addtokomafont{section}{\clearpage}
 
@@ -136,7 +136,7 @@ nohead,includefoot,footskip=25pt}
 
 """,
 
-'document_header_end':r"""
+    'document_header_end': r"""
 % clereref must be loaded after anything that changes the referencing system
 \usepackage{cleveref}
 \creflabelformat{equation}{#2#1#3}

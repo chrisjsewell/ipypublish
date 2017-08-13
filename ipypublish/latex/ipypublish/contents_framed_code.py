@@ -1,7 +1,7 @@
-tplx_dict = { 
-'meta_docstring':'with the input code wrapped and framed',
+tplx_dict = {
+    'meta_docstring': 'with the input code wrapped and framed',
 
-'document_packages':r"""
+    'document_packages': r"""
 
     % define a code float
     \usepackage{newfloat} % to define a new float types
@@ -20,7 +20,7 @@ tplx_dict = {
 
 """,
 
-'document_header_end':r"""
+    'document_header_end': r"""
 % make the code float work with cleverref
 \crefname{codecell}{code}{codes}
 \Crefname{codecell}{code}{codes}
@@ -32,7 +32,7 @@ tplx_dict = {
 \Crefname{errorcell}{error}{errors}
 """,
 
-'document_definitions':r"""
+    'document_definitions': r"""
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
 \definecolor{codepurple}{rgb}{0.58,0,0.82}
@@ -69,17 +69,17 @@ tplx_dict = {
 
 """,
 
-'notebook_input_code':r"""
+    'notebook_input_code': r"""
 ((( draw_text(cell.metadata,cell.source,"code",
 "language=Python,numbers=left,xleftmargin=20pt,xrightmargin=5pt,belowskip=5pt,aboveskip=5pt") )))
 """,
 
-'notebook_output_text':r"""
+    'notebook_output_text': r"""
 ((( draw_text(cell.metadata,output.data['text/plain'] | strip_ansi,"text",
 "language={},postbreak={},numbers=none,xrightmargin=7pt,breakindent=0pt,aboveskip=5pt,belowskip=5pt") )))
 """,
 
-'notebook_output_stream':r"""
+    'notebook_output_stream': r"""
 ((*- if cell.metadata.get("ipub",{}).get("text",{}).use_ansi : -*))
 ((( draw_text(cell.metadata,output.text | ansi2listings("%") ,"text",
 "language={},postbreak={},numbers=none,xrightmargin=7pt,belowskip=5pt,aboveskip=5pt,breakindent=0pt,escapechar=\%") )))
@@ -89,15 +89,15 @@ tplx_dict = {
 ((*- endif *))
 """,
 
-'notebook_output_error':r"""
+    'notebook_output_error': r"""
 ((( super() )))
 """,
-'notebook_output_traceback':"""
+    'notebook_output_traceback': """
 ((( draw_text(cell.metadata,line | indent | strip_ansi,"error",
 "language=Python,numbers=none,xrightmargin=5pt,belowskip=2pt,aboveskip=2pt") )))
 """,
 
-'jinja_macros':r"""
+    'jinja_macros': r"""
 ((* macro draw_text(meta,source,type,options) -*))
 
 ((*- if meta.ipub: -*))
@@ -163,4 +163,3 @@ tplx_dict = {
 """
 
 }
-

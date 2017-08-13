@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-tplx_dict = { 
-'meta_docstring':'with the main ipypublish title and contents page setup',
+tplx_dict = {
+    'meta_docstring': 'with the main ipypublish title and contents page setup',
 
-'document_definitions':"""
+    'document_definitions': """
 \\DeclareTranslationFallback{Author}{Author}
 \\DeclareTranslation{Portuges}{Author}{Autor}
 
@@ -30,7 +30,7 @@ tplx_dict = {
 
 """,
 
-'document_title':r"""
+    'document_title': r"""
 
 ((*- if nb.metadata["ipub"]: -*))    
 
@@ -128,7 +128,7 @@ tplx_dict = {
 
 """,
 
-'document_predoc':r"""
+    'document_predoc': r"""
 ((*- if nb.metadata["ipub"]: -*))
     \begingroup
     \let\cleardoublepage\relax

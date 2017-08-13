@@ -202,7 +202,8 @@ TPL_OUTLINE = r"""
 {jinja_macros}
 """
 
-def create_tpl(tpl_dicts=(),outpath=None):
+
+def create_tpl(tpl_dicts=(), outpath=None):
     """ build an html jinja template from multiple dictionaries,
     specifying fragments of the template to insert a specific points
                 
@@ -215,114 +216,112 @@ def create_tpl(tpl_dicts=(),outpath=None):
     tpl_dicts: list of dicts
     outpath: str
         if not None, output template to file
-    outline : dict
-        the outline jinja template
-    
+
     """
-    outline=TPL_OUTLINE
-    tpl_sections={
-    'meta_docstring':'',
-    'globals':'',
+    outline = TPL_OUTLINE
+    tpl_sections = {
+        'meta_docstring': '',
+        'globals': '',
 
-    'html_header':'',
-    'html_body_start':'',
-    'html_body_end':'',
-    'html_footer':'',
-    
-    'notebook_all':'',
+        'html_header': '',
+        'html_body_start': '',
+        'html_body_end': '',
+        'html_footer': '',
 
-    'notebook_input_code_prompt':'',
-    'notebook_input_code':'',
-    'notebook_input_raw':'',
-    'notebook_input_markdown':'',
-    'notebook_input_unknown':'',
-    'notebook_input_code_pre':'',
-    'notebook_input_raw_pre':'',
-    'notebook_input_markdown_pre':'',
-    'notebook_input_unknown_pre':'',
-    'notebook_input_code_post':'',
-    'notebook_input_raw_post':'',
-    'notebook_input_markdown_post':'',
-    'notebook_input_unknown_post':'',
+        'notebook_all': '',
 
-    'notebook_output':'',
-    'notebook_output_prompt':'',
-    'notebook_output_text':'',
-    'notebook_output_error':'',
-    'notebook_output_traceback':'',
-    'notebook_output_stream_stderr':'',
-    'notebook_output_stream_stdout':'',
-    'notebook_output_latex':'',
-    'notebook_output_markdown':'',
-    'notebook_output_png':'',
-    'notebook_output_jpg':'',
-    'notebook_output_svg':'',
-    'notebook_output_pdf':'',
-    'notebook_output_html':'',
-    'notebook_output_javascript':'',
-    'notebook_output_widget_state':'',
-    'notebook_output_widget_view':'',
+        'notebook_input_code_prompt': '',
+        'notebook_input_code': '',
+        'notebook_input_raw': '',
+        'notebook_input_markdown': '',
+        'notebook_input_unknown': '',
+        'notebook_input_code_pre': '',
+        'notebook_input_raw_pre': '',
+        'notebook_input_markdown_pre': '',
+        'notebook_input_unknown_pre': '',
+        'notebook_input_code_post': '',
+        'notebook_input_raw_post': '',
+        'notebook_input_markdown_post': '',
+        'notebook_input_unknown_post': '',
 
-    'notebook_output_pre':'',
-    'notebook_output_text_pre':'',
-    'notebook_output_error_pre':'',
-    'notebook_output_traceback_pre':'',
-    'notebook_output_stream_stderr_pre':'',
-    'notebook_output_stream_stdout_pre':'',
-    'notebook_output_latex_pre':'',
-    'notebook_output_markdown_pre':'',
-    'notebook_output_png_pre':'',
-    'notebook_output_jpg_pre':'',
-    'notebook_output_svg_pre':'',
-    'notebook_output_pdf_pre':'',
-    'notebook_output_html_pre':'',
-    'notebook_output_javascript_pre':'',
-    'notebook_output_widget_state_pre':'',
-    'notebook_output_widget_view_pre':'',
+        'notebook_output': '',
+        'notebook_output_prompt': '',
+        'notebook_output_text': '',
+        'notebook_output_error': '',
+        'notebook_output_traceback': '',
+        'notebook_output_stream_stderr': '',
+        'notebook_output_stream_stdout': '',
+        'notebook_output_latex': '',
+        'notebook_output_markdown': '',
+        'notebook_output_png': '',
+        'notebook_output_jpg': '',
+        'notebook_output_svg': '',
+        'notebook_output_pdf': '',
+        'notebook_output_html': '',
+        'notebook_output_javascript': '',
+        'notebook_output_widget_state': '',
+        'notebook_output_widget_view': '',
 
-    'notebook_output_post':'',
-    'notebook_output_text_post':'',
-    'notebook_output_error_post':'',
-    'notebook_output_traceback_post':'',
-    'notebook_output_stream_stderr_post':'',
-    'notebook_output_stream_stdout_post':'',
-    'notebook_output_latex_post':'',
-    'notebook_output_markdown_post':'',
-    'notebook_output_png_post':'',
-    'notebook_output_jpg_post':'',
-    'notebook_output_svg_post':'',
-    'notebook_output_pdf_post':'',
-    'notebook_output_html_post':'',
-    'notebook_output_javascript_post':'',
-    'notebook_output_widget_state_post':'',
-    'notebook_output_widget_view_post':'',
+        'notebook_output_pre': '',
+        'notebook_output_text_pre': '',
+        'notebook_output_error_pre': '',
+        'notebook_output_traceback_pre': '',
+        'notebook_output_stream_stderr_pre': '',
+        'notebook_output_stream_stdout_pre': '',
+        'notebook_output_latex_pre': '',
+        'notebook_output_markdown_pre': '',
+        'notebook_output_png_pre': '',
+        'notebook_output_jpg_pre': '',
+        'notebook_output_svg_pre': '',
+        'notebook_output_pdf_pre': '',
+        'notebook_output_html_pre': '',
+        'notebook_output_javascript_pre': '',
+        'notebook_output_widget_state_pre': '',
+        'notebook_output_widget_view_pre': '',
 
-    'jinja_macros':''}
-    
+        'notebook_output_post': '',
+        'notebook_output_text_post': '',
+        'notebook_output_error_post': '',
+        'notebook_output_traceback_post': '',
+        'notebook_output_stream_stderr_post': '',
+        'notebook_output_stream_stdout_post': '',
+        'notebook_output_latex_post': '',
+        'notebook_output_markdown_post': '',
+        'notebook_output_png_post': '',
+        'notebook_output_jpg_post': '',
+        'notebook_output_svg_post': '',
+        'notebook_output_pdf_post': '',
+        'notebook_output_html_post': '',
+        'notebook_output_javascript_post': '',
+        'notebook_output_widget_state_post': '',
+        'notebook_output_widget_view_post': '',
+
+        'jinja_macros': ''}
+
     for i, tpl_dict in enumerate(tpl_dicts):
         if 'overwrite' in list(tpl_dict.keys()):
             overwrite = tpl_dict['overwrite']
         else:
             overwrite = []
         logging.debug('overwrite keys: {}'.format(overwrite))
-        for key,val in tpl_dict.items():
+        for key, val in tpl_dict.items():
             if key == 'overwrite':
                 pass
             elif key not in tpl_sections:
                 raise ValueError(
-                '{0} from tpl_dict {1} not in outline tpl section'.format(key,i+1))
+                    '{0} from tpl_dict {1} not in outline tpl section'.format(key, i + 1))
             elif key in overwrite:
                 tpl_sections[key] = val
             # if its pre then add befor existing (if post add after)
             elif '_pre' in key:
-                tpl_sections[key] = val+'\n'+tpl_sections[key]
+                tpl_sections[key] = val + '\n' + tpl_sections[key]
             else:
-                tpl_sections[key] = tpl_sections[key]+'\n'+val
+                tpl_sections[key] = tpl_sections[key] + '\n' + val
 
-    outline =  outline.format(**tpl_sections) 
-    
-    if outpath is not None: 
-        with open(outpath,'w') as f:
+    outline = outline.format(**tpl_sections)
+
+    if outpath is not None:
+        with open(outpath, 'w') as f:
             f.write(outline)
         return
     return outline
