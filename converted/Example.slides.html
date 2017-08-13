@@ -1,5 +1,4 @@
-
-<!-- A html document --> 
+<!-- A html document -->
 <!-- 
 with standard nbconvert input/output content
 standard html tag wrapping
@@ -11,10 +10,10 @@ marks up html with slide tags, based on metadata -->
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8" /><!-- Load mathjax -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
-<!-- MathJax configuration -->
-<script type="text/x-mathjax-config">
+    <meta charset="utf-8"/><!-- Load mathjax -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
+    <!-- MathJax configuration -->
+    <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
     tex2jax: {
         inlineMath: [ ['$','$'], ["\\(","\\)"] ],
@@ -30,26 +29,28 @@ MathJax.Hub.Config({
         linebreaks: { automatic: true }
     }
 });
-</script>
-<!-- End of mathjax configuration --><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
-<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    </script>
+    <!-- End of mathjax configuration -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1"/>
 
-<title>Notebook slides</title>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <title>Notebook slides</title>
 
-<!-- General and theme style sheets -->
-<link rel="stylesheet" href="reveal.js/css/reveal.css">
-<link rel="stylesheet" href="reveal.js/css/theme/simple.css" id="theme">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
-<!-- If the query includes 'print-pdf', include the PDF print sheet -->
-<script>
+    <!-- General and theme style sheets -->
+    <link rel="stylesheet" href="reveal.js/css/reveal.css">
+    <link rel="stylesheet" href="reveal.js/css/theme/simple.css" id="theme">
+
+    <!-- If the query includes 'print-pdf', include the PDF print sheet -->
+    <script>
 if( window.location.search.match( /print-pdf/gi ) ) {
         var link = document.createElement( 'link' );
         link.rel = 'stylesheet';
@@ -58,16 +59,17 @@ if( window.location.search.match( /print-pdf/gi ) ) {
         document.getElementsByTagName( 'head' )[0].appendChild( link );
 }
 
-</script>
 
-<!--[if lt IE 9]>
-<script src="reveal.js/lib/js/html5shiv.js"></script>
-<![endif]-->
+    </script>
 
-<!-- Get Font-awesome from cdn -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.css">
+    <!--[if lt IE 9]>
+    <script src="reveal.js/lib/js/html5shiv.js"></script>
+    <![endif]-->
 
-<style type="text/css">
+    <!-- Get Font-awesome from cdn -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.css">
+
+    <style type="text/css">
     /*!
 *
 * Twitter Bootstrap
@@ -11666,8 +11668,9 @@ ul.typeahead-list > li > a {
   margin-top: 20px;
 }
 /*# sourceMappingURL=style.min.css.map */
+
     </style>
-<style type="text/css">
+    <style type="text/css">
     .highlight .hll { background-color: #ffffcc }
 .highlight  { background: #f8f8f8; }
 .highlight .c { color: #408080; font-style: italic } /* Comment */
@@ -11737,8 +11740,9 @@ ul.typeahead-list > li > a {
 .highlight .vi { color: #19177C } /* Name.Variable.Instance */
 .highlight .vm { color: #19177C } /* Name.Variable.Magic */
 .highlight .il { color: #666666 } /* Literal.Number.Integer.Long */
+
     </style>
-<style type="text/css">
+    <style type="text/css">
 
 /* Temporary definitions which will become obsolete with Notebook release 5.0 */
 .ansi-black-fg { color: #3E424D; }
@@ -11776,9 +11780,10 @@ ul.typeahead-list > li > a {
 
 .ansi-bold { font-weight: bold; }
 
+
     </style>
 
-<style type="text/css">
+    <style type="text/css">
 /* Overrides of notebook CSS for static HTML export */
 .reveal {
   font-size: 160%;
@@ -11846,203 +11851,223 @@ a.anchor-link {
 .rendered_html p {
   text-align: inherit;
 }
-</style>
 
-<!--[if IE lte 8]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+    </style>
 
-<style type="text/css">
+    <!--[if IE lte 8]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+    <style type="text/css">
 .ipyfigure { display: -ms-flex; display: -webkit-flex; display: flex;}
 .ipyfigure>div { flex:1; }
 .ipytable { display: -ms-flex; display: -webkit-flex; display: flex;}
 .ipytable>div { flex:1; }
 
-</style></head>
- <body>
+
+    </style>
+</head>
+<body>
 
 <div class="reveal">
-<div class="slides"><section><h1>Main-Title</h1><h3>Sub-Title</h3><b>by Authors Name</b></section>  
+    <div class="slides">
+        <section><h1>Main-Title</h1>
+            <h3>Sub-Title</h3><b>by Authors Name</b></section>
 
-</section>
-</section>  
+        </section>
+        </section>
 
-<section>
-<section>
+        <section>
+            <section>
 
-<div class="input_markdown">
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
+                <div class="input_markdown">
+                    <div class="cell border-box-sizing text_cell rendered">
+                        <div class="inner_cell">
+                            <div class="text_cell_render border-box-sizing rendered_html">
 
-<h1 id="1.-Markdown">1. Markdown<a class="anchor-link" href="#1.-Markdown">&#182;</a></h1>
+                                <h1 id="1.-Markdown">1. Markdown<a class="anchor-link" href="#1.-Markdown">&#182;</a>
+                                </h1>
 
-</div>
-</div>
-</div>
-</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-</section>
-<section>
+            </section>
+            <section>
 
-<div class="input_markdown">
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
+                <div class="input_markdown">
+                    <div class="cell border-box-sizing text_cell rendered">
+                        <div class="inner_cell">
+                            <div class="text_cell_render border-box-sizing rendered_html">
 
-<h2 id="1.1.-General">1.1. General<a class="anchor-link" href="#1.1.-General">&#182;</a></h2>
+                                <h2 id="1.1.-General">1.1. General<a class="anchor-link" href="#1.1.-General">&#182;</a>
+                                </h2>
 
-</div>
-</div>
-</div>
-</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-<div class="input_markdown">
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
+                <div class="input_markdown">
+                    <div class="cell border-box-sizing text_cell rendered">
+                        <div class="inner_cell">
+                            <div class="text_cell_render border-box-sizing rendered_html">
 
-<p>Some markdown text.</p>
-<p>A list:</p>
-<ul>
-<li>something</li>
-<li>something else</li>
-</ul>
-<p>A numbered list</p>
-<ol>
-<li>something</li>
-<li>something else</li>
-</ol>
+                                <p>Some markdown text.</p>
+                                <p>A list:</p>
+                                <ul>
+                                    <li>something</li>
+                                    <li>something else</li>
+                                </ul>
+                                <p>A numbered list</p>
+                                <ol>
+                                    <li>something</li>
+                                    <li>something else</li>
+                                </ol>
 
-</div>
-</div>
-</div>
-</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-<div class="input_markdown">
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
+                <div class="input_markdown">
+                    <div class="cell border-box-sizing text_cell rendered">
+                        <div class="inner_cell">
+                            <div class="text_cell_render border-box-sizing rendered_html">
 
-<p>This is an abbreviated section of the document text, which we only want in a presentation</p>
-<ul>
-<li>summary of document text</li>
-</ul>
+                                <p>This is an abbreviated section of the document text, which we only want in a
+                                    presentation</p>
+                                <ul>
+                                    <li>summary of document text</li>
+                                </ul>
 
-</div>
-</div>
-</div>
-</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-</section>
-<section>
+            </section>
+            <section>
 
-<div class="input_markdown">
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
+                <div class="input_markdown">
+                    <div class="cell border-box-sizing text_cell rendered">
+                        <div class="inner_cell">
+                            <div class="text_cell_render border-box-sizing rendered_html">
 
-<h2 id="1.2.-References-and-Citations">1.2. References and Citations<a class="anchor-link" href="#1.2.-References-and-Citations">&#182;</a></h2>
+                                <h2 id="1.2.-References-and-Citations">1.2. References and Citations<a
+                                        class="anchor-link" href="#1.2.-References-and-Citations">&#182;</a></h2>
 
-</div>
-</div>
-</div>
-</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-<div class="input_markdown">
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
+                <div class="input_markdown">
+                    <div class="cell border-box-sizing text_cell rendered">
+                        <div class="inner_cell">
+                            <div class="text_cell_render border-box-sizing rendered_html">
 
-<p>References to <a href="#/2/0fig:example">fig. 1</a>, <a href="#/3/0tbl:example">tbl. 1</a>, <a href="#/4/0eqn:example_sympy">eqn. 1</a> and <a href="#/2/3code:example_mpl">code 6</a>.</p>
-<p>Referencing multiple items: <a href="#/2/0fig:example">fig. 1</a>, <a href="#/2/0fig:example_h">fig. 2</a> and <a href="#/2/0fig:example_v">fig. 3</a>.</p>
-<p>A latex citation.[<a href="https://doi.org/10.1134/S0018143916050209">Zelenyak <em>et al</em>, 2016.</a>]</p>
-<p>A html citation.<cite data-cite="kirkeminde_thermodynamic_2012">(Kirkeminde, 2012)</cite></p>
+                                <p>References to <a href="#/2/0fig:example">fig. 1</a>, <a href="#/3/0tbl:example">tbl.
+                                    1</a>, <a href="#/4/0eqn:example_sympy">eqn. 1</a> and <a
+                                        href="#/2/3code:example_mpl">code 6</a>.</p>
+                                <p>Referencing multiple items: <a href="#/2/0fig:example">fig. 1</a>, <a
+                                        href="#/2/0fig:example_h">fig. 2</a> and <a href="#/2/0fig:example_v">fig. 3</a>.
+                                </p>
+                                <p>A latex citation.[<a href="https://doi.org/10.1134/S0018143916050209">Zelenyak <em>et
+                                    al</em>, 2016.</a>]</p>
+                                <p>A html citation.<cite data-cite="kirkeminde_thermodynamic_2012">(Kirkeminde,
+                                    2012)</cite></p>
 
-</div>
-</div>
-</div>
-</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-</section>
-<section>
+            </section>
+            <section>
 
-<div class="input_markdown">
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
+                <div class="input_markdown">
+                    <div class="cell border-box-sizing text_cell rendered">
+                        <div class="inner_cell">
+                            <div class="text_cell_render border-box-sizing rendered_html">
 
-<h2 id="1.3.-Todo-notes">1.3. Todo notes<a class="anchor-link" href="#1.3.-Todo-notes">&#182;</a></h2>
+                                <h2 id="1.3.-Todo-notes">1.3. Todo notes<a class="anchor-link" href="#1.3.-Todo-notes">&#182;</a>
+                                </h2>
 
-</div>
-</div>
-</div>
-</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-<div class="input_markdown">
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
+                <div class="input_markdown">
+                    <div class="cell border-box-sizing text_cell rendered">
+                        <div class="inner_cell">
+                            <div class="text_cell_render border-box-sizing rendered_html">
 
-<p>Some text.</p>
+                                <p>Some text.</p>
 
-</div>
-</div>
-</div>
-</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-</section>
-</section>  
+            </section>
+        </section>
 
-<section>
-<section>
+        <section>
+            <section>
 
-<div class="input_markdown">
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
+                <div class="input_markdown">
+                    <div class="cell border-box-sizing text_cell rendered">
+                        <div class="inner_cell">
+                            <div class="text_cell_render border-box-sizing rendered_html">
 
-<h1 id="2.-Text-Output">2. Text Output<a class="anchor-link" href="#2.-Text-Output">&#182;</a></h1>
+                                <h1 id="2.-Text-Output">2. Text Output<a class="anchor-link" href="#2.-Text-Output">&#182;</a>
+                                </h1>
 
-</div>
-</div>
-</div>
-</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-<div class="output_area">
+                <div class="output_area">
 
-<div class="output_subarea output_stream output_stdout output_text">
+                    <div class="output_subarea output_stream output_stdout output_text">
 <pre>
 This is some printed text,
 with a nicely formatted output.
 
 </pre>
-</div>
+                    </div>
 
-</div>
+                </div>
 
-</section>
-</section>  
+            </section>
+        </section>
 
-<section>
-<section>
+        <section>
+            <section>
 
-<div class="input_markdown">
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
+                <div class="input_markdown">
+                    <div class="cell border-box-sizing text_cell rendered">
+                        <div class="inner_cell">
+                            <div class="text_cell_render border-box-sizing rendered_html">
 
-<h1 id="3.-Images-and-Figures">3. Images and Figures<a class="anchor-link" href="#3.-Images-and-Figures">&#182;</a></h1>
+                                <h1 id="3.-Images-and-Figures">3. Images and Figures<a class="anchor-link"
+                                                                                       href="#3.-Images-and-Figures">&#182;</a>
+                                </h1>
 
-</div>
-</div>
-</div>
-</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-<div class="output_area">
+                <div class="output_area">
 
-<a id="fig:example" class="anchor-link" name="#fig:example"></a>
+                    <a id="fig:example" class="anchor-link" name="#fig:example"></a>
 
-<div class="output_image output_jpeg output_subarea output_execute_result">
-<img src="data:image/jpeg;base64,/9j/4RB6RXhpZgAATU0AKgAAAAgABwESAAMAAAABAAEAAAEaAAUAAAABAAAAYgEbAAUAAAABAAAA
+                    <div class="output_image output_jpeg output_subarea output_execute_result">
+                        <img src="data:image/jpeg;base64,/9j/4RB6RXhpZgAATU0AKgAAAAgABwESAAMAAAABAAEAAAEaAAUAAAABAAAAYgEbAAUAAAABAAAA
 agEoAAMAAAABAAIAAAExAAIAAAAkAAAAcgEyAAIAAAAUAAAAlodpAAQAAAABAAAArAAAANgACvyA
 AAAnEAAK/IAAACcQQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKE1hY2ludG9zaCkAMjAxNToxMjox
 NyAxMDo1OTo0NQAAAAADoAEAAwAAAAH//wAAoAIABAAAAAEAAAFyoAMABAAAAAEAAAD+AAAAAAAA
@@ -13058,29 +13083,29 @@ IG/MMV6jbrtgLbLkyu2M4ANGeq/GDsOhr7YuJKkxVpyF+DgQwpU1rtvTwxDVQRlrX1l48qfH17ff
 74OrCfLdPYeXDcGtPi8MWiVKktd+g+E8q9aYliifJhk+va8FX/R6Qkv29Xeo+dMydLe/c4uuqod+
 /wAmdn7szHXhae23y8MCrD+OFKkaVP4YqsatN/pxQt8dvn44q74sC7v/2Q==
 "
-height=400
->
+                             height=400
+                        >
 
-</div>
+                    </div>
 
-</div>
+                </div>
 
-<div class="output_area">
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<b>Figure 1:</b> A nice picture.
-</div>
-</div>
-</div>
-</div>
+                <div class="output_area">
+                    <div class="cell border-box-sizing text_cell rendered">
+                        <div class="inner_cell">
+                            <div class="text_cell_render border-box-sizing rendered_html">
+                                <b>Figure 1:</b> A nice picture.
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-<div class="output_area">
+                <div class="output_area">
 
-<a id="fig:example_h" class="anchor-link" name="#fig:example_h"></a>
+                    <a id="fig:example_h" class="anchor-link" name="#fig:example_h"></a>
 
-<div class="output_image output_png output_subarea output_execute_result">
-<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAADICAYAAAA0n5+2AAEAAElEQVR4nOz9aaxtSXbfif1WDHvv
+                    <div class="output_image output_png output_subarea output_execute_result">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAADICAYAAAA0n5+2AAEAAElEQVR4nOz9aaxtSXbfif1WDHvv
 M9zhjTlnVdZIFlmcR7UmUpRIdUuwpLatHmz3h1arZbeAtt2GB9iAhw8GDBiwYUBqA7ZgdzdESGqS
 lkRQlEriUKSKYpFVRdZcWZlZWZkvx5dvutM5e4iI5Q9xzr37nrvPvfe9zCqWoBMP591z9o5hxfSP
 WCtWrCVf/LWfVxEwxoAkclA0CSIGEaEfVBVVRUQQEVQVIMeTREqLPNQcxzfGMBgElISIHXiVQAVY
@@ -14586,31 +14611,31 @@ ZYU8zP1qq+RS4lo0w/sI5bWI2dDRORDrY7pH6RiJFMomEczD0Xu92eFOzoVS0iGixDCKyPAKWtPt
 AYnrFwsgWgneNqrFw811vX5pJJQqyg7YomRJdG8H0Htu7K2diiPC54sKsNsA5mWgcwyAx50Rf8l3
 Hdb/gs7VCa9OeHXCqxNevQgfXuW14+WHxav/PyM3DC1Ltde3AAAAAElFTkSuQmCC
 "
->
+                        >
 
-</div>
+                    </div>
 
-</div>
+                </div>
 
-<div class="output_area">
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<b>Figure 2:</b> Horizontally aligned images.
-</div>
-</div>
-</div>
-</div>
+                <div class="output_area">
+                    <div class="cell border-box-sizing text_cell rendered">
+                        <div class="inner_cell">
+                            <div class="text_cell_render border-box-sizing rendered_html">
+                                <b>Figure 2:</b> Horizontally aligned images.
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-</section>
-<section>
+            </section>
+            <section>
 
-<div class="output_area">
+                <div class="output_area">
 
-<a id="fig:example_v" class="anchor-link" name="#fig:example_v"></a>
+                    <a id="fig:example_v" class="anchor-link" name="#fig:example_v"></a>
 
-<div class="output_image output_png output_subarea output_execute_result">
-<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARgAAAGQCAYAAAB1bX85AAEAAElEQVR4nMz9ebBt2X3fh31+a9r7
+                    <div class="output_image output_png output_subarea output_execute_result">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARgAAAGQCAYAAAB1bX85AAEAAElEQVR4nMz9ebBt2X3fh31+a9r7
 DHd47/V7/XoGGhMBEAABDqIoURIHKdRAFy1bSlQpl2VbkR0lZStx/lGlkrjipCrDH/oj5ajKUVly
 rMGWZDmWRFKcRFIUCAIEQRFAY2ygu9Gv3+s3vzucYe+91vrlj7XPveeee84dGoBKq+v2u3cPa9pr
 /dbv9/1N8oVf+TsqAsYYkAyAqoIaRAwinCg5l2eMMeU5QBAwGVU9endRjzGG1SIIKhlFEbEr9xRQ
@@ -17240,31 +17265,31 @@ qxV869HtqsuUNnLdtdtuLtu4MXhTmwzKtn63GPCpx4tO6EfHj44fHT86freH/Of/+f+uvPguX7vx
 3e+vwff5wz7N18f/vva17Zt/uYdce9kX/f2HOBk+uT5+t9f6j44fHT86fnT86PjR8aPjR8ePjh8d
 Pzp+dPzo+NHxo+NHx4+OHx0/On50/Oj4//vx/wVsPkzyLurC2QAAAABJRU5ErkJggg==
 "
->
+                        >
 
-</div>
+                    </div>
 
-</div>
+                </div>
 
-<div class="output_area">
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<b>Figure 3:</b> Vertically aligned images.
-</div>
-</div>
-</div>
-</div>
+                <div class="output_area">
+                    <div class="cell border-box-sizing text_cell rendered">
+                        <div class="inner_cell">
+                            <div class="text_cell_render border-box-sizing rendered_html">
+                                <b>Figure 3:</b> Vertically aligned images.
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-</section>
-<section>
+            </section>
+            <section>
 
-<div class="output_area">
+                <div class="output_area">
 
-<a id="fig:example_grid" class="anchor-link" name="#fig:example_grid"></a>
+                    <a id="fig:example_grid" class="anchor-link" name="#fig:example_grid"></a>
 
-<div class="output_image output_png output_subarea output_execute_result">
-<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAbsAAAEsCAYAAABaCh3lAAEAAElEQVR4nLz9ebQtWXrQB/6+PUTE
+                    <div class="output_image output_png output_subarea output_execute_result">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAbsAAAEsCAYAAABaCh3lAAEAAElEQVR4nLz9ebQtWXrQB/6+PUTE
 OefOb8j3XmZWZVZV1pRSValUGlCBBEIIyRbYaMk0XjQG4zbdvWAtd+NejenGxkC3YbltDAtjL+FG
 wkISpkETQhNoVk2qKlVVVlVmVc5zvnzTfXc8Q8Qe+o8dcU6cOHHuuy9LsHO9vOfEidhTfN/+5u+T
 L/3Kj0elBFEAkRhARCEiNC2GCAIiEGP6i3hCAKICWLo/XYBIQES3LgWIAigiASQCCmJEiSLGCIBS
@@ -20410,94 +20435,111 @@ lr761c/nf9pr8IXXV+F3fud37v3WV+7+61XW7P9v3uLnr6/C78RZcrPtnr+5l97u9gNfvfPfr/I7
 k+uT65Prk+uT65Prk+uT65Prk+uT65Prk+uT65Prk+uT65Prk+uT6z8X1/8HNTCBoG5igi0AAAAA
 SUVORK5CYII=
 "
->
+                        >
 
-</div>
+                    </div>
 
-</div>
+                </div>
 
-<div class="output_area">
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<b>Figure 4:</b> Images aligned in a grid.
-</div>
-</div>
-</div>
-</div>
+                <div class="output_area">
+                    <div class="cell border-box-sizing text_cell rendered">
+                        <div class="inner_cell">
+                            <div class="text_cell_render border-box-sizing rendered_html">
+                                <b>Figure 4:</b> Images aligned in a grid.
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-</section>
-<section>
+            </section>
+            <section>
 
-<div class="input_markdown">
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
+                <div class="input_markdown">
+                    <div class="cell border-box-sizing text_cell rendered">
+                        <div class="inner_cell">
+                            <div class="text_cell_render border-box-sizing rendered_html">
 
-<h2 id="3.1.-Displaying-a-plot-with-its-code">3.1. Displaying a plot with its code<a class="anchor-link" href="#3.1.-Displaying-a-plot-with-its-code">&#182;</a></h2>
+                                <h2 id="3.1.-Displaying-a-plot-with-its-code">3.1. Displaying a plot with its code<a
+                                        class="anchor-link" href="#3.1.-Displaying-a-plot-with-its-code">&#182;</a></h2>
 
-</div>
-</div>
-</div>
-</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-<br><b>Code 6:</b> The plotting code for a matplotlib figure (<a href="#fig:example_mpl">fig. 5</a>).
-<div class="input_code">
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">  
+                <br><b>Code 6:</b> The plotting code for a matplotlib figure (<a href="#fig:example_mpl">fig. 5</a>).
+                <div class="input_code">
+                    <div class="cell border-box-sizing code_cell rendered">
+                        <div class="input">
 
-<div class="inner_cell">
-<div class="input_area"><a id="code:example_mpl" class="anchor-link" name="#code:example_mpl"></a>
+                            <div class="inner_cell">
+                                <div class="input_area"><a id="code:example_mpl" class="anchor-link"
+                                                           name="#code:example_mpl"></a>
 
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> 
-            <span class="n">label</span><span class="o">=</span><span class="s1">&#39;data label&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;a y label with latex $\alpha$&#39;</span><span class="p">)</span>
+                                    <div class=" highlight hl-ipython3"><pre><span></span><span
+                                            class="n">plt</span><span class="o">.</span><span
+                                            class="n">scatter</span><span class="p">(</span><span
+                                            class="n">np</span><span class="o">.</span><span
+                                            class="n">random</span><span class="o">.</span><span
+                                            class="n">rand</span><span class="p">(</span><span class="mi">10</span><span
+                                            class="p">),</span> <span class="n">np</span><span class="o">.</span><span
+                                            class="n">random</span><span class="o">.</span><span
+                                            class="n">rand</span><span class="p">(</span><span class="mi">10</span><span
+                                            class="p">),</span>
+            <span class="n">label</span><span class="o">=</span><span class="s1">&#39;data label&#39;</span><span
+                                                class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span
+                                                class="s1">&#39;a y label with latex $\alpha$&#39;</span><span
+                                                class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
-</pre></div>
+</pre>
+                                    </div>
 
-</div>
-</div>   
+                                </div>
+                            </div>
 
-</div>
-</div>
-</div>   
+                        </div>
+                    </div>
+                </div>
 
-<div class="output_area">
+                <div class="output_area">
 
-<a id="fig:example_mpl" class="anchor-link" name="#fig:example_mpl"></a>
+                    <a id="fig:example_mpl" class="anchor-link" name="#fig:example_mpl"></a>
 
-<div class="output_image output_svg output_subarea ">
-<?xml version="1.0" encoding="utf-8" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
-  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<!-- Created with matplotlib (http://matplotlib.org/) -->
-<svg height="258pt" version="1.1" viewBox="0 0 455 258" width="455pt" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
- <defs>
-  <style type="text/css">
+                    <div class="output_image output_svg output_subarea ">
+                        <?xml version="1.0" encoding="utf-8" standalone="no"?>
+                        <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+                        "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+                        <!-- Created with matplotlib (http://matplotlib.org/) -->
+                        <svg height="258pt" version="1.1" viewBox="0 0 455 258" width="455pt"
+                             xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                            <defs>
+                                <style type="text/css">
 *{stroke-linecap:butt;stroke-linejoin:round;}
-  </style>
- </defs>
- <g id="figure_1">
-  <g id="patch_1">
-   <path d="M 0 258.561146 
+
+                                </style>
+                            </defs>
+                            <g id="figure_1">
+                                <g id="patch_1">
+                                    <path d="M 0 258.561146
 L 455.384887 258.561146 
 L 455.384887 0 
 L 0 0 
 z
 " style="fill:none;"/>
-  </g>
-  <g id="axes_1">
-   <g id="patch_2">
-    <path d="M 54.084887 230.192082 
+                                </g>
+                                <g id="axes_1">
+                                    <g id="patch_2">
+                                        <path d="M 54.084887 230.192082
 L 444.684887 230.192082 
 L 444.684887 12.752082 
 L 54.084887 12.752082 
 z
 " style="fill:#ffffff;"/>
-   </g>
-   <g id="PathCollection_1">
-    <defs>
-     <path d="M 0 4 
+                                    </g>
+                                    <g id="PathCollection_1">
+                                        <defs>
+                                            <path d="M 0 4
 C 1.060812 4 2.078319 3.578535 2.828427 2.828427 
 C 3.578535 2.078319 4 1.060812 4 0 
 C 4 -1.060812 3.578535 -2.078319 2.828427 -2.828427 
@@ -20508,36 +20550,47 @@ C -4 1.060812 -3.578535 2.078319 -2.828427 2.828427
 C -2.078319 3.578535 -1.060812 4 0 4 
 z
 " id="m6b5534bdeb" style="stroke:#1f77b4;"/>
-    </defs>
-    <g clip-path="url(#pb6c7af1790)">
-     <use style="fill:#1f77b4;stroke:#1f77b4;" x="422.721916" xlink:href="#m6b5534bdeb" y="184.497127"/>
-     <use style="fill:#1f77b4;stroke:#1f77b4;" x="405.972863" xlink:href="#m6b5534bdeb" y="39.575749"/>
-     <use style="fill:#1f77b4;stroke:#1f77b4;" x="118.670055" xlink:href="#m6b5534bdeb" y="216.499778"/>
-     <use style="fill:#1f77b4;stroke:#1f77b4;" x="418.516455" xlink:href="#m6b5534bdeb" y="49.912552"/>
-     <use style="fill:#1f77b4;stroke:#1f77b4;" x="102.973672" xlink:href="#m6b5534bdeb" y="48.69341"/>
-     <use style="fill:#1f77b4;stroke:#1f77b4;" x="202.070038" xlink:href="#m6b5534bdeb" y="81.608013"/>
-     <use style="fill:#1f77b4;stroke:#1f77b4;" x="184.303117" xlink:href="#m6b5534bdeb" y="174.733258"/>
-     <use style="fill:#1f77b4;stroke:#1f77b4;" x="204.975328" xlink:href="#m6b5534bdeb" y="126.363393"/>
-     <use style="fill:#1f77b4;stroke:#1f77b4;" x="388.76488" xlink:href="#m6b5534bdeb" y="26.444385"/>
-     <use style="fill:#1f77b4;stroke:#1f77b4;" x="76.047857" xlink:href="#m6b5534bdeb" y="179.117964"/>
-    </g>
-   </g>
-   <g id="matplotlib.axis_1">
-    <g id="xtick_1">
-     <g id="line2d_1">
-      <defs>
-       <path d="M 0 0 
+                                        </defs>
+                                        <g clip-path="url(#pb6c7af1790)">
+                                            <use style="fill:#1f77b4;stroke:#1f77b4;" x="422.721916"
+                                                 xlink:href="#m6b5534bdeb" y="184.497127"/>
+                                            <use style="fill:#1f77b4;stroke:#1f77b4;" x="405.972863"
+                                                 xlink:href="#m6b5534bdeb" y="39.575749"/>
+                                            <use style="fill:#1f77b4;stroke:#1f77b4;" x="118.670055"
+                                                 xlink:href="#m6b5534bdeb" y="216.499778"/>
+                                            <use style="fill:#1f77b4;stroke:#1f77b4;" x="418.516455"
+                                                 xlink:href="#m6b5534bdeb" y="49.912552"/>
+                                            <use style="fill:#1f77b4;stroke:#1f77b4;" x="102.973672"
+                                                 xlink:href="#m6b5534bdeb" y="48.69341"/>
+                                            <use style="fill:#1f77b4;stroke:#1f77b4;" x="202.070038"
+                                                 xlink:href="#m6b5534bdeb" y="81.608013"/>
+                                            <use style="fill:#1f77b4;stroke:#1f77b4;" x="184.303117"
+                                                 xlink:href="#m6b5534bdeb" y="174.733258"/>
+                                            <use style="fill:#1f77b4;stroke:#1f77b4;" x="204.975328"
+                                                 xlink:href="#m6b5534bdeb" y="126.363393"/>
+                                            <use style="fill:#1f77b4;stroke:#1f77b4;" x="388.76488"
+                                                 xlink:href="#m6b5534bdeb" y="26.444385"/>
+                                            <use style="fill:#1f77b4;stroke:#1f77b4;" x="76.047857"
+                                                 xlink:href="#m6b5534bdeb" y="179.117964"/>
+                                        </g>
+                                    </g>
+                                    <g id="matplotlib.axis_1">
+                                        <g id="xtick_1">
+                                            <g id="line2d_1">
+                                                <defs>
+                                                    <path d="M 0 0
 L 0 3.5 
 " id="m6755c82402" style="stroke:#000000;stroke-width:0.8;"/>
-      </defs>
-      <g>
-       <use style="stroke:#000000;stroke-width:0.8;" x="67.238851" xlink:href="#m6755c82402" y="230.192082"/>
-      </g>
-     </g>
-     <g id="text_1">
-      <!-- $0.0$ -->
-      <defs>
-       <path d="M 42 31.640625 
+                                                </defs>
+                                                <g>
+                                                    <use style="stroke:#000000;stroke-width:0.8;" x="67.238851"
+                                                         xlink:href="#m6755c82402" y="230.192082"/>
+                                                </g>
+                                            </g>
+                                            <g id="text_1">
+                                                <!-- $0.0$ -->
+                                                <defs>
+                                                    <path d="M 42 31.640625
 C 42 37.75 41.90625 48.125 37.703125 56.109375 
 C 34 63.109375 28.09375 65.59375 22.90625 65.59375 
 C 18.09375 65.59375 12 63.40625 8.203125 56.203125 
@@ -20558,31 +20611,34 @@ C 35.59375 26.25 35.59375 18.265625 34.40625 12.375
 C 32.296875 1.484375 26.40625 -0.40625 22.90625 -0.40625 
 z
 " id="CMR17-48"/>
-       <path d="M 18.40625 4.796875 
+                                                    <path d="M 18.40625 4.796875
 C 18.40625 7.6875 16 9.671875 13.59375 9.671875 
 C 10.703125 9.671875 8.703125 7.28125 8.703125 4.890625 
 C 8.703125 2 11.09375 0 13.5 0 
 C 16.40625 0 18.40625 2.390625 18.40625 4.796875 
 z
 " id="CMMI12-58"/>
-      </defs>
-      <g transform="translate(57.26709 248.26167)scale(0.16 -0.16)">
-       <use transform="scale(0.996264)" xlink:href="#CMR17-48"/>
-       <use transform="translate(45.690477 0)scale(0.996264)" xlink:href="#CMMI12-58"/>
-       <use transform="translate(72.787654 0)scale(0.996264)" xlink:href="#CMR17-48"/>
-      </g>
-     </g>
-    </g>
-    <g id="xtick_2">
-     <g id="line2d_2">
-      <g>
-       <use style="stroke:#000000;stroke-width:0.8;" x="149.429385" xlink:href="#m6755c82402" y="230.192082"/>
-      </g>
-     </g>
-     <g id="text_2">
-      <!-- $0.2$ -->
-      <defs>
-       <path d="M 41.703125 15.453125 
+                                                </defs>
+                                                <g transform="translate(57.26709 248.26167)scale(0.16 -0.16)">
+                                                    <use transform="scale(0.996264)" xlink:href="#CMR17-48"/>
+                                                    <use transform="translate(45.690477 0)scale(0.996264)"
+                                                         xlink:href="#CMMI12-58"/>
+                                                    <use transform="translate(72.787654 0)scale(0.996264)"
+                                                         xlink:href="#CMR17-48"/>
+                                                </g>
+                                            </g>
+                                        </g>
+                                        <g id="xtick_2">
+                                            <g id="line2d_2">
+                                                <g>
+                                                    <use style="stroke:#000000;stroke-width:0.8;" x="149.429385"
+                                                         xlink:href="#m6755c82402" y="230.192082"/>
+                                                </g>
+                                            </g>
+                                            <g id="text_2">
+                                                <!-- $0.2$ -->
+                                                <defs>
+                                                    <path d="M 41.703125 15.453125
 L 39.90625 15.453125 
 C 38.90625 8.375 38.09375 7.171875 37.703125 6.5625 
 C 37.203125 5.765625 30 5.765625 28.59375 5.765625 
@@ -20603,24 +20659,27 @@ L 4.09375 0
 L 39.296875 0 
 z
 " id="CMR17-50"/>
-      </defs>
-      <g transform="translate(139.457624 248.26167)scale(0.16 -0.16)">
-       <use transform="scale(0.996264)" xlink:href="#CMR17-48"/>
-       <use transform="translate(45.690477 0)scale(0.996264)" xlink:href="#CMMI12-58"/>
-       <use transform="translate(72.787654 0)scale(0.996264)" xlink:href="#CMR17-50"/>
-      </g>
-     </g>
-    </g>
-    <g id="xtick_3">
-     <g id="line2d_3">
-      <g>
-       <use style="stroke:#000000;stroke-width:0.8;" x="231.619919" xlink:href="#m6755c82402" y="230.192082"/>
-      </g>
-     </g>
-     <g id="text_3">
-      <!-- $0.4$ -->
-      <defs>
-       <path d="M 33.59375 64.40625 
+                                                </defs>
+                                                <g transform="translate(139.457624 248.26167)scale(0.16 -0.16)">
+                                                    <use transform="scale(0.996264)" xlink:href="#CMR17-48"/>
+                                                    <use transform="translate(45.690477 0)scale(0.996264)"
+                                                         xlink:href="#CMMI12-58"/>
+                                                    <use transform="translate(72.787654 0)scale(0.996264)"
+                                                         xlink:href="#CMR17-50"/>
+                                                </g>
+                                            </g>
+                                        </g>
+                                        <g id="xtick_3">
+                                            <g id="line2d_3">
+                                                <g>
+                                                    <use style="stroke:#000000;stroke-width:0.8;" x="231.619919"
+                                                         xlink:href="#m6755c82402" y="230.192082"/>
+                                                </g>
+                                            </g>
+                                            <g id="text_3">
+                                                <!-- $0.4$ -->
+                                                <defs>
+                                                    <path d="M 33.59375 64.40625
 C 33.59375 66.5 33.5 66.5 31.703125 66.5 
 L 2 19.59375 
 L 2 17 
@@ -20644,24 +20703,27 @@ L 28.09375 19.59375
 L 4 19.59375 
 z
 " id="CMR17-52"/>
-      </defs>
-      <g transform="translate(221.648158 248.26167)scale(0.16 -0.16)">
-       <use transform="scale(0.996264)" xlink:href="#CMR17-48"/>
-       <use transform="translate(45.690477 0)scale(0.996264)" xlink:href="#CMMI12-58"/>
-       <use transform="translate(72.787654 0)scale(0.996264)" xlink:href="#CMR17-52"/>
-      </g>
-     </g>
-    </g>
-    <g id="xtick_4">
-     <g id="line2d_4">
-      <g>
-       <use style="stroke:#000000;stroke-width:0.8;" x="313.810453" xlink:href="#m6755c82402" y="230.192082"/>
-      </g>
-     </g>
-     <g id="text_4">
-      <!-- $0.6$ -->
-      <defs>
-       <path d="M 10.59375 34 
+                                                </defs>
+                                                <g transform="translate(221.648158 248.26167)scale(0.16 -0.16)">
+                                                    <use transform="scale(0.996264)" xlink:href="#CMR17-48"/>
+                                                    <use transform="translate(45.690477 0)scale(0.996264)"
+                                                         xlink:href="#CMMI12-58"/>
+                                                    <use transform="translate(72.787654 0)scale(0.996264)"
+                                                         xlink:href="#CMR17-52"/>
+                                                </g>
+                                            </g>
+                                        </g>
+                                        <g id="xtick_4">
+                                            <g id="line2d_4">
+                                                <g>
+                                                    <use style="stroke:#000000;stroke-width:0.8;" x="313.810453"
+                                                         xlink:href="#m6755c82402" y="230.192082"/>
+                                                </g>
+                                            </g>
+                                            <g id="text_4">
+                                                <!-- $0.6$ -->
+                                                <defs>
+                                                    <path d="M 10.59375 34
 C 10.59375 57.65625 21.796875 63 28.296875 63 
 C 30.40625 63 35.5 62.640625 37.5 59 
 C 35.90625 59 32.90625 59 32.90625 55.515625 
@@ -20683,24 +20745,27 @@ C 35.203125 14.75 35.203125 10.78125 33.09375 6.78125
 C 30.90625 2.671875 27.703125 0.390625 23.09375 0.390625 
 z
 " id="CMR17-54"/>
-      </defs>
-      <g transform="translate(303.838692 248.26167)scale(0.16 -0.16)">
-       <use transform="scale(0.996264)" xlink:href="#CMR17-48"/>
-       <use transform="translate(45.690477 0)scale(0.996264)" xlink:href="#CMMI12-58"/>
-       <use transform="translate(72.787654 0)scale(0.996264)" xlink:href="#CMR17-54"/>
-      </g>
-     </g>
-    </g>
-    <g id="xtick_5">
-     <g id="line2d_5">
-      <g>
-       <use style="stroke:#000000;stroke-width:0.8;" x="396.000988" xlink:href="#m6755c82402" y="230.192082"/>
-      </g>
-     </g>
-     <g id="text_5">
-      <!-- $0.8$ -->
-      <defs>
-       <path d="M 27.203125 35.375 
+                                                </defs>
+                                                <g transform="translate(303.838692 248.26167)scale(0.16 -0.16)">
+                                                    <use transform="scale(0.996264)" xlink:href="#CMR17-48"/>
+                                                    <use transform="translate(45.690477 0)scale(0.996264)"
+                                                         xlink:href="#CMMI12-58"/>
+                                                    <use transform="translate(72.787654 0)scale(0.996264)"
+                                                         xlink:href="#CMR17-54"/>
+                                                </g>
+                                            </g>
+                                        </g>
+                                        <g id="xtick_5">
+                                            <g id="line2d_5">
+                                                <g>
+                                                    <use style="stroke:#000000;stroke-width:0.8;" x="396.000988"
+                                                         xlink:href="#m6755c82402" y="230.192082"/>
+                                                </g>
+                                            </g>
+                                            <g id="text_5">
+                                                <!-- $0.8$ -->
+                                                <defs>
+                                                    <path d="M 27.203125 35.375
 C 33.5 38.546875 39.90625 43.328125 39.90625 50.984375 
 C 39.90625 60.015625 31.09375 65.296875 23 65.296875 
 C 13.90625 65.296875 5.90625 58.734375 5.90625 49.6875 
@@ -20725,106 +20790,124 @@ C 13.90625 0.390625 7 6.84375 7 14.6875
 C 7 22.546875 13.09375 29.09375 20 32.1875 
 z
 " id="CMR17-56"/>
-      </defs>
-      <g transform="translate(386.029227 248.26167)scale(0.16 -0.16)">
-       <use transform="scale(0.996264)" xlink:href="#CMR17-48"/>
-       <use transform="translate(45.690477 0)scale(0.996264)" xlink:href="#CMMI12-58"/>
-       <use transform="translate(72.787654 0)scale(0.996264)" xlink:href="#CMR17-56"/>
-      </g>
-     </g>
-    </g>
-   </g>
-   <g id="matplotlib.axis_2">
-    <g id="ytick_1">
-     <g id="line2d_6">
-      <defs>
-       <path d="M 0 0 
+                                                </defs>
+                                                <g transform="translate(386.029227 248.26167)scale(0.16 -0.16)">
+                                                    <use transform="scale(0.996264)" xlink:href="#CMR17-48"/>
+                                                    <use transform="translate(45.690477 0)scale(0.996264)"
+                                                         xlink:href="#CMMI12-58"/>
+                                                    <use transform="translate(72.787654 0)scale(0.996264)"
+                                                         xlink:href="#CMR17-56"/>
+                                                </g>
+                                            </g>
+                                        </g>
+                                    </g>
+                                    <g id="matplotlib.axis_2">
+                                        <g id="ytick_1">
+                                            <g id="line2d_6">
+                                                <defs>
+                                                    <path d="M 0 0
 L -3.5 0 
 " id="me4dbc141a7" style="stroke:#000000;stroke-width:0.8;"/>
-      </defs>
-      <g>
-       <use style="stroke:#000000;stroke-width:0.8;" x="54.084887" xlink:href="#me4dbc141a7" y="219.773958"/>
-      </g>
-     </g>
-     <g id="text_6">
-      <!-- $0.0$ -->
-      <g transform="translate(27.141364 225.308752)scale(0.16 -0.16)">
-       <use transform="scale(0.996264)" xlink:href="#CMR17-48"/>
-       <use transform="translate(45.690477 0)scale(0.996264)" xlink:href="#CMMI12-58"/>
-       <use transform="translate(72.787654 0)scale(0.996264)" xlink:href="#CMR17-48"/>
-      </g>
-     </g>
-    </g>
-    <g id="ytick_2">
-     <g id="line2d_7">
-      <g>
-       <use style="stroke:#000000;stroke-width:0.8;" x="54.084887" xlink:href="#me4dbc141a7" y="178.366125"/>
-      </g>
-     </g>
-     <g id="text_7">
-      <!-- $0.2$ -->
-      <g transform="translate(27.141364 183.900919)scale(0.16 -0.16)">
-       <use transform="scale(0.996264)" xlink:href="#CMR17-48"/>
-       <use transform="translate(45.690477 0)scale(0.996264)" xlink:href="#CMMI12-58"/>
-       <use transform="translate(72.787654 0)scale(0.996264)" xlink:href="#CMR17-50"/>
-      </g>
-     </g>
-    </g>
-    <g id="ytick_3">
-     <g id="line2d_8">
-      <g>
-       <use style="stroke:#000000;stroke-width:0.8;" x="54.084887" xlink:href="#me4dbc141a7" y="136.958292"/>
-      </g>
-     </g>
-     <g id="text_8">
-      <!-- $0.4$ -->
-      <g transform="translate(27.141364 142.493087)scale(0.16 -0.16)">
-       <use transform="scale(0.996264)" xlink:href="#CMR17-48"/>
-       <use transform="translate(45.690477 0)scale(0.996264)" xlink:href="#CMMI12-58"/>
-       <use transform="translate(72.787654 0)scale(0.996264)" xlink:href="#CMR17-52"/>
-      </g>
-     </g>
-    </g>
-    <g id="ytick_4">
-     <g id="line2d_9">
-      <g>
-       <use style="stroke:#000000;stroke-width:0.8;" x="54.084887" xlink:href="#me4dbc141a7" y="95.55046"/>
-      </g>
-     </g>
-     <g id="text_9">
-      <!-- $0.6$ -->
-      <g transform="translate(27.141364 101.085254)scale(0.16 -0.16)">
-       <use transform="scale(0.996264)" xlink:href="#CMR17-48"/>
-       <use transform="translate(45.690477 0)scale(0.996264)" xlink:href="#CMMI12-58"/>
-       <use transform="translate(72.787654 0)scale(0.996264)" xlink:href="#CMR17-54"/>
-      </g>
-     </g>
-    </g>
-    <g id="ytick_5">
-     <g id="line2d_10">
-      <g>
-       <use style="stroke:#000000;stroke-width:0.8;" x="54.084887" xlink:href="#me4dbc141a7" y="54.142627"/>
-      </g>
-     </g>
-     <g id="text_10">
-      <!-- $0.8$ -->
-      <g transform="translate(27.141364 59.677421)scale(0.16 -0.16)">
-       <use transform="scale(0.996264)" xlink:href="#CMR17-48"/>
-       <use transform="translate(45.690477 0)scale(0.996264)" xlink:href="#CMMI12-58"/>
-       <use transform="translate(72.787654 0)scale(0.996264)" xlink:href="#CMR17-56"/>
-      </g>
-     </g>
-    </g>
-    <g id="ytick_6">
-     <g id="line2d_11">
-      <g>
-       <use style="stroke:#000000;stroke-width:0.8;" x="54.084887" xlink:href="#me4dbc141a7" y="12.734794"/>
-      </g>
-     </g>
-     <g id="text_11">
-      <!-- $1.0$ -->
-      <defs>
-       <path d="M 26.59375 63.40625 
+                                                </defs>
+                                                <g>
+                                                    <use style="stroke:#000000;stroke-width:0.8;" x="54.084887"
+                                                         xlink:href="#me4dbc141a7" y="219.773958"/>
+                                                </g>
+                                            </g>
+                                            <g id="text_6">
+                                                <!-- $0.0$ -->
+                                                <g transform="translate(27.141364 225.308752)scale(0.16 -0.16)">
+                                                    <use transform="scale(0.996264)" xlink:href="#CMR17-48"/>
+                                                    <use transform="translate(45.690477 0)scale(0.996264)"
+                                                         xlink:href="#CMMI12-58"/>
+                                                    <use transform="translate(72.787654 0)scale(0.996264)"
+                                                         xlink:href="#CMR17-48"/>
+                                                </g>
+                                            </g>
+                                        </g>
+                                        <g id="ytick_2">
+                                            <g id="line2d_7">
+                                                <g>
+                                                    <use style="stroke:#000000;stroke-width:0.8;" x="54.084887"
+                                                         xlink:href="#me4dbc141a7" y="178.366125"/>
+                                                </g>
+                                            </g>
+                                            <g id="text_7">
+                                                <!-- $0.2$ -->
+                                                <g transform="translate(27.141364 183.900919)scale(0.16 -0.16)">
+                                                    <use transform="scale(0.996264)" xlink:href="#CMR17-48"/>
+                                                    <use transform="translate(45.690477 0)scale(0.996264)"
+                                                         xlink:href="#CMMI12-58"/>
+                                                    <use transform="translate(72.787654 0)scale(0.996264)"
+                                                         xlink:href="#CMR17-50"/>
+                                                </g>
+                                            </g>
+                                        </g>
+                                        <g id="ytick_3">
+                                            <g id="line2d_8">
+                                                <g>
+                                                    <use style="stroke:#000000;stroke-width:0.8;" x="54.084887"
+                                                         xlink:href="#me4dbc141a7" y="136.958292"/>
+                                                </g>
+                                            </g>
+                                            <g id="text_8">
+                                                <!-- $0.4$ -->
+                                                <g transform="translate(27.141364 142.493087)scale(0.16 -0.16)">
+                                                    <use transform="scale(0.996264)" xlink:href="#CMR17-48"/>
+                                                    <use transform="translate(45.690477 0)scale(0.996264)"
+                                                         xlink:href="#CMMI12-58"/>
+                                                    <use transform="translate(72.787654 0)scale(0.996264)"
+                                                         xlink:href="#CMR17-52"/>
+                                                </g>
+                                            </g>
+                                        </g>
+                                        <g id="ytick_4">
+                                            <g id="line2d_9">
+                                                <g>
+                                                    <use style="stroke:#000000;stroke-width:0.8;" x="54.084887"
+                                                         xlink:href="#me4dbc141a7" y="95.55046"/>
+                                                </g>
+                                            </g>
+                                            <g id="text_9">
+                                                <!-- $0.6$ -->
+                                                <g transform="translate(27.141364 101.085254)scale(0.16 -0.16)">
+                                                    <use transform="scale(0.996264)" xlink:href="#CMR17-48"/>
+                                                    <use transform="translate(45.690477 0)scale(0.996264)"
+                                                         xlink:href="#CMMI12-58"/>
+                                                    <use transform="translate(72.787654 0)scale(0.996264)"
+                                                         xlink:href="#CMR17-54"/>
+                                                </g>
+                                            </g>
+                                        </g>
+                                        <g id="ytick_5">
+                                            <g id="line2d_10">
+                                                <g>
+                                                    <use style="stroke:#000000;stroke-width:0.8;" x="54.084887"
+                                                         xlink:href="#me4dbc141a7" y="54.142627"/>
+                                                </g>
+                                            </g>
+                                            <g id="text_10">
+                                                <!-- $0.8$ -->
+                                                <g transform="translate(27.141364 59.677421)scale(0.16 -0.16)">
+                                                    <use transform="scale(0.996264)" xlink:href="#CMR17-48"/>
+                                                    <use transform="translate(45.690477 0)scale(0.996264)"
+                                                         xlink:href="#CMMI12-58"/>
+                                                    <use transform="translate(72.787654 0)scale(0.996264)"
+                                                         xlink:href="#CMR17-56"/>
+                                                </g>
+                                            </g>
+                                        </g>
+                                        <g id="ytick_6">
+                                            <g id="line2d_11">
+                                                <g>
+                                                    <use style="stroke:#000000;stroke-width:0.8;" x="54.084887"
+                                                         xlink:href="#me4dbc141a7" y="12.734794"/>
+                                                </g>
+                                            </g>
+                                            <g id="text_11">
+                                                <!-- $1.0$ -->
+                                                <defs>
+                                                    <path d="M 26.59375 63.40625
 C 26.59375 65.5 26.5 65.5 25.09375 65.5 
 C 21.203125 61.1875 15.296875 59.796875 9.703125 59.796875 
 C 9.40625 59.796875 8.90625 59.796875 8.796875 59.5 
@@ -20841,18 +20924,20 @@ L 35.40625 2.5
 C 26.796875 2.5 26.59375 3.59375 26.59375 7.15625 
 z
 " id="CMR17-49"/>
-      </defs>
-      <g transform="translate(27.141364 18.269588)scale(0.16 -0.16)">
-       <use transform="scale(0.996264)" xlink:href="#CMR17-49"/>
-       <use transform="translate(45.690477 0)scale(0.996264)" xlink:href="#CMMI12-58"/>
-       <use transform="translate(72.787654 0)scale(0.996264)" xlink:href="#CMR17-48"/>
-      </g>
-     </g>
-    </g>
-    <g id="text_12">
-     <!-- a y label with latex $\alpha$ -->
-     <defs>
-      <path d="M 36 25.828125 
+                                                </defs>
+                                                <g transform="translate(27.141364 18.269588)scale(0.16 -0.16)">
+                                                    <use transform="scale(0.996264)" xlink:href="#CMR17-49"/>
+                                                    <use transform="translate(45.690477 0)scale(0.996264)"
+                                                         xlink:href="#CMMI12-58"/>
+                                                    <use transform="translate(72.787654 0)scale(0.996264)"
+                                                         xlink:href="#CMR17-48"/>
+                                                </g>
+                                            </g>
+                                        </g>
+                                        <g id="text_12">
+                                            <!-- a y label with latex $\alpha$ -->
+                                            <defs>
+                                                <path d="M 36 25.828125
 C 36 32.375 36 35.84375 31.796875 39.734375 
 C 28.09375 43 23.796875 44 20.40625 44 
 C 12.5 44 6.796875 37.609375 6.796875 30.796875 
@@ -20882,7 +20967,7 @@ C 10.09375 11.890625 11.40625 17.1875 17.203125 20.390625
 C 22 23.09375 27.5 23.5 30.703125 23.5 
 z
 " id="CMR17-97"/>
-      <path d="M 39 34.328125 
+                                                <path d="M 39 34.328125
 C 41.5 40.40625 46 40.40625 47.40625 40.40625 
 L 47.40625 43 
 C 45.5 43 43 43 41.09375 43 
@@ -20909,7 +20994,7 @@ C 1.203125 -17.109375 5.296875 -20 9.796875 -20
 C 15.59375 -20 19.203125 -14.40625 21.203125 -9.4375 
 z
 " id="CMR17-121"/>
-      <path d="M 15.296875 68.6875 
+                                                <path d="M 15.296875 68.6875
 L 3.40625 67.59375 
 L 3.40625 65 
 C 9.296875 65 10.203125 64.40625 10.203125 59.640625 
@@ -20922,7 +21007,7 @@ L 22.09375 2.390625
 C 15.703125 2.390625 15.296875 2.78125 15.296875 6.65625 
 z
 " id="CMR17-108"/>
-      <path d="M 15 68.6875 
+                                                <path d="M 15 68.6875
 L 3.09375 67.59375 
 L 3.09375 65 
 C 9 65 9.90625 64.40625 9.90625 59.640625 
@@ -20943,7 +21028,7 @@ C 24 0.59375 19.5 1.78125 16.296875 7.59375
 C 15.203125 9.5 15.203125 9.703125 15.203125 11.484375 
 z
 " id="CMR17-98"/>
-      <path d="M 38.09375 23 
+                                                <path d="M 38.09375 23
 C 38.5 23.40625 38.5 23.609375 38.5 24.625 
 C 38.5 34.96875 33.09375 44 21.703125 44 
 C 11.09375 44 2.703125 33.890625 2.703125 21.609375 
@@ -20960,7 +21045,7 @@ C 9.90625 39.140625 17.59375 42.40625 21.59375 42.40625
 C 28.40625 42.40625 33 35.890625 33.09375 24.5 
 z
 " id="CMR17-101"/>
-      <path d="M 58.203125 34.109375 
+                                                <path d="M 58.203125 34.109375
 C 60.203125 40 64.203125 40 65.703125 40 
 L 65.703125 42.6875 
 C 63.703125 42.6875 61.703125 42.6875 59.703125 42.6875 
@@ -20995,7 +21080,7 @@ C 44.203125 -0.609375 44.59375 -0.8125 45.296875 -0.8125
 C 46.09375 -0.8125 46.40625 -0.515625 46.796875 0.78125 
 z
 " id="CMR17-119"/>
-      <path d="M 15.5 61.078125 
+                                                <path d="M 15.5 61.078125
 C 15.5 63.265625 13.703125 65.15625 11.40625 65.15625 
 C 9.203125 65.15625 7.296875 63.375 7.296875 61.078125 
 C 7.296875 58.890625 9.09375 57 11.40625 57 
@@ -21014,7 +21099,7 @@ C 15.5 2.390625 15.296875 2.984375 15.296875 6.5625
 L 15.296875 43.375 
 z
 " id="CMR17-105"/>
-      <path d="M 15.09375 40 
+                                                <path d="M 15.09375 40
 L 29.09375 40 
 L 29.09375 42.578125 
 L 15.09375 42.578125 
@@ -21033,7 +21118,7 @@ C 28.90625 5.375 26.203125 0.796875 22 0.796875
 C 19.09375 0.796875 15.09375 2.78125 15.09375 11.84375 
 z
 " id="CMR17-116"/>
-      <path d="M 41.5 30.203125 
+                                                <path d="M 41.5 30.203125
 C 41.5 35.296875 40.5 43.59375 28.703125 43.59375 
 C 20.5 43.59375 16.5 37 15.296875 33.703125 
 L 15.203125 33.703125 
@@ -21060,7 +21145,7 @@ L 48.296875 2.390625
 C 41.90625 2.390625 41.5 2.78125 41.5 6.6875 
 z
 " id="CMR17-104"/>
-      <path d="M 26 23.078125 
+                                                <path d="M 26 23.078125
 C 29 26.96875 32.40625 31.34375 35.203125 34.625 
 C 38.5 38.40625 42.296875 40 46.703125 40 
 L 46.703125 42.59375 
@@ -21099,7 +21184,7 @@ L 48.296875 2.5
 C 43.296875 2.5 41.796875 2.6875 39.40625 5.78125 
 z
 " id="CMR17-120"/>
-      <path d="M 46.296875 25.25 
+                                                <path d="M 46.296875 25.25
 C 46.296875 34.921875 40.796875 43.984375 30.203125 43.984375 
 C 17.09375 43.984375 4 29.71875 4 15.5625 
 C 4 6.890625 9.40625 -1 19.59375 -1 
@@ -21125,51 +21210,67 @@ C 39.90625 18.46875 39.796875 15.875 39.796875 13.375
 C 39.796875 11.375 39.90625 10.875 40 9.78125 
 z
 " id="CMMI12-11"/>
-     </defs>
-     <g transform="translate(19.6533 199.592384)rotate(-90)scale(0.18 -0.18)">
-      <use transform="scale(0.996264)" xlink:href="#CMR17-97"/>
-      <use transform="translate(75.766443 0)scale(0.996264)" xlink:href="#CMR17-121"/>
-      <use transform="translate(154.135326 0)scale(0.996264)" xlink:href="#CMR17-108"/>
-      <use transform="translate(179.006384 0)scale(0.996264)" xlink:href="#CMR17-97"/>
-      <use transform="translate(224.696861 0)scale(0.996264)" xlink:href="#CMR17-98"/>
-      <use transform="translate(278.19467 0)scale(0.996264)" xlink:href="#CMR17-101"/>
-      <use transform="translate(318.68033 0)scale(0.996264)" xlink:href="#CMR17-108"/>
-      <use transform="translate(373.627355 0)scale(0.996264)" xlink:href="#CMR17-119"/>
-      <use transform="translate(440.137236 0)scale(0.996264)" xlink:href="#CMR17-105"/>
-      <use transform="translate(465.008294 0)scale(0.996264)" xlink:href="#CMR17-116"/>
-      <use transform="translate(500.289062 0)scale(0.996264)" xlink:href="#CMR17-104"/>
-      <use transform="translate(581.260398 0)scale(0.996264)" xlink:href="#CMR17-108"/>
-      <use transform="translate(606.131457 0)scale(0.996264)" xlink:href="#CMR17-97"/>
-      <use transform="translate(651.821934 0)scale(0.996264)" xlink:href="#CMR17-116"/>
-      <use transform="translate(687.102701 0)scale(0.996264)" xlink:href="#CMR17-101"/>
-      <use transform="translate(727.588362 0)scale(0.996264)" xlink:href="#CMR17-120"/>
-      <use transform="translate(805.957244 0)scale(0.996264)" xlink:href="#CMMI12-11"/>
-     </g>
-    </g>
-   </g>
-   <g id="patch_3">
-    <path d="M 54.084887 230.192082 
+                                            </defs>
+                                            <g transform="translate(19.6533 199.592384)rotate(-90)scale(0.18 -0.18)">
+                                                <use transform="scale(0.996264)" xlink:href="#CMR17-97"/>
+                                                <use transform="translate(75.766443 0)scale(0.996264)"
+                                                     xlink:href="#CMR17-121"/>
+                                                <use transform="translate(154.135326 0)scale(0.996264)"
+                                                     xlink:href="#CMR17-108"/>
+                                                <use transform="translate(179.006384 0)scale(0.996264)"
+                                                     xlink:href="#CMR17-97"/>
+                                                <use transform="translate(224.696861 0)scale(0.996264)"
+                                                     xlink:href="#CMR17-98"/>
+                                                <use transform="translate(278.19467 0)scale(0.996264)"
+                                                     xlink:href="#CMR17-101"/>
+                                                <use transform="translate(318.68033 0)scale(0.996264)"
+                                                     xlink:href="#CMR17-108"/>
+                                                <use transform="translate(373.627355 0)scale(0.996264)"
+                                                     xlink:href="#CMR17-119"/>
+                                                <use transform="translate(440.137236 0)scale(0.996264)"
+                                                     xlink:href="#CMR17-105"/>
+                                                <use transform="translate(465.008294 0)scale(0.996264)"
+                                                     xlink:href="#CMR17-116"/>
+                                                <use transform="translate(500.289062 0)scale(0.996264)"
+                                                     xlink:href="#CMR17-104"/>
+                                                <use transform="translate(581.260398 0)scale(0.996264)"
+                                                     xlink:href="#CMR17-108"/>
+                                                <use transform="translate(606.131457 0)scale(0.996264)"
+                                                     xlink:href="#CMR17-97"/>
+                                                <use transform="translate(651.821934 0)scale(0.996264)"
+                                                     xlink:href="#CMR17-116"/>
+                                                <use transform="translate(687.102701 0)scale(0.996264)"
+                                                     xlink:href="#CMR17-101"/>
+                                                <use transform="translate(727.588362 0)scale(0.996264)"
+                                                     xlink:href="#CMR17-120"/>
+                                                <use transform="translate(805.957244 0)scale(0.996264)"
+                                                     xlink:href="#CMMI12-11"/>
+                                            </g>
+                                        </g>
+                                    </g>
+                                    <g id="patch_3">
+                                        <path d="M 54.084887 230.192082
 L 54.084887 12.752082 
 " style="fill:none;stroke:#000000;stroke-linecap:square;stroke-linejoin:miter;stroke-width:0.8;"/>
-   </g>
-   <g id="patch_4">
-    <path d="M 444.684887 230.192082 
+                                    </g>
+                                    <g id="patch_4">
+                                        <path d="M 444.684887 230.192082
 L 444.684887 12.752082 
 " style="fill:none;stroke:#000000;stroke-linecap:square;stroke-linejoin:miter;stroke-width:0.8;"/>
-   </g>
-   <g id="patch_5">
-    <path d="M 54.084887 230.192082 
+                                    </g>
+                                    <g id="patch_5">
+                                        <path d="M 54.084887 230.192082
 L 444.684887 230.192082 
 " style="fill:none;stroke:#000000;stroke-linecap:square;stroke-linejoin:miter;stroke-width:0.8;"/>
-   </g>
-   <g id="patch_6">
-    <path d="M 54.084887 12.752082 
+                                    </g>
+                                    <g id="patch_6">
+                                        <path d="M 54.084887 12.752082
 L 444.684887 12.752082 
 " style="fill:none;stroke:#000000;stroke-linecap:square;stroke-linejoin:miter;stroke-width:0.8;"/>
-   </g>
-   <g id="legend_1">
-    <g id="patch_7">
-     <path d="M 63.884887 43.46411 
+                                    </g>
+                                    <g id="legend_1">
+                                        <g id="patch_7">
+                                            <path d="M 63.884887 43.46411
 L 168.244482 43.46411 
 Q 171.044482 43.46411 171.044482 40.66411 
 L 171.044482 22.552082 
@@ -21180,16 +21281,17 @@ L 61.084887 40.66411
 Q 61.084887 43.46411 63.884887 43.46411 
 z
 " style="fill:#ffffff;opacity:0.8;stroke:#cccccc;stroke-linejoin:miter;"/>
-    </g>
-    <g id="PathCollection_2">
-     <g>
-      <use style="fill:#1f77b4;stroke:#1f77b4;" x="80.684887" xlink:href="#m6b5534bdeb" y="31.477082"/>
-     </g>
-    </g>
-    <g id="text_13">
-     <!-- data label -->
-     <defs>
-      <path d="M 29.203125 67.59375 
+                                        </g>
+                                        <g id="PathCollection_2">
+                                            <g>
+                                                <use style="fill:#1f77b4;stroke:#1f77b4;" x="80.684887"
+                                                     xlink:href="#m6b5534bdeb" y="31.477082"/>
+                                            </g>
+                                        </g>
+                                        <g id="text_13">
+                                            <!-- data label -->
+                                            <defs>
+                                                <path d="M 29.203125 67.59375
 L 29.203125 65 
 C 35.09375 65 36 64.40625 36 59.6875 
 L 36 36.640625 
@@ -21212,101 +21314,137 @@ C 28.5 42 32.203125 39.40625 34.5 35.796875
 C 35.796875 33.703125 35.796875 33.40625 35.796875 31.609375 
 z
 " id="CMR17-100"/>
-     </defs>
-     <g transform="translate(105.884887 35.152082)scale(0.14 -0.14)">
-      <use transform="scale(0.996264)" xlink:href="#CMR17-100"/>
-      <use transform="translate(50.89537 0)scale(0.996264)" xlink:href="#CMR17-97"/>
-      <use transform="translate(96.585847 0)scale(0.996264)" xlink:href="#CMR17-116"/>
-      <use transform="translate(131.866615 0)scale(0.996264)" xlink:href="#CMR17-97"/>
-      <use transform="translate(207.633058 0)scale(0.996264)" xlink:href="#CMR17-108"/>
-      <use transform="translate(232.504117 0)scale(0.996264)" xlink:href="#CMR17-97"/>
-      <use transform="translate(278.194594 0)scale(0.996264)" xlink:href="#CMR17-98"/>
-      <use transform="translate(331.692402 0)scale(0.996264)" xlink:href="#CMR17-101"/>
-      <use transform="translate(372.178063 0)scale(0.996264)" xlink:href="#CMR17-108"/>
-     </g>
-    </g>
-   </g>
-  </g>
- </g>
- <defs>
-  <clipPath id="pb6c7af1790">
-   <rect height="217.44" width="390.6" x="54.084887" y="12.752082"/>
-  </clipPath>
- </defs>
-</svg>
+                                            </defs>
+                                            <g transform="translate(105.884887 35.152082)scale(0.14 -0.14)">
+                                                <use transform="scale(0.996264)" xlink:href="#CMR17-100"/>
+                                                <use transform="translate(50.89537 0)scale(0.996264)"
+                                                     xlink:href="#CMR17-97"/>
+                                                <use transform="translate(96.585847 0)scale(0.996264)"
+                                                     xlink:href="#CMR17-116"/>
+                                                <use transform="translate(131.866615 0)scale(0.996264)"
+                                                     xlink:href="#CMR17-97"/>
+                                                <use transform="translate(207.633058 0)scale(0.996264)"
+                                                     xlink:href="#CMR17-108"/>
+                                                <use transform="translate(232.504117 0)scale(0.996264)"
+                                                     xlink:href="#CMR17-97"/>
+                                                <use transform="translate(278.194594 0)scale(0.996264)"
+                                                     xlink:href="#CMR17-98"/>
+                                                <use transform="translate(331.692402 0)scale(0.996264)"
+                                                     xlink:href="#CMR17-101"/>
+                                                <use transform="translate(372.178063 0)scale(0.996264)"
+                                                     xlink:href="#CMR17-108"/>
+                                            </g>
+                                        </g>
+                                    </g>
+                                </g>
+                            </g>
+                            <defs>
+                                <clipPath id="pb6c7af1790">
+                                    <rect height="217.44" width="390.6" x="54.084887" y="12.752082"/>
+                                </clipPath>
+                            </defs>
+                        </svg>
 
-</div>
+                    </div>
 
-</div>
+                </div>
 
-<div class="output_area">
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<b>Figure 5:</b> A matplotlib figure, with the caption set in the markdowncell above the figure.
-</div>
-</div>
-</div>
-</div>
+                <div class="output_area">
+                    <div class="cell border-box-sizing text_cell rendered">
+                        <div class="inner_cell">
+                            <div class="text_cell_render border-box-sizing rendered_html">
+                                <b>Figure 5:</b> A matplotlib figure, with the caption set in the markdowncell above the
+                                figure.
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-</section>
-</section>  
+            </section>
+        </section>
 
-<section>
-<section>
+        <section>
+            <section>
 
-<div class="input_markdown">
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
+                <div class="input_markdown">
+                    <div class="cell border-box-sizing text_cell rendered">
+                        <div class="inner_cell">
+                            <div class="text_cell_render border-box-sizing rendered_html">
 
-<h1 id="4.-Tables-(with-pandas)">4. Tables (with pandas)<a class="anchor-link" href="#4.-Tables-(with-pandas)">&#182;</a></h1>
+                                <h1 id="4.-Tables-(with-pandas)">4. Tables (with pandas)<a class="anchor-link"
+                                                                                           href="#4.-Tables-(with-pandas)">&#182;</a>
+                                </h1>
 
-</div>
-</div>
-</div>
-</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-<br><b>Code 8:</b> The plotting code for a pandas Dataframe table (<a href="#tbl:example">tbl. 1</a>).
-<div class="input_code">
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">  
+                <br><b>Code 8:</b> The plotting code for a pandas Dataframe table (<a href="#tbl:example">tbl. 1</a>).
+                <div class="input_code">
+                    <div class="cell border-box-sizing code_cell rendered">
+                        <div class="input">
 
-<div class="inner_cell">
-<div class="input_area"><a id="code:example_pd" class="anchor-link" name="#code:example_pd"></a>
+                            <div class="inner_cell">
+                                <div class="input_area"><a id="code:example_pd" class="anchor-link"
+                                                           name="#code:example_pd"></a>
 
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="s1">&#39;b&#39;</span><span class="p">,</span><span class="s1">&#39;c&#39;</span><span class="p">,</span><span class="s1">&#39;d&#39;</span><span class="p">])</span>
-<span class="n">df</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;$\delta$&#39;</span><span class="p">,</span><span class="s1">&#39;x&#39;</span><span class="p">,</span><span class="s1">&#39;y&#39;</span><span class="p">]</span>
-<span class="n">df</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;l&#39;</span><span class="p">,</span><span class="s1">&#39;m&#39;</span><span class="p">,</span><span class="s1">&#39;n&#39;</span><span class="p">]</span>
-<span class="n">df</span><span class="o">.</span><span class="n">set_index</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="s1">&#39;b&#39;</span><span class="p">])</span>
-<span class="n">df</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-</pre></div>
+                                    <div class=" highlight hl-ipython3"><pre><span></span><span
+                                            class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span
+                                            class="o">.</span><span class="n">DataFrame</span><span
+                                            class="p">(</span><span class="n">np</span><span class="o">.</span><span
+                                            class="n">random</span><span class="o">.</span><span
+                                            class="n">rand</span><span class="p">(</span><span class="mi">3</span><span
+                                            class="p">,</span><span class="mi">4</span><span class="p">),</span><span
+                                            class="n">columns</span><span class="o">=</span><span
+                                            class="p">[</span><span class="s1">&#39;a&#39;</span><span
+                                            class="p">,</span><span class="s1">&#39;b&#39;</span><span
+                                            class="p">,</span><span class="s1">&#39;c&#39;</span><span
+                                            class="p">,</span><span class="s1">&#39;d&#39;</span><span
+                                            class="p">])</span>
+<span class="n">df</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span
+                                                class="p">[</span><span class="s1">&#39;$\delta$&#39;</span><span
+                                                class="p">,</span><span class="s1">&#39;x&#39;</span><span
+                                                class="p">,</span><span class="s1">&#39;y&#39;</span><span
+                                                class="p">]</span>
+<span class="n">df</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span
+                                                class="p">[</span><span class="s1">&#39;l&#39;</span><span
+                                                class="p">,</span><span class="s1">&#39;m&#39;</span><span
+                                                class="p">,</span><span class="s1">&#39;n&#39;</span><span
+                                                class="p">]</span>
+<span class="n">df</span><span class="o">.</span><span class="n">set_index</span><span class="p">([</span><span
+                                                class="s1">&#39;a&#39;</span><span class="p">,</span><span class="s1">&#39;b&#39;</span><span
+                                                class="p">])</span>
+<span class="n">df</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span
+                                                class="mi">3</span><span class="p">)</span>
+</pre>
+                                    </div>
 
-</div>
-</div>   
+                                </div>
+                            </div>
 
-</div>
-</div>
-</div>   
+                        </div>
+                    </div>
+                </div>
 
-<div class="output_area">
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html"> 
-<b>Table 1:</b> An example of a table created with pandas dataframe.
-</div>
-</div>
-</div>
-</div>
+                <div class="output_area">
+                    <div class="cell border-box-sizing text_cell rendered">
+                        <div class="inner_cell">
+                            <div class="text_cell_render border-box-sizing rendered_html">
+                                <b>Table 1:</b> An example of a table created with pandas dataframe.
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-<div class="output_area">
+                <div class="output_area">
 
-<a id="tbl:example" class="anchor-link" name="#tbl:example"></a>
+                    <a id="tbl:example" class="anchor-link" name="#tbl:example"></a>
 
-<div class="output_html rendered_html output_subarea output_execute_result">
+                    <div class="output_html rendered_html output_subarea output_execute_result">
 
-<div>
-<style>
+                        <div>
+                            <style>
     .dataframe thead tr:only-child th {
         text-align: right;
     }
@@ -21318,166 +21456,194 @@ z
     .dataframe tbody tr th {
         vertical-align: top;
     }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>a</th>
-      <th>b</th>
-      <th>c</th>
-      <th>d</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>$\delta$</td>
-      <td>l</td>
-      <td>0.583</td>
-      <td>0.279</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>x</td>
-      <td>m</td>
-      <td>0.914</td>
-      <td>0.021</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>y</td>
-      <td>n</td>
-      <td>0.333</td>
-      <td>0.116</td>
-    </tr>
-  </tbody>
-</table>
-</div>
 
-</div>
+                            </style>
+                            <table border="1" class="dataframe">
+                                <thead>
+                                <tr style="text-align: right;">
+                                    <th></th>
+                                    <th>a</th>
+                                    <th>b</th>
+                                    <th>c</th>
+                                    <th>d</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <th>0</th>
+                                    <td>$\delta$</td>
+                                    <td>l</td>
+                                    <td>0.583</td>
+                                    <td>0.279</td>
+                                </tr>
+                                <tr>
+                                    <th>1</th>
+                                    <td>x</td>
+                                    <td>m</td>
+                                    <td>0.914</td>
+                                    <td>0.021</td>
+                                </tr>
+                                <tr>
+                                    <th>2</th>
+                                    <td>y</td>
+                                    <td>n</td>
+                                    <td>0.333</td>
+                                    <td>0.116</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
 
-</div>
+                    </div>
 
-</section>
-</section>  
+                </div>
 
-<section>
-<section>
+            </section>
+        </section>
 
-<div class="input_markdown">
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
+        <section>
+            <section>
 
-<h1 id="5.-Equations-(with-ipython-or-sympy)">5. Equations (with ipython or sympy)<a class="anchor-link" href="#5.-Equations-(with-ipython-or-sympy)">&#182;</a></h1>
+                <div class="input_markdown">
+                    <div class="cell border-box-sizing text_cell rendered">
+                        <div class="inner_cell">
+                            <div class="text_cell_render border-box-sizing rendered_html">
 
-</div>
-</div>
-</div>
-</div>
+                                <h1 id="5.-Equations-(with-ipython-or-sympy)">5. Equations (with ipython or sympy)<a
+                                        class="anchor-link" href="#5.-Equations-(with-ipython-or-sympy)">&#182;</a></h1>
 
-<div class="output_area">
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-<div class="output_latex output_subarea output_execute_result">
+                <div class="output_area">
 
-$$ a = b+c $$
+                    <div class="output_latex output_subarea output_execute_result">
 
-</div>
+                        $$ a = b+c $$
 
-<a id="eqn:example_ipy" class="anchor-link" name="#eqn:example_ipy"></a>
+                    </div>
 
-</div>
+                    <a id="eqn:example_ipy" class="anchor-link" name="#eqn:example_ipy"></a>
 
-<br><b>Code 11:</b> The plotting code for a sympy equation (<a href="#eqn:example_sympy">eqn. 1</a>).
-<div class="input_code">
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">  
+                </div>
 
-<div class="inner_cell">
-<div class="input_area"><a id="code:example_sym" class="anchor-link" name="#code:example_sym"></a>
+                <br><b>Code 11:</b> The plotting code for a sympy equation (<a href="#eqn:example_sympy">eqn. 1</a>).
+                <div class="input_code">
+                    <div class="cell border-box-sizing code_cell rendered">
+                        <div class="input">
 
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="n">sym</span><span class="o">.</span><span class="n">Function</span><span class="p">(</span><span class="s1">&#39;f&#39;</span><span class="p">)</span>
-<span class="n">y</span><span class="p">,</span><span class="n">n</span> <span class="o">=</span> <span class="n">sym</span><span class="o">.</span><span class="n">symbols</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;y \alpha&#39;</span><span class="p">)</span>
-<span class="n">f</span> <span class="o">=</span> <span class="n">y</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">y</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="n">sym</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span><span class="o">-</span><span class="mi">5</span><span class="o">*</span><span class="n">y</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">sym</span><span class="o">.</span><span class="n">rsolve</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">y</span><span class="p">(</span><span class="n">n</span><span class="p">),[</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">])</span>
-</pre></div>
+                            <div class="inner_cell">
+                                <div class="input_area"><a id="code:example_sym" class="anchor-link"
+                                                           name="#code:example_sym"></a>
 
-</div>
-</div>   
+                                    <div class=" highlight hl-ipython3"><pre><span></span><span class="n">f</span> <span
+                                            class="o">=</span> <span class="n">sym</span><span class="o">.</span><span
+                                            class="n">Function</span><span class="p">(</span><span class="s1">&#39;f&#39;</span><span
+                                            class="p">)</span>
+<span class="n">y</span><span class="p">,</span><span class="n">n</span> <span class="o">=</span> <span
+                                                class="n">sym</span><span class="o">.</span><span
+                                                class="n">symbols</span><span class="p">(</span><span
+                                                class="sa">r</span><span class="s1">&#39;y \alpha&#39;</span><span
+                                                class="p">)</span>
+<span class="n">f</span> <span class="o">=</span> <span class="n">y</span><span class="p">(</span><span
+                                                class="n">n</span><span class="p">)</span><span class="o">-</span><span
+                                                class="mi">2</span><span class="o">*</span><span class="n">y</span><span
+                                                class="p">(</span><span class="n">n</span><span class="o">-</span><span
+                                                class="mi">1</span><span class="o">/</span><span
+                                                class="n">sym</span><span class="o">.</span><span
+                                                class="n">pi</span><span class="p">)</span><span class="o">-</span><span
+                                                class="mi">5</span><span class="o">*</span><span class="n">y</span><span
+                                                class="p">(</span><span class="n">n</span><span class="o">-</span><span
+                                                class="mi">2</span><span class="p">)</span>
+<span class="n">sym</span><span class="o">.</span><span class="n">rsolve</span><span class="p">(</span><span
+                                                class="n">f</span><span class="p">,</span><span class="n">y</span><span
+                                                class="p">(</span><span class="n">n</span><span
+                                                class="p">),[</span><span class="mi">1</span><span
+                                                class="p">,</span><span class="mi">4</span><span class="p">])</span>
+</pre>
+                                    </div>
 
-</div>
-</div>
-</div>   
+                                </div>
+                            </div>
 
-<div class="output_area">
+                        </div>
+                    </div>
+                </div>
 
-<div class="output_latex output_subarea output_execute_result">
+                <div class="output_area">
 
-$$\left(\sqrt{5} i\right)^{\alpha} \left(\frac{1}{2} - \frac{2 i}{5} \sqrt{5}\right) + \left(- \sqrt{5} i\right)^{\alpha} \left(\frac{1}{2} + \frac{2 i}{5} \sqrt{5}\right)$$
+                    <div class="output_latex output_subarea output_execute_result">
 
-</div>
+                        $$\left(\sqrt{5} i\right)^{\alpha} \left(\frac{1}{2} - \frac{2 i}{5} \sqrt{5}\right) + \left(-
+                        \sqrt{5} i\right)^{\alpha} \left(\frac{1}{2} + \frac{2 i}{5} \sqrt{5}\right)$$
 
-<a id="eqn:example_sympy" class="anchor-link" name="#eqn:example_sympy"></a>
+                    </div>
 
-</div>
+                    <a id="eqn:example_sympy" class="anchor-link" name="#eqn:example_sympy"></a>
 
-</section>
-</section>  
+                </div>
 
-<section>
-<section>
+            </section>
+        </section>
 
-<div class="input_markdown">
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
+        <section>
+            <section>
 
-<h1 id="6.-Embed-interactive-HTML-(like-ipywidgets)">6. Embed interactive HTML (like ipywidgets)<a class="anchor-link" href="#6.-Embed-interactive-HTML-(like-ipywidgets)">&#182;</a></h1>
+                <div class="input_markdown">
+                    <div class="cell border-box-sizing text_cell rendered">
+                        <div class="inner_cell">
+                            <div class="text_cell_render border-box-sizing rendered_html">
 
-</div>
-</div>
-</div>
-</div>
+                                <h1 id="6.-Embed-interactive-HTML-(like-ipywidgets)">6. Embed interactive HTML (like
+                                    ipywidgets)<a class="anchor-link"
+                                                  href="#6.-Embed-interactive-HTML-(like-ipywidgets)">&#182;</a></h1>
 
-<div class="input_markdown">
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-<p>Interactive HTML was created using <a href="https://ipyvolume.readthedocs.io">ipyvolume</a>
-and will render below in .html type outputs:</p>
+                <div class="input_markdown">
+                    <div class="cell border-box-sizing text_cell rendered">
+                        <div class="inner_cell">
+                            <div class="text_cell_render border-box-sizing rendered_html">
 
-</div>
-</div>
-</div>
-</div>
+                                <p>Interactive HTML was created using <a href="https://ipyvolume.readthedocs.io">ipyvolume</a>
+                                    and will render below in .html type outputs:</p>
 
-<div class="output_area">
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-<div class="output_html rendered_html output_subarea output_execute_result">
+                <div class="output_area">
 
-        <iframe style="display:block; margin: 0 auto; height:50vh; width:50vw" data-src="Example_files/embed.html" frameborder="0" allowfullscreen></iframe>
+                    <div class="output_html rendered_html output_subarea output_execute_result">
 
-</div>
+                        <iframe style="display:block; margin: 0 auto; height:50vh; width:50vw"
+                                data-src="Example_files/embed.html" frameborder="0" allowfullscreen></iframe>
 
-</div>
+                    </div>
 
-<div class="output_area">
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<b>Figure 6:</b> An example of embedded html
-</div>
-</div>
-</div>
-</div>
+                </div>
 
-</section>
-</section>
+                <div class="output_area">
+                    <div class="cell border-box-sizing text_cell rendered">
+                        <div class="inner_cell">
+                            <div class="text_cell_render border-box-sizing rendered_html">
+                                <b>Figure 6:</b> An example of embedded html
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-</section>
-</div>
+            </section>
+        </section>
+
+        </section>
+    </div>
 </div>
 
 <script>
@@ -21530,8 +21696,9 @@ require(
         Reveal.configure({ slideNumber: 'c/t' });
     }
 );
+
 </script>
 
- </body>
+</body>
 
 </html>

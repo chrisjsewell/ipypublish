@@ -1,9 +1,10 @@
-import os, logging, re
-from nbconvert.preprocessors import Preprocessor
-import traitlets as traits
-import bibtexparser
-
+import logging
+import re
 import string
+
+import bibtexparser
+import traitlets as traits
+from nbconvert.preprocessors import Preprocessor
 
 # python 3 to 2 compatibility
 try:

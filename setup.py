@@ -5,6 +5,7 @@
 
 import io
 from importlib import import_module
+
 from setuptools import setup, find_packages
 
 with open('requirements.txt') as f:
@@ -48,7 +49,7 @@ with io.open('README.rst') as readme:
         ],
         keywords='python, jupyter-notebook, nbconvert, pandoc, latex, pdf',
         zip_safe=True,
-        packages = find_packages(),
+        packages=find_packages(),
         package_data={'': []},
         scripts=['bin/nbpublish', 'bin/nbpresent'],
     )
