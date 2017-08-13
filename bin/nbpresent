@@ -15,7 +15,7 @@ def nbpresent(inpath,
               ignore_prefix='_', clear_files=False,
               log_level='INFO'):
     """ load reveal.js slides as a web server, converting from ipynb first if path extension is .ipynb
-    
+
     Parameters
     ----------
     inpath: str
@@ -27,12 +27,12 @@ def nbpresent(inpath,
     dump_files: bool
         whether to write files from nbconvert (containing images, etc) to outpath
     clear_files : str
-        whether to clear existing external files in outpath folder                
+        whether to clear existing external files in outpath folder
     ignore_prefix: str
-        ignore ipynb files with this prefix                
-    loglevel: str
+        ignore ipynb files with this prefix
+    log_level: str
         the logging level (debug, info, critical, ...)
-    
+
     """
     root = logging.getLogger()
     root.handlers = []  # remove any existing handlers
@@ -64,23 +64,19 @@ def nbpresent(inpath,
 
 def list_outformats():
     """ print list all available output formats and descriptions
-    
-    Parameters
-    ----------
-    type: str
-        list for a specific type (Html, Latex, Slide, ...)
+
     """
-    plugins = export_plugins.get()
+    plugins_dict = export_plugins.get()
     outstr = 'Available Output Formats\n'
     outstr += '------------------------'
-    for plugin_name in sorted(plugins.keys()):
-        slides = plugins[plugin_name]['oformat'].lower() == 'slides'
-        html = plugins[plugin_name]['oformat'].lower() == 'html'
+    for plugin_name in sorted(plugins_dict.keys()):
+        slides = plugins_dict[plugin_name]['oformat'].lower() == 'slides'
+        html = plugins_dict[plugin_name]['oformat'].lower() == 'html'
         if not (slides or html):
             continue
         outstr += '\n- {}:'.format(plugin_name)
         space = '  '
-        for line in plugins[plugin_name]['descript'].split('\n'):
+        for line in plugins_dict[plugin_name]['descript'].split('\n'):
             outstr += '\n' + space + line
 
     return outstr

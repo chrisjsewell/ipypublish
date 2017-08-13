@@ -18,7 +18,7 @@ def nbpublish(ipynb_path,
 
     paths can be string of an existing file or folder,
     or a pathlib.Path like object
-              
+
     Parameters
     ----------
     ipynb_path
@@ -30,18 +30,18 @@ def nbpublish(ipynb_path,
     dump_files: bool
         write files from nbconvert (containing images, etc) to outpath
     ignore_prefix: str
-        ignore ipynb files with this prefix                
+        ignore ipynb files with this prefix
     clear_files : str
-        whether to clear existing external files in outpath folder                
+        whether to clear existing external files in outpath folder
     create_pdf: bool
         convert to pdf (if converting to latex)
     pdf_in_temp: bool
         run pdf conversion in a temporary folder and only copy back the .pdf file
     pdf_debug: bool
         run latexmk in interactive mode
-    loglevel: str
+    log_level: str
         the logging level (debug, info, critical, ...)
-              
+
     """
     ipynb_name = os.path.splitext(os.path.basename(ipynb_path))[0]
     outdir = os.path.join(os.getcwd(), 'converted') if outpath is None else outpath
@@ -72,19 +72,15 @@ def nbpublish(ipynb_path,
 
 def list_outformats():
     """ print list all available output formats and descriptions
-    
-    Parameters
-    ----------
-    type: str
-        list for a specific type (Html, Latex, Slide, ...)
+
     """
-    plugins = export_plugins.get()
+    plugins_dict = export_plugins.get()
     outstr = 'Available Output Formats\n'
     outstr += '------------------------'
-    for plugin_name in sorted(plugins.keys()):
+    for plugin_name in sorted(plugins_dict.keys()):
         outstr += '\n- {}:'.format(plugin_name)
         space = '  '
-        for line in plugins[plugin_name]['descript'].split('\n'):
+        for line in plugins_dict[plugin_name]['descript'].split('\n'):
             outstr += '\n' + space + line
 
     return outstr
