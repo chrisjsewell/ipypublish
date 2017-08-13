@@ -66,10 +66,10 @@ def create_key(input, **kwargs):
     """create sanitized key string which only contains lowercase letters,
     (semi)colons as c, underscores as u and numbers as roman numerals
     in this way the keys with different input should mainly be unique
-    
+
     >>> create_key('fig:A_10name56')
     'figcauxnamelvi'
-    
+
     """
     input = re.compile(r"\d+").sub(_repl, input)
     input = input.replace(':', 'c')
@@ -80,18 +80,18 @@ def create_key(input, **kwargs):
 
 def dict_to_kwds(dct, kwdstr):
     """ convert a dictionary to a string of keywords
-    
+
     Parameters
     ----------
     dct : dict
     kwdstr: str
         additional keyword strings
-    
+
     Examples
     --------
     >>> dict_to_kwds({"a":1,"c":3},'a=1,b=2')
     'a=1,c=3,b=2,'
-    
+
     """
     string = ''
     for key in sorted(dct.keys()):

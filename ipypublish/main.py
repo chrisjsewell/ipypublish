@@ -31,9 +31,9 @@ def publish(ipynb_path,
 
     paths can be string of an existing file or folder,
     or a pathlib.Path like object
-            
+
     all files linked in the documents are placed into a single folder
-              
+
     Parameters
     ----------
     ipynb_path
@@ -47,7 +47,7 @@ def publish(ipynb_path,
     ignore_prefix: str
         ignore ipynb files with this prefix
     clear_files : str
-        whether to clear existing external files in outpath folder                
+        whether to clear existing external files in outpath folder
     create_pdf: bool
         whether to convert to pdf (if converting to latex)
     pdf_in_temp: bool
@@ -58,8 +58,8 @@ def publish(ipynb_path,
     Returns
     --------
     outpath: str
-     path to output file   
-    
+     path to output file
+
     """
     if isinstance(ipynb_path, basestring):
         ipynb_path = pathlib.Path(ipynb_path)
@@ -123,7 +123,7 @@ def publish(ipynb_path,
     else:
         internal_files = {}
 
-    # output main file    
+    # output main file
     outpath = os.path.join(outdir, ipynb_name + exe)
     logging.info('outputting converted file to: {}'.format(outpath))
     with open(outpath, "w") as fh:

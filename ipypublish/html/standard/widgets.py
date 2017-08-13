@@ -15,7 +15,7 @@ tpl_dict = {
 
     'html_footer': r"""
 
-{% set mimetype = 'application/vnd.jupyter.widget-state+json'%} 
+{% set mimetype = 'application/vnd.jupyter.widget-state+json'%}
 {% if mimetype in nb.metadata.get("widgets",{})%}
 <script type="{{ mimetype }}">
 {{ nb.metadata.widgets[mimetype] | json_dumps }}

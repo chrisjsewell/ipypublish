@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Note, updated version of 
+# Note, updated version of
 # https://github.com/ipython/ipython-in-depth/blob/master/tools/nbmerge.py
 """
 usage:
@@ -35,9 +35,9 @@ def alphanumeric_sort(l):
 
 def merge_notebooks(ipynb_path, ignore_prefix='_',
                     to_str=False, as_version=4):
-    """ merge one or more ipynb's, 
-    if more than one, then the meta data is taken from the first 
-    
+    """ merge one or more ipynb's,
+    if more than one, then the meta data is taken from the first
+
     Parameters
     ----------
     ipynb_path: str or path_like

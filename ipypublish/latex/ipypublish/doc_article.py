@@ -6,12 +6,12 @@ tplx_dict = {
 	toc=sectionentrywithdots,
 	bibliography=totocnumbered,
 	captions=tableheading,numbers=noendperiod]{scrartcl}
-    
+
 ((*- if nb.metadata.ipub: *))
 ((*- if nb.metadata.ipub.language: *))
 %\usepackage{polyglossia}
 %\setmainlanguage{((( nb.metadata.ipub.language )))}
-%\DeclareTextCommandDefault{\nobreakspace}{\leavevmode\nobreak\ } 
+%\DeclareTextCommandDefault{\nobreakspace}{\leavevmode\nobreak\ }
 \usepackage[((( nb.metadata.ipub.language )))]{babel}
 ((*- endif *))
 ((*- endif *))
@@ -23,7 +23,7 @@ tplx_dict = {
 \usepackage{geometry}
 \geometry{tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in,
 nohead,includefoot,footskip=25pt}
-% you can use showframe option to check the margins visually 
+% you can use showframe option to check the margins visually
 """,
 
     'document_packages': r"""
@@ -42,7 +42,7 @@ nohead,includefoot,footskip=25pt}
 
     'document_definitions': r"""
     \setcounter{secnumdepth}{5}
-    
+
     % Colors for the hyperref package
     \definecolor{urlcolor}{rgb}{0,.145,.698}
     \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
@@ -55,7 +55,7 @@ nohead,includefoot,footskip=25pt}
 	\addtokomafont{section}{\clearpage}
 
     % Prevent overflowing lines due to hard-to-break entities
-    \sloppy 
+    \sloppy
 
     % Setup hyperref package
     \hypersetup{
@@ -91,7 +91,7 @@ nohead,includefoot,footskip=25pt}
 	\renewcommand\thetable{\thesection.\arabic{table}}
 	\renewcommand\thefigure{\thesection.\arabic{figure}}
 	\renewcommand\theequation{\thesection.\arabic{equation}}
-    
+
     ((*- if nb.metadata.ipub: *))
 
         % set global options for float placement
@@ -100,25 +100,25 @@ nohead,includefoot,footskip=25pt}
         \makeatother
 
         ((*- if nb.metadata.ipub.table: -*))
-        ((*- if nb.metadata.ipub.table.placement: *))   
-         
+        ((*- if nb.metadata.ipub.table.placement: *))
+
         \setfloatlocations{table}{((( nb.metadata.ipub.table.placement )))}
 
         ((*- endif *))
         ((*- endif *))
         ((*- if nb.metadata.ipub.figure: -*))
-        ((*- if nb.metadata.ipub.figure.placement: *))   
-         
+        ((*- if nb.metadata.ipub.figure.placement: *))
+
         \setfloatlocations{figure}{((( nb.metadata.ipub.figure.placement )))}
-        
+
         ((*- endif *))
         ((*- endif *))
-    
+
     ((*- endif *))
 
     % align captions to left (indented)
 	\captionsetup{justification=raggedright,
-	singlelinecheck=false,format=hang,labelfont={it,bf}} 
+	singlelinecheck=false,format=hang,labelfont={it,bf}}
 
 	% shift footer down so space between separation line
 	\ModifyLayer[addvoffset=.6ex]{scrheadings.foot.odd}

@@ -8,13 +8,13 @@ from nbformat.notebooknode import NotebookNode
 
 class LatexDocHTML(Preprocessor):
     r""" processing of ipub metatags, specific to html
-    
+
     - import embedded html files
     - add refmap key to references for {label:reference name} lookup
       e.g. {"fig:test":"fig. 1"}
     - add caption_prefix tag for floats with correct numbering/name
       e.g. cell.metadata.ipub.figure.caption_prefix = "Figure 1: "
-    
+
     """
 
     metapath = traits.Unicode('', help="the path to the meta data").tag(config=True)

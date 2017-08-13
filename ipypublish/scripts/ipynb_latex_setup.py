@@ -115,8 +115,8 @@ if _pil_present:
 
     def images_hconcat(images, width=700, height=700,
                        gap=0, aspaths=True):
-        """concatenate multiple images horizontally 
-    
+        """concatenate multiple images horizontally
+
         Properties
         ----------
         images : list
@@ -127,11 +127,11 @@ if _pil_present:
             maximum height of final image, or of individual images
         gap : int
             size of space between images
-    
+
         Returns
         -------
         image : PIL.Image
-                       
+
         Examples
         --------
         >>> img_path = create_test_image(size=(50,50))
@@ -153,7 +153,7 @@ if _pil_present:
         >>> img = images_hconcat([img_path,img_path],gap=10)
         >>> img.size
         (110, 50)
-                         
+
         """
         images = images_read(images) if aspaths else images
         if not isinstance(width, list):
@@ -182,8 +182,8 @@ if _pil_present:
 
     def images_vconcat(images, width=700, height=700,
                        gap=0, aspaths=True):
-        """concatenate multiple images vertically 
-    
+        """concatenate multiple images vertically
+
         Properties
         ----------
         images : list
@@ -194,11 +194,11 @@ if _pil_present:
             maximum height of final image, or of individual images
         gap : int
             size of space between images
-    
+
         Returns
         -------
         image : PIL.Image
-                       
+
         Examples
         --------
         >>> img_path = create_test_image(size=(50,50))
@@ -220,8 +220,8 @@ if _pil_present:
         >>> img = images_vconcat([img_path,img_path],gap=10)
         >>> img.size
         (50, 110)
-        
-                   
+
+
         """
         images = images_read(images) if aspaths else images
         if not isinstance(width, list):
@@ -250,14 +250,14 @@ if _pil_present:
 
     def images_gridconcat(pathslist, width=700, height=700,
                           aspaths=True, hgap=0, vgap=0):
-        """concatenate multiple images in a grid 
-    
+        """concatenate multiple images in a grid
+
         Properties
         ----------
         pathslist : list of lists
             if aspaths=True, list of path strings, else list of PIL.Image instances
             each sub list constitutes a row
-        width : int 
+        width : int
             maximum width of final image
         height : int
             maximum height of final image
@@ -265,11 +265,11 @@ if _pil_present:
             size of horizontal space between images
         vgap : int
             size of vertical space between images
-    
+
         Returns
         -------
         image : PIL.Image
-                   
+
         """
         himages = [images_hconcat(paths, gap=hgap, aspaths=aspaths) for paths in pathslist]
         new_im = images_vconcat(himages, gap=vgap, aspaths=False)

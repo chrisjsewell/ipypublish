@@ -6,11 +6,11 @@ from nbformat.notebooknode import NotebookNode
 
 
 class LatexCaptions(Preprocessor):
-    """ a preprocessor to 
-    1. find cells with a ipub.caption meta-tag, 
+    """ a preprocessor to
+    1. find cells with a ipub.caption meta-tag,
        extract the caption and label to a dict and remove the cell
     2. find cells with the found labels and replace their captions
-    
+
     """
 
     add_prefix = traits.Bool(False, help="add float type/number prefix to caption (from caption_prefix tag)").tag(

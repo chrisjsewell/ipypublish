@@ -1,6 +1,6 @@
 tpl_dict = {
 
-    'meta_docstring': """sets markdown main titles (with one #) as their own slides, 
+    'meta_docstring': """sets markdown main titles (with one #) as their own slides,
 remove code cells """,
 
     "overwrite": ['notebook_all',
@@ -24,14 +24,14 @@ remove code cells """,
 </section>
 <section>
             {%- endif -%}
-            {% if slidecolumn.append('1') %}{% endif %}   
+            {% if slidecolumn.append('1') %}{% endif %}
         {%- endif -%}
     {%- else -%}
             {% if slidecolumn | length != 0 %}
 </section>
 <section>
             {%- endif -%}
-           {% if slidecolumn.append('1') %}{% endif %}  
+           {% if slidecolumn.append('1') %}{% endif %}
     {%- endif -%}
 {%- endif -%}
 """,

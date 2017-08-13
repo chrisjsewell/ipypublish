@@ -13,10 +13,10 @@ tplx_dict = {
 ((*- if cell.metadata.ipub: -*))
     ((*- if cell.metadata.ipub.ignore: -*))
     ((*- elif cell.metadata.ipub.slideonly: -*))
-    ((*- else -*))	
+    ((*- else -*))
     ((( super() )))
     ((*- endif *))
-((*- else -*))	
+((*- else -*))
     ((( super() )))
 ((*- endif *))
 """,
@@ -29,10 +29,10 @@ tplx_dict = {
 ((*- if cell.metadata.ipub: -*))
     ((*- if cell.metadata.ipub.ignore: -*))
     ((*- elif cell.metadata.ipub.slideonly: -*))
-    ((*- else -*))	
+    ((*- else -*))
     ((( super() )))
     ((*- endif *))
-((*- else -*))	
+((*- else -*))
     ((( super() )))
 ((*- endif *))
 """,
@@ -48,10 +48,10 @@ tplx_dict = {
     'notebook_output_stream': r"""
 ((*- if cell.metadata.ipub: -*))
     ((*- if cell.metadata.ipub.ignore: -*))
-    ((*- else -*))	
+    ((*- else -*))
     ((( super() )))
     ((*- endif *))
-((*- else -*))	
+((*- else -*))
     ((( super() )))
 ((*- endif *))
 """,
@@ -60,29 +60,29 @@ tplx_dict = {
 ((*- if cell.metadata.ipub: -*))
 
     ((*- if cell.metadata.ipub.table and cell.metadata.ipub.equation -*))
-    
+
         ((*- if output.data['text/latex'] | is_equation -*))
-            
+
             ((( draw_equation(cell.metadata, output.data['text/latex']) )))
-            
+
         ((*- else -*))
-        
+
             ((( draw_table(cell, resources, output.data['text/latex']) )))
-        
+
         ((*- endif *))
-    
+
     ((*- else -*))
-    
+
     ((*- if cell.metadata.ipub.table: -*))
-    
+
         ((( draw_table(cell, resources, output.data['text/latex']) )))
-    
+
     ((*- elif cell.metadata.ipub.equation: -*))
 
         ((( draw_equation(cell.metadata, output.data['text/latex']) )))
 
     ((*- endif *))
-    
+
     ((*- endif *))
 ((*- endif *))
 """,
@@ -140,7 +140,7 @@ cell.metadata) )))
         ((*- if resources.captions: -*))
             ((*- if resources.captions[meta.ipub.figure.label]: -*))
              \caption{((( resources.captions[meta.ipub.figure.label] )))}
-            ((*- else -*))   
+            ((*- else -*))
              \caption{((( meta.ipub.figure.caption )))}
             ((*- endif *))
         ((*- elif meta.ipub.figure.caption: -*))
@@ -161,14 +161,14 @@ cell.metadata) )))
 
 ((*- if cell.metadata.ipub.table.placement: -*))
 \begin{table}[(((cell.metadata.ipub.table.placement)))]
-((*- else -*))	
+((*- else -*))
 \begin{table}
 ((*- endif *))
 
 ((*- if resources.captions and cell.metadata.ipub.table.label -*))
     ((*- if resources.captions[cell.metadata.ipub.table.label]: -*))
      \caption{((( resources.captions[cell.metadata.ipub.table.label] )))}
-    ((*- elif cell.metadata.ipub.table.caption -*))   
+    ((*- elif cell.metadata.ipub.table.caption -*))
      \caption{((( cell.metadata.ipub.table.caption )))}
     ((*- endif *))
 ((*- elif cell.metadata.ipub.table.caption -*))

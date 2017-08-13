@@ -5,7 +5,7 @@ tplx_dict = {
 	% bibliography formatting
 	\usepackage[numbers, square, super, sort&compress]{natbib}
 	% hyperlink doi's
-	\usepackage{doi}	
+	\usepackage{doi}
 """,
 
     'document_bibliography': r"""

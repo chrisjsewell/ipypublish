@@ -12,8 +12,8 @@ http://nbconvert.readthedocs.io/en/latest/api/exporters.html#nbconvert.exporters
 import logging
 
 TPL_OUTLINE = r"""
-<!-- A html document --> 
-<!-- {meta_docstring} --> 
+<!-- A html document -->
+<!-- {meta_docstring} -->
 
 
 {{%- extends 'display_priority.tpl' -%}}
@@ -39,7 +39,7 @@ TPL_OUTLINE = r"""
  {html_body_start}
  {{{{ super() }}}}
  {html_body_end}
- </body>   
+ </body>
 {{%- endblock body %}}
 
 {{%- block footer %}}
@@ -161,7 +161,7 @@ TPL_OUTLINE = r"""
 {{%- endblock data_png -%}}
 
 {{%- block data_svg -%}}
-{notebook_output_svg_pre}	
+{notebook_output_svg_pre}
 {notebook_output_svg}
 {notebook_output_svg_post}
 {{%- endblock data_svg -%}}
@@ -206,11 +206,11 @@ TPL_OUTLINE = r"""
 def create_tpl(tpl_dicts=(), outpath=None):
     """ build an html jinja template from multiple dictionaries,
     specifying fragments of the template to insert a specific points
-                
-    if a tpl_dict contains the key "overwrite", 
+
+    if a tpl_dict contains the key "overwrite",
     then its value should be a list of keys,
     such that these key values overwrite any entries before
-                
+
     Parameters
     ----------
     tpl_dicts: list of dicts

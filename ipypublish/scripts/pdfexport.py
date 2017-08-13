@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-""" a module for exporting latex file to pdf 
+""" a module for exporting latex file to pdf
 
 """
 import logging
@@ -15,14 +15,14 @@ except ImportError:
     from distutils.spawn import find_executable as exe_exists
 
 VIEW_PDF = r"""
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 
 <head>
     <meta http-equiv="content-type" content="text/html; charset=windows-1252">
     <title>View PDF</title>
-	
+
     <script type="text/javascript">
  	   var filepath = "{pdf_name}";
        var timer = null;
@@ -38,8 +38,8 @@ VIEW_PDF = r"""
        }}
 
        function manualRefresh(){{
-          clearTimeout(timer); 
-          refresh();   
+          clearTimeout(timer);
+          refresh();
        }}
 	   function check_pdf() {{
 	     var newfile = document.f.userFile.value;
@@ -67,7 +67,7 @@ VIEW_PDF = r"""
 	<button onclick="manualRefresh()">manual refresh</button>
    <button onclick="autoRefresh()">auto refresh</button>
    <div id="pdf"></div>
-</body> 
+</body>
 <script type="text/javascript">refresh();</script>
 </html>
 """

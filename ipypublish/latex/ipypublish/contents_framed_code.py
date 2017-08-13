@@ -14,7 +14,7 @@ tplx_dict = {
     \DeclareFloatingEnvironment[
         fileext=frm,placement={!ht},
         within=section,name=Text]{errorcell}
-        
+
     \usepackage{listings} % a package for wrapping code in a box
     \usepackage[framemethod=tikz]{mdframed} % to fram code
 
@@ -44,20 +44,20 @@ tplx_dict = {
     numberstyle=\tiny\color{codegray},
     stringstyle=\color{codepurple},
     basicstyle=\ttfamily,
-    breakatwhitespace=false,         
-    keepspaces=true,                 
-    numbers=left,                    
-    numbersep=10pt,                  
-    showspaces=false,                
+    breakatwhitespace=false,
+    keepspaces=true,
+    numbers=left,
+    numbersep=10pt,
+    showspaces=false,
     showstringspaces=false,
-    showtabs=false,                  
+    showtabs=false,
     tabsize=2,
     breaklines=true,
     literate={\-}{}{0\discretionary{-}{}{-}},
   postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
 }
- 
-\lstset{style=mystyle} 
+
+\lstset{style=mystyle}
 
 \surroundwithmdframed[
   hidealllines=true,
@@ -118,7 +118,7 @@ tplx_dict = {
     \begin{(((type)))cell}
         ((*- endif *))
     ((*- endif *))
-    
+
 
     ((* set captionfound = false *))
 

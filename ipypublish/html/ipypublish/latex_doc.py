@@ -82,8 +82,8 @@ tpl_dict = {
 <div class="input_code">
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-{%- endif %}   
-{%- endif %}  
+{%- endif %}
+{%- endif %}
 """,
     'notebook_input_code': r"""
 {%- if cell.metadata.ipub: -%}
@@ -92,14 +92,14 @@ tpl_dict = {
 <div class="input_area">
 {%- if cell.metadata.ipub.code.label: -%}
 <a id="{{cell.metadata.ipub.code.label}}" class="anchor-link" name="#{{cell.metadata.ipub.code.label}}"></a>
-{% if resources.refslide.setdefault(cell.metadata.ipub.code.label, 
-            (slidecolumn | length - 1,sliderow.get('len',[]) | length)) %}{% endif %} 
+{% if resources.refslide.setdefault(cell.metadata.ipub.code.label,
+            (slidecolumn | length - 1,sliderow.get('len',[]) | length)) %}{% endif %}
 {%- endif %}
 {{ cell.source | highlight_code(metadata=cell.metadata) }}
 </div>
 </div>
-{%- endif %}   
-{%- endif %}   
+{%- endif %}
+{%- endif %}
 """,
     'notebook_input_code_post': r"""
 {%- if cell.metadata.ipub: -%}
@@ -107,8 +107,8 @@ tpl_dict = {
 </div>
 </div>
 </div>
-{%- endif %}   
-{%- endif %}   
+{%- endif %}
+{%- endif %}
 """,
 
     'notebook_input_markdown': r"""
@@ -118,18 +118,18 @@ tpl_dict = {
     'notebook_output': r"""
 {%- if cell.metadata.ipub: -%}
     {%- if cell.metadata.ipub.figure: -%}
-{{ super() }}    
+{{ super() }}
     {%- elif cell.metadata.ipub.table: -%}
-{{ super() }}    
+{{ super() }}
     {%- elif cell.metadata.ipub.equation: -%}
-{{ super() }}    
+{{ super() }}
     {%- elif cell.metadata.ipub.text: -%}
-{{ super() }}    
+{{ super() }}
     {%- elif cell.metadata.ipub.error: -%}
-{{ super() }}    
+{{ super() }}
     {%- elif cell.metadata.ipub.mkdown: -%}
-{{ super() }}    
-    {%- endif %}   
+{{ super() }}
+    {%- endif %}
 {%- else -%}
 
 {%- endif %}
@@ -240,8 +240,8 @@ tpl_dict = {
 
     {%- if meta.ipub.figure.label: -%}
 <a id="{{meta.ipub.figure.label}}" class="anchor-link" name="#{{meta.ipub.figure.label}}"></a>
-    {% if resources.refslide.setdefault(meta.ipub.figure.label, 
-        (slidecolumn | length - 1,sliderow.get('len',[]) | length)) %}{% endif %} 
+    {% if resources.refslide.setdefault(meta.ipub.figure.label,
+        (slidecolumn | length - 1,sliderow.get('len',[]) | length)) %}{% endif %}
     {%- endif %}
     {%- endif %}
 {%- endif %}
@@ -279,8 +279,8 @@ tpl_dict = {
 
         {%- if meta.ipub.table.label: -%}
 <a id="{{meta.ipub.table.label}}" class="anchor-link" name="#{{meta.ipub.table.label}}"></a>
-           {% if resources.refslide.setdefault(meta.ipub.table.label, 
-               (slidecolumn | length - 1,sliderow.get('len',[]) | length)) %}{% endif %} 
+           {% if resources.refslide.setdefault(meta.ipub.table.label,
+               (slidecolumn | length - 1,sliderow.get('len',[]) | length)) %}{% endif %}
         {%- endif %}
     {%- endif %}
 
@@ -307,8 +307,8 @@ tpl_dict = {
     {%- if meta.ipub.equation: -%}
         {%- if meta.ipub.equation.label: -%}
 <a id="{{meta.ipub.equation.label}}" class="anchor-link" name="#{{meta.ipub.equation.label}}"></a>
-           {% if resources.refslide.setdefault(meta.ipub.equation.label, 
-               (slidecolumn | length - 1,sliderow.get('len',[]) | length)) %}{% endif %} 
+           {% if resources.refslide.setdefault(meta.ipub.equation.label,
+               (slidecolumn | length - 1,sliderow.get('len',[]) | length)) %}{% endif %}
         {%- endif %}
     {%- endif %}
 {%- endif %}
@@ -321,7 +321,7 @@ tpl_dict = {
 <div class="output_area">
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html"> 
+<div class="text_cell_render border-box-sizing rendered_html">
 {{meta.ipub.table.caption | replace_string("{id_home_prefix}","#")}}
 </div>
 </div>

@@ -48,9 +48,9 @@ class _OpenWrite(object):
 
 @total_ordering
 class MockPath(object):
-    r"""a mock path, mimicking pathlib.Path, 
+    r"""a mock path, mimicking pathlib.Path,
     supporting context open method for read/write
-    
+
     Properties
     ----------
     path : str
@@ -89,12 +89,12 @@ class MockPath(object):
     File("test.txt") Contents:
     newline1
     newline2
-    
+
     >>> with file_obj.maketemp() as temp:
     ...     with open(temp.name) as f:
     ...         print(f.readline().strip())
     newline1
-    
+
     >>> dir_obj = MockPath(
     ...   structure=[{'dir1':[{'subdir':[]},file_obj]},{'dir2':[file_obj]},file_obj]
     ... )
@@ -107,17 +107,17 @@ class MockPath(object):
     >>> dir_obj.is_dir()
     True
     >>> print(dir_obj.to_string())
-    Folder("root") 
-      Folder("dir1") 
-        Folder("subdir") 
-        File("test.txt") 
-      Folder("dir2") 
-        File("test.txt") 
-      File("test.txt") 
+    Folder("root")
+      Folder("dir1")
+        Folder("subdir")
+        File("test.txt")
+      Folder("dir2")
+        File("test.txt")
+      File("test.txt")
 
     >>> list(dir_obj.iterdir())
     [MockFolder("dir1"), MockFolder("dir2"), MockFile("test.txt")]
-    
+
     >>> new = dir_obj.joinpath('dir3')
     >>> list(dir_obj.iterdir())
     [MockFolder("dir1"), MockFolder("dir2"), MockFile("test.txt")]
@@ -125,7 +125,7 @@ class MockPath(object):
     >>> new.mkdir()
     >>> list(dir_obj.iterdir())
     [MockFolder("dir1"), MockFolder("dir2"), MockFolder("dir3"), MockFile("test.txt")]
-        
+
     """
 
     def __init__(self, path='root',
@@ -236,7 +236,7 @@ class MockPath(object):
             if not subobj.exists():
                 continue
             if subobj.is_dir():
-                text += ' ' * indent + '{0}("{1}") \n'.format(self._folderstr, subobj.name)
+                text += ' ' * indent + '{0}("{1}")\n'.format(self._folderstr, subobj.name)
                 text += self._recurse_print(subobj.children,
                                             indent=indent, file_content=file_content)
             else:
@@ -245,7 +245,7 @@ class MockPath(object):
                     text += ' ' * indent + sep.join(
                         ['{0}("{1}") Contents:'.format(self._filestr, subobj.name)] + subobj._content) + '\n'
                 else:
-                    text += ' ' * indent + '{0}("{1}") \n'.format(self._filestr, subobj.name)
+                    text += ' ' * indent + '{0}("{1}")\n'.format(self._filestr, subobj.name)
 
         return text
 
@@ -261,7 +261,7 @@ class MockPath(object):
         if self.is_file():
             return '\n'.join(['{0}("{1}") Contents:'.format(self._filestr, self.name)] + self._content)
         elif self.is_dir():
-            text = '{0}("{1}") \n'.format(self._folderstr, self.name)
+            text = '{0}("{1}")\n'.format(self._folderstr, self.name)
             text += self._recurse_print(self.children, indentlvl=indentlvl,
                                         file_content=file_content)
 

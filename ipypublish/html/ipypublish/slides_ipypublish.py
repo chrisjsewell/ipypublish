@@ -43,8 +43,8 @@ tpl_dict = {
 {%- endif -%}
 
 {%- if cell.metadata.ipyslides == 'first_cell' -%}
-{% if slidecolumn.append('1') %}{% endif %}  
-{% if sliderow.update({'len':[]}) %}{% endif %}  
+{% if slidecolumn.append('1') %}{% endif %}
+{% if sliderow.update({'len':[]}) %}{% endif %}
 <section>
 {{ super() }}
 {%- endif -%}
@@ -57,16 +57,16 @@ tpl_dict = {
 
 
 {%- if cell.metadata.ipyslides == 'horizontalbreak_after_novertical' -%}
-{% if slidecolumn.append('1') %}{% endif %}  
-{% if sliderow.update({'len':[]}) %}{% endif %}  
+{% if slidecolumn.append('1') %}{% endif %}
+{% if sliderow.update({'len':[]}) %}{% endif %}
 <section>
 {{ super() }}
 </section>
 {%- endif -%}
 
 {%- if cell.metadata.ipyslides == 'horizontalbreak_after_plusvertical' -%}
-{% if slidecolumn.append('1') %}{% endif %}  
-{% if sliderow.update({'len':[]}) %}{% endif %}  
+{% if slidecolumn.append('1') %}{% endif %}
+{% if sliderow.update({'len':[]}) %}{% endif %}
 <section>
 <section>
 {{ super() }}
@@ -75,8 +75,8 @@ tpl_dict = {
 {%- endif -%}
 
 {%- if cell.metadata.ipyslides == 'horizontalbreak_after' -%}
-{% if slidecolumn.append('1') %}{% endif %}  
-{% if sliderow.update({'len':[]}) %}{% endif %}  
+{% if slidecolumn.append('1') %}{% endif %}
+{% if sliderow.update({'len':[]}) %}{% endif %}
 <section>
 <section>
 {{ super() }}
@@ -88,7 +88,7 @@ tpl_dict = {
 {%- endif -%}
 
 {%- if cell.metadata.ipyslides == 'verticalbreak_after' -%}
-{% if sliderow['len'].append('1') %}{% endif %} 
+{% if sliderow['len'].append('1') %}{% endif %}
 </section>
 <section>
 {{ super() }}

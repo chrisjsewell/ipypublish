@@ -1,5 +1,5 @@
-r"""html in standard nbconvert format, but with 
-- a table of contents 
+r"""html in standard nbconvert format, but with
+- a table of contents
 - toggle buttons for showing/hiding code & output cells
 - converts or removes (if no converter) latex tags (like \cite{abc}, \ref{})
 

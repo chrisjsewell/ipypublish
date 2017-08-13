@@ -1,7 +1,7 @@
 """latex article in the main ipypublish format:
 - all input markdown is rendered
 - all output is rendered
-- a basic titlepage and table of contents  
+- a basic titlepage and table of contents
 - only code/error cells with metadata tags are used
 """
 from ipypublish.filters.ansi_listings import ansi2listings

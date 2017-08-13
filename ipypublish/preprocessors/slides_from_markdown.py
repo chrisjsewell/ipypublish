@@ -64,7 +64,7 @@ class FinalCells(object):
 
 def is_header(line, max_level):
     """if max_level is 0 assumes all headers ok
-    
+
     Examples
     --------
     >>> is_header("abc",0)
@@ -77,7 +77,7 @@ def is_header(line, max_level):
     True
     >>> is_header("### title",2)
     False
-        
+
     """
     if max_level:
         return len(re.findall('^#{{1,{0}}} .+'.format(max_level), line)) > 0
@@ -87,7 +87,7 @@ def is_header(line, max_level):
 
 def header_level(line):
     """
-    
+
     Examples
     --------
     >>> header_level('# title')
@@ -105,7 +105,7 @@ def header_level(line):
 
 def number_title(line, current_levels):
     """
-    
+
     Examples
     --------
     >>> number_title("# title",[])
@@ -137,15 +137,15 @@ def number_title(line, current_levels):
 
 class MarkdownSlides(Preprocessor):
     """ a preprocessor to setup the notebook as an ipyslideshow,
-    according to a set of rules 
-    
+    according to a set of rules
+
     - markdown cells containaing # headers are broken into individual cells
     - any cells where ipub.ignore=True is set to 'skip'
     - any code cells with no other ipub tags are set to 'skip'
     - any header level >= column_level starts a new column
     - else, any header level >= row_level starts a new row
     - if max_cells is not 0, then breaks to a new row after <max_cells> cells
-    
+
     """
 
     column_level = traits.Integer(1, min=0, help='maximum header level for new columns (0 indicates no maximum)').tag(

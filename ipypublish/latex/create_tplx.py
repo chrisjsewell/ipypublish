@@ -19,7 +19,7 @@ import logging
 # ((* endblock execute_result *))
 
 TPLX_OUTLINE = r"""
-((= 
+((=
 A latex document
 {meta_docstring}
 =))
@@ -31,36 +31,36 @@ A latex document
 
 ((* block header *))
 
-	((*- block docclass *)) 
-		{document_docclass} 	
+	((*- block docclass *))
+		{document_docclass}
 	((* endblock docclass -*))
-	
+
 	((*- block packages *))
-		{document_packages} 
+		{document_packages}
 	((* endblock packages *))
-	
+
 	((*- block definitions *))
     	((* block date *))((* endblock date *))
-    	((* block author *))((* endblock author *))	
+    	((* block author *))((* endblock author *))
 		((* block title *))((* endblock title *))
-		
+
 		{document_definitions}
-				
+
 	((* endblock definitions *))
 
 	((*- block commands *))
 		((* block margins *))
 			{document_margins}
 		((* endblock margins *))
-		{document_commands}	
+		{document_commands}
 	((* endblock commands *))
-	
+
     {document_header_end}
-    
+
 ((* endblock header *))
 
 ((* block body *))
-	
+
 	\begin{{document}}
 
 	((* block predoc *))
@@ -72,16 +72,16 @@ A latex document
 		((* endblock abstract *))
 		{document_predoc}
 	((* endblock predoc *))
-	
+
 	((( super() )))
-	
+
 	((* block postdoc *))
     	((* block bibliography *))
 			{document_bibliography}
 		((* endblock bibliography *))
 		{document_postdoc}
     ((* endblock postdoc *))
-	
+
 	\end{{document}}
 
 ((* endblock body *))
@@ -170,11 +170,11 @@ A latex document
 def create_tplx(tplx_dicts=(), outpath=None):
     """ build a latex jinja template from multiple dictionaries,
     specifying fragments of the template to insert a specific points
-                
-    if a tplx_dict contains the key "overwrite", 
+
+    if a tplx_dict contains the key "overwrite",
     then its value should be a list of keys,
     such that these key values overwrite any entries before
-                
+
     Parameters
     ----------
     tplx_dicts: list of dicts

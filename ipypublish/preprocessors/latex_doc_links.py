@@ -6,13 +6,13 @@ from nbconvert.preprocessors import Preprocessor
 
 
 class LatexDocLinks(Preprocessor):
-    """ a preprocessor to resolve file paths in the ipub metadata section 
-    
+    """ a preprocessor to resolve file paths in the ipub metadata section
+
     retrieve external file paths from metadata,
     resolve where they are, if the path is relative
     make sure that the link points to a single folder
     add 'external_file_paths' and 'bibliopath' (if present) to resources
-    
+
     """
 
     metapath = traits.Unicode('', help="the path to the meta data").tag(config=True)

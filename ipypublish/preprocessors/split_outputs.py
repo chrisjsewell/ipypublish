@@ -8,12 +8,12 @@ from nbformat.notebooknode import NotebookNode
 
 def merge(a, b, path=None, overwrite=True):
     """merges b into a
-    
+
     Examples
     --------
     >>> merge({'a':{'b':1},'c':3},{'a':{'b':2}})
     {'a': {'b': 2}, 'c': 3}
-    
+
     """
     if path is None:
         path = []
@@ -35,7 +35,7 @@ def merge(a, b, path=None, overwrite=True):
 class SplitOutputs(Preprocessor):
     """ a preprocessor to split outputs into separate cells,
     merging the cell and output metadata, with output metadata taking priority
-    
+
     """
 
     split = traits.Bool(True, help="whether to split outputs").tag(config=True)
@@ -60,7 +60,7 @@ class SplitOutputs(Preprocessor):
                 meta = copy.deepcopy(cell.metadata)
                 # don't need the code to output
                 meta.get('ipub', NotebookNode({})).code = False
-                # don't create a new slide for each output, 
+                # don't create a new slide for each output,
                 # unless specified in output level metadata
                 if 'slide' in meta.get('ipub', NotebookNode({})):
                     meta.ipub.slide = True if meta.ipub.slide == 'new' else meta.ipub.slide

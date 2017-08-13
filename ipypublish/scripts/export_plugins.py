@@ -33,17 +33,17 @@ def _get_module_path(module):
 
 
 def _get_modules(path):
-    """ get modules from a directory   
-    
+    """ get modules from a directory
+
     Properties
     ----------
     path : str or path-like
-    
+
     Returns
     -------
     modules : list of modules
     load_errors: list of str
-    
+
     Examples
     --------
     >>> from ipypublish.utils import MockPath
@@ -57,7 +57,7 @@ def _get_modules(path):
     ['mod1']
     >>> modules['mod1'].name
     'modname1'
- 
+
     """
     # get potential plugin python files
     if hasattr(path, 'glob'):
@@ -98,9 +98,9 @@ _plugins_dict = {}
 
 def add_directory(path):
     """ add a directory of export plugin modules to the existing dict
-    
-    plugins must have: oformat, template and config attributes and a doc string  
-    
+
+    plugins must have: oformat, template and config attributes and a doc string
+
     Properties
     ----------
     path : str or path-like
@@ -131,6 +131,6 @@ if load_errors:
 
 
 def get():
-    """ return export plugins    
+    """ return export plugins
     """
     return _plugins_dict.copy()

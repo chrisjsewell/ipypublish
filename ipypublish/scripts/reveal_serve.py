@@ -39,7 +39,7 @@ class ProxyHandler(web.RequestHandler):
 
 class RevealServer(LoggingConfigurable):
     """Post processor designed to serve files
-    
+
     Proxies reveal.js requests to a CDN if no local reveal.js is present
     """
 

@@ -1,5 +1,5 @@
 r"""html in ipypublish format, preprocessed with default metadata tags;
-- a table of contents 
+- a table of contents
 - toggle buttons for showing/hiding code & output cells
 - converts or removes (if no converter) latex tags (like \cite{abc}, \ref{})
 - only code/error cells with metadata tags are used

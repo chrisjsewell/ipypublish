@@ -1,5 +1,5 @@
-"""html in standard nbconvert format, but with 
-- a table of contents 
+"""html in standard nbconvert format, but with
+- a table of contents
 - toggle buttons for showing/hiding code & output cells
 - converts or removes (if no converter) latex tags (like \cite{abc}, \ref{})
 
@@ -31,7 +31,7 @@ template = create_tpl([
     document.tpl_dict,
     content.tpl_dict, content_tagging.tpl_dict,
     mathjax.tpl_dict, widgets.tpl_dict,
-    #    inout_prompt.tpl_dict, 
+    #    inout_prompt.tpl_dict,
     toggle_buttons.tpl_dict, toc_sidebar.tpl_dict,
     latex_doc.tpl_dict
 ])

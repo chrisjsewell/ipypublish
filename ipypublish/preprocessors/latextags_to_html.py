@@ -28,15 +28,15 @@ class LatexTagsToHTML(Preprocessor):
     r""" a preprocessor to find latex tags (like \cite{abc} or \todo[color]{stuff}) and:
     1. attempt to process them into a html friendly format
     2. remove them entirely if this is not possible
-    
+
     for \ref or \cref,  attempts to use resources.refmap to map labels to reference names
     for labels not found in resources.refmap
     the reference name is '<name> <number>', where;
     - <name> is either ref of, if labelbycolon is True and the label has a colon, all text before the colon
     - <number> iterate by order of first appearance of a particular label
-    
+
     NB: should be applied after LatexDocHTML, if you want resources.refmap to be available
-    
+
     """
 
     regex = traits.Unicode(r"\\(?:[^a-zA-Z]|[a-zA-Z]+[*=']?)(?:\[.*?\])?{.*?}",
@@ -56,7 +56,7 @@ class LatexTagsToHTML(Preprocessor):
 
     def read_bibliography(self, path):
         """ read a bibliography
-        
+
         """
         logging.info('reading bibliopath: {}'.format(path))
         try:
@@ -72,7 +72,7 @@ class LatexTagsToHTML(Preprocessor):
     def process_bib_entry(self, entry):
         """work out the best way to represent the bib entry """
 
-        # abbreviate a list of authors 
+        # abbreviate a list of authors
         if 'author' in entry:
             authors = re.split(", | and ", entry['author'])
             if len(authors) > 1:
@@ -104,8 +104,8 @@ class LatexTagsToHTML(Preprocessor):
 
     def replace_reflabel(self, name, resources):
         """ find a suitable html replacement for a reference label
-        
-        the links are left with a format hook in them: {id_home_prefix}, 
+
+        the links are left with a format hook in them: {id_home_prefix},
         so that an nbconvert filter can later replace it
         this is particularly useful for slides, which require a prefix #/<slide_number><label>
         """
@@ -129,17 +129,17 @@ class LatexTagsToHTML(Preprocessor):
 
     def convert(self, source, resources):
         """ convert a a string with tags in
-        
+
         Example
         -------
 
         >>> source = r'''
         ... References to \\cref{fig:example}, \\cref{tbl:example}, \\cref{eqn:example_sympy} and \\cref{code:example_mpl}.
-        ... 
+        ...
         ... Referencing multiple items: \\cref{fig:example,fig:example_h,fig:example_v}.
-        ... 
+        ...
         ... An unknown latex tag.\\unknown{zelenyak_molecular_2016}
-        ... '''        
+        ... '''
         >>> processor = LatexTagsToHTML()
         >>> print(processor.convert(source,{}))
         <BLANKLINE>
@@ -149,7 +149,7 @@ class LatexTagsToHTML(Preprocessor):
         <BLANKLINE>
         An unknown latex tag.
         <BLANKLINE>
-        
+
         """
         new = source
         in_equation = False

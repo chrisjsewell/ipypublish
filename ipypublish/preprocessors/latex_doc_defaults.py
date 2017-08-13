@@ -49,9 +49,9 @@ def flatten(d, key_as_tuple=True, sep='.'):
 
 
 class MetaDefaults(Preprocessor):
-    """ a preprocessor which enters default metadata tags 
+    """ a preprocessor which enters default metadata tags
     into all cell metadata, without overriding any currently set
-    
+
     """
 
     nb_defaults = traits.Dict(default_value={}, help='dict of notebook level defaults').tag(config=True)

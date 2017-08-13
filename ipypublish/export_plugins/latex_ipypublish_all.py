@@ -1,6 +1,6 @@
 """latex article in the main ipypublish format, preprocessed with default metadata tags:
 - all output/code/error is rendered
-- a basic titlepage and table of contents and tables of figures/tables/code  
+- a basic titlepage and table of contents and tables of figures/tables/code
 """
 from ipypublish.filters.ansi_listings import ansi2listings
 from ipypublish.filters.filters import remove_dollars, first_para, create_key, dict_to_kwds, is_equation

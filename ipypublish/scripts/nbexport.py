@@ -8,7 +8,7 @@ from traitlets.config import Config
 
 def export_notebook(nb, format, config, template):
     """ exports a notebook in a particular format
-    
+
     Parameters
     ----------
     nb: nbformat.notebooknode.NotebookNode
@@ -18,14 +18,14 @@ def export_notebook(nb, format, config, template):
         configuration for the nbconvert exporter
     template : str
         the Jinja template for the conversion
-    
+
     Returns
     -------
-    export: tuple 
+    export: tuple
         (body, resources)
     extension: str
         the file extension of the exported format (e.g. .tex)
-    
+
     """
     jinja_template = DictLoader({'my_template': template})
     c = Config()
