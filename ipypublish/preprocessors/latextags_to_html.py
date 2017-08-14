@@ -37,6 +37,58 @@ class LatexTagsToHTML(Preprocessor):
 
     NB: should be applied after LatexDocHTML, if you want resources.refmap to be available
 
+    Examples
+    --------
+    >>> from nbformat import NotebookNode
+    >>> from ipypublish.utils import MockPath
+
+    >>> processor = LatexTagsToHTML()
+
+    >>> bibfile = MockPath(is_file=True,content='''
+    ... @article{bibkey,
+    ... title = {the title},
+    ... doi = {10.1134/S0018143916050209},
+    ... author = {Surname, A. Name},
+    ... date = {2016-09-01},
+    ... }
+    ... ''')
+    >>> resources = NotebookNode({'bibliopath':bibfile, 'refmap':{"label":"label_name"}})
+
+    >>> cell = NotebookNode({
+    ... "cell_type":"markdown",
+    ... "metadata":{},
+    ... "source":"test"
+    ... })
+    >>> nb = NotebookNode({"cells":[cell]})
+    >>> nb, _ = processor.preprocess(nb,resources)
+    >>> print(nb.cells[0].source)
+    test
+
+    >>> cell.source = "\\unknown{test}"
+    >>> nb, _ = processor.preprocess(nb,resources)
+    >>> print(nb.cells[0].source)
+    <BLANKLINE>
+
+    >>> cell.source = "\\ref{label}\\unknown{test}"
+    >>> nb, _ = processor.preprocess(nb,resources)
+    >>> print(nb.cells[0].source)
+    <a href="{id_home_prefix}label">label_name</a>
+
+    >>> cell.source = "\\label{test}"
+    >>> nb, _ = processor.preprocess(nb,resources)
+    >>> print(nb.cells[0].source)
+    <a id="test" class="anchor-link" name="#test">&#182;</a>
+
+    >>> cell.source = "\\cite{bibkey}"
+    >>> nb, _ = processor.preprocess(nb,resources)
+    >>> print(nb.cells[0].source)
+    [<a href="https://doi.org/10.1134/S0018143916050209">Surname <em>et al</em>, 2016.</a>]
+
+    >>> cell.source = "\\begin{equation}x=a+b\\end{equation}"
+    >>> nb, _ = processor.preprocess(nb,resources)
+    >>> print(nb.cells[0].source)
+    \begin{equation}x=a+b\end{equation}
+
     """
 
     regex = traits.Unicode(r"\\(?:[^a-zA-Z]|[a-zA-Z]+[*=']?)(?:\[.*?\])?{.*?}",
@@ -54,16 +106,24 @@ class LatexTagsToHTML(Preprocessor):
         self.bibdatabase = {}
         super(LatexTagsToHTML, self).__init__(*args, **kwargs)
 
-    def read_bibliography(self, path):
+    @staticmethod
+    def read_bibliography(path):
         """ read a bibliography
 
         """
         logging.info('reading bibliopath: {}'.format(path))
+        bibdatabase = {}
         try:
-            with open(path) as bibtex_file:
-                self.bibdatabase = bibtexparser.load(bibtex_file).entries_dict
+            if hasattr(path,'open'):
+                with path.open() as bibtex_file:
+                    bibdatabase = bibtexparser.load(bibtex_file).entries_dict
+            else:
+                with open(path) as bibtex_file:
+                    bibdatabase = bibtexparser.load(bibtex_file).entries_dict
         except:
             logging.error('could not read bibliopath: {}'.format(path))
+
+        return bibdatabase
 
     def rreplace(self, source, target, replacement, replacements=1):
         """replace in string, from right-to-left"""
@@ -209,8 +269,10 @@ class LatexTagsToHTML(Preprocessor):
     def preprocess(self, nb, resources):
 
         logging.info('converting latex tags to html')
-        if resources['bibliopath']:
-            self.read_bibliography(resources['bibliopath'])
+        if 'bibliopath' in resources:
+            self.bibdatabase = self.read_bibliography(resources['bibliopath'])
+        else:
+            self.bibdatabase = {}
 
         for cell in nb.cells:
 

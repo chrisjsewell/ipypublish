@@ -49,6 +49,12 @@ def ansi2listings(text, escapechar='%'):
     >>> print(ansi2listings('\x1b[32mFolder\x1b[0m(\"subdir1\")'))
     %\\textcolor{ansi-green}{Folder}%("subdir1")
 
+    >>> print(ansi2listings('\x1b[1;32mFolder\x1b[0m(\"subdir1\")'))
+    %\\textcolor{ansi-green-intense}{\\textbf{Folder}}%("subdir1")
+
+    >>> print(ansi2listings('\x1b[38;2;10;10;10mFolder\x1b[0m(\"subdir1\")'))
+    %\\def\\tcRGB{\\textcolor[RGB]}\\expandafter\\tcRGB\\expandafter{\\detokenize{10,10,10}}{Folder}%("subdir1")
+
     """
     return _ansi2anything(text, _latexconverter, escapechar)
 
