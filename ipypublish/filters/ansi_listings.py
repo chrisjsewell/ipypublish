@@ -44,6 +44,11 @@ def ansi2listings(text, escapechar='%'):
     escapechar: str
         escape character
 
+    Examples
+    --------
+    >>> print(ansi2listings('\x1b[32mFolder\x1b[0m(\"subdir1\")'))
+    %\\textcolor{ansi-green}{Folder}%("subdir1")
+
     """
     return _ansi2anything(text, _latexconverter, escapechar)
 
