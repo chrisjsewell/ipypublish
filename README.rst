@@ -3,7 +3,7 @@ ipypublish
 
 **Project**: https://github.com/chrisjsewell/ipypublish
 
-**Webpage**: https://chrisjsewell.github.io/ipypublish
+**Documentation**: http://ipypublish.readthedocs.io
 
 .. image:: https://travis-ci.org/chrisjsewell/ipypublish.svg?branch=master
     :target: https://travis-ci.org/chrisjsewell/ipypublish

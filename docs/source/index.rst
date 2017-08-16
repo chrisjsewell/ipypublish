@@ -1,5 +1,5 @@
-IPyPublish
-==========
+.. image:: _static/logo_name.png
+    :alt: **IPyPublish**
 
 |Build Status| |Coverage Status| |PyPI|
 

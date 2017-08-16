@@ -126,7 +126,7 @@ todo_include_todos = True
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
-html_logo = '_static/doc_icon_100px.png'
+#html_logo = '_static/doc_icon_100px.png'
 html_favicon = '_static/doc_icon_32px.ico'
 
 # -- Options for HTMLHelp output ------------------------------------------
@@ -190,9 +190,9 @@ intersphinx_mapping = {
     'matplotlib': ('http://matplotlib.sourceforge.net/', None),
     'pandas': ('http://pandas.pydata.org/pandas-docs/stable/', None),
     'IPython': ('http://ipython.org/ipython-doc/stable/', None),
-    'PIL': ('http://pillow.readthedocs.org/', None),
-    'nbconvert': ("http://nbconvert.readthedocs.io", None),
-    'nbformat': ("http://nbformat.readthedocs.io", None),
+    'PIL': ('http://pillow.readthedocs.org/en/latest/', None),
+    'nbconvert': ("http://nbconvert.readthedocs.io/en/latest/", None),
+    'nbformat': ("http://nbformat.readthedocs.io/en/latest/", None),
 }
 
 # Napoleon settings
