@@ -37,6 +37,8 @@ The **nbpublish** script handles parsing the notebooks to nbconvert, with the ap
 
     nbpublish -h
     nbpublish -pdf -f latex_ipypublish_nocode path/to/notebook.ipynb
+
+For a more detailed explanation see the [Controlling Content Output](content_output.md) section.
     
 The **nbpresent** script handles serving [reveal.js](http://lab.hakim.se/reveal-js/#/) slides to a webbrowser.
 
