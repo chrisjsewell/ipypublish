@@ -28,12 +28,11 @@ import json
 git_history = urllib.request.urlopen('https://api.github.com/repos/chrisjsewell/ipypublish/releases').read().decode('utf-8')
 git_history_json = json.loads(git_history)
 with open('releases.md', 'w') as f:
-	f.write('Releases\n')
+	f.write('# Releases\n')
 	f.write('---------\n')
 	f.write('\n')
 	for r in git_history_json:
-		f.write(' '.join([r['tag_name'],'-',r['name'],'\n']))
-		f.write('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+		f.write('## '+' '.join([r['tag_name'],'-',r['name'],'\n']))
 		f.write('\n')
 		for line in r['body'].split('\n'):
 			f.write(' '.join([line, '\n']))
