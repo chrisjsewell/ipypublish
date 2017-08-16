@@ -5,6 +5,8 @@ IPyPublish
 
 A package for creating and editing publication ready scientific reports and presentations.
 
+.. image:: https://github.com/chrisjsewell/ipypublish/raw/master/example_workflow.gif
+
 Combining features of the Jupyter Notebook, WYSIWYG editors and the Latex document preparation system,
 to provide a workflow for:
 
