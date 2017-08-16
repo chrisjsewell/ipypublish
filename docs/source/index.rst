@@ -4,7 +4,10 @@
 A package for creating and editing publication ready scientific reports and presentations.
 
 .. image:: https://github.com/chrisjsewell/ipypublish/raw/master/example_workflow.gif
+    :alt: example_workflow.gif
 
+IPyPublish: Features
+====================
 
 Combining features of the Jupyter Notebook, WYSIWYG editors and the Latex document preparation system,
 to provide a workflow for:
@@ -17,7 +20,8 @@ to provide a workflow for:
 
 - Output the same source document to different layouts and formats (pdf, html, presentation slides, etc).
 
-
+Badges
+======
 
 |Build Status| |Coverage Status| |PyPI|
 
@@ -36,8 +40,8 @@ to provide a workflow for:
    releases
 
 
-IPyPublish
-==========
+Index and Search
+================
 
 * :ref:`genindex`
 * :ref:`modindex`
