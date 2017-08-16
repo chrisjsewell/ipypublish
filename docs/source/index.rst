@@ -10,9 +10,13 @@ Combining features of the Jupyter Notebook, WYSIWYG editors and the Latex docume
 to provide a workflow for:
 
 - Dynamic editing and visualisation of key document components (text, math, figures, tables, references, citations, etc).
+
 - Combine document elements with dynamic (and reproducible) data exploration, analysis and visualisation.
+
 - Supply meta formatting for document and code elements for precise control over the final document layout and typesetting.
+
 - Output the same source document to different layouts and formats (pdf, html, presentation slides, etc).
+
 
 
 |Build Status| |Coverage Status| |PyPI|
