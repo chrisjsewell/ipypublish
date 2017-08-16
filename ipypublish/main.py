@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # import base64
+import io
 import logging
 import os
 import re
@@ -126,7 +127,7 @@ def publish(ipynb_path,
     # output main file
     outpath = os.path.join(outdir, ipynb_name + exe)
     logging.info('outputting converted file to: {}'.format(outpath))
-    with open(outpath, "w") as fh:
+    with io.open(outpath, "w", encoding='utf8') as fh:
         fh.write(body)
 
     # output external files
