@@ -1,11 +1,10 @@
 .. image:: _static/logo_name.png
     :alt: **IPyPublish**
 
-|Build Status| |Coverage Status| |PyPI|
-
 A package for creating and editing publication ready scientific reports and presentations.
 
 .. image:: https://github.com/chrisjsewell/ipypublish/raw/master/example_workflow.gif
+
 
 Combining features of the Jupyter Notebook, WYSIWYG editors and the Latex document preparation system,
 to provide a workflow for:
@@ -14,6 +13,11 @@ to provide a workflow for:
 - Combine document elements with dynamic (and reproducible) data exploration, analysis and visualisation.
 - Supply meta formatting for document and code elements for precise control over the final document layout and typesetting.
 - Output the same source document to different layouts and formats (pdf, html, presentation slides, etc).
+
+
+|Build Status| |Coverage Status| |PyPI|
+
+
 
 .. toctree::
    :maxdepth: 2
