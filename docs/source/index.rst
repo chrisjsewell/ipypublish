@@ -36,8 +36,8 @@ to provide a workflow for:
    releases
 
 
-Indices and tables
-==================
+IPyPublish
+==========
 
 * :ref:`genindex`
 * :ref:`modindex`
