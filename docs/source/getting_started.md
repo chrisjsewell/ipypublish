@@ -33,7 +33,19 @@ and an environment can be created directly from this file using conda:
 
 ## Basic Conversion
 
+The **nbpublish** script handles parsing the notebooks to nbconvert, with the appropriate converter.
+
+    nbpublish -h
     nbpublish -pdf -f latex_ipypublish_nocode path/to/notebook.ipynb
+    
+The **nbpresent** script handles serving [reveal.js](http://lab.hakim.se/reveal-js/#/) slides to a webbrowser.
+
+    nbpresent -h
+	nbpresent -f slides_ipypublish_nocode path/to/notebook.ipynb
+	
+Note that, for offline use, simply download the latest version of reveal.js [here](https://github.com/hakimel/reveal.js/releases), 
+rename the entire folder to reveal.js and place it in the same folder as the converted .slides.html file. 
+The slides can also be save to PDF my appending `pdf-export` to the url (see [here](https://github.com/hakimel/reveal.js#pdf-export) for details).
 
 ## Troubleshooting
 
@@ -47,3 +59,16 @@ both the console and file (default path: converted/notebook_name.nbpub.log).
 To debug conversions, use the `--log-level debug` and `--pdf-debug` flags. If there is still an error, please raise an
 issue on the [GitHub repository](https://github.com/chrisjsewell/ipypublish/issues), including the run environment and
 the log file.
+
+# Examples
+
+See [Example.ipynb](example/notebooks/Example.ipynb), [Example.pdf](https://chrisjsewell.github.io/ipypublish/Example.view_pdf.html),
+[Example.html](https://chrisjsewell.github.io/ipypublish/Example.html) and 
+[Example.slides.html](https://chrisjsewell.github.io/ipypublish/Example.slides.html#/) 
+for an example of the potential input/output.
+
+Or, for a practical example of the ipypublish capability, see these documents on Atomic 3D Visualisation: 
+[Notebook](https://github.com/chrisjsewell/chrisjsewell.github.io/blob/master/3d_atomic/3D%20Atomic%20Visualisation.ipynb), 
+[PDF](https://chrisjsewell.github.io/3d_atomic/converted/3D%20Atomic%20Visualisation.view_pdf.html), 
+[HTML](https://chrisjsewell.github.io/3d_atomic/converted/3D%20Atomic%20Visualisation.html) 
+or [Reveal.JS slideshow](https://chrisjsewell.github.io/3d_atomic/converted/3D%20Atomic%20Visualisation.slides.html).

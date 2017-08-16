@@ -20,8 +20,13 @@ to provide a workflow for:
    :caption: Contents:
 
    getting_started
+   content_output
+   metadata_tags
+   additional_tools
+   acknowledgements
    package_api
    releases
+
 
 Indices and tables
 ==================

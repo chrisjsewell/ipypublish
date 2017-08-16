@@ -18,26 +18,27 @@
 #
 import os
 import sys
-#sys.path.insert(0, os.path.abspath('.'))
+
+# sys.path.insert(0, os.path.abspath('.'))
 sys.path.insert(0, os.path.abspath('../..'))
 import ipypublish
 
 # create releases page
 import urllib
 import json
-git_history = urllib.request.urlopen('https://api.github.com/repos/chrisjsewell/ipypublish/releases').read().decode('utf-8')
+
+git_history = urllib.request.urlopen('https://api.github.com/repos/chrisjsewell/ipypublish/releases').read().decode(
+    'utf-8')
 git_history_json = json.loads(git_history)
 with open('releases.md', 'w') as f:
-	f.write('# Releases\n')
-	f.write('---------\n')
-	f.write('\n')
-	for r in git_history_json:
-		f.write('## '+' '.join([r['tag_name'],'-',r['name'],'\n']))
-		f.write('\n')
-		for line in r['body'].split('\n'):
-			f.write(' '.join([line, '\n']))
-		f.write('\n')
-
+    f.write('# Releases\n')
+    f.write('\n')
+    for r in git_history_json:
+        f.write('## ' + ' '.join([r['tag_name'], '-', r['name'], '\n']))
+        f.write('\n')
+        for line in r['body'].split('\n'):
+            f.write(' '.join([line, '\n']))
+        f.write('\n')
 
 # -- General configuration ------------------------------------------------
 
@@ -49,16 +50,16 @@ with open('releases.md', 'w') as f:
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = ['sphinx.ext.autodoc',
-    'sphinx.ext.doctest',
-    'sphinx.ext.intersphinx',
-    'sphinx.ext.todo',
-    'sphinx.ext.coverage',
-    'sphinx.ext.mathjax',
-    'sphinx.ext.ifconfig',
-    'sphinx.ext.viewcode',
-    'sphinx.ext.githubpages',
-     'sphinx.ext.napoleon',
-     'sphinx.ext.autosummary']
+              'sphinx.ext.doctest',
+              'sphinx.ext.intersphinx',
+              'sphinx.ext.todo',
+              'sphinx.ext.coverage',
+              'sphinx.ext.mathjax',
+              'sphinx.ext.ifconfig',
+              'sphinx.ext.viewcode',
+              'sphinx.ext.githubpages',
+              'sphinx.ext.napoleon',
+              'sphinx.ext.autosummary']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -67,7 +68,7 @@ templates_path = ['_templates']
 # You can specify multiple suffix as a list of string:
 #
 source_parsers = {
-   '.md': 'recommonmark.parser.CommonMarkParser',
+    '.md': 'recommonmark.parser.CommonMarkParser',
 }
 source_suffix = ['.rst', '.md']
 # source_suffix = '.rst'
@@ -108,13 +109,12 @@ pygments_style = 'sphinx'
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
 
-
 # -- Options for HTML output ----------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-#html_theme = 'alabaster'
+# html_theme = 'alabaster'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -127,12 +127,10 @@ todo_include_todos = True
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 
-
 # -- Options for HTMLHelp output ------------------------------------------
 
 # Output file base name for HTML help builder.
 htmlhelp_basename = 'ipypublishdoc'
-
 
 # -- Options for LaTeX output ---------------------------------------------
 
@@ -162,7 +160,6 @@ latex_documents = [
      u'Chris Sewell', 'manual'),
 ]
 
-
 # -- Options for manual page output ---------------------------------------
 
 # One entry per manual page. List of tuples
@@ -171,7 +168,6 @@ man_pages = [
     (master_doc, 'ipypublish', u'ipypublish Documentation',
      [author], 1)
 ]
-
 
 # -- Options for Texinfo output -------------------------------------------
 
@@ -183,7 +179,6 @@ texinfo_documents = [
      author, 'ipypublish', description,
      'Miscellaneous'),
 ]
-
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {'https://docs.python.org/': None}
@@ -199,16 +194,18 @@ napoleon_use_ivar = True
 napoleon_use_param = True
 napoleon_use_rtype = True
 
+
 # adapted from https://github.com/markovmodel/PyEMMA/blob/devel/doc/source/conf.py#L285
-# and discussed here: https://stackoverflow.com/questions/20569011/python-sphinx-autosummary-automated-listing-of-member-functions
+# and discussed here:
+# https://stackoverflow.com/questions/20569011/python-sphinx-autosummary-automated-listing-of-member-functions
 def setup(app):
-    #app.connect('autodoc-skip-member', skip_deprecated)
+    # app.connect('autodoc-skip-member', skip_deprecated)
     try:
         from sphinx.ext.autosummary import Autosummary
-        #from sphinx.ext.autosummary import get_documenter
+        # from sphinx.ext.autosummary import get_documenter
         from docutils.parsers.rst import directives
-        #from sphinx.util.inspect import safe_getattr
-        #import re
+        # from sphinx.util.inspect import safe_getattr
+        # import re
         import inspect
         from types import FunctionType
 
@@ -218,11 +215,11 @@ def setup(app):
                 'functions': directives.unchanged,
                 'classes': directives.unchanged,
                 'toctree': directives.unchanged,
-                'nosignatures':directives.unchanged
+                'nosignatures': directives.unchanged
             }
 
             required_arguments = 1
-                
+
             @staticmethod
             def get_functions(mod):
 
@@ -230,7 +227,7 @@ def setup(app):
                     return isinstance(obj, FunctionType) and obj.__module__ == mod.__name__
 
                 members = inspect.getmembers(mod, predicate=is_function_local)
-                return [name for name,value in members if not name.startswith('_')]
+                return [name for name, value in members if not name.startswith('_')]
 
             @staticmethod
             def get_classes(mod):
@@ -239,28 +236,28 @@ def setup(app):
                     return inspect.isclass(obj) and obj.__module__ == mod.__name__
 
                 members = inspect.getmembers(mod, predicate=is_class_local)
-                return [name for name,value in members if not name.startswith('_')]
+                return [name for name, value in members if not name.startswith('_')]
 
             def run(self):
-                
+
                 mod_path = self.arguments[0]
-                
+
                 (package_name, mod_name) = mod_path.rsplit('.', 1)
                 pkg = __import__(package_name, globals(), locals(), [mod_name])
                 mod = getattr(pkg, mod_name)
-            
+
                 if 'classes' in self.options:
                     klasses = self.get_classes(mod)
                     self.content = ["~%s.%s" % (mod_path, klass) for klass in klasses if not klass.startswith('_')]
-                if 'functions' in self.options:                    
+                if 'functions' in self.options:
                     functions = self.get_functions(mod)
                     content = ["~%s.%s" % (mod_path, func) for func in functions if not func.startswith('_')]
                     if self.content:
                         self.content += content
                     else:
                         self.content = content
-                try: 
-                    pass                   
+                try:
+                    pass
                 finally:
                     return super(AutoFunctionSummary, self).run()
 
