@@ -127,7 +127,7 @@ todo_include_todos = True
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 html_logo = '_static/doc_icon_100px.png'
-html_favicon = '_static/doc_icon_16px.ico'
+html_favicon = '_static/doc_icon_32px.ico'
 
 # -- Options for HTMLHelp output ------------------------------------------
 
@@ -183,7 +183,17 @@ texinfo_documents = [
 ]
 
 # Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {'https://docs.python.org/': None}
+intersphinx_mapping = {
+    'python': ('https://docs.python.org/3.4', None),
+    'numpy': ('http://docs.scipy.org/doc/numpy/', None),
+    'scipy': ('http://docs.scipy.org/doc/scipy/reference/', None),
+    'matplotlib': ('http://matplotlib.sourceforge.net/', None),
+    'pandas': ('http://pandas.pydata.org/pandas-docs/stable/', None),
+    'IPython': ('http://ipython.org/ipython-doc/stable/', None),
+    'PIL': ('http://pillow.readthedocs.org/', None),
+    'nbconvert': ("http://nbconvert.readthedocs.io", None),
+    'nbformat': ("http://nbformat.readthedocs.io", None),
+}
 
 # Napoleon settings
 napoleon_numpy_docstring = True
