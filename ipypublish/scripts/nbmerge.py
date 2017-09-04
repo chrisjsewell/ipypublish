@@ -76,7 +76,10 @@ def merge_notebooks(ipynb_path, ignore_prefix='_',
                 continue
             with ipath.open('r', encoding='utf-8') as f:
                 if sys.version_info.major == 3 and sys.version_info.minor < 6 and "win" not in sys.platform:
-                    nb = nbformat.reads(f.read().decode("utf-8"), as_version=as_version)
+                    data = f.read()
+                    if hasattr(data, "decode"):
+                        data = data.decode("utf-8")
+                    nb = nbformat.reads(data, as_version=as_version)
                 else:
                     nb = nbformat.read(f, as_version=as_version)
             if final_nb is None:
@@ -88,7 +91,10 @@ def merge_notebooks(ipynb_path, ignore_prefix='_',
         logging.info('Reading notebook')
         with ipynb_path.open('r', encoding='utf-8') as f:
             if sys.version_info.major == 3 and sys.version_info.minor < 6 and "win" not in sys.platform:
-                final_nb = nbformat.reads(f.read().decode("utf-8"), as_version=as_version)
+                data = f.read()
+                if hasattr(data, "decode"):
+                    data = data.decode("utf-8")
+                final_nb = nbformat.reads(data, as_version=as_version)
             else:
                 final_nb = nbformat.read(f, as_version=as_version)
         meta_path = ipynb_path
