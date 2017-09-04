@@ -11,7 +11,8 @@ def merge(a, b, path=None, overwrite=True):
 
     Examples
     --------
-    >>> merge({'a':{'b':1},'c':3},{'a':{'b':2}})
+    >>> from pprint import pprint
+    >>> pprint(merge({'a':{'b':1},'c':3},{'a':{'b':2}}))
     {'a': {'b': 2}, 'c': 3}
 
     """
