@@ -47,8 +47,6 @@ matrix:
     - travis_retry sudo tlmgr install biblatex
     - travis_retry sudo tlmgr install needspace
     - travis_retry sudo tlmgr install collection-fontsrecommended
-
-matrix:
   allow_failures:
     - os: linux
       sudo: required
