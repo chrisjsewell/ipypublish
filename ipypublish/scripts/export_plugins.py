@@ -46,7 +46,7 @@ def _get_modules(path):
 
     Examples
     --------
-    >>> from ipypublish.utils import MockPath
+    >>> from jsonextended.utils import MockPath
     >>> mod1 = MockPath('mod1.py', is_file=True,
     ... content="name='modname1'")
     >>> dir = MockPath(structure=[mod1])
@@ -80,8 +80,8 @@ def _get_modules(path):
 
                 # for MockPaths
                 if hasattr(pypath, 'maketemp'):
-                    with pypath.maketemp() as f:
-                        module = load_source(mod_name, f.name)
+                    with pypath.maketemp() as fpath:
+                        module = load_source(mod_name, str(fpath))
                     pypath = pypath.name
                 else:
                     module = load_source(mod_name, str(pypath))

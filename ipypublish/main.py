@@ -17,6 +17,7 @@ try:
 except ImportError:
     import pathlib2 as pathlib
 
+import ipypublish
 from ipypublish.scripts import export_plugins
 from ipypublish.scripts.nbmerge import merge_notebooks
 from ipypublish.scripts.nbexport import export_notebook
@@ -71,7 +72,7 @@ def publish(ipynb_path,
     if not os.path.exists(outdir):
         os.mkdir(outdir)
 
-    logging.info('started ipypublish at {0}'.format(time.strftime("%c")))
+    logging.info('started ipypublish v{0} at {1}'.format(ipypublish.__version__, time.strftime("%c")))
     logging.info('logging to: {}'.format(os.path.join(outdir, ipynb_name + '.nbpub.log')))
     logging.info('running for ipynb(s) at: {0}'.format(ipynb_path))
     logging.info('with conversion: {0}'.format(outformat))

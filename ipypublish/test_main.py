@@ -4,7 +4,7 @@ import tempfile
 
 from ipypublish.main import publish
 from ipypublish.scripts import nbmerge, nbexport, pdfexport
-from ipypublish.utils import MockPath
+from jsonextended.utils import MockPath
 from nose.tools import eq_
 
 

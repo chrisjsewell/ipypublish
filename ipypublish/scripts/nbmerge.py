@@ -27,7 +27,13 @@ except NameError:
 
 
 def alphanumeric_sort(l):
-    """sort key.name alphanumeriacally """
+    """sort key.name alphanumerically
+
+    Parameters
+    ----------
+    l: list of str
+
+    """
     convert = lambda text: int(text) if text.isdigit() else text.lower()
     alphanum_key = lambda key: [convert(c) for c in re.split('([0-9]+)', key.name)]
     return sorted(l, key=alphanum_key)

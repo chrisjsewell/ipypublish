@@ -40,7 +40,7 @@ class LatexTagsToHTML(Preprocessor):
     Examples
     --------
     >>> from nbformat import NotebookNode
-    >>> from ipypublish.utils import MockPath
+    >>> from jsonextended.utils import MockPath
 
     >>> processor = LatexTagsToHTML()
 
