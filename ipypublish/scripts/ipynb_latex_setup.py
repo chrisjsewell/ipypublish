@@ -287,4 +287,4 @@ except ImportError:
 if _jsonextended_present:
     from jsonextended import plugins as eplugins
 
-    eplugins.load_builtin_plugins()
+    #eplugins.load_builtin_plugins()
