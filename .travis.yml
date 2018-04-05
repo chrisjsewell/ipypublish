@@ -23,8 +23,9 @@ matrix:
     - travis_wait brew update
     #- brew install python3 # python is now already installed
     - brew upgrade python
-    - virtualenv env -p python3
-    - source env/bin/activate
+    #- virtualenv env -p python3
+    #- source env/bin/activate
+    - alias pip="pip3"
     - brew install pandoc
     - brew upgrade wget
     - travis_retry sudo wget http://mirror.ctan.org/systems/mac/mactex/BasicTeX.pkg
