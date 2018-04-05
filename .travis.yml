@@ -21,7 +21,8 @@ matrix:
     language: generic
     before_install:
     - travis_wait brew update
-    - brew install python3
+    #- brew install python3 # python is now already installed
+    - brew upgrade python
     - virtualenv env -p python3
     - source env/bin/activate
     - brew install pandoc
