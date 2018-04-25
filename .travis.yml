@@ -82,16 +82,16 @@ script:
 after_success:
 - coveralls
 deploy:
-  - provider: pypi
-    distributions: bdist_wheel
-    server: https://test.pypi.org/legacy/
-    user: cjsewell
-    password:
-      secure: en0mNL9+rzlhUpnsLsdd3kskGYWVHL+bUyKnPJCZq0d0AH7tmAC7/J+KkR9iv+pHwVHJphqd+8X3p7k+eXOjjSGlY4mnTmz84iQrRilRzEsK53IvlU+0tayKv23ZlUVG8ecKT/33BOdqO/QZNOz09DViTABj65iIoTzd3pM1b94ycCOjWJV2EzSn8UQXe0p90mO7iE4aoyOOimweezbaZ1FrmZatUuRWeFGuzhopHF1FHtd/xk8Q2rWItUqwIgHiESknAAm5fFsgfJtEqenvmoGbeuBJ7ImCQzEOtF30Im7HJRwd8tXRJHVrTS0PpQpZLjhS/nGors8RRC0DW7r1FdYTUKWUUypDZJSphpyAkfvdVtlOX0NBBuCU71X8yx3yZWLsSv84PulRN6YASPSV3FvptMtam1J2/eoAm2aNy+/RyCvZpe8VtlE+7CSQX41T/1FdIyMzThlJHG0n3Kx92YBTUVuNLTlawTfK4WfS8NJhW1H74XoIRzrKn41EVoup4G0HAPj3vFhezwMdJ7CFIPyav5RdYf3h60smE0qpJl+qIMo5QD7AEWpvg+AIR8C4e0fRE6Iqovqzk+vM4Jq1QlI/mghDkRTFKEES5v0dObaIG8Gi+F3TfBjlyssHA0YREBaZRfVaO2Ov8wLBNaqr3QyJniJ5+eK2yL406DCqKOc=
-    on:
-      branch: master
-      tags: false
-      condition: $TRAVIS_PYTHON_VERSION = "3.6"
+#  - provider: pypi
+#    distributions: bdist_wheel
+#    server: https://test.pypi.org/legacy/
+#    user: cjsewell
+#    password:
+#      secure: en0mNL9+rzlhUpnsLsdd3kskGYWVHL+bUyKnPJCZq0d0AH7tmAC7/J+KkR9iv+pHwVHJphqd+8X3p7k+eXOjjSGlY4mnTmz84iQrRilRzEsK53IvlU+0tayKv23ZlUVG8ecKT/33BOdqO/QZNOz09DViTABj65iIoTzd3pM1b94ycCOjWJV2EzSn8UQXe0p90mO7iE4aoyOOimweezbaZ1FrmZatUuRWeFGuzhopHF1FHtd/xk8Q2rWItUqwIgHiESknAAm5fFsgfJtEqenvmoGbeuBJ7ImCQzEOtF30Im7HJRwd8tXRJHVrTS0PpQpZLjhS/nGors8RRC0DW7r1FdYTUKWUUypDZJSphpyAkfvdVtlOX0NBBuCU71X8yx3yZWLsSv84PulRN6YASPSV3FvptMtam1J2/eoAm2aNy+/RyCvZpe8VtlE+7CSQX41T/1FdIyMzThlJHG0n3Kx92YBTUVuNLTlawTfK4WfS8NJhW1H74XoIRzrKn41EVoup4G0HAPj3vFhezwMdJ7CFIPyav5RdYf3h60smE0qpJl+qIMo5QD7AEWpvg+AIR8C4e0fRE6Iqovqzk+vM4Jq1QlI/mghDkRTFKEES5v0dObaIG8Gi+F3TfBjlyssHA0YREBaZRfVaO2Ov8wLBNaqr3QyJniJ5+eK2yL406DCqKOc=
+#    on:
+#      branch: master
+#      tags: false
+#      condition: $TRAVIS_PYTHON_VERSION = "3.6"
   - provider: pypi
     distributions: bdist_wheel
     user: cjsewell
