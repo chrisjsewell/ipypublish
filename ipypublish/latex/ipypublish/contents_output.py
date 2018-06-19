@@ -25,6 +25,14 @@ tplx_dict = {
 ((( cell.source | citation2latex | strip_files_prefix | convert_pandoc('markdown', 'json',extra_args=[]) | resolve_references | convert_pandoc('json','latex'))))
 """,
 
+    'notebook_input_raw': r"""
+((*- if cell.metadata.raw_mimetype: -*))  
+((*- if cell.metadata.raw_mimetype == "text/latex" -*))  
+((( super() )))    
+((*- endif *))
+((*- endif *))
+""",
+
     'notebook_output': r"""
 ((*- if cell.metadata.ipub: -*))
     ((*- if cell.metadata.ipub.ignore: -*))
@@ -55,6 +63,8 @@ tplx_dict = {
     ((( super() )))
 ((*- endif *))
 """,
+
+
 
     'notebook_output_latex': r"""
 ((*- if cell.metadata.ipub: -*))

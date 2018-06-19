@@ -20,6 +20,14 @@ tpl_dict = {
 </div>
 """,
 
+    'notebook_input_raw': r"""
+{%- if cell.metadata.raw_mimetype: -%}
+{%- if cell.metadata.raw_mimetype == "text/html" -%}
+{{ super() }} 
+{%- endif %}
+{%- endif %}
+""",
+
     'notebook_input_unknown': r"""
 unknown type  {{ cell.type }}
 """,

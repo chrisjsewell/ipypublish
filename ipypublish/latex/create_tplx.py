@@ -109,7 +109,7 @@ A latex document
 	{notebook_input_unknown}
 ((* endblock unknowncell *))
 
-%% Notebook Outbook
+%% Notebook Output
 %% ================
 
 % Redirect execute_result to display data priority.

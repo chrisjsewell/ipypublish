@@ -58,6 +58,8 @@ matrix:
       sudo: required
       python: 3.5
       dist: trusty
+    - os: osx
+      language: generic
 
 before_install:
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update ; fi
