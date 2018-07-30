@@ -21,7 +21,7 @@ in particular [latexmk](http://mg.readthedocs.io/latexmk.html)), which can be in
 - Windows: [MikTex](http://www.miktex.org/)
 
 For helpful extensions to the notebooks core capabilities, see the 
-[Jupiter Notebook Extensions package](http://jupyter-contrib-nbextensions.readthedocs.io/en/latest/):
+[Jupyter Notebook Extensions package](http://jupyter-contrib-nbextensions.readthedocs.io/en/latest/):
 
 	conda install --name ipyreport jupyter_contrib_nbextensions
 	
