@@ -233,12 +233,12 @@ For  **tables** (e.g. those output by `pandas`), enter in cell metadata:
 
 - `caption` and `label` are optional
 - `placement` is optional and constitutes using a placement arguments for the table (e.g. \begin{table}[H]). See [Positioning_images_and_tables](https://www.sharelatex.com/learn/Positioning_images_and_tables).
-- `alternate` is optional and constitutes using alternating colors for the table rows (e.g. \rowcolors{2}{gray!25}{white}). See (https://tex.stackexchange.com/a/5365/107738)[https://tex.stackexchange.com/a/5365/107738].
+- `alternate` is optional and constitutes using alternating colors for the table rows (e.g. \rowcolors{2}{gray!25}{white}). See [https://tex.stackexchange.com/a/5365/107738](https://tex.stackexchange.com/a/5365/107738).
 - if tables exceed the text width, in latex, they will be shrunk to fit 
 
 ### Output Equations
 
-For  **equations** (e.g. thos output by `sympy`), enter in cell metadata:
+For  **equations** (e.g. those output by `sympy`), enter in cell metadata:
 
 ```json
 {
