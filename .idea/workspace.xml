@@ -1,0 +1,1008 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AnalysisUIOptions">
+    <option name="SCOPE_TYPE" value="2" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="b06f2b59-fd1b-4353-9fb4-098650873439" name="Default" comment="" />
+    <ignored path="$PROJECT_DIR$/.idea/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CoverageDataManager">
+    <SUITE FILE_PATH="coverage/ipypublish$scratch_1.coverage" NAME="scratch_1 Coverage Results" MODIFIED="1502857690154" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$APPLICATION_CONFIG_DIR$/scratches" />
+    <SUITE FILE_PATH="coverage/ipypublish$Nosetests_for_ipypublish_scripts_export_plugins__get_modules.coverage" NAME="Nosetests for ipypublish.scripts.export_plugins._get_modules Coverage Results" MODIFIED="1503761640464" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/ipypublish$nosetests.coverage" NAME="nosetests Coverage Results" MODIFIED="1529378399275" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_TABLE_DETAILS" value="true" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <expand />
+    <select />
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="ipypublish" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ipypublish/__init__.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="20" lean-forward="false" selection-start-line="0" selection-start-column="20" selection-end-line="0" selection-end-column="20" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ipynb_latex_setup.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ipypublish/scripts/ipynb_latex_setup.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1350">
+              <caret line="93" column="0" lean-forward="false" selection-start-line="93" selection-start-column="0" selection-end-line="277" selection-end-column="0" />
+              <folding>
+                <element signature="e#135#179#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="latex_ipypublish_all.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ipypublish/export_plugins/latex_ipypublish_all.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="135">
+              <caret line="9" column="46" lean-forward="false" selection-start-line="9" selection-start-column="46" selection-end-line="9" selection-end-column="46" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="contents_output.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ipypublish/latex/ipypublish/contents_output.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="405">
+              <caret line="27" column="0" lean-forward="false" selection-start-line="27" selection-start-column="0" selection-end-line="33" selection-end-column="4" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="content.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ipypublish/html/standard/content.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="360">
+              <caret line="24" column="52" lean-forward="false" selection-start-line="24" selection-start-column="52" selection-end-line="24" selection-end-column="52" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="create_tplx.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ipypublish/latex/create_tplx.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2790">
+              <caret line="186" column="29" lean-forward="false" selection-start-line="186" selection-start-column="29" selection-end-line="186" selection-end-column="29" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name=".travis.yml" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.travis.yml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="279">
+              <caret line="79" column="31" lean-forward="true" selection-start-line="79" selection-start-column="31" selection-end-line="79" selection-end-column="31" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="setup.cfg" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/setup.cfg">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="4" selection-end-column="11" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="SPLIT">
+              <first_editor relative-caret-position="210">
+                <caret line="14" column="46" lean-forward="false" selection-start-line="14" selection-start-column="46" selection-end-line="14" selection-end-column="46" />
+                <folding>
+                  <marker date="1502667651000" expanded="true" signature="16477:16516" ph="..." />
+                  <marker date="1502667651000" expanded="true" signature="16497:16509" ph="..." />
+                  <marker date="1502667651000" expanded="true" signature="16714:16730" ph="{...}" />
+                  <marker date="1502667651000" expanded="true" signature="17534:17573" ph="{...}" />
+                  <marker date="1502667651000" expanded="true" signature="17544:17571" ph="{&quot;language&quot;: &quot;french&quot;...}" />
+                  <marker date="1502667651000" expanded="true" signature="17746:17806" ph="{...}" />
+                  <marker date="1502667651000" expanded="true" signature="17756:17804" ph="{&quot;bibliography&quot;: &quot;path/to/bibliograph.bib&quot;...}" />
+                  <marker date="1502667651000" expanded="true" signature="17907:18256" ph="{...}" />
+                  <marker date="1502667651000" expanded="true" signature="17917:18254" ph="{...}" />
+                  <marker date="1502667651000" expanded="true" signature="17934:18250" ph="{&quot;author&quot;: &quot;Authors Name&quot;...}" />
+                  <marker date="1502667651000" expanded="true" signature="18010:18060" ph="[...]" />
+                  <marker date="1502667651000" expanded="true" signature="18169:18210" ph="[...]" />
+                  <marker date="1502667651000" expanded="true" signature="18573:18670" ph="{...}" />
+                  <marker date="1502667651000" expanded="true" signature="18583:18668" ph="{&quot;toc&quot;: true...}" />
+                  <marker date="1502667651000" expanded="true" signature="18746:18861" ph="{...}" />
+                  <marker date="1502667651000" expanded="true" signature="18756:18859" ph="{...}" />
+                  <marker date="1502667651000" expanded="true" signature="18772:18806" ph="{&quot;placement&quot;: &quot;!bp&quot;...}" />
+                  <marker date="1502667651000" expanded="true" signature="18821:18855" ph="{&quot;placement&quot;: &quot;!bp&quot;...}" />
+                  <marker date="1502667651000" expanded="true" signature="19055:19088" ph="{...}" />
+                  <marker date="1502667651000" expanded="true" signature="19065:19086" ph="{&quot;ignore&quot;: true...}" />
+                  <marker date="1502667651000" expanded="true" signature="19154:19190" ph="{...}" />
+                  <marker date="1502667651000" expanded="true" signature="19164:19188" ph="{&quot;slideonly&quot;: true...}" />
+                  <marker date="1502667651000" expanded="true" signature="19234:19404" ph="{...}" />
+                  <marker date="1502667651000" expanded="true" signature="19244:19402" ph="{...}" />
+                  <marker date="1502667651000" expanded="true" signature="19256:19398" ph="{&quot;asfloat&quot;: true...}" />
+                  <marker date="1502667651000" expanded="true" signature="19845:20077" ph="{...}" />
+                  <marker date="1502667651000" expanded="true" signature="19855:20075" ph="{...}" />
+                  <marker date="1502667651000" expanded="true" signature="19867:20071" ph="{&quot;asfloat&quot;: true...}" />
+                  <marker date="1502667651000" expanded="true" signature="19885:19925" ph="{&quot;basicstyle&quot;: &quot;\\small&quot;...}" />
+                  <marker date="1502667651000" expanded="true" signature="20737:20897" ph="{...}" />
+                  <marker date="1502667651000" expanded="true" signature="20747:20895" ph="{...}" />
+                  <marker date="1502667651000" expanded="true" signature="20761:20891" ph="{&quot;caption&quot;: &quot;Figure caption.&quot;...}" />
+                  <marker date="1502667651000" expanded="true" signature="21510:21669" ph="{...}" />
+                  <marker date="1502667651000" expanded="true" signature="21520:21667" ph="{...}" />
+                  <marker date="1502667651000" expanded="true" signature="21536:21662" ph="{&quot;caption&quot;: &quot;Table caption.&quot;...}" />
+                  <marker date="1502667651000" expanded="true" signature="22300:22403" ph="{...}" />
+                  <marker date="1502667651000" expanded="true" signature="22312:22401" ph="{...}" />
+                  <marker date="1502667651000" expanded="true" signature="22329:22397" ph="{&quot;environment&quot;: &quot;equation&quot;...}" />
+                  <marker date="1502667651000" expanded="true" signature="22877:22913" ph="{...}" />
+                  <marker date="1502667651000" expanded="true" signature="22889:22911" ph="{&quot;slide&quot;: true...}" />
+                  <marker date="1502667651000" expanded="true" signature="24767:24814" ph="{...}" />
+                  <marker date="1502667651000" expanded="true" signature="24778:24812" ph="{&quot;caption&quot;: &quot;fig:example_mpl&quot;...}" />
+                  <marker date="1502667651000" expanded="true" signature="25287:25368" ph="{...}" />
+                  <marker date="1502667651000" expanded="true" signature="25297:25366" ph="{...}" />
+                  <marker date="1502667651000" expanded="true" signature="25310:25362" ph="{&quot;caption&quot;: &quot;&quot;...}" />
+                  <marker date="1502667651000" expanded="true" signature="26435:26700" ph="{...}" />
+                  <marker date="1502667651000" expanded="true" signature="26447:26698" ph="{...}" />
+                  <marker date="1502667651000" expanded="true" signature="26467:26624" ph="{&quot;filepath&quot;: &quot;path/to/file.html&quot;...}" />
+                  <marker date="1502667651000" expanded="true" signature="26640:26694" ph="{&quot;caption&quot;: &quot;An example of embedded html&quot;...}" />
+                </folding>
+              </first_editor>
+              <second_editor />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="nbexport.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ipypublish/scripts/nbexport.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="45">
+              <caret line="3" column="10" lean-forward="false" selection-start-line="3" selection-start-column="10" selection-end-line="3" selection-end-column="10" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>maketemp</find>
+      <find>from ipypublish.utils import MockPath</find>
+      <find>latexmk</find>
+    </findStrings>
+    <dirStrings>
+      <dir>$PROJECT_DIR$</dir>
+    </dirStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/ipypublish/preprocessors/latex_doc_html.py" />
+        <option value="$PROJECT_DIR$/ipypublish/scripts/reveal_serve.py" />
+        <option value="$PROJECT_DIR$/ipypublish/scripts/nbexport.py" />
+        <option value="$PROJECT_DIR$/ipypublish/scripts/pdfexport.py" />
+        <option value="$PROJECT_DIR$/ipypublish/html/create_tpl.py" />
+        <option value="$PROJECT_DIR$/ipypublish/filters/filters.py" />
+        <option value="$PROJECT_DIR$/ipypublish/test_main.py" />
+        <option value="$PROJECT_DIR$/ipypublish/preprocessors/slides_from_markdown.py" />
+        <option value="$PROJECT_DIR$/ipypublish/preprocessors/crop_cells.py" />
+        <option value="$PROJECT_DIR$/ipypublish/export_plugins/html_ipypublish_main.py" />
+        <option value="$PROJECT_DIR$/ipypublish/utils.py" />
+        <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/bin/nbpresent" />
+        <option value="$PROJECT_DIR$/bin/nbpublish" />
+        <option value="$PROJECT_DIR$/ipypublish/filters/ansi_listings.py" />
+        <option value="$PROJECT_DIR$/docs/source/package_api.rst" />
+        <option value="$PROJECT_DIR$/docs/source/releases.md" />
+        <option value="$PROJECT_DIR$/docs/source/content_output.md" />
+        <option value="$PROJECT_DIR$/docs/source/acknowledgements.md" />
+        <option value="$PROJECT_DIR$/docs/source/external_data.md" />
+        <option value="$PROJECT_DIR$/docs/source/additional_tools.md" />
+        <option value="$PROJECT_DIR$/docs/source/metadata_tags.md" />
+        <option value="$PROJECT_DIR$/docs/build/html/index.html" />
+        <option value="$PROJECT_DIR$/docs/source/getting_started.md" />
+        <option value="$PROJECT_DIR$/README.rst" />
+        <option value="$PROJECT_DIR$/docs/source/index.rst" />
+        <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch.py" />
+        <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch_1.py" />
+        <option value="$PROJECT_DIR$/docs/source/conf.py" />
+        <option value="$PROJECT_DIR$/test_requirements.txt" />
+        <option value="$PROJECT_DIR$/ipypublish/preprocessors/latextags_to_html.py" />
+        <option value="$PROJECT_DIR$/ipypublish/scripts/export_plugins.py" />
+        <option value="$PROJECT_DIR$/ipypublish/main.py" />
+        <option value="$PROJECT_DIR$/ipypublish/preprocessors/split_outputs.py" />
+        <option value="$PROJECT_DIR$/ipypublish/scripts/nbmerge.py" />
+        <option value="$PROJECT_DIR$/ipypublish/scripts/ipynb_latex_setup.py" />
+        <option value="$PROJECT_DIR$/ipypublish/latex/create_tplx.py" />
+        <option value="$PROJECT_DIR$/.travis.yml" />
+        <option value="$PROJECT_DIR$/ipypublish/latex/ipypublish/contents_output.py" />
+        <option value="$PROJECT_DIR$/ipypublish/html/standard/content.py" />
+        <option value="$PROJECT_DIR$/ipypublish/__init__.py" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="y" value="23" />
+    <option name="width" value="1280" />
+    <option name="height" value="729" />
+  </component>
+  <component name="ProjectInspectionProfilesVisibleTreeState">
+    <entry key="Project Default">
+      <profile-state>
+        <expanded-state>
+          <State>
+            <id />
+          </State>
+          <State>
+            <id>DOM issuesJavaScript</id>
+          </State>
+          <State>
+            <id>GeneralJavaScript</id>
+          </State>
+          <State>
+            <id>Google App Engine (Python)</id>
+          </State>
+          <State>
+            <id>Internationalization issues</id>
+          </State>
+          <State>
+            <id>JavaScript</id>
+          </State>
+          <State>
+            <id>Python</id>
+          </State>
+        </expanded-state>
+        <selected-state>
+          <State>
+            <id>JSON</id>
+          </State>
+        </selected-state>
+      </profile-state>
+    </entry>
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+      <manualOrder />
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="ipypublish" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ipypublish" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ipypublish" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ipypublish" type="462c0819:PsiDirectoryNode" />
+              <item name="bin" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ipypublish" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ipypublish" type="462c0819:PsiDirectoryNode" />
+              <item name="ipypublish" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ipypublish" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ipypublish" type="462c0819:PsiDirectoryNode" />
+              <item name="ipypublish" type="462c0819:PsiDirectoryNode" />
+              <item name="export_plugins" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ipypublish" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ipypublish" type="462c0819:PsiDirectoryNode" />
+              <item name="ipypublish" type="462c0819:PsiDirectoryNode" />
+              <item name="filters" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ipypublish" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ipypublish" type="462c0819:PsiDirectoryNode" />
+              <item name="ipypublish" type="462c0819:PsiDirectoryNode" />
+              <item name="html" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ipypublish" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ipypublish" type="462c0819:PsiDirectoryNode" />
+              <item name="ipypublish" type="462c0819:PsiDirectoryNode" />
+              <item name="html" type="462c0819:PsiDirectoryNode" />
+              <item name="ipypublish" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ipypublish" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ipypublish" type="462c0819:PsiDirectoryNode" />
+              <item name="ipypublish" type="462c0819:PsiDirectoryNode" />
+              <item name="html" type="462c0819:PsiDirectoryNode" />
+              <item name="standard" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ipypublish" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ipypublish" type="462c0819:PsiDirectoryNode" />
+              <item name="ipypublish" type="462c0819:PsiDirectoryNode" />
+              <item name="latex" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ipypublish" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ipypublish" type="462c0819:PsiDirectoryNode" />
+              <item name="ipypublish" type="462c0819:PsiDirectoryNode" />
+              <item name="preprocessors" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ipypublish" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ipypublish" type="462c0819:PsiDirectoryNode" />
+              <item name="ipypublish" type="462c0819:PsiDirectoryNode" />
+              <item name="scripts" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scratches" />
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="last_opened_file_path" value="/anaconda/envs/lsr/bin/python" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$2/Languages" value="Python" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/docs/source" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Python tests.nosetests">
+    <configuration name="Nosetests for ipypublish.scripts.export_plugins._get_modules" type="tests" factoryName="Nosetests" temporary="true" nameIsGenerated="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="/anaconda/envs/lsr/bin/python" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="ipypublish" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="_new_regexPattern" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;--with-doctest --exe&quot;" />
+      <option name="_new_target" value="&quot;ipypublish.scripts.export_plugins._get_modules&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+    </configuration>
+    <configuration name="nosetests" type="tests" factoryName="Nosetests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="/anaconda/envs/lsr/bin/python" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="ipypublish" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="_new_regexPattern" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;--with-doctest --exe&quot;" />
+      <option name="_new_target" value="&quot;ipypublish&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+    </configuration>
+    <configuration name="scratch_1" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$APPLICATION_CONFIG_DIR$/scratches" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="ipypublish" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$APPLICATION_CONFIG_DIR$/scratches/scratch_1.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+    </configuration>
+    <list size="3">
+      <item index="0" class="java.lang.String" itemvalue="Python tests.nosetests" />
+      <item index="1" class="java.lang.String" itemvalue="Python.scratch_1" />
+      <item index="2" class="java.lang.String" itemvalue="Python tests.Nosetests for ipypublish.scripts.export_plugins._get_modules" />
+    </list>
+    <recent_temporary>
+      <list size="2">
+        <item index="0" class="java.lang.String" itemvalue="Python tests.Nosetests for ipypublish.scripts.export_plugins._get_modules" />
+        <item index="1" class="java.lang.String" itemvalue="Python.scratch_1" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false">
+    <option name="remove_strategy" value="false" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="b06f2b59-fd1b-4353-9fb4-098650873439" name="Default" comment="" />
+      <created>1502651512858</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1502651512858</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="TestHistory">
+    <history-entry file="Nosetests_for_ipypublish_scripts_export_plugins__get_modules - 2017.08.26 at 16h 34m 02s.xml">
+      <configuration name="Nosetests for ipypublish.scripts.export_plugins._get_modules" configurationId="tests" />
+    </history-entry>
+    <history-entry file="nosetests - 2017.08.25 at 05h 32m 08s.xml">
+      <configuration name="nosetests" configurationId="tests" />
+    </history-entry>
+    <history-entry file="nosetests - 2017.08.26 at 15h 13m 58s.xml">
+      <configuration name="nosetests" configurationId="tests" />
+    </history-entry>
+    <history-entry file="nosetests - 2017.08.26 at 15h 16m 56s.xml">
+      <configuration name="nosetests" configurationId="tests" />
+    </history-entry>
+    <history-entry file="nosetests - 2017.08.26 at 15h 23m 06s.xml">
+      <configuration name="nosetests" configurationId="tests" />
+    </history-entry>
+    <history-entry file="nosetests - 2017.08.26 at 16h 34m 15s.xml">
+      <configuration name="nosetests" configurationId="tests" />
+    </history-entry>
+    <history-entry file="nosetests - 2017.08.26 at 16h 35m 41s.xml">
+      <configuration name="nosetests" configurationId="tests" />
+    </history-entry>
+    <history-entry file="nosetests - 2017.08.26 at 16h 43m 30s.xml">
+      <configuration name="nosetests" configurationId="tests" />
+    </history-entry>
+    <history-entry file="nosetests - 2017.09.04 at 18h 15m 15s.xml">
+      <configuration name="nosetests" configurationId="tests" />
+    </history-entry>
+    <history-entry file="nosetests - 2018.06.19 at 04h 20m 18s.xml">
+      <configuration name="nosetests" configurationId="tests" />
+    </history-entry>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="23" width="1280" height="729" extended-state="0" />
+    <editor active="true" />
+    <layout>
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21647818" sideWeight="0.48217055" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32919255" sideWeight="0.5" order="14" side_tool="true" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32956383" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3279483" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32640332" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24959612" sideWeight="0.49436393" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32850242" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.125" sideWeight="0.5178295" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32956383" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug Logs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Execute Anonymous" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection Results" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5458937" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32919255" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Salesforce" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
+    </layout>
+    <layout-to-restore>
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug Logs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32919255" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32919255" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3279743" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Execute Anonymous" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32850242" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.125" sideWeight="0.4883721" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection Results" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5458937" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32956383" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32919255" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24959612" sideWeight="0.49436393" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.125" sideWeight="0.5116279" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32956383" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Salesforce" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="14" side_tool="false" content_ui="tabs" />
+    </layout-to-restore>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <option name="time" value="1" />
+    </breakpoint-manager>
+    <watches-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/ipypublish/scripts/reveal_serve.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="155">
+          <caret line="79" column="0" lean-forward="false" selection-start-line="79" selection-start-column="0" selection-end-line="79" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ipypublish/filters/filters.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="413">
+          <caret line="85" column="14" lean-forward="false" selection-start-line="85" selection-start-column="14" selection-end-line="85" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ipypublish/html/create_tpl.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="212">
+          <caret line="218" column="0" lean-forward="false" selection-start-line="218" selection-start-column="0" selection-end-line="218" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ipypublish/preprocessors/slides_from_markdown.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="660">
+          <caret line="50" column="15" lean-forward="false" selection-start-line="50" selection-start-column="15" selection-end-line="50" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ipypublish/export_plugins/html_ipypublish_main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="31" column="23" lean-forward="false" selection-start-line="31" selection-start-column="23" selection-end-line="31" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ipypublish/preprocessors/crop_cells.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="16" column="0" lean-forward="false" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ipypublish/latex/ipypublish/doc_article.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="450">
+          <caret line="30" column="7" lean-forward="true" selection-start-line="30" selection-start-column="7" selection-end-line="30" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ipypublish/preprocessors/latex_doc_html.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1080">
+          <caret line="77" column="49" lean-forward="false" selection-start-line="77" selection-start-column="49" selection-end-line="77" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ipypublish/filters/ansi_listings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="324">
+          <caret line="55" column="71" lean-forward="false" selection-start-line="55" selection-start-column="71" selection-end-line="55" selection-end-column="71" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ipypublish/preprocessors/latex_doc_captions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="26" column="46" lean-forward="false" selection-start-line="26" selection-start-column="46" selection-end-line="26" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/source/package_api.rst">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="17" lean-forward="false" selection-start-line="6" selection-start-column="17" selection-end-line="6" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/source/releases.rst" />
+    <entry file="file://$PROJECT_DIR$/bin/nbpresent">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="349">
+          <caret line="127" column="44" lean-forward="false" selection-start-line="127" selection-start-column="33" selection-end-line="127" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bin/nbpublish">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1571">
+          <caret line="10" column="25" lean-forward="false" selection-start-line="10" selection-start-column="25" selection-end-line="10" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/source/README.md" />
+    <entry file="file://$PROJECT_DIR$/docs/source/acknowledgements.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="0">
+            <caret line="0" column="19" lean-forward="false" selection-start-line="0" selection-start-column="3" selection-end-line="0" selection-end-column="19" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/source/releases.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="2085">
+            <caret line="139" column="1" lean-forward="false" selection-start-line="139" selection-start-column="1" selection-end-line="139" selection-end-column="1" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/source/external_data.md" />
+    <entry file="file://$PROJECT_DIR$/docs/source/metadata_tags.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="761">
+            <caret line="311" column="35" lean-forward="false" selection-start-line="311" selection-start-column="35" selection-end-line="311" selection-end-column="35" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/source/content_output.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="0">
+            <caret line="0" column="28" lean-forward="false" selection-start-line="0" selection-start-column="2" selection-end-line="0" selection-end-column="28" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/source/additional_tools.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="405">
+            <caret line="27" column="0" lean-forward="false" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/source/getting_started.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="289">
+            <caret line="40" column="88" lean-forward="false" selection-start-line="40" selection-start-column="88" selection-end-line="40" selection-end-column="88" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="1" column="11" lean-forward="false" selection-start-line="1" selection-start-column="11" selection-end-line="1" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch_1.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.rst">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="51" lean-forward="false" selection-start-line="5" selection-start-column="51" selection-end-line="5" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/source/index.rst">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="23" column="6" lean-forward="false" selection-start-line="23" selection-start-column="6" selection-end-line="23" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/build/html/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="8" column="74" lean-forward="false" selection-start-line="8" selection-start-column="74" selection-end-line="8" selection-end-column="74" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/source/conf.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="495">
+          <caret line="34" column="11" lean-forward="false" selection-start-line="34" selection-start-column="11" selection-end-line="34" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ipypublish/test_main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="16" column="29" lean-forward="false" selection-start-line="16" selection-start-column="29" selection-end-line="16" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/requirements.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ipypublish/utils.py" />
+    <entry file="file://$PROJECT_DIR$/test_requirements.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="14" lean-forward="false" selection-start-line="2" selection-start-column="14" selection-end-line="2" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ipypublish/scripts/export_plugins.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1185">
+          <caret line="85" column="21" lean-forward="false" selection-start-line="85" selection-start-column="21" selection-end-line="85" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ipypublish/preprocessors/split_outputs.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="29" column="43" lean-forward="false" selection-start-line="29" selection-start-column="43" selection-end-line="29" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ipypublish/scripts/nbmerge.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1365">
+          <caret line="98" column="66" lean-forward="false" selection-start-line="98" selection-start-column="66" selection-end-line="98" selection-end-column="66" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ipypublish/export_plugins/nb_ipypublish_all.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="22" column="37" lean-forward="false" selection-start-line="22" selection-start-column="37" selection-end-line="22" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ipypublish/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="780">
+          <caret line="57" column="28" lean-forward="false" selection-start-line="57" selection-start-column="21" selection-end-line="57" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ipypublish/scripts/pdfexport.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" column="42" lean-forward="false" selection-start-line="4" selection-start-column="0" selection-end-line="8" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ipypublish/scripts/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ipypublish/preprocessors/latextags_to_html.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1305">
+          <caret line="93" column="27" lean-forward="false" selection-start-line="93" selection-start-column="27" selection-end-line="93" selection-end-column="78" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ipypublish/export_plugins/html_ipypublish_all.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ipypublish/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="20" lean-forward="false" selection-start-line="0" selection-start-column="20" selection-end-line="0" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ipypublish/scripts/ipynb_latex_setup.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1350">
+          <caret line="93" column="0" lean-forward="false" selection-start-line="93" selection-start-column="0" selection-end-line="277" selection-end-column="0" />
+          <folding>
+            <element signature="e#135#179#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ipypublish/export_plugins/latex_ipypublish_all.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" column="46" lean-forward="false" selection-start-line="9" selection-start-column="46" selection-end-line="9" selection-end-column="46" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ipypublish/latex/ipypublish/contents_output.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="405">
+          <caret line="27" column="0" lean-forward="false" selection-start-line="27" selection-start-column="0" selection-end-line="33" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ipypublish/html/standard/content.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="24" column="52" lean-forward="false" selection-start-line="24" selection-start-column="52" selection-end-line="24" selection-end-column="52" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ipypublish/latex/create_tplx.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2790">
+          <caret line="186" column="29" lean-forward="false" selection-start-line="186" selection-start-column="29" selection-end-line="186" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/setup.cfg">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="4" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="210">
+            <caret line="14" column="46" lean-forward="false" selection-start-line="14" selection-start-column="46" selection-end-line="14" selection-end-column="46" />
+            <folding>
+              <marker date="1502667651000" expanded="true" signature="16477:16516" ph="..." />
+              <marker date="1502667651000" expanded="true" signature="16497:16509" ph="..." />
+              <marker date="1502667651000" expanded="true" signature="16714:16730" ph="{...}" />
+              <marker date="1502667651000" expanded="true" signature="17534:17573" ph="{...}" />
+              <marker date="1502667651000" expanded="true" signature="17544:17571" ph="{&quot;language&quot;: &quot;french&quot;...}" />
+              <marker date="1502667651000" expanded="true" signature="17746:17806" ph="{...}" />
+              <marker date="1502667651000" expanded="true" signature="17756:17804" ph="{&quot;bibliography&quot;: &quot;path/to/bibliograph.bib&quot;...}" />
+              <marker date="1502667651000" expanded="true" signature="17907:18256" ph="{...}" />
+              <marker date="1502667651000" expanded="true" signature="17917:18254" ph="{...}" />
+              <marker date="1502667651000" expanded="true" signature="17934:18250" ph="{&quot;author&quot;: &quot;Authors Name&quot;...}" />
+              <marker date="1502667651000" expanded="true" signature="18010:18060" ph="[...]" />
+              <marker date="1502667651000" expanded="true" signature="18169:18210" ph="[...]" />
+              <marker date="1502667651000" expanded="true" signature="18573:18670" ph="{...}" />
+              <marker date="1502667651000" expanded="true" signature="18583:18668" ph="{&quot;toc&quot;: true...}" />
+              <marker date="1502667651000" expanded="true" signature="18746:18861" ph="{...}" />
+              <marker date="1502667651000" expanded="true" signature="18756:18859" ph="{...}" />
+              <marker date="1502667651000" expanded="true" signature="18772:18806" ph="{&quot;placement&quot;: &quot;!bp&quot;...}" />
+              <marker date="1502667651000" expanded="true" signature="18821:18855" ph="{&quot;placement&quot;: &quot;!bp&quot;...}" />
+              <marker date="1502667651000" expanded="true" signature="19055:19088" ph="{...}" />
+              <marker date="1502667651000" expanded="true" signature="19065:19086" ph="{&quot;ignore&quot;: true...}" />
+              <marker date="1502667651000" expanded="true" signature="19154:19190" ph="{...}" />
+              <marker date="1502667651000" expanded="true" signature="19164:19188" ph="{&quot;slideonly&quot;: true...}" />
+              <marker date="1502667651000" expanded="true" signature="19234:19404" ph="{...}" />
+              <marker date="1502667651000" expanded="true" signature="19244:19402" ph="{...}" />
+              <marker date="1502667651000" expanded="true" signature="19256:19398" ph="{&quot;asfloat&quot;: true...}" />
+              <marker date="1502667651000" expanded="true" signature="19845:20077" ph="{...}" />
+              <marker date="1502667651000" expanded="true" signature="19855:20075" ph="{...}" />
+              <marker date="1502667651000" expanded="true" signature="19867:20071" ph="{&quot;asfloat&quot;: true...}" />
+              <marker date="1502667651000" expanded="true" signature="19885:19925" ph="{&quot;basicstyle&quot;: &quot;\\small&quot;...}" />
+              <marker date="1502667651000" expanded="true" signature="20737:20897" ph="{...}" />
+              <marker date="1502667651000" expanded="true" signature="20747:20895" ph="{...}" />
+              <marker date="1502667651000" expanded="true" signature="20761:20891" ph="{&quot;caption&quot;: &quot;Figure caption.&quot;...}" />
+              <marker date="1502667651000" expanded="true" signature="21510:21669" ph="{...}" />
+              <marker date="1502667651000" expanded="true" signature="21520:21667" ph="{...}" />
+              <marker date="1502667651000" expanded="true" signature="21536:21662" ph="{&quot;caption&quot;: &quot;Table caption.&quot;...}" />
+              <marker date="1502667651000" expanded="true" signature="22300:22403" ph="{...}" />
+              <marker date="1502667651000" expanded="true" signature="22312:22401" ph="{...}" />
+              <marker date="1502667651000" expanded="true" signature="22329:22397" ph="{&quot;environment&quot;: &quot;equation&quot;...}" />
+              <marker date="1502667651000" expanded="true" signature="22877:22913" ph="{...}" />
+              <marker date="1502667651000" expanded="true" signature="22889:22911" ph="{&quot;slide&quot;: true...}" />
+              <marker date="1502667651000" expanded="true" signature="24767:24814" ph="{...}" />
+              <marker date="1502667651000" expanded="true" signature="24778:24812" ph="{&quot;caption&quot;: &quot;fig:example_mpl&quot;...}" />
+              <marker date="1502667651000" expanded="true" signature="25287:25368" ph="{...}" />
+              <marker date="1502667651000" expanded="true" signature="25297:25366" ph="{...}" />
+              <marker date="1502667651000" expanded="true" signature="25310:25362" ph="{&quot;caption&quot;: &quot;&quot;...}" />
+              <marker date="1502667651000" expanded="true" signature="26435:26700" ph="{...}" />
+              <marker date="1502667651000" expanded="true" signature="26447:26698" ph="{...}" />
+              <marker date="1502667651000" expanded="true" signature="26467:26624" ph="{&quot;filepath&quot;: &quot;path/to/file.html&quot;...}" />
+              <marker date="1502667651000" expanded="true" signature="26640:26694" ph="{&quot;caption&quot;: &quot;An example of embedded html&quot;...}" />
+            </folding>
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ipypublish/scripts/nbexport.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" column="10" lean-forward="false" selection-start-line="3" selection-start-column="10" selection-end-line="3" selection-end-column="10" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.travis.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="279">
+          <caret line="79" column="31" lean-forward="true" selection-start-line="79" selection-start-column="31" selection-end-line="79" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
