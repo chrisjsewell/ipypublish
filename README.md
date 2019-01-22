@@ -5,15 +5,16 @@
 [![DOI](https://zenodo.org/badge/96322423.svg)](https://zenodo.org/badge/latestdoi/96322423)
 
 # ipypublish
+
 A workflow for creating and editing publication ready scientific reports and presentations, from one or more Jupyter Notebooks, without leaving the browser!
 
 ![WorkFlow Example](/example_workflow.gif)
 
 See [Example.ipynb](example/notebooks/Example.ipynb), [Example.pdf](https://chrisjsewell.github.io/ipypublish/Example.view_pdf.html),
-[Example.html](https://chrisjsewell.github.io/ipypublish/Example.html) and 
+[Example.html](https://chrisjsewell.github.io/ipypublish/Example.html) and
 [Example.slides.html](https://chrisjsewell.github.io/ipypublish/Example.slides.html#/) for an example of the potential input/output.
 
-Or, for a practical example of the ipypublish capability, see these documents on Atomic 3D Visualisation: 
+Or, for a practical example of the ipypublish capability, see these documents on Atomic 3D Visualisation:
 [Notebook](https://github.com/chrisjsewell/chrisjsewell.github.io/blob/master/3d_atomic/3D%20Atomic%20Visualisation.ipynb), [PDF](https://chrisjsewell.github.io/3d_atomic/converted/3D%20Atomic%20Visualisation.view_pdf.html), [HTML](https://chrisjsewell.github.io/3d_atomic/converted/3D%20Atomic%20Visualisation.html) or [Reveal.JS slideshow](https://chrisjsewell.github.io/3d_atomic/converted/3D%20Atomic%20Visualisation.slides.html).
 
 - [ipypublish](#ipypublish)
@@ -36,7 +37,6 @@ Or, for a practical example of the ipypublish capability, see these documents on
   - [Miscellaneous](#miscellaneous)
   - [Acknowledgements](#acknowledgements)
 
-
 ## Design Philosophy
 
 In essence, the dream is to have the ultimate hybrid of Jupyter Notebook, WYSIWYG editor (e.g. MS Word) and document preparation system (e.g. [TexMaker](http://www.xm1math.net/texmaker/)), being able to:
@@ -44,54 +44,54 @@ In essence, the dream is to have the ultimate hybrid of Jupyter Notebook, WYSIWY
 - Dynamically (and reproducibly) explore data, run code and output the results
 - Dynamically edit and visualise the basic components of the document (text, math, figures, tables, references, citations, etc).
 - Have precise control over what elements are output to the final document and how they are layed out and typeset.
-     - Also be able to output the same source document to different layouts and formats (pdf, html, presentation slides, etc).
+  - Also be able to output the same source document to different layouts and formats (pdf, html,presentation slides, etc).
 
 ## Workflow
 
 1. Create a notebook with some content!
 2. optionally create a .bib file and external images
-3. Adjust the notebook and cell metadata. 
-4. install ipypublish and run the `nbpublish` for either the specific notebook, or a folder containing multiple notebooks. 
+3. Adjust the notebook and cell metadata.
+4. install ipypublish and run the `nbpublish` for either the specific notebook, or a folder containing multiple notebooks.
 5. A converted folder will be created, into which final .tex .pdf and _viewpdf.html files will be output, named by the notebook or folder input
 
-The default latex template outputs all markdown cells (unless tagged latex_ignore), and then only code and output cells with [latex metadata tags](#latex-metadata-tags). 
+The default latex template outputs all markdown cells (unless tagged latex_ignore), and then only code and output cells with [latex metadata tags](#latex-metadata-tags).
 See [Example.ipynb](https://github.com/chrisjsewell/ipypublish/blob/master/example/notebooks/Example.ipynb), [Example.pdf](https://chrisjsewell.github.io/ipypublish/Example.view_pdf.html),
 [Example.html](https://chrisjsewell.github.io/ipypublish/Example.html) and [Example.slides.html](https://chrisjsewell.github.io/ipypublish/Example.slides.html#/) for examples of the potential input and output.
 
 ## Setting up the environment
 
-Using [Conda](https://conda.io/docs/) is recommended for package management, 
-in order to create self contained environments with specific versions of packages. 
+Using [Conda](https://conda.io/docs/) is recommended for package management,
+in order to create self contained environments with specific versions of packages.
 The main external packages required are the Jupyter notebook, and [Pandoc](http://pandoc.org) (for conversion of file formats):
 
-	conda create --name ipyreport -c conda-forge jupyter pandoc
-	
+  conda create --name ipyreport -c conda-forge jupyter pandoc
+
 ipypublish can then be installed into this environment:
 
-	source activate ipyreport
-	pip install ipypublish
-	
+  source activate ipyreport
+  pip install ipypublish
+
 For converting to PDF, the TeX document preparation ecosystem is required (an in particular [latexmk](http://mg.readthedocs.io/latexmk.html)), which can be installed from:
 
 - Linux: [TeX Live](http://tug.org/texlive/)
 - macOS (OS X): [MacTeX](http://tug.org/mactex/)
 - Windows: [MikTex](http://www.miktex.org/)
 
-ipypublish is automatically **tested** on update against **python 2.7 and 3.6**, for both **Linux and OSX**, using [Travis CI](https://en.wikipedia.org/wiki/Travis_CI). Therefore, to troubleshoot any installation/run issues, 
-it is best to look at the [travis config](https://github.com/chrisjsewell/ipypublish/blob/master/.travis.yml) 
+ipypublish is automatically **tested** on update against **python 2.7 and 3.6**, for both **Linux and OSX**, using [Travis CI](https://en.wikipedia.org/wiki/Travis_CI). Therefore, to troubleshoot any installation/run issues,
+it is best to look at the [travis config](https://github.com/chrisjsewell/ipypublish/blob/master/.travis.yml)
 and [travis test runs](https://travis-ci.org/chrisjsewell/ipypublish) for working configurations.
 
 For helpful extensions to the notebooks core capabilities (like a toc sidebar):
 
-	conda install --name ipyreport jupyter_contrib_nbextensions
-	
-A more extensive setup of useful packages (used to create the example) 
-are listed in ![conda_packages.txt](conda_packages.txt) 
+  conda install --name ipyreport jupyter_contrib_nbextensions
+
+A more extensive setup of useful packages (used to create the example)
+are listed in ![conda_packages.txt](conda_packages.txt)
 and an environment can be created directly from this using conda:
 
-	conda create --name ipyreport -c conda-forge -c matsci --file conda_packages.txt
-	
-## Setting up a Notebook 
+  conda create --name ipyreport -c conda-forge -c matsci --file conda_packages.txt
+
+## Setting up a Notebook
 
 For improved latex/pdf output, `ipynb_latex_setup.py` contains import and setup code for the notebook and a number of common packages and functions, including:
 
@@ -112,25 +112,25 @@ For existing notebooks: the **nb_ipypublish_all** and **nb_ipypublish_nocode** c
 
 The nbpublish script handles parsing the notebooks to nbconvert, with the appropriate converter. To see all options for this script:
 
-	nbpublish -h
+  nbpublish -h
 
 For example, to convert the Example.ipynb notebook directly to pdf:
 
-	nbpublish -pdf example/notebooks/Example.ipynb
+  nbpublish -pdf example/notebooks/Example.ipynb
 
 If a folder is input, then the .ipynb files it contains are processed and combined in 'natural' sorted order, i.e. 2_name.ipynb before 10_name.ipynb. By default, notebooks beginning '_' are ignored.
 
 All available converters are also listed by `nbpublish -h`. Three of note are:
 
 - **latex_ipypublish_main** is the **default** and converts cells to latex according to metadata tags on an 'opt in' basis. Note that, for this converter, **no code cells or output** will appear in the final tex/pdf document unless they have a suitable [ipub metadata tag](#latex-metadata-tags).
-- **html_ipypublish_main** converts the entire notebook(s) to html and adds a table of contents sidebar and a button to toggle input code and output cells visible/hidden, with latex citations and references resolved. 
-- **slides_ipypublish_main** converts the notebook to [reveal.js](http://lab.hakim.se/reveal-js/#/) slides, with latex citations and references resolved and slide partitioning by markdown headers. See the [Live Slideshows](#live-slideshows) section for using `nbpresent` to serve these slides to a webbrowser. 
+- **html_ipypublish_main** converts the entire notebook(s) to html and adds a table of contents sidebar and a button to toggle input code and output cells visible/hidden, with latex citations and references resolved.
+- **slides_ipypublish_main** converts the notebook to [reveal.js](http://lab.hakim.se/reveal-js/#/) slides, with latex citations and references resolved and slide partitioning by markdown headers. See the [Live Slideshows](#live-slideshows) section for using `nbpresent` to serve these slides to a webbrowser.
 - The **all** and **nocode** variants of these converters preprocess a copy of the notebook, to add default metadata tags to the notebook and all cells, such that all output is rendered (with or without the code)
 
 The current `nbconvert --to pdf` does not correctly resolve references and citations (since it copies the files to a temporary directory). Therefore nbconvert is only used for the initial `nbconvert --to latex` phase, followed by using `latexmk` to create the pdf and correctly resolve everything. **To convert your own notebook to PDF** for the first time, a good route would be to use:
 
-	nbpublish -f latex_ipypublish_all -pdf --pdf-debug path/to/YourNotebook.ipynb
-	
+  nbpublish -f latex_ipypublish_all -pdf --pdf-debug path/to/YourNotebook.ipynb
+
 **To raise any issues** please include the converted/YourNotebook.nbpub.log file.
 
 ### The ipypublish defaults
@@ -148,25 +148,25 @@ This leads to the following logic flow (discussed further in the [Metadata Tags]
 - markdown cells: include all
 - code cells (input): only include if the "code" tag is present
 - code cells (output): only include if the following tags are present
-    - "figure" for png/svg/pdf/jpeg or html (html only)
-	- "table" or "equation" for latex or html (html only)
-	- "mkdown" for markdown text
-	- "text" for plain text
+  - "figure" for png/svg/pdf/jpeg or html (html only)
+  - "table" or "equation" for latex or html (html only)
+  - "mkdown" for markdown text
+  - "text" for plain text
 
 **slides_ipypublish_main**:
 
 - all cells: bypass "ignore"
 - markdown cells: are first split into header (beggining #)/non-header components
-    - headers: include all
-	- non-headers: only include if "slide" tag
+  - headers: include all
+  - non-headers: only include if "slide" tag
 - code cells (input): only include if the "code" tag is present
 - code cells (output): only include if the following tags are present
-    - "figure" for png/svg/pdf/jpeg/html
-	- "table" or "equation" for latex/html
-	- "mkdown" for markdown text
-	- "text" for plain text
+  - "figure" for png/svg/pdf/jpeg/html
+  - "table" or "equation" for latex/html
+  - "mkdown" for markdown text
+  - "text" for plain text
 
-Packages, such as pandas and matplotlib, use jupyter notebooks [rich representation](http://ipython.readthedocs.io/en/stable/config/integrating.html#rich-display) mechanics to store a single output in multiple formats. nbconvert (and hence ipypublish) then selects only the highest priority (compatible) format to be output. This allows, for example, for pandas DataFrames to be output as 
+Packages, such as pandas and matplotlib, use jupyter notebooks [rich representation](http://ipython.readthedocs.io/en/stable/config/integrating.html#rich-display) mechanics to store a single output in multiple formats. nbconvert (and hence ipypublish) then selects only the highest priority (compatible) format to be output. This allows, for example, for pandas DataFrames to be output as
 latex tables in latex documents and html tables in html documents/slides.
 
 ### Creating a bespoke converter
@@ -180,10 +180,10 @@ A plugin is a python (.py) file with at least the following four variables (i.e.
 1. a **docstring** describing its output format
 2. an **oformat** string,  specifying a base exporter prefix (for any of the exporters listed [here](https://nbconvert.readthedocs.io/en/latest/api/exporters.html#specialized-exporter-classes))
 3. a **config** dictionary, containing any configuration option (as a string) listed [here](https://nbconvert.readthedocs.io/en/latest/api/exporters.html#specialized-exporter-classes). This is mainly to supply preprocessors (which act on the notbook object before it is parsed) or filters (which are functions supplied to the jinja template).
-4. a **template** string, specifying the [Jinja templates](https://jinja2.readthedocs.io/en/latest/intro.html), which contains rules for how each element of the notebook should be converted, and also what each section of the latex file should contain. 
+4. a **template** string, specifying the [Jinja templates](https://jinja2.readthedocs.io/en/latest/intro.html), which contains rules for how each element of the notebook should be converted, and also what each section of the latex file should contain.
 5. It is not required, but recommended, to also include the version number of ipypublish which the plugin was written for.
 
-So a simple plugin would look like this (create_tplx will be explained below) 
+So a simple plugin would look like this (create_tplx will be explained below)
 
 ```python
 """this exporter exports a .tex file with nothing in it
@@ -195,46 +195,46 @@ template = create_tplx()
 
 ```
 
-This is similar to how nbconvert works, except for one key difference, 
+This is similar to how nbconvert works, except for one key difference,
 the plugin must specify the entire jinja template (rather than using a default one).
 The advantage of this, is that the plugin has complete control over the look of the final document.
 
 To aid in the creation of the jinja template, the `create_tplx` (for latex) and `create_tpl` (for html) functions
-work by creating an inital *skeleton* template, with placeholders in all the relevant [structural blocks](https://nbconvert.readthedocs.io/en/latest/customizing.html#Template-structure). 
-They then take a list of *fragment* dictionaries which progressively append input to the relevant blocks. 
-So, for instance:   
+work by creating an inital *skeleton* template, with placeholders in all the relevant [structural blocks](https://nbconvert.readthedocs.io/en/latest/customizing.html#Template-structure).
+They then take a list of *fragment* dictionaries which progressively append input to the relevant blocks.
+So, for instance:
 
 ```python
-"""exports a .tex file containing 
+"""exports a .tex file containing
 some latex setup and
-only input markdown cells from the notebook 
+only input markdown cells from the notebook
 """
 from ipypublish.latex.create_tplx import create_tplx
 oformat = 'Latex'
 config = {}
 
 doc_dict = {
-	'document_docclass':r'\documentclass[11pt]{article}',
-	'document_packages':r"""
-	\usepackage{caption}
-	 \usepackage{amsmath}
-	"""
+  'document_docclass':r'\documentclass[11pt]{article}',
+  'document_packages':r"""
+  \usepackage{caption}
+   \usepackage{amsmath}
+  """
 }
 
 mkdown_dict = {
   'notebook_input_markdown':r"""
- 	((( cell.source | citation2latex | strip_files_prefix | convert_pandoc('markdown', 'json',extra_args=[]) | resolve_references | convert_pandoc('json','latex') )))
-	"""
+  ((( cell.source | citation2latex | strip_files_prefix | convert_pandoc('markdown', 'json',extra_args=[]) | resolve_references | convert_pandoc('json','latex') )))
+  """
 }
 
 template = create_tplx([doc_dict,mkdown_dict])
 
 ```
 
-This approach allows independant aspects of the document to be 
-stored separately then pieced together in the desired manner. 
+This approach allows independant aspects of the document to be
+stored separately then pieced together in the desired manner.
 ipypublish stores all of the standard fragments in separate modules,
-for instance the latex_standard_article plugin looks like this: 
+for instance the latex_standard_article plugin looks like this:
 
 ```python
 """latex article in the standard nbconvert format
@@ -272,14 +272,14 @@ would show a, then b. But, if you want to redefine a particular section(s);
 ```python
 dict1 = {'notebook_input':'a'}
 dict2 = {
-	'overwrite':['notebook_input'],
-	'notebook_input':'b'}
+  'overwrite':['notebook_input'],
+  'notebook_input':'b'}
 template = create_tplx([dict1,dict2])
 ```
 
 will only show b.
 
-Note that, the `create_tpl` template additionally has *pre* and *post* placeholder. 
+Note that, the `create_tpl` template additionally has *pre* and *post* placeholder.
 This is helpful for wrapping cells in extra html tags. For instance:
 
 ```python
@@ -314,7 +314,7 @@ All information additional information, used to specify how a particular noteboo
 
 ```json
 {
-		"ipub": {}
+  "ipub": {}
 }
 ```
 
@@ -334,12 +334,12 @@ To change the **language** of the document:
 ```json
 {
 "ipub": {
-	"language" : "french"
-	}
+  "language" : "french"
+  }
 }
 ```
 
-where the language can be any specified in the 
+where the language can be any specified in the
 [babel](https://people.phys.ethz.ch/~ihn/latex/babel.pdf) package.
 
 To specify where the **bibliography** is:
@@ -347,8 +347,8 @@ To specify where the **bibliography** is:
 ```json
 {
 "ipub": {
-	"bibliography" : "path/to/bibliograph.bib"
-	}
+  "bibliography" : "path/to/bibliograph.bib"
+  }
 }
 ```
 
@@ -360,21 +360,21 @@ For **titlepage**, enter in notebook metadata:
 {
 "ipub": {
   "titlepage": {
-	"author": "Authors Name",
-	"email": "authors@email.com",
-	"supervisors": [
-	  "First Supervisor",
-	  "Second Supervisor"
-	],
-	"title": "Main-Title",
-	"subtitle": "Sub-Title",
-	"tagline": "A tagline for the report.",
-	"institution": [
-	  "Institution1",
-	  "Institution2"
-	],
-	"logo": "path/to/logo_example.png"
-	}
+  "author": "Authors Name",
+  "email": "authors@email.com",
+  "supervisors": [
+    "First Supervisor",
+    "Second Supervisor"
+  ],
+  "title": "Main-Title",
+  "subtitle": "Sub-Title",
+  "tagline": "A tagline for the report.",
+  "institution": [
+    "Institution1",
+    "Institution2"
+  ],
+  "logo": "path/to/logo_example.png"
+  }
   }
 }
 ```
@@ -421,8 +421,8 @@ To **ignore any cell** for all outputs:
 ```json
 {
 "ipub": {
-	"ignore" : true
-	}
+  "ignore" : true
+  }
 }
 ```
 
@@ -431,8 +431,8 @@ To mark any cell as for output to **slides only**:
 ```json
 {
 "ipub": {
-	"slideonly" : true
-	}
+  "slideonly" : true
+  }
 }
 ```
 
@@ -442,7 +442,7 @@ To  **output a code block**:
 {
 "ipub": {
   "code": {
-	"format" : {},
+  "format" : {},
     "asfloat": true,
     "caption": "",
     "label": "code:example_sym",
@@ -473,7 +473,7 @@ To  **output text produced by the code** (e.g. *via* the `print` command):
     "label": "code:example_sym",
     "widefigure": false,
     "placement": "H",
-	"use_ansi": false
+  "use_ansi": false
     }
   }
 }
@@ -483,9 +483,8 @@ all extra tags are optional:
 
 - `format` can contain any keywords related to the latex [Listings](https://en.wikibooks.org/wiki/LaTeX/Source_Code_Listings) package (such as syntax highlighting colors). N.B. in place of `\` use `\\`.
 - `asfloat` contitutes whether the code is wrapped in a codecell (float) environment or is inline.
-- if `use_ansi` is true then, instead of stripping ansi colors in latex output, they will be converted to latex, wrapped in % characters and the listings option escapechar=\% set. 
+- if `use_ansi` is true then, instead of stripping ansi colors in latex output, they will be converted to latex, wrapped in % characters and the listings option escapechar=\% set.
 - all other tags work the same as figure (below).
-
 
 For **figures** (i.e. any graphics output by the code), enter in cell metadata:
 
@@ -496,7 +495,7 @@ For **figures** (i.e. any graphics output by the code), enter in cell metadata:
     "caption": "Figure caption.",
     "label": "fig:flabel",
     "placement": "H",
-	"height":0.4,
+  "height":0.4,
     "widefigure": false,
     }
   }
@@ -514,35 +513,34 @@ For  **tables** (e.g. those output by `pandas`), enter in cell metadata:
 {
 "ipub": {
      "table": {
-	    "caption": "Table caption.",
-	    "label": "tbl:tlabel",
-	    "placement": "H",
+      "caption": "Table caption.",
+      "label": "tbl:tlabel",
+      "placement": "H",
             "alternate": "gray!20"
-	  }
+    }
    }
 }
 ```
 
 - `caption` and `label` are optional
 - `placement` is optional and constitutes using a placement arguments for the table (e.g. \begin{table}[H]). See [Positioning_images_and_tables](https://www.sharelatex.com/learn/Positioning_images_and_tables).
-- `alternate` is optional and constitutes using alternating colors for the table rows (e.g. \rowcolors{2}{gray!25}{white}). See (https://tex.stackexchange.com/a/5365/107738)[https://tex.stackexchange.com/a/5365/107738].
-- if tables exceed the text width, in latex, they will be shrunk to fit 
-
+- `alternate` is optional and constitutes using alternating colors for the table rows (e.g. \rowcolors{2}{gray!25}{white}). See [stackexchange answer](https://tex.stackexchange.com/a/5365/107738).
+- if tables exceed the text width, in latex, they will be shrunk to fit
 
 For  **equations** (e.g. thos output by `sympy`), enter in cell metadata:
 
 ```json
 {
   "ipub": {
-	  "equation": {
+    "equation": {
         "environment": "equation",
-	    "label": "eqn:elabel"
-	  }
+      "label": "eqn:elabel"
+    }
   }
 }
 ```
 
-- environment is optional and can be 'none' or any of those available in [amsmath](https://www.sharelatex.com/learn/Aligning_equations_with_amsmath); 'equation', 'align','multline','gather', or their \* variants. Additionaly, 'breqn' or 'breqn\*' will select the experimental [breqn](https://ctan.org/pkg/breqn) environment to *smart* wrap long equations. 
+- environment is optional and can be 'none' or any of those available in [amsmath](https://www.sharelatex.com/learn/Aligning_equations_with_amsmath); 'equation', 'align','multline','gather', or their \* variants. Additionaly, 'breqn' or 'breqn\*' will select the experimental [breqn](https://ctan.org/pkg/breqn) environment to *smart* wrap long equations.
 - label is optional and will only be used if the equation is in an environment
 
 For **slide output**:
@@ -550,7 +548,7 @@ For **slide output**:
 ```json
 {
   "ipub": {
-	  "slide": true
+    "slide": true
   }
 }
 ```
@@ -559,7 +557,7 @@ For **slide output**:
 
 ### Object Output Formats
 
-The format of the Jupyter Notebook (.ipynb) file allows for the storage of a single output in multiple formats. This is taken advantage of by packages such as matplotlib and pandas, etc to store a figure/table in both latex and html formats, which can then be selected by ipypublish based on the document type required. 
+The format of the Jupyter Notebook (.ipynb) file allows for the storage of a single output in multiple formats. This is taken advantage of by packages such as matplotlib and pandas, etc to store a figure/table in both latex and html formats, which can then be selected by ipypublish based on the document type required.
 
 Sometimes a user may wish to have greater control over the output format
 and/or which output types are to be stored. It it possible to achieve this *via* the Jupyter `display` function. For example, if we wanted to display a
@@ -601,14 +599,14 @@ If a **markdown cell** or **code cell with latex/text output** has the metadata 
 ```json
 {
  "ipub": {
-	"caption": "fig:example_mpl"
-	}
+  "caption": "fig:example_mpl"
+  }
 }
 ```
 
 Then, during the the postprocessor stage, this cell will be removed from the notebook object, and its text stored as a *resource*;
 
-- the cell's text is the first paragraph of the markdown string, i.e. nothing after a newline (\n) 
+- the cell's text is the first paragraph of the markdown string, i.e. nothing after a newline (\n)
 - if there are multiple instance of the same cation name, then only the last instance will be stored
 
 During the jinja templating, if a **figure, table or code** cell has a label matching any stored caption name, for example:
@@ -616,28 +614,27 @@ During the jinja templating, if a **figure, table or code** cell has a label mat
 ```json
 {
 "ipub": {
-	"figure": {
-	  "caption": "",
-	  "label": "fig:example_mpl"
-	}
+  "figure": {
+    "caption": "",
+    "label": "fig:example_mpl"
+  }
   }
 }
 ```
 
-Then its caption will be overriden with the stored text. 
+Then its caption will be overriden with the stored text.
 
 ### Embedding Interactive HTML
 
-Packages built on [IPywidgets](http://ipywidgets.readthedocs.io), 
-like [PythreeJS](https://github.com/jovyan/pythreejs), 
-[Pandas3JS](https://github.com/chrisjsewell/pandas3js) 
-and the excellent [IPyvolume](https://ipyvolume.readthedocs.io/en/latest/), 
-are making it increasingly easier to render complex, interactive html in the notebook. 
+Packages built on [IPywidgets](http://ipywidgets.readthedocs.io),
+like [PythreeJS](https://github.com/jovyan/pythreejs),
+[Pandas3JS](https://github.com/chrisjsewell/pandas3js)
+and the excellent [IPyvolume](https://ipyvolume.readthedocs.io/en/latest/),
+are making it increasingly easier to render complex, interactive html in the notebook.
 IPywidgets offers a [save notebook with widgets](http://ipywidgets.readthedocs.io/en/latest/embedding.html) feature, however, this can greatly increase the size of the notebook.
 
-
-A better solution, recently offered, is to save a [html snippet](http://ipywidgets.readthedocs.io/en/latest/embedding.html#embeddable-html-snippet) 
-of the current widget state to file and embed it into the html/slides output as an iframe. This is also particularly useful in reveal.js slides, 
+A better solution, recently offered, is to save a [html snippet](http://ipywidgets.readthedocs.io/en/latest/embedding.html#embeddable-html-snippet)
+of the current widget state to file and embed it into the html/slides output as an iframe. This is also particularly useful in reveal.js slides,
 since the iframe content can be [*lazy loaded*](https://github.com/hakimel/reveal.js/#lazy-loading).
 To embed html, use the `embed_html` tag:
 
@@ -647,9 +644,9 @@ To embed html, use the `embed_html` tag:
     "embed_html": {
       "filepath": "path/to/file.html",
       "other_files": ["path/to/file.js"],
-	  "url": "https//path/to/url.html",
-	  "width":0.5,
-	  "height":0.5
+    "url": "https//path/to/url.html",
+    "width":0.5,
+    "height":0.5
     },
     "figure": {
       "caption": "An example of embedded html"
@@ -658,50 +655,48 @@ To embed html, use the `embed_html` tag:
 }
 ```
 
-If the cell already contains an output, then this tag will create/overwrite the first output's "text/html" type. 
+If the cell already contains an output, then this tag will create/overwrite the first output's "text/html" type.
 This allows for a single notebook cell with a static image of the widget in the output, and a path to the embed html in the metadata so that a) if you export to latex/pdf, you get the static image or b) if you export to html/reveal slides, you get the html.
 
 - use either filepath or url
 - other_files are files required by the html file (e.g. javascript libraries). These files will be copied to the the same folder as the html
 - width/height refers to the fraction of the viewspace used (e.g. 0.5 width -> 50vw and 0.5 height -> 50vh)
 
-An example of how this works is in the [Example.ipynb](example/notebooks/Example.pdf), and the 
-[Example.html](https://chrisjsewell.github.io/ipypublish/Example.html#Embedded-HTML-6) and 
-[Example.slides.html](https://chrisjsewell.github.io/ipypublish/Example.slides.html#/9) outputs. 
+An example of how this works is in the [Example.ipynb](example/notebooks/Example.pdf), and the
+[Example.html](https://chrisjsewell.github.io/ipypublish/Example.html#Embedded-HTML-6) and
+[Example.slides.html](https://chrisjsewell.github.io/ipypublish/Example.slides.html#/9) outputs.
 
 ## Citations and Bibliography
 
-Using Zotero's Firefox plugin and [Zotero Better Bibtex](https://github.com/retorquere/zotero-better-bibtex/releases/tag/1.6.100) for;
+Using Zotero's plugin and [Zotero Better Bibtex](https://github.com/retorquere/zotero-better-bibtex/) for;
 
-- automated .bib file updating 
-- drag and drop cite keys \cite{kirkeminde_thermodynamic_2012}
+- automated `.bib` file updating
+- drag and drop cite keys `\cite{kirkeminde_thermodynamic_2012}`
 - `latexmk -bibtex -pdf` (in nbpublish.py) handles creation of the bibliography
 - \usepackage{doi} turns the DOI numbers into url links
+  - in Zotero-Better-Bibtex you have the option set to only export DOI, if both DOI and URL are present.
 
-    - in Zotero-Better-Bibtex I have the option set to only export DOI, if both DOI and URL are present.
-	
-Please note, at the time of writing, Better BibTeX does not support Zotero 5.0 ([issue#555](https://github.com/retorquere/zotero-better-bibtex/issues/555)). For now I have turned off auto-updates of Zotero, though this is probably not wise for long ([Zotero 5 Discussion](https://forums.zotero.org/discussion/comment/277434/#Comment_277434)).
+<!-- Please note, at the time of writing, Better BibTeX does not support Zotero 5.0 ([issue#555](https://github.com/retorquere/zotero-better-bibtex/issues/555)). For now I have turned off auto-updates of Zotero, though this is probably not wise for long ([Zotero 5 Discussion](https://forums.zotero.org/discussion/comment/277434/#Comment_277434)). -->
 
-Can use: 
+Can use:
 
 ```html
-<cite data-cite="kirkeminde_thermodynamic_2012">(Kirkeminde, 2012)</cite> 
+<cite data-cite="kirkeminde_thermodynamic_2012">(Kirkeminde, 2012)</cite>
 ```
 
-to make it look better in html, but not specifically available for drag and drop in Zotero 
-	
+to make it look better in html, but not specifically available for drag and drop in Zotero
+
 ## Live Slideshows
 
 The **nbpresent** script handles serving [reveal.js](http://lab.hakim.se/reveal-js/#/) slides to a webbrowser. To see all options for this script:
 
-	nbpresent -h
-	
-Note that, for offline use, simply download the latest version of reveal.js [here](https://github.com/hakimel/reveal.js/releases), rename the entire folder to reveal.js and place it in the same folder as the converted .slides.html file. The slides can also be save to PDF my appending `pdf-export` to the url (see [here](https://github.com/hakimel/reveal.js#pdf-export) for details).
+  nbpresent -h
 
+Note that, for offline use, simply download the latest version of reveal.js [here](https://github.com/hakimel/reveal.js/releases), rename the entire folder to reveal.js and place it in the same folder as the converted .slides.html file. The slides can also be save to PDF my appending `pdf-export` to the url (see [here](https://github.com/hakimel/reveal.js#pdf-export) for details).
 
 Additionally, the [Reveal.js - Jupyter/IPython Slideshow Extension (RISE)](https://github.com/damianavila/RISE) notebook extension offers rendering as a Reveal.js-based slideshow, where you can execute code or show to the audience whatever you can show/do inside the notebook itself! Click on the image to see a demo:
 
-[![RISE Demo](https://img.youtube.com/vi/sXyFa_r1nxA/0.jpg)](https://www.youtube.com/watch?v=sXyFa_r1nxA) 
+[![RISE Demo](https://img.youtube.com/vi/sXyFa_r1nxA/0.jpg)](https://www.youtube.com/watch?v=sXyFa_r1nxA)
 
 ## Dealing with external data
 
@@ -748,17 +743,17 @@ variable1 = data.folder1.file1_json.key1
 variable2 = data[['folder1','file1.json','key2']]
 variable3 = data[['folder1','file2.csv','key1']]
 variable4 = data[['folder2','subfolder1','file3.other','key1']]
-...    
+...
 ```
 
-If you are dealing with numerical data arrays which are to large to be loaded directly in to memory, 
+If you are dealing with numerical data arrays which are to large to be loaded directly in to memory,
 then the [h5py](http://docs.h5py.org/en/latest/index.html) interface to the [HDF5](http://hdfgroup.org/) binary data format,
-allows for the manipultion of even multi-terabyte datasets stored on disk, as if they were real NumPy arrays. 
+allows for the manipultion of even multi-terabyte datasets stored on disk, as if they were real NumPy arrays.
 These files are also supported by [jsonextended](https://github.com/chrisjsewell/jsonextended) lazy loading.
 
 ## Miscellaneous
 
-I also use the Firefox Split Pannel extension to view the {name}_viewpdf.html page and monitor changes to the pdf.
+You can also use the Firefox Split Pannel extension to view the {name}_viewpdf.html page and monitor changes to the pdf.
 
 [bookbook](https://github.com/takluyver/bookbook) is another package with some conversion capabilities.
 
@@ -769,5 +764,3 @@ I took strong influence from:
 - [Julius Schulz](http://blog.juliusschulz.de/blog/ultimate-ipython-notebook)
 - [Dan Mackinlay](https://livingthing.danmackinlay.name/jupyter.html)
 - Notebook concatination was adapted from [nbconvert issue#253](https://github.com/jupyter/nbconvert/issues/253)
-
-

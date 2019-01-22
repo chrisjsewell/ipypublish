@@ -2,32 +2,32 @@
 
 ## Citations and Bibliography
 
-Using Zotero's Firefox plugin and [Zotero Better Bibtex](https://github.com/retorquere/zotero-better-bibtex/releases/tag/1.6.100) for;
+Using Zotero's Firefox plugin and [Zotero Better Bibtex](https://github.com/retorquere/zotero-better-bibtex) for;
 
-- automated .bib file updating 
+- automated .bib file updating
 - drag and drop cite keys \cite{kirkeminde_thermodynamic_2012}
 - `latexmk -bibtex -pdf` (in nbpublish.py) handles creation of the bibliography
 - \usepackage{doi} turns the DOI numbers into url links
 
-    - in Zotero-Better-Bibtex I have the option set to only export DOI, if both DOI and URL are present.
-	
-Please note, at the time of writing, Better BibTeX does not support Zotero 5.0 ([issue#555](https://github.com/retorquere/zotero-better-bibtex/issues/555)). For now I have turned off auto-updates of Zotero, though this is probably not wise for long ([Zotero 5 Discussion](https://forums.zotero.org/discussion/comment/277434/#Comment_277434)).
+  - in Zotero-Better-Bibtex you have the option set to only export DOI, if both DOI and URL are present.
 
-Can use: 
+<!-- Please note, at the time of writing, Better BibTeX does not support Zotero 5.0 ([issue#555](https://github.com/retorquere/zotero-better-bibtex/issues/555)). For now I have turned off auto-updates of Zotero, though this is probably not wise for long ([Zotero 5 Discussion](https://forums.zotero.org/discussion/comment/277434/#Comment_277434)). -->
+
+Can use:
 
 ```html
-<cite data-cite="kirkeminde_thermodynamic_2012">(Kirkeminde, 2012)</cite> 
+<cite data-cite="kirkeminde_thermodynamic_2012">(Kirkeminde, 2012)</cite>
 ```
 
-to make it look better in html, but not specifically available for drag and drop in Zotero 
-	
+to make it look better in html, but not specifically available for drag and drop in Zotero.
+
 ## Live Slideshows
 
-The [Reveal.js - Jupyter/IPython Slideshow Extension (RISE)](https://github.com/damianavila/RISE) notebook extension 
-offers rendering as a Reveal.js-based slideshow, where you can execute code or show to the audience whatever 
+The [Reveal.js - Jupyter/IPython Slideshow Extension (RISE)](https://github.com/damianavila/RISE) notebook extension
+offers rendering as a Reveal.js-based slideshow, where you can execute code or show to the audience whatever
 you can show/do inside the notebook itself! Click on the image to see a demo:
 
-[![RISE Demo](https://img.youtube.com/vi/sXyFa_r1nxA/0.jpg)](https://www.youtube.com/watch?v=sXyFa_r1nxA) 
+[![RISE Demo](https://img.youtube.com/vi/sXyFa_r1nxA/0.jpg)](https://www.youtube.com/watch?v=sXyFa_r1nxA)
 
 ## Working With External Data
 
@@ -74,12 +74,12 @@ variable1 = data.folder1.file1_json.key1
 variable2 = data[['folder1','file1.json','key2']]
 variable3 = data[['folder1','file2.csv','key1']]
 variable4 = data[['folder2','subfolder1','file3.other','key1']]
-...    
+...
 ```
 
-If you are dealing with numerical data arrays which are to large to be loaded directly in to memory, 
+If you are dealing with numerical data arrays which are to large to be loaded directly in to memory,
 then the [h5py](http://docs.h5py.org/en/latest/index.html) interface to the [HDF5](http://hdfgroup.org/) binary data format,
-allows for the manipultion of even multi-terabyte datasets stored on disk, as if they were real NumPy arrays. 
+allows for the manipultion of even multi-terabyte datasets stored on disk, as if they were real NumPy arrays.
 These files are also supported by [jsonextended](https://github.com/chrisjsewell/jsonextended) lazy loading.
 
 ## Miscellaneous
