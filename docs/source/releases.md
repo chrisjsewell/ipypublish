@@ -1,5 +1,21 @@
 # Releases
 
+## v0.6.8 - version bump to initiate Zenodo 
+
+ 
+
+## v0.6.7 - Added support for raw cells 
+
+Raw output is now included in the latex (if raw format is latex), and html (if raw format is html) 
+
+## v0.6.5 - Minor Update 
+
+ 
+
+## v0.6.4 - Encoding Bug Fixes for Python < 3.6 
+
+and addition of documentation 
+
 ## v0.6.3 - better support for latex math environments 
 
  

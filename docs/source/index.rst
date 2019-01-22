@@ -20,6 +20,11 @@ to provide a workflow for:
 
 - Output the same source document to different layouts and formats (pdf, html, presentation slides, etc).
 
+Citation
+========
+
+Please cite |DOI| if using IPyPublish.
+
 Badges
 ======
 
@@ -53,3 +58,5 @@ Index and Search
    :target: https://coveralls.io/github/chrisjsewell/ipypublish?branch=master
 .. |PyPI| image:: https://img.shields.io/pypi/v/ipypublish.svg
    :target: https://pypi.python.org/pypi/ipypublish/
+.. |DOI| image:: https://zenodo.org/badge/96322423.svg
+   :target: https://zenodo.org/badge/latestdoi/96322423

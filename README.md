@@ -1,7 +1,8 @@
 [![Build Status](https://travis-ci.org/chrisjsewell/ipypublish.svg?branch=master)](https://travis-ci.org/chrisjsewell/ipypublish)
 [![Coverage Status](https://coveralls.io/repos/github/chrisjsewell/ipypublish/badge.svg?branch=master)](https://coveralls.io/github/chrisjsewell/ipypublish?branch=master)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/243d0038a2f543e7a9c47a781ca3cbf5)](https://www.codacy.com/app/chrisj_sewell/ipypublish?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=chrisjsewell/ipypublish&amp;utm_campaign=Badge_Grade)
+<!-- [![Codacy Badge](https://api.codacy.com/project/badge/Grade/243d0038a2f543e7a9c47a781ca3cbf5)](https://www.codacy.com/app/chrisj_sewell/ipypublish?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=chrisjsewell/ipypublish&amp;utm_campaign=Badge_Grade) -->
 [![PyPI](https://img.shields.io/pypi/v/ipypublish.svg)](https://pypi.python.org/pypi/ipypublish/)
+[![DOI](https://zenodo.org/badge/96322423.svg)](https://zenodo.org/badge/latestdoi/96322423)
 
 # ipypublish
 A workflow for creating and editing publication ready scientific reports and presentations, from one or more Jupyter Notebooks, without leaving the browser!
@@ -15,21 +16,25 @@ See [Example.ipynb](example/notebooks/Example.ipynb), [Example.pdf](https://chri
 Or, for a practical example of the ipypublish capability, see these documents on Atomic 3D Visualisation: 
 [Notebook](https://github.com/chrisjsewell/chrisjsewell.github.io/blob/master/3d_atomic/3D%20Atomic%20Visualisation.ipynb), [PDF](https://chrisjsewell.github.io/3d_atomic/converted/3D%20Atomic%20Visualisation.view_pdf.html), [HTML](https://chrisjsewell.github.io/3d_atomic/converted/3D%20Atomic%20Visualisation.html) or [Reveal.JS slideshow](https://chrisjsewell.github.io/3d_atomic/converted/3D%20Atomic%20Visualisation.slides.html).
 
-- [Design Philosophy](#design-philosophy)
-- [Workflow](#worklow)
-- [Setting up the environment](#setting-up-the-environment)
-- [Setting up a Notebook ](#setting-up-a-notebook)
-- [Converting Notebooks](#converting-notebooks)
+- [ipypublish](#ipypublish)
+  - [Design Philosophy](#design-philosophy)
+  - [Workflow](#workflow)
+  - [Setting up the environment](#setting-up-the-environment)
+  - [Setting up a Notebook](#setting-up-a-notebook)
+  - [Converting Notebooks](#converting-notebooks)
+    - [The ipypublish defaults](#the-ipypublish-defaults)
     - [Creating a bespoke converter](#creating-a-bespoke-converter)
-- [Metadata Tags](#metadata-tags)
+  - [Metadata Tags](#metadata-tags)
+    - [Document Tags](#document-tags)
+    - [Cell Tags](#cell-tags)
     - [Object Output Formats](#object-output-formats)
     - [Captions in a Markdown cell](#captions-in-a-markdown-cell)
-	- [Embedding Interactive HTML](#embedding-interactive-html)
-- [Citations and Bibliography](#citations-and-bibliography)
-- [Live Slideshows](#live-slideshows)
-- [Dealing with external data](#dealing-with-external-data)
-- [Miscellaneous](#miscellaneous)
-- [Acknowledgements](#acknowledgements)
+    - [Embedding Interactive HTML](#embedding-interactive-html)
+  - [Citations and Bibliography](#citations-and-bibliography)
+  - [Live Slideshows](#live-slideshows)
+  - [Dealing with external data](#dealing-with-external-data)
+  - [Miscellaneous](#miscellaneous)
+  - [Acknowledgements](#acknowledgements)
 
 
 ## Design Philosophy
