@@ -3,8 +3,9 @@
 
 A package for creating and editing publication ready scientific reports and presentations.
 
-.. image:: https://github.com/chrisjsewell/ipypublish/raw/master/example_workflow.gif
+.. figure:: https://github.com/chrisjsewell/ipypublish/raw/master/example_workflow.gif
     :alt: example_workflow.gif
+
 
 IPyPublish: Features
 ====================
