@@ -41,6 +41,7 @@ Badges
    content_output
    metadata_tags
    additional_tools
+   applications
    acknowledgements
    package_api
    releases
