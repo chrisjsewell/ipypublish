@@ -1,7 +1,8 @@
 .. image:: _static/logo_name.png
     :alt: **IPyPublish**
 
-A package for creating and editing publication ready scientific reports and presentations.
+A package for creating and editing publication ready scientific reports and presentations,
+from Jupyter Notebooks.
 
 .. figure:: https://github.com/chrisjsewell/ipypublish/raw/master/example_workflow.gif
     :alt: example_workflow.gif
