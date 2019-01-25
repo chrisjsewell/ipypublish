@@ -18,14 +18,15 @@ matrix:
     python: 3.6
     dist: trusty
   - os: osx
+    osx_image: xcode8.3  # see https://github.com/travis-ci/travis-ci/issues/9929
     language: generic
     before_install:
     - travis_wait brew update
-    #- brew install python3 # python is now already installed
-    - brew upgrade python
-    #- virtualenv env -p python3
-    #- source env/bin/activate
-    - alias pip="pip3"
+    - brew install python3
+    # - brew upgrade python
+    - virtualenv env -p python3
+    - source env/bin/activate
+    # - alias pip="pip3"
     - brew install pandoc
     - brew upgrade wget
     - travis_retry sudo wget http://mirror.ctan.org/systems/mac/mactex/BasicTeX.pkg
