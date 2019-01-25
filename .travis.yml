@@ -79,7 +79,7 @@ install:
 - pip install --quiet coveralls
 script:
 # - nosetests -v --nocapture --with-doctest --with-coverage --exe --cover-package=ipypublish
-- pytest -v --cov=ipypublish --cov-report=ipypublish
+- pytest -v --cov=ipypublish --cov-report= ipypublish
 - nbpublish -pdf --pdf-debug -log debug example/notebooks/Example.ipynb
 after_success:
 - coveralls
