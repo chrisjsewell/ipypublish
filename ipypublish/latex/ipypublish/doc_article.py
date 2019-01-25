@@ -35,6 +35,9 @@ nohead,includefoot,footskip=25pt}
 	\usepackage{float}
 	\usepackage[colorinlistoftodos,obeyFinal,textwidth=.8in]{todonotes} % to mark to-dos
 	% number figures, tables and equations by section
+    % fix for new versions of texlive (see https://tex.stackexchange.com/a/425603/107738)
+    \let\counterwithout\relax
+    \let\counterwithin\relax
 	\usepackage{chngcntr}
 	% header/footer
 	\usepackage[footsepline=0.25pt]{scrlayer-scrpage}
@@ -79,7 +82,6 @@ nohead,includefoot,footskip=25pt}
     \makeatother
 
 	% number figures, tables and equations by section
-	\usepackage{chngcntr}
 	\counterwithout{figure}{section}
 	\counterwithout{table}{section}
 	\counterwithout{equation}{section}

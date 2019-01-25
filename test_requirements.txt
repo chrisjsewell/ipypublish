@@ -1,3 +1,5 @@
-nose
+pytest
+pytest-cov
+coverage
 pillow
 jsonextended>=0.5.0

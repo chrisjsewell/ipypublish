@@ -76,10 +76,10 @@ install:
 - travis_wait pip install -r requirements.txt
 - pip install -r test_requirements.txt
 - pip install .
-- pip install --quiet coverage
 - pip install --quiet coveralls
 script:
-- nosetests -v --nocapture --with-doctest --with-coverage --exe --cover-package=ipypublish
+# - nosetests -v --nocapture --with-doctest --with-coverage --exe --cover-package=ipypublish
+- pytest -v --cov=ipypublish --cov-report=ipypublish
 - nbpublish -pdf --pdf-debug -log debug example/notebooks/Example.ipynb
 after_success:
 - coveralls
