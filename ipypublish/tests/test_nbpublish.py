@@ -1,13 +1,13 @@
 import os
 import shutil
 import tempfile
-import hashlib
 
 import pytest
 
 from ipypublish.main import publish
 from ipypublish.scripts import pdfexport
 from ipypublish.main import iter_all_plugin_paths
+from ipypublish.tests import TEST_FILES_DIR
 
 
 def test_pdf_export():
@@ -106,26 +106,36 @@ def test_publish_ipynb1_slides(ipynb1):
     "plugin_name,plugin_path",
     list(iter_all_plugin_paths())
 )
-def test_publish_run_all_plugins(ipynb1, plugin_name, plugin_path,
-                                 hashkey_dict):
+def test_publish_run_all_plugins(ipynb1, plugin_name, plugin_path):
 
     # for plugin_name, plugin_path in iter_all_plugin_paths():
     out_folder = tempfile.mkdtemp()
     try:
         outpath, exporter = publish(
             ipynb1, conversion=plugin_name, outpath=out_folder)
-        extension = exporter.file_extension
-        outfile = os.path.join(out_folder,
-                               os.path.splitext(ipynb1.name)[0] + extension)
+        outname = os.path.splitext(ipynb1.name)[0] + exporter.file_extension
+        outfile = os.path.join(out_folder, outname)
+        testfile = os.path.join(TEST_FILES_DIR, "ipynb1_converted",
+                                plugin_name + exporter.file_extension)
         assert os.path.exists(outfile), "could not find: {} for {}".format(
             outfile, plugin_name)
-        # TODO hash key tests
+        assert os.path.exists(testfile), "could not find: {} for {}".format(
+            testfile, plugin_name)
+
+        # hash key tests
         # with open(outfile, "rb") as f:
         #     hashkey = hashlib.md5(f.read()).hexdigest()
         # assert hashkey == hashkey_dict["ipynb1"][plugin_name]
+
+        with open(outfile) as fobj:
+            out_content = fobj.read()
+        with open(testfile) as fobj:
+            test_content = fobj.read()
+
+        assert out_content == test_content
+
     finally:
         shutil.rmtree(out_folder)
 
 # TODO files with internal files
 # TODO files with external files
-

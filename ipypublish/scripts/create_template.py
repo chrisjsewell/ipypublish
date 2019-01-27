@@ -12,6 +12,7 @@ http://nbconvert.readthedocs.io/en/latest/api/exporters.html#nbconvert.exporters
 from typing import List, Tuple, Union  # noqa: F401
 import logging
 import jsonschema
+from ipypublish import __version__
 
 
 def create_template(outline_schema, segment_datas, outpath=None):
@@ -73,7 +74,12 @@ def create_template(outline_schema, segment_datas, outpath=None):
                     "properties/segments/properties/{0}/$ref ".format(key) +
                     "should contain either append_before or append_before")
 
-    replacements["meta_docstring"] = "\n".join(docstrings)
+    replacements["meta_docstring"] = "\n".join(docstrings).replace("'", '"')
+    # TODO add option to include ipypub version in output file
+    # not included by default,
+    # since it would require the test files to be updated with every version
+    replacements["ipypub_version"] = ""  # str(__version__)
+
     outline = outline_content.format(**replacements)
 
     if outpath is not None:

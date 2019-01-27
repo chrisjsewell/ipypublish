@@ -3,8 +3,7 @@
     "$id": "html-tpl",
     "description": "define segments to insert into a jinja template of id html-tpl",
     "outline": [
-        "",
-        "<!-- A html document -->",
+        "<!-- An html document created by ipypublish {ipypub_version}-->",
         "<!-- {meta_docstring} -->",
         "",
         "",
