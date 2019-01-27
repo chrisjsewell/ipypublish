@@ -48,7 +48,7 @@ def assess_syntax(path):
 def ast_to_json(item, imported, assignments):
     """recursively convert ast items to json friendly values"""
     value = None
-    if isinstance(item, ast.NameConstant):
+    if hasattr(ast, "NameConstant") and isinstance(item, ast.NameConstant):
         value = item.value
     elif isinstance(item, ast.Str):
         value = item.s
@@ -61,7 +61,7 @@ def ast_to_json(item, imported, assignments):
             value = ast_to_json(assignments[item.id], imported, assignments)
         else:
             raise ValueError(
-                "could not find assignmen '{}' in config".format(item.id))
+                "could not find assignment '{}' in config".format(item.id))
     elif isinstance(item, (ast.List, ast.Tuple, ast.Set)):
         value = [ast_to_json(i, imported, assignments) for i in item.elts]
     elif isinstance(item, ast.Dict):
