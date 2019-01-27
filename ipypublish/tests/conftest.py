@@ -1,6 +1,9 @@
+import os
 import json
 import pytest
 from jsonextended.utils import MockPath
+
+from ipypublish.tests import TEST_FILES_DIR
 
 
 @pytest.fixture
@@ -203,3 +206,10 @@ def bibfile():
 @pytest.fixture
 def directory(ipynb1, ipynb2):
     return MockPath('dir1', structure=[ipynb1, ipynb2])
+
+
+@pytest.fixture(scope="session")
+def hashkey_dict():
+    with open(os.path.join(TEST_FILES_DIR, "output_hashlibs.json")) as fobj:
+        data = json.load(fobj)
+    return data

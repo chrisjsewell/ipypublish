@@ -55,12 +55,12 @@ def nbpresent(inpath,
             outdir, inpath_name + '.nbpub.log'), 'w')
         flogger.setLevel(getattr(logging, log_level.upper()))
         root.addHandler(flogger)
-        inpath = publish(inpath,
-                         conversion=outformat,
-                         outpath=outpath, dump_files=dump_files,
-                         ignore_prefix=ignore_prefix,
-                         clear_existing=clear_files,
-                         create_pdf=False, dry_run=dry_run)
+        inpath, exporter = publish(inpath,
+                                   conversion=outformat,
+                                   outpath=outpath, dump_files=dump_files,
+                                   ignore_prefix=ignore_prefix,
+                                   clear_existing=clear_files,
+                                   create_pdf=False, dry_run=dry_run)
 
     server = RevealServer()
     if not dry_run:

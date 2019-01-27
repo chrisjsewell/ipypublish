@@ -89,7 +89,9 @@ def publish(ipynb_path,
     Returns
     --------
     outpath: str
-     path to output file
+        path to output file
+    exporter: nbconvert.exporters.Exporter
+        the exporter used
 
     """
     # setup the input and output paths
@@ -136,12 +138,10 @@ def publish(ipynb_path,
             IOError)
 
     # read conversion configuration and create
-    logging.info('reading conversion configuration')
-    with plugin_path.open() as fobj:
-        data = json.load(fobj)
-    # TODO validate against schema
+    logging.info('loading conversion configuration')
+    data = load_plugin(plugin_path)
     logging.info('creating exporter')
-    exporter_cls = create_exporter(data["exporter"]["class"])
+    exporter_cls = create_exporter_cls(data["exporter"]["class"])
     logging.info('creating template')
     jinja_template = load_template(data["template"])
     logging.info('creating nbconvert configuration')
@@ -158,7 +158,7 @@ def publish(ipynb_path,
     body, resources, internal_files = postprocess_nb(body, resources)
 
     if dry_run:
-        return None
+        return outpath, exporter
 
     # write results
     logging.info("writing results")
@@ -183,7 +183,7 @@ def publish(ipynb_path,
 
     logging.info('process finished successfully')
 
-    return outpath
+    return outpath, exporter
 
 
 def get_module_path(module):
@@ -217,7 +217,18 @@ def iter_all_plugin_paths(plugin_folder_paths=(), regex="*.json"):
         yield name, pathlib.Path(jsonpath)
 
 
-def create_exporter(class_str):
+def load_plugin(plugin_path):
+
+    if isinstance(plugin_path, basestring):
+        plugin_path = pathlib.Path(plugin_path)
+
+    with plugin_path.open() as fobj:
+        data = json.load(fobj)
+    # TODO validate against schema
+    return data
+
+
+def create_exporter_cls(class_str):
     """dynamically load export class"""
     export_class_path = class_str.split(".")
     module_path = ".".join(export_class_path[0:-1])
@@ -239,7 +250,13 @@ def create_exporter(class_str):
     class BespokeTemplateExporter(export_class):
         """override the default template"""
         template_file = _TEMPLATE_KEY
-    return BespokeTemplateExporter
+    return BespokeTemplateExporter  # type: nbconvert.
+
+def get_plugin_extension(plugin_path):
+    """return the file extension of the exporter class"""
+    data = load_plugin(plugin_path)
+    exporter_cls = create_exporter_cls(data["exporter"]["class"])
+    return exporter_cls.file_extension
 
 
 def read_json_from_module(module_path, file_name, jtype):

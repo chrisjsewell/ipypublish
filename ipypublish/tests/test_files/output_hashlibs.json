@@ -1,0 +1,26 @@
+{
+    "notes": [
+        "# use this code to generate",
+        "with open(outfile, 'rb') as f:",
+        "    hashkey = hashlib.md5(f.read()).hexdigest()"
+    ],
+    "ipynb1": {
+        "html_ipypublish_all": "982d2f999242cbffe8444d94efd0f766",
+        "html_ipypublish_main": "3b3de08ac4d71879116e3c173658d34c",
+        "html_ipypublish_nocode": "c949d86b3fc424a4ee81cb3376f8cdae",
+        "html_standard": "4dc84943158a52094b6550471f100cfe",
+        "latex_ipypublish_all": "6a135463aae78e8da019763c8f6cb7d9",
+        "latex_ipypublish_main": "2be384df23784be6c39972183f83c555",
+        "latex_ipypublish_nocode": "c95179a405ecfeee2f4d90d2b0973f81",
+        "latex_standard_article": "52d16e65a38d2b9e38583ca99a230f00",
+        "nb_ipypublish_all": "66efcc59c8bd09f4e0f672007ceffb33",
+        "nb_ipypublish_nocode": "ce4563bebda6ccfffb386b278bc3458d",
+        "slides_ipypublish_all": "91954f22f6dba29e71ea6e888f4ef8f6",
+        "slides_ipypublish_main": "f7966629e03009de800ce5832e29b7df",
+        "slides_ipypublish_nocode": "ac2d8f434cc49e7c1a62fb97872dd77c",
+        "slides_mkdown_all": "250825cef2ece57f8787513bfec599ed",
+        "slides_mkdown_main": "33aa7f94a305b795e77605a549df6938",
+        "slides_mkdown_nocode": "9ef5fbd82cc155313a1447287f4b197c",
+        "slides_standard": "76d8ac79a939fb57e846be0f8f009bb6"
+    }
+}

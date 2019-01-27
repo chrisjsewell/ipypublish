@@ -1,12 +1,12 @@
 from ipypublish.scripts import nbmerge
 from ipypublish.main import (str_to_jinja, dict_to_config,
-                             create_exporter, export_notebook)
+                             create_exporter_cls, export_notebook)
 
 
 def test_nbexport_latex_empty(ipynb1):
     template = str_to_jinja('')
     config = dict_to_config({})
-    exporter_cls = create_exporter('nbconvert.exporters.LatexExporter')
+    exporter_cls = create_exporter_cls('nbconvert.exporters.LatexExporter')
     nb, path = nbmerge.merge_notebooks(ipynb1)
     exporter, body, resources = export_notebook(nb, exporter_cls,
                                                 config, template)
@@ -22,7 +22,7 @@ test123
     """)
     config = dict_to_config({})
     nb, path = nbmerge.merge_notebooks(ipynb1)
-    exporter_cls = create_exporter('nbconvert.exporters.LatexExporter')
+    exporter_cls = create_exporter_cls('nbconvert.exporters.LatexExporter')
     exporter, body, resources = export_notebook(nb, exporter_cls,
                                                 config, template)
     assert exporter.output_mimetype == 'text/latex'
@@ -38,7 +38,7 @@ def test_nbexport_latex_mkdown2(ipynb1):
     """)
     config = dict_to_config({})
     nb, path = nbmerge.merge_notebooks(ipynb1)
-    exporter_cls = create_exporter('nbconvert.exporters.LatexExporter')
+    exporter_cls = create_exporter_cls('nbconvert.exporters.LatexExporter')
     exporter, body, resources = export_notebook(nb, exporter_cls,
                                                 config, template)
     assert exporter.output_mimetype == 'text/latex'
@@ -50,7 +50,7 @@ def test_nbexport_html_empty(ipynb1):
     template = str_to_jinja('')
     config = dict_to_config({})
     nb, path = nbmerge.merge_notebooks(ipynb1)
-    exporter_cls = create_exporter('nbconvert.exporters.HTMLExporter')
+    exporter_cls = create_exporter_cls('nbconvert.exporters.HTMLExporter')
     exporter, body, resources = export_notebook(nb, exporter_cls,
                                                 config, template)
     assert exporter.output_mimetype == 'text/html'
@@ -66,7 +66,7 @@ test123
     """)
     config = dict_to_config({})
     nb, path = nbmerge.merge_notebooks(ipynb1)
-    exporter_cls = create_exporter('nbconvert.exporters.HTMLExporter')
+    exporter_cls = create_exporter_cls('nbconvert.exporters.HTMLExporter')
     exporter, body, resources = export_notebook(nb, exporter_cls,
                                                 config, template)
     assert exporter.output_mimetype == 'text/html'
@@ -83,7 +83,7 @@ def test_nbexport_html_mkdown2(ipynb1):
     """)
     config = dict_to_config({})
     nb, path = nbmerge.merge_notebooks(ipynb1)
-    exporter_cls = create_exporter('nbconvert.exporters.HTMLExporter')
+    exporter_cls = create_exporter_cls('nbconvert.exporters.HTMLExporter')
     exporter, body, resources = export_notebook(nb, exporter_cls,
                                                 config, template)
     assert exporter.output_mimetype == 'text/html'

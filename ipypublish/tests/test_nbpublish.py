@@ -1,6 +1,8 @@
 import os
 import shutil
 import tempfile
+import hashlib
+
 import pytest
 
 from ipypublish.main import publish
@@ -104,15 +106,26 @@ def test_publish_ipynb1_slides(ipynb1):
     "plugin_name,plugin_path",
     list(iter_all_plugin_paths())
 )
-def test_publish_run_all_plugins(ipynb1, plugin_name, plugin_path):
+def test_publish_run_all_plugins(ipynb1, plugin_name, plugin_path,
+                                 hashkey_dict):
 
     # for plugin_name, plugin_path in iter_all_plugin_paths():
     out_folder = tempfile.mkdtemp()
     try:
-        publish(ipynb1, conversion=plugin_name, outpath=out_folder)
-        # TODO test against file hash
+        outpath, exporter = publish(
+            ipynb1, conversion=plugin_name, outpath=out_folder)
+        extension = exporter.file_extension
+        outfile = os.path.join(out_folder,
+                               os.path.splitext(ipynb1.name)[0] + extension)
+        assert os.path.exists(outfile), "could not find: {} for {}".format(
+            outfile, plugin_name)
+        # TODO hash key tests
+        # with open(outfile, "rb") as f:
+        #     hashkey = hashlib.md5(f.read()).hexdigest()
+        # assert hashkey == hashkey_dict["ipynb1"][plugin_name]
     finally:
         shutil.rmtree(out_folder)
 
 # TODO files with internal files
 # TODO files with external files
+
