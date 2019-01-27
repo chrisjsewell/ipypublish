@@ -250,7 +250,7 @@ def read_json_from_module(module_path, file_name, jtype):
         handle_error(
             "module {} containing {} {} not found".format(
                 module_path, jtype, file_name), ModuleNotFoundError)
-    outline_path = os.path.join(get_module_path(outline_module), file_name)
+    outline_path = os.path.join(str(get_module_path(outline_module)), file_name)
     if not os.path.exists(outline_path):
         handle_error(
             "the {} does not exist: {}".format(jtype, outline_path),
