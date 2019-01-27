@@ -133,10 +133,11 @@ def test_publish_run_all_plugins(ipynb1, plugin_name, plugin_path):
         with open(testfile) as fobj:
             test_content = fobj.readlines()
 
+        # only report differences
         if out_content != test_content:
-            raise AssertionError(context_diff(
+            raise AssertionError("\n".join(context_diff(
                 test_content, out_content,
-                fromfile=testfile, tofile=outfile))
+                fromfile=testfile, tofile=outfile)))
       
     finally:
         shutil.rmtree(out_folder)
