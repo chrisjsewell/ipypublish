@@ -1,6 +1,7 @@
 import os
 import shutil
 import tempfile
+import re
 from difflib import context_diff
 
 import pytest
@@ -128,20 +129,26 @@ def test_publish_run_all_plugins(ipynb1, plugin_name, plugin_path):
         if exporter.output_mimetype == 'text/latex':
 
             with open(outfile) as fobj:
-                out_content = fobj.readlines()
+                out_content = fobj.read()
             with open(testfile) as fobj:
-                test_content = fobj.readlines()
+                test_content = fobj.read()
 
-            # only certain versions of pandoc insert \hypertarget at sections
-            out_content = [c for c in out_content
-                           if "\\hypertarget" not in c]
-            test_content = [c for c in test_content
-                            if "\\hypertarget" not in c]
+            # only certain versions of pandoc wrap sections with \hypertarget
+            # NOTE a better way to do this might be to use TexSoup
+            regex = re.compile("\\\\hypertarget\\{.*\\}\\{%*(.*\\})\\}",
+                               re.DOTALL)
+            out_content = regex.sub("\\g<1>", out_content)
+            test_content = regex.sub("\\g<1>", test_content)
+
+            # out_content = [c for c in out_content
+            #                if "\\hypertarget" not in c]
+            # test_content = [c for c in test_content
+            #                 if "\\hypertarget" not in c]
 
             # only report differences
             if out_content != test_content:
                 raise AssertionError("\n"+"\n".join(context_diff(
-                    test_content, out_content,
+                    test_content.splitlines(), out_content.splitlines(),
                     fromfile=testfile, tofile=outfile)))
 
         # TODO for html, use html.parser or beautifulsoup to compare only body
