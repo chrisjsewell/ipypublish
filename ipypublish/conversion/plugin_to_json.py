@@ -61,6 +61,8 @@ def ast_to_json(item, imported, assignments):
             value = imported[item.id]
         elif item.id in assignments:
             value = ast_to_json(assignments[item.id], imported, assignments)
+        if item.id in ['True', 'False', 'None']:  # python 2.7
+            value = {'True': True, 'False': False, 'None': None}[item.id]
         else:
             raise ValueError(
                 "could not find assignment '{}' in config".format(item.id))
