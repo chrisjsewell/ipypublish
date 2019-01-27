@@ -48,8 +48,8 @@ def assess_syntax(path):
 def ast_to_json(item, imported, assignments):
     """recursively convert ast items to json friendly values"""
     value = None
-    if item in [True, False, None]:
-        value = item
+    if item in ['True', 'False', 'None']:  # python 2.7
+        value = {'True': True, 'False': False, 'None': None}[item]
     elif hasattr(ast, "NameConstant") and isinstance(item, ast.NameConstant):
         value = item.value
     elif isinstance(item, ast.Str):
