@@ -135,15 +135,15 @@ def test_publish_run_all_plugins(ipynb1, plugin_name, plugin_path):
 
             # only certain versions of pandoc wrap sections with \hypertarget
             # NOTE a better way to do this might be to use TexSoup
-            regex = re.compile("\\\\hypertarget\\{.*\\}\\{%*(.*\\})\\}",
-                               re.DOTALL)
-            out_content = regex.sub("\\g<1>", out_content)
-            test_content = regex.sub("\\g<1>", test_content)
+            ht_rgx = re.compile("\\\\hypertarget\\{.*\\}\\{[^\\\\]*(.*\\})\\}",
+                                re.DOTALL)
+            out_content = ht_rgx.sub("\\g<1>", out_content)
+            test_content = ht_rgx.sub("\\g<1>", test_content)
 
-            # out_content = [c for c in out_content
-            #                if "\\hypertarget" not in c]
-            # test_content = [c for c in test_content
-            #                 if "\\hypertarget" not in c]
+            # also remove all space from start of lines
+            space_rgx = re.compile("^[\s]*", re.MULTILINE)
+            out_content = space_rgx.sub("", out_content)
+            test_content = space_rgx.sub("", test_content)
 
             # only report differences
             if out_content != test_content:
