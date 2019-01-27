@@ -1,6 +1,7 @@
 import os
 import shutil
 import tempfile
+from difflib import context_diff
 
 import pytest
 
@@ -132,10 +133,14 @@ def test_publish_run_all_plugins(ipynb1, plugin_name, plugin_path):
         with open(testfile) as fobj:
             test_content = fobj.read()
 
-        assert out_content == test_content
-
+        if out_content != test_content:
+            raise AssertionError(context_diff(
+                test_content, out_content,
+                fromfile=testfile, tofile=outfile))
+      
     finally:
         shutil.rmtree(out_folder)
 
+# TODO files with non-ascii characters
 # TODO files with internal files
 # TODO files with external files
