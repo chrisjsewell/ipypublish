@@ -126,18 +126,26 @@ def test_publish_run_all_plugins(ipynb1, plugin_name, plugin_path):
         # only compare latex files, since html has styles differing by
         # nbconvert version (e.g. different versions of font-awesome)
         if exporter.output_mimetype == 'text/latex':
-            
+
             with open(outfile) as fobj:
                 out_content = fobj.readlines()
             with open(testfile) as fobj:
                 test_content = fobj.readlines()
+
+            # only certain versions of pandoc insert \hypertarget at sections
+            out_content = [c for c in out_content
+                           if "\\hypertarget" not in c]
+            test_content = [c for c in test_content
+                            if "\\hypertarget" not in c]
 
             # only report differences
             if out_content != test_content:
                 raise AssertionError("\n"+"\n".join(context_diff(
                     test_content, out_content,
                     fromfile=testfile, tofile=outfile)))
-      
+
+        # TODO for html, use html.parser or beautifulsoup to compare only body
+
     finally:
         shutil.rmtree(out_folder)
 
