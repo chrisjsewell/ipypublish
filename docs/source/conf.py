@@ -29,12 +29,15 @@ import json
 
 git_history = urllib.request.urlopen('https://api.github.com/repos/chrisjsewell/ipypublish/releases').read().decode(
     'utf-8')
+# NOTE on vscode this was failing with urllib.error.HTTPError
 git_history_json = json.loads(git_history)
-with open('releases.md', 'w') as f:
+# NOTE on vscode this was failing unless encoding='utf8' was present
+with open('releases.md', 'w') as f: 
     f.write('# Releases\n')
     f.write('\n')
     for r in git_history_json:
-        f.write('## ' + ' '.join([r['tag_name'], '-', r['name'], '\n']))
+        subtitle = '## ' + ' '.join([r['tag_name'], '-', r['name'], '\n'])
+        f.write(subtitle)
         f.write('\n')
         for line in r['body'].split('\n'):
             f.write(' '.join([line, '\n']))
