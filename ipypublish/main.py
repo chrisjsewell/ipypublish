@@ -212,7 +212,7 @@ def iter_all_plugin_paths(plugin_folder_paths=(), regex="*.json"):
             yield name, pathlib.Path(jsonpath)
 
     module_path = get_module_path(export_plugins)
-    for jsonpath in glob.glob(os.path.join(module_path, regex)):
+    for jsonpath in glob.glob(os.path.join(str(module_path), regex)):
         name = os.path.splitext(os.path.basename(jsonpath))[0]
         yield name, pathlib.Path(jsonpath)
 
