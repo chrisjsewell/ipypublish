@@ -143,7 +143,7 @@ def test_publish_run_all_plugins(ipynb1, plugin_name, plugin_path):
             # python < 3.6 sorts these differently
             pyg_rgx = re.compile(
                 ("\\\\expandafter\\\\def\\\\csname "
-                 "PY\\@tok\\@[a-zA-Z]*\\\\endcsname[^\n]*"),
+                 "PY\\@tok\\@[0-9a-zA-Z]*\\\\endcsname[^\n]*"),
                 re.MULTILINE)
             out_content = pyg_rgx.sub("\<pygments definition\>", out_content)
             test_content = pyg_rgx.sub("\<pygments definition\>", test_content)
