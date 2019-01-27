@@ -129,9 +129,9 @@ def test_publish_run_all_plugins(ipynb1, plugin_name, plugin_path):
         # assert hashkey == hashkey_dict["ipynb1"][plugin_name]
 
         with open(outfile) as fobj:
-            out_content = fobj.read()
+            out_content = fobj.readlines()
         with open(testfile) as fobj:
-            test_content = fobj.read()
+            test_content = fobj.readlines()
 
         if out_content != test_content:
             raise AssertionError(context_diff(
