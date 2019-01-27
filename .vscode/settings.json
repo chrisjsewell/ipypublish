@@ -14,4 +14,14 @@
     "python.unitTest.unittestEnabled": false,
     "python.unitTest.nosetestsEnabled": false,
     "python.unitTest.pyTestEnabled": true,
+    "python.linting.pylintEnabled": false,
+    "python.linting.pylamaEnabled": false,
+    "python.linting.enabled": true,
+    "python.linting.flake8Enabled": true,
+    "cSpell.words": [
+        "ipynb",
+        "ipypublish",
+        "nbconvert",
+        "nbpresent"
+    ],
 }

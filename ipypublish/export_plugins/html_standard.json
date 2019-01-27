@@ -1,0 +1,43 @@
+{
+  "description": [
+    "html in standard nbconvert format"
+  ],
+  "exporter": {
+    "class": "nbconvert.exporters.HTMLExporter",
+    "filters": {},
+    "preprocessors": [],
+    "other_args": {}
+  },
+  "template": {
+    "outline": {
+      "module": "ipypublish.templates.outline_schemas",
+      "file": "html_tpl_schema.json"
+    },
+    "segments": [
+      {
+        "module": "ipypublish.templates.segments",
+        "file": "std-document.html-tplx.json"
+      },
+      {
+        "module": "ipypublish.templates.segments",
+        "file": "std-content.html-tplx.json"
+      },
+      {
+        "module": "ipypublish.templates.segments",
+        "file": "std-content_tagging.html-tplx.json"
+      },
+      {
+        "module": "ipypublish.templates.segments",
+        "file": "std-mathjax.html-tplx.json"
+      },
+      {
+        "module": "ipypublish.templates.segments",
+        "file": "std-widgets.html-tplx.json"
+      },
+      {
+        "module": "ipypublish.templates.segments",
+        "file": "std-inout_prompt.html-tplx.json"
+      }
+    ]
+  }
+}

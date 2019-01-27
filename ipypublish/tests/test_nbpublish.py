@@ -1,15 +1,17 @@
 import os
 import shutil
 import tempfile
+import pytest
 
 from ipypublish.main import publish
-from ipypublish.scripts import nbexport, nbmerge, pdfexport
+from ipypublish.scripts import pdfexport
+from ipypublish.main import iter_all_plugin_paths
 
 
 def test_pdf_export():
 
     tex_content = """
-\\documentclass{article} 
+\\documentclass{article}
 \\begin{document}
 hallo world
 \\end{document}
@@ -80,7 +82,7 @@ def test_publish_ipynb1_html(ipynb1):
     out_folder = tempfile.mkdtemp()
     html_path = os.path.join(out_folder, '2test.html')
     try:
-        publish(ipynb1, outformat='html_ipypublish_main', outpath=out_folder)
+        publish(ipynb1, conversion='html_ipypublish_main', outpath=out_folder)
         assert os.path.exists(html_path)
     finally:
         shutil.rmtree(out_folder)
@@ -91,20 +93,26 @@ def test_publish_ipynb1_slides(ipynb1):
     out_folder = tempfile.mkdtemp()
     html_path = os.path.join(out_folder, '2test.slides.html')
     try:
-        publish(ipynb1, outformat='slides_ipypublish_main', outpath=out_folder)
+        publish(ipynb1, conversion='slides_ipypublish_main',
+                outpath=out_folder)
         assert os.path.exists(html_path)
     finally:
         shutil.rmtree(out_folder)
 
 
-def test_publish_run_all_plugins(ipynb1):
-    from ipypublish.scripts import export_plugins
-    for plugin_name in export_plugins.get().keys():
-        out_folder = tempfile.mkdtemp()
-        try:
-            publish(ipynb1, outformat=plugin_name, outpath=out_folder)
-        finally:
-            shutil.rmtree(out_folder)
+@pytest.mark.parametrize(
+    "plugin_name,plugin_path",
+    list(iter_all_plugin_paths())
+)
+def test_publish_run_all_plugins(ipynb1, plugin_name, plugin_path):
+
+    # for plugin_name, plugin_path in iter_all_plugin_paths():
+    out_folder = tempfile.mkdtemp()
+    try:
+        publish(ipynb1, conversion=plugin_name, outpath=out_folder)
+        # TODO test against file hash
+    finally:
+        shutil.rmtree(out_folder)
 
 # TODO files with internal files
 # TODO files with external files

@@ -17,7 +17,9 @@ with io.open('README.rst') as readme:
     setup(
         name='ipypublish',
         version=import_module('ipypublish').__version__,
-        description='A workflow for creating and editing publication ready scientific reports, from one or more Jupyter Notebooks',
+        description=(
+            'A workflow for creating and editing publication ready '
+            'scientific reports, from one or more Jupyter Notebooks'),
         long_description=readme.read(),
         install_requires=requirements,
         tests_require=test_requirements,
@@ -50,6 +52,6 @@ with io.open('README.rst') as readme:
         keywords='python, jupyter-notebook, nbconvert, pandoc, latex, pdf',
         zip_safe=True,
         packages=find_packages(),
-        package_data={'': []},
+        include_package_data=True,
         scripts=['bin/nbpublish', 'bin/nbpresent'],
     )

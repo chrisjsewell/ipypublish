@@ -1,84 +1,91 @@
-import os
-import shutil
-import tempfile
-
-from ipypublish.main import publish
-from ipypublish.scripts import nbexport, nbmerge, pdfexport
+from ipypublish.scripts import nbmerge
+from ipypublish.main import (str_to_jinja, dict_to_config,
+                             create_exporter, export_notebook)
 
 
 def test_nbexport_latex_empty(ipynb1):
-    template = ''
-    config = {}
+    template = str_to_jinja('')
+    config = dict_to_config({})
+    exporter_cls = create_exporter('nbconvert.exporters.LatexExporter')
     nb, path = nbmerge.merge_notebooks(ipynb1)
-    (body, resources), exe = nbexport.export_notebook(
-        nb, 'Latex', config, template)
-    assert exe == '.tex'
+    exporter, body, resources = export_notebook(nb, exporter_cls,
+                                                config, template)
+    assert exporter.output_mimetype == 'text/latex'
     assert body == ''
 
 
 def test_nbexport_latex_mkdown1(ipynb1):
-    template = """
+    template = str_to_jinja("""
 ((* block markdowncell scoped *))
 test123
 ((* endblock markdowncell *))
-    """
-    config = {}
+    """)
+    config = dict_to_config({})
     nb, path = nbmerge.merge_notebooks(ipynb1)
-    (body, resources), exe = nbexport.export_notebook(
-        nb, 'Latex', config, template)
-    assert exe == '.tex'
+    exporter_cls = create_exporter('nbconvert.exporters.LatexExporter')
+    exporter, body, resources = export_notebook(nb, exporter_cls,
+                                                config, template)
+    assert exporter.output_mimetype == 'text/latex'
     assert body.strip() == 'test123'
 
 
 def test_nbexport_latex_mkdown2(ipynb1):
-    template = """
+    template = str_to_jinja("""
 ((*- extends 'display_priority.tplx' -*))
 ((* block markdowncell scoped *))
 (((cell.source)))
 ((* endblock markdowncell *))
-    """
-    config = {}
+    """)
+    config = dict_to_config({})
     nb, path = nbmerge.merge_notebooks(ipynb1)
-    (body, resources), exe = nbexport.export_notebook(
-        nb, 'Latex', config, template)
-    assert exe == '.tex'
+    exporter_cls = create_exporter('nbconvert.exporters.LatexExporter')
+    exporter, body, resources = export_notebook(nb, exporter_cls,
+                                                config, template)
+    assert exporter.output_mimetype == 'text/latex'
+
     assert body.strip() == '# a title\n\nsome text'
 
 
 def test_nbexport_html_empty(ipynb1):
-    template = ''
-    config = {}
+    template = str_to_jinja('')
+    config = dict_to_config({})
     nb, path = nbmerge.merge_notebooks(ipynb1)
-    (body, resources), exe = nbexport.export_notebook(
-        nb, 'HTML', config, template)
-    assert exe == '.html'
+    exporter_cls = create_exporter('nbconvert.exporters.HTMLExporter')
+    exporter, body, resources = export_notebook(nb, exporter_cls,
+                                                config, template)
+    assert exporter.output_mimetype == 'text/html'
+
     assert body == ''
 
 
 def test_nbexport_html_mkdown1(ipynb1):
-    template = """
+    template = str_to_jinja("""
 {% block markdowncell scoped %}
 test123
 {% endblock markdowncell %}
-    """
-    config = {}
+    """)
+    config = dict_to_config({})
     nb, path = nbmerge.merge_notebooks(ipynb1)
-    (body, resources), exe = nbexport.export_notebook(
-        nb, 'HTML', config, template)
-    assert exe == '.html'
+    exporter_cls = create_exporter('nbconvert.exporters.HTMLExporter')
+    exporter, body, resources = export_notebook(nb, exporter_cls,
+                                                config, template)
+    assert exporter.output_mimetype == 'text/html'
+
     assert body.strip() == 'test123'
 
 
 def test_nbexport_html_mkdown2(ipynb1):
-    template = """
+    template = str_to_jinja("""
 {%- extends 'display_priority.tpl' -%}
 {% block markdowncell scoped %}
 {{cell.source}}
 {% endblock markdowncell %}
-    """
-    config = {}
+    """)
+    config = dict_to_config({})
     nb, path = nbmerge.merge_notebooks(ipynb1)
-    (body, resources), exe = nbexport.export_notebook(
-        nb, 'HTML', config, template)
-    assert exe == '.html'
+    exporter_cls = create_exporter('nbconvert.exporters.HTMLExporter')
+    exporter, body, resources = export_notebook(nb, exporter_cls,
+                                                config, template)
+    assert exporter.output_mimetype == 'text/html'
+
     assert body.strip() == '# a title\n\nsome text'

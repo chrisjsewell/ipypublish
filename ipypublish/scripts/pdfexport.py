@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """ a module for exporting latex file to pdf
-
+TODO could this be refactored as nbconvert postprocessor
 """
 import logging
 import os
@@ -24,7 +24,7 @@ VIEW_PDF = r"""
     <title>View PDF</title>
 
     <script type="text/javascript">
- 	   var filepath = "{pdf_name}";
+       var filepath = "{pdf_name}";
        var timer = null;
 
        function refresh(){{
@@ -41,32 +41,32 @@ VIEW_PDF = r"""
           clearTimeout(timer);
           refresh();
        }}
-	   function check_pdf() {{
-	     var newfile = document.f.userFile.value;
-	     ext = newfile.substring(newfile.length-3,newfile.length);
-	     ext = ext.toLowerCase();
-	     if(ext != 'pdf') {{
-	       alert('You selected a .'+ext+
-	             ' file; please select a .pdf file instead!'+filepath);
-	       return false; }}
-	     else
-			 alert(newfile);
-		     window.filepath = newfile;
-			 alert(filepath);
-			 refresh();
-	       return true; }}
+       function check_pdf() {{
+         var newfile = document.f.userFile.value;
+         ext = newfile.substring(newfile.length-3,newfile.length);
+         ext = ext.toLowerCase();
+         if(ext != 'pdf') {{
+           alert('You selected a .'+ext+
+                 ' file; please select a .pdf file instead!'+filepath);
+           return false; }}
+         else
+             alert(newfile);
+             window.filepath = newfile;
+             alert(filepath);
+             refresh();
+           return true; }}
     </script>
 
 </head>
 <body>
-	<!-- <form name=f onsubmit="return check_pdf();"
-	    action='' method='POST' enctype='multipart/form-data'>
-	    <input type='submit' name='upload_btn' value='upload'>
-		<input type='file' name='userFile' accept="application/pdf">
-	</form> -->
-	<button onclick="manualRefresh()">manual refresh</button>
-   <button onclick="autoRefresh()">auto refresh</button>
-   <div id="pdf"></div>
+    <!-- <form name=f onsubmit="return check_pdf();"
+        action='' method='POST' enctype='multipart/form-data'>
+        <input type='submit' name='upload_btn' value='upload'>
+        <input type='file' name='userFile' accept="application/pdf">
+    </form> -->
+    <button onclick="manualRefresh()">manual refresh</button>
+    <button onclick="autoRefresh()">auto refresh</button>
+    <div id="pdf"></div>
 </body>
 <script type="text/javascript">refresh();</script>
 </html>
@@ -113,18 +113,24 @@ def export_pdf(texpath, outdir, files_path=None,
         if isinstance(files_path, basestring):
             files_path = pathlib.Path(files_path)
         if not files_path.exists() or not files_path.is_dir():
-            logging.error('the external folder path does not exist: {}'.format(texpath))
-            raise IOError('the external folder path does not exist: {}'.format(texpath))
+            logging.error(
+                'the external folder path does not exist: {}'.format(texpath))
+            raise IOError(
+                'the external folder path does not exist: {}'.format(texpath))
 
     if not exe_exists('latexmk'):
-        logging.error('requires the latexmk executable to run. See http://mg.readthedocs.io/latexmk.html#installation')
+        logging.error(
+            'requires the latexmk executable to run. '
+            'See http://mg.readthedocs.io/latexmk.html#installation')
         raise RuntimeError(
-            'requires the latexmk executable to run. See http://mg.readthedocs.io/latexmk.html#installation')
+            'requires the latexmk executable to run. '
+            'See http://mg.readthedocs.io/latexmk.html#installation')
 
     if convert_in_temp:
         out_folder = tempfile.mkdtemp()
         try:
-            exitcode = run_conversion(texpath, out_folder, files_path, debug_mode)
+            exitcode = run_conversion(
+                texpath, out_folder, files_path, debug_mode)
             if exitcode == 0:
                 shutil.copyfile(os.path.join(out_folder, texname + '.pdf'),
                                 os.path.join(outdir, texname + '.pdf'))
@@ -137,8 +143,10 @@ def export_pdf(texpath, outdir, files_path=None,
         logging.info('pdf conversion complete')
 
         if html_viewer:
-            view_pdf = VIEW_PDF.format(pdf_name=texname.replace(' ', '%20') + '.pdf')
-            with open(os.path.join(outdir, texname + '.view_pdf.html'), 'w') as f:
+            view_pdf = VIEW_PDF.format(
+                pdf_name=texname.replace(' ', '%20') + '.pdf')
+            view_pdf_path = os.path.join(outdir, texname + '.view_pdf.html')
+            with open(view_pdf_path, 'w') as f:
                 f.write(view_pdf)
         return True
     else:
@@ -154,8 +162,10 @@ def run_conversion(texpath, out_folder, files_folder=None, debug_mode=False):
     # make sure tex file in right place
     outpath = os.path.join(out_folder, texpath.name)
     if os.path.dirname(str(texpath)) != str(out_folder):
-        logging.debug('copying tex file to: {}'.format(os.path.join(str(out_folder), texpath.name)))
-        shutil.copyfile(str(texpath), os.path.join(str(out_folder), texpath.name))
+        logging.debug('copying tex file to: {}'.format(
+            os.path.join(str(out_folder), texpath.name)))
+        shutil.copyfile(str(texpath), os.path.join(
+            str(out_folder), texpath.name))
 
     # make sure the external files folder is in right place
     if files_folder is not None:
@@ -176,7 +186,8 @@ def run_conversion(texpath, out_folder, files_folder=None, debug_mode=False):
 
         def log_latexmk_output(pipe):
             for line in iter(pipe.readline, b''):
-                logging.info('latexmk: {}'.format(line.decode("utf-8").strip()))
+                logging.info('latexmk: {}'.format(
+                    line.decode("utf-8").strip()))
 
         process = Popen(latexmk, stdout=PIPE, stderr=STDOUT)
         with process.stdout:
