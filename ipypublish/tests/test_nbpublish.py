@@ -140,6 +140,14 @@ def test_publish_run_all_plugins(ipynb1, plugin_name, plugin_path):
             out_content = ht_rgx.sub("\\g<1>", out_content)
             test_content = ht_rgx.sub("\\g<1>", test_content)
 
+            # python < 3.6 sorts these differently
+            pyg_rgx = re.compile(
+                ("\\\\expandafter\\\\def\\\\csname "
+                 "PY\\@tok\\@[a-zA-Z]*\\\\endcsname[^\n]*"),
+                re.MULTILINE)
+            out_content = pyg_rgx.sub("\<pygments definition\>", out_content)
+            test_content = pyg_rgx.sub("\<pygments definition\>", test_content)
+
             # also remove all space from start of lines
             space_rgx = re.compile("^[\s]*", re.MULTILINE)
             out_content = space_rgx.sub("", out_content)
