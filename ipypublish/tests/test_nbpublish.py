@@ -123,21 +123,20 @@ def test_publish_run_all_plugins(ipynb1, plugin_name, plugin_path):
         assert os.path.exists(testfile), "could not find: {} for {}".format(
             testfile, plugin_name)
 
-        # hash key tests
-        # with open(outfile, "rb") as f:
-        #     hashkey = hashlib.md5(f.read()).hexdigest()
-        # assert hashkey == hashkey_dict["ipynb1"][plugin_name]
+        # only compare latex files, since html has styles differing by
+        # nbconvert version (e.g. different versions of font-awesome)
+        if exporter.output_mimetype == 'text/latex':
+            
+            with open(outfile) as fobj:
+                out_content = fobj.readlines()
+            with open(testfile) as fobj:
+                test_content = fobj.readlines()
 
-        with open(outfile) as fobj:
-            out_content = fobj.readlines()
-        with open(testfile) as fobj:
-            test_content = fobj.readlines()
-
-        # only report differences
-        if out_content != test_content:
-            raise AssertionError("\n".join(context_diff(
-                test_content, out_content,
-                fromfile=testfile, tofile=outfile)))
+            # only report differences
+            if out_content != test_content:
+                raise AssertionError("\n"+"\n".join(context_diff(
+                    test_content, out_content,
+                    fromfile=testfile, tofile=outfile)))
       
     finally:
         shutil.rmtree(out_folder)

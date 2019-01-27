@@ -252,6 +252,7 @@ def create_exporter_cls(class_str):
         template_file = _TEMPLATE_KEY
     return BespokeTemplateExporter  # type: nbconvert.
 
+
 def get_plugin_extension(plugin_path):
     """return the file extension of the exporter class"""
     data = load_plugin(plugin_path)
