@@ -116,7 +116,8 @@ def run(sys_args):
     parser.add_argument("-f", "--outformat", type=str,
                         metavar='key | filepath',
                         # choices=list(plugins.keys()),
-                        help='output format configuration to use',
+                        help=('output format configuration to use, '
+                              'can be a key name or path to the file'),
                         default='latex_ipypublish_main')
     parser.add_argument("-o", "--outpath", type=str, metavar='str',
                         help='path to output converted files',
