@@ -23,7 +23,10 @@ class DefaultFormatter(string.Formatter):
 
 def safe_str(obj):
     if hasattr(obj, "decode"):
-        obj = obj.decode("utf-8")
+        try:
+            obj = obj.decode("utf-8")
+        except UnicodeEncodeError:
+            pass
     try:
         return str(obj)
     except UnicodeEncodeError:
@@ -32,7 +35,9 @@ def safe_str(obj):
 
 
 class LatexTagsToHTML(Preprocessor):
-    r""" a preprocessor to find latex tags (like \cite{abc} or \todo[color]{stuff}) and:
+    r""" a preprocessor to find latex tags 
+    (like \cite{abc} or \todo[color]{stuff}) and:
+
     1. attempt to process them into a html friendly format
     2. remove them entirely if this is not possible
 
