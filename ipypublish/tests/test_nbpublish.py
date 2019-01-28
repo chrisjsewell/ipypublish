@@ -197,6 +197,10 @@ def compare_html_files(testpath, outpath):
             raise IOError("could not find body content of {}".format(path))
         content = body_search.group(1)
 
+        # remove script environments which can change (e.g. reveal)
+        script_rgx = re.compile("\\<script\\>(.*)\\</script\\>", re.DOTALL)
+        content = script_rgx.sub("<script></script>", content)
+
         output.append(content)
 
     test_content, out_content = output
