@@ -30,6 +30,9 @@ def safe_str(obj):
     try:
         return str(obj)
     except UnicodeEncodeError:
+        # python 2.7
+        obj = re.sub(u"\u2013", "-", obj)   # en dash
+        obj = re.sub(u"\u2014", "--", obj)  # em dash
         return obj.encode('ascii', 'ignore').decode('ascii')
     return ""
 
