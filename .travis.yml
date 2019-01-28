@@ -69,6 +69,7 @@ before_install:
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y texlive ; fi
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y texlive-xetex ; fi
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y texlive-latex-extra ; fi
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y texlive-lang-portuguese ; fi
 # need up-to-date koma-script, which isn't supplied with this version of debian
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo wget http://mirrors.ctan.org/install/macros/latex/contrib/koma-script.tds.zip ; fi
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo unzip koma-script.tds.zip -d ~/texmf/ ; fi
