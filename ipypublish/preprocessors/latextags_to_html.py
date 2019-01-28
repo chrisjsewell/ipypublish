@@ -21,6 +21,16 @@ class DefaultFormatter(string.Formatter):
             string.Formatter.get_value(key, args, kwds)
 
 
+def safe_str(obj):
+    if hasattr(obj, "decode"):
+        obj = obj.decode("utf-8")
+    try:
+        return str(obj)
+    except UnicodeEncodeError:
+        return obj.encode('ascii', 'ignore').decode('ascii')
+    return ""
+
+
 class LatexTagsToHTML(Preprocessor):
     r""" a preprocessor to find latex tags (like \cite{abc} or \todo[color]{stuff}) and:
     1. attempt to process them into a html friendly format
@@ -90,14 +100,17 @@ class LatexTagsToHTML(Preprocessor):
 
     regex = traits.Unicode(r"\\(?:[^a-zA-Z]|[a-zA-Z]+[*=']?)(?:\[.*?\])?{.*?}",
                            help="the regex to identify latex tags").tag(config=True)
-    bibformat = traits.Unicode("{author}, {year}.",
-                               help=r"the format to output \cite{} tags found in the bibliography").tag(config=True)
-    labelbycolon = traits.Bool(True,
-                               help=r'create reference label based on text before colon, e.g. \ref{fig:example} -> fig 1').tag(
-        config=True)
+    bibformat = traits.Unicode(
+        "{author}, {year}.",
+        help="the format to output \\cite{} tags found in the bibliography"
+        ).tag(config=True)
+    labelbycolon = traits.Bool(
+        True,
+        help='create reference label based on text before colon, e.g. \\ref{fig:example} -> fig 1'
+        ).tag(config=True)
 
     def __init__(self, *args, **kwargs):
-        # a dictionary to keep track of references, 
+        # a dictionary to keep track of references,
         # so they each get a different number
         self.refs = {}
         # bibliography references
@@ -119,8 +132,7 @@ class LatexTagsToHTML(Preprocessor):
             else:
                 with io.open(path, encoding="utf8") as bibtex_file:
                     bibtex_data = bibtex_file.read()
-            if hasattr(bibtex_data, "decode"):
-                    bibtex_data = bibtex_data.decode("utf-8")
+            bibtex_data = safe_str(bibtex_data)
             bibdatabase = bibparser.parse(bibtex_data).entries_dict
         except Exception as err:
             logging.error('could not read bibliopath {}: {}'.format(path, err))
@@ -156,11 +168,14 @@ class LatexTagsToHTML(Preprocessor):
         text = DefaultFormatter().format(self.bibformat, **entry)
 
         if 'doi' in entry:
-            return r'<a href="https://doi.org/{doi}">{text}</a>'.format(doi=entry['doi'], text=text)
+            return r'<a href="https://doi.org/{doi}">{text}</a>'.format(
+                doi=entry['doi'], text=text)
         elif 'url' in entry:
-            return r'<a href="{url}">{text}</a>'.format(url=entry['url'], text=text)
+            return r'<a href="{url}">{text}</a>'.format(
+                url=entry['url'], text=text)
         elif 'link' in entry:
-            return r'<a href="{url}">{text}</a>'.format(url=entry['link'], text=text)
+            return r'<a href="{url}">{text}</a>'.format(
+                url=entry['link'], text=text)
         else:
             return text
 
@@ -173,7 +188,8 @@ class LatexTagsToHTML(Preprocessor):
         """
         if 'refmap' in resources:
             if name in resources['refmap']:
-                return r'<a href="{{id_home_prefix}}{0}">{1}</a>'.format(name, resources['refmap'][name])
+                return r'<a href="{{id_home_prefix}}{0}">{1}</a>'.format(
+                    name, resources['refmap'][name])
 
         if self.labelbycolon:
             ref_name = name.split(':')[0] if ':' in name else 'ref'
@@ -187,7 +203,8 @@ class LatexTagsToHTML(Preprocessor):
         else:
             id = len(refs) + 1
             refs[name] = id
-        return r'<a href="{{id_home_prefix}}{0}">{1}. {2}</a>'.format(name, ref_name, id)
+        return r'<a href="{{id_home_prefix}}{0}">{1}. {2}</a>'.format(
+            name, ref_name, id)
 
     def convert(self, source, resources):
         """ convert a a string with tags in
@@ -255,10 +272,12 @@ class LatexTagsToHTML(Preprocessor):
                 new = new.replace(tag, '[' + ', '.join(html) + ']')
 
             elif any([tag.startswith('\\begin{{{0}}}'.format(env)) for env in
-                      ['equation', 'equation*', 'align', 'align*', 'multline', 'multline*', 'gather', 'gather*']]):
+                      ['equation', 'equation*', 'align', 'align*',
+                       'multline', 'multline*', 'gather', 'gather*']]):
                 in_equation = True
             elif any([tag.startswith('\\end{{{0}}}'.format(env)) for env in
-                      ['equation', 'equation*', 'align', 'align*', 'multline', 'multline*', 'gather', 'gather*']]):
+                      ['equation', 'equation*', 'align', 'align*', 'multline',
+                       'multline*', 'gather', 'gather*']]):
                 new += ' '.join(labels)
                 labels = []
                 in_equation = False
