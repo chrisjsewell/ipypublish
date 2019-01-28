@@ -159,6 +159,11 @@ def compare_tex_files(testpath, outpath):
                             re.DOTALL)
         content = ht_rgx.sub("\\g<1>", content)
 
+        # at start of itemize
+        content = content.replace("\\itemsep1pt\\parskip0pt\\parsep0pt\n", "")
+        # at start of enumerate
+        content = content.replace("\\tightlist\n", "")
+
         # python < 3.6 sorts these differently
         pyg_rgx = re.compile(
             ("\\\\expandafter\\\\def\\\\csname "
