@@ -111,13 +111,17 @@ class LatexTagsToHTML(Preprocessor):
         """
         logging.info('reading bibliopath: {}'.format(path))
         bibdatabase = {}
+        bibparser = bibtexparser.bparser.BibTexParser()
         try:
             if hasattr(path, 'open'):
                 with path.open(encoding="utf8") as bibtex_file:
-                    bibdatabase = bibtexparser.load(bibtex_file).entries_dict
+                    bibtex_data = bibtex_file.read()
             else:
                 with io.open(path, encoding="utf8") as bibtex_file:
-                    bibdatabase = bibtexparser.load(bibtex_file).entries_dict
+                    bibtex_data = bibtex_file.read()
+            if hasattr(bibtex_data, "decode"):
+                    bibtex_data = bibtex_data.decode("utf-8")
+            bibdatabase = bibparser.parse(bibtex_data).entries_dict
         except Exception as err:
             logging.error('could not read bibliopath {}: {}'.format(path, err))
 
