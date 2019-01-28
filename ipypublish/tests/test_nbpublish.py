@@ -77,9 +77,14 @@ def test_publish_with_external(ipynb_folder_with_external, tex_with_external):
     """ includes:
 
     - international language (portugese)
-    - non-ascii characters in text
     - internal (image) files
     - external logo and bib
+
+    TODO non-ascii characters in text not working on Linux
+    This works locally (on osx) and on travis osx, but not for linux
+    latexmk raises `Package utf8x Error: MalformedUTF-8sequence.` or
+    `character used is undefined`
+    presumable this is due to the way the ipynb is being encoded on osx
 
     """
     basename = os.path.basename(ipynb_folder_with_external)
@@ -163,6 +168,9 @@ def compare_tex_files(testpath, outpath):
         content = content.replace("\\itemsep1pt\\parskip0pt\\parsep0pt\n", "")
         # at start of enumerate
         content = content.replace("\\tightlist\n", "")
+
+        # python 3.5 used .jpg instead of .jpeg
+        content = content.replace(".jpg", ".jpeg")
 
         # python < 3.6 sorts these differently
         pyg_rgx = re.compile(
