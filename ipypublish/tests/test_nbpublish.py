@@ -152,7 +152,10 @@ def compare_tex_files(testpath, outpath):
 
         # only certain versions of pandoc wrap sections with \hypertarget
         # NOTE a better way to do this might be to use TexSoup
-        ht_rgx = re.compile("\\\\hypertarget\\{.*\\}\\{[^\\\\]*(.*\\})\\}",
+        ht_rgx = re.compile("\\\\hypertarget\\{[^\\}]*\\}\\{[^\\\\]*"
+                            "(\\\\[sub]*section\\{[^\\}]*\\}"
+                            "\\\\label\\{[^\\}]*\\})"
+                            "\\}",
                             re.DOTALL)
         content = ht_rgx.sub("\\g<1>", content)
 
