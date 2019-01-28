@@ -76,3 +76,5 @@ def run(sys_args=None):
     filepath, options = parse_options(sys_args, "nbpresent")
 
     nbpresent(filepath, **options)
+
+    return 0

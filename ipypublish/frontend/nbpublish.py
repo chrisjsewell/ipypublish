@@ -85,4 +85,6 @@ def run(sys_args=None):
 
     filepath, options = parse_options(sys_args, "nbpublish")
 
-    return nbpublish(filepath, **options)
+    nbpublish(filepath, **options)
+
+    return 0
