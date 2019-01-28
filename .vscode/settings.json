@@ -24,4 +24,5 @@
         "nbconvert",
         "nbpresent"
     ],
+    "latex-workshop.latex.autoBuild.onSave.enabled": false
 }
