@@ -315,6 +315,8 @@ def convert_to_json(path, outpath=None, ignore_other=False):
     return json.dumps(output, indent=2)
 
 
+# TODO add "strip_ext": "ipypublish.filters.filters.strip_ext" to latex ipypublish
+
 if __name__ == "__main__":
 
     if False:

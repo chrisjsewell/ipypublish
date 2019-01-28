@@ -14,7 +14,7 @@
       "",
       "((*- if nb.metadata.ipub: -*))",
       "((*- if nb.metadata.ipub.bibliography: -*))",
-      "((* set filename = nb.metadata.ipub.bibliography | posix_path *))",
+      "((* set filename = nb.metadata.ipub.bibliography | strip_ext | posix_path *))",
       "",
       "% sort citations by order of first appearance",
       "\\bibliographystyle{unsrtnat}",
