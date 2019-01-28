@@ -5,9 +5,9 @@ from difflib import context_diff
 
 import pytest
 
-from ipypublish.main import publish
+from ipypublish.convert.main import publish
 from ipypublish.scripts import pdfexport
-from ipypublish.main import iter_all_plugin_paths
+from ipypublish.convert.plugin_manager import iter_all_plugin_paths
 from ipypublish.tests import TEST_FILES_DIR
 
 

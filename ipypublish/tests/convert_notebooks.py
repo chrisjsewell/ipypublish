@@ -2,8 +2,8 @@ import shutil
 import tempfile
 import os
 
-from ipypublish.main import iter_all_plugin_paths
-from ipypublish.main import publish
+from ipypublish.convert.plugin_manager import iter_all_plugin_paths
+from ipypublish.convert.main import publish
 from ipypublish.tests import TEST_FILES_DIR
 
 

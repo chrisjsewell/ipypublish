@@ -1,7 +1,7 @@
 import os
 import json
-from ipypublish.conversion.plugin_to_json import convert_to_json
-from ipypublish.conversion.tpl_dct_to_json import py_to_json
+from ipypublish.port_api.plugin_to_json import convert_to_json
+from ipypublish.port_api.tpl_dct_to_json import py_to_json
 from ipypublish.tests import TEST_FILES_DIR
 
 

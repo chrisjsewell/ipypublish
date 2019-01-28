@@ -4,7 +4,7 @@ import os
 import sys
 
 from ipypublish.frontend.shared import get_parser
-from ipypublish.main import publish
+from ipypublish.convert.main import publish
 
 
 def nbpublish(ipynb_path,

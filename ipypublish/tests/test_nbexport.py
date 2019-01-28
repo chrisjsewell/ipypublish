@@ -1,6 +1,8 @@
 from ipypublish.scripts import nbmerge
-from ipypublish.main import (str_to_jinja, dict_to_config,
-                             create_exporter_cls, export_notebook)
+from ipypublish.convert.plugin_manager import (
+    create_exporter_cls, str_to_jinja
+)
+from ipypublish.convert.main import (dict_to_config, export_notebook)
 
 
 def test_nbexport_latex_empty(ipynb1):
