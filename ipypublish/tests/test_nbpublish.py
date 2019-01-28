@@ -7,7 +7,7 @@ import pytest
 
 from ipypublish.convert.main import publish
 from ipypublish.scripts import pdfexport
-from ipypublish.convert.plugin_manager import iter_all_plugin_paths
+from ipypublish.convert.config_manager import iter_all_export_paths
 from ipypublish.tests import TEST_FILES_DIR
 
 
@@ -157,7 +157,7 @@ def test_publish_ipynb1_slides(temp_folder, ipynb1):
 
 @pytest.mark.parametrize(
     "plugin_name,plugin_path",
-    list(iter_all_plugin_paths())
+    list(iter_all_export_paths())
 )
 def test_publish_run_all_plugins(temp_folder, ipynb1,
                                  plugin_name, plugin_path):

@@ -2,7 +2,7 @@ import sys
 import os
 import argparse
 
-from ipypublish.convert.plugin_manager import iter_all_plugin_infos
+from ipypublish.convert.config_manager import iter_all_export_infos
 
 
 class CustomFormatter(argparse.ArgumentDefaultsHelpFormatter,
@@ -30,7 +30,7 @@ def get_plugin_str(plugin_folder_paths):
     outstrs = []
     # outstrs.append('Available Export Configurations')
     # outstrs.append('-------------------------------')
-    for item in sorted(iter_all_plugin_infos(plugin_folder_paths),
+    for item in sorted(iter_all_export_infos(plugin_folder_paths),
                        key=lambda i: (i["class"], i["key"])):
         outstrs.append("- Key:   {}".format(item["key"]))
         outstrs.append("  Class: {}".format(item["class"]))

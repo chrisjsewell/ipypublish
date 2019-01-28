@@ -1,4 +1,5 @@
 {
+  "$schema": "../convert/export_config.schema.json",
   "description": [
     "html in ipypublish format, preprocessed with default metadata tags",
     "- a table of contents",

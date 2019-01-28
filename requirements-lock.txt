@@ -13,7 +13,7 @@ future==0.17.1            # via bibtexparser
 ipython-genutils==0.2.0   # via nbformat, traitlets
 jinja2==2.10
 jsonextended==0.7.7
-jsonschema==2.6.0         # via nbformat
+jsonschema==2.6.0
 jupyter-core==4.4.0       # via nbconvert, nbformat
 markupsafe==1.1.0         # via jinja2
 mistune==0.8.4            # via nbconvert

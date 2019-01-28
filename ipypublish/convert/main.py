@@ -15,7 +15,8 @@ from six import string_types
 import ipypublish
 from ipypublish.utils import pathlib
 from ipypublish.scripts.nbmerge import merge_notebooks
-from ipypublish.convert.plugin_manager import (get_plugin_path, load_plugin,
+from ipypublish.convert.config_manager import (get_export_config_path,
+                                               load_export_config,
                                                load_template,
                                                create_exporter_cls)
 from ipypublish.scripts.pdfexport import export_pdf
@@ -107,26 +108,27 @@ def publish(ipynb_path,
 
     # find conversion configuration
     logging.info('finding conversion configuration: {}'.format(conversion))
-    plugin_path = None
+    export_config_path = None
     if isinstance(conversion, string_types):
         outformat_path = pathlib.Path(conversion)
     else:
         outformat_path = conversion
     if outformat_path.exists():  # TODO use pathlib approach
         # if is outformat is a path that exists, use that
-        plugin_path = outformat_path
+        export_config_path = outformat_path
     else:
         # else search internally
-        plugin_path = get_plugin_path(conversion, plugin_folder_paths)
+        export_config_path = get_export_config_path(
+            conversion, plugin_folder_paths)
 
-    if plugin_path is None:
+    if export_config_path is None:
         handle_error(
             "could not find conversion configuration: {}".format(conversion),
             IOError)
 
     # read conversion configuration and create
     logging.info('loading conversion configuration')
-    data = load_plugin(plugin_path)
+    data = load_export_config(export_config_path)
     logging.info('creating exporter')
     exporter_cls = create_exporter_cls(data["exporter"]["class"])
     logging.info('creating template')

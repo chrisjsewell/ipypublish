@@ -1,5 +1,5 @@
 from ipypublish.scripts import nbmerge
-from ipypublish.convert.plugin_manager import (
+from ipypublish.convert.config_manager import (
     create_exporter_cls, str_to_jinja
 )
 from ipypublish.convert.main import (dict_to_config, export_notebook)

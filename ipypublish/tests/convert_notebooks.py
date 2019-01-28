@@ -2,14 +2,14 @@ import shutil
 import tempfile
 import os
 
-from ipypublish.convert.plugin_manager import iter_all_plugin_paths
+from ipypublish.convert.config_manager import iter_all_export_paths
 from ipypublish.convert.main import publish
 from ipypublish.tests import TEST_FILES_DIR
 
 
 def convert_all(inpath, outpath):
     """ convert notebook using all available plugins """
-    for plugin_name, plugin_path in iter_all_plugin_paths():
+    for plugin_name, plugin_path in iter_all_export_paths():
 
         out_folder = tempfile.mkdtemp()
         try:

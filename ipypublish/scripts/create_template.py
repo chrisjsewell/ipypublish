@@ -15,6 +15,17 @@ import jsonschema
 # from ipypublish import __version__
 
 
+def handle_error(msg, err_type, raise_msg=None, log_msg=None):
+    """handle an error, by logging it, then raising"""
+    if raise_msg is None:
+        raise_msg = msg
+    if log_msg is None:
+        log_msg = msg
+
+    logging.error(log_msg)
+    raise err_type(raise_msg)
+
+
 def create_template(outline_schema, segment_datas, outpath=None):
     # type: (dict, Tuple[dict]) -> str
     """ build a latex jinja template from;
@@ -46,10 +57,16 @@ def create_template(outline_schema, segment_datas, outpath=None):
         "with segments:"
     ]
 
-    for segment_data in segment_datas:
+    for seg_num, segment_data in enumerate(segment_datas):
+
         # validate segment against outline schema
-        jsonschema.validate(segment_data, outline_schema)
-        # TODO better validation error output for user
+        try:
+            jsonschema.validate(segment_data, outline_schema)
+        except jsonschema.ValidationError as err:
+            handle_error(
+                "validation of template segment {} failed: {}".format(
+                    seg_num, err.message),
+                jsonschema.ValidationError)
 
         # get description of segment
         docstrings.append(
@@ -70,9 +87,11 @@ def create_template(outline_schema, segment_datas, outpath=None):
             elif 'append_after' in placeholders[key]["$ref"]:
                 replacements[key] = replacements[key] + '\n' + valstring
             else:
-                raise jsonschema.ValidationError(
+                # TODO this should be part of the schema
+                handle_error((
                     "properties/segments/properties/{0}/$ref ".format(key) +
-                    "should contain either append_before or append_before")
+                    "should contain either append_before or append_before"),
+                    jsonschema.ValidationError)
 
     replacements["meta_docstring"] = "\n".join(docstrings).replace("'", '"')
     # TODO add option to include ipypub version in output file

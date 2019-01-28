@@ -8,3 +8,4 @@ tornado
 bibtexparser
 jsonextended
 six
+jsonschema
