@@ -28,6 +28,13 @@ def bibfile():
 
 
 @pytest.fixture
+def temp_folder():
+    out_folder = tempfile.mkdtemp()
+    yield out_folder
+    shutil.rmtree(out_folder)
+
+
+@pytest.fixture
 def ipynb_folder(temp_folder, ipynb1, ipynb2):
 
     shutil.copyfile(os.path.join(TEST_FILES_DIR, 'ipynb1.ipynb'),
@@ -38,7 +45,25 @@ def ipynb_folder(temp_folder, ipynb1, ipynb2):
 
 
 @pytest.fixture
-def temp_folder():
-    out_folder = tempfile.mkdtemp()
-    yield out_folder
-    shutil.rmtree(out_folder)
+def ipynb_folder_with_external(temp_folder):
+
+    folder = os.path.join(temp_folder, "ipynb_with_external")
+    os.makedirs(folder)
+
+    shutil.copyfile(os.path.join(TEST_FILES_DIR, 'ipynb_with_external',
+                                 'ipynb_with_external.ipynb'),
+                    os.path.join(folder, 'ipynb_with_external.ipynb'))
+    shutil.copyfile(os.path.join(TEST_FILES_DIR, 'ipynb_with_external',
+                                 'example.bib'),
+                    os.path.join(folder, 'example.bib'))
+    shutil.copyfile(os.path.join(TEST_FILES_DIR, 'ipynb_with_external',
+                                 'logo_example.png'),
+                    os.path.join(folder, 'logo_example.png'))
+
+    yield folder
+
+
+@pytest.fixture
+def tex_with_external():
+    return pathlib.Path(os.path.join(TEST_FILES_DIR, 'ipynb_with_external',
+                                     'ipynb_with_external.tex'))

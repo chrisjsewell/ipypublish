@@ -1,5 +1,6 @@
 import os
 import re
+import io
 from difflib import context_diff
 
 import pytest
@@ -71,6 +72,30 @@ def test_publish_withbib(temp_folder, ipynb_with_bib):
     assert os.path.exists(pdf_path)
 
 
+@pytest.mark.requires_latexmk
+def test_publish_with_external(ipynb_folder_with_external, tex_with_external):
+    """ includes:
+
+    - international language (portugese)
+    - non-ascii characters in text
+    - internal (image) files
+    - external logo and bib
+
+    """
+    basename = os.path.basename(ipynb_folder_with_external)
+    tex_path = os.path.join(ipynb_folder_with_external,
+                            basename + '.tex')
+    pdf_path = os.path.join(ipynb_folder_with_external,
+                            basename + '.pdf')
+    publish(ipynb_folder_with_external,
+            conversion='latex_ipypublish_main',
+            outpath=ipynb_folder_with_external,
+            create_pdf=True)
+    assert os.path.exists(tex_path)
+    assert os.path.exists(pdf_path)
+    compare_tex_files(tex_with_external, tex_path)
+
+
 def test_publish_ipynb1_html(temp_folder, ipynb1):
 
     html_path = os.path.join(temp_folder,
@@ -112,39 +137,41 @@ def test_publish_run_all_plugins(temp_folder, ipynb1,
     # nbconvert version (e.g. different versions of font-awesome)
     if exporter.output_mimetype == 'text/latex':
 
-        with open(outfile) as fobj:
-            out_content = fobj.read()
-        with open(testfile) as fobj:
-            test_content = fobj.read()
+        compare_tex_files(testfile, outfile)
+
+    # TODO for html, use html.parser or beautifulsoup to compare only body
+
+
+def compare_tex_files(testpath, outpath):
+
+    output = []
+    for path in [testpath, outpath]:
+
+        with io.open(str(path), encoding='utf8') as fobj:
+            content = fobj.read()
 
         # only certain versions of pandoc wrap sections with \hypertarget
         # NOTE a better way to do this might be to use TexSoup
         ht_rgx = re.compile("\\\\hypertarget\\{.*\\}\\{[^\\\\]*(.*\\})\\}",
                             re.DOTALL)
-        out_content = ht_rgx.sub("\\g<1>", out_content)
-        test_content = ht_rgx.sub("\\g<1>", test_content)
+        content = ht_rgx.sub("\\g<1>", content)
 
         # python < 3.6 sorts these differently
         pyg_rgx = re.compile(
             ("\\\\expandafter\\\\def\\\\csname "
                 "PY\\@tok\\@[0-9a-zA-Z]*\\\\endcsname[^\n]*"),
             re.MULTILINE)
-        out_content = pyg_rgx.sub("\<pygments definition\>", out_content)
-        test_content = pyg_rgx.sub("\<pygments definition\>", test_content)
+        content = pyg_rgx.sub("\<pygments definition\>", content)
 
         # also remove all space from start of lines
         space_rgx = re.compile("^[\s]*", re.MULTILINE)
-        out_content = space_rgx.sub("", out_content)
-        test_content = space_rgx.sub("", test_content)
+        content = space_rgx.sub("", content)
+        output.append(content)
 
-        # only report differences
-        if out_content != test_content:
-            raise AssertionError("\n"+"\n".join(context_diff(
-                test_content.splitlines(), out_content.splitlines(),
-                fromfile=testfile, tofile=outfile)))
+    test_content, out_content = output
 
-    # TODO for html, use html.parser or beautifulsoup to compare only body
-
-# TODO files with non-ascii characters
-# TODO files with internal files
-# TODO files with external files
+    # only report differences
+    if out_content != test_content:
+        raise AssertionError("\n"+"\n".join(context_diff(
+            test_content.splitlines(), out_content.splitlines(),
+            fromfile=str(testpath), tofile=str(outpath))))
