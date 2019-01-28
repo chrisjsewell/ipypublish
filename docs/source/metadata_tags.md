@@ -6,7 +6,7 @@ All information additional information, used to specify how a particular noteboo
 
 ```json
 {
-		"ipub": {}
+    "ipub": {}
 }
 ```
 
@@ -21,34 +21,36 @@ if you are not setting additional options, use `"value":true`.
 
 ## Document Level
 
-### Language 
+### Language
 
 To change the **language** of the document:
 
 ```json
 {
 "ipub": {
-	"language" : "french"
-	}
+  "language" : "french"
+  }
 }
 ```
 
-where the language can be any specified in the 
-[babel](https://people.phys.ethz.ch/~ihn/latex/babel.pdf) package.
+where the language can be any specified in the
+[babel](https://ctan.org/pkg/babel) package.
 
 ### Bibliography
 
-To specify where the **bibliography** is:
+To specify where the **bibliography** is and choose a style:
 
 ```json
 {
 "ipub": {
-	"bibliography" : "path/to/bibliograph.bib"
-	}
+  "bibliography" : "path/to/bibliograph.bib",
+  "bibstyle": "unsrtnat"
+  }
 }
 ```
 
-The path can be absolute or relative.
+- The path can be absolute or relative.
+- The `bibstyle` must be a [natbib stylename](https://www.overleaf.com/learn/latex/Natbib_bibliography_styles)
 
 ### Title Page
 
@@ -58,21 +60,21 @@ For **titlepage**, enter in notebook metadata:
 {
 "ipub": {
   "titlepage": {
-	"author": "Authors Name",
-	"email": "authors@email.com",
-	"supervisors": [
-	  "First Supervisor",
-	  "Second Supervisor"
-	],
-	"title": "Main-Title",
-	"subtitle": "Sub-Title",
-	"tagline": "A tagline for the report.",
-	"institution": [
-	  "Institution1",
-	  "Institution2"
-	],
-	"logo": "path/to/logo_example.png"
-	}
+  "author": "Authors Name",
+  "email": "authors@email.com",
+  "supervisors": [
+    "First Supervisor",
+    "Second Supervisor"
+  ],
+  "title": "Main-Title",
+  "subtitle": "Sub-Title",
+  "tagline": "A tagline for the report.",
+  "institution": [
+    "Institution1",
+    "Institution2"
+  ],
+  "logo": "path/to/logo_example.png"
+  }
   }
 }
 ```
@@ -123,8 +125,8 @@ To **ignore any cell** for all outputs:
 ```json
 {
 "ipub": {
-	"ignore" : true
-	}
+  "ignore" : true
+  }
 }
 ```
 
@@ -133,10 +135,11 @@ To mark any cell as for output to **slides only**:
 ```json
 {
 "ipub": {
-	"slideonly" : true
-	}
+  "slideonly" : true
+  }
 }
 ```
+
 ### Code Block
 
 To  **output a code block**:
@@ -145,7 +148,7 @@ To  **output a code block**:
 {
 "ipub": {
   "code": {
-	"format" : {},
+  "format" : {},
     "asfloat": true,
     "caption": "",
     "label": "code:example_sym",
@@ -178,7 +181,7 @@ To  **output text produced by the code** (e.g. *via* the `print` command):
     "label": "code:example_sym",
     "widefigure": false,
     "placement": "H",
-	"use_ansi": false
+  "use_ansi": false
     }
   }
 }
@@ -188,7 +191,7 @@ all extra tags are optional:
 
 - `format` can contain any keywords related to the latex [Listings](https://en.wikibooks.org/wiki/LaTeX/Source_Code_Listings) package (such as syntax highlighting colors). N.B. in place of `\` use `\\`.
 - `asfloat` contitutes whether the code is wrapped in a codecell (float) environment or is inline.
-- if `use_ansi` is true then, instead of stripping ansi colors in latex output, they will be converted to latex, wrapped in % characters and the listings option escapechar=\% set. 
+- if `use_ansi` is true then, instead of stripping ansi colors in latex output, they will be converted to latex, wrapped in % characters and the listings option escapechar=\% set.
 - all other tags work the same as figure (below).
 
 ### Output Figures
@@ -202,7 +205,7 @@ For **figures** (i.e. any graphics output by the code), enter in cell metadata:
     "caption": "Figure caption.",
     "label": "fig:flabel",
     "placement": "H",
-	"height":0.4,
+  "height":0.4,
     "widefigure": false
     }
   }
@@ -222,11 +225,11 @@ For  **tables** (e.g. those output by `pandas`), enter in cell metadata:
 {
 "ipub": {
      "table": {
-	    "caption": "Table caption.",
-	    "label": "tbl:tlabel",
-	    "placement": "H",
+      "caption": "Table caption.",
+      "label": "tbl:tlabel",
+      "placement": "H",
             "alternate": "gray!20"
-	  }
+    }
    }
 }
 ```
@@ -234,7 +237,7 @@ For  **tables** (e.g. those output by `pandas`), enter in cell metadata:
 - `caption` and `label` are optional
 - `placement` is optional and constitutes using a placement arguments for the table (e.g. \begin{table}[H]). See [Positioning_images_and_tables](https://www.sharelatex.com/learn/Positioning_images_and_tables).
 - `alternate` is optional and constitutes using alternating colors for the table rows (e.g. \rowcolors{2}{gray!25}{white}). See [https://tex.stackexchange.com/a/5365/107738](https://tex.stackexchange.com/a/5365/107738).
-- if tables exceed the text width, in latex, they will be shrunk to fit 
+- if tables exceed the text width, in latex, they will be shrunk to fit
 
 ### Output Equations
 
@@ -243,15 +246,15 @@ For  **equations** (e.g. those output by `sympy`), enter in cell metadata:
 ```json
 {
   "ipub": {
-	  "equation": {
+    "equation": {
         "environment": "equation",
-	    "label": "eqn:elabel"
-	  }
+      "label": "eqn:elabel"
+    }
   }
 }
 ```
 
-- environment is optional and can be 'none' or any of those available in [amsmath](https://www.sharelatex.com/learn/Aligning_equations_with_amsmath); 'equation', 'align','multline','gather', or their \* variants. Additionaly, 'breqn' or 'breqn\*' will select the experimental [breqn](https://ctan.org/pkg/breqn) environment to *smart* wrap long equations. 
+- environment is optional and can be 'none' or any of those available in [amsmath](https://www.sharelatex.com/learn/Aligning_equations_with_amsmath); 'equation', 'align','multline','gather', or their \* variants. Additionaly, 'breqn' or 'breqn\*' will select the experimental [breqn](https://ctan.org/pkg/breqn) environment to *smart* wrap long equations.
 - label is optional and will only be used if the equation is in an environment
 
 ### Controlling Slides
@@ -261,7 +264,7 @@ For **slide output**:
 ```json
 {
   "ipub": {
-	  "slide": true
+    "slide": true
   }
 }
 ```
@@ -270,7 +273,7 @@ For **slide output**:
 
 ### Object Output Formats
 
-The format of the Jupyter Notebook (.ipynb) file allows for the storage of a single output in multiple formats. This is taken advantage of by packages such as matplotlib and pandas, etc to store a figure/table in both latex and html formats, which can then be selected by ipypublish based on the document type required. 
+The format of the Jupyter Notebook (.ipynb) file allows for the storage of a single output in multiple formats. This is taken advantage of by packages such as matplotlib and pandas, etc to store a figure/table in both latex and html formats, which can then be selected by ipypublish based on the document type required.
 
 Sometimes a user may wish to have greater control over the output format
 and/or which output types are to be stored. It it possible to achieve this *via* the Jupyter `display` function. For example, if we wanted to display a
@@ -286,7 +289,7 @@ latex = df.to_latex(index=False)
 html = df.to_html(index=False)
 display({'text/latex': latex,
          'text/html': html}, raw=True)
-         
+
 ```
 
 If you wish to create your own object with multiple output formats,
@@ -302,7 +305,7 @@ class MyObject(object):
 
     def _repr_html_(self):
         return "<b>" + self.text + "</b>"
-        
+
 ```
 
 ### Captions in a Markdown cell
@@ -314,14 +317,14 @@ If a **markdown cell** or **code cell with latex/text output** has the metadata 
 ```json
 {
  "ipub": {
-	"caption": "fig:example_mpl"
-	}
+  "caption": "fig:example_mpl"
+  }
 }
 ```
 
 Then, during the the postprocessor stage, this cell will be removed from the notebook object, and its text stored as a *resource*;
 
-- the cell's text is the first paragraph of the markdown string, i.e. nothing after a newline (\n) 
+- the cell's text is the first paragraph of the markdown string, i.e. nothing after a newline (\n)
 - if there are multiple instance of the same cation name, then only the last instance will be stored
 
 During the jinja templating, if a **figure, table or code** cell has a label matching any stored caption name, for example:
@@ -329,28 +332,27 @@ During the jinja templating, if a **figure, table or code** cell has a label mat
 ```json
 {
 "ipub": {
-	"figure": {
-	  "caption": "",
-	  "label": "fig:example_mpl"
-	}
+  "figure": {
+    "caption": "",
+    "label": "fig:example_mpl"
+  }
   }
 }
 ```
 
-Then its caption will be overriden with the stored text. 
+Then its caption will be overriden with the stored text.
 
 ### Embedding Interactive HTML
 
-Packages built on [IPywidgets](http://ipywidgets.readthedocs.io), 
-like [PythreeJS](https://github.com/jovyan/pythreejs), 
-[Pandas3JS](https://github.com/chrisjsewell/pandas3js) 
-and the excellent [IPyvolume](https://ipyvolume.readthedocs.io/en/latest/), 
-are making it increasingly easier to render complex, interactive html in the notebook. 
+Packages built on [IPywidgets](http://ipywidgets.readthedocs.io),
+like [PythreeJS](https://github.com/jovyan/pythreejs),
+[Pandas3JS](https://github.com/chrisjsewell/pandas3js)
+and the excellent [IPyvolume](https://ipyvolume.readthedocs.io/en/latest/),
+are making it increasingly easier to render complex, interactive html in the notebook.
 IPywidgets offers a [save notebook with widgets](http://ipywidgets.readthedocs.io/en/latest/embedding.html) feature, however, this can greatly increase the size of the notebook.
 
-
-A better solution, recently offered, is to save a [html snippet](http://ipywidgets.readthedocs.io/en/latest/embedding.html#embeddable-html-snippet) 
-of the current widget state to file and embed it into the html/slides output as an iframe. This is also particularly useful in reveal.js slides, 
+A better solution, recently offered, is to save a [html snippet](http://ipywidgets.readthedocs.io/en/latest/embedding.html#embeddable-html-snippet)
+of the current widget state to file and embed it into the html/slides output as an iframe. This is also particularly useful in reveal.js slides,
 since the iframe content can be [*lazy loaded*](https://github.com/hakimel/reveal.js/#lazy-loading).
 To embed html, use the `embed_html` tag:
 
@@ -360,9 +362,9 @@ To embed html, use the `embed_html` tag:
     "embed_html": {
       "filepath": "path/to/file.html",
       "other_files": ["path/to/file.js"],
-	  "url": "https//path/to/url.html",
-	  "width":0.5,
-	  "height":0.5
+      "url": "https//path/to/url.html",
+      "width":0.5,
+      "height":0.5
     },
     "figure": {
       "caption": "An example of embedded html"
@@ -371,13 +373,13 @@ To embed html, use the `embed_html` tag:
 }
 ```
 
-If the cell already contains an output, then this tag will create/overwrite the first output's "text/html" type. 
+If the cell already contains an output, then this tag will create/overwrite the first output's "text/html" type.
 This allows for a single notebook cell with a static image of the widget in the output, and a path to the embed html in the metadata so that a) if you export to latex/pdf, you get the static image or b) if you export to html/reveal slides, you get the html.
 
 - use either filepath or url
 - other_files are files required by the html file (e.g. javascript libraries). These files will be copied to the the same folder as the html
 - width/height refers to the fraction of the viewspace used (e.g. 0.5 width -> 50vw and 0.5 height -> 50vh)
 
-An example of how this works is in the [Example.ipynb](example/notebooks/Example.pdf), and the 
-[Example.html](https://chrisjsewell.github.io/ipypublish/Example.html#Embedded-HTML-6) and 
-[Example.slides.html](https://chrisjsewell.github.io/ipypublish/Example.slides.html#/9) outputs. 
+An example of how this works is in the [Example.ipynb](example/notebooks/Example.pdf), and the
+[Example.html](https://chrisjsewell.github.io/ipypublish/Example.html#Embedded-HTML-6) and
+[Example.slides.html](https://chrisjsewell.github.io/ipypublish/Example.slides.html#/9) outputs.

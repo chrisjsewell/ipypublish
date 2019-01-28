@@ -35,7 +35,7 @@ def nbpublish(ipynb_path,
     create_pdf: bool
         convert to pdf (if converting to latex)
     pdf_in_temp: bool
-        run pdf conversion in a temporary folder 
+        run pdf conversion in a temporary folder
         and only copy back the pdf file
     pdf_debug: bool
         run latexmk in interactive mode
