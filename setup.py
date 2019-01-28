@@ -53,5 +53,11 @@ with io.open('README.rst') as readme:
         zip_safe=True,
         packages=find_packages(),
         include_package_data=True,
-        scripts=['bin/nbpublish', 'bin/nbpresent'],
+        # scripts=['bin/nbpublish', 'bin/nbpresent'],
+        entry_points={
+            'console_scripts': [
+                'nbpublish = ipypublish.frontend.nbpublish:run',
+                'nbpresent = ipypublish.frontend.nbpresent:run'
+            ]
+        }
     )

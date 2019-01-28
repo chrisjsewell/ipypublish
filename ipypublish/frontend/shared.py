@@ -85,6 +85,7 @@ def parse_options(sys_args, program):
     export_group.add_argument("-le", "--list-exporters", action="store_true",
                               help=("list all known, "
                                     "export configurations"))
+    # TODO filter list by part of key
 
     nbmerge_group = parser.add_argument_group('nb merge')
     nbmerge_group.add_argument("-i", "--ignore-prefix",

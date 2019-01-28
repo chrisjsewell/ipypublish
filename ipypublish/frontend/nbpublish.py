@@ -78,7 +78,10 @@ def nbpublish(ipynb_path,
                    plugin_folder_paths=export_paths)
 
 
-def run(sys_args):
+def run(sys_args=None):
+
+    if sys_args is None:
+        sys_args = sys.argv[1:]
 
     filepath, options = parse_options(sys_args, "nbpublish")
 
