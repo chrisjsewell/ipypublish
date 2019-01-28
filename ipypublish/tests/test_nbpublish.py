@@ -73,7 +73,7 @@ def test_publish_withbib(temp_folder, ipynb_with_bib):
 
 
 @pytest.mark.requires_latexmk
-def test_publish_with_external(ipynb_folder_with_external, tex_with_external):
+def test_publish_complex_latex(ipynb_folder_with_external, tex_with_external):
     """ includes:
 
     - international language (portugese)
@@ -99,6 +99,41 @@ def test_publish_with_external(ipynb_folder_with_external, tex_with_external):
     assert os.path.exists(tex_path)
     assert os.path.exists(pdf_path)
     compare_tex_files(tex_with_external, tex_path)
+
+
+def test_publish_complex_html(ipynb_folder_with_external, html_with_external):
+    """ includes:
+
+    - internal (image) files
+    - external logo and bib
+
+    """
+    basename = os.path.basename(ipynb_folder_with_external)
+    html_path = os.path.join(ipynb_folder_with_external,
+                             basename + '.html')
+    publish(ipynb_folder_with_external,
+            conversion='html_ipypublish_main',
+            outpath=ipynb_folder_with_external)
+    assert os.path.exists(html_path)
+    compare_html_files(html_with_external, html_path)
+
+
+def test_publish_complex_slides(ipynb_folder_with_external,
+                                slides_with_external):
+    """ includes:
+
+    - internal (image) files
+    - external logo and bib
+
+    """
+    basename = os.path.basename(ipynb_folder_with_external)
+    html_path = os.path.join(ipynb_folder_with_external,
+                             basename + '.slides.html')
+    publish(ipynb_folder_with_external,
+            conversion='slides_ipypublish_main',
+            outpath=ipynb_folder_with_external)
+    assert os.path.exists(html_path)
+    compare_html_files(slides_with_external, html_path)
 
 
 def test_publish_ipynb1_html(temp_folder, ipynb1):
@@ -138,13 +173,39 @@ def test_publish_run_all_plugins(temp_folder, ipynb1,
     assert os.path.exists(testfile), "could not find: {} for {}".format(
         testfile, plugin_name)
 
-    # only compare latex files, since html has styles differing by
-    # nbconvert version (e.g. different versions of font-awesome)
     if exporter.output_mimetype == 'text/latex':
-
         compare_tex_files(testfile, outfile)
+    elif exporter.output_mimetype == 'text/html':
+        compare_html_files(testfile, outfile)
 
-    # TODO for html, use html.parser or beautifulsoup to compare only body
+
+def compare_html_files(testpath, outpath):
+    # only compare body of html, since styles differ by
+    # nbconvert/pandoc version (e.g. different versions of font-awesome)
+
+    output = []
+    for path in [testpath, outpath]:
+
+        with io.open(str(path), encoding='utf8') as fobj:
+            content = fobj.read()
+
+        # extract only the body
+        # could use html.parser or beautifulsoup to do this better
+        body_rgx = re.compile("\\<body\\>(.*)\\</body\\>", re.DOTALL)
+        body_search = body_rgx.search(content)
+        if not body_search:
+            raise IOError("could not find body content of {}".format(path))
+        content = body_search.group(1)
+
+        output.append(content)
+
+    test_content, out_content = output
+
+    # only report differences
+    if out_content != test_content:
+        raise AssertionError("\n"+"\n".join(context_diff(
+            test_content.splitlines(), out_content.splitlines(),
+            fromfile=str(testpath), tofile=str(outpath))))
 
 
 def compare_tex_files(testpath, outpath):

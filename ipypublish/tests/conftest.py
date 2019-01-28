@@ -67,3 +67,15 @@ def ipynb_folder_with_external(temp_folder):
 def tex_with_external():
     return pathlib.Path(os.path.join(TEST_FILES_DIR, 'ipynb_with_external',
                                      'ipynb_with_external.tex'))
+
+
+@pytest.fixture
+def html_with_external():
+    return pathlib.Path(os.path.join(TEST_FILES_DIR, 'ipynb_with_external',
+                                     'ipynb_with_external.html'))
+
+
+@pytest.fixture
+def slides_with_external():
+    return pathlib.Path(os.path.join(TEST_FILES_DIR, 'ipynb_with_external',
+                                     'ipynb_with_external.slides.html'))

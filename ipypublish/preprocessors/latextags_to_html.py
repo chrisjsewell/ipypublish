@@ -1,6 +1,7 @@
 import logging
 import re
 import string
+import io
 
 import bibtexparser
 import traitlets as traits
@@ -96,7 +97,8 @@ class LatexTagsToHTML(Preprocessor):
         config=True)
 
     def __init__(self, *args, **kwargs):
-        # a dictionary to keep track of references, so they each get a different number
+        # a dictionary to keep track of references, 
+        # so they each get a different number
         self.refs = {}
         # bibliography references
         self.bibdatabase = {}
@@ -110,14 +112,14 @@ class LatexTagsToHTML(Preprocessor):
         logging.info('reading bibliopath: {}'.format(path))
         bibdatabase = {}
         try:
-            if hasattr(path,'open'):
-                with path.open() as bibtex_file:
+            if hasattr(path, 'open'):
+                with path.open(encoding="utf8") as bibtex_file:
                     bibdatabase = bibtexparser.load(bibtex_file).entries_dict
             else:
-                with open(path) as bibtex_file:
+                with io.open(path, encoding="utf8") as bibtex_file:
                     bibdatabase = bibtexparser.load(bibtex_file).entries_dict
-        except:
-            logging.error('could not read bibliopath: {}'.format(path))
+        except Exception as err:
+            logging.error('could not read bibliopath {}: {}'.format(path, err))
 
         return bibdatabase
 
@@ -213,7 +215,8 @@ class LatexTagsToHTML(Preprocessor):
         for tag in re.findall(self.regex, source):
 
             if tag.startswith('\\label'):
-                link = r'<a id="{label}" class="anchor-link" name="#{label}">&#182;</a>'.format(label=tag[7:-1])
+                link = r'<a id="{label}" class="anchor-link" name="#{label}">&#182;</a>'.format(
+                    label=tag[7:-1])
                 if in_equation:
                     labels.append(link)
                     new = new.replace(tag, '')
@@ -225,21 +228,24 @@ class LatexTagsToHTML(Preprocessor):
                 html = []
                 for name in names:
                     html.append(self.replace_reflabel(name, resources))
-                new = new.replace(tag, self.rreplace(', '.join(html), ',', ' and'))
+                new = new.replace(tag, self.rreplace(
+                    ', '.join(html), ',', ' and'))
 
             elif tag.startswith('\\cref'):
                 names = tag[6:-1].split(',')
                 html = []
                 for name in names:
                     html.append(self.replace_reflabel(name, resources))
-                new = new.replace(tag, self.rreplace(', '.join(html), ',', ' and'))
+                new = new.replace(tag, self.rreplace(
+                    ', '.join(html), ',', ' and'))
 
             elif tag.startswith('\\cite'):
                 names = tag[6:-1].split(',')
                 html = []
                 for name in names:
                     if name in self.bibdatabase:
-                        html.append(self.process_bib_entry(self.bibdatabase[name]))
+                        html.append(self.process_bib_entry(
+                            self.bibdatabase[name]))
                     else:
                         html.append('Unresolved citation: {}.'.format(name))
                 new = new.replace(tag, '[' + ', '.join(html) + ']')
@@ -278,7 +284,8 @@ class LatexTagsToHTML(Preprocessor):
                         continue
                     if "caption" in cell['metadata']["ipub"][key]:
                         text = cell['metadata']["ipub"][key]["caption"]
-                        cell['metadata']["ipub"][key]["caption"] = self.convert(text, resources)
+                        cell['metadata']["ipub"][key]["caption"] = self.convert(
+                            text, resources)
 
             if not cell['cell_type'] == "markdown":
                 continue
