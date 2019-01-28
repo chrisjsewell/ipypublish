@@ -1,38 +1,37 @@
+import os
 import pytest
-from jsonextended.utils import MockPath   # noqa: F401
+from ipypublish.utils import pathlib   # noqa: F401
 from ipypublish.frontend import nbpresent
 from ipypublish.frontend import nbpublish
 
 
-def test_nbpresent_dry_run(ipynb1):
-    # type: (MockPath) -> None
-    with ipynb1.maketemp() as fpath:
-        nbpresent.run([str(fpath), "--dry-run", "--log-level", "debug"])
+def test_nbpresent_dry_run(temp_folder, ipynb1):
+    # type: (str, pathlib.Path) -> None
+    nbpresent.run([str(ipynb1), "--outpath", temp_folder,
+                   "--dry-run", "--log-level", "debug"])
 
 
-def test_nbpublish_dry_run(ipynb1):
-    # type: (MockPath) -> None
-    with ipynb1.maketemp() as fpath:
-        nbpublish.run([str(fpath), "--dry-run", "--log-level", "debug"])
+def test_nbpublish_dry_run(temp_folder, ipynb1):
+    # type: (str, pathlib.Path) -> None
+    nbpublish.run([str(ipynb1), "--outpath", temp_folder,
+                   "--dry-run", "--log-level", "debug"])
 
 
-def test_nbpublish_write(ipynb1):
-    # type: (MockPath) -> None
-    with ipynb1.maketemp() as fpath:
-        nbpublish.run([str(fpath),
-                       "--outformat", "latex_ipypublish_main",
-                       "--outpath", str(fpath.parent)])
-        assert fpath.parent.joinpath(
-            fpath.name.replace(".ipynb", ".tex")).exists()
+def test_nbpublish_write(temp_folder, ipynb1):
+    # type: (str, pathlib.Path) -> None
+    nbpublish.run([str(ipynb1),
+                   "--outformat", "latex_ipypublish_main",
+                   "--outpath", temp_folder])
+    assert os.path.exists(os.path.join(temp_folder,
+                                       ipynb1.name.replace(".ipynb", ".tex")))
 
 
 @pytest.mark.requires_latexmk
-def test_nbpublish_to_pdf(ipynb1):
-    # type: (MockPath) -> None
-    with ipynb1.maketemp() as fpath:
-        nbpublish.run([str(fpath),
-                       "--outformat", "latex_ipypublish_main",
-                       "--outpath", str(fpath.parent),
-                       "--create-pdf"])
-        assert fpath.parent.joinpath(
-            fpath.name.replace(".ipynb", ".pdf")).exists()
+def test_nbpublish_to_pdf(temp_folder, ipynb1):
+    # type: (str, pathlib.Path) -> None
+    nbpublish.run([str(ipynb1),
+                   "--outformat", "latex_ipypublish_main",
+                   "--outpath", temp_folder,
+                   "--create-pdf"])
+    assert os.path.exists(os.path.join(temp_folder,
+                                       ipynb1.name.replace(".ipynb", ".pdf")))

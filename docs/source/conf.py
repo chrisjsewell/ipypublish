@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# jsonextended documentation build configuration file, created by
+# ipypublish documentation build configuration file, created by
 # sphinx-quickstart on Sat Jun  3 02:06:22 2017.
 #
 # This file is execfile()d with the current directory set to its

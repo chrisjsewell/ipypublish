@@ -16,17 +16,9 @@ from traitlets.config import Config
 from jinja2 import DictLoader
 from jsonextended import edict
 
-# python 3 to 2 compatibility
-try:
-    basestring
-except NameError:
-    basestring = str
-try:
-    import pathlib
-except ImportError:
-    import pathlib2 as pathlib
 
 import ipypublish
+from ipypublish.utils import basestring, pathlib
 from ipypublish.scripts.nbmerge import merge_notebooks
 from ipypublish.scripts.pdfexport import export_pdf
 from ipypublish import export_plugins

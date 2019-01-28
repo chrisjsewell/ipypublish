@@ -12,7 +12,7 @@ http://nbconvert.readthedocs.io/en/latest/api/exporters.html#nbconvert.exporters
 from typing import List, Tuple, Union  # noqa: F401
 import logging
 import jsonschema
-from ipypublish import __version__
+# from ipypublish import __version__
 
 
 def create_template(outline_schema, segment_datas, outpath=None):
