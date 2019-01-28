@@ -1,6 +1,6 @@
 {
   "description": [
-    "revel.js slides in the ipypublish format, preprocessed with default metadata tags;",
+    "reveal.js slides in the ipypublish format, preprocessed with default metadata tags;",
     "- all code/errors/output is shown unless tagged otherwise",
     "- resolves or removes (if no converter) latex tags (like \\cite{abc}, \\ref{})",
     "- splits titles and sub-titles into separate slides"

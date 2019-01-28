@@ -1,6 +1,6 @@
 {
   "description": [
-    "revel.js slides in the ipypublish format;",
+    "reveal.js slides in the ipypublish format;",
     "- all code is removed, unless tagged otherwise",
     "- resolves or removes (if no converter) latex tags (like \\cite{abc}, \\ref{})",
     "- splits notebook into slide rows/columns, based on markdown headers"

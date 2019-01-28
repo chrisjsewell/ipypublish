@@ -1,6 +1,6 @@
 {
   "description": [
-    "revel.js slides in the standard nbconvert format"
+    "reveal.js slides in the standard nbconvert format"
   ],
   "exporter": {
     "class": "nbconvert.exporters.SlidesExporter",

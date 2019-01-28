@@ -17,6 +17,39 @@ def test_nbpublish_dry_run(temp_folder, ipynb1):
                    "--dry-run", "--log-level", "debug"])
 
 
+def test_nbpublish_dry_run_with_external_plugin(
+        temp_folder, ipynb1, external_export_plugin):
+    # type: (str, pathlib.Path) -> None
+    nbpublish.run([str(ipynb1), "--outformat", str(external_export_plugin),
+                   "--outpath", temp_folder,
+                   "--dry-run", "--log-level", "debug"])
+
+
+def test_nbpublish_dry_run_with_external_plugin_key(
+        temp_folder, ipynb1, external_export_plugin):
+    # type: (str, pathlib.Path, pathlib.Path) -> None
+    nbpublish.run([str(ipynb1),
+                   "--export-paths", str(external_export_plugin.parent),
+                   "--outformat",
+                   os.path.splitext(str(external_export_plugin.name))[0],
+                   "--outpath", temp_folder,
+                   "--dry-run", "--log-level", "debug"])
+
+
+def test_nbpresent_list_exports():
+    with pytest.raises(SystemExit) as out:
+        nbpresent.run(["--list-exporters"])
+        assert out.type == SystemExit
+        assert out.value.code == 0
+
+
+def test_nbpublish_list_exports():
+    with pytest.raises(SystemExit) as out:
+        nbpublish.run(["--list-exporters"])
+        assert out.type == SystemExit
+        assert out.value.code == 0
+
+
 def test_nbpublish_write(temp_folder, ipynb1):
     # type: (str, pathlib.Path) -> None
     nbpublish.run([str(ipynb1),

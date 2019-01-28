@@ -1,3 +1,4 @@
+from collections import OrderedDict
 import os
 import inspect
 import glob
@@ -66,6 +67,19 @@ def load_plugin(plugin_path):
         data = json.load(fobj)
     # TODO validate against schema
     return data
+
+
+def iter_all_plugin_infos(plugin_folder_paths=(), regex="*.json"):
+
+    for name, path in iter_all_plugin_paths(plugin_folder_paths, regex):
+        data = load_plugin(path)
+
+        yield dict([
+            ("key", str(name)),
+            ("class", data["exporter"]["class"]),
+            ("path", str(path)),
+            ("description", data["description"])
+        ])
 
 
 def create_exporter_cls(class_str):

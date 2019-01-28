@@ -28,6 +28,12 @@ def bibfile():
 
 
 @pytest.fixture
+def external_export_plugin():
+    return pathlib.Path(os.path.join(TEST_FILES_DIR,
+                                     'example_new_plugin.json'))
+
+
+@pytest.fixture
 def temp_folder():
     out_folder = tempfile.mkdtemp()
     yield out_folder
