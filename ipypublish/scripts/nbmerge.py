@@ -14,8 +14,9 @@ import re
 import sys
 
 import nbformat
+from six import string_types
 
-from ipypublish.utils import basestring, pathlib
+from ipypublish.utils import pathlib
 
 
 def alphanumeric_sort(l):
@@ -56,7 +57,7 @@ def merge_notebooks(ipynb_path, ignore_prefix='_',
 
     """
     meta_path = ''
-    if isinstance(ipynb_path, basestring):
+    if isinstance(ipynb_path, string_types):
         ipynb_path = pathlib.Path(ipynb_path)
     if not ipynb_path.exists():
         logging.error('the notebook path does not exist: {}'.format(

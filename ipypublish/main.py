@@ -15,10 +15,11 @@ import json
 from traitlets.config import Config
 from jinja2 import DictLoader
 from jsonextended import edict
+from six import string_types
 
 
 import ipypublish
-from ipypublish.utils import basestring, pathlib
+from ipypublish.utils import pathlib
 from ipypublish.scripts.nbmerge import merge_notebooks
 from ipypublish.scripts.pdfexport import export_pdf
 from ipypublish import export_plugins
@@ -87,7 +88,7 @@ def publish(ipynb_path,
 
     """
     # setup the input and output paths
-    if isinstance(ipynb_path, basestring):
+    if isinstance(ipynb_path, string_types):
         ipynb_path = pathlib.Path(ipynb_path)
     ipynb_name = os.path.splitext(ipynb_path.name)[0]
     files_folder = ipynb_name + '_files'
@@ -113,7 +114,7 @@ def publish(ipynb_path,
     # find conversion configuration
     logging.info('finding conversion configuration: {}'.format(conversion))
     plugin_path = None
-    if isinstance(conversion, basestring):
+    if isinstance(conversion, string_types):
         outformat_path = pathlib.Path(conversion)
     else:
         outformat_path = conversion
@@ -211,7 +212,7 @@ def iter_all_plugin_paths(plugin_folder_paths=(), regex="*.json"):
 
 def load_plugin(plugin_path):
 
-    if isinstance(plugin_path, basestring):
+    if isinstance(plugin_path, string_types):
         plugin_path = pathlib.Path(plugin_path)
 
     with plugin_path.open() as fobj:
@@ -309,14 +310,14 @@ def create_config(exporter_data, replacements):
         preprocessors.append(preproc["class"])
         preproc_name = preproc["class"].split(".")[-1]
         for name, val in preproc.get("args", {}).items():
-            if isinstance(val, basestring):
+            if isinstance(val, string_types):
                 for instr, outstr in replacements.items():
                     val = val.replace(instr, outstr)
             config[preproc_name + "." + name] = val
     config[exporter_name + ".preprocessors"] = preprocessors
 
     for name, val in exporter_data.get("other_args", {}).items():
-        if isinstance(val, basestring):
+        if isinstance(val, string_types):
             for instr, outstr in replacements.items():
                 val = val.replace(instr, outstr)
         config[name] = val

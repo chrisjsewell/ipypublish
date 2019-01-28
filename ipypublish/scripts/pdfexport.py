@@ -7,8 +7,13 @@ import os
 import shutil
 import tempfile
 from subprocess import Popen, PIPE, STDOUT
+from six import string_types
 
 # python 3 to 2 compatibility
+try:
+    import pathlib
+except ImportError:
+    import pathlib2 as pathlib
 try:
     from shutil import which as exe_exists
 except ImportError:
@@ -87,21 +92,10 @@ class change_dir:
         os.chdir(self.savedPath)
 
 
-# python 3 to 2 compatibility
-try:
-    import pathlib
-except ImportError:
-    import pathlib2 as pathlib
-try:
-    basestring
-except NameError:
-    basestring = str
-
-
 def export_pdf(texpath, outdir, files_path=None,
                convert_in_temp=False, html_viewer=True,
                debug_mode=False):
-    if isinstance(texpath, basestring):
+    if isinstance(texpath, string_types):
         texpath = pathlib.Path(texpath)
     if not texpath.exists() or not texpath.is_file():
         logging.error('the tex file path does not exist: {}'.format(texpath))
@@ -110,7 +104,7 @@ def export_pdf(texpath, outdir, files_path=None,
     texname = os.path.splitext(texpath.name)[0]
 
     if files_path is not None:
-        if isinstance(files_path, basestring):
+        if isinstance(files_path, string_types):
             files_path = pathlib.Path(files_path)
         if not files_path.exists() or not files_path.is_dir():
             logging.error(

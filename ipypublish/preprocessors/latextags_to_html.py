@@ -6,11 +6,7 @@ import bibtexparser
 import traitlets as traits
 from nbconvert.preprocessors import Preprocessor
 
-# python 3 to 2 compatibility
-try:
-    basestring
-except NameError:
-    basestring = str
+from six import string_types
 
 
 class DefaultFormatter(string.Formatter):
@@ -18,10 +14,10 @@ class DefaultFormatter(string.Formatter):
         self.default = default
 
     def get_value(self, key, args, kwds):
-        if isinstance(key, basestring):
+        if isinstance(key, string_types):
             return kwds.get(key, self.default.format(key))
         else:
-            Formatter.get_value(key, args, kwds)
+            string.Formatter.get_value(key, args, kwds)
 
 
 class LatexTagsToHTML(Preprocessor):

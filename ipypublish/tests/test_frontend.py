@@ -35,3 +35,5 @@ def test_nbpublish_to_pdf(temp_folder, ipynb1):
                    "--create-pdf"])
     assert os.path.exists(os.path.join(temp_folder,
                                        ipynb1.name.replace(".ipynb", ".pdf")))
+
+# TODO test plugins in separate folders
