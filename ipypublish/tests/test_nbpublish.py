@@ -90,7 +90,7 @@ def test_publish_with_external(ipynb_folder_with_external, tex_with_external):
     publish(ipynb_folder_with_external,
             conversion='latex_ipypublish_main',
             outpath=ipynb_folder_with_external,
-            create_pdf=True)
+            create_pdf=True, pdf_debug=True)
     assert os.path.exists(tex_path)
     assert os.path.exists(pdf_path)
     compare_tex_files(tex_with_external, tex_path)
