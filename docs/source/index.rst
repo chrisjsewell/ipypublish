@@ -63,6 +63,7 @@ Badges
    package_api
    releases
 
+.. todo:: compare to nbconvert with images, how to use with vs-code
 
 Index and Search
 ================
