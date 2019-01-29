@@ -31,6 +31,7 @@
         "ipypublish",
         "nbconvert",
         "nbpresent",
+        "placeholders",
         "plugins"
     ],
     "todo-tree.tags": [

@@ -16,6 +16,7 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
+import ipypublish
 import os
 import io
 import sys
@@ -26,7 +27,6 @@ on_rtd = os.environ.get('READTHEDOCS') == 'True'
 
 # sys.path.insert(0, os.path.abspath('.'))
 sys.path.insert(0, os.path.abspath('../..'))
-import ipypublish
 
 # TODO run script api/run_apidoc automatically
 
@@ -65,7 +65,7 @@ extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.mathjax',
               'sphinx.ext.ifconfig',
               'sphinx.ext.viewcode',
-              'sphinx.ext.githubpages', # TODO is this needed?
+              'sphinx.ext.githubpages',  # TODO is this needed?
               'sphinx.ext.napoleon',
               'sphinx.ext.autosummary']
 
@@ -197,12 +197,13 @@ intersphinx_mapping = {
     # 'scipy': ('http://docs.scipy.org/doc/scipy/reference/', None),
     # 'matplotlib': ('http://matplotlib.sourceforge.net/', None),
     # 'pandas': ('http://pandas.pydata.org/pandas-docs/stable/', None),
-    'IPython': ('http://ipython.org/ipython-doc/stable/', None),
+    # 'IPython': ('http://ipython.org/ipython-doc/stable/', None),
     'PIL': ('http://pillow.readthedocs.org/en/latest/', None),
     'nbconvert': ("http://nbconvert.readthedocs.io/en/latest/", None),
-    'nbformat': ("http://nbformat.readthedocs.io/en/latest/", None),
+    # 'nbformat': ("http://nbformat.readthedocs.io/en/latest/", None),
     'tornado': ("https://www.tornadoweb.org/en/stable/", None),
-    'traitlets': ("https://traitlets.readthedocs.io/en/stable/", None)
+    'traitlets': ("https://traitlets.readthedocs.io/en/stable/", None),
+    'jinja': ('http://jinja.pocoo.org/docs/dev', None)
 }
 
 intersphinx_aliases = {
@@ -348,10 +349,14 @@ nitpick_ignore = [('py:exc', 'ArithmeticError'), ('py:exc', 'AssertionError'),
                   ('py:exc', 'VMSError'), ('py:exc', 'ValueError'),
                   ('py:exc', 'Warning'), ('py:exc', 'WindowsError'),
                   ('py:exc', 'ZeroDivisionError'), ('py:obj', 'str'),
-                  ('py:obj', 'list'), ('py:obj', 'tuple'), ('py:obj', 'int'),
-                  ('py:obj', 'float'), ('py:obj', 'bool'), ('py:obj',
-                                                            'Mapping'),
+                  ('py:obj', 'list'),
+                  ('py:obj', 'tuple'),
+                  ('py:obj', 'int'),
+                  ('py:obj', 'float'),
+                  ('py:obj', 'bool'),
+                  ('py:obj', 'Mapping'),
                   ('py:obj', 'MutableMapping'),
+                  ('py:func', 'str.format'),
                   ('py:class', '_abcoll.MutableMapping'),
                   ('py:class',
-                  'traitlets.config.configurable.LoggingConfigurable')]
+                   'traitlets.config.configurable.LoggingConfigurable')]

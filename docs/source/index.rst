@@ -9,7 +9,7 @@ from Jupyter Notebooks.
     A major API improvement occurred in ``v0.7.0``.
     This has not changed the general user interface,
     but anyone using custom converter plugins will be required to update them
-    (see `Transfer API <#transfer-api>`__ section)
+    (see :ref:`convert_from_old_api`)
 
 .. todo:: update gif
 
@@ -47,8 +47,6 @@ Badges
 
 |Build Status| |Coverage Status| |PyPI|
 
-
-
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
@@ -62,6 +60,16 @@ Badges
    acknowledgements
    package_api
    releases
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Example Files:
+
+   latex_ipypublish_all
+   export_schema
+   outline_schema
+   segment_example
+
 
 .. todo:: how to use with vs-code
 

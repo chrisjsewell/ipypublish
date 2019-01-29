@@ -1,7 +1,15 @@
-.. todo:: update a
-
 Custom Export Configurations
 ============================
+
+The simplest application of this, would be to copy
+:ref:`latex_ipypublish_all.json <latex_ipypublish_all>`
+(or the html/slides variants) and make changes to the
+``cell_defaults`` and ``nb_defaults`` dictionaries, to suit your output
+needs, then run:
+
+.. code-block:: console
+
+    nbpublish -f path/to/latex_ipypublish_all.json notebook.ipynb
 
 The Conversion Process
 ----------------------
@@ -10,7 +18,7 @@ iPyPublish uses export configuration files to control how the Notebook(s)
 will be exported. As shown in the figure below, they define two key components:
 
 1. The export class, and its associated pre-processors and filter functions.
-2. The Jinja template outline and segments to be inserted into it.
+2. The `jinja`_ template outline and segments to be inserted into it.
 
 .. figure:: _static/process.svg
     :align: center
@@ -18,225 +26,192 @@ will be exported. As shown in the figure below, they define two key components:
     :alt: conversion process
     :figclass: align-center
 
+    iPyPublish Conversion Process
+
 This process extends :py:mod:`nbconvert` in a number of ways:
 
 - Merging of notebooks is handled automatically
 - Numerous additional :py:mod:`ipypublish.preprocessors` and
   :py:mod:`ipypublish.filters` are supplied.
-- Jinja templates are constructed *via* segment insertions,
+- `jinja`_ templates are constructed *via* segment insertions,
   into a skeleton (outline) template, rather than by inheritance only.
-  This allows for greater control and flexibility over its construction.
-- The use of ``latexmk`` to convert TeX to PDF and correct resolution of
-  references and citations.
+  This allows for greater control and modularity in their construction.
+- The use of ``latexmk`` with XeLaTeX to convert TeX to PDF,
+  and correct resolution of file references and citations.
+
 
 The Configuration File Format
 -----------------------------
 
-The configuration file is a JSON file, with a validation schema
-:ref:`export_config_schema` 
+The configuration file is a JSON file, with a validation schema given in
+:ref:`export_config_schema`. Below is a minimal example:
 
-.. code:: json
+.. code-block:: json
+    :linenos:
 
     {
-      "description": [
+        "description": [
         "A description of the configuration"
-      ],
-      "exporter": {
-        "class": "nbconvert.exporters.LatexExporter",
-        "filters": {
-          "remove_dollars": "ipypublish.filters.filters.remove_dollars",
-        },
-        "preprocessors": [
-          {
-            "class": "ipypublish.preprocessors.split_outputs.SplitOutputs",
-            "args": {
-              "split": true
-            }
-          }
         ],
-        "other_args": {}
-      },
-      "template": {
-        "outline": {
-          "module": "ipypublish.templates.outline_schemas",
-          "file": "latex_tplx_schema.json"
+        "exporter": {
+            "class": "nbconvert.exporters.LatexExporter",
+            "preprocessors": [
+                {
+                "class": "ipypublish.preprocessors.latex_doc_links.LatexDocLinks",
+                "args":
+                    {
+                    "metapath": "${meta_path}",
+                    "filesfolder": "${files_path}"
+                    }
+                }
+            ],
+            "filters": {
+                "remove_dollars": "ipypublish.filters.filters.remove_dollars",
+            },
+            "other_args": {}
         },
-        "segments": [
-          {
-            "module": "ipypublish.templates.segments",
-            "file": "std-standard_packages.latex-tpl.json"
-          },
-          {
-            "directory": "path/to/folder",
-            "file": "ipy-contents_framed_code.latex-tpl.json"
-          }
-        ]
-      }
+        "template": {
+            "outline": {
+                "module": "ipypublish.templates.outline_schemas",
+                "file": "latex_tplx_schema.json"
+            },
+            "segments": [
+                {
+                "module": "ipypublish.templates.segments",
+                "file": "std-standard_packages.latex-tpl.json"
+                },
+                {
+                "directory": "path/to/folder",
+                "file": "a_user_defined_segment.json"
+                }
+            ]
+        }
     }
 
 
+Exporter Class
+~~~~~~~~~~~~~~
 
-.. todo:: remove all stuff below here
+In line 6, we define the exporter class, which can be any class in the python
+environment namespace that inherits from
+:py:class:`nbconvert.exporters.Exporter`.
 
-On instantiation, ipypublish loads all converter plugins in its internal
-:py:mod:`ipypublish.export_plugins`
-module folder. Additionally, when ``nbpublish`` or ``nbpresent`` are called, if
-a folder named **ipypublish_plugins** is present in the current working
-directory, they will load all plugins in this folder.
+Exporters can be parsed any number of preprocessors
+(inheriting from :py:class:`nbconvert.preprocessors.Preprocessor`),
+which act on the notebook in the order supplied.
 
-The simplest application of this, would be to copy the a
+The ``args`` field is used to set any configurable :py:mod:`traitlets`
+the class exposes.
+Two special placeholders are available:
 
-`latex_ipypublish_all.json <https://github.com/chrisjsewell/ipypublish/blob/master/ipypublish/export_plugins/latex_ipypublish_all.json>`__
-file (or the html/slides variants) and make changes to the
-``cell_defaults`` and ``nb_defaults`` dictionaries to suit your output
-needs.
+- ``${meta_path}`` will be set dynamically as the path to the (primary)
+  ipynb file, containing the document level meta-data.
+- ``${files_path}`` will be set dynamically as the path to the folder where,
+  additional files (such as internal images) will be output to.
 
-A plugin is a python (.py) file with at least the following four
-variables (i.e. it’s interface spec):
+Filters provide functions or classes to transform particular content of the
+notebook, and are parsed to the `jinja`_ templating engine.
 
-1. a **docstring** describing its output format
-2. an **oformat** string, specifying a base exporter prefix (for any of
-   the exporters listed
-   `here <https://nbconvert.readthedocs.io/en/latest/api/exporters.html#specialized-exporter-classes>`__)
-3. a **config** dictionary, containing any configuration option (as a
-   string) listed
-   `here <https://nbconvert.readthedocs.io/en/latest/api/exporters.html#specialized-exporter-classes>`__.
-   This is mainly to supply preprocessors (which act on the notbook
-   object before it is parsed) or filters (which are functions supplied
-   to the jinja template).
-4. a **template** string, specifying the `Jinja
-   templates <https://jinja2.readthedocs.io/en/latest/intro.html>`__,
-   which contains rules for how each element of the notebook should be
-   converted, and also what each section of the latex file should
-   contain.
-5. It is not required, but recommended, to also include the version
-   number of ipypublish which the plugin was written for.
+.. seealso::
 
-So a simple plugin would look like this (create_tplx will be explained
-below)
+    - The classes available natively in nbconvert:
+      :py:mod:`nbconvert.exporters`,
+      :py:mod:`nbconvert.preprocessors`,
+      :py:mod:`nbconvert.filters`.
 
-.. code:: python
+    - How :ref:`jinja:filters` are used in `jinja`_.
 
-   """this exporter exports a .tex file with nothing in it
-   """
-   from ipypublish.latex.create_tplx import create_tplx
-   oformat = 'Latex'
-   config = {}
-   template = create_tplx()
+Template Construction
+~~~~~~~~~~~~~~~~~~~~~
 
-This is similar to how nbconvert works, except for one key difference,
-the plugin must specify the entire jinja template (rather than using a
-default one). The advantage of this, is that the plugin has complete
-control over the look of the final document.
+In line 22, we define how to construct the `jinja`_ template.
+The ``outline`` key defines the path to an outline schema,
+such as in :ref:`outline_schema`.
+This file achieves two things; to define an outline of the `jinja`_ template
+structural blocks,
+with placeholders to be replaced by :py:func:`str.format`, and to
+provide a schema for segment files which are used to replace
+one or more of the placeholders.
 
-To aid in the creation of the jinja template, the ``create_tplx`` (for
-latex) and ``create_tpl`` (for html) functions work by creating an
-inital *skeleton* template, with placeholders in all the relevant
-`structural
-blocks <https://nbconvert.readthedocs.io/en/latest/customizing.html#Template-structure>`__.
-They then take a list of *fragment* dictionaries which progressively
-append input to the relevant blocks. So, for instance:
+This approach allows independent aspects of the document to be stored
+separately then pieced together in the desired manner. For example,
+the segment defined in :ref:`segment_config` defines only parts of the document
+which define how the bibliography is constructed.
+This could be removed or replaced by a custom export configuration.
+Similarly, input and output prompts can be added/removed in html documents.
 
-.. code:: python
+Segments are applied in the order they are defined,
+and the outline schema defines whether they are appended
+above or below existing content. For example, these segments:
 
-   """exports a .tex file containing 
-   some latex setup and
-   only input markdown cells from the notebook 
-   """
-   from ipypublish.latex.create_tplx import create_tplx
-   oformat = 'Latex'
-   config = {}
+.. code-block:: JSON
 
-   doc_dict = {
-       'document_docclass':r'\documentclass[11pt]{article}',
-       'document_packages':r"""
-       \usepackage{caption}
-        \usepackage{amsmath}
-       """
-   }
-
-   mkdown_dict = {
-     'notebook_input_markdown':r"""
-       ((( cell.source | citation2latex | strip_files_prefix | convert_pandoc('markdown', 'json',extra_args=[]) | resolve_references | convert_pandoc('json','latex') )))
-       """
-   }
-
-   template = create_tplx([doc_dict,mkdown_dict])
-
-This approach allows independant aspects of the document to be stored
-separately then pieced together in the desired manner. ipypublish stores
-all of the standard fragments in separate modules, for instance the
-latex_standard_article plugin looks like this:
-
-.. code:: python
-
-   """latex article in the standard nbconvert format
-   """
-
-   from ipypublish.latex.create_tplx import create_tplx
-   from ipypublish.latex.standard import standard_article as doc
-   from ipypublish.latex.standard import standard_packages as package
-   from ipypublish.latex.standard import standard_definitions as defs
-   from ipypublish.latex.standard import standard_contents as content
-   from ipypublish.latex.standard import in_out_prompts as prompts
-
-   oformat = 'Latex'
-   template = create_tplx(
-       [package.tplx_dict,defs.tplx_dict,doc.tplx_dict,
-       content.tplx_dict,prompts.tplx_dict])
-
-   config = {}
-
-Now, if you wanted mainly the same output format but without input and
-output prompts shown, simply copy this plugin but remove the
-prompts.tplx_dict.
-
-By default, sections are appended to, so;
-
-.. code:: python
-
-   dict1 = {'notebook_input':'a'}
-   dict2 = {'notebook_input':'b'}
-   template = create_tplx([dict1,dict2])
-
-would show a, then b. But, if you want to redefine a particular
-section(s);
-
-.. code:: python
-
-   dict1 = {'notebook_input':'a'}
-   dict2 = {
-       'overwrite':['notebook_input'],
-       'notebook_input':'b'}
-   template = create_tplx([dict1,dict2])
-
-will only show b.
-
-Note that, the ``create_tpl`` template additionally has *pre* and *post*
-placeholder. This is helpful for wrapping cells in extra html tags. For
-instance:
-
-.. code:: python
-
-
-   dict1 = {
-     'notebook_input_markdown_pre':r"<div class="inner">",
-     'notebook_input_markdown':"test",
-     'notebook_input_markdown_post':r"</div>",
-   }
-   dict2 = {
-     'notebook_input_markdown_pre':r"<div class="outer">",
-     'notebook_input_markdown_post':r"</div>",
-   }
-
-   template = create_tpl([dict1,dict2])
+    [
+        {
+            "notebook_input_markdown_pre": "<div class='inner'>",
+            "notebook_input_markdown": "  test",
+            "notebook_input_markdown_post": "</div>",
+        },
+        {
+            "notebook_input_markdown_pre": "<div class='outer'>",
+            "notebook_input_markdown_post": "</div>",
+        }
+    ]
 
 will result in a template containing:
 
-.. code:: html
+.. code-block:: html
 
-   <div class="outer">
-   <div class="inner">
-   test
+   <div class='outer'>
+   <div class='inner'>
+     test
    </div>
    </div>
+
+
+Segment configuration files also have an optional ``overwrite`` key, which
+define segments that overwrite any previously defined content in that section.
+
+.. seealso::
+
+    - The jinja documentation on :doc:`jinja:templates`
+
+    - The nbconvert documentation on :doc:`nbconvert:customizing`
+
+Loading Custom Configurations
+-----------------------------
+
+Custom configurations can be parsed directly to ``nbpublish``:
+
+.. code-block:: console
+
+    nbpublish -f path/to/configs/export_config.json notebook.ipynb
+
+Or used as a key, by providing ``nbpublish`` with additional folders to scan
+(in addition to the :py:mod:`ipypublish.export_plugins` module folder):
+
+.. code-block:: console
+
+    nbpublish -ep path/to/configs -f export_config notebook.ipynb
+
+
+.. _convert_from_old_api:
+
+Conversion of Plugins From Old API
+----------------------------------
+
+The old style export plugins (defined as python scripts)
+can be converted to the new JSON style, using the
+:py:func:`ipypublish.port_api.plugin_to_json.convert_to_json` function.
+
+The old style template segment dictionaries (defined as python scripts)
+can be converted to the new JSON style, using the
+:py:func:`ipypublish.port_api.tpl_dct_to_json.py_to_json` function.
+
+
+.. links:
+
+.. _jinja: http://jinja.pocoo.org/
+.. _filter: http://jinja.pocoo.org/docs/dev/templates/#filters
+.. _reveal.js: http://lab.hakim.se/reveal-js
+.. _pandoc: http://pandoc.org/
