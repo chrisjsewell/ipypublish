@@ -200,7 +200,7 @@ intersphinx_mapping = {
     # 'IPython': ('http://ipython.org/ipython-doc/stable/', None),
     'PIL': ('http://pillow.readthedocs.org/en/latest/', None),
     'nbconvert': ("http://nbconvert.readthedocs.io/en/latest/", None),
-    # 'nbformat': ("http://nbformat.readthedocs.io/en/latest/", None),
+    'nbformat': ("http://nbformat.readthedocs.io/en/latest/", None),
     'tornado': ("https://www.tornadoweb.org/en/stable/", None),
     'traitlets': ("https://traitlets.readthedocs.io/en/stable/", None),
     'jinja': ('http://jinja.pocoo.org/docs/dev', None)
@@ -208,7 +208,9 @@ intersphinx_mapping = {
 
 intersphinx_aliases = {
     ('py:class', 'nbconvert.preprocessors.base.Preprocessor'):
-        ('py:class', 'nbconvert.preprocessors.Preprocessor')
+        ('py:class', 'nbconvert.preprocessors.Preprocessor'),
+    ('py:class', 'nbformat.notebooknode.NotebookNode'):
+        ('py:class', 'nbformat.NotebookNode')
 }
 
 

@@ -1,0 +1,21 @@
+{
+  "description": [
+    "a configuration to convert to a python file",
+    "with cells denoted by #&&"
+  ],
+  "exporter": {
+    "class": "nbconvert.exporters.PythonExporter",
+    "filters": {
+      "meta2yaml": "ipypublish.filters.meta_to_yaml.meta_to_yaml"
+    },
+    "preprocessors": [],
+    "other_args": {}
+  },
+  "template": {
+    "outline": {
+      "module": "ipypublish.templates.outline_schemas",
+      "file": "python_tpl_schema.json"
+    },
+    "segments": []
+  }
+}

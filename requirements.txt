@@ -9,3 +9,4 @@ bibtexparser
 jsonextended
 six
 jsonschema
+pyyaml

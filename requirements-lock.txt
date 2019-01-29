@@ -23,6 +23,7 @@ pandocfilters==1.4.2      # via nbconvert
 pathlib2==2.3.3
 pygments==2.3.1           # via nbconvert
 pyparsing==2.3.1          # via bibtexparser
+pyyaml==3.13
 six==1.12.0
 testpath==0.4.2           # via nbconvert
 tornado==5.1.1
