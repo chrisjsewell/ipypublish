@@ -39,13 +39,13 @@ package <http://jupyter-contrib-nbextensions.readthedocs.io/en/latest/>`__:
    conda install --name ipyreport jupyter_contrib_nbextensions
 
 Additionally, a more extensive setup of useful packages (used to create
-the examples) are listed in
-`conda_packages.txt <https://github.com/chrisjsewell/ipypublish/blob/master/conda_packages.txt>`__
-and an environment can be created directly from this file using conda:
+the examples) are provided by the
+`anaconda distribution <https://docs.anaconda.com/anaconda/packages/pkg-docs/>`__
+which can be installed in to a new environment
 
 .. code-block:: console
 
-   conda create --name ipyreport -c conda-forge -c matsci --file conda_packages.txt
+   conda create --name ipyreport anaconda
 
 Basic Conversion
 ----------------
@@ -58,8 +58,7 @@ with the appropriate converter.
    nbpublish -h
    nbpublish -pdf -f latex_ipypublish_nocode path/to/notebook.ipynb
 
-For a more detailed explanation see the `Controlling Content
-Output <content_output.html>`__ section.
+For a more detailed explanation see the :ref:`notebook_conversion` section.
 
 The **nbpresent** script handles serving
 `reveal.js <http://lab.hakim.se/reveal-js/#/>`__ slides to a webbrowser.
@@ -87,6 +86,10 @@ first look at the `travis
 config <https://github.com/chrisjsewell/ipypublish/blob/master/.travis.yml>`__
 and `travis test runs <https://travis-ci.org/chrisjsewell/ipypublish>`__
 for working configurations.
+
+The `requirements-lock.txt <https://github.com/chrisjsewell/ipypublish/blob/master/requirements-lock.txt>`_
+file can also be used to provide exact versions of
+working package dependencies.
 
 For conversion issues, for both ``nbpublish`` and ``nbpresent``,
 detailed log messages of the run are output to both the console and file

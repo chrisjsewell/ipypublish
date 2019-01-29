@@ -1,3 +1,5 @@
+.. _notebook_conversion:
+
 Notebook Conversion
 ===================
 

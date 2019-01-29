@@ -6,7 +6,7 @@ jinja2
 traitlets
 tornado
 bibtexparser
-jsonextended
+jsonextended>=0.7
 six
 jsonschema
 pyyaml
