@@ -142,6 +142,8 @@ def convert_config(config, exporter_class, allow_other):
                     preprocs[pname]["args"]["metapath"] = "${meta_path}"
                     preprocs[pname]["args"]["filesfolder"] = "${files_path}"
 
+
+
     # second parse
     for key, val in config.items():
         if key in ["Exporter.filters", "TemplateExporter.filters",
@@ -276,6 +278,10 @@ def create_json(docstring, imported, assignments, allow_other=True):
     exporter_class, outline = convert_oformat(oformat)
     exporter = convert_config(config, exporter_class, allow_other)
 
+    if any(["biblio_natbib" in s for s in template]):
+        exporter["filters"]["strip_ext"] = (
+            "ipypublish.filters.filters.strip_ext")
+
     return {
         "description": docstring.splitlines(),
         "exporter": exporter,
@@ -314,8 +320,6 @@ def convert_to_json(path, outpath=None, ignore_other=False):
             json.dump(output, file_obj, indent=2)
     return json.dumps(output, indent=2)
 
-
-# TODO add "strip_ext": "ipypublish.filters.filters.strip_ext" to latex ipypublish
 
 if __name__ == "__main__":
 

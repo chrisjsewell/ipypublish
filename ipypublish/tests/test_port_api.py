@@ -5,10 +5,18 @@ from ipypublish.port_api.tpl_dct_to_json import py_to_json
 from ipypublish.tests import TEST_FILES_DIR
 
 
-def test_plugin_to_json():
+def test_plugin_to_json_html():
 
     out_str = convert_to_json(os.path.join(TEST_FILES_DIR,
                                            "html_ipypublish_all.py.txt"))
+    dct = json.loads(out_str)
+    assert "exporter" in dct  # TODO test against schema
+
+
+def test_plugin_to_json_latex():
+
+    out_str = convert_to_json(os.path.join(TEST_FILES_DIR,
+                                           "latex_ipypublish_all.py.txt"))
     dct = json.loads(out_str)
     assert "exporter" in dct  # TODO test against schema
 
