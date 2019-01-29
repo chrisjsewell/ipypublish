@@ -1,14 +1,16 @@
 .. todo:: update a
 
 Custom Export Configurations
-----------------------------
+============================
+
+The Conversion Process
+----------------------
 
 iPyPublish uses export configuration files to control how the Notebook(s)
 will be exported. As shown in the figure below, they define two key components:
 
-- The export class, and its associated pre-processors and filter functions
-- he template outlineT
-
+1. The export class, and its associated pre-processors and filter functions.
+2. The Jinja template outline and segments to be inserted into it.
 
 .. figure:: _static/process.svg
     :align: center
@@ -16,6 +18,65 @@ will be exported. As shown in the figure below, they define two key components:
     :alt: conversion process
     :figclass: align-center
 
+This process extends :py:mod:`nbconvert` in a number of ways:
+
+- Merging of notebooks is handled automatically
+- Numerous additional :py:mod:`ipypublish.preprocessors` and
+  :py:mod:`ipypublish.filters` are supplied.
+- Jinja templates are constructed *via* segment insertions,
+  into a skeleton (outline) template, rather than by inheritance only.
+  This allows for greater control and flexibility over its construction.
+- The use of ``latexmk`` to convert TeX to PDF and correct resolution of
+  references and citations.
+
+The Configuration File Format
+-----------------------------
+
+The configuration file is a JSON file, with a validation schema
+:ref:`export_config_schema` 
+
+.. code:: json
+
+    {
+      "description": [
+        "A description of the configuration"
+      ],
+      "exporter": {
+        "class": "nbconvert.exporters.LatexExporter",
+        "filters": {
+          "remove_dollars": "ipypublish.filters.filters.remove_dollars",
+        },
+        "preprocessors": [
+          {
+            "class": "ipypublish.preprocessors.split_outputs.SplitOutputs",
+            "args": {
+              "split": true
+            }
+          }
+        ],
+        "other_args": {}
+      },
+      "template": {
+        "outline": {
+          "module": "ipypublish.templates.outline_schemas",
+          "file": "latex_tplx_schema.json"
+        },
+        "segments": [
+          {
+            "module": "ipypublish.templates.segments",
+            "file": "std-standard_packages.latex-tpl.json"
+          },
+          {
+            "directory": "path/to/folder",
+            "file": "ipy-contents_framed_code.latex-tpl.json"
+          }
+        ]
+      }
+    }
+
+
+
+.. todo:: remove all stuff below here
 
 On instantiation, ipypublish loads all converter plugins in its internal
 :py:mod:`ipypublish.export_plugins`
@@ -23,7 +84,7 @@ module folder. Additionally, when ``nbpublish`` or ``nbpresent`` are called, if
 a folder named **ipypublish_plugins** is present in the current working
 directory, they will load all plugins in this folder.
 
-The simplest application of this, would be to copy the
+The simplest application of this, would be to copy the a
 
 `latex_ipypublish_all.json <https://github.com/chrisjsewell/ipypublish/blob/master/ipypublish/export_plugins/latex_ipypublish_all.json>`__
 file (or the html/slides variants) and make changes to the

@@ -2,7 +2,7 @@
     "$schema": "http://json-schema.org/draft-04/schema",
     "description": "a configuration for exporting an ipynb in ipypublish",
     "type": "object",
-    "additionalProperties": false,
+    "additionalProperties": true,
     "required": [
         "description",
         "exporter",

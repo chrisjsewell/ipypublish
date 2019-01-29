@@ -54,7 +54,7 @@ Badges
    :caption: Contents:
 
    getting_started
-   content_output
+   notebook_conversion
    metadata_tags
    custom_export_config
    additional_tools
@@ -63,7 +63,7 @@ Badges
    package_api
    releases
 
-.. todo:: compare to nbconvert with images, how to use with vs-code
+.. todo:: how to use with vs-code
 
 Index and Search
 ================

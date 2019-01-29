@@ -16,6 +16,8 @@
     "restructuredtext.confPath": "${workspaceFolder}/docs/source",
     "restructuredtext.preview.scrollEditorWithPreview": false,
     "restructuredtext.preview.scrollPreviewWithEditor": false,
+    "restructuredtext.updateOnTextChanged": "false",
+    "restructuredtext.updateDelay": 100000,
     "python.unitTest.unittestEnabled": false,
     "python.unitTest.nosetestsEnabled": false,
     "python.unitTest.pyTestEnabled": true,

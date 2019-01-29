@@ -1,5 +1,5 @@
-Controlling Content Output
-==========================
+Notebook Conversion
+===================
 
 Setting up a Notebook
 ---------------------
@@ -47,8 +47,8 @@ If a folder is input, then the .ipynb files it contains are processed
 and combined in ‘natural’ sorted order, i.e. 2_name.ipynb before
 10_name.ipynb. By default, notebooks beginning ’_’ are ignored.
 
-All available converters are also listed by ``nbpublish -h``. Three of
-note are:
+All available converters are also listed by ``nbpublish --list-exporters``.
+Three of note are:
 
 -  **latex_ipypublish_main** is the **default** and converts cells to
    latex according to metadata tags on an ‘opt in’ basis. Note that, for
