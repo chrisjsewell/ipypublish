@@ -7,9 +7,16 @@ from one or more Jupyter Notebooks.
 
 [![Build Status](https://travis-ci.org/chrisjsewell/ipypublish.svg?branch=master)](https://travis-ci.org/chrisjsewell/ipypublish)
 [![Coverage Status](https://coveralls.io/repos/github/chrisjsewell/ipypublish/badge.svg?branch=master)](https://coveralls.io/github/chrisjsewell/ipypublish?branch=master)
-<!-- [![Codacy Badge](https://api.codacy.com/project/badge/Grade/243d0038a2f543e7a9c47a781ca3cbf5)](https://www.codacy.com/app/chrisj_sewell/ipypublish?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=chrisjsewell/ipypublish&amp;utm_campaign=Badge_Grade) -->
 [![PyPI](https://img.shields.io/pypi/v/ipypublish.svg)](https://pypi.python.org/pypi/ipypublish/)
 [![DOI](https://zenodo.org/badge/96322423.svg)](https://zenodo.org/badge/latestdoi/96322423)
+<!-- [![Codacy Badge](https://api.codacy.com/project/badge/Grade/243d0038a2f543e7a9c47a781ca3cbf5)](https://www.codacy.com/app/chrisj_sewell/ipypublish?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=chrisjsewell/ipypublish&amp;utm_campaign=Badge_Grade) -->
+
+**Attention**
+
+A major API improvement occurred in `v0.7.0`. This has not changed the
+general user interface, but anyone using custom converter plugins will
+be required to update them (see [Plugin Conversion](https://ipypublish.readthedocs.io/en/latest/custom_export_config.html#conversion-of-plugins-from-old-api))
+
 
 ![WorkFlow Example](/example_workflow.gif)
 
