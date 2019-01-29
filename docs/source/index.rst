@@ -36,6 +36,11 @@ to provide a workflow for:
 - Output the same source document to different layouts and formats
   (pdf, html, presentation slides, etc).
 
+.. figure:: _static/process.svg
+    :align: center
+    :height: 300px
+    :alt: conversion process
+    :figclass: align-center
 
 Citation
 ========
