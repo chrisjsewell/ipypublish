@@ -1,6 +1,6 @@
 # iPyPublish
 
-A workflow for creating and editing publication ready scientific reports and presentations,
+A program for creating and editing publication ready scientific reports and presentations,
 from one or more Jupyter Notebooks.
 
 **Documentation**: [ipypublish.readthedocs.io](http://ipypublish.readthedocs.io)
@@ -11,13 +11,13 @@ from one or more Jupyter Notebooks.
 [![DOI](https://zenodo.org/badge/96322423.svg)](https://zenodo.org/badge/latestdoi/96322423)
 <!-- [![Codacy Badge](https://api.codacy.com/project/badge/Grade/243d0038a2f543e7a9c47a781ca3cbf5)](https://www.codacy.com/app/chrisj_sewell/ipypublish?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=chrisjsewell/ipypublish&amp;utm_campaign=Badge_Grade) -->
 
->**Attention**
+>**Attention**:
 A major API improvement occurred in `v0.7.0`. This has not changed the
 general user interface, but anyone using custom converter plugins will
 be required to update them (see [Plugin Conversion](https://ipypublish.readthedocs.io/en/latest/custom_export_config.html#conversion-of-plugins-from-old-api))
 
 
-![WorkFlow Example](/example_workflow.gif)
+![Conversion Process](/docs/source/_static/process.svg)
 
 For an example of the potential input/output, see:
 [Example.ipynb](example/notebooks/Example.ipynb),
@@ -51,6 +51,8 @@ In essence, the dream is to have the ultimate hybrid of Jupyter Notebook, WYSIWY
 The default latex template outputs all markdown cells (unless tagged `latex_ignore`), and then only code and output cells with [latex metadata tags](#latex-metadata-tags).
 See [Example.ipynb](https://github.com/chrisjsewell/ipypublish/blob/master/example/notebooks/Example.ipynb), [Example.pdf](https://chrisjsewell.github.io/ipypublish/Example.view_pdf.html),
 [Example.html](https://chrisjsewell.github.io/ipypublish/Example.html) and [Example.slides.html](https://chrisjsewell.github.io/ipypublish/Example.slides.html#/) for examples of the potential input and output.
+
+![WorkFlow Example](/example_workflow.gif)
 
 **See the project site for more info!**
 

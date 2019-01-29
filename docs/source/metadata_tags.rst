@@ -25,8 +25,8 @@ There are three levels of metadata:
    metadata specific to a certain output. Options set at the output
    level will override options set at the cell level. for an example of
    this, download and run the
-   :download:`MultiOutput_Example.ipynb <_static/MultiOutput_Example.ipynb>`,
-   :download:`MultiOutput_Example.ipynb <../../example/notebooks/MultiOutput_Example.ipynb>`
+   :download:`MultiOutput_Example.ipynb <../../example/notebooks/MultiOutput_Example.ipynb>`.
+
 
 .. important::
 
@@ -36,6 +36,54 @@ There are three levels of metadata:
 .. seealso::
 
     :ref:`nbformat:notebook_file_format`
+
+
+Visualising Metadata
+--------------------
+
+.. versionadded:: 0.7.0
+
+    To view all the metadata in a notebook, you can now use the
+    ``python_with_meta`` exporter.
+
+.. code-block:: console
+
+    nbpublish -f python_with_meta example.ipynb
+
+This will produce a standard python file, with metadata commented by ``#~~``
+and each cell beginning with ``#%%``:
+
+.. code-block:: python
+
+  #~~ language_info:
+    #~~   name: python
+    #~~   nbconvert_exporter: python
+    #~~   pygments_lexer: ipython3
+    #~~   version: 3.6.1
+
+  #%% [markdown]
+  #~~ {}
+  # # Document Title
+
+  #%%
+  #~~ ipub:
+  #~~   figure:
+  #~~     caption: A nice picture.
+  #~~     label: fig:example
+  #~~     placement: '!bh'
+  Image('example.jpg',height=400)
+
+The file format can also be used in
+`VS Code <https://code.visualstudio.com/docs/python/jupyter-support>`_
+to run individual cells.
+
+.. figure:: _static/vscode_python.png
+    :align: center
+    :height: 350px
+    :alt: alternate text
+    :figclass: align-center
+
+    Running Python File in VS Code
 
 Document Level
 --------------
@@ -260,11 +308,19 @@ metadata:
    only one should be used (aspect ratio will be maintained
    automatically)
 -  ``placement`` is optional and constitutes using a placement arguments
-   for the figure (e.g. \\begin{figure}[H]). See
-   `Positioning_images_and_tables <https://www.sharelatex.com/learn/Positioning_images_and_tables>`__.
+   for the figure (see
+   `Positioning_images_and_tables <https://www.sharelatex.com/learn/Positioning_images_and_tables>`__).
+
+   .. code-block:: latex
+
+      \begin{figure}[H]
+
 -  ``widefigure`` is optional and constitutes expanding the figure to
-   the page width (i.e. \\begin{figure*}) (placement arguments will then
-   be ignored)
+   the page width (placement arguments will then be ignored)
+
+   .. code-block:: latex
+
+      \begin{figure*}
 
 Output Tables
 ~~~~~~~~~~~~~
@@ -287,11 +343,20 @@ metadata:
 
 -  ``caption`` and ``label`` are optional
 -  ``placement`` is optional and constitutes using a placement arguments
-   for the table (e.g. \\begin{table}[H]). See
-   `Positioning_images_and_tables <https://www.sharelatex.com/learn/Positioning_images_and_tables>`__.
+   for the table (see
+   `Positioning_images_and_tables <https://www.sharelatex.com/learn/Positioning_images_and_tables>`__).
+
+   .. code-block:: latex
+
+      \begin{table}[H]
+
 -  ``alternate`` is optional and constitutes using alternating colors
-   for the table rows (e.g. :raw-latex:`\rowcolors{2}{gray!25}{white}`).
-   See https://tex.stackexchange.com/a/5365/107738.
+   for the table rows (see https://tex.stackexchange.com/a/5365/107738).
+
+   .. code-block:: latex
+
+      \rowcolors{2}{gray!25}{white}
+
 -  if tables exceed the text width, in latex, they will be shrunk to fit
 
 Output Equations
@@ -401,7 +466,7 @@ Then, during the the postprocessor stage, this cell will be removed from
 the notebook object, and its text stored as a *resource*;
 
 -  the cell’s text is the first paragraph of the markdown string,
-   i.e. nothing after a newline (:raw-latex:`\n`)
+   i.e. nothing after a newline (:code:`\n`)
 -  if there are multiple instance of the same cation name, then only the
    last instance will be stored
 
