@@ -16,7 +16,6 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-import ipypublish
 import os
 import io
 import sys
@@ -27,6 +26,7 @@ on_rtd = os.environ.get('READTHEDOCS') == 'True'
 
 # sys.path.insert(0, os.path.abspath('.'))
 sys.path.insert(0, os.path.abspath('../..'))
+import ipypublish
 
 # TODO run script api/run_apidoc automatically
 
