@@ -14,6 +14,12 @@ the metadata under:
        "ipub": {}
    }
 
+.. figure:: _static/metadata_edit.gif
+    :align: center
+    :height: 200px
+    :alt: editing metadata
+    :figclass: align-center
+
 There are three levels of metadata:
 
 -  For notebook level: in the Jupyter Notebook Toolbar go to Edit ->
