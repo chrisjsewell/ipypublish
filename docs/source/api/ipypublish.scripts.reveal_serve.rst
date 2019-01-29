@@ -1,5 +1,5 @@
-ipypublish.scripts.reveal_serve module
-======================================
+ipypublish\.scripts\.reveal\_serve module
+=========================================
 
 .. automodule:: ipypublish.scripts.reveal_serve
     :members:

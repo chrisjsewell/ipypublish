@@ -6,20 +6,20 @@ Subpackages
 
 .. toctree::
 
+    ipypublish.convert
     ipypublish.export_plugins
     ipypublish.filters
-    ipypublish.html
-    ipypublish.latex
+    ipypublish.frontend
+    ipypublish.port_api
     ipypublish.preprocessors
     ipypublish.scripts
+    ipypublish.templates
 
 Submodules
 ----------
 
 .. toctree::
 
-   ipypublish.main
-   ipypublish.test_main
    ipypublish.utils
 
 Module contents

@@ -1,0 +1,93 @@
+{
+  "description": [
+    "reveal.js slides in the ipypublish format;",
+    "- resolves or removes (if no converter) latex tags (like \\cite{abc}, \\ref{})",
+    "- splits notebook into slide rows/columns, based on markdown headers"
+  ],
+  "exporter": {
+    "class": "nbconvert.exporters.SlidesExporter",
+    "filters": {
+      "replace_string": "ipypublish.filters.replace_string.replace_string"
+    },
+    "preprocessors": [
+      {
+        "class": "ipypublish.preprocessors.split_outputs.SplitOutputs",
+        "args": {
+          "split": true
+        }
+      },
+      {
+        "class": "ipypublish.preprocessors.latex_doc_links.LatexDocLinks",
+        "args": {
+          "metapath": "${meta_path}",
+          "filesfolder": "${files_path}"
+        }
+      },
+      {
+        "class": "ipypublish.preprocessors.latex_doc_html.LatexDocHTML",
+        "args": {
+          "metapath": "${meta_path}",
+          "filesfolder": "${files_path}",
+          "src_name": "data-src"
+        }
+      },
+      {
+        "class": "ipypublish.preprocessors.latextags_to_html.LatexTagsToHTML",
+        "args": {}
+      },
+      {
+        "class": "ipypublish.preprocessors.latex_doc_captions.LatexCaptions",
+        "args": {
+          "add_prefix": true
+        }
+      },
+      {
+        "class": "ipypublish.preprocessors.slides_from_markdown.MarkdownSlides",
+        "args": {
+          "column_level": 1,
+          "row_level": 0,
+          "header_slide": false,
+          "max_cells": 0,
+          "autonumbering": true
+        }
+      }
+    ],
+    "other_args": {}
+  },
+  "template": {
+    "outline": {
+      "module": "ipypublish.templates.outline_schemas",
+      "file": "html_tpl_schema.json"
+    },
+    "segments": [
+      {
+        "module": "ipypublish.templates.segments",
+        "file": "std-content.html-tplx.json"
+      },
+      {
+        "module": "ipypublish.templates.segments",
+        "file": "std-content_tagging.html-tplx.json"
+      },
+      {
+        "module": "ipypublish.templates.segments",
+        "file": "std-mathjax.html-tplx.json"
+      },
+      {
+        "module": "ipypublish.templates.segments",
+        "file": "std-widgets.html-tplx.json"
+      },
+      {
+        "module": "ipypublish.templates.segments",
+        "file": "std-slides.html-tplx.json"
+      },
+      {
+        "module": "ipypublish.templates.segments",
+        "file": "ipy-latex_doc.html-tplx.json"
+      },
+      {
+        "module": "ipypublish.templates.segments",
+        "file": "ipy-slides_ipypublish.html-tplx.json"
+      }
+    ]
+  }
+}

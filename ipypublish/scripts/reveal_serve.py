@@ -1,4 +1,6 @@
-""" serve HTML page """
+""" serve HTML page 
+TODO the RevealServer setting should be available at front end
+"""
 
 # Copyright (c) Jupyter Development Team.
 # Distributed under the terms of the Modified BSD License.
@@ -31,7 +33,8 @@ class ProxyHandler(web.RequestHandler):
         # rethrow errors
         response.rethrow()
 
-        for header in ["Content-Type", "Cache-Control", "Date", "Last-Modified", "Expires"]:
+        for header in ["Content-Type", "Cache-Control",
+                       "Date", "Last-Modified", "Expires"]:
             if header in response.headers:
                 self.set_header(header, response.headers[header])
         self.finish(response.body)
@@ -43,15 +46,24 @@ class RevealServer(LoggingConfigurable):
     Proxies reveal.js requests to a CDN if no local reveal.js is present
     """
 
-    open_in_browser = Bool(True,
-                           help="""Should the browser be opened automatically?"""
-                           ).tag(config=True)
-    reveal_cdn = Unicode("https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.1.0",
-                         help="""URL for reveal.js CDN."""
-                         ).tag(config=True)
-    reveal_prefix = Unicode("reveal.js", help="URL prefix for reveal.js").tag(config=True)
-    ip = Unicode("127.0.0.1", help="The IP address to listen on.").tag(config=True)
-    port = Int(8000, help="port for the server to listen on.").tag(config=True)
+    open_in_browser = Bool(
+        True,
+        help="Should the browser be opened automatically?"
+    ).tag(config=True)
+
+    reveal_cdn = Unicode(
+        "https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.1.0",
+        help="""URL for reveal.js CDN."""
+    ).tag(config=True)
+
+    reveal_prefix = Unicode(
+        "reveal.js", help="URL prefix for reveal.js").tag(config=True)
+
+    ip = Unicode(
+        "127.0.0.1", help="The IP address to listen on.").tag(config=True)
+
+    port = Int(
+        8000, help="port for the server to listen on.").tag(config=True)
 
     def serve(self, input):
         """Serve the build directory with a webserver."""
@@ -74,9 +86,12 @@ class RevealServer(LoggingConfigurable):
             self.log.info("Serving local %s", self.reveal_prefix)
             logging.info("Serving local %s", self.reveal_prefix)
         else:
-            self.log.info("Redirecting %s requests to %s", self.reveal_prefix, self.reveal_cdn)
-            logging.info("Redirecting %s requests to %s", self.reveal_prefix, self.reveal_cdn)
-            handlers.insert(0, (r"/(%s)/(.*)" % self.reveal_prefix, ProxyHandler))
+            self.log.info("Redirecting %s requests to %s",
+                          self.reveal_prefix, self.reveal_cdn)
+            logging.info("Redirecting %s requests to %s",
+                         self.reveal_prefix, self.reveal_cdn)
+            handlers.insert(0, (r"/(%s)/(.*)" %
+                                self.reveal_prefix, ProxyHandler))
 
         app = web.Application(handlers,
                               cdn=self.reveal_cdn,
@@ -99,8 +114,12 @@ class RevealServer(LoggingConfigurable):
             except IOError:
                 self.port += 1
         if port_attempt == port_attempts[-1]:
-            logging.error('no port available to launch slides on, try closing some slideshows')
-            raise IOError('no port available to launch slides on, try closing some slideshows')
+            logging.error(
+                'no port available to launch slides on, '
+                'try closing some slideshows')
+            raise IOError(
+                'no port available to launch slides on, '
+                'try closing some slideshows')
 
         logging.info("Serving your slides at %s" % url)
         logging.info("Use Control-C to stop this server")
@@ -116,5 +135,6 @@ class RevealServer(LoggingConfigurable):
         try:
             ioloop.IOLoop.instance().start()
         except KeyboardInterrupt:
-            # ioloop.IOLoop.instance().stop() #dosen't look like this is necessary
+            # dosen't look like line below is necessary
+            # ioloop.IOLoop.instance().stop()
             logging.info("\nInterrupted")

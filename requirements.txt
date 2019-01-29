@@ -1,7 +1,12 @@
 pathlib2
+typing
 nbconvert
 nbformat
 jinja2
 traitlets
 tornado
 bibtexparser
+jsonextended
+six
+jsonschema
+pyyaml

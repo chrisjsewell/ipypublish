@@ -1,6 +1,8 @@
 ## Acknowledgements
 
-I took strong influence from:
+IPyPublish is built as an extension to [nbconvert](https://nbconvert.readthedocs.io).
+
+I also took strong influence from:
 
 - [Julius Schulz](http://blog.juliusschulz.de/blog/ultimate-ipython-notebook)
 - [Dan Mackinlay](https://livingthing.danmackinlay.name/jupyter.html)

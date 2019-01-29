@@ -1,0 +1,31 @@
+{
+  "$schema": "../outline_schema/latex_tplx_schema.json",
+  "identifier": "ipypublish-biblio_natbib",
+  "description": "with the main ipypublish bibliography",
+  "segments": {
+    "document_packages": [
+      "",
+      "% bibliography formatting",
+      "\\usepackage[numbers, square, super, sort&compress]{natbib}",
+      "% hyperlink doi's",
+      "\\usepackage{doi}"
+    ],
+    "document_bibliography": [
+      "",
+      "((*- if nb.metadata.ipub: -*))",
+      "((*- if nb.metadata.ipub.bibliography: -*))",
+      "((* set filename = nb.metadata.ipub.bibliography | strip_ext | posix_path *))",
+      "((*- if nb.metadata.ipub.bibstyle: -*))",
+      "\\bibliographystyle{((( nb.metadata.ipub.bibstyle )))}",
+      "((*- else -*))",
+      "% sort citations by order of first appearance",
+      "\\bibliographystyle{unsrtnat}",
+      "((*- endif *))",
+      "\\bibliography{((( filename )))}",
+      "",
+      "((*- endif *))",
+      "((*- endif *))"
+    ]
+  },
+  "template": "latex-tplx"
+}

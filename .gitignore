@@ -102,3 +102,6 @@ ENV/
 
 # docs build
 docs/source/_build
+
+# added by CJS
+releases.md

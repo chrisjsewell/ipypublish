@@ -1,5 +1,5 @@
-ipypublish.scripts.nbmerge module
-=================================
+ipypublish\.scripts\.nbmerge module
+===================================
 
 .. automodule:: ipypublish.scripts.nbmerge
     :members:
