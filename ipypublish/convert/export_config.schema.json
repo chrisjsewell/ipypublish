@@ -1,0 +1,142 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema",
+    "description": "a configuration for exporting an ipynb in ipypublish",
+    "type": "object",
+    "additionalProperties": true,
+    "required": [
+        "description",
+        "exporter",
+        "template"
+    ],
+    "properties": {
+        "$schema": {
+            "type": "string"
+        },
+        "description": {
+            "description": "a description of the configuration",
+            "type": "array",
+            "minItems": 1,
+            "items": {
+                "type": "string"
+            }
+        },
+        "exporter": {
+            "description": "an exporter to be used by nbconvert",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "class",
+                "filters",
+                "preprocessors"
+            ],
+            "properties": {
+                "class": {
+                    "description": "the python class path for the exporter",
+                    "type": "string"
+                },
+                "filters": {
+                    "description": "the filter functions to be used by the exporter",
+                    "type": "object",
+                    "patternProperties": {
+                        ".+": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "preprocessors": {
+                    "description": "the preprocessor classes to be used by the exporter",
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": [
+                            "class",
+                            "args"
+                        ],
+                        "properties": {
+                            "class": {
+                                "description": "the python class path for the preprocessor",
+                                "type": "string"
+                            },
+                            "args": {
+                                "description": "arguments taken by the preprocessor",
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "other_args": {
+                    "description": "additional arguments to be fed to the traitlets Config",
+                    "type": "object"
+                }
+            }
+        },
+        "template": {
+            "description": "configuration to build a Jinja template",
+            "type": [
+                "null",
+                "object"
+            ],
+            "additionalProperties": false,
+            "required": [
+                "outline",
+                "segments"
+            ],
+            "properties": {
+                "outline": {
+                    "description": "the outline schema, containing the jinja template and schema for segments",
+                    "$ref": "#/definitions/json_location"
+                },
+                "segments": {
+                    "description": "segments to be inserted into the outline",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/json_location"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "json_location": {
+            "oneOf": [
+                {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                        "module",
+                        "file"
+                    ],
+                    "properties": {
+                        "module": {
+                            "description": "the python module that the json file resides in",
+                            "type": "string"
+                        },
+                        "file": {
+                            "description": "the filename of the json file",
+                            "type": "string"
+                        }
+                    }
+                },
+                {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                        "directory",
+                        "file"
+                    ],
+                    "properties": {
+                        "directory": {
+                            "description": "the folder path that the json file resides in",
+                            "type": "string"
+                        },
+                        "file": {
+                            "description": "the filename of the json file",
+                            "type": "string"
+                        }
+                    }
+                }
+            ]
+        }
+    }
+}

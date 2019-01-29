@@ -1,0 +1,2 @@
+recursive-include ipypublish *.json
+recursive-include ipypublish/tests/test_files *

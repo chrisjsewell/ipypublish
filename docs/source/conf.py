@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# jsonextended documentation build configuration file, created by
+# ipypublish documentation build configuration file, created by
 # sphinx-quickstart on Sat Jun  3 02:06:22 2017.
 #
 # This file is execfile()d with the current directory set to its
@@ -17,28 +17,36 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import os
+import io
 import sys
+import urllib
+import json
+
+on_rtd = os.environ.get('READTHEDOCS') == 'True'
 
 # sys.path.insert(0, os.path.abspath('.'))
 sys.path.insert(0, os.path.abspath('../..'))
 import ipypublish
 
-# create releases page
-import urllib
-import json
+# TODO run script api/run_apidoc automatically
 
-git_history = urllib.request.urlopen('https://api.github.com/repos/chrisjsewell/ipypublish/releases').read().decode(
-    'utf-8')
-git_history_json = json.loads(git_history)
-with open('releases.md', 'w') as f:
-    f.write('# Releases\n')
-    f.write('\n')
-    for r in git_history_json:
-        f.write('## ' + ' '.join([r['tag_name'], '-', r['name'], '\n']))
+if on_rtd:
+    # create releases page
+    git_history = urllib.request.urlopen('https://api.github.com/repos/chrisjsewell/ipypublish/releases').read().decode(
+        'utf-8')
+    # NOTE on vscode this could fail with urllib.error.HTTPError
+    git_history_json = json.loads(git_history)
+    # NOTE on vscode this was failing unless encoding='utf8' was present
+    with io.open('releases.md', 'w', encoding="utf8") as f:
+        f.write('# Releases\n')
         f.write('\n')
-        for line in r['body'].split('\n'):
-            f.write(' '.join([line, '\n']))
-        f.write('\n')
+        for r in git_history_json:
+            subtitle = '## ' + ' '.join([r['tag_name'], '-', r['name'], '\n'])
+            f.write(subtitle)
+            f.write('\n')
+            for line in r['body'].split('\n'):
+                f.write(' '.join([line, '\n']))
+            f.write('\n')
 
 # -- General configuration ------------------------------------------------
 
@@ -57,7 +65,7 @@ extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.mathjax',
               'sphinx.ext.ifconfig',
               'sphinx.ext.viewcode',
-              'sphinx.ext.githubpages',
+              'sphinx.ext.githubpages',  # TODO is this needed?
               'sphinx.ext.napoleon',
               'sphinx.ext.autosummary']
 
@@ -107,7 +115,7 @@ exclude_patterns = []
 pygments_style = 'sphinx'
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
-todo_include_todos = True
+todo_include_todos = False
 
 # -- Options for HTML output ----------------------------------------------
 
@@ -177,23 +185,52 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'ipypublish', u'IPyPublishd',
+    (master_doc, 'ipypublish', u'IPyPublish',
      author, 'ipypublish', description,
      'Miscellaneous'),
 ]
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
-    'python': ('https://docs.python.org/3.4', None),
-    'numpy': ('http://docs.scipy.org/doc/numpy/', None),
-    'scipy': ('http://docs.scipy.org/doc/scipy/reference/', None),
-    'matplotlib': ('http://matplotlib.sourceforge.net/', None),
-    'pandas': ('http://pandas.pydata.org/pandas-docs/stable/', None),
-    'IPython': ('http://ipython.org/ipython-doc/stable/', None),
+    'python': ('https://docs.python.org/3.6', None),
+    # 'numpy': ('http://docs.scipy.org/doc/numpy/', None),
+    # 'scipy': ('http://docs.scipy.org/doc/scipy/reference/', None),
+    # 'matplotlib': ('http://matplotlib.sourceforge.net/', None),
+    # 'pandas': ('http://pandas.pydata.org/pandas-docs/stable/', None),
+    # 'IPython': ('http://ipython.org/ipython-doc/stable/', None),
     'PIL': ('http://pillow.readthedocs.org/en/latest/', None),
     'nbconvert': ("http://nbconvert.readthedocs.io/en/latest/", None),
     'nbformat': ("http://nbformat.readthedocs.io/en/latest/", None),
+    'tornado': ("https://www.tornadoweb.org/en/stable/", None),
+    'traitlets': ("https://traitlets.readthedocs.io/en/stable/", None),
+    'jinja': ('http://jinja.pocoo.org/docs/dev', None)
 }
+
+intersphinx_aliases = {
+    ('py:class', 'nbconvert.preprocessors.base.Preprocessor'):
+        ('py:class', 'nbconvert.preprocessors.Preprocessor'),
+    ('py:class', 'nbformat.notebooknode.NotebookNode'):
+        ('py:class', 'nbformat.NotebookNode')
+}
+
+
+def add_intersphinx_aliases_to_inv(app):
+    """see https://github.com/sphinx-doc/sphinx/issues/5603"""
+    from sphinx.ext.intersphinx import InventoryAdapter
+    inventories = InventoryAdapter(app.builder.env)
+
+    for alias, target in app.config.intersphinx_aliases.items():
+        alias_domain, alias_name = alias
+        target_domain, target_name = target
+        try:
+            found = inventories.main_inventory[target_domain][target_name]
+            try:
+                inventories.main_inventory[alias_domain][alias_name] = found
+            except KeyError:
+                continue
+        except KeyError:
+            continue
+
 
 # Napoleon settings
 napoleon_numpy_docstring = True
@@ -212,6 +249,10 @@ napoleon_use_rtype = True
 # https://stackoverflow.com/questions/20569011/python-sphinx-autosummary-automated-listing-of-member-functions
 def setup(app):
     # app.connect('autodoc-skip-member', skip_deprecated)
+
+    app.add_config_value('intersphinx_aliases', {}, 'env')
+    app.connect('builder-inited', add_intersphinx_aliases_to_inv)
+
     try:
         from sphinx.ext.autosummary import Autosummary
         # from sphinx.ext.autosummary import get_documenter
@@ -248,7 +289,8 @@ def setup(app):
                     return inspect.isclass(obj) and obj.__module__ == mod.__name__
 
                 members = inspect.getmembers(mod, predicate=is_class_local)
-                return [name for name, value in members if not name.startswith('_')]
+                return [name for name, value in members
+                        if not name.startswith('_')]
 
             def run(self):
 
@@ -260,10 +302,12 @@ def setup(app):
 
                 if 'classes' in self.options:
                     klasses = self.get_classes(mod)
-                    self.content = ["~%s.%s" % (mod_path, klass) for klass in klasses if not klass.startswith('_')]
+                    self.content = ["~%s.%s" % (mod_path, klass)
+                                    for klass in klasses if not klass.startswith('_')]
                 if 'functions' in self.options:
                     functions = self.get_functions(mod)
-                    content = ["~%s.%s" % (mod_path, func) for func in functions if not func.startswith('_')]
+                    content = ["~%s.%s" % (mod_path, func)
+                               for func in functions if not func.startswith('_')]
                     if self.content:
                         self.content += content
                     else:
@@ -276,3 +320,45 @@ def setup(app):
         app.add_directive('autofuncsummary', AutoFunctionSummary)
     except BaseException as e:
         raise e
+
+
+# Warnings to ignore when using the -n (nitpicky) option
+# We should ignore any python built-in exception, for instance
+nitpick_ignore = [('py:exc', 'ArithmeticError'), ('py:exc', 'AssertionError'),
+                  ('py:exc', 'AttributeError'), ('py:exc', 'BaseException'),
+                  ('py:exc', 'BufferError'), ('py:exc', 'DeprecationWarning'),
+                  ('py:exc', 'EOFError'), ('py:exc', 'EnvironmentError'),
+                  ('py:exc', 'Exception'), ('py:exc', 'FloatingPointError'),
+                  ('py:exc', 'FutureWarning'), ('py:exc', 'GeneratorExit'),
+                  ('py:exc', 'IOError'), ('py:exc', 'ImportError'),
+                  ('py:exc', 'ImportWarning'), ('py:exc', 'IndentationError'),
+                  ('py:exc', 'IndexError'), ('py:exc', 'KeyError'),
+                  ('py:exc', 'KeyboardInterrupt'), ('py:exc', 'LookupError'),
+                  ('py:exc', 'MemoryError'), ('py:exc', 'NameError'),
+                  ('py:exc', 'NotImplementedError'), ('py:exc', 'OSError'),
+                  ('py:exc', 'OverflowError'),
+                  ('py:exc', 'PendingDeprecationWarning'),
+                  ('py:exc', 'ReferenceError'), ('py:exc', 'RuntimeError'),
+                  ('py:exc', 'RuntimeWarning'), ('py:exc', 'StandardError'),
+                  ('py:exc', 'StopIteration'), ('py:exc', 'SyntaxError'),
+                  ('py:exc', 'SyntaxWarning'), ('py:exc', 'SystemError'),
+                  ('py:exc', 'SystemExit'), ('py:exc', 'TabError'),
+                  ('py:exc', 'TypeError'), ('py:exc', 'UnboundLocalError'),
+                  ('py:exc', 'UnicodeDecodeError'),
+                  ('py:exc', 'UnicodeEncodeError'), ('py:exc', 'UnicodeError'),
+                  ('py:exc', 'UnicodeTranslateError'),
+                  ('py:exc', 'UnicodeWarning'), ('py:exc', 'UserWarning'),
+                  ('py:exc', 'VMSError'), ('py:exc', 'ValueError'),
+                  ('py:exc', 'Warning'), ('py:exc', 'WindowsError'),
+                  ('py:exc', 'ZeroDivisionError'), ('py:obj', 'str'),
+                  ('py:obj', 'list'),
+                  ('py:obj', 'tuple'),
+                  ('py:obj', 'int'),
+                  ('py:obj', 'float'),
+                  ('py:obj', 'bool'),
+                  ('py:obj', 'Mapping'),
+                  ('py:obj', 'MutableMapping'),
+                  ('py:func', 'str.format'),
+                  ('py:class', '_abcoll.MutableMapping'),
+                  ('py:class',
+                   'traitlets.config.configurable.LoggingConfigurable')]

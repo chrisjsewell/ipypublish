@@ -1,5 +1,5 @@
-ipypublish.scripts.pdfexport module
-===================================
+ipypublish\.scripts\.pdfexport module
+=====================================
 
 .. automodule:: ipypublish.scripts.pdfexport
     :members:

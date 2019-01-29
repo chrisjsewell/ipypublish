@@ -1,5 +1,5 @@
-ipypublish.preprocessors.crop_cells module
-==========================================
+ipypublish\.preprocessors\.crop\_cells module
+=============================================
 
 .. automodule:: ipypublish.preprocessors.crop_cells
     :members:

@@ -1,14 +1,13 @@
-ipypublish.scripts package
-==========================
+ipypublish\.scripts package
+===========================
 
 Submodules
 ----------
 
 .. toctree::
 
-   ipypublish.scripts.export_plugins
+   ipypublish.scripts.create_template
    ipypublish.scripts.ipynb_latex_setup
-   ipypublish.scripts.nbexport
    ipypublish.scripts.nbmerge
    ipypublish.scripts.pdfexport
    ipypublish.scripts.reveal_serve

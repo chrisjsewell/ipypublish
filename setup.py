@@ -13,19 +13,29 @@ with open('requirements.txt') as f:
 with open('test_requirements.txt') as f:
     test_requirements = f.read().splitlines()
 
-with io.open('README.rst') as readme:
-    setup(
-        name='ipypublish',
-        version=import_module('ipypublish').__version__,
-        description='A workflow for creating and editing publication ready scientific reports, from one or more Jupyter Notebooks',
-        long_description=readme.read(),
-        install_requires=requirements,
-        tests_require=test_requirements,
-        license='MIT',
-        author='Chris Sewell',
-        author_email='chrisj_sewell@hotmail.com',
-        url='https://github.com/chrisjsewell/ipypublish',
-        classifiers=[
+with io.open('README.md') as readme:
+    readme_str = readme.read()
+
+setup(
+    name='ipypublish',
+    version=import_module('ipypublish').__version__,
+    description=(
+        'A workflow for creating and editing publication ready '
+        'scientific reports, from one or more Jupyter Notebooks'),
+    long_description=readme_str,
+    long_description_content_type='text/markdown',
+    install_requires=requirements,
+    tests_require=test_requirements,
+    extras_require={
+        "docs": {
+            "sphinx"
+        }
+    },
+    license='MIT',
+    author='Chris Sewell',
+    author_email='chrisj_sewell@hotmail.com',
+    url='https://github.com/chrisjsewell/ipypublish',
+    classifiers=[
             'Development Status :: 3 - Alpha',
             'Environment :: Console',
             'Environment :: Web Environment',
@@ -46,10 +56,15 @@ with io.open('README.rst') as readme:
             'Topic :: Scientific/Engineering :: Physics',
             'Topic :: Software Development :: Libraries :: Python Modules',
             'Topic :: Utilities',
-        ],
-        keywords='python, jupyter-notebook, nbconvert, pandoc, latex, pdf',
-        zip_safe=True,
-        packages=find_packages(),
-        package_data={'': []},
-        scripts=['bin/nbpublish', 'bin/nbpresent'],
-    )
+    ],
+    keywords='python, jupyter-notebook, nbconvert, pandoc, latex, pdf',
+    zip_safe=True,
+    packages=find_packages(),
+    include_package_data=True,
+    entry_points={
+        'console_scripts': [
+            'nbpublish = ipypublish.frontend.nbpublish:run',
+            'nbpresent = ipypublish.frontend.nbpresent:run'
+        ]
+    }
+)

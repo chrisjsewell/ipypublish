@@ -1,0 +1,46 @@
+{
+  "overwrite": [
+    "notebook_all",
+    "notebook_input_markdown"
+  ],
+  "$schema": "../outline_schema/html_tpl_schema.json",
+  "identifier": "ipypublish-slides_mkdown",
+  "description": "sets markdown main titles (with one #) as their own slides,\nremove code cells ",
+  "segments": {
+    "globals": [
+      "",
+      "{% set slidecolumn = [] %}\"",
+      "{% set sliderow = {} %}\""
+    ],
+    "notebook_all": [
+      "{{ super() }}"
+    ],
+    "notebook_input_markdown_pre": [
+      "",
+      "{%- if cell.source[0] == '#' -%}",
+      "    {%- if cell.source[1] == '#' -%}",
+      "        {%- if cell.source[2] == '#' -%}",
+      "",
+      "        {%- else -%}",
+      "            {% if slidecolumn | length != 0 %}",
+      "</section>",
+      "<section>",
+      "            {%- endif -%}",
+      "            {% if slidecolumn.append('1') %}{% endif %}",
+      "        {%- endif -%}",
+      "    {%- else -%}",
+      "            {% if slidecolumn | length != 0 %}",
+      "</section>",
+      "<section>",
+      "            {%- endif -%}",
+      "           {% if slidecolumn.append('1') %}{% endif %}",
+      "    {%- endif -%}",
+      "{%- endif -%}"
+    ],
+    "notebook_input_markdown": [
+      "",
+      "{{ cell.source  | markdown2html | strip_files_prefix }}"
+    ]
+  },
+  "template": "html-tpl"
+}

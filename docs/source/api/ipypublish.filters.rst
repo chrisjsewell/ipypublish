@@ -1,5 +1,5 @@
-ipypublish.filters package
-==========================
+ipypublish\.filters package
+===========================
 
 Submodules
 ----------
@@ -8,6 +8,7 @@ Submodules
 
    ipypublish.filters.ansi_listings
    ipypublish.filters.filters
+   ipypublish.filters.meta_to_yaml
    ipypublish.filters.replace_string
 
 Module contents

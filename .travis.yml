@@ -21,11 +21,13 @@ matrix:
     language: generic
     before_install:
     - travis_wait brew update
-    #- brew install python3 # python is now already installed
-    - brew upgrade python
-    #- virtualenv env -p python3
-    #- source env/bin/activate
-    - alias pip="pip3"
+    # TODO currently by default python 2.7 is already installed (see https://github.com/travis-ci/travis-ci/issues/9929)
+    # - brew install python3
+    # - brew upgrade python
+    # - pip install virtualenv
+    # - virtualenv env -p python3
+    # - source env/bin/activate
+    # - alias pip="pip3"
     - brew install pandoc
     - brew upgrade wget
     - travis_retry sudo wget http://mirror.ctan.org/systems/mac/mactex/BasicTeX.pkg
@@ -61,12 +63,15 @@ matrix:
     - os: osx
       language: generic
 
+# TODO add read the docs test `pip install .[docs] cd docs; make`
+
 before_install:
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update ; fi
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y pandoc ; fi
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y texlive ; fi
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y texlive-xetex ; fi
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y texlive-latex-extra ; fi
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y texlive-lang-portuguese ; fi
 # need up-to-date koma-script, which isn't supplied with this version of debian
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo wget http://mirrors.ctan.org/install/macros/latex/contrib/koma-script.tds.zip ; fi
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo unzip koma-script.tds.zip -d ~/texmf/ ; fi
@@ -76,10 +81,10 @@ install:
 - travis_wait pip install -r requirements.txt
 - pip install -r test_requirements.txt
 - pip install .
-- pip install --quiet coverage
 - pip install --quiet coveralls
 script:
-- nosetests -v --nocapture --with-doctest --with-coverage --exe --cover-package=ipypublish
+# - nosetests -v --nocapture --with-doctest --with-coverage --exe --cover-package=ipypublish
+- pytest -v --cov=ipypublish --cov-report= ipypublish
 - nbpublish -pdf --pdf-debug -log debug example/notebooks/Example.ipynb
 after_success:
 - coveralls

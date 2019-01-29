@@ -1,5 +1,5 @@
-ipypublish.preprocessors.latex_doc_html module
-==============================================
+ipypublish\.preprocessors\.latex\_doc\_html module
+==================================================
 
 .. automodule:: ipypublish.preprocessors.latex_doc_html
     :members:

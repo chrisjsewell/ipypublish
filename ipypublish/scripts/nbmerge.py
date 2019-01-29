@@ -14,16 +14,9 @@ import re
 import sys
 
 import nbformat
+from six import string_types
 
-# python 3 to 2 compatibility
-try:
-    import pathlib
-except ImportError:
-    import pathlib2 as pathlib
-try:
-    basestring
-except NameError:
-    basestring = str
+from ipypublish.utils import pathlib
 
 
 def alphanumeric_sort(l):
@@ -31,11 +24,13 @@ def alphanumeric_sort(l):
 
     Parameters
     ----------
-    l: list of str
+    l: list[str]
 
     """
-    convert = lambda text: int(text) if text.isdigit() else text.lower()
-    alphanum_key = lambda key: [convert(c) for c in re.split('([0-9]+)', key.name)]
+    def convert(text): return int(text) if text.isdigit() else text.lower()
+
+    def alphanum_key(key): return [convert(c)
+                                   for c in re.split('([0-9]+)', key.name)]
     return sorted(l, key=alphanum_key)
 
 
@@ -46,7 +41,7 @@ def merge_notebooks(ipynb_path, ignore_prefix='_',
 
     Parameters
     ----------
-    ipynb_path: str or path_like
+    ipynb_path: str or pathlib.Path
     ignore_prefix : str
         ignore filename starting with this prefix
     to_str: bool
@@ -62,11 +57,13 @@ def merge_notebooks(ipynb_path, ignore_prefix='_',
 
     """
     meta_path = ''
-    if isinstance(ipynb_path, basestring):
+    if isinstance(ipynb_path, string_types):
         ipynb_path = pathlib.Path(ipynb_path)
     if not ipynb_path.exists():
-        logging.error('the notebook path does not exist: {}'.format(ipynb_path))
-        raise IOError('the notebook path does not exist: {}'.format(ipynb_path))
+        logging.error('the notebook path does not exist: {}'.format(
+            ipynb_path))
+        raise IOError('the notebook path does not exist: {}'.format(
+            ipynb_path))
 
     final_nb = None
     if ipynb_path.is_dir():
@@ -75,7 +72,9 @@ def merge_notebooks(ipynb_path, ignore_prefix='_',
             if os.path.basename(ipath.name).startswith(ignore_prefix):
                 continue
             with ipath.open('r', encoding='utf-8') as f:
-                if sys.version_info.major == 3 and sys.version_info.minor < 6 and "win" not in sys.platform:
+                if (sys.version_info.major == 3
+                    and sys.version_info.minor < 6
+                        and "win" not in sys.platform):
                     data = f.read()
                     if hasattr(data, "decode"):
                         data = data.decode("utf-8")
@@ -90,7 +89,9 @@ def merge_notebooks(ipynb_path, ignore_prefix='_',
     else:
         logging.info('Reading notebook')
         with ipynb_path.open('r', encoding='utf-8') as f:
-            if sys.version_info.major == 3 and sys.version_info.minor < 6 and "win" not in sys.platform:
+            if (sys.version_info.major == 3
+                and sys.version_info.minor < 6
+                    and "win" not in sys.platform):
                 data = f.read()
                 if hasattr(data, "decode"):
                     data = data.decode("utf-8")
@@ -109,7 +110,9 @@ def merge_notebooks(ipynb_path, ignore_prefix='_',
             return nbformat.writes(final_nb).encode('utf-8')
 
     if final_nb is None:
-        logging.error('no acceptable notebooks found for path: {}'.format(ipynb_path.name))
-        raise IOError('no acceptable notebooks found for path: {}'.format(ipynb_path.name))
+        logging.error('no acceptable notebooks found for path: {}'.format(
+            ipynb_path.name))
+        raise IOError('no acceptable notebooks found for path: {}'.format(
+            ipynb_path.name))
 
     return final_nb, meta_path

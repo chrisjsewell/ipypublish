@@ -1,5 +1,5 @@
-ipypublish.filters.filters module
-=================================
+ipypublish\.filters\.filters module
+===================================
 
 .. automodule:: ipypublish.filters.filters
     :members:

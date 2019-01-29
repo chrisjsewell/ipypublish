@@ -1,3 +1,12 @@
+from collections import OrderedDict
+import re
+import os
+
+
+def strip_ext(path):
+    return os.path.splitext(path)[0]
+
+
 def wrap_latex(input, max_length=75, **kwargs):
     if len(input) > max_length:
         # remove double dollars, as they don't allow word wrap
@@ -23,10 +32,6 @@ def remove_dollars(input, **kwargs):
 def first_para(input, **kwargs):
     r"""get only ttext before a \n (i.e. the fist paragraph)"""
     return input.split('\n')[0]
-
-
-import re
-from collections import OrderedDict
 
 
 def _write_roman(num):

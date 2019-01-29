@@ -1,5 +1,5 @@
-ipypublish.filters.ansi_listings module
-=======================================
+ipypublish\.filters\.ansi\_listings module
+==========================================
 
 .. automodule:: ipypublish.filters.ansi_listings
     :members:

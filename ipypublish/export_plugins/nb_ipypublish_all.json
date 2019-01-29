@@ -1,0 +1,51 @@
+{
+  "description": [
+    "original notebook with default metadata tags added (where not already present) to set",
+    "- code/error tags to True, unless already set",
+    "- all output tags set to True, unless already set",
+    "- a basic titlepage, table of contents and tables of figures/tables/code"
+  ],
+  "exporter": {
+    "class": "nbconvert.exporters.NotebookExporter",
+    "filters": {
+      "remove_dollars": "ipypublish.filters.filters.remove_dollars",
+      "first_para": "ipypublish.filters.filters.first_para",
+      "create_key": "ipypublish.filters.filters.create_key",
+      "dict_to_kwds": "ipypublish.filters.filters.dict_to_kwds"
+    },
+    "preprocessors": [
+      {
+        "class": "ipypublish.preprocessors.latex_doc_defaults.MetaDefaults",
+        "args": {
+          "cell_defaults": {
+            "ipub": {
+              "figure": {
+                "placement": "H"
+              },
+              "table": {
+                "placement": "H"
+              },
+              "equation": true,
+              "text": true,
+              "mkdown": true,
+              "code": true,
+              "error": true,
+              "slide": true
+            }
+          },
+          "nb_defaults": {
+            "ipub": {
+              "titlepage": {},
+              "toc": true,
+              "listfigures": true,
+              "listtables": true,
+              "listcode": true
+            }
+          }
+        }
+      }
+    ],
+    "other_args": {}
+  },
+  "template": null
+}

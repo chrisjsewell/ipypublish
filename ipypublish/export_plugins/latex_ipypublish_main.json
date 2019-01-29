@@ -1,0 +1,75 @@
+{
+  "description": [
+    "latex article in the main ipypublish format:",
+    "- only output cells with metadata tags are used",
+    "- code, figures, tables and code are formatted accordingly"
+  ],
+  "exporter": {
+    "class": "nbconvert.exporters.LatexExporter",
+    "filters": {
+      "remove_dollars": "ipypublish.filters.filters.remove_dollars",
+      "first_para": "ipypublish.filters.filters.first_para",
+      "create_key": "ipypublish.filters.filters.create_key",
+      "dict_to_kwds": "ipypublish.filters.filters.dict_to_kwds",
+      "ansi2listings": "ipypublish.filters.ansi_listings.ansi2listings",
+      "is_equation": "ipypublish.filters.filters.is_equation",
+      "strip_ext": "ipypublish.filters.filters.strip_ext"
+    },
+    "preprocessors": [
+      {
+        "class": "ipypublish.preprocessors.split_outputs.SplitOutputs",
+        "args": {
+          "split": true
+        }
+      },
+      {
+        "class": "ipypublish.preprocessors.latex_doc_links.LatexDocLinks",
+        "args": {
+          "metapath": "${meta_path}",
+          "filesfolder": "${files_path}"
+        }
+      },
+      {
+        "class": "ipypublish.preprocessors.latex_doc_captions.LatexCaptions",
+        "args": {}
+      }
+    ],
+    "other_args": {}
+  },
+  "template": {
+    "outline": {
+      "module": "ipypublish.templates.outline_schemas",
+      "file": "latex_tplx_schema.json"
+    },
+    "segments": [
+      {
+        "module": "ipypublish.templates.segments",
+        "file": "std-standard_packages.latex-tpl.json"
+      },
+      {
+        "module": "ipypublish.templates.segments",
+        "file": "std-standard_definitions.latex-tpl.json"
+      },
+      {
+        "module": "ipypublish.templates.segments",
+        "file": "ipy-doc_article.latex-tpl.json"
+      },
+      {
+        "module": "ipypublish.templates.segments",
+        "file": "ipy-front_pages.latex-tpl.json"
+      },
+      {
+        "module": "ipypublish.templates.segments",
+        "file": "ipy-biblio_natbib.latex-tpl.json"
+      },
+      {
+        "module": "ipypublish.templates.segments",
+        "file": "ipy-contents_output.latex-tpl.json"
+      },
+      {
+        "module": "ipypublish.templates.segments",
+        "file": "ipy-contents_framed_code.latex-tpl.json"
+      }
+    ]
+  }
+}

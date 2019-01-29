@@ -1,0 +1,39 @@
+{
+  "description": [
+    "latex article in the standard nbconvert format"
+  ],
+  "exporter": {
+    "class": "nbconvert.exporters.LatexExporter",
+    "filters": {},
+    "preprocessors": [],
+    "other_args": {}
+  },
+  "template": {
+    "outline": {
+      "module": "ipypublish.templates.outline_schemas",
+      "file": "latex_tplx_schema.json"
+    },
+    "segments": [
+      {
+        "module": "ipypublish.templates.segments",
+        "file": "std-standard_packages.latex-tpl.json"
+      },
+      {
+        "module": "ipypublish.templates.segments",
+        "file": "std-standard_definitions.latex-tpl.json"
+      },
+      {
+        "module": "ipypublish.templates.segments",
+        "file": "std-standard_article.latex-tpl.json"
+      },
+      {
+        "module": "ipypublish.templates.segments",
+        "file": "std-standard_contents.latex-tpl.json"
+      },
+      {
+        "module": "ipypublish.templates.segments",
+        "file": "std-in_out_prompts.latex-tpl.json"
+      }
+    ]
+  }
+}
