@@ -1,5 +1,5 @@
-ipypublish.utils module
-=======================
+ipypublish\.utils module
+========================
 
 .. automodule:: ipypublish.utils
     :members:

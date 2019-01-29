@@ -1,5 +1,5 @@
-ipypublish.preprocessors package
-================================
+ipypublish\.preprocessors package
+=================================
 
 Submodules
 ----------

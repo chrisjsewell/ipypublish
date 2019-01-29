@@ -1,7 +1,7 @@
-ipypublish\.filters\.replace\_string module
+ipypublish\.convert\.config\_manager module
 ===========================================
 
-.. automodule:: ipypublish.filters.replace_string
+.. automodule:: ipypublish.convert.config_manager
     :members:
     :undoc-members:
     :show-inheritance:

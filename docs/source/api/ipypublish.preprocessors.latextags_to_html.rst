@@ -1,5 +1,5 @@
-ipypublish.preprocessors.latextags_to_html module
-=================================================
+ipypublish\.preprocessors\.latextags\_to\_html module
+=====================================================
 
 .. automodule:: ipypublish.preprocessors.latextags_to_html
     :members:

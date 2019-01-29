@@ -39,7 +39,7 @@ def ansi2listings(text, escapechar='%'):
 
     Parameters
     ----------
-    text : unicode
+    text : str
         Text containing ANSI colors to convert to LaTeX
     escapechar: str
         escape character

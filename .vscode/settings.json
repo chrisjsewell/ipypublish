@@ -1,5 +1,8 @@
 {
-    "editor.rulers": [80, 120],
+    "editor.rulers": [
+        80,
+        120
+    ],
     "files.exclude": {
         "**/.git": true,
         "**/.svn": true,
@@ -8,9 +11,11 @@
         "**/.DS_Store": true,
         "**/*.pyc": true,
         "**/__pycache__": true
-      },
+    },
     "python.pythonPath": "/anaconda/envs/lsr/bin/python",
     "restructuredtext.confPath": "${workspaceFolder}/docs/source",
+    "restructuredtext.preview.scrollEditorWithPreview": false,
+    "restructuredtext.preview.scrollPreviewWithEditor": false,
     "python.unitTest.unittestEnabled": false,
     "python.unitTest.nosetestsEnabled": false,
     "python.unitTest.pyTestEnabled": true,
@@ -18,11 +23,36 @@
     "python.linting.pylamaEnabled": false,
     "python.linting.enabled": true,
     "python.linting.flake8Enabled": true,
+    "latex-workshop.latex.autoBuild.onSave.enabled": false,
     "cSpell.words": [
         "ipynb",
         "ipypublish",
         "nbconvert",
-        "nbpresent"
+        "nbpresent",
+        "plugins"
     ],
-    "latex-workshop.latex.autoBuild.onSave.enabled": false
+    "todo-tree.tags": [
+        "TODO",
+        "todo::",
+        "FIXME",
+        "NOTE"
+      ],
+    "todo-tree.regex": "((//|#|<!--|\\.\\.|;|/\\*|^)\\s*($TAGS)|^\\s*- \\[ \\])",
+    "todo-tree.defaultHighlight": {
+        "icon": "alert",
+        "type": "tag",
+        "foreground": "orange",
+        "background": "white",
+        "opacity": 10
+    },
+    "todo-tree.customHighlight": {
+        "NOTE": {
+            "icon": "check",
+            "type": "tag",
+            "foreground": "green",
+        "background": "white",
+        "opacity": 10
+        }
+    }
+
 }

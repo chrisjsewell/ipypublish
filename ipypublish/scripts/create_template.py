@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 """
 create template
 
@@ -29,6 +28,7 @@ def handle_error(msg, err_type, raise_msg=None, log_msg=None):
 def create_template(outline_schema, segment_datas, outpath=None):
     # type: (dict, Tuple[dict]) -> str
     """ build a latex jinja template from;
+
     - a json file, defining a jinja template outline,
       containing segment placeholders, and a schema for segments,
     - and json segment files adhering to the schema
@@ -40,8 +40,8 @@ def create_template(outline_schema, segment_datas, outpath=None):
     Parameters
     ----------
     outline_schema: dict
-    segment_datas: tuple of dict
-    outpath: 
+    segment_datas: tuple or dict
+    outpath:  None or str
         if not None, output to path
 
     """

@@ -26,6 +26,11 @@ setup(
     long_description_content_type='text/markdown',
     install_requires=requirements,
     tests_require=test_requirements,
+    extras_require={
+        "docs": {
+            "sphinx"
+        }
+    },
     license='MIT',
     author='Chris Sewell',
     author_email='chrisj_sewell@hotmail.com',

@@ -1,7 +1,7 @@
-ipypublish\.preprocessors\.split\_outputs module
+ipypublish\.port\_api\.tpl\_dct\_to\_json module
 ================================================
 
-.. automodule:: ipypublish.preprocessors.split_outputs
+.. automodule:: ipypublish.port_api.tpl_dct_to_json
     :members:
     :undoc-members:
     :show-inheritance:

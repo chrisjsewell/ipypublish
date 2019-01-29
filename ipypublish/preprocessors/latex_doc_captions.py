@@ -6,7 +6,8 @@ from nbformat.notebooknode import NotebookNode
 
 
 class LatexCaptions(Preprocessor):
-    """ a preprocessor to
+    """ a preprocessor to:
+
     1. find cells with a ipub.caption meta-tag,
        extract the caption and label to a dict and remove the cell
     2. find cells with the found labels and replace their captions

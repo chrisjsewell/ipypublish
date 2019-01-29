@@ -1,5 +1,5 @@
-ipypublish.scripts.ipynb_latex_setup module
-===========================================
+ipypublish\.scripts\.ipynb\_latex\_setup module
+===============================================
 
 .. automodule:: ipypublish.scripts.ipynb_latex_setup
     :members:

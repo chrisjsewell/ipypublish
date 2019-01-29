@@ -63,6 +63,8 @@ matrix:
     - os: osx
       language: generic
 
+# TODO add read the docs test `pip install .[docs] cd docs; make`
+
 before_install:
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update ; fi
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y pandoc ; fi

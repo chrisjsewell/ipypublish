@@ -4,6 +4,15 @@
 A package for creating and editing publication ready scientific reports and presentations,
 from Jupyter Notebooks.
 
+.. attention::
+
+    A major API improvement occurred in ``v0.7.0``.
+    This has not changed the general user interface,
+    but anyone using custom converter plugins will be required to update them
+    (see `Transfer API <#transfer-api>`__ section)
+
+.. todo:: update gif
+
 .. figure:: https://github.com/chrisjsewell/ipypublish/raw/master/example_workflow.gif
     :alt: example_workflow.gif
 
@@ -11,16 +20,22 @@ from Jupyter Notebooks.
 IPyPublish: Features
 ====================
 
-Combining features of the Jupyter Notebook, WYSIWYG editors and the Latex document preparation system,
+Combining features of the Jupyter Notebook,
+WYSIWYG editors and the Latex document preparation system,
 to provide a workflow for:
 
-- Dynamic editing and visualisation of key document components (text, math, figures, tables, references, citations, etc).
+- Dynamic editing and visualisation of key document components
+  (text, math, figures, tables, references, citations, etc).
 
-- Combine document elements with dynamic (and reproducible) data exploration, analysis and visualisation.
+- Combine document elements with dynamic (and reproducible) data exploration,
+  analysis and visualisation.
 
-- Supply meta formatting for document and code elements for precise control over the final document layout and typesetting.
+- Supply meta formatting for document and code elements for precise control
+  over the final document layout and typesetting.
 
-- Output the same source document to different layouts and formats (pdf, html, presentation slides, etc).
+- Output the same source document to different layouts and formats
+  (pdf, html, presentation slides, etc).
+
 
 Citation
 ========
@@ -41,6 +56,7 @@ Badges
    getting_started
    content_output
    metadata_tags
+   custom_export_config
    additional_tools
    applications
    acknowledgements

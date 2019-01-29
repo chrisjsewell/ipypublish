@@ -24,7 +24,7 @@ def alphanumeric_sort(l):
 
     Parameters
     ----------
-    l: list of str
+    l: list[str]
 
     """
     def convert(text): return int(text) if text.isdigit() else text.lower()
@@ -41,7 +41,7 @@ def merge_notebooks(ipynb_path, ignore_prefix='_',
 
     Parameters
     ----------
-    ipynb_path: str or path_like
+    ipynb_path: str or pathlib.Path
     ignore_prefix : str
         ignore filename starting with this prefix
     to_str: bool

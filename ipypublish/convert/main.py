@@ -57,7 +57,7 @@ def publish(ipynb_path,
         notebook file or directory
     outformat: str
         output format to use
-    outpath : path_like
+    outpath : str or pathlib.Path
         path to output converted files
     dump_files: bool
         whether to write files from nbconvert (images, etc) to outpath

@@ -1,7 +1,7 @@
-ipypublish\.filters\.filters module
+ipypublish\.frontend\.shared module
 ===================================
 
-.. automodule:: ipypublish.filters.filters
+.. automodule:: ipypublish.frontend.shared
     :members:
     :undoc-members:
     :show-inheritance:

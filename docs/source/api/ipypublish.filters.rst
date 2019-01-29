@@ -1,5 +1,5 @@
-ipypublish.filters package
-==========================
+ipypublish\.filters package
+===========================
 
 Submodules
 ----------

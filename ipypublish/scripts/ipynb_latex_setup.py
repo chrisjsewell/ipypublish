@@ -2,7 +2,9 @@
 """
 Some setup for improved latex/pdf output
 
-at top of workbook, use
+at top of workbook, use:
+
+.. code:: python
 
     from ipynb_latex_setup import *
 
@@ -107,23 +109,21 @@ if _pil_present:
         file.seek(0)
         return file
 
-
     def images_read(paths):
         """read a list of image paths to a list of PIL.IMAGE instances """
         return [PImage.open(i).convert("RGBA") for i in paths]
-
 
     def images_hconcat(images, width=700, height=700,
                        gap=0, aspaths=True):
         """concatenate multiple images horizontally
 
-        Properties
+        Parameters
         ----------
         images : list
             if aspaths=True, list of path strings, else list of PIL.Image instances
-        width : int or list of ints
+        width : int or list[int]
             maximum width of final image, or of individual images
-        height : int or list of ints
+        height : int or list[int]
             maximum height of final image, or of individual images
         gap : int
             size of space between images
@@ -179,18 +179,17 @@ if _pil_present:
         new_im.thumbnail((width, height), PImage.ANTIALIAS)
         return new_im
 
-
     def images_vconcat(images, width=700, height=700,
                        gap=0, aspaths=True):
         """concatenate multiple images vertically
 
-        Properties
+        Parameters
         ----------
         images : list
             if aspaths=True, list of path strings, else list of PIL.Image instances
-        width : int or list of ints
+        width : int or list[int]
             maximum width of final image, or of individual images
-        height : int or list of ints
+        height : int or list[int]
             maximum height of final image, or of individual images
         gap : int
             size of space between images
@@ -247,14 +246,13 @@ if _pil_present:
         new_im.thumbnail((width, height), PImage.ANTIALIAS)
         return new_im
 
-
     def images_gridconcat(pathslist, width=700, height=700,
                           aspaths=True, hgap=0, vgap=0):
         """concatenate multiple images in a grid
 
-        Properties
+        Parameters
         ----------
-        pathslist : list of lists
+        pathslist : list[list]
             if aspaths=True, list of path strings, else list of PIL.Image instances
             each sub list constitutes a row
         width : int
@@ -271,7 +269,8 @@ if _pil_present:
         image : PIL.Image
 
         """
-        himages = [images_hconcat(paths, gap=hgap, aspaths=aspaths) for paths in pathslist]
+        himages = [images_hconcat(paths, gap=hgap, aspaths=aspaths)
+                   for paths in pathslist]
         new_im = images_vconcat(himages, gap=vgap, aspaths=False)
         new_im.thumbnail((width, height), PImage.ANTIALIAS)
         return new_im
@@ -287,4 +286,4 @@ except ImportError:
 if _jsonextended_present:
     from jsonextended import plugins as eplugins
 
-    #eplugins.load_builtin_plugins()
+    # eplugins.load_builtin_plugins()
