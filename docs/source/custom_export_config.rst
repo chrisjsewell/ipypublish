@@ -1,18 +1,31 @@
-.. todo:: update
+.. todo:: update a
 
-Creating a Bespoke Converter
+Custom Export Configurations
 ----------------------------
 
-On instatiation, ipypublish loads all converter plugins in its internal
-`export_plugins <https://github.com/chrisjsewell/ipypublish/tree/master/ipypublish/export_plugins>`__
-folder. Additionally, when ``nbpublish`` or ``nbpresent`` are called, if
+iPyPublish uses export configuration files to control how the Notebook(s)
+will be exported. As shown in the figure below, they define two key components:
+
+- The export class, and its associated pre-processors and filter functions
+- he template outlineT
+
+
+.. figure:: _static/process.svg
+    :align: center
+    :height: 400px
+    :alt: conversion process
+    :figclass: align-center
+
+
+On instantiation, ipypublish loads all converter plugins in its internal
+:py:mod:`ipypublish.export_plugins`
+module folder. Additionally, when ``nbpublish`` or ``nbpresent`` are called, if
 a folder named **ipypublish_plugins** is present in the current working
-directory, they will load all plugins in this folder. Programatically,
-it is the ``ipypublish.export_plugins.add_directory`` function which is
-being called and adding modules to an internal dictionary.
+directory, they will load all plugins in this folder.
 
 The simplest application of this, would be to copy the
-`latex_ipypublish_all.py <https://github.com/chrisjsewell/ipypublish/blob/master/ipypublish/export_plugins/latex_ipypublish_all.py>`__
+
+`latex_ipypublish_all.json <https://github.com/chrisjsewell/ipypublish/blob/master/ipypublish/export_plugins/latex_ipypublish_all.json>`__
 file (or the html/slides variants) and make changes to the
 ``cell_defaults`` and ``nb_defaults`` dictionaries to suit your output
 needs.
