@@ -122,7 +122,8 @@ def number_title(line, current_levels):
     ('### 2.1.3. title a#bc', [2, 1, 3])
     """
     level = header_level(line)
-    assert level > 0
+    if not level > 0:
+        raise ValueError("level must be > 0: {}".format(level))
     if len(current_levels) < level:
         while len(current_levels) < level:
             current_levels.append(1)
@@ -148,20 +149,34 @@ class MarkdownSlides(Preprocessor):
 
     """
 
-    column_level = traits.Integer(1, min=0, help='maximum header level for new columns (0 indicates no maximum)').tag(
-        config=True)
-    row_level = traits.Integer(0, min=0, help='maximum header level for new rows (0 indicates no maximum)').tag(
-        config=True)
-    header_slide = traits.Bool(False, help='if True, make the first header in a column appear on its own slide').tag(
-        config=True)
-    max_cells = traits.Integer(0, min=0, help='maximum number of nb cells per slide (0 indicates no maximum)').tag(
-        config=True)
-    autonumbering = traits.Bool(False, help='append section numbering to titles, e.g. 1.1.1 Title').tag(config=True)
+    column_level = traits.Integer(
+        1, min=0,
+        help='maximum header level for new columns (0 indicates no maximum)'
+    ).tag(config=True)
+    row_level = traits.Integer(
+        0, min=0,
+        help='maximum header level for new rows (0 indicates no maximum)'
+    ).tag(config=True)
+    header_slide = traits.Bool(
+        False,
+        help=('if True, make the first header in a '
+              'column appear on its own slide')
+    ).tag(config=True)
+    max_cells = traits.Integer(
+        0, min=0,
+        help='maximum number of nb cells per slide (0 indicates no maximum)'
+    ).tag(config=True)
+    autonumbering = traits.Bool(
+        False,
+        help='append section numbering to titles, e.g. 1.1.1 Title'
+    ).tag(config=True)
 
     def preprocess(self, nb, resources):
 
-        logging.info('creating slides based on markdown and existing slide tags')
-        latexdoc_tags = ['code', 'error', 'table', 'equation', 'figure', 'text']
+        logging.info(
+            'creating slides based on markdown and existing slide tags')
+        latexdoc_tags = ['code', 'error',
+                         'table', 'equation', 'figure', 'text']
         # break up titles
         cells_in_slide = 0
         header_levels = []
@@ -182,8 +197,10 @@ class MarkdownSlides(Preprocessor):
                 continue
 
             if not cell.cell_type == "markdown":
-                # TODO this doesn't test if the data is actually available to be output
-                if not any([cell.metadata.ipub.get(typ, False) for typ in latexdoc_tags]):
+                # TODO this doesn't test if the data is actually available
+                # to be output
+                if not any([cell.metadata.ipub.get(typ, False)
+                            for typ in latexdoc_tags]):
                     cell.metadata.ipyslides = 'skip'
                     final_cells.append(cell)
                     continue
@@ -207,43 +224,63 @@ class MarkdownSlides(Preprocessor):
                     line, header_levels = number_title(line, header_levels[:])
 
                 if is_header(line, self.column_level):
-                    if nonheader_lines and cell.metadata.ipub.get('slide', False):
-                        if (cells_in_slide > self.max_cells and self.max_cells) or cell.metadata.ipub.slide == 'new':
-                            final_cells.mkdcell(nonheader_lines, cell.metadata, 'verticalbreak_after')
+                    if (nonheader_lines
+                            and cell.metadata.ipub.get('slide', False)):
+                        if ((cells_in_slide > self.max_cells
+                             and self.max_cells)
+                                or cell.metadata.ipub.slide == 'new'):
+                            final_cells.mkdcell(
+                                nonheader_lines, cell.metadata,
+                                'verticalbreak_after')
                             cells_in_slide = 1
                         else:
                             cells_in_slide += 1
-                            final_cells.mkdcell(nonheader_lines, cell.metadata, 'normal')
+                            final_cells.mkdcell(
+                                nonheader_lines, cell.metadata, 'normal')
                         current_lines = []
 
                     if self.header_slide:
-                        final_cells.mkdcell([line], cell.metadata, 'horizontalbreak_after_plusvertical')
+                        final_cells.mkdcell(
+                            [line], cell.metadata,
+                            'horizontalbreak_after_plusvertical')
                     else:
-                        final_cells.mkdcell([line], cell.metadata, 'horizontalbreak_after')
+                        final_cells.mkdcell(
+                            [line], cell.metadata, 'horizontalbreak_after')
                     cells_in_slide = 1
 
                 elif is_header(line, self.row_level):
-                    if nonheader_lines and cell.metadata.ipub.get('slide', False):
-                        if (cells_in_slide > self.max_cells and self.max_cells) or cell.metadata.ipub.slide == 'new':
-                            final_cells.mkdcell(nonheader_lines, cell.metadata, 'verticalbreak_after')
+                    if (nonheader_lines
+                            and cell.metadata.ipub.get('slide', False)):
+                        if ((cells_in_slide > self.max_cells
+                             and self.max_cells)
+                                or cell.metadata.ipub.slide == 'new'):
+                            final_cells.mkdcell(
+                                nonheader_lines, cell.metadata,
+                                'verticalbreak_after')
                             cells_in_slide = 1
                         else:
                             cells_in_slide += 1
-                            final_cells.mkdcell(nonheader_lines, cell.metadata, 'normal')
+                            final_cells.mkdcell(
+                                nonheader_lines, cell.metadata, 'normal')
                         current_lines = []
 
-                    final_cells.mkdcell([line], cell.metadata, 'verticalbreak_after')
+                    final_cells.mkdcell(
+                        [line], cell.metadata, 'verticalbreak_after')
                     cells_in_slide = 1
                 else:
                     nonheader_lines.append(line)
 
             if nonheader_lines and cell.metadata.ipub.get('slide', False):
-                if (cells_in_slide > self.max_cells and self.max_cells) or cell.metadata.ipub.slide == 'new':
-                    final_cells.mkdcell(nonheader_lines, cell.metadata, 'verticalbreak_after')
+                if ((cells_in_slide > self.max_cells
+                     and self.max_cells)
+                        or cell.metadata.ipub.slide == 'new'):
+                    final_cells.mkdcell(
+                        nonheader_lines, cell.metadata, 'verticalbreak_after')
                     cells_in_slide = 1
                 else:
                     cells_in_slide += 1
-                    final_cells.mkdcell(nonheader_lines, cell.metadata, 'normal')
+                    final_cells.mkdcell(
+                        nonheader_lines, cell.metadata, 'normal')
 
         if not final_cells.finalize():
             logging.warning('no cells available for slideshow')

@@ -21,8 +21,9 @@ def convert_all(inpath, outpath):
                 os.path.basename(str(inpath)))[0] + extension
             outfile = os.path.join(out_folder, out_name)
 
-            assert os.path.exists(outfile), "could not find: {} for {}".format(
-                outfile, plugin_name)
+            if not os.path.exists(outfile):
+                raise IOError("could not find: {} for {}".format(
+                    outfile, plugin_name))
 
             shutil.copyfile(outfile, os.path.join(
                 str(outpath), plugin_name + extension))

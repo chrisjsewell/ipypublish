@@ -17,9 +17,14 @@ class LatexDocHTML(Preprocessor):
 
     """
 
-    metapath = traits.Unicode('', help="the path to the meta data").tag(config=True)
-    filesfolder = traits.Unicode('', help="the folder to point towards").tag(config=True)
-    src_name = traits.Unicode('src', help="for embedding, if reveal js slides use data-src (for lazy loading)").tag(
+    metapath = traits.Unicode(
+        '', help="the path to the meta data").tag(config=True)
+    filesfolder = traits.Unicode(
+        '', help="the folder to point towards").tag(config=True)
+    src_name = traits.Unicode(
+        'src',
+        help=("for embedding, if reveal js slides use data-src "
+              "(for lazy loading)")).tag(
         config=True)
 
     @traits.validate('src_name')
@@ -53,10 +58,15 @@ class LatexDocHTML(Preprocessor):
         if cell.outputs:
             cell.outputs[0]["data"]["text/html"] = embed_code
         else:
-            cell.outputs.append(NotebookNode({"data": {"text/html": embed_code},
-                                              "execution_count": 0,
-                                              "metadata": {},
-                                              "output_type": "execute_result"}))
+            cell.outputs.append(NotebookNode(
+                {
+                    "data": {
+                        "text/html": embed_code
+                    },
+                    "execution_count": 0,
+                    "metadata": {},
+                    "output_type": "execute_result"
+                }))
 
         return cell
 
@@ -66,33 +76,43 @@ class LatexDocHTML(Preprocessor):
                      ' in ipub metadata to: {}'.format(self.metapath))
 
         final_cells = []
-        float_count = dict([('figure', 0), ('table', 0), ('code', 0), ('text', 0), ('error', 0)])
+        float_count = dict([('figure', 0), ('table', 0),
+                            ('code', 0), ('text', 0), ('error', 0)])
         for i, cell in enumerate(nb.cells):
             if hasattr(cell.metadata, 'ipub'):
                 if hasattr(cell.metadata.ipub, 'embed_html'):
                     if hasattr(cell.metadata.ipub.embed_html, 'filepath'):
                         paths = [cell.metadata.ipub.embed_html.filepath]
                         if hasattr(cell.metadata.ipub.embed_html, 'other_files'):
-                            assert isinstance(cell.metadata.ipub.embed_html.other_files, list)
+                            if not isinstance(
+                                    cell.metadata.ipub.embed_html.other_files,
+                                    list):
+                                raise TypeError("{} should be a list".format(
+                                    cell.metadata.ipub.embed_html.other_files))
                             paths += cell.metadata.ipub.embed_html.other_files
                         for j, path in enumerate(paths):
                             fpath = self.resolve_path(path, self.metapath)
                             if not os.path.exists(fpath):
-                                logging.warning('file in embed html metadata does not exist'
-                                                ': {}'.format(fpath))
+                                logging.warning(
+                                    'file in embed html metadata does not exist'
+                                    ': {}'.format(fpath))
                             else:
                                 resources.setdefault("external_file_paths", [])
                                 resources['external_file_paths'].append(fpath)
                                 if j == 0:
-                                    self.embed_html(cell, os.path.join(self.filesfolder, os.path.basename(fpath)))
+                                    self.embed_html(cell, os.path.join(
+                                        self.filesfolder, os.path.basename(fpath)))
 
                     elif hasattr(cell.metadata.ipub.embed_html, 'url'):
-                        self.embed_html(cell, cell.metadata.ipub.embed_html.url)
+                        self.embed_html(
+                            cell, cell.metadata.ipub.embed_html.url)
                     else:
-                        logging.warning('cell {} has no filepath or url key in its metadata.embed_html'.format(i))
+                        logging.warning(
+                            'cell {} has no filepath or url key in its metadata.embed_html'.format(i))
 
-                for floattype, floatabbr in [('figure', 'fig.'), ('table', 'tbl.'), ('code', 'code'),
-                                             ('text', 'text'), ('error', 'error')]:
+                for floattype, floatabbr in [
+                    ('figure', 'fig.'), ('table', 'tbl.'), ('code', 'code'),
+                        ('text', 'text'), ('error', 'error')]:
                     if floattype in cell.metadata.ipub:
                         if floattype != 'code' and not cell.get("outputs", []):
                             continue

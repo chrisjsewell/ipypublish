@@ -49,7 +49,8 @@ def get_plugin_str(plugin_folder_paths):
 
 def parse_options(sys_args, program):
 
-    assert program in ["nbpublish", "nbpresent"]
+    if program not in ["nbpublish", "nbpresent"]:
+        raise ValueError("program should be nbpublish or nbpresent")
 
     if program == "nbpresent":
         parser = get_parser(
