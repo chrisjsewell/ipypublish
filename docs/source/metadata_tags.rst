@@ -128,27 +128,30 @@ To specify where the **bibliography** is and choose a style:
 -  The path can be absolute or relative.
 -  The ``bibstyle`` must be a `natbib
    stylename <https://www.overleaf.com/learn/latex/Natbib_bibliography_styles>`__
--  The ``biboptions`` is a list of options to parse
-   to `natbib <https://ctan.org/pkg/natbib?lang=en>`_.
-   The default is: ["numbers", "square", "super", "sort&compress"], and some
-   common options are:
 
-   - *round*: (default) for round parentheses;
-   - *square*: for square brackets;
-   - *curly*: for curly braces;
-   - *angle*: for angle brackets;
-   - *colon*: (default) to separate multiple citations with colons;
-   - *comma*: to use commas as separators;
-   - *authoryear*: (default) for author-year citations;
-   - *numbers*: for numerical citations;
-   - *super*: for superscripted numerical citations, as in Nature;
-   - *sort*: orders multiple citations into the sequence
-     in which they appear in the list of references;
-   - *sort&compress*: as sort but in addition multiple numerical citations are
-     compressed if possible (e.g. 3-6, 15);
-   - *longnamesfirst*: makes the first citation of any reference the equivalent
-     of the starred variant (full author list) and subsequent citations normal
-     (abbreviated list);
+.. versionadded:: 0.7.1
+
+  - The ``biboptions`` is a list of options to parse
+    to `natbib <https://ctan.org/pkg/natbib?lang=en>`_.
+    The default is: ["numbers", "square", "super", "sort&compress"], and some
+    common options are:
+
+    - *round*: (default) for round parentheses;
+    - *square*: for square brackets;
+    - *curly*: for curly braces;
+    - *angle*: for angle brackets;
+    - *colon*: (default) to separate multiple citations with colons;
+    - *comma*: to use commas as separators;
+    - *authoryear*: (default) for author-year citations;
+    - *numbers*: for numerical citations;
+    - *super*: for superscripted numerical citations, as in Nature;
+    - *sort*: orders multiple citations into the sequence
+      in which they appear in the list of references;
+    - *sort&compress*: as sort but in addition multiple numerical citations are
+      compressed if possible (e.g. 3-6, 15);
+    - *longnamesfirst*: makes the first citation of any reference the equivalent
+      of the starred variant (full author list) and subsequent citations normal
+      (abbreviated list);
 
 
 Title Page
