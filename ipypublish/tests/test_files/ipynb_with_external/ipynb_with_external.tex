@@ -74,7 +74,7 @@ captions=tableheading,numbers=noendperiod]{scrartcl}
 \usepackage[footsepline=0.25pt]{scrlayer-scrpage}
 
 % bibliography formatting
-\usepackage[numbers, square, super, sort&compress]{natbib}
+\usepackage[sort,super]{natbib}
 % hyperlink doi's
 \usepackage{doi}
 
@@ -538,7 +538,7 @@ Some text.\todo{a todo in the margins}
 \hypertarget{text-output}{%
 \section{Text Output}\label{text-output}}
 
-\begin{lstlisting}[backgroundcolor=\color{blue!10},language={},postbreak={},numbers=none,xrightmargin=7pt,belowskip=5pt,aboveskip=5pt,breakindent=0pt,]
+\begin{lstlisting}[aboveskip=5pt,backgroundcolor=\color{blue!10},belowskip=5pt,breakindent=0pt,language={},numbers=none,postbreak={},xrightmargin=7pt]
 
 This is some printed text,
 with a nicely formatted output.
@@ -616,8 +616,7 @@ sym.rsolve(f,y(n),[1,4])
 \left(\sqrt{5} i\right)^{\alpha} \left(\frac{1}{2} - \frac{2 i}{5} \sqrt{5}\right) + \left(- \sqrt{5} i\right)^{\alpha} \left(\frac{1}{2} + \frac{2 i}{5} \sqrt{5}\right)
 \end{equation}
 
-% sort citations by order of first appearance
-\bibliographystyle{unsrtnat}
+\bibliographystyle{humannat}
 \bibliography{ipynb_with_external_files/example}
 
 \end{document}

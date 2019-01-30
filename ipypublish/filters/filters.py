@@ -1,6 +1,7 @@
 from collections import OrderedDict
 import re
 import os
+from six import string_types
 
 
 def strip_ext(path):
@@ -83,28 +84,82 @@ def create_key(input, **kwargs):
     return re.sub('[^a-zA-Z]+', '', str(input)).lower()
 
 
-def dict_to_kwds(dct, kwdstr):
-    """ convert a dictionary to a string of keywords
+def _split_option(item, original):
+    opt = item.split("=")
+    if len(opt) > 2:
+        raise ValueError(
+                "item '{}' from '{}' contains multiple '='".format(
+                    item, original))
+    elif len(opt) == 1:
+        return opt[0].strip(), None
+    else:
+        return [o.strip() for o in opt]
+
+
+def dict_to_kwds(inobject, kwdstr='', overwrite=True):
+    """ convert a dictionary to a string of keywords,
+    or, if a list, a string of options
+
+    append to an existing options string (without duplication)
 
     Parameters
     ----------
     dct : dict
     kwdstr: str
-        additional keyword strings
+        initial keyword string
+    overwrite: bool
+        overwrite the option, if it already exists with a different value
 
     Examples
     --------
     >>> dict_to_kwds({"a":1,"c":3},'a=1,b=2')
-    'a=1,c=3,b=2,'
+    'a=1,b=2,c=3'
+    >>> dict_to_kwds(['a', 'c'],'a,b')
+    'a,b,c'
 
     """
-    string = ''
-    for key in sorted(dct.keys()):
-        string += '{0}={1},'.format(key, dct[key])
-    for kwd in kwdstr.split(","):
-        if not kwd.split('=')[0] + '=' in string:
-            string += kwd + ','
-    return string
+    if not isinstance(kwdstr, string_types):
+        raise ValueError("kwdstr '{}' not a string".format(kwdstr))
+
+    optdict = {}
+    for item in kwdstr.split(","):
+        if item == "":
+            continue
+        ikey, ival = _split_option(item, kwdstr)
+        if ikey in optdict:
+            raise ValueError(
+                "kwdstr '{}' contain multiple references to '{}'".format(
+                    kwdstr, ikey
+                ))
+        optdict[ikey] = ival
+
+    if isinstance(inobject, (list, tuple)):
+        for item in inobject:
+            if item == "":
+                continue
+            if not isinstance(item, string_types):
+                raise ValueError(
+                    "option '{}' from option list is not a string: {}".format(
+                        item, kwdstr))
+            okey, oval = _split_option(item, inobject)     
+            if okey not in optdict or overwrite:
+                optdict[okey] = oval
+    else:
+        for kkey in sorted(inobject.keys()):
+            keystr = str(kkey)
+            if keystr not in optdict or overwrite:
+                optdict[kkey] = str(inobject[kkey])
+
+    outstring1 = []
+    outstring2 = []
+    for skey in sorted(optdict.keys()):
+        if optdict[skey] is None:
+            outstring1.append(skey)
+        else:
+            outstring2.append("{}={}".format(skey, optdict[skey]))
+
+    outstring = outstring1 + outstring2
+    return ",".join(outstring)
 
 
 def is_equation(text):
@@ -117,3 +172,8 @@ def is_equation(text):
         return True
     else:
         return False
+
+
+if __name__ == "__main__":
+
+    print(dict_to_kwds(['a', 'c'],'e,b,d=3'))

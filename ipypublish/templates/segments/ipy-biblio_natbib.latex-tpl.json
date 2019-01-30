@@ -6,7 +6,11 @@
     "document_packages": [
       "",
       "% bibliography formatting",
+      "((*- if nb.metadata.ipub and nb.metadata.ipub.biboptions: *))",
+      "\\usepackage[(((nb.metadata.ipub.biboptions | dict_to_kwds)))]{natbib}",
+      "((*- else *))",
       "\\usepackage[numbers, square, super, sort&compress]{natbib}",
+      "((*- endif *))",
       "% hyperlink doi's",
       "\\usepackage{doi}"
     ],
