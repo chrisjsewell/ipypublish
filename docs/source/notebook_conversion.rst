@@ -105,7 +105,8 @@ default output is then:
 This leads to the following logic flow (discussed further in the
 `Metadata Tags <#metadata-tags>`__ section):
 
-**latex_ipypublish_main**/**html_ipypublish_main**:
+latex_ipypublish_main and html_ipypublish_main
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 -  all cells: bypass “ignore” and “slideonly” tags
 -  markdown cells: include all
@@ -117,7 +118,8 @@ This leads to the following logic flow (discussed further in the
    -  “mkdown” for markdown text
    -  “text” for plain text
 
-**slides_ipypublish_main**:
+slides_ipypublish_main
+~~~~~~~~~~~~~~~~~~~~~~
 
 -  all cells: bypass “ignore”
 -  markdown cells: are first split into header (beggining #)/non-header
@@ -141,4 +143,19 @@ hence ipypublish) then selects only the highest priority (compatible)
 format to be output. This allows, for example, for pandas DataFrames to
 be output as latex tables in latex documents and html tables in html
 documents/slides.
+
+Simple Customisation of Outputs
+-------------------------------
+
+To customise the output of the above defaults, simply download one of:
+
+- :download:`latex_ipypublish_all.json <../../ipypublish/export_plugins/latex_ipypublish_all.json>`.
+- :download:`html_ipypublish_all.json <../../ipypublish/export_plugins/html_ipypublish_all.json>`.
+- :download:`slides_ipypublish_all.json <../../ipypublish/export_plugins/slides_ipypublish_all.json>`.
+
+Then alter the ``cell_defaults`` and ``nb_default`` sections, and run:
+
+.. code-block:: console
+
+    nbpublish -f path/to/new_config.json input.ipynb
 

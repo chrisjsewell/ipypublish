@@ -64,7 +64,10 @@ class SplitOutputs(Preprocessor):
                 # don't create a new slide for each output,
                 # unless specified in output level metadata
                 if 'slide' in meta.get('ipub', NotebookNode({})):
-                    meta.ipub.slide = True if meta.ipub.slide == 'new' else meta.ipub.slide
+                    if meta.ipub.slide == 'new':
+                        meta.ipub.slide = True
+                    else:
+                        meta.ipub.slide = meta.ipub.slide
                 meta = merge(meta, output.get('metadata', {}))
                 new = NotebookNode({
                     "cell_type": "code",
