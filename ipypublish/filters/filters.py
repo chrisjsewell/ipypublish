@@ -14,7 +14,7 @@ def wrap_latex(input, max_length=75, **kwargs):
         if len(input) > 3:
             if input[0:2] == '$$' and input[-2:] == '$$':
                 input = input[1:-1]
-        # change \left( and \right) to \bigg( and \bigg), as they allow word wrap
+        # change \left( and \right) to \bigg( and \bigg), as allow word wrap
         input = input.replace(r'\left(', r'\big(')
         input = input.replace(r'\right)', r'\big)')
 
@@ -88,8 +88,8 @@ def _split_option(item, original):
     opt = item.split("=")
     if len(opt) > 2:
         raise ValueError(
-                "item '{}' from '{}' contains multiple '='".format(
-                    item, original))
+            "item '{}' from '{}' contains multiple '='".format(
+                item, original))
     elif len(opt) == 1:
         return opt[0].strip(), None
     else:
@@ -141,7 +141,7 @@ def dict_to_kwds(inobject, kwdstr='', overwrite=True):
                 raise ValueError(
                     "option '{}' from option list is not a string: {}".format(
                         item, kwdstr))
-            okey, oval = _split_option(item, inobject)     
+            okey, oval = _split_option(item, inobject)
             if okey not in optdict or overwrite:
                 optdict[okey] = oval
     else:
@@ -165,8 +165,11 @@ def dict_to_kwds(inobject, kwdstr='', overwrite=True):
 def is_equation(text):
     text = text.strip()
 
-    if any([text.startswith('\\begin{{{0}}}'.format(env)) and text.endswith('\\end{{{0}}}'.format(env)) for env in
-            ['equation', 'split', 'equation*', 'align', 'align*', 'multline', 'multline*', 'gather', 'gather*']]):
+    if any([text.startswith('\\begin{{{0}}}'.format(env))
+            and text.endswith('\\end{{{0}}}'.format(env))
+            for env in
+            ['equation', 'split', 'equation*', 'align', 'align*',
+             'multline', 'multline*', 'gather', 'gather*']]):
         return True
     elif text.startswith('$') and text.endswith('$'):
         return True
@@ -176,4 +179,4 @@ def is_equation(text):
 
 if __name__ == "__main__":
 
-    print(dict_to_kwds(['a', 'c'],'e,b,d=3'))
+    print(dict_to_kwds(['a', 'c'], 'e,b,d=3'))
