@@ -153,7 +153,7 @@ To customise the output of the above defaults, simply download one of:
 - :download:`html_ipypublish_all.json <../../ipypublish/export_plugins/html_ipypublish_all.json>`.
 - :download:`slides_ipypublish_all.json <../../ipypublish/export_plugins/slides_ipypublish_all.json>`.
 
-Then alter the ``cell_defaults`` and ``nb_default`` sections, and run:
+Then alter the ``cell_defaults`` and ``nb_defaults`` sections, and run:
 
 .. code-block:: console
 
