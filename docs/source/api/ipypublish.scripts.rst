@@ -6,7 +6,6 @@ Submodules
 
 .. toctree::
 
-   ipypublish.scripts.create_template
    ipypublish.scripts.ipynb_latex_setup
    ipypublish.scripts.nbmerge
    ipypublish.scripts.pdfexport

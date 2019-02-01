@@ -1,7 +1,7 @@
 .. _outline_schema:
 
-Template Outline Configuration Example
---------------------------------------
+Template Outline Example
+------------------------
 
-.. literalinclude:: ../../ipypublish/templates/outline_schemas/latex_outline.latex.j2
-  :language: JSON
+.. literalinclude:: ../../ipypublish/templates/outline_schemas/html_outline.html.j2
+  :language: html+jinja
