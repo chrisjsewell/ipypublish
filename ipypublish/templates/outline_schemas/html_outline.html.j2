@@ -37,6 +37,7 @@ An html document created by ipypublish @ipubreplace{below}{ipypub_version}
 %% ==============
 
 {%- block any_cell scoped %}
+{# Note: if {{ super() }} is not present then no input will be called #}
 @ipubreplace{below}{notebook_all}
 {% endblock any_cell %}
 
@@ -82,15 +83,6 @@ An html document created by ipypublish @ipubreplace{below}{ipypub_version}
 @ipubreplace{below}{notebook_output_post}
 {% endblock output %}
 
-% Redirect execute_result to display data priority.
-{%- block execute_result scoped %}
-    {%- set extra_class="output_execute_result" -%}
-    {% block data_priority scoped %}
-@ipubreplace{below}{notebook_output}
-    {% endblock %}
-    {%- set extra_class="" -%}
-{% endblock execute_result %}
-
 {% block error %}
 @ipubreplace{above}{notebook_output_error_pre}
 @ipubreplace{below}{notebook_output_error}
@@ -103,60 +95,29 @@ An html document created by ipypublish @ipubreplace{below}{ipypub_version}
 @ipubreplace{below}{notebook_output_traceback_post}
 {% endblock traceback_line %}
 
-{% block data_text %}
-@ipubreplace{above}{notebook_output_text_pre}
-@ipubreplace{below}{notebook_output_text}
-@ipubreplace{below}{notebook_output_text_post}
-{% endblock data_text %}
-
-{% block data_latex %}
-@ipubreplace{above}{notebook_output_latex_pre}
-@ipubreplace{below}{notebook_output_latex}
-@ipubreplace{below}{notebook_output_latex_post}
-{% endblock data_latex %}
-
-
+{# {% block stream %} #}
 {% block stream_stdout %}
 @ipubreplace{above}{notebook_output_stream_stdout_pre}
 @ipubreplace{below}{notebook_output_stream_stdout}
 @ipubreplace{below}{notebook_output_stream_stdout_post}
 {% endblock stream_stdout %}
-
 {% block stream_stderr %}
 @ipubreplace{above}{notebook_output_stream_stderr_pre}
 @ipubreplace{below}{notebook_output_stream_stderr}
 @ipubreplace{below}{notebook_output_stream_stderr_post}
 {% endblock stream_stderr %}
+{# {% endblock stream %} #}
 
-{%- block data_markdown -%}
-@ipubreplace{above}{notebook_output_markdown_pre}
-@ipubreplace{below}{notebook_output_markdown}
-@ipubreplace{below}{notebook_output_markdown_post}
-{% endblock data_markdown %}
+{# output data types #}
 
-{%- block data_jpg -%}
-@ipubreplace{above}{notebook_output_jpg_pre}
-@ipubreplace{below}{notebook_output_jpg}
-@ipubreplace{below}{notebook_output_jpg_post}
-{%- endblock data_jpg -%}
-
-{%- block data_png -%}
-@ipubreplace{above}{notebook_output_png_pre}
-@ipubreplace{below}{notebook_output_png}
-@ipubreplace{below}{notebook_output_png_post}
-{%- endblock data_png -%}
-
-{%- block data_svg -%}
-@ipubreplace{above}{notebook_output_svg_pre}
-@ipubreplace{below}{notebook_output_svg}
-@ipubreplace{below}{notebook_output_svg_post}
-{%- endblock data_svg -%}
-
-{%- block data_pdf -%}
-@ipubreplace{above}{notebook_output_pdf_pre}
-@ipubreplace{below}{notebook_output_pdf}
-@ipubreplace{below}{notebook_output_pdf_post}
-{%- endblock -%}
+{# Redirect execute_result to display data priority. #}
+{%- block execute_result scoped %}
+    {%- set extra_class="output_execute_result" -%}
+    {% block data_priority scoped %}
+@ipubreplace{below}{notebook_output}
+    {% endblock %}
+    {%- set extra_class="" -%}
+{% endblock execute_result %}
 
 {% block data_html -%}
 @ipubreplace{above}{notebook_output_html_pre}
@@ -170,6 +131,48 @@ An html document created by ipypublish @ipubreplace{below}{ipypub_version}
 @ipubreplace{below}{notebook_output_javascript_post}
 {%- endblock -%}
 
+{%- block data_jpg -%}
+@ipubreplace{above}{notebook_output_jpg_pre}
+@ipubreplace{below}{notebook_output_jpg}
+@ipubreplace{below}{notebook_output_jpg_post}
+{%- endblock data_jpg -%}
+
+{% block data_latex %}
+@ipubreplace{above}{notebook_output_latex_pre}
+@ipubreplace{below}{notebook_output_latex}
+@ipubreplace{below}{notebook_output_latex_post}
+{% endblock data_latex %}
+
+{%- block data_markdown -%}
+@ipubreplace{above}{notebook_output_markdown_pre}
+@ipubreplace{below}{notebook_output_markdown}
+@ipubreplace{below}{notebook_output_markdown_post}
+{% endblock data_markdown %}
+
+{%- block data_pdf -%}
+@ipubreplace{above}{notebook_output_pdf_pre}
+@ipubreplace{below}{notebook_output_pdf}
+@ipubreplace{below}{notebook_output_pdf_post}
+{%- endblock -%}
+
+{%- block data_png -%}
+@ipubreplace{above}{notebook_output_png_pre}
+@ipubreplace{below}{notebook_output_png}
+@ipubreplace{below}{notebook_output_png_post}
+{%- endblock data_png -%}
+
+{%- block data_svg -%}
+@ipubreplace{above}{notebook_output_svg_pre}
+@ipubreplace{below}{notebook_output_svg}
+@ipubreplace{below}{notebook_output_svg_post}
+{%- endblock data_svg -%}
+
+{% block data_text %}
+@ipubreplace{above}{notebook_output_text_pre}
+@ipubreplace{below}{notebook_output_text}
+@ipubreplace{below}{notebook_output_text_post}
+{% endblock data_text %}
+
 {%- block data_widget_state scoped %}
 @ipubreplace{above}{notebook_output_widget_state_pre}
 @ipubreplace{below}{notebook_output_widget_state}
@@ -182,7 +185,5 @@ An html document created by ipypublish @ipubreplace{below}{ipypub_version}
 @ipubreplace{below}{notebook_output_widget_view_post}
 {%- endblock data_widget_view -%}
 
-%% Jinja Macros
-%% ================
-
+{# JINJA MACROS #}
 @ipubreplace{below}{jinja_macros}
