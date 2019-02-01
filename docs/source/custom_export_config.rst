@@ -128,6 +128,10 @@ In line 22, we define how to construct the `jinja`_ template.
 The ``outline`` key defines the path to an outline template,
 such as in :ref:`outline_schema`.
 
+.. versionchanged:: 0.8.0
+
+    The outline file is now a jinja template, instead of a JSON file
+
 This template file can be a full jinja template file, extending
 an existing nbconvert template, but may optionally contain 'placeholders'
 (of the form ``@ipubreplace{below}{key_name}``)
