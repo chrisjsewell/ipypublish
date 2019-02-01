@@ -57,7 +57,7 @@ Visualising Metadata
     nbpublish -f python_with_meta example.ipynb
 
 This will produce a standard python file, with metadata commented by ``#~~``
-and each cell beginning with ``#%%``:
+and each cell beginning with ``#%%`` (known as the percent format):
 
 .. code-block:: python
 
@@ -79,9 +79,41 @@ and each cell beginning with ``#%%``:
   #~~     placement: '!bh'
   Image('example.jpg',height=400)
 
-The file format can also be used in
-`VS Code <https://code.visualstudio.com/docs/python/jupyter-support>`_
-to run individual cells.
+Alternatively, you can use the excellent
+`jupytext <https://github.com/mwouts/jupytext>`_ package, to convert between
+a notebook and `percent format <https://github.com/mwouts/jupytext#the-percent-format>`_.
+Simply add, this section to the notebook-level metadata:
+
+.. code-block:: json
+
+   {
+      "jupytext": {
+        "metadata_filter": {
+          "notebook": "ipub"
+        }
+      }
+   }
+
+and run:
+
+.. code-block:: console
+
+    jupytext --to py:percent notebook.py
+
+Then, after altering the python file, run:
+
+.. code-block:: console
+
+    jupytext --to notebook notebook.py              # overwrite notebook.ipynb (remove outputs)
+    jupytext --to notebook --update notebook.py     # update notebook.ipynb (preserve outputs)
+
+The `percent format <https://github.com/mwouts/jupytext#the-percent-format>`_
+can be utilised in IDEs, such as
+`Spyder <https://docs.spyder-ide.org/editor.html#defining-code-cells>`_,
+`Atom <https://atom.io/packages/hydrogen>`_,
+`PyCharm <https://www.jetbrains.com/pycharm/>`_, and
+`VS Code <https://code.visualstudio.com/docs/python/jupyter-support>`_,
+to run individual cells:
 
 .. figure:: _static/vscode_python.png
     :align: center
