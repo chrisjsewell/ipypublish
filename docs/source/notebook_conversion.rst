@@ -49,6 +49,12 @@ If a folder is input, then the .ipynb files it contains are processed
 and combined in ‘natural’ sorted order, i.e. 2_name.ipynb before
 10_name.ipynb. By default, notebooks beginning ’_’ are ignored.
 
+.. important::
+
+    The default conversion (``_ipypublish_main``) will **NOT**
+    output any cells that are not tagged with metadata.
+    To output all notebook content by default, use ``_ipypublish_all``.
+
 All available converters are also listed by ``nbpublish --list-exporters``.
 Three of note are:
 

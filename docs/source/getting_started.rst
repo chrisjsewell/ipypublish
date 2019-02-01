@@ -71,7 +71,7 @@ The **nbpresent** script handles serving
 Note that, for offline use, simply download the latest version of
 reveal.js `here <https://github.com/hakimel/reveal.js/releases>`__,
 rename the entire folder to reveal.js and place it in the same folder as
-the converted .slides.html file. The slides can also be save to PDF my
+the converted .slides.html file. The slides can also be saved to PDF by
 appending ``pdf-export`` to the url (see
 `here <https://github.com/hakimel/reveal.js#pdf-export>`__ for details).
 
