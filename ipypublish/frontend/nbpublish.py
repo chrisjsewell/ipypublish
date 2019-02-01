@@ -14,7 +14,8 @@ def nbpublish(ipynb_path,
               outpath=None, dump_files=True,
               ignore_prefix='_', clear_files=False,
               create_pdf=False, pdf_in_temp=False, pdf_debug=False,
-              log_level='INFO', dry_run=False, export_paths=()):
+              log_level='INFO', dry_run=False, print_traceback=False,
+              export_paths=()):
     """ convert one or more Jupyter notebooks to a published format
 
     paths can be string of an existing file or folder,
@@ -81,6 +82,8 @@ def nbpublish(ipynb_path,
                 plugin_folder_paths=export_paths)
     except Exception as err:
         logger.error("Run Failed: {}".format(err))
+        if print_traceback:
+            raise err
         return 1
 
     return 0

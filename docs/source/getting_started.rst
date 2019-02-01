@@ -93,8 +93,14 @@ working package dependencies.
 
 For conversion issues, for both ``nbpublish`` and ``nbpresent``,
 detailed log messages of the run are output to both the console and file
-(default path: converted/notebook_name.nbpub.log). To debug conversions,
-use the ``--log-level debug`` and ``--pdf-debug`` flags. If there is
+(default path: converted/notebook_name.nbpub.log).
+Try running with options:
+
+.. code-block:: console
+
+    nbpublish --log-level debug --print-traceback notebook.ipynb
+
+To debug PDF conversions, use the ``--pdf-debug`` flag. If there is
 still an error, please raise an issue on the `GitHub
 repository <https://github.com/chrisjsewell/ipypublish/issues>`__,
 including the run environment and the log file.

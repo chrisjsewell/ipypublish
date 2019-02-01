@@ -14,7 +14,9 @@ def nbpresent(inpath,
               outformat='slides_standard',
               outpath=None, dump_files=True,
               ignore_prefix='_', clear_files=False,
-              log_level='INFO', dry_run=False, export_paths=()):
+              log_level='INFO', dry_run=False,
+              print_traceback=False,
+              export_paths=()):
     """ load reveal.js slides as a web server,
     converting from ipynb first if path extension is .ipynb
 
@@ -69,6 +71,8 @@ def nbpresent(inpath,
                                         plugin_folder_paths=export_paths)
         except Exception as err:
             logger.error("Run Failed: {}".format(err))
+            if print_traceback:
+                raise err
             return 1
     else:
         outpath = inpath
