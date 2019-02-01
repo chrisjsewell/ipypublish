@@ -51,7 +51,7 @@ def load_export_config(export_config_path):
 
     data = read_file_from_directory(
         export_config_path.parent, export_config_path.name,
-        "export configuration", logger, as_json=True)
+        "export configuration", logger, interp_ext=True)
 
     # validate against schema
     global _EXPORT_SCHEMA
@@ -59,7 +59,7 @@ def load_export_config(export_config_path):
         # lazy load schema once
         _EXPORT_SCHEMA = read_file_from_directory(
             os.path.dirname(os.path.realpath(__file__)), _EXPORT_SCHEMA_FILE,
-            "export configuration schema", logger, as_json=True)
+            "export configuration schema", logger, interp_ext=True)
     try:
         jsonschema.validate(data, _EXPORT_SCHEMA)
     except jsonschema.ValidationError as err:
@@ -129,14 +129,14 @@ def load_template(template_dict):
         outline_template = read_file_from_directory(
             template_dict["outline"]["directory"],
             template_dict["outline"]["file"],
-            "template outline", logger, as_json=False)
+            "template outline", logger, interp_ext=False)
         outline_name = os.path.join(template_dict["outline"]["directory"],
                                     template_dict["outline"]["file"])
     else:
         outline_template = read_file_from_module(
             template_dict["outline"]["module"],
             template_dict["outline"]["file"],
-            "template outline", logger, as_json=False)
+            "template outline", logger, interp_ext=False)
         outline_name = os.path.join(template_dict["outline"]["module"],
                                     template_dict["outline"]["file"])
 
@@ -151,11 +151,11 @@ def load_template(template_dict):
         if "directory" in segment:
             seg_data = read_file_from_directory(
                 segment["directory"],
-                segment["file"], "template segment", logger, as_json=True)
+                segment["file"], "template segment", logger, interp_ext=True)
         elif "module" in segment:
             seg_data = read_file_from_module(
                 segment["module"],
-                segment["file"], "template segment", logger, as_json=True)
+                segment["file"], "template segment", logger, interp_ext=True)
         else:
             handle_error(
                 "'directory' or 'module' expected in segment {}".format(snum),
