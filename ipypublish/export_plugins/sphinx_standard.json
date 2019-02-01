@@ -1,0 +1,23 @@
+{
+    "description": [
+      "sphinx reStructuredText in standard nbconvert format"
+    ],
+    "exporter": {
+      "class": "nbconvert.exporters.RSTExporter",
+      "filters": {},
+      "preprocessors": [],
+      "other_args": {}
+    },
+    "template": {
+      "outline": {
+        "module": "ipypublish.templates.outline_schemas",
+        "file": "rst_outline.rst.j2"
+      },
+      "segments": [
+        {
+          "module": "ipypublish.templates.segments",
+          "file": "std_rst.yaml.j2"
+        }
+      ]
+    }
+  }
