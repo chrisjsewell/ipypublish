@@ -1,5 +1,5 @@
 {
-  "$schema": "../outline_schema/latex_tplx_schema.json",
+  "$schema": "../segment.schema.json",
   "identifier": "ipypublish-biblio_natbib",
   "description": "with the main ipypublish bibliography",
   "segments": {
@@ -30,6 +30,5 @@
       "((*- endif *))",
       "((*- endif *))"
     ]
-  },
-  "template": "latex-tplx"
+  }
 }

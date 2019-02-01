@@ -14,6 +14,7 @@
     },
     "python.pythonPath": "/anaconda/envs/lsr/bin/python",
     "restructuredtext.confPath": "${workspaceFolder}/docs/source",
+    "restructuredtext.builtDocumentationPath": "${workspaceFolder}/docs/build/html",
     "restructuredtext.preview.scrollEditorWithPreview": false,
     "restructuredtext.preview.scrollPreviewWithEditor": false,
     "restructuredtext.updateOnTextChanged": "false",

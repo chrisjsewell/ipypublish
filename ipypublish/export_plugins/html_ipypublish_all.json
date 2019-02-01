@@ -78,7 +78,7 @@
   "template": {
     "outline": {
       "module": "ipypublish.templates.outline_schemas",
-      "file": "html_tpl_schema.json"
+      "file": "html_outline.html.j2"
     },
     "segments": [
       {

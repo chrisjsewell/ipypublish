@@ -73,7 +73,7 @@ The configuration file is a JSON file, with a validation schema given in
         "template": {
             "outline": {
                 "module": "ipypublish.templates.outline_schemas",
-                "file": "latex_tplx_schema.json"
+                "file": "latex_outline.latex.j2"
             },
             "segments": [
                 {
@@ -125,24 +125,30 @@ Template Construction
 ~~~~~~~~~~~~~~~~~~~~~
 
 In line 22, we define how to construct the `jinja`_ template.
-The ``outline`` key defines the path to an outline schema,
+The ``outline`` key defines the path to an outline template,
 such as in :ref:`outline_schema`.
-This file achieves two things; to define an outline of the `jinja`_ template
-structural blocks,
-with placeholders to be replaced by :py:func:`str.format`, and to
-provide a schema for segment files which are used to replace
-one or more of the placeholders.
+
+.. versionchanged:: 0.8.0
+
+    The outline file is now a jinja template, instead of a JSON file
+
+This template file can be a full jinja template file, extending
+an existing nbconvert template, but may optionally contain 'placeholders'
+(of the form ``@ipubreplace{below}{key_name}``)
+that can be replaced by injecting zero or more segments into them.
+The first option states whether segment injections are appended above or below
+previous injections, and the second option defines the key for that segment.
 
 This approach allows independent aspects of the document to be stored
 separately then pieced together in the desired manner. For example,
-the segment defined in :ref:`segment_config` defines only parts of the document
-which define how the bibliography is constructed.
+the segment file in :ref:`segment_config` defines only parts of the document
+which control how the bibliography is constructed.
 This could be removed or replaced by a custom export configuration.
 Similarly, input and output prompts can be added/removed in html documents.
 
-Segments are applied in the order they are defined,
-and the outline schema defines whether they are appended
-above or below existing content. For example, these segments:
+Segments are applied in the order they are defined, and appended
+above or below existing content, as defined by the placeholder.
+For example, these segments:
 
 .. code-block:: JSON
 
@@ -158,15 +164,27 @@ above or below existing content. For example, these segments:
         }
     ]
 
+applied to this template outline:
+
+.. code-block:: html+jinja
+
+    {% block markdowncell scoped %}
+    @ipubreplace{above}{notebook_input_markdown_pre}
+    @ipubreplace{below}{notebook_input_markdown}
+    @ipubreplace{below}{notebook_input_markdown_post}
+    {% endblock markdowncell %}
+
 will result in a template containing:
 
-.. code-block:: html
+.. code-block:: html+jinja
 
-   <div class='outer'>
-   <div class='inner'>
-     test
-   </div>
-   </div>
+    {% block markdowncell scoped %}
+    <div class='outer'>
+    <div class='inner'>
+        test
+    </div>
+    </div>
+    {% endblock markdowncell %}
 
 
 Segment configuration files also have an optional ``overwrite`` key, which

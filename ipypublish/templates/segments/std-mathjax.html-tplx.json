@@ -1,5 +1,5 @@
 {
-  "$schema": "../outline_schema/html_tpl_schema.json",
+  "$schema": "../segment.schema.json",
   "identifier": "standard-mathjax",
   "description": "with mathjax loaded",
   "segments": {
@@ -27,6 +27,5 @@
       "</script>",
       "<!-- End of mathjax configuration -->"
     ]
-  },
-  "template": "html-tpl"
+  }
 }

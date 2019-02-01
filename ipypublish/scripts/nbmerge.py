@@ -16,7 +16,9 @@ import sys
 import nbformat
 from six import string_types
 
-from ipypublish.utils import pathlib
+from ipypublish.utils import pathlib, handle_error
+
+logger = logging.getLogger("nbmerge")
 
 
 def alphanumeric_sort(l):
@@ -60,14 +62,12 @@ def merge_notebooks(ipynb_path, ignore_prefix='_',
     if isinstance(ipynb_path, string_types):
         ipynb_path = pathlib.Path(ipynb_path)
     if not ipynb_path.exists():
-        logging.error('the notebook path does not exist: {}'.format(
-            ipynb_path))
-        raise IOError('the notebook path does not exist: {}'.format(
-            ipynb_path))
+        handle_error('the notebook path does not exist: {}'.format(
+            ipynb_path), IOError, logger)
 
     final_nb = None
     if ipynb_path.is_dir():
-        logging.info('Merging all notebooks in directory')
+        logger.info('Merging all notebooks in directory')
         for ipath in alphanumeric_sort(ipynb_path.glob('*.ipynb')):
             if os.path.basename(ipath.name).startswith(ignore_prefix):
                 continue
@@ -87,7 +87,7 @@ def merge_notebooks(ipynb_path, ignore_prefix='_',
             else:
                 final_nb.cells.extend(nb.cells)
     else:
-        logging.info('Reading notebook')
+        logger.info('Reading notebook')
         with ipynb_path.open('r', encoding='utf-8') as f:
             if (sys.version_info.major == 3
                 and sys.version_info.minor < 6
@@ -110,9 +110,7 @@ def merge_notebooks(ipynb_path, ignore_prefix='_',
             return nbformat.writes(final_nb).encode('utf-8')
 
     if final_nb is None:
-        logging.error('no acceptable notebooks found for path: {}'.format(
-            ipynb_path.name))
-        raise IOError('no acceptable notebooks found for path: {}'.format(
-            ipynb_path.name))
+        handle_error('no acceptable notebooks found for path: {}'.format(
+            ipynb_path.name), IOError, logger)
 
     return final_nb, meta_path

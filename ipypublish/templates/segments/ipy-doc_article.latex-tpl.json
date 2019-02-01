@@ -1,5 +1,5 @@
 {
-  "$schema": "../outline_schema/latex_tplx_schema.json",
+  "$schema": "../segment.schema.json",
   "identifier": "ipypublish-doc_article",
   "description": "with the main ipypublish article setup",
   "segments": {
@@ -146,6 +146,5 @@
       "\\usepackage{cleveref}",
       "\\creflabelformat{equation}{#2#1#3}"
     ]
-  },
-  "template": "latex-tplx"
+  }
 }

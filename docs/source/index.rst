@@ -47,6 +47,7 @@ Citation
 
 Please cite |DOI| if using IPyPublish.
 
+
 Badges
 ======
 
@@ -57,6 +58,7 @@ Badges
    :caption: Contents:
 
    getting_started
+   examples
    notebook_conversion
    metadata_tags
    custom_export_config

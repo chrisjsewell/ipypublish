@@ -1,0 +1,154 @@
+((*- extends 'display_priority.tplx' -*))
+
+%% Latex Document Setup
+%% ====================
+
+((* block header *))
+% A latex document created by ipypublish @ipubreplace{below}{ipypub_version}
+((( '@ipubreplace{below}{meta_docstring}' | comment_lines('% ') )))
+%
+
+  ((*- block docclass *))
+%%%%%%%%%%%% DOCCLASS
+    @ipubreplace{below}{document_docclass}
+%%%%%%%%%%%%
+  ((* endblock docclass -*))
+
+  ((*- block packages *))
+%%%%%%%%%%%% PACKAGES
+    @ipubreplace{below}{document_packages}
+%%%%%%%%%%%%
+  ((* endblock packages *))
+
+  ((*- block definitions *))
+      ((* block date *))((* endblock date *))
+      ((* block author *))((* endblock author *))
+    ((* block title *))((* endblock title *))
+
+%%%%%%%%%%%% DEFINITIONS
+    @ipubreplace{below}{document_definitions}
+%%%%%%%%%%%%
+
+  ((* endblock definitions *))
+
+  ((*- block commands *))
+    ((* block margins *))
+%%%%%%%%%%%% MARGINS
+      @ipubreplace{below}{document_margins}
+%%%%%%%%%%%%
+    ((* endblock margins *))
+%%%%%%%%%%%% COMMANDS
+    @ipubreplace{below}{document_commands}
+%%%%%%%%%%%%
+  ((* endblock commands *))
+
+%%%%%%%%%%%% FINAL HEADER MATERIAL
+    @ipubreplace{below}{document_header_end}
+%%%%%%%%%%%%
+
+((* endblock header *))
+
+((* block body *))
+
+\begin{document}
+
+  ((* block predoc *))
+    ((* block maketitle *))
+      @ipubreplace{below}{document_title}
+    ((* endblock maketitle *))
+    ((* block abstract *))
+      @ipubreplace{below}{document_abstract}
+    ((* endblock abstract *))
+    @ipubreplace{below}{document_predoc}
+  ((* endblock predoc *))
+
+  ((( super() )))
+
+  ((* block postdoc *))
+      ((* block bibliography *))
+      @ipubreplace{below}{document_bibliography}
+    ((* endblock bibliography *))
+    @ipubreplace{below}{document_postdoc}
+    ((* endblock postdoc *))
+
+\end{document}
+
+((* endblock body *))
+
+%% Notebook Input
+%% ==============
+
+((*- block any_cell scoped *))
+  @ipubreplace{below}{notebook_input}
+((* endblock any_cell *))
+
+((* block input scoped *))
+  @ipubreplace{below}{notebook_input_code}
+((* endblock input *))
+
+((* block rawcell scoped *))
+  @ipubreplace{below}{notebook_input_raw}
+((* endblock rawcell *))
+
+((* block markdowncell scoped *))
+  @ipubreplace{below}{notebook_input_markdown}
+((* endblock markdowncell *))
+
+((* block unknowncell scoped *))
+  @ipubreplace{below}{notebook_input_unknown}
+((* endblock unknowncell *))
+
+%% Notebook Output
+%% ================
+
+% Redirect execute_result to display data priority.
+((*- block execute_result scoped *))
+    ((* block data_priority scoped *))
+    @ipubreplace{below}{notebook_output}
+    ((* endblock *))
+((* endblock execute_result *))
+
+((* block data_text *))
+  @ipubreplace{below}{notebook_output_text}
+((* endblock data_text *))
+
+((* block error *))
+  @ipubreplace{below}{notebook_output_error}
+((* endblock error *))
+
+((* block traceback_line *))
+    @ipubreplace{below}{notebook_output_traceback}
+((* endblock traceback_line *))
+
+((* block stream *))
+    @ipubreplace{below}{notebook_output_stream}
+((* endblock stream *))
+
+((* block data_latex -*))
+  @ipubreplace{below}{notebook_output_latex}
+((* endblock data_latex *))
+
+((*- block data_markdown -*))
+  @ipubreplace{below}{notebook_output_markdown}
+((* endblock data_markdown *))
+
+((*- block data_png -*))
+  @ipubreplace{below}{notebook_output_png}
+((*- endblock data_png -*))
+
+((*- block data_jpg -*))
+  @ipubreplace{below}{notebook_output_jpg}
+((*- endblock data_jpg -*))
+
+((*- block data_svg -*))
+  @ipubreplace{below}{notebook_output_svg}
+((*- endblock data_svg -*))
+
+((*- block data_pdf -*))
+  @ipubreplace{below}{notebook_output_pdf}
+((*- endblock -*))
+
+%% Jinja Macros
+%% ================
+
+@ipubreplace{below}{jinja_macros}

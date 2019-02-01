@@ -3,7 +3,7 @@
     "notebook_all",
     "notebook_input_markdown"
   ],
-  "$schema": "../outline_schema/html_tpl_schema.json",
+  "$schema": "../segment.schema.json",
   "identifier": "ipypublish-slides_mkdown",
   "description": "sets markdown main titles (with one #) as their own slides,\nremove code cells ",
   "segments": {
@@ -41,6 +41,5 @@
       "",
       "{{ cell.source  | markdown2html | strip_files_prefix }}"
     ]
-  },
-  "template": "html-tpl"
+  }
 }

@@ -98,21 +98,3 @@ use the ``--log-level debug`` and ``--pdf-debug`` flags. If there is
 still an error, please raise an issue on the `GitHub
 repository <https://github.com/chrisjsewell/ipypublish/issues>`__,
 including the run environment and the log file.
-
-Examples
---------
-
-See `Example.ipynb <example/notebooks/Example.ipynb>`__,
-`Example.pdf <https://chrisjsewell.github.io/ipypublish/Example.view_pdf.html>`__,
-`Example.html <https://chrisjsewell.github.io/ipypublish/Example.html>`__
-and
-`Example.slides.html <https://chrisjsewell.github.io/ipypublish/Example.slides.html#/>`__
-for an example of the potential input/output.
-
-Or, for a practical example of the ipypublish capability, see these
-documents on Atomic 3D Visualisation:
-`Notebook <https://github.com/chrisjsewell/chrisjsewell.github.io/blob/master/3d_atomic/3D%20Atomic%20Visualisation.ipynb>`__,
-`PDF <https://chrisjsewell.github.io/3d_atomic/converted/3D%20Atomic%20Visualisation.view_pdf.html>`__,
-`HTML <https://chrisjsewell.github.io/3d_atomic/converted/3D%20Atomic%20Visualisation.html>`__
-or `Reveal.JS
-slideshow <https://chrisjsewell.github.io/3d_atomic/converted/3D%20Atomic%20Visualisation.slides.html>`__.

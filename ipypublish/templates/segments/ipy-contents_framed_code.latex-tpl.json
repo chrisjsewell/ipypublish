@@ -1,5 +1,5 @@
 {
-  "$schema": "../outline_schema/latex_tplx_schema.json",
+  "$schema": "../segment.schema.json",
   "identifier": "ipypublish-contents_framed_code",
   "description": "with the input code wrapped and framed",
   "segments": {
@@ -165,6 +165,5 @@
       "((*- endif *))",
       "((*- endmacro *))"
     ]
-  },
-  "template": "latex-tplx"
+  }
 }

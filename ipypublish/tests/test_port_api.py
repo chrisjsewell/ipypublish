@@ -2,6 +2,7 @@ import os
 import json
 from ipypublish.port_api.plugin_to_json import convert_to_json
 from ipypublish.port_api.tpl_dct_to_json import py_to_json
+from ipypublish.port_api.convert_format_str import convert_format_str
 from ipypublish.tests import TEST_FILES_DIR
 
 
@@ -27,3 +28,26 @@ def test_py_to_json():
                                       "front_pages.py.txt"))
     dct = json.loads(out_str)
     assert "segments" in dct  # TODO test against schema
+
+
+def test_convert_format_str():
+
+    template = ["{{%- extends 'null.tpl' -%}}",
+                "{{% block header %}}",
+                "{{{{ nb.metadata | meta2yaml('#~~ ') }}}}",
+                "{{% endblock header %}}",
+                "{{% block codecell %}}",
+                "#%%",
+                "{{{{ super() }}}}",
+                "{{% endblock codecell %}}",
+                "{{% block in_prompt %}}{{% endblock in_prompt %}}",
+                "{{% block input %}}{{{{ cell.metadata | meta2yaml('#~~ ') }}}}",
+                "{{{{ cell.source | ipython2python }}}}",
+                "{{% endblock input %}}",
+                "{{% block markdowncell scoped %}}#%% [markdown]",
+                "{{{{ cell.metadata | meta2yaml('#~~ ') }}}}",
+                "{{{{ cell.source | comment_lines }}}}",
+                "{{% endblock markdowncell %}}"
+                ]
+
+    convert_format_str(template)

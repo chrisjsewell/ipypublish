@@ -2,7 +2,7 @@
   "overwrite": [
     "notebook_all"
   ],
-  "$schema": "../outline_schema/html_tpl_schema.json",
+  "$schema": "../segment.schema.json",
   "identifier": "standard-slides",
   "description": "marks up html with slide tags, based on metadata",
   "segments": {
@@ -214,6 +214,5 @@
       "</section>",
       "{%- endif -%}"
     ]
-  },
-  "template": "html-tpl"
+  }
 }

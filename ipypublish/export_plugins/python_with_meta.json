@@ -14,8 +14,7 @@
   "template": {
     "outline": {
       "module": "ipypublish.templates.outline_schemas",
-      "file": "python_tpl_schema.json"
-    },
-    "segments": []
+      "file": "python_outline.py.j2"
+    }
   }
 }

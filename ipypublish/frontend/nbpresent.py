@@ -7,6 +7,8 @@ from ipypublish.frontend.shared import parse_options
 from ipypublish.convert.main import publish
 from ipypublish.scripts.reveal_serve import RevealServer
 
+logger = logging.getLogger("nbpresent")
+
 
 def nbpresent(inpath,
               outformat='slides_standard',
@@ -46,6 +48,7 @@ def nbpresent(inpath,
 
     inpath_name, inpath_ext = os.path.splitext(os.path.basename(inpath))
 
+    outpath = None
     if inpath_ext == '.ipynb':
         outdir = os.path.join(
             os.getcwd(), 'converted') if outpath is None else outpath
@@ -55,17 +58,27 @@ def nbpresent(inpath,
             outdir, inpath_name + '.nbpub.log'), 'w')
         flogger.setLevel(getattr(logging, log_level.upper()))
         root.addHandler(flogger)
-        inpath, exporter = publish(inpath,
-                                   conversion=outformat,
-                                   outpath=outpath, dump_files=dump_files,
-                                   ignore_prefix=ignore_prefix,
-                                   clear_existing=clear_files,
-                                   create_pdf=False, dry_run=dry_run,
-                                   plugin_folder_paths=export_paths)
 
-    server = RevealServer()
-    if not dry_run:
-        server.serve(inpath)
+        try:
+            outpath, exporter = publish(inpath,
+                                        conversion=outformat,
+                                        outpath=outpath, dump_files=dump_files,
+                                        ignore_prefix=ignore_prefix,
+                                        clear_existing=clear_files,
+                                        create_pdf=False, dry_run=dry_run,
+                                        plugin_folder_paths=export_paths)
+        except Exception as err:
+            logger.error("Run Failed: {}".format(err))
+            return 1
+    else:
+        outpath = inpath
+
+    if outpath:
+        server = RevealServer()
+        if not dry_run:
+            server.serve(inpath)
+   
+    return 0
 
 
 def run(sys_args=None):
@@ -75,6 +88,6 @@ def run(sys_args=None):
 
     filepath, options = parse_options(sys_args, "nbpresent")
 
-    nbpresent(filepath, **options)
+    outcode = nbpresent(filepath, **options)
 
-    return 0
+    return outcode

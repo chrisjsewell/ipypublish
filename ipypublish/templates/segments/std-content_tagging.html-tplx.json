@@ -1,5 +1,5 @@
 {
-  "$schema": "../outline_schema/html_tpl_schema.json",
+  "$schema": "../segment.schema.json",
   "identifier": "standard-content_tagging",
   "description": "standard html tag wrapping",
   "segments": {
@@ -210,6 +210,5 @@
       "</script>",
       "</div>"
     ]
-  },
-  "template": "html-tpl"
+  }
 }

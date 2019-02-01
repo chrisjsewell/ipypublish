@@ -1,5 +1,5 @@
 {
-  "$schema": "../outline_schema/html_tpl_schema.json",
+  "$schema": "../segment.schema.json",
   "identifier": "ipypublish-flexbox_css",
   "description": " adds flex boxes (https://github.com/Munawwar/flex-helper)  ",
   "segments": {
@@ -88,6 +88,5 @@
       "",
       "</style>"
     ]
-  },
-  "template": "html-tpl"
+  }
 }

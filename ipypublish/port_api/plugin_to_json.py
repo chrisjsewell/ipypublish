@@ -98,19 +98,19 @@ def convert_oformat(oformat):
         exporter = 'nbconvert.exporters.LatexExporter'
         outline = {
             "module": "ipypublish.templates.outline_schemas",
-            "file": "latex_tplx_schema.json"
+            "file": "latex_outline.latex.j2"
         }
     elif oformat == "HTML":
         exporter = 'nbconvert.exporters.HTMLExporter'
         outline = {
             "module": "ipypublish.templates.outline_schemas",
-            "file": "html_tpl_schema.json"
+            "file": "html_outline.html.j2"
         }
     elif oformat == "Slides":
         exporter = 'nbconvert.exporters.SlidesExporter'
         outline = {
             "module": "ipypublish.templates.outline_schemas",
-            "file": "html_tpl_schema.json"
+            "file": "html_outline.html.j2"
         }
     else:
         raise ValueError("expected oformat to be: "

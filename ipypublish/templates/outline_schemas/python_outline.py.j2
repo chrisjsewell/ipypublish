@@ -1,0 +1,16 @@
+{%- extends 'null.tpl' -%}
+{% block header %}
+{{ nb.metadata | meta2yaml('#~~ ') }}
+{% endblock header %}
+{% block codecell %}
+#%%
+{{ super() }}
+{% endblock codecell %}
+{% block in_prompt %}{% endblock in_prompt %}
+{% block input %}{{ cell.metadata | meta2yaml('#~~ ') }}
+{{ cell.source | ipython2python }}
+{% endblock input %}
+{% block markdowncell scoped %}#%% [markdown]
+{{ cell.metadata | meta2yaml('#~~ ') }}
+{{ cell.source | comment_lines }}
+{% endblock markdowncell %}
