@@ -10,15 +10,18 @@ http://nbconvert.readthedocs.io/en/latest/api/exporters.html#nbconvert.exporters
 """
 from typing import List, Tuple, Union  # noqa: F401
 import re
+import io
+import os
 import logging
 import jsonschema
 
 # from ipypublish import __version__
-from ipypublish.utils import (read_file_from_module,
-                              read_file_from_directory,
-                              handle_error)
+from ipypublish.utils import handle_error, read_file_from_directory
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("template")
+
+_SEGMENT_SCHEMA_FILE = "segment.schema.json"
+_SEGMENT_SCHEMA = None
 
 
 def multireplace(string, replacements):
@@ -28,7 +31,7 @@ def multireplace(string, replacements):
     From https://gist.github.com/bgusach/a967e0587d6e01e889fd1d776c5f3729
 
     :param str string: string to execute replacements on
-    :param dict replacements: replacement dictionary {value to find: value to replace}
+    :param dict replacements: replacement dictionary {find value: replacement}
     :rtype: str
 
     """
@@ -49,13 +52,22 @@ def multireplace(string, replacements):
     return regexp.sub(lambda match: replacements[match.group(0)], string)
 
 
-def create_template(outline_schema, segment_datas, outpath=None):
+def _output_to_file(content, outpath):
+    if outpath is not None:
+        with io.open(outpath, "w", encoding='utf8') as f:  # TODO use pathlib
+            f.write(content)
+        return
+
+
+def create_template(outline_template, outline_name,
+                    segment_datas,
+                    outpath=None):
     # type: (dict, Tuple[dict]) -> str
     """ build a latex jinja template from;
 
-    - a json file, defining a jinja template outline,
-      containing segment placeholders, and a schema for segments,
-    - and json segment files adhering to the schema
+    - a jinja(2) template outline,
+      which may contain segment placeholders,
+    - and json segment files adhering to the segment.schema.json schema
 
     if a segment contains the key "overwrite",
     then its value should be a list of keys,
@@ -63,41 +75,51 @@ def create_template(outline_schema, segment_datas, outpath=None):
 
     Parameters
     ----------
-    outline_schema: dict
+    outline_template: str
     segment_datas: tuple or dict
     outpath:  None or str
         if not None, output to path
 
     """
-    # TODO validate outline schema
-
-    # get jinja template
-    if "directory" in outline_schema["outline"]:
-        outline_content = read_file_from_directory(
-            outline_schema["outline"]["directory"],
-            outline_schema["outline"]["file"], "template outline", logger)
-    else:
-        outline_content = read_file_from_module(
-            outline_schema["outline"]["module"],
-            outline_schema["outline"]["file"], "template outline", logger)
-
     # get the placeholders @ipubreplace{above|below}{name}
     regex = re.compile("@ipubreplace{(.+)}{(.+)}", re.MULTILINE)
-    placeholder_tuple = regex.findall(outline_content)
+    placeholder_tuple = regex.findall(outline_template)
+
+    if not placeholder_tuple:
+        if segment_datas:
+            handle_error(
+                "the segment data is provided, " +
+                "but the outline template contains no placeholders",
+                KeyError, logger)
+
+        if outpath:
+            _output_to_file(outline_template, outpath)
+        return outline_template
+
     placeholders = {name: append for append, name in placeholder_tuple}
+    # TODO validate that placeholders to not exist multiple times,
+    # with above and below
 
     replacements = {key: "" for key in placeholders.keys()}
     docstrings = [
-        outline_schema.get("$id"),
-        outline_schema.get("description"),
-        "with segments:"
+        "outline: {}".format(outline_name),
     ]
+
+    if segment_datas:
+        docstrings.append("with segments:")
+        global _SEGMENT_SCHEMA
+        if _SEGMENT_SCHEMA is None:
+            # lazy segment schema once
+            _SEGMENT_SCHEMA = read_file_from_directory(
+                os.path.dirname(os.path.realpath(__file__)),
+                _SEGMENT_SCHEMA_FILE,
+                "segment configuration schema", logger, as_json=True)
 
     for seg_num, segment_data in enumerate(segment_datas):
 
-        # validate segment against outline schema
+        # validate segment
         try:
-            jsonschema.validate(segment_data, outline_schema)
+            jsonschema.validate(segment_data, _SEGMENT_SCHEMA)
         except jsonschema.ValidationError as err:
             handle_error(
                 "validation of template segment {} failed: {}".format(
@@ -115,6 +137,13 @@ def create_template(outline_schema, segment_datas, outpath=None):
         logger.debug('overwrite keys: {}'.format(overwrite))
 
         for key, val in segment_data.get("segments").items():
+
+            if key not in placeholders:
+                handle_error(
+                    "the segment key '{}' ".format(key) +
+                    "is not contained in the outline template",
+                    KeyError, logger)
+
             valstring = "\n".join(val)
             if key in overwrite:
                 replacements[key] = valstring
@@ -123,11 +152,10 @@ def create_template(outline_schema, segment_datas, outpath=None):
             elif placeholders[key] == "below":
                 replacements[key] = replacements[key] + '\n' + valstring
             else:
-                # TODO this should be part of the schema?
                 handle_error((
                     "the placeholder @ipubreplace{{{0}}}{{{1}}} ".format(
                         key, placeholders[key]) +
-                    "should specify above or below appending"),
+                    "should specify 'above' or 'below' appending"),
                     jsonschema.ValidationError, logger=logger)
 
     if "meta_docstring" in placeholders:
@@ -140,13 +168,12 @@ def create_template(outline_schema, segment_datas, outpath=None):
         replacements["ipypub_version"] = ""  # str(__version__)
 
     replace_dict = {
-        "@ipubreplace{{{0}}}{{{1}}}".format(append, name): replacements[name]
+        "@ipubreplace{{{0}}}{{{1}}}".format(append, name): replacements.get(
+            name, "")
         for append, name in placeholder_tuple}
-    outline = multireplace(outline_content, replace_dict)
+    outline = multireplace(outline_template, replace_dict)
 
-    if outpath is not None:
-        with open(outpath, 'w') as f:  # TODO use pathlib
-            f.write(outline)
-        return
+    if outpath:
+        _output_to_file(outline, outpath)
 
     return outline

@@ -6,6 +6,8 @@ import sys
 from ipypublish.frontend.shared import parse_options
 from ipypublish.convert.main import publish
 
+logger = logging.getLogger("nbpublish")
+
 
 def nbpublish(ipynb_path,
               outformat='latex_ipypublish_main',
@@ -55,7 +57,7 @@ def nbpublish(ipynb_path,
     root.setLevel(logging.DEBUG)
     slogger = logging.StreamHandler(sys.stdout)
     slogger.setLevel(getattr(logging, log_level.upper()))
-    formatter = logging.Formatter('%(levelname)s:%(module)s:%(message)s')
+    formatter = logging.Formatter('%(levelname)s:%(name)s:%(message)s')
     slogger.setFormatter(formatter)
     slogger.propogate = False
     root.addHandler(slogger)
@@ -69,13 +71,19 @@ def nbpublish(ipynb_path,
     root.addHandler(flogger)
 
     # run
-    return publish(ipynb_path,
-                   conversion=outformat,
-                   outpath=outpath, dump_files=dump_files,
-                   ignore_prefix=ignore_prefix, clear_existing=clear_files,
-                   create_pdf=create_pdf, pdf_in_temp=pdf_in_temp,
-                   pdf_debug=pdf_debug, dry_run=dry_run,
-                   plugin_folder_paths=export_paths)
+    try:
+        publish(ipynb_path,
+                conversion=outformat,
+                outpath=outpath, dump_files=dump_files,
+                ignore_prefix=ignore_prefix, clear_existing=clear_files,
+                create_pdf=create_pdf, pdf_in_temp=pdf_in_temp,
+                pdf_debug=pdf_debug, dry_run=dry_run,
+                plugin_folder_paths=export_paths)
+    except Exception as err:
+        logger.error("Run Failed: {}".format(err))
+        return 1
+
+    return 0
 
 
 def run(sys_args=None):
@@ -85,6 +93,6 @@ def run(sys_args=None):
 
     filepath, options = parse_options(sys_args, "nbpublish")
 
-    nbpublish(filepath, **options)
+    outcode = nbpublish(filepath, **options)
 
-    return 0
+    return outcode

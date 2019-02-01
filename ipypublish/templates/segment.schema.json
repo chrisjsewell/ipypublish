@@ -1,0 +1,45 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema",
+    "$id": "segment",
+    "description": "define segments to insert into a jinja template",
+    "type": "object",
+    "additionalProperties": true,
+    "required": [
+        "identifier",
+        "description",
+        "segments"
+    ],
+    "properties": {
+        "$schema": {
+            "type": "string"
+        },
+        "identifier": {
+            "description": "the identification of the segments",
+            "type": "string"
+        },
+        "description": {
+            "description": "the purpose of this group of segments",
+            "type": "string"
+        },
+        "segments": {
+            "additionalProperties": false,
+            "description": "the segments to insert",
+            "patternProperties": {
+                ".+": {
+                    "description": "a segment of the template, each line should be a separate list item",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "overwrite": {
+            "description": "a list of segment keys that may overwrite previously defined entries",
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        }
+    }
+}

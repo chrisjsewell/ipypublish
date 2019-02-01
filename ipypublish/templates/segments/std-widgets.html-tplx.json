@@ -1,5 +1,5 @@
 {
-  "$schema": "../outline_schema/html_tpl_schema.json",
+  "$schema": "../segment.schema.json",
   "identifier": "standard-widgets",
   "description": "with jupyter wigets",
   "segments": {
@@ -25,6 +25,5 @@
       "{% endif %}",
       ""
     ]
-  },
-  "template": "html-tpl"
+  }
 }

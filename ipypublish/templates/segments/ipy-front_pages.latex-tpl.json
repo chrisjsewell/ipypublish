@@ -1,5 +1,5 @@
 {
-  "$schema": "../outline_schema/latex_tplx_schema.json",
+  "$schema": "../segment.schema.json",
   "identifier": "ipypublish-front_pages",
   "description": "with the main ipypublish title and contents page setup",
   "segments": {
@@ -148,6 +148,5 @@
       "    \\endgroup",
       "((*- endif *))"
     ]
-  },
-  "template": "latex-tplx"
+  }
 }

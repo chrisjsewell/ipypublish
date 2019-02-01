@@ -21,7 +21,7 @@ from ipypublish.convert.config_manager import (get_export_config_path,
                                                create_exporter_cls)
 from ipypublish.scripts.pdfexport import export_pdf
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("conversion")
 
 
 def publish(ipynb_path,
@@ -85,20 +85,20 @@ def publish(ipynb_path,
         os.mkdir(outdir)
 
     # log start of conversion
-    logging.info('started ipypublish v{0} at {1}'.format(
+    logger.info('started ipypublish v{0} at {1}'.format(
         ipypublish.__version__, time.strftime("%c")))
-    logging.info('logging to: {}'.format(
+    logger.info('logging to: {}'.format(
         os.path.join(outdir, ipynb_name + '.nbpub.log')))
-    logging.info('running for ipynb(s) at: {0}'.format(ipynb_path))
-    logging.info('with conversion configuration: {0}'.format(conversion))
+    logger.info('running for ipynb(s) at: {0}'.format(ipynb_path))
+    logger.info('with conversion configuration: {0}'.format(conversion))
 
     # merge all notebooks (this handles checking ipynb_path exists)
     final_nb, meta_path = merge_notebooks(ipynb_path,
                                           ignore_prefix=ignore_prefix)
-    logging.debug('notebooks meta path: {}'.format(meta_path))
+    logger.debug('notebooks meta path: {}'.format(meta_path))
 
     # find conversion configuration
-    logging.info('finding conversion configuration: {}'.format(conversion))
+    logger.info('finding conversion configuration: {}'.format(conversion))
     export_config_path = None
     if isinstance(conversion, string_types):
         outformat_path = pathlib.Path(conversion)
@@ -118,19 +118,19 @@ def publish(ipynb_path,
             IOError, logger)
 
     # read conversion configuration and create
-    logging.info('loading conversion configuration')
+    logger.info('loading conversion configuration')
     data = load_export_config(export_config_path)
-    logging.info('creating exporter')
+    logger.info('creating exporter')
     exporter_cls = create_exporter_cls(data["exporter"]["class"])
-    logging.info('creating template')
+    logger.info('creating template')
     jinja_template = load_template(data["template"])
-    logging.info('creating nbconvert configuration')
+    logger.info('creating nbconvert configuration')
     config = create_config(data["exporter"],
                            {"${meta_path}": str(meta_path),
                             "${files_path}": str(files_folder)})
 
     # run nbconvert
-    logging.info('running nbconvert')
+    logger.info('running nbconvert')
     exporter, body, resources = export_notebook(final_nb, exporter_cls,
                                                 config, jinja_template)
 
@@ -141,7 +141,7 @@ def publish(ipynb_path,
         return outpath, exporter
 
     # write results
-    logging.info("writing results")
+    logger.info("writing results")
     main_file_name = ipynb_name + exporter.file_extension
     outpath, outfilespath = write_output(body, resources, outdir,
                                          main_file_name,
@@ -151,7 +151,7 @@ def publish(ipynb_path,
 
     # create pdf
     if create_pdf and exporter.output_mimetype == 'text/latex':
-        logging.info('running pdf conversion')
+        logger.info('running pdf conversion')
 
         if not export_pdf(outpath, outdir=outdir,
                           files_path=outfilespath,
@@ -161,7 +161,7 @@ def publish(ipynb_path,
             handle_error('pdf export failed, try running with pdf_debug=True',
                          RuntimeError, logger)
 
-    logging.info('process finished successfully')
+    logger.info('process finished successfully')
 
     return outpath, exporter
 
@@ -246,13 +246,13 @@ def write_output(body, resources, outdir, main_file_name, output_external,
     outpath = os.path.join(outdir, main_file_name)
     outfilespath = os.path.join(outdir, files_folder)
 
-    logging.info('outputting converted file to: {}'.format(outpath))
+    logger.info('outputting converted file to: {}'.format(outpath))
     with io.open(outpath, "w", encoding='utf8') as fh:
         fh.write(body)
 
     # output external files
     if output_external:
-        logging.info('dumping external files to: {}'.format(outfilespath))
+        logger.info('dumping external files to: {}'.format(outfilespath))
 
         if os.path.exists(outfilespath):
             if clear_existing:

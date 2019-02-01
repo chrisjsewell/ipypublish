@@ -1,5 +1,5 @@
 {
-  "$schema": "../outline_schema/html_tpl_schema.json",
+  "$schema": "../segment.schema.json",
   "identifier": "standard-content",
   "description": "with standard nbconvert input/output content",
   "segments": {
@@ -123,6 +123,5 @@
       "",
       "{{ output.data[datatype] | json_dumps }}"
     ]
-  },
-  "template": "html-tpl"
+  }
 }

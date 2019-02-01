@@ -1,5 +1,5 @@
 {
-  "$schema": "../outline_schema/html_tpl_schema.json",
+  "$schema": "../segment.schema.json",
   "identifier": "ipypublish-toggle_buttons",
   "description": "add buttons to toggle input code and output cells",
   "segments": {
@@ -69,6 +69,5 @@
       "",
       ""
     ]
-  },
-  "template": "html-tpl"
+  }
 }

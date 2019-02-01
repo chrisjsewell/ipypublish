@@ -73,7 +73,7 @@ The configuration file is a JSON file, with a validation schema given in
         "template": {
             "outline": {
                 "module": "ipypublish.templates.outline_schemas",
-                "file": "latex_tplx_schema.json"
+                "file": "latex_outline.latex.j2"
             },
             "segments": [
                 {

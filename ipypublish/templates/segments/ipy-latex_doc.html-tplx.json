@@ -10,7 +10,7 @@
     "notebook_output_stream_stderr",
     "notebook_output_stream_stdout"
   ],
-  "$schema": "../outline_schema/html_tpl_schema.json",
+  "$schema": "../segment.schema.json",
   "identifier": "ipypublish-latex_doc",
   "description": " caption and label elements according to ipub meta tags  ",
   "segments": {
@@ -332,6 +332,5 @@
       "{%- endmacro %}",
       ""
     ]
-  },
-  "template": "html-tpl"
+  }
 }

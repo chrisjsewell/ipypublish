@@ -1,5 +1,5 @@
 {
-  "$schema": "../outline_schema/html_tpl_schema.json",
+  "$schema": "../segment.schema.json",
   "identifier": "ipypublish-toc_sidebar",
   "description": "number headers and add sidebar with hyperlinked table of contents",
   "segments": {
@@ -52,6 +52,5 @@
       "",
       ""
     ]
-  },
-  "template": "html-tpl"
+  }
 }

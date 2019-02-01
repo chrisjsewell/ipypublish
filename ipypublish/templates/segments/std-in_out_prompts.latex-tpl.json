@@ -3,7 +3,7 @@
     "notebook_output",
     "notebook_input_code"
   ],
-  "$schema": "../outline_schema/latex_tplx_schema.json",
+  "$schema": "../segment.schema.json",
   "identifier": "standard-in_out_prompts",
   "description": "with in/out prompts",
   "segments": {
@@ -47,6 +47,5 @@
       "((*- endmacro *))",
       ""
     ]
-  },
-  "template": "latex-tplx"
+  }
 }

@@ -56,7 +56,7 @@ def assess_syntax(path):
         "identifier": os.path.splitext(os.path.basename(path))[0],
         "description": docstring,
         "segments": output,
-        "template": "latex-tplx" if dtype == "tplx_dict" else "html-tpl"
+        "$schema": "../segment.schema.json"
      }
 
 

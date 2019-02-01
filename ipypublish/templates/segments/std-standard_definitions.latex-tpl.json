@@ -1,5 +1,5 @@
 {
-  "$schema": "../outline_schema/latex_tplx_schema.json",
+  "$schema": "../segment.schema.json",
   "identifier": "standard-standard_definitions",
   "description": "with standard nbconvert definitions",
   "segments": {
@@ -78,6 +78,5 @@
       "\\def\\lt{<}",
       ""
     ]
-  },
-  "template": "latex-tplx"
+  }
 }

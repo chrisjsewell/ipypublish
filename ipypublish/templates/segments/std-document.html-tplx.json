@@ -1,5 +1,5 @@
 {
-  "$schema": "../outline_schema/html_tpl_schema.json",
+  "$schema": "../segment.schema.json",
   "identifier": "standard-document",
   "description": "with standard nbconvert css layout",
   "segments": {
@@ -64,6 +64,5 @@
       "     </div>",
       "   </div>"
     ]
-  },
-  "template": "html-tpl"
+  }
 }

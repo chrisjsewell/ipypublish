@@ -3,5 +3,5 @@
 Template Outline Configuration Example
 --------------------------------------
 
-.. literalinclude:: ../../ipypublish/templates/outline_schemas/latex_tplx_schema.json
+.. literalinclude:: ../../ipypublish/templates/outline_schemas/latex_outline.latex.j2
   :language: JSON

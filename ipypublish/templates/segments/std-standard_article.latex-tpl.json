@@ -1,5 +1,5 @@
 {
-  "$schema": "../outline_schema/latex_tplx_schema.json",
+  "$schema": "../segment.schema.json",
   "identifier": "standard-standard_article",
   "description": "with standard nbconvert article setup",
   "segments": {
@@ -63,6 +63,5 @@
       "\\title{((( resources.metadata.name | ascii_only | escape_latex )))}",
       "\\maketitle"
     ]
-  },
-  "template": "latex-tplx"
+  }
 }

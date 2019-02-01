@@ -1,5 +1,5 @@
 {
-  "$schema": "../outline_schema/latex_tplx_schema.json",
+  "$schema": "../segment.schema.json",
   "identifier": "standard-standard_packages",
   "description": "with standard nbconvert packages",
   "segments": {
@@ -38,6 +38,5 @@
       "                            % normalem makes italics be italics, not underlines",
       ""
     ]
-  },
-  "template": "latex-tplx"
+  }
 }
