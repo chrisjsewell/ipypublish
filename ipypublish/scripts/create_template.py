@@ -9,20 +9,44 @@ http://nbconvert.readthedocs.io/en/latest/api/exporters.html#nbconvert.exporters
 
 """
 from typing import List, Tuple, Union  # noqa: F401
+import re
 import logging
 import jsonschema
+
 # from ipypublish import __version__
+from ipypublish.utils import (read_file_from_module,
+                              read_file_from_directory,
+                              handle_error)
+
+logger = logging.getLogger(__name__)
 
 
-def handle_error(msg, err_type, raise_msg=None, log_msg=None):
-    """handle an error, by logging it, then raising"""
-    if raise_msg is None:
-        raise_msg = msg
-    if log_msg is None:
-        log_msg = msg
+def multireplace(string, replacements):
+    """
+    Given a string and a replacement map, it returns the replaced string.
 
-    logging.error(log_msg)
-    raise err_type(raise_msg)
+    From https://gist.github.com/bgusach/a967e0587d6e01e889fd1d776c5f3729
+
+    :param str string: string to execute replacements on
+    :param dict replacements: replacement dictionary {value to find: value to replace}
+    :rtype: str
+
+    """
+    if not replacements:
+        return string
+
+    # Place longer ones first to keep shorter substrings from matching,
+    # where the longer ones should take place
+    # For instance given the replacements {'ab': 'AB', 'abc': 'ABC'}
+    # against the string 'hey abc', it should produce
+    # 'hey ABC' and not 'hey ABc'
+    substrs = sorted(replacements, key=len, reverse=True)
+
+    # Create a big OR regex that matches any of the substrings to replace
+    regexp = re.compile('|'.join(map(re.escape, substrs)))
+
+    # For each match, look up the new string in the replacements
+    return regexp.sub(lambda match: replacements[match.group(0)], string)
 
 
 def create_template(outline_schema, segment_datas, outpath=None):
@@ -46,9 +70,21 @@ def create_template(outline_schema, segment_datas, outpath=None):
 
     """
     # TODO validate outline schema
-    # get outline info
-    outline_content = "\n".join(outline_schema.get("outline"))
-    placeholders = outline_schema["properties"]["segments"]["properties"]
+
+    # get jinja template
+    if "directory" in outline_schema["outline"]:
+        outline_content = read_file_from_directory(
+            outline_schema["outline"]["directory"],
+            outline_schema["outline"]["file"], "template outline", logger)
+    else:
+        outline_content = read_file_from_module(
+            outline_schema["outline"]["module"],
+            outline_schema["outline"]["file"], "template outline", logger)
+
+    # get the placeholders @ipubreplace{above|below}{name}
+    regex = re.compile("@ipubreplace{(.+)}{(.+)}", re.MULTILINE)
+    placeholder_tuple = regex.findall(outline_content)
+    placeholders = {name: append for append, name in placeholder_tuple}
 
     replacements = {key: "" for key in placeholders.keys()}
     docstrings = [
@@ -66,7 +102,7 @@ def create_template(outline_schema, segment_datas, outpath=None):
             handle_error(
                 "validation of template segment {} failed: {}".format(
                     seg_num, err.message),
-                jsonschema.ValidationError)
+                jsonschema.ValidationError, logger=logger)
 
         # get description of segment
         docstrings.append(
@@ -76,30 +112,37 @@ def create_template(outline_schema, segment_datas, outpath=None):
 
         # find what key to overwrite
         overwrite = segment_data.get("overwrite", [])
-        logging.debug('overwrite keys: {}'.format(overwrite))
+        logger.debug('overwrite keys: {}'.format(overwrite))
 
         for key, val in segment_data.get("segments").items():
             valstring = "\n".join(val)
             if key in overwrite:
                 replacements[key] = valstring
-            elif 'append_before' in placeholders[key]["$ref"]:
+            elif placeholders[key] == "above":
                 replacements[key] = valstring + '\n' + replacements[key]
-            elif 'append_after' in placeholders[key]["$ref"]:
+            elif placeholders[key] == "below":
                 replacements[key] = replacements[key] + '\n' + valstring
             else:
-                # TODO this should be part of the schema
+                # TODO this should be part of the schema?
                 handle_error((
-                    "properties/segments/properties/{0}/$ref ".format(key) +
-                    "should contain either append_before or append_before"),
-                    jsonschema.ValidationError)
+                    "the placeholder @ipubreplace{{{0}}}{{{1}}} ".format(
+                        key, placeholders[key]) +
+                    "should specify above or below appending"),
+                    jsonschema.ValidationError, logger=logger)
 
-    replacements["meta_docstring"] = "\n".join(docstrings).replace("'", '"')
-    # TODO add option to include ipypub version in output file
-    # not included by default,
-    # since it would require the test files to be updated with every version
-    replacements["ipypub_version"] = ""  # str(__version__)
+    if "meta_docstring" in placeholders:
+        docstring = "\n".join(docstrings).replace("'", '"')
+        replacements["meta_docstring"] = docstring
+    if "ipypub_version" in placeholders:
+        # TODO add option to include ipypub version in output file
+        # not included by default,
+        # since tests need to be changed to ignore version number
+        replacements["ipypub_version"] = ""  # str(__version__)
 
-    outline = outline_content.format(**replacements)
+    replace_dict = {
+        "@ipubreplace{{{0}}}{{{1}}}".format(append, name): replacements[name]
+        for append, name in placeholder_tuple}
+    outline = multireplace(outline_content, replace_dict)
 
     if outpath is not None:
         with open(outpath, 'w') as f:  # TODO use pathlib

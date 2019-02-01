@@ -13,7 +13,7 @@ from six import string_types
 
 
 import ipypublish
-from ipypublish.utils import pathlib
+from ipypublish.utils import pathlib, handle_error
 from ipypublish.scripts.nbmerge import merge_notebooks
 from ipypublish.convert.config_manager import (get_export_config_path,
                                                load_export_config,
@@ -21,16 +21,7 @@ from ipypublish.convert.config_manager import (get_export_config_path,
                                                create_exporter_cls)
 from ipypublish.scripts.pdfexport import export_pdf
 
-
-def handle_error(msg, err_type, raise_msg=None, log_msg=None):
-    """handle an error, by logging it, then raising"""
-    if raise_msg is None:
-        raise_msg = msg
-    if log_msg is None:
-        log_msg = msg
-
-    logging.error(log_msg)
-    raise err_type(raise_msg)
+logger = logging.getLogger(__name__)
 
 
 def publish(ipynb_path,
@@ -124,7 +115,7 @@ def publish(ipynb_path,
     if export_config_path is None:
         handle_error(
             "could not find conversion configuration: {}".format(conversion),
-            IOError)
+            IOError, logger)
 
     # read conversion configuration and create
     logging.info('loading conversion configuration')
@@ -168,7 +159,7 @@ def publish(ipynb_path,
                           html_viewer=True,
                           debug_mode=pdf_debug):
             handle_error('pdf export failed, try running with pdf_debug=True',
-                         RuntimeError)
+                         RuntimeError, logger)
 
     logging.info('process finished successfully')
 

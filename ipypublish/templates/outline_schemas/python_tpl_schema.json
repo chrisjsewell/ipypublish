@@ -2,41 +2,12 @@
     "$schema": "http://json-schema.org/draft-04/schema",
     "$id": "python-tpl",
     "description": "define segments to insert into a jinja template of id html-tpl",
-    "outline": ["{{%- extends 'null.tpl' -%}}",
-        "{{% block header %}}",
-        "{{{{ nb.metadata | meta2yaml('#~~ ') }}}}",
-        "{{% endblock header %}}",
-        "{{% block codecell %}}",
-        "#%%",
-        "{{{{ super() }}}}",
-        "{{% endblock codecell %}}",
-        "{{% block in_prompt %}}{{% endblock in_prompt %}}",
-        "{{% block input %}}{{{{ cell.metadata | meta2yaml('#~~ ') }}}}",
-        "{{{{ cell.source | ipython2python }}}}",
-        "{{% endblock input %}}",
-        "{{% block markdowncell scoped %}}#%% [markdown]",
-        "{{{{ cell.metadata | meta2yaml('#~~ ') }}}}",
-        "{{{{ cell.source | comment_lines }}}}",
-        "{{% endblock markdowncell %}}"
-    ],
+    "outline": {
+        "module": "ipypublish.templates.outline_schemas",
+        "file": "python_outline.py.j2"
+    },
     "type": "object",
     "additionalProperties": false,
-    "definitions": {
-        "append_before": {
-            "description": "a segment of the template, each line should be a separate list item",
-            "type": "array",
-            "items": {
-                "type": "string"
-            }
-        },
-        "append_after": {
-            "description": "a segment of the template, each line should be a separate list item",
-            "type": "array",
-            "items": {
-                "type": "string"
-            }
-        }
-    },
     "required": [
         "description",
         "identifier",
