@@ -59,7 +59,7 @@ def read_file_from_directory(dir_path, file_name, jtype,
                 if ext_type == "json":
                     data = json.load(fobj)
                 elif ext_type == "yaml":
-                    data = yaml.load(fobj)
+                    data = yaml.safe_load(fobj)
                 else:
                     raise ValueError("extension type not recognised")
             except Exception as err:
