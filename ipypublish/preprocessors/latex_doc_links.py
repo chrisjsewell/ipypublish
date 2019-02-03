@@ -15,8 +15,10 @@ class LatexDocLinks(Preprocessor):
 
     """
 
-    metapath = traits.Unicode('', help="the path to the meta data").tag(config=True)
-    filesfolder = traits.Unicode('', help="the folder to point towards").tag(config=True)
+    metapath = traits.Unicode(
+        '', help="the path to the meta data").tag(config=True)
+    filesfolder = traits.Unicode(
+        '', help="the folder to point towards").tag(config=True)
 
     def resolve_path(self, fpath, filepath):
         """resolve a relative path, w.r.t. another filepath """

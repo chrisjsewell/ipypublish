@@ -39,7 +39,7 @@
 
         {{ super() }}
 
-    "notebook_output_traceback": |
+    "notebook_output_traceback_line": |
         {{ line | indent | strip_ansi }}
 
     "notebook_output_stream_stdout": |
@@ -52,6 +52,9 @@
 
         {{ output.text | indent }}
 
+    "notebook_output_data_all": |
+        {{ super() }}
+
     "notebook_output_html": |
         .. raw:: html
 
@@ -63,11 +66,11 @@
         .. image:: {{ output.metadata.filenames['image/jpeg'] | urlencode }}
         {%- set width=output | get_metadata('width', 'image/jpeg') -%}
         {%- if width is not none %}
-        :width: {{ width }}px
+           :width: {{ width }}px
         {%- endif %}
         {%- set height=output | get_metadata('height', 'image/jpeg') -%}
         {%- if height is not none %}
-        :height: {{ height }}px
+           :height: {{ height }}px
         {%- endif %}
 
     "notebook_output_latex": |
@@ -84,11 +87,11 @@
         .. image:: {{ output.metadata.filenames['image/png'] | urlencode }}
         {%- set width=output | get_metadata('width', 'image/png') -%}
         {%- if width is not none %}
-        :width: {{ width }}px
+           :width: {{ width }}px
         {%- endif %}
         {%- set height=output | get_metadata('height', 'image/png') -%}
         {%- if height is not none %}
-        :height: {{ height }}px
+           :height: {{ height }}px
         {%- endif %}
 
     "notebook_output_svg": |

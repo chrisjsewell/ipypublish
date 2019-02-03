@@ -81,9 +81,6 @@ def publish(ipynb_path,
     outdir = os.path.join(
         os.getcwd(), 'converted') if outpath is None else outpath
 
-    if not dry_run and not os.path.exists(outdir):
-        os.mkdir(outdir)
-
     # log start of conversion
     logger.info('started ipypublish v{0} at {1}'.format(
         ipypublish.__version__, time.strftime("%c")))
@@ -207,9 +204,18 @@ def dict_to_config(config, unflatten=True):
 
 
 def export_notebook(final_nb, exporter_cls, config, jinja_template):
-    exporter = exporter_cls(
-        config=config,
-        extra_loaders=[] if jinja_template is None else [jinja_template])
+
+    kwargs = {"config": config}
+    if jinja_template is not None:
+        kwargs["extra_loaders"] = [jinja_template]
+    try:
+        exporter = exporter_cls(**kwargs)
+    except TypeError:
+        logger.warn(
+            "the exporter class can not be parsed the arguments: {}".format(
+                list(kwargs.keys())))
+        exporter = exporter_cls()
+
     body, resources = exporter.from_notebook_node(final_nb)
     return exporter, body, resources
 
@@ -242,6 +248,9 @@ def write_output(body, resources, outdir, main_file_name, output_external,
     # TODO should this be done using an nbconvert writer?
     # e.g. nbconvert.writers.FilesWriter
 
+    if not os.path.exists(outdir):
+        os.makedirs(outdir)  # TODO try/except
+
     # output main file
     outpath = os.path.join(outdir, main_file_name)
     outfilespath = os.path.join(outdir, files_folder)
@@ -251,22 +260,27 @@ def write_output(body, resources, outdir, main_file_name, output_external,
         fh.write(body)
 
     # output external files
-    if output_external:
+    if output_external and (internal_files
+                            or resources.get('external_file_paths', False)):
         logger.info('dumping external files to: {}'.format(outfilespath))
 
         if os.path.exists(outfilespath):
             if clear_existing:
                 shutil.rmtree(outfilespath)
+        elif resources.get('external_file_paths', False):
+            os.makedirs(outfilespath)
         else:
-            os.mkdir(outfilespath)
+            outfilespath = None
 
         for internal_path, fcontents in internal_files.items():
             with open(os.path.join(outdir, internal_path), "wb") as fh:
                 fh.write(fcontents)
-        for external_path in resources['external_file_paths']:
+        for external_path in resources.get('external_file_paths', []):
             shutil.copyfile(external_path,
                             os.path.join(outfilespath,
                                          os.path.basename(external_path)))
+    else:
+        outfilespath = None
 
     return outpath, outfilespath
 

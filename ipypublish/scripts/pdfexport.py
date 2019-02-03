@@ -102,8 +102,9 @@ def export_pdf(texpath, outdir, files_path=None,
     if isinstance(texpath, string_types):
         texpath = pathlib.Path(texpath)
     if not texpath.exists() or not texpath.is_file():
-        logger.error('the tex file path does not exist: {}'.format(texpath))
-        raise IOError('the tex file path does not exist: {}'.format(texpath))
+        handle_error(
+            'the tex file path does not exist: {}'.format(texpath),
+            IOError, logger)
 
     texname = os.path.splitext(texpath.name)[0]
 
@@ -111,10 +112,9 @@ def export_pdf(texpath, outdir, files_path=None,
         if isinstance(files_path, string_types):
             files_path = pathlib.Path(files_path)
         if not files_path.exists() or not files_path.is_dir():
-            logger.error(
-                'the external folder path does not exist: {}'.format(texpath))
-            raise IOError(
-                'the external folder path does not exist: {}'.format(texpath))
+            handle_error(
+                'the external folder path does not exist: {}'.format(
+                    files_path), IOError, logger)
 
     if not exe_exists('latexmk'):
         handle_error(

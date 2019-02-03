@@ -1,6 +1,6 @@
 {% extends 'display_priority.tpl' %}
 
-@ipubreplace{below}{globals}
+@ipubreplace{below}{new_blocks}
 
 {# HEADER #}
 {% block header %}
@@ -73,11 +73,9 @@
 @ipubreplace{below}{notebook_output_error}
 @ipubreplace{below}{notebook_output_error_post}
 {% endblock error %}
-
+{# inside error block (so requires super() in that block) #}
 {% block traceback_line %}
-@ipubreplace{above}{notebook_output_traceback_pre}
-@ipubreplace{below}{notebook_output_traceback}
-@ipubreplace{below}{notebook_output_traceback_post}
+@ipubreplace{below}{notebook_output_traceback_line}
 {% endblock traceback_line %}
 
 {# {% block stream %} #}
@@ -93,15 +91,23 @@
 {% endblock stream_stderr %}
 {# {% endblock stream %} #}
 
-{# output data types #}
+{# OUTPUT DATA #}
 
-{# Redirect execute_result to display data priority. #}
-{% block execute_result %}
+{# display_priority.tpl defines this, 
+which creates block for each data type,
+and selects which data type to proritise
+(if output.output_type == 'display_data') #}
 {% block data_priority scoped %}
-{{ super() }}
+@ipubreplace{below}{notebook_output_data_all}
 {% endblock %}
+
+{# Redirect output.output_type == 'execute_result' to data_priority block #}
+{% block execute_result %}
+{{ self.data_priority() }}
 {% endblock execute_result %}
 
+{# block defined in data_priority
+requires super() to be called in data_priority #}
 {% block data_html scoped %}
 @ipubreplace{above}{notebook_output_html_pre}
 @ipubreplace{below}{notebook_output_html}
@@ -161,7 +167,6 @@
 @ipubreplace{below}{notebook_output_widget_state}
 @ipubreplace{below}{notebook_output_widget_state_post}
 {% endblock data_widget_state %}
-
 {% block data_widget_view scoped %}
 @ipubreplace{above}{notebook_output_widget_view_pre}
 @ipubreplace{below}{notebook_output_widget_view}
