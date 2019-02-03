@@ -1,0 +1,123 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema",
+    "description": "validation of the Jupyter Notebook document level metadata for ipypublish",
+    "type": "object",
+    "properties": {
+        "ipub": {
+            "type": "object",
+            "properties": {
+                "language": {
+                    "description": "the language can be any specified in the babel package",
+                    "type": "string",
+                    "default": "english"
+                },
+                "titlepage": {
+                    "description": "options for creating the title page",
+                    "type": [
+                        "boolean",
+                        "object"
+                    ],
+                    "properties": {
+                        "author": {
+                            "type": "string",
+                            "description": "Authors Name"
+                        },
+                        "email": {
+                            "type": "string",
+                            "description": "authors email, e.g. authors@email.com"
+                        },
+                        "supervisors": {
+                            "description": "list of supervisors",
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "title": {
+                            "type": "string",
+                            "description": "Main Title"
+                        },
+                        "subtitle": {
+                            "type": "string",
+                            "description": "Sub Title"
+                        },
+                        "tagline": {
+                            "type": "string",
+                            "description": "A tagline for the report"
+                        },
+                        "institution": {
+                            "description": "the publishing institution",
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "logo": {
+                            "type": "string",
+                            "description": "the path to the logo image file  (absolute or relative)"
+                        }
+                    }
+                },
+                "toc": {
+                    "type": "boolean",
+                    "description": "output a table of contents",
+                    "default": "false"
+                },
+                "listfigures": {
+                    "type": "boolean",
+                    "description": "output a list of figures",
+                    "default": "false"
+                },
+                "listtables": {
+                    "type": "boolean",
+                    "description": "output a list of tables",
+                    "default": "false"
+                },
+                "listcode": {
+                    "type": "boolean",
+                    "description": "output a list of code",
+                    "default": "false"
+                },
+                "figure": {
+                    "type": "object",
+                    "properties": {
+                        "placement": {
+                            "type": "string",
+                            "description": "default float placement of figures"
+                        }
+                    }
+                },
+                "table": {
+                    "type": "object",
+                    "properties": {
+                        "placement": {
+                            "type": "string",
+                            "description": "default float placement of tables"
+                        }
+                    }
+                },
+                "bibliography": {
+                    "description": "the path to the bibliography file (absolute or relative)",
+                    "type": "string"
+                },
+                "bibstyle": {
+                    "description": "a natbib stylename",
+                    "type": "string"
+                },
+                "biboptions": {
+                    "description": "a list of options to parse to natbib",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "default": [
+                        "numbers",
+                        "square",
+                        "super",
+                        "sort&compress"
+                    ]
+                }
+            }
+        }
+    }
+}

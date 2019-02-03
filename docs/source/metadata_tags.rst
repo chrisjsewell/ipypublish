@@ -126,6 +126,8 @@ to run individual cells:
 Document Level
 --------------
 
+The full schema can be viewed at :ref:`meta_doclevel_schema`.
+
 Language
 ~~~~~~~~
 
