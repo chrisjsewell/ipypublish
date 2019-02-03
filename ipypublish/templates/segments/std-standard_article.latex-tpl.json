@@ -1,5 +1,5 @@
 {
-  "$schema": "../segment.schema.json",
+  "$schema": "../../schema/segment.schema.json",
   "identifier": "standard-standard_article",
   "description": "with standard nbconvert article setup",
   "segments": {

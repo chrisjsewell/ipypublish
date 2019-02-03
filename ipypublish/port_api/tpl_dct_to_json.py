@@ -56,7 +56,7 @@ def assess_syntax(path):
         "identifier": os.path.splitext(os.path.basename(path))[0],
         "description": docstring,
         "segments": output,
-        "$schema": "../segment.schema.json"
+        "$schema": "../../schema/segment.schema.json"
      }
 
 

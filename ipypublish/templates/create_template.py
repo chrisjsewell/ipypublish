@@ -18,7 +18,9 @@ import jsonschema
 from six import string_types
 
 # from ipypublish import __version__
-from ipypublish.utils import handle_error, read_file_from_directory
+from ipypublish import schema
+from ipypublish.utils import (handle_error,
+                              read_file_from_directory, get_module_path)
 
 logger = logging.getLogger("template")
 
@@ -85,7 +87,7 @@ def create_template(outline_template, outline_name,
     """
     # get the placeholders @ipubreplace{above|below}{name}
     regex = re.compile("\\@ipubreplace\\{([^\\}]+)\\}\\{([^\\}]+)\\}",
-        re.MULTILINE)
+                       re.MULTILINE)
     placeholder_tuple = regex.findall(outline_template)
 
     if not placeholder_tuple:
@@ -114,7 +116,7 @@ def create_template(outline_template, outline_name,
         if _SEGMENT_SCHEMA is None:
             # lazy segment schema once
             _SEGMENT_SCHEMA = read_file_from_directory(
-                os.path.dirname(os.path.realpath(__file__)),
+                get_module_path(schema),
                 _SEGMENT_SCHEMA_FILE,
                 "segment configuration schema", logger, interp_ext=True)
 

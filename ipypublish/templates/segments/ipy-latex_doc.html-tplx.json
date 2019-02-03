@@ -10,7 +10,7 @@
     "notebook_output_stream_stderr",
     "notebook_output_stream_stdout"
   ],
-  "$schema": "../segment.schema.json",
+  "$schema": "../../schema/segment.schema.json",
   "identifier": "ipypublish-latex_doc",
   "description": " caption and label elements according to ipub meta tags  ",
   "segments": {

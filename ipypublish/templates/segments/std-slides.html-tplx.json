@@ -2,7 +2,7 @@
   "overwrite": [
     "notebook_all"
   ],
-  "$schema": "../segment.schema.json",
+  "$schema": "../../schema/segment.schema.json",
   "identifier": "standard-slides",
   "description": "marks up html with slide tags, based on metadata",
   "segments": {

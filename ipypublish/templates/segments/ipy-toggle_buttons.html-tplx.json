@@ -1,5 +1,5 @@
 {
-  "$schema": "../segment.schema.json",
+  "$schema": "../../schema/segment.schema.json",
   "identifier": "ipypublish-toggle_buttons",
   "description": "add buttons to toggle input code and output cells",
   "segments": {

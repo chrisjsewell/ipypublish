@@ -10,6 +10,7 @@ import jsonschema
 from ipypublish.utils import (pathlib, handle_error, get_module_path,
                               read_file_from_directory, read_file_from_module)
 from ipypublish import export_plugins
+from ipypublish import schema
 from ipypublish.templates.create_template import create_template
 
 _TEMPLATE_KEY = 'new_template'
@@ -58,7 +59,7 @@ def load_export_config(export_config_path):
     if _EXPORT_SCHEMA is None:
         # lazy load schema once
         _EXPORT_SCHEMA = read_file_from_directory(
-            os.path.dirname(os.path.realpath(__file__)), _EXPORT_SCHEMA_FILE,
+            get_module_path(schema), _EXPORT_SCHEMA_FILE,
             "export configuration schema", logger, interp_ext=True)
     try:
         jsonschema.validate(data, _EXPORT_SCHEMA)

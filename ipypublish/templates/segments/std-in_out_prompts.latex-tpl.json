@@ -3,7 +3,7 @@
     "notebook_output",
     "notebook_input_code"
   ],
-  "$schema": "../segment.schema.json",
+  "$schema": "../../schema/segment.schema.json",
   "identifier": "standard-in_out_prompts",
   "description": "with in/out prompts",
   "segments": {

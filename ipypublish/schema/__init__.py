@@ -1,0 +1,2 @@
+""" contains JSON validation schema
+"""

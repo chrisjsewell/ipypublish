@@ -3,6 +3,8 @@
 # ipypublish documentation build configuration file, created by
 # sphinx-quickstart on Sat Jun  3 02:06:22 2017.
 #
+# http://www.sphinx-doc.org/en/master/usage/configuration.html
+#
 # This file is execfile()d with the current directory set to its
 # containing dir.
 #

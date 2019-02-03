@@ -4,7 +4,7 @@
     "html_body_start",
     "notebook_input_markdown"
   ],
-  "$schema": "../segment.schema.json",
+  "$schema": "../../schema/segment.schema.json",
   "identifier": "ipypublish-slides_ipypublish",
   "description": "marks up html with slide tags, based on metadata",
   "segments": {

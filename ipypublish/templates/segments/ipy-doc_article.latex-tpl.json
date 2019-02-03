@@ -1,5 +1,5 @@
 {
-  "$schema": "../segment.schema.json",
+  "$schema": "../../schema/segment.schema.json",
   "identifier": "ipypublish-doc_article",
   "description": "with the main ipypublish article setup",
   "segments": {

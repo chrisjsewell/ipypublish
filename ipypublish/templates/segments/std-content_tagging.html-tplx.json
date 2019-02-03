@@ -1,5 +1,5 @@
 {
-  "$schema": "../segment.schema.json",
+  "$schema": "../../schema/segment.schema.json",
   "identifier": "standard-content_tagging",
   "description": "standard html tag wrapping",
   "segments": {

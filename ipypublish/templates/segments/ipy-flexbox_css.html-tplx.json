@@ -1,5 +1,5 @@
 {
-  "$schema": "../segment.schema.json",
+  "$schema": "../../schema/segment.schema.json",
   "identifier": "ipypublish-flexbox_css",
   "description": " adds flex boxes (https://github.com/Munawwar/flex-helper)  ",
   "segments": {
