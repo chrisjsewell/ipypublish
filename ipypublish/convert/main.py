@@ -120,9 +120,10 @@ def publish(ipynb_path,
     logger.info('creating exporter')
     exporter_cls = create_exporter_cls(data["exporter"]["class"])
     logger.info('creating template')
-    jinja_template = load_template(data["template"])
+    template_name = "template_file"
+    jinja_template = load_template(template_name, data["template"])
     logger.info('creating nbconvert configuration')
-    config = create_config(data["exporter"],
+    config = create_config(data["exporter"], template_name,
                            {"${meta_path}": str(meta_path),
                             "${files_path}": str(files_folder)})
 
@@ -163,10 +164,12 @@ def publish(ipynb_path,
     return outpath, exporter
 
 
-def create_config(exporter_data, replacements):
+def create_config(exporter_data, template_name, replacements):
     # type: (dict, Dict[str, str]) -> Config
     config = {}
     exporter_name = exporter_data["class"].split(".")[-1]
+
+    config[exporter_name + ".template_file"] = template_name
     config[exporter_name + ".filters"] = exporter_data.get("filters", [])
 
     preprocessors = []

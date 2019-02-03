@@ -86,6 +86,7 @@ def iter_all_export_infos(config_folder_paths=(), regex="*.json"):
 
 
 def create_exporter_cls(class_str):
+    # type: (str) -> nbconvert.exporters.Exporter
     """dynamically load export class"""
     export_class_path = class_str.split(".")
     module_path = ".".join(export_class_path[0:-1])
@@ -103,11 +104,7 @@ def create_exporter_cls(class_str):
             "module {} does not contain class {}".format(
                 module_path, class_name), ImportError, logger=logger)
 
-    # if a template is used we need to override the default template
-    class BespokeTemplateExporter(export_class):
-        """override the default template"""
-        template_file = _TEMPLATE_KEY
-    return BespokeTemplateExporter  # type: nbconvert.
+    return export_class
 
 
 def get_export_extension(export_config_path):
@@ -117,11 +114,11 @@ def get_export_extension(export_config_path):
     return exporter_cls.file_extension
 
 
-def str_to_jinja(template_str):
-    return DictLoader({_TEMPLATE_KEY: template_str})
+def str_to_jinja(template_str, template_key="jinja_template"):
+    return DictLoader({template_key: template_str})
 
 
-def load_template(template_dict):
+def load_template(template_key, template_dict):
 
     if template_dict is None:
         return None
@@ -166,4 +163,4 @@ def load_template(template_dict):
 
     template_str = create_template(outline_template, outline_name, segments)
 
-    return str_to_jinja(template_str)
+    return str_to_jinja(template_str, template_key)
