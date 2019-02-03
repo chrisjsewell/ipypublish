@@ -70,12 +70,13 @@ Badges
 
 .. toctree::
    :maxdepth: 2
-   :caption: Example Files:
+   :caption: Included Files:
 
    latex_ipypublish_all
    export_schema
    outline_schema
    segment_example
+   metadata_doc_schema
 
 
 .. todo:: how to use with vs-code

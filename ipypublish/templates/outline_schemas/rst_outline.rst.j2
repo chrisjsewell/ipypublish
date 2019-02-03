@@ -1,65 +1,35 @@
-{%- extends 'display_priority.tpl' -%}
+{% extends 'display_priority.tpl' %}
 
-@ipubreplace{below}{globals}
+@ipubreplace{below}{new_blocks}
 
-%% HTML Setup
-%% ====================
+{# HEADER #}
+{% block header %}
+{{ '.. An html document created by ipypublish @ipubreplace{below}{ipypub_version}' | replace('\n', ' ') | trim }}
+{{ '@ipubreplace{below}{meta_docstring}' | indent(nspaces=3, flatten=True) }}
 
-{%- block header %}<!-- 
-An html document created by ipypublish @ipubreplace{below}{ipypub_version}
-@ipubreplace{below}{meta_docstring}
--->
+@ipubreplace{below}{header}
+{% endblock header %}
 
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8" />
-{%- block html_head -%}
-    @ipubreplace{below}{html_header}
-{%- endblock html_head -%}
-</head>
-{%- endblock header -%}
+{# INPUT #}
 
-{% block body %}
- <body>
- @ipubreplace{below}{html_body_start}
- {{ super() }}
- @ipubreplace{below}{html_body_end}
- </body>
-{%- endblock body %}
-
-{%- block footer %}
-    @ipubreplace{below}{html_footer}
-</html>
-{%- endblock footer-%}
-
-%% Notebook Input
-%% ==============
-
-{%- block any_cell scoped %}
+{% block any_cell scoped %}
 {# Note: if {{ super() }} is not present then no input will be called #}
-@ipubreplace{below}{notebook_all}
+@ipubreplace{below}{notebook_input_all}
 {% endblock any_cell %}
 
-{% block input_group -%}
+{# code cell #}
+{% block input_group %}
 @ipubreplace{above}{notebook_input_code_pre}
 {{ super() }}
 @ipubreplace{below}{notebook_input_code_post}
 {% endblock input_group %}
-
-{% block in_prompt -%}
+{% block in_prompt %}
 @ipubreplace{below}{notebook_input_code_prompt}
-{%- endblock in_prompt %}
-
+{% endblock in_prompt %}
 {% block input scoped %}
 @ipubreplace{below}{notebook_input_code}
 {% endblock input %}
-
-{% block rawcell scoped %}
-@ipubreplace{above}{notebook_input_raw_pre}
-@ipubreplace{below}{notebook_input_raw}
-@ipubreplace{below}{notebook_input_raw_post}
-{% endblock rawcell %}
+{# end #}
 
 {% block markdowncell scoped %}
 @ipubreplace{above}{notebook_input_markdown_pre}
@@ -67,14 +37,25 @@ An html document created by ipypublish @ipubreplace{below}{ipypub_version}
 @ipubreplace{below}{notebook_input_markdown_post}
 {% endblock markdowncell %}
 
+{% block rawcell scoped %}
+@ipubreplace{above}{notebook_input_raw_pre}
+@ipubreplace{below}{notebook_input_raw}
+@ipubreplace{below}{notebook_input_raw_post}
+{% endblock rawcell %}
+
 {% block unknowncell scoped %}
 @ipubreplace{above}{notebook_input_unknown_pre}
 @ipubreplace{below}{notebook_input_unknown}
 @ipubreplace{below}{notebook_input_unknown_post}
 {% endblock unknowncell %}
 
-%% Notebook Outbook
-%% ================
+{# NB: deprecated #}
+{% block headingcell scoped %}
+@ipubreplace{below}{notebook_input_heading}
+{% endblock headingcell %}
+
+
+{# OUTPUT #}
 
 {% block output %}
 @ipubreplace{above}{notebook_output_pre}
@@ -83,16 +64,18 @@ An html document created by ipypublish @ipubreplace{below}{ipypub_version}
 @ipubreplace{below}{notebook_output_post}
 {% endblock output %}
 
+{% block output_prompt %}
+@ipubreplace{below}{notebook_output_prompt}
+{% endblock output_prompt %}
+
 {% block error %}
 @ipubreplace{above}{notebook_output_error_pre}
 @ipubreplace{below}{notebook_output_error}
 @ipubreplace{below}{notebook_output_error_post}
 {% endblock error %}
-
+{# inside error block (so requires super() in that block) #}
 {% block traceback_line %}
-@ipubreplace{above}{notebook_output_traceback_pre}
-@ipubreplace{below}{notebook_output_traceback}
-@ipubreplace{below}{notebook_output_traceback_post}
+@ipubreplace{below}{notebook_output_traceback_line}
 {% endblock traceback_line %}
 
 {# {% block stream %} #}
@@ -108,34 +91,40 @@ An html document created by ipypublish @ipubreplace{below}{ipypub_version}
 {% endblock stream_stderr %}
 {# {% endblock stream %} #}
 
-{# output data types #}
+{# OUTPUT DATA #}
 
-{# Redirect execute_result to display data priority. #}
-{%- block execute_result scoped %}
-    {%- set extra_class="output_execute_result" -%}
-    {% block data_priority scoped %}
-@ipubreplace{below}{notebook_output}
-    {% endblock %}
-    {%- set extra_class="" -%}
+{# display_priority.tpl defines this, 
+which creates block for each data type,
+and selects which data type to proritise
+(if output.output_type == 'display_data') #}
+{% block data_priority scoped %}
+@ipubreplace{below}{notebook_output_data_all}
+{% endblock %}
+
+{# Redirect output.output_type == 'execute_result' to data_priority block #}
+{% block execute_result %}
+{{ self.data_priority() }}
 {% endblock execute_result %}
 
-{% block data_html -%}
+{# block defined in data_priority
+requires super() to be called in data_priority #}
+{% block data_html scoped %}
 @ipubreplace{above}{notebook_output_html_pre}
 @ipubreplace{below}{notebook_output_html}
 @ipubreplace{below}{notebook_output_html_post}
-{% endblock data_html%}
+{% endblock data_html %}
 
-{%- block data_javascript scoped %}
+{% block data_javascript scoped %}
 @ipubreplace{above}{notebook_output_javascript_pre}
 @ipubreplace{below}{notebook_output_javascript}
 @ipubreplace{below}{notebook_output_javascript_post}
-{%- endblock -%}
+{% endblock %}
 
-{%- block data_jpg -%}
+{% block data_jpg %}
 @ipubreplace{above}{notebook_output_jpg_pre}
 @ipubreplace{below}{notebook_output_jpg}
 @ipubreplace{below}{notebook_output_jpg_post}
-{%- endblock data_jpg -%}
+{% endblock data_jpg %}
 
 {% block data_latex %}
 @ipubreplace{above}{notebook_output_latex_pre}
@@ -143,47 +132,53 @@ An html document created by ipypublish @ipubreplace{below}{ipypub_version}
 @ipubreplace{below}{notebook_output_latex_post}
 {% endblock data_latex %}
 
-{%- block data_markdown -%}
+{% block data_markdown %}
 @ipubreplace{above}{notebook_output_markdown_pre}
 @ipubreplace{below}{notebook_output_markdown}
 @ipubreplace{below}{notebook_output_markdown_post}
 {% endblock data_markdown %}
 
-{%- block data_pdf -%}
+{% block data_pdf %}
 @ipubreplace{above}{notebook_output_pdf_pre}
 @ipubreplace{below}{notebook_output_pdf}
 @ipubreplace{below}{notebook_output_pdf_post}
-{%- endblock -%}
+{% endblock %}
 
-{%- block data_png -%}
+{% block data_png %}
 @ipubreplace{above}{notebook_output_png_pre}
 @ipubreplace{below}{notebook_output_png}
 @ipubreplace{below}{notebook_output_png_post}
-{%- endblock data_png -%}
+{% endblock data_png %}
 
-{%- block data_svg -%}
+{% block data_svg %}
 @ipubreplace{above}{notebook_output_svg_pre}
 @ipubreplace{below}{notebook_output_svg}
 @ipubreplace{below}{notebook_output_svg_post}
-{%- endblock data_svg -%}
+{% endblock data_svg %}
 
-{% block data_text %}
+{% block data_text scoped %}
 @ipubreplace{above}{notebook_output_text_pre}
 @ipubreplace{below}{notebook_output_text}
 @ipubreplace{below}{notebook_output_text_post}
 {% endblock data_text %}
 
-{%- block data_widget_state scoped %}
+{% block data_widget_state scoped %}
 @ipubreplace{above}{notebook_output_widget_state_pre}
 @ipubreplace{below}{notebook_output_widget_state}
 @ipubreplace{below}{notebook_output_widget_state_post}
-{%- endblock data_widget_state -%}
-
-{%- block data_widget_view scoped %}
+{% endblock data_widget_state %}
+{% block data_widget_view scoped %}
 @ipubreplace{above}{notebook_output_widget_view_pre}
 @ipubreplace{below}{notebook_output_widget_view}
 @ipubreplace{below}{notebook_output_widget_view_post}
-{%- endblock data_widget_view -%}
+{% endblock data_widget_view %}
+
+
+{# FOOTER #}
+{% block footer %}
+@ipubreplace{below}{footer}
+{% endblock footer %}
+
 
 {# JINJA MACROS #}
 @ipubreplace{below}{jinja_macros}

@@ -1,5 +1,5 @@
 {
-  "$schema": "../segment.schema.json",
+  "$schema": "../../schema/segment.schema.json",
   "identifier": "standard-document",
   "description": "with standard nbconvert css layout",
   "segments": {

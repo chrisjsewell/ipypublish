@@ -1,5 +1,5 @@
 {
-  "$schema": "../segment.schema.json",
+  "$schema": "../../schema/segment.schema.json",
   "identifier": "standard-inout_prompt",
   "description": "with standard nbconvert input/output prompts",
   "segments": {

@@ -1,0 +1,107 @@
+
+"$schema": "../../schema/segment.schema.json"
+"identifier": "sphinx-standard-content"
+"description": "standard sphinx nbconvert content"
+"segments":
+    "notebook_input_all": |
+        {{ super() }}
+
+    "notebook_input_code": |
+        {%- if cell.source.strip() -%}
+        {{'.. code:: '}}
+        {%- if 'magics_language' in cell.metadata  -%}
+            {{ cell.metadata.magics_language}}
+        {%- elif 'pygments_lexer' in nb.metadata.get('language_info', {}) -%}
+            {{ nb.metadata.language_info.pygments_lexer }}
+        {%- elif 'name' in nb.metadata.get('language_info', {}) -%}
+            {{ nb.metadata.language_info.name }}
+        {%- endif %}
+
+        {{ cell.source | indent}}
+        {% endif -%}
+
+    "notebook_input_markdown": |
+        {{ cell.source | convert_pandoc("markdown", "rst") }}
+
+    "notebook_input_raw": |
+        {%- if cell.metadata.get('raw_mimetype', '').lower() in resources.get('raw_mimetypes', ['']) %}
+        {{cell.source}}
+        {% endif -%}
+
+    "notebook_input_heading": |
+        {{ ("#" * cell.level + cell.source) | replace('\n', ' ') | convert_pandoc("markdown", "rst") }}
+
+    "notebook_input_unknown": |
+        unknown type  {{cell.type}}
+
+    "notebook_output_error": |
+        ::
+
+        {{ super() }}
+
+    "notebook_output_traceback_line": |
+        {{ line | indent | strip_ansi }}
+
+    "notebook_output_stream_stdout": |
+        .. parsed-literal::
+
+        {{ output.text | indent }}
+
+    "notebook_output_stream_stderr": |
+        .. parsed-literal::
+
+        {{ output.text | indent }}
+
+    "notebook_output_data_all": |
+        {{ super() }}
+
+    "notebook_output_html": |
+        .. raw:: html
+
+        {{ output.data['text/html'] | indent }}
+
+    # "notebook_output_javascript": |
+
+    "notebook_output_jpg": |
+        .. image:: {{ output.metadata.filenames['image/jpeg'] | urlencode }}
+        {%- set width=output | get_metadata('width', 'image/jpeg') -%}
+        {%- if width is not none %}
+           :width: {{ width }}px
+        {%- endif %}
+        {%- set height=output | get_metadata('height', 'image/jpeg') -%}
+        {%- if height is not none %}
+           :height: {{ height }}px
+        {%- endif %}
+
+    "notebook_output_latex": |
+        .. math::
+
+        {{ output.data['text/latex'] | strip_dollars | indent }}
+
+    "notebook_output_markdown": |
+        {{ output.data['text/markdown'] | convert_pandoc("markdown", "rst") }}
+
+    # notebook_output_pdf: |
+
+    "notebook_output_png": |
+        .. image:: {{ output.metadata.filenames['image/png'] | urlencode }}
+        {%- set width=output | get_metadata('width', 'image/png') -%}
+        {%- if width is not none %}
+           :width: {{ width }}px
+        {%- endif %}
+        {%- set height=output | get_metadata('height', 'image/png') -%}
+        {%- if height is not none %}
+           :height: {{ height }}px
+        {%- endif %}
+
+    "notebook_output_svg": |
+        .. image:: {{ output.metadata.filenames['image/svg+xml'] | urlencode }}
+
+    "notebook_output_text": |
+        .. parsed-literal::
+
+        {{ output.data['text/plain'] | indent }}
+
+    # "notebook_output_widget_state": |
+
+    # "notebook_output_widget_view": |

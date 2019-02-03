@@ -15,8 +15,12 @@ import os
 import logging
 import jsonschema
 
+from six import string_types
+
 # from ipypublish import __version__
-from ipypublish.utils import handle_error, read_file_from_directory
+from ipypublish import schema
+from ipypublish.utils import (handle_error,
+                              read_file_from_directory, get_module_path)
 
 logger = logging.getLogger("template")
 
@@ -82,7 +86,8 @@ def create_template(outline_template, outline_name,
 
     """
     # get the placeholders @ipubreplace{above|below}{name}
-    regex = re.compile("@ipubreplace{(.+)}{(.+)}", re.MULTILINE)
+    regex = re.compile("\\@ipubreplace\\{([^\\}]+)\\}\\{([^\\}]+)\\}",
+                       re.MULTILINE)
     placeholder_tuple = regex.findall(outline_template)
 
     if not placeholder_tuple:
@@ -111,9 +116,9 @@ def create_template(outline_template, outline_name,
         if _SEGMENT_SCHEMA is None:
             # lazy segment schema once
             _SEGMENT_SCHEMA = read_file_from_directory(
-                os.path.dirname(os.path.realpath(__file__)),
+                get_module_path(schema),
                 _SEGMENT_SCHEMA_FILE,
-                "segment configuration schema", logger, as_json=True)
+                "segment configuration schema", logger, interp_ext=True)
 
     for seg_num, segment_data in enumerate(segment_datas):
 
@@ -136,7 +141,7 @@ def create_template(outline_template, outline_name,
         overwrite = segment_data.get("overwrite", [])
         logger.debug('overwrite keys: {}'.format(overwrite))
 
-        for key, val in segment_data.get("segments").items():
+        for key, segtext in segment_data.get("segments").items():
 
             if key not in placeholders:
                 handle_error(
@@ -144,13 +149,14 @@ def create_template(outline_template, outline_name,
                     "is not contained in the outline template",
                     KeyError, logger)
 
-            valstring = "\n".join(val)
+            if not isinstance(segtext, string_types):
+                segtext = "\n".join(segtext)
             if key in overwrite:
-                replacements[key] = valstring
+                replacements[key] = segtext
             elif placeholders[key] == "above":
-                replacements[key] = valstring + '\n' + replacements[key]
+                replacements[key] = segtext + '\n' + replacements[key]
             elif placeholders[key] == "below":
-                replacements[key] = replacements[key] + '\n' + valstring
+                replacements[key] = replacements[key] + '\n' + segtext
             else:
                 handle_error((
                     "the placeholder @ipubreplace{{{0}}}{{{1}}} ".format(
@@ -159,7 +165,7 @@ def create_template(outline_template, outline_name,
                     jsonschema.ValidationError, logger=logger)
 
     if "meta_docstring" in placeholders:
-        docstring = "\n".join(docstrings).replace("'", '"')
+        docstring = "\n".join([s for s in docstrings if s]).replace("'", '"')
         replacements["meta_docstring"] = docstring
     if "ipypub_version" in placeholders:
         # TODO add option to include ipypub version in output file
@@ -167,8 +173,9 @@ def create_template(outline_template, outline_name,
         # since tests need to be changed to ignore version number
         replacements["ipypub_version"] = ""  # str(__version__)
 
+    prefix = "@ipubreplace{"
     replace_dict = {
-        "@ipubreplace{{{0}}}{{{1}}}".format(append, name): replacements.get(
+        prefix + append + "}{" + name + "}": replacements.get(
             name, "")
         for append, name in placeholder_tuple}
     outline = multireplace(outline_template, replace_dict)

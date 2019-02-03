@@ -1,5 +1,5 @@
 {
-  "$schema": "../segment.schema.json",
+  "$schema": "../../schema/segment.schema.json",
   "identifier": "ipypublish-front_pages",
   "description": "with the main ipypublish title and contents page setup",
   "segments": {

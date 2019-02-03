@@ -27,7 +27,7 @@
             "patternProperties": {
                 ".+": {
                     "description": "a segment of the template, each line should be a separate list item",
-                    "type": "array",
+                    "type": ["string", "array"],
                     "items": {
                         "type": "string"
                     }

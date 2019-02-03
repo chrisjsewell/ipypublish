@@ -118,6 +118,8 @@ def parse_options(sys_args, program):
     debug_group.add_argument("-log", "--log-level", type=str, default='info',
                              choices=['debug', 'info', 'warning', 'error'],
                              help='the logging level to output to screen/file')
+    debug_group.add_argument("-pt", "--print-traceback", action="store_true",
+                             help=("print the full exception traceback"))
     debug_group.add_argument("-dr", "--dry-run", action="store_true",
                              help=("perform a 'dry run', "
                                    "which will not output any files"))

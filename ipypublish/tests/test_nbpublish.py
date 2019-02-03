@@ -177,6 +177,7 @@ def test_publish_run_all_plugins(temp_folder, ipynb1,
         compare_tex_files(testfile, outfile)
     elif exporter.output_mimetype == 'text/html':
         compare_html_files(testfile, outfile)
+    # TODO test rst output
 
 
 def compare_html_files(testpath, outpath):

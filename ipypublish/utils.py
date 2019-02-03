@@ -4,6 +4,7 @@ import inspect
 import importlib
 
 from six import string_types
+import yaml  # TODO use ruamel.yaml instead?
 
 # python 2/3 compatibility
 try:
@@ -24,10 +25,15 @@ def handle_error(msg, err_type, logger, raise_msg=None, log_msg=None):
 
 
 def read_file_from_directory(dir_path, file_name, jtype,
-                             logger, as_json=False):
+                             logger, interp_ext=False,
+                             ext_types=(
+                                 ("json", (".json",)),
+                                 ("yaml", (".yaml", ".yaml.j2")))):
     """load a file situated in a directory
 
-    if as_json=True load file contents to a dict
+    if ``interp_ext=True``:
+    interpret the file extension *via* ``ext_types``
+    and load file in a suitable manner
 
     """
     if isinstance(dir_path, string_types):
@@ -40,10 +46,22 @@ def read_file_from_directory(dir_path, file_name, jtype,
             "the {} does not exist: {}".format(jtype, file_path),
             IOError, logger=logger)
 
-    if as_json:
+    ext_type = None
+    ext_map = {ext: ftype for ftype, exts in ext_types for ext in exts}
+    # Place longer extensions first to keep shorter ones from matching first
+    for ext in sorted(ext_map.keys(), key=len, reverse=True):
+        if file_name.endswith(ext):
+            ext_type = ext_map[ext]
+
+    if ext_type is not None and interp_ext:
         with file_path.open() as fobj:
             try:
-                data = json.load(fobj)
+                if ext_type == "json":
+                    data = json.load(fobj)
+                elif ext_type == "yaml":
+                    data = yaml.safe_load(fobj)
+                else:
+                    raise ValueError("extension type not recognised")
             except Exception as err:
                 handle_error("failed to read {} ({}): {}".format(
                     jtype, file_path, err), IOError, logger=logger)
@@ -61,10 +79,15 @@ def get_module_path(module):
 
 
 def read_file_from_module(module_path, file_name, jtype,
-                          logger, as_json=False):
+                          logger, interp_ext=False,
+                          ext_types=(
+                              ("json", (".json")),
+                              ("yaml", (".yaml", ".yaml.j2")))):
     """load a file situated in a python module
 
-    if as_json=True load file contents to a dict
+    if ``interp_ext=True``:
+    interpret the file extension *via* ``ext_type``
+    and load file in a suitable manner
 
     """
     try:
@@ -76,4 +99,6 @@ def read_file_from_module(module_path, file_name, jtype,
             ModuleNotFoundError, logger=logger)
 
     return read_file_from_directory(get_module_path(outline_module),
-                                    file_name, jtype, logger, as_json=as_json)
+                                    file_name, jtype, logger,
+                                    interp_ext=interp_ext,
+                                    ext_types=ext_types)

@@ -10,6 +10,7 @@ import jsonschema
 from ipypublish.utils import (pathlib, handle_error, get_module_path,
                               read_file_from_directory, read_file_from_module)
 from ipypublish import export_plugins
+from ipypublish import schema
 from ipypublish.templates.create_template import create_template
 
 _TEMPLATE_KEY = 'new_template'
@@ -51,15 +52,15 @@ def load_export_config(export_config_path):
 
     data = read_file_from_directory(
         export_config_path.parent, export_config_path.name,
-        "export configuration", logger, as_json=True)
+        "export configuration", logger, interp_ext=True)
 
     # validate against schema
     global _EXPORT_SCHEMA
     if _EXPORT_SCHEMA is None:
         # lazy load schema once
         _EXPORT_SCHEMA = read_file_from_directory(
-            os.path.dirname(os.path.realpath(__file__)), _EXPORT_SCHEMA_FILE,
-            "export configuration schema", logger, as_json=True)
+            get_module_path(schema), _EXPORT_SCHEMA_FILE,
+            "export configuration schema", logger, interp_ext=True)
     try:
         jsonschema.validate(data, _EXPORT_SCHEMA)
     except jsonschema.ValidationError as err:
@@ -85,6 +86,7 @@ def iter_all_export_infos(config_folder_paths=(), regex="*.json"):
 
 
 def create_exporter_cls(class_str):
+    # type: (str) -> nbconvert.exporters.Exporter
     """dynamically load export class"""
     export_class_path = class_str.split(".")
     module_path = ".".join(export_class_path[0:-1])
@@ -102,11 +104,7 @@ def create_exporter_cls(class_str):
             "module {} does not contain class {}".format(
                 module_path, class_name), ImportError, logger=logger)
 
-    # if a template is used we need to override the default template
-    class BespokeTemplateExporter(export_class):
-        """override the default template"""
-        template_file = _TEMPLATE_KEY
-    return BespokeTemplateExporter  # type: nbconvert.
+    return export_class
 
 
 def get_export_extension(export_config_path):
@@ -116,11 +114,11 @@ def get_export_extension(export_config_path):
     return exporter_cls.file_extension
 
 
-def str_to_jinja(template_str):
-    return DictLoader({_TEMPLATE_KEY: template_str})
+def str_to_jinja(template_str, template_key="jinja_template"):
+    return DictLoader({template_key: template_str})
 
 
-def load_template(template_dict):
+def load_template(template_key, template_dict):
 
     if template_dict is None:
         return None
@@ -129,14 +127,14 @@ def load_template(template_dict):
         outline_template = read_file_from_directory(
             template_dict["outline"]["directory"],
             template_dict["outline"]["file"],
-            "template outline", logger, as_json=False)
+            "template outline", logger, interp_ext=False)
         outline_name = os.path.join(template_dict["outline"]["directory"],
                                     template_dict["outline"]["file"])
     else:
         outline_template = read_file_from_module(
             template_dict["outline"]["module"],
             template_dict["outline"]["file"],
-            "template outline", logger, as_json=False)
+            "template outline", logger, interp_ext=False)
         outline_name = os.path.join(template_dict["outline"]["module"],
                                     template_dict["outline"]["file"])
 
@@ -151,11 +149,11 @@ def load_template(template_dict):
         if "directory" in segment:
             seg_data = read_file_from_directory(
                 segment["directory"],
-                segment["file"], "template segment", logger, as_json=True)
+                segment["file"], "template segment", logger, interp_ext=True)
         elif "module" in segment:
             seg_data = read_file_from_module(
                 segment["module"],
-                segment["file"], "template segment", logger, as_json=True)
+                segment["file"], "template segment", logger, interp_ext=True)
         else:
             handle_error(
                 "'directory' or 'module' expected in segment {}".format(snum),
@@ -165,4 +163,4 @@ def load_template(template_dict):
 
     template_str = create_template(outline_template, outline_name, segments)
 
-    return str_to_jinja(template_str)
+    return str_to_jinja(template_str, template_key)

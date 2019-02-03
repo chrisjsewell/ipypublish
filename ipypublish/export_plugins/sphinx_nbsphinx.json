@@ -1,0 +1,12 @@
+{
+    "description": [
+      "sphinx reStructuredText in nbsphinx format (requires nbsphinx installed)"
+    ],
+    "exporter": {
+      "class": "nbsphinx.Exporter",
+      "filters": {},
+      "preprocessors": [],
+      "other_args": {}
+    },
+    "template": null
+  }

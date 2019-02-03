@@ -3,6 +3,8 @@
 # ipypublish documentation build configuration file, created by
 # sphinx-quickstart on Sat Jun  3 02:06:22 2017.
 #
+# http://www.sphinx-doc.org/en/master/usage/configuration.html
+#
 # This file is execfile()d with the current directory set to its
 # containing dir.
 #
@@ -22,6 +24,8 @@ import sys
 import urllib
 import json
 
+from sphinx.application import Sphinx  # noqa
+
 on_rtd = os.environ.get('READTHEDOCS') == 'True'
 
 # sys.path.insert(0, os.path.abspath('.'))
@@ -32,8 +36,9 @@ import ipypublish
 
 if on_rtd:
     # create releases page
-    git_history = urllib.request.urlopen('https://api.github.com/repos/chrisjsewell/ipypublish/releases').read().decode(
-        'utf-8')
+    git_history = urllib.request.urlopen(
+        'https://api.github.com/repos/chrisjsewell/ipypublish/releases'
+    ).read().decode('utf-8')
     # NOTE on vscode this could fail with urllib.error.HTTPError
     git_history_json = json.loads(git_history)
     # NOTE on vscode this was failing unless encoding='utf8' was present
@@ -88,7 +93,8 @@ master_doc = 'index'
 project = u'ipypublish'
 copyright = u'2017, Chris Sewell'
 author = u'Chris Sewell'
-description = 'Create quality publication and presentation directly from Jupyter Notebook(s)'
+description = ('Create quality publication and presentation'
+               'directly from Jupyter Notebook(s)')
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -134,7 +140,7 @@ todo_include_todos = False
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
-#html_logo = '_static/doc_icon_100px.png'
+# html_logo = '_static/doc_icon_100px.png'
 html_favicon = '_static/doc_icon_32px.ico'
 
 # -- Options for HTMLHelp output ------------------------------------------
@@ -244,10 +250,18 @@ napoleon_use_param = True
 napoleon_use_rtype = True
 
 
-# adapted from https://github.com/markovmodel/PyEMMA/blob/devel/doc/source/conf.py#L285
-# and discussed here:
-# https://stackoverflow.com/questions/20569011/python-sphinx-autosummary-automated-listing-of-member-functions
 def setup(app):
+    # type: (Sphinx) -> dict
+    """
+    extension for sphinx 
+    to genrate add an autofuncsummary directive
+
+    adapted from 
+    https://github.com/markovmodel/PyEMMA/blob/devel/doc/source/conf.py#L285
+    and discussed here:
+    https://stackoverflow.com/questions/20569011/python-sphinx-autosummary-automated-listing-of-member-functions
+    """
+
     # app.connect('autodoc-skip-member', skip_deprecated)
 
     app.add_config_value('intersphinx_aliases', {}, 'env')
@@ -277,16 +291,19 @@ def setup(app):
             def get_functions(mod):
 
                 def is_function_local(obj):
-                    return isinstance(obj, FunctionType) and obj.__module__ == mod.__name__
+                    return (isinstance(obj, FunctionType) and
+                            obj.__module__ == mod.__name__)
 
                 members = inspect.getmembers(mod, predicate=is_function_local)
-                return [name for name, value in members if not name.startswith('_')]
+                return [name for name, value in members
+                        if not name.startswith('_')]
 
             @staticmethod
             def get_classes(mod):
 
                 def is_class_local(obj):
-                    return inspect.isclass(obj) and obj.__module__ == mod.__name__
+                    return (inspect.isclass(obj)
+                            and obj.__module__ == mod.__name__)
 
                 members = inspect.getmembers(mod, predicate=is_class_local)
                 return [name for name, value in members
@@ -303,11 +320,13 @@ def setup(app):
                 if 'classes' in self.options:
                     klasses = self.get_classes(mod)
                     self.content = ["~%s.%s" % (mod_path, klass)
-                                    for klass in klasses if not klass.startswith('_')]
+                                    for klass in klasses
+                                    if not klass.startswith('_')]
                 if 'functions' in self.options:
                     functions = self.get_functions(mod)
                     content = ["~%s.%s" % (mod_path, func)
-                               for func in functions if not func.startswith('_')]
+                               for func in functions
+                               if not func.startswith('_')]
                     if self.content:
                         self.content += content
                     else:
