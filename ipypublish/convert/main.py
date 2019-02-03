@@ -1,4 +1,8 @@
 #!/usr/bin/env python
+# TODO sphinx and attachments:
+# https://github.com/sphinx-doc/sphinx/issues/3855
+# https://stackoverflow.com/questions/36949066/how-to-properly-numref-table-in-sphinx
+# http://pygments.org/docs/lexers/
 # import base64
 from typing import List, Tuple, Union, Dict  # noqa: F401
 import io
