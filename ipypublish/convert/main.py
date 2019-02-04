@@ -274,7 +274,7 @@ def write_output(body, resources, outdir, main_file_name, output_external,
         if os.path.exists(outfilespath):
             if clear_existing:
                 shutil.rmtree(outfilespath)
-        elif resources.get('external_file_paths', False):
+        elif resources.get('external_file_paths', False) or internal_files:
             os.makedirs(outfilespath)
         else:
             outfilespath = None
