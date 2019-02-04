@@ -25,6 +25,7 @@ class LatexDocLinks(Preprocessor):
         if not os.path.isabs(fpath):
             fpath = os.path.join(os.path.dirname(str(filepath)), fpath)
             fpath = os.path.abspath(fpath)
+
         return fpath
 
     def preprocess(self, nb, resources):
@@ -43,7 +44,8 @@ class LatexDocLinks(Preprocessor):
             #                             ': {}'.format(fpath))
             #         else:
             #             external_files.append(fpath)
-            #         mfiles.append(os.path.join(self.filesfolder, os.path.basename(fpath)))
+            #         mfiles.append(os.path.join(
+            # self.filesfolder, os.path.basename(fpath)))
             #
             #     nb.metadata.ipub.files = mfiles
 
@@ -57,8 +59,8 @@ class LatexDocLinks(Preprocessor):
                     external_files.append(bib)
                     resources['bibliopath'] = bib
 
-                nb.metadata.ipub.bibliography = os.path.join(self.filesfolder,
-                                                             os.path.basename(bib))
+                nb.metadata.ipub.bibliography = os.path.join(
+                    self.filesfolder, os.path.basename(bib))
 
             if hasattr(nb.metadata.ipub, 'titlepage'):
                 if hasattr(nb.metadata.ipub.titlepage, 'logo'):
@@ -70,8 +72,9 @@ class LatexDocLinks(Preprocessor):
                     else:
                         external_files.append(logo)
 
-                    nb.metadata.ipub.titlepage.logo = os.path.join(self.filesfolder,
-                                                                   os.path.basename(logo))
+                    nb.metadata.ipub.titlepage.logo = os.path.join(
+                        self.filesfolder, os.path.basename(logo))
+
         resources.setdefault("external_file_paths", [])
         resources['external_file_paths'] += external_files
 
