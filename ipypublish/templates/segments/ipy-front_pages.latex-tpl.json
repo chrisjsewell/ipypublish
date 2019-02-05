@@ -127,6 +127,14 @@
       "((*- endif *))",
       ""
     ],
+    "document_commands": [
+      "",
+      "((* if nb.metadata.ipub and nb.metadata.ipub.toc is mapping and 'depth' in nb.metadata.ipub.toc: -*))",
+      "% set depth of table of contents",
+      "\\setcounter{tocdepth}{((( nb.metadata.ipub.toc.depth )))}",
+      "((*- endif *))",
+      ""
+    ],
     "document_predoc": [
       "",
       "((*- if nb.metadata[\"ipub\"]: -*))",

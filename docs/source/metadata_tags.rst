@@ -238,6 +238,22 @@ To control the output of **contents tables**:
      }
    }
 
+.. versionadded:: v0.8.3
+
+    You can now control the depth of the contents table:
+
+.. code:: json
+
+    {
+    "ipub": {
+      "toc": {"depth": 2}
+      }
+    }
+
+
+Figures and Tables
+~~~~~~~~~~~~~~~~~~
+
 To override the default **placement of figures and tables**:
 
 .. code:: json

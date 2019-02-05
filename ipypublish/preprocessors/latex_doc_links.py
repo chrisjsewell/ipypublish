@@ -61,9 +61,9 @@ class LatexDocLinks(Preprocessor):
 
         Parameters
         ----------
-        cell : NotebookNode cell
+        cell : nbformat.notebooknode.NotebookNode
             Notebook cell being processed
-        resources : dictionary
+        resources : dict
             Additional resources used in the conversion process.  Allows
             preprocessors to pass variables into the Jinja engine.
         cell_index : int
@@ -136,6 +136,9 @@ class LatexDocLinks(Preprocessor):
         return cell, resources
 
     def preprocess(self, nb, resources):
+        """
+        Preprocessing to apply on each notebook.
+        """
 
         logging.info('resolving external file paths' +
                      ' in ipub metadata to: {}'.format(self.metapath))

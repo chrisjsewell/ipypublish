@@ -12,6 +12,7 @@ Subpackages
     ipypublish.frontend
     ipypublish.port_api
     ipypublish.preprocessors
+    ipypublish.schema
     ipypublish.scripts
     ipypublish.templates
 
