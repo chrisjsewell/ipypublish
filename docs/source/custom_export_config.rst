@@ -39,6 +39,13 @@ This process extends :py:mod:`nbconvert` in a number of ways:
 - The use of ``latexmk`` with XeLaTeX to convert TeX to PDF,
   and correct resolution of file references and citations.
 
+.. versionadded:: v0.8.3
+
+    Drag and drop cell attachments are now extracted and correctly referenced
+
+
+.. todo:: document this feature and other non-metadata features in a separate section 
+
 
 The Configuration File Format
 -----------------------------

@@ -2,6 +2,7 @@ import os
 import json
 import inspect
 import importlib
+import re
 
 from six import string_types
 import yaml  # TODO use ruamel.yaml instead?
@@ -102,3 +103,16 @@ def read_file_from_module(module_path, file_name, jtype,
                                     file_name, jtype, logger,
                                     interp_ext=interp_ext,
                                     ext_types=ext_types)
+
+
+def get_valid_filename(s):
+    """
+    Return the given string converted to a string that can be used for a clean
+    filename. Remove leading and trailing spaces; convert other spaces to
+    underscores; and remove anything that is not an alphanumeric, dash,
+    underscore, or dot.
+    >>> get_valid_filename("john's portrait in 2004.jpg")
+    'johns_portrait_in_2004.jpg'
+    """
+    s = str(s).strip().replace(' ', '_')
+    return re.sub(r'(?u)[^-\w.]', '', s)

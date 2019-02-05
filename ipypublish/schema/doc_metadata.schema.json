@@ -59,9 +59,16 @@
                     }
                 },
                 "toc": {
-                    "type": "boolean",
+                    "type": ["boolean", "object"],
                     "description": "output a table of contents",
-                    "default": "false"
+                    "default": "false",
+                    "properties": {
+                        "depth": {
+                            "description": "the depth of subheaders to show",
+                            "type": "number",
+                            "minimum": 1
+                        }
+                    }
                 },
                 "listfigures": {
                     "type": "boolean",

@@ -61,6 +61,25 @@ def test_publish_ipynb1_pdf(temp_folder, ipynb1):
 
 
 @pytest.mark.requires_latexmk
+def test_publish_with_attachments_latex(temp_folder, ipynb_with_attach):
+    """ test notebook containing attachments
+
+    """
+    ipynb = ipynb_with_attach["input_file"]
+    tex_file = ipynb_with_attach["latex_ipypublish_main"]
+
+    tex_path = os.path.join(temp_folder,
+                            os.path.splitext(ipynb.name)[0] + '.tex')
+    pdf_path = os.path.join(temp_folder,
+                            os.path.splitext(ipynb.name)[0] + '.pdf')
+
+    publish(ipynb, outpath=temp_folder, create_pdf=True)
+    assert os.path.exists(tex_path)
+    assert os.path.exists(pdf_path)
+    compare_tex_files(tex_file, tex_path)
+
+
+@pytest.mark.requires_latexmk
 def test_publish_withbib(temp_folder, ipynb_with_bib):
     tex_path = os.path.join(temp_folder,
                             os.path.splitext(ipynb_with_bib.name)[0] + '.tex')
@@ -73,7 +92,7 @@ def test_publish_withbib(temp_folder, ipynb_with_bib):
 
 
 @pytest.mark.requires_latexmk
-def test_publish_complex_latex(ipynb_folder_with_external, tex_with_external):
+def test_publish_complex_latex(ipynb_folder_with_external):
     """ includes:
 
     - international language (portugese)
@@ -87,53 +106,61 @@ def test_publish_complex_latex(ipynb_folder_with_external, tex_with_external):
     presumable this is due to the way the ipynb is being encoded on osx
 
     """
-    basename = os.path.basename(ipynb_folder_with_external)
-    tex_path = os.path.join(ipynb_folder_with_external,
+    input_folder = ipynb_folder_with_external["input_folder"]
+    expected = ipynb_folder_with_external["latex_ipypublish_main"]
+
+    basename = os.path.basename(input_folder)
+    tex_path = os.path.join(input_folder,
                             basename + '.tex')
-    pdf_path = os.path.join(ipynb_folder_with_external,
+    pdf_path = os.path.join(input_folder,
                             basename + '.pdf')
-    publish(ipynb_folder_with_external,
+    publish(input_folder,
             conversion='latex_ipypublish_main',
-            outpath=ipynb_folder_with_external,
+            outpath=input_folder,
             create_pdf=True, pdf_debug=True)
     assert os.path.exists(tex_path)
     assert os.path.exists(pdf_path)
-    compare_tex_files(tex_with_external, tex_path)
+    compare_tex_files(expected, tex_path)
 
 
-def test_publish_complex_html(ipynb_folder_with_external, html_with_external):
+def test_publish_complex_html(ipynb_folder_with_external):
     """ includes:
 
     - internal (image) files
     - external logo and bib
 
     """
-    basename = os.path.basename(ipynb_folder_with_external)
-    html_path = os.path.join(ipynb_folder_with_external,
+    input_folder = ipynb_folder_with_external["input_folder"]
+    expected = ipynb_folder_with_external["html_ipypublish_main"]
+
+    basename = os.path.basename(input_folder)
+    html_path = os.path.join(input_folder,
                              basename + '.html')
-    publish(ipynb_folder_with_external,
+    publish(input_folder,
             conversion='html_ipypublish_main',
-            outpath=ipynb_folder_with_external)
+            outpath=input_folder)
     assert os.path.exists(html_path)
-    compare_html_files(html_with_external, html_path)
+    compare_html_files(expected, html_path)
 
 
-def test_publish_complex_slides(ipynb_folder_with_external,
-                                slides_with_external):
+def test_publish_complex_slides(ipynb_folder_with_external):
     """ includes:
 
     - internal (image) files
     - external logo and bib
 
     """
-    basename = os.path.basename(ipynb_folder_with_external)
-    html_path = os.path.join(ipynb_folder_with_external,
+    input_folder = ipynb_folder_with_external["input_folder"]
+    expected = ipynb_folder_with_external["slides_ipypublish_main"]
+
+    basename = os.path.basename(input_folder)
+    html_path = os.path.join(input_folder,
                              basename + '.slides.html')
-    publish(ipynb_folder_with_external,
+    publish(input_folder,
             conversion='slides_ipypublish_main',
-            outpath=ipynb_folder_with_external)
+            outpath=input_folder)
     assert os.path.exists(html_path)
-    compare_html_files(slides_with_external, html_path)
+    compare_html_files(expected, html_path)
 
 
 def test_publish_ipynb1_html(temp_folder, ipynb1):
@@ -229,6 +256,10 @@ def compare_tex_files(testpath, outpath):
                             "\\}",
                             re.DOTALL)
         content = ht_rgx.sub("\\g<1>", content)
+
+        # newer versions of pandoc convert ![](file) to \begin{figure}[htbp]
+        # TODO override pandoc figure placement of ![](file) in markdown2latex
+        content = content.replace("\\begin{figure}[htbp]", "\\begin{figure}")
 
         # at start of itemize
         content = content.replace("\\itemsep1pt\\parskip0pt\\parsep0pt\n", "")

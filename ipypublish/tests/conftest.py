@@ -18,6 +18,18 @@ def ipynb2():
 
 
 @pytest.fixture
+def ipynb_with_attach():
+    return {
+        "input_file": pathlib.Path(os.path.join(
+            TEST_FILES_DIR, 'nb_with_attachment',
+            'nb_with_attachment.ipynb')),
+        "latex_ipypublish_main": pathlib.Path(os.path.join(
+            TEST_FILES_DIR, 'nb_with_attachment',
+            'latex_ipypublish_main.tex'))
+    }
+
+
+@pytest.fixture
 def ipynb_with_bib():
     return pathlib.Path(os.path.join(TEST_FILES_DIR, 'ipynb_with_bib.ipynb'))
 
@@ -66,22 +78,16 @@ def ipynb_folder_with_external(temp_folder):
                                  'logo_example.png'),
                     os.path.join(folder, 'logo_example.png'))
 
-    yield folder
-
-
-@pytest.fixture
-def tex_with_external():
-    return pathlib.Path(os.path.join(TEST_FILES_DIR, 'ipynb_with_external',
-                                     'ipynb_with_external.tex'))
-
-
-@pytest.fixture
-def html_with_external():
-    return pathlib.Path(os.path.join(TEST_FILES_DIR, 'ipynb_with_external',
+    tex = pathlib.Path(os.path.join(TEST_FILES_DIR, 'ipynb_with_external',
+                                    'ipynb_with_external.tex'))
+    html = pathlib.Path(os.path.join(TEST_FILES_DIR, 'ipynb_with_external',
                                      'ipynb_with_external.html'))
+    slides = pathlib.Path(os.path.join(TEST_FILES_DIR, 'ipynb_with_external',
+                                       'ipynb_with_external.slides.html'))
 
-
-@pytest.fixture
-def slides_with_external():
-    return pathlib.Path(os.path.join(TEST_FILES_DIR, 'ipynb_with_external',
-                                     'ipynb_with_external.slides.html'))
+    yield {
+        "input_folder": folder,
+        "latex_ipypublish_main": tex,
+        "html_ipypublish_main": html,
+        "slides_ipypublish_main": slides
+    }

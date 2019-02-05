@@ -105,4 +105,4 @@ docs/source/_build
 
 # added by CJS
 releases.md
-.pytest_cache/v/cache/nodeids
+.pytest_cache/

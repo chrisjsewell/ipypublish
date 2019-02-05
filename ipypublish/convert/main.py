@@ -17,7 +17,7 @@ from six import string_types
 
 
 import ipypublish
-from ipypublish.utils import pathlib, handle_error
+from ipypublish.utils import pathlib, handle_error, get_valid_filename
 from ipypublish.scripts.nbmerge import merge_notebooks
 from ipypublish.convert.config_manager import (get_export_config_path,
                                                load_export_config,
@@ -81,7 +81,7 @@ def publish(ipynb_path,
     if isinstance(ipynb_path, string_types):
         ipynb_path = pathlib.Path(ipynb_path)
     ipynb_name = os.path.splitext(ipynb_path.name)[0]
-    files_folder = ipynb_name + '_files'
+    files_folder = get_valid_filename(ipynb_name) + '_files'
     outdir = os.path.join(
         os.getcwd(), 'converted') if outpath is None else outpath
 
@@ -197,6 +197,9 @@ def create_config(exporter_data, template_name, replacements):
     files_path = "${files_path}"
     for instr, outstr in replacements.items():
         files_path = files_path.replace(instr, outstr)
+    # this ensured that the ExtractOutputPreprocessor sets extracted files to
+    # the required folder path
+    # (alternatively could set resources['output_files_dir'] = files_path)
     config[
         'ExtractOutputPreprocessor.output_filename_template'
     ] = files_path + '/{unique_key}_{cell_index}_{index}{extension}'
