@@ -198,7 +198,7 @@ def create_config(exporter_data, template_name, replacements):
     for instr, outstr in replacements.items():
         files_path = files_path.replace(instr, outstr)
     # this ensured that the ExtractOutputPreprocessor sets extracted files to
-    # the required folder path 
+    # the required folder path
     # (alternatively could set resources['output_files_dir'] = files_path)
     config[
         'ExtractOutputPreprocessor.output_filename_template'
