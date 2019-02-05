@@ -61,6 +61,25 @@ def test_publish_ipynb1_pdf(temp_folder, ipynb1):
 
 
 @pytest.mark.requires_latexmk
+def test_publish_with_attachments_latex(temp_folder, ipynb_with_attach):
+    """ test notebook containing attachments
+
+    """
+    ipynb = ipynb_with_attach["input_file"]
+    tex_file = ipynb_with_attach["latex_ipypublish_main"]
+
+    tex_path = os.path.join(temp_folder,
+                            os.path.splitext(ipynb.name)[0] + '.tex')
+    pdf_path = os.path.join(temp_folder,
+                            os.path.splitext(ipynb.name)[0] + '.pdf')
+
+    publish(ipynb, outpath=temp_folder, create_pdf=True)
+    assert os.path.exists(tex_path)
+    assert os.path.exists(pdf_path)
+    compare_tex_files(tex_file, tex_path)
+
+
+@pytest.mark.requires_latexmk
 def test_publish_withbib(temp_folder, ipynb_with_bib):
     tex_path = os.path.join(temp_folder,
                             os.path.splitext(ipynb_with_bib.name)[0] + '.tex')
