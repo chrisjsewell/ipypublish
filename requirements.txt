@@ -10,4 +10,5 @@ jsonextended>=0.7
 six
 jsonschema
 pyyaml
+pandocfilters
 pandoc-xnos

@@ -26,13 +26,17 @@ def ipynb2():
 
 @pytest.fixture
 def nb_markdown_cells():
+    from pandocxnos import init as get_pandoc_version
+    if get_pandoc_version() < '1.18':
+        expected = 'latex_ipypublish_main.pandoc.1-12.tex'
+    else:
+        expected = 'latex_ipypublish_main.pandoc.2-2.tex'
     return {
         "input_file": pathlib.Path(os.path.join(
             TEST_FILES_DIR, 'nb_markdown_cells',
             'nb_markdown_cells.ipynb')),
         "latex_ipypublish_main": pathlib.Path(os.path.join(
-            TEST_FILES_DIR, 'nb_markdown_cells',
-            'latex_ipypublish_main.tex'))
+            TEST_FILES_DIR, 'nb_markdown_cells', expected))
     }
 
 
