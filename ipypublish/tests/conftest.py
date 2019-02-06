@@ -32,7 +32,10 @@ def nb_markdown_cells():
         expected_rst = 'sphinx_ipypublish_main.pandoc.1-12.rst'
     else:
         expected_ltx = 'latex_ipypublish_main.pandoc.2-2.tex'
-        expected_rst = 'sphinx_ipypublish_main.pandoc.2-2.rst'
+        if get_pandoc_version() < '2.6':
+            expected_rst = 'sphinx_ipypublish_main.pandoc.2-2.rst'
+        else:
+            expected_rst = 'sphinx_ipypublish_main.pandoc.2-6.rst'
 
     return {
         "input_file": pathlib.Path(os.path.join(
