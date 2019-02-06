@@ -67,9 +67,7 @@ def resolve_references(source, reftag="cref", at_notation=False):
     from pandocxnos import init as get_pandoc_version
     # TODO is there a better way to get the pandoc-api-version
     source_json = json.loads(source)
-    if isinstance(source_json, (tuple, list)):
-        source_json = source_json[0]
-    api_version = source_json["pandoc-api-version"]
+    api_version = source_json.get("pandoc-api-version", None)
 
     global Image
     if get_pandoc_version() < '1.16':
@@ -105,7 +103,7 @@ def resolve_references(source, reftag="cref", at_notation=False):
 
 def _sanitize_label(label):
     """from pandoc documentation
-    The citation key must begin with a letter, digit, or _, 
+    The citation key must begin with a letter, digit, or _,
     and may contain alphanumerics, _,
     and internal punctuation characters (:.#$%&-+?<>~/)
     """
@@ -178,7 +176,7 @@ def _resolve_one_ref_func(cmnd="cref", prefix="", use_at_notation=False):
         Parameters
         ----------
         key: str
-            the type of the pandoc object (e.g. 'Str', 'Para') 
+            the type of the pandoc object (e.g. 'Str', 'Para')
         value:
             the contents of the object (e.g. a string for 'Str', a list of
             inline elements for 'Para')
@@ -267,7 +265,7 @@ def _resolve_math(key, value, format, meta):
     Parameters
     ----------
     key: str
-        the type of the pandoc object (e.g. 'Str', 'Para') 
+        the type of the pandoc object (e.g. 'Str', 'Para')
     value:
         the contents of the object (e.g. a string for 'Str', a list of
         inline elements for 'Para')
@@ -304,7 +302,7 @@ def _resolve_figures_func(api_version):
         Parameters
         ----------
         key: str
-            the type of the pandoc object (e.g. 'Str', 'Para') 
+            the type of the pandoc object (e.g. 'Str', 'Para')
         value:
             the contents of the object (e.g. a string for 'Str', a list of
             inline elements for 'Para')
@@ -319,6 +317,7 @@ def _resolve_figures_func(api_version):
         pandoc_object:
 
         """
+        from pandocxnos import init as get_pandoc_version
         if key == 'Para' and len(value) == 1 and value[0]['t'] == 'Image':
             if len(value[0]['c']) == 2:  # Unattributed, bail out
                 return None
@@ -326,12 +325,18 @@ def _resolve_figures_func(api_version):
             path, typef = value[0]['c'][2]  # TODO is typef always 'fig:'
 
             # convert the caption to latex
-            caption_json = json.dumps(
-                {
-                    "blocks": [{"t": "Para", "c": caption_block}],
-                    "meta": meta,
-                    "pandoc-api-version": api_version
-                })
+            if get_pandoc_version() >= '1.18':
+                caption_json = json.dumps(
+                    {
+                        "blocks": [{"t": "Para", "c": caption_block}],
+                        "meta": meta,
+                        "pandoc-api-version": api_version
+                    })
+            else:
+                caption_json = json.dumps(
+                    [{'unMeta': {}},
+                     [{"t": "Para", "c": caption_block}]])
+
             caption = pandoc(caption_json, 'json', 'latex')
 
             label = _sanitize_label(attributes[0])
@@ -370,7 +375,7 @@ def _resolve_tables_func(api_version):
         Parameters
         ----------
         key: str
-            the type of the pandoc object (e.g. 'Str', 'Para') 
+            the type of the pandoc object (e.g. 'Str', 'Para')
         value:
             the contents of the object (e.g. a string for 'Str', a list of
             inline elements for 'Para')

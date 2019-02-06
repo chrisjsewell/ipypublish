@@ -9,14 +9,14 @@ def test_nbpresent_bad_exporter(temp_folder, ipynb1):
     # type: (str, pathlib.Path) -> None
     assert 1 == nbpresent.run([str(ipynb1), "-f", "non-existent",
                                "--outpath", temp_folder,
-                               "--dry-run", "--log-level", "debug", "-pt"])
+                               "--dry-run", "--log-level", "debug"])
 
 
 def test_nbpublish_bad_exporter(temp_folder, ipynb1):
     # type: (str, pathlib.Path) -> None
     assert 1 == nbpublish.run([str(ipynb1),  "-f", "non-existent",
                                "--outpath", temp_folder,
-                               "--dry-run", "--log-level", "debug", "-pt"])
+                               "--dry-run", "--log-level", "debug"])
 
 
 def test_nbpresent_dry_run(temp_folder, ipynb1):
