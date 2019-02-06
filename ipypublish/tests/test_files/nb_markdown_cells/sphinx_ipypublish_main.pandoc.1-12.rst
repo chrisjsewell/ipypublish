@@ -14,7 +14,6 @@ Cell with Attached Image
    :alt: output\_13\_0.jpeg
 
    output\_13\_0.jpeg
-
 :numref:`fig:id1` `mkdown\_ref <#fig:id1>`__
 
 Cell with Linked Image
