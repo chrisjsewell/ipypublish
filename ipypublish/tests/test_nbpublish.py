@@ -61,12 +61,12 @@ def test_publish_ipynb1_pdf(temp_folder, ipynb1):
 
 
 @pytest.mark.requires_latexmk
-def test_publish_with_attachments_latex(temp_folder, ipynb_with_attach):
+def test_publish_with_attachments_latex(temp_folder, nb_markdown_cells):
     """ test notebook containing attachments
 
     """
-    ipynb = ipynb_with_attach["input_file"]
-    tex_file = ipynb_with_attach["latex_ipypublish_main"]
+    ipynb = nb_markdown_cells["input_file"]
+    tex_file = nb_markdown_cells["latex_ipypublish_main"]
 
     tex_path = os.path.join(temp_folder,
                             os.path.splitext(ipynb.name)[0] + '.tex')
@@ -204,7 +204,8 @@ def test_publish_run_all_plugins(temp_folder, ipynb1,
         compare_tex_files(testfile, outfile)
     elif exporter.output_mimetype == 'text/html':
         compare_html_files(testfile, outfile)
-    # TODO test rst output
+    elif exporter.output_mimetype == 'text/restructuredtext':
+        pass  # TODO test rst output
 
 
 def compare_html_files(testpath, outpath):

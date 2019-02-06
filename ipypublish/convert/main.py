@@ -94,6 +94,8 @@ def publish(ipynb_path,
     logger.info('with conversion configuration: {0}'.format(conversion))
 
     # merge all notebooks (this handles checking ipynb_path exists)
+    # TODO allow notebooks to remain separate 
+    # (would require creating a main.tex with the preamble in etc )
     final_nb, meta_path = merge_notebooks(ipynb_path,
                                           ignore_prefix=ignore_prefix)
     logger.debug('notebooks meta path: {}'.format(meta_path))

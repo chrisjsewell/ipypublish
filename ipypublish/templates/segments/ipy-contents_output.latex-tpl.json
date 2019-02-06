@@ -25,7 +25,7 @@
     ],
     "notebook_input_markdown": [
       "",
-      "((( cell.source | citation2latex | strip_files_prefix | convert_pandoc('markdown', 'json',extra_args=[]) | resolve_references | convert_pandoc('json','latex'))))"
+      "((( cell.source | citation2latex | strip_files_prefix | convert_pandoc('markdown', 'json',extra_args=[]) | resolve_references(at_notation=True) | convert_pandoc('json','latex'))))"
     ],
     "notebook_input_raw": [
       "",

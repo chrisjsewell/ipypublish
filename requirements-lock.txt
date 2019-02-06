@@ -19,8 +19,10 @@ markupsafe==1.1.0         # via jinja2
 mistune==0.8.4            # via nbconvert
 nbconvert==5.4.0
 nbformat==4.4.0
-pandocfilters==1.4.2      # via nbconvert
+pandoc-xnos==1.1.1
+pandocfilters==1.4.2      # via nbconvert, pandoc-xnos
 pathlib2==2.3.3
+psutil==5.5.0             # via pandoc-xnos
 pygments==2.3.1           # via nbconvert
 pyparsing==2.3.1          # via bibtexparser
 pyyaml==4.2b1

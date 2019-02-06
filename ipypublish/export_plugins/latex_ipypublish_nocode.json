@@ -15,7 +15,8 @@
       "dict_to_kwds": "ipypublish.filters.filters.dict_to_kwds",
       "ansi2listings": "ipypublish.filters.ansi_listings.ansi2listings",
       "is_equation": "ipypublish.filters.filters.is_equation",
-      "strip_ext": "ipypublish.filters.filters.strip_ext"
+      "strip_ext": "ipypublish.filters.filters.strip_ext",
+      "resolve_references": "ipypublish.filters.pandoc_latex.resolve_references"
     },
     "preprocessors": [
       {

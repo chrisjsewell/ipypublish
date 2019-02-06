@@ -1,10 +1,17 @@
 import os
+import io
 import shutil
 import tempfile
 import pytest
 
 from ipypublish.utils import pathlib
 from ipypublish.tests import TEST_FILES_DIR
+
+
+@pytest.fixture(autouse=True)
+def pandocxnos_fix(monkeypatch):
+    monkeypatch.setattr('sys.stdin',
+                        io.TextIOWrapper(io.StringIO("dummy stream")))
 
 
 @pytest.fixture
@@ -18,13 +25,13 @@ def ipynb2():
 
 
 @pytest.fixture
-def ipynb_with_attach():
+def nb_markdown_cells():
     return {
         "input_file": pathlib.Path(os.path.join(
-            TEST_FILES_DIR, 'nb_with_attachment',
-            'nb_with_attachment.ipynb')),
+            TEST_FILES_DIR, 'nb_markdown_cells',
+            'nb_markdown_cells.ipynb')),
         "latex_ipypublish_main": pathlib.Path(os.path.join(
-            TEST_FILES_DIR, 'nb_with_attachment',
+            TEST_FILES_DIR, 'nb_markdown_cells',
             'latex_ipypublish_main.tex'))
     }
 

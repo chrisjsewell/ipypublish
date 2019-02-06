@@ -417,14 +417,77 @@ singlelinecheck=false,format=hang,labelfont={it,bf}}
 
 \begin{document}
 
-\hypertarget{notebook-with-attachment}{%
-\section{Notebook with attachment}\label{notebook-with-attachment}}
+\hypertarget{notebook-to-test-markdown-cells}{%
+\section{Notebook to Test Markdown
+Cells}\label{notebook-to-test-markdown-cells}}
 
-\begin{figure}[htbp]
-\centering
-\includegraphics{nb_with_attachment_files/attach_1_output_13_0.jpeg}
-\caption{output\_13\_0.jpeg}
+\hypertarget{cell-with-attached-image}{%
+\subsection{Cell with Attached Image}\label{cell-with-attached-image}}
+
+\begin{figure}[H]
+\hypertarget{fig:id1}{%
+\begin{center}
+\adjustimage{max size={0.9\linewidth}{0.9\paperheight},}{nb_markdown_cells_files/attach_1_output_13_0.jpeg}
+\end{center}
+\caption{output\_13\_0.jpeg}\label{fig:id1}
+}
 \end{figure}
+
+\cref{fig:id1} \cref{fig:id1}
+
+\hypertarget{cell-with-linked-image}{%
+\subsection{Cell with Linked Image}\label{cell-with-linked-image}}
+
+\begin{figure}[]
+\hypertarget{fig:id2}{%
+\begin{center}
+\adjustimage{max size={0.9\linewidth}{0.9\paperheight},width=0.5\linewidth}{nb_markdown_cells_files/logo_example.png}
+\end{center}
+\caption{this is a \textbf{caption}}\label{fig:id2}
+}
+\end{figure}
+
+\hypertarget{cell-with-link-to-header}{%
+\subsection{Cell with Link to Header}\label{cell-with-link-to-header}}
+
+\cref{cell-with-link-to-header}
+
+\hypertarget{cell-with-math}{%
+\subsection{Cell with Math}\label{cell-with-math}}
+
+inline: \(a = b\)
+
+\begin{equation}a = b\label{eq:id1}\end{equation}
+\begin{align*}c &= d \\ other &= e\end{align*} 
+
+\hypertarget{cell-with-table}{%
+\subsection{Cell with Table}\label{cell-with-table}}
+
+\begin{longtable}[]{@{}lll@{}}
+\caption{Caption. \label{tbl:id}}\tabularnewline
+\toprule
+A & B & A and B\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+A & B & A and B\tabularnewline
+\midrule
+\endhead
+False & False & False\tabularnewline
+True & False & False\tabularnewline
+False & True & False\tabularnewline
+True & True & True\tabularnewline
+\bottomrule
+\end{longtable}
+
+\cref{tbl:id}
+
+\hypertarget{references-using-notation}{%
+\subsection{References Using @
+Notation}\label{references-using-notation}}
+
+\Cref{cell-with-link-to-header}, and multiple references
+\cref{tbl:id,eq:id1}
 
 \end{document}
 

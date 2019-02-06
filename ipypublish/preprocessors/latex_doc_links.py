@@ -3,11 +3,14 @@ import os
 from binascii import a2b_base64
 import sys
 import json
+import re
 from mimetypes import guess_extension
 
 from six import string_types
 import traitlets as traits
 from nbconvert.preprocessors import Preprocessor
+
+logger = logging.getLogger("resolve_links")
 
 
 def guess_extension_without_jpe(mimetype):
@@ -23,37 +26,93 @@ def guess_extension_without_jpe(mimetype):
     return ext
 
 
+def resolve_path(fpath, filepath):
+    """resolve a relative path, w.r.t. another filepath """
+    if not os.path.isabs(fpath):
+        fpath = os.path.join(os.path.dirname(str(filepath)), fpath)
+        fpath = os.path.abspath(fpath)
+
+    return os.path.normpath(fpath)
+
+
+def extract_file_links(source, parent_path, redirect_path,
+                       replace_nonexistent=False):
+    """ extract local linked files
+
+    Examples
+    --------
+    >>> source = '''## Cell with Linked Image
+    ... ![test_image](subdir/logo_example.png)
+    ... a [test_link](other_doc#a-link)'''
+    >>> src, rpaths, npaths = extract_file_links(
+    ...                             source, '/root/nb.ipynb', 'redirect', True)
+    >>> print(src)
+    ## Cell with Linked Image
+    ![test_image](redirect/logo_example.png)
+    a [test_link](redirect/other_doc#a-link)
+
+    >>> print(rpaths[0])
+    /root/subdir/logo_example.png
+    >>> print(rpaths[1])
+    /root/other_doc
+
+
+    """
+    # TODO is this robust enough
+    regex = re.compile('\\[([^\\]]*)\\]\\(([^\\)^\\#]*)([^\\)]*)\\)')
+    new_source = source
+    redirected_paths = []
+    nonexistent_paths = []
+    for text, path, label in regex.findall(source):
+        if path.startswith("attachment:"):
+            continue
+        if not path:  # internal links
+            continue
+        respath = resolve_path(path, parent_path)
+        if not os.path.exists(respath):
+            nonexistent_paths.append(respath)
+        if os.path.exists(respath) or replace_nonexistent:
+            redirected_paths.append(respath)
+            new_path = os.path.normpath(os.path.join(
+                redirect_path, os.path.basename(path)))
+            new_source = new_source.replace(
+                "[{0}]({1}{2})".format(text, path, label),
+                "[{0}]({1}{2})".format(text, new_path, label))
+
+    return new_source, redirected_paths, nonexistent_paths
+
+
 class LatexDocLinks(Preprocessor):
     """ a preprocessor to resolve file paths in the notebook:
 
-    - retrieve external file paths from ipub metadata section,
-    - resolve where they are, if the path is relative
-    - make sure that the link points to a single folder
-    - add 'external_file_paths' and 'bibliopath' (if present) to resources
-    - extract attachments from input cells and rename their file links
+    1. Creates resources['external_file_paths'] = [] and adds to it:
+
+        - local relative file paths referenced in markdown cells by
+          '[](path/to/file)'
+        - path to nb.metadata.ipub.bibliography (if present)
+        - path to nb.metadata.ipub.titlepage.logo (if present)
+
+    2. If the above paths are relative, redirects them to self.filesfolder 
+
+    3. if nb.metadata.ipub.bibliography, create resources['bibliopath']
+
+    4. Extract attachments from markdown cells, to resources['outputs'],
+       and redirect their file links to self.filesfolder 
 
     """
 
     metapath = traits.Unicode(
-        '', help="the path to the meta data").tag(config=True)
+        '', help="the file path to the notebook").tag(config=True)
     filesfolder = traits.Unicode(
-        '', help="the folder to point towards").tag(config=True)
+        '', help="the folder path to redirect file links to").tag(config=True)
     extract_attachments = traits.Bool(
         True,
-        help=("extract attachments "
+        help=("extract attachments stored in the notebook"
               "(created by dragging and dropping files into markdown cells)")
     ).tag(config=True)
     output_attachment_template = traits.Unicode(
         "{unique_key}_{cell_index}_{key}{extension}"
     ).tag(config=True)
-
-    def resolve_path(self, fpath, filepath):
-        """resolve a relative path, w.r.t. another filepath """
-        if not os.path.isabs(fpath):
-            fpath = os.path.join(os.path.dirname(str(filepath)), fpath)
-            fpath = os.path.abspath(fpath)
-
-        return fpath
 
     def preprocess_cell(self, cell, resources, cell_index):
         """
@@ -67,10 +126,20 @@ class LatexDocLinks(Preprocessor):
             Additional resources used in the conversion process.  Allows
             preprocessors to pass variables into the Jinja engine.
         cell_index : int
-            Index of the cell being processed (see base.py)
+            Index of the cell being processed
         """
-        unique_key = resources.get('unique_key', 'attach')
+        if cell.cell_type != "markdown":
+            return cell, resources
 
+        # extract local linked files
+        source, rpaths, npaths = extract_file_links(
+            cell.source, self.metapath, self.filesfolder)
+        cell.source = source
+        resources['external_file_paths'].extend(rpaths)
+        resources['unfound_file_paths'].extend(npaths)
+
+        # extract attachments
+        unique_key = resources.get('unique_key', 'attach')
         if 'attachments' in cell and self.extract_attachments:
             attachments = cell.pop('attachments')
 
@@ -140,17 +209,20 @@ class LatexDocLinks(Preprocessor):
         Preprocessing to apply on each notebook.
         """
 
-        logging.info('resolving external file paths' +
-                     ' in ipub metadata to: {}'.format(self.metapath))
-        external_files = []
+        logger.info('resolving external file paths' +
+                    ' in ipub metadata to: {}'.format(self.metapath))
+
+        resources.setdefault("external_file_paths", [])
+        resources.setdefault("unfound_file_paths", [])
+
         if 'ipub' in nb.metadata:
 
             # if hasattr(nb.metadata.ipub, 'files'):
             #     mfiles = []
             #     for fpath in nb.metadata.ipub.files:
-            #         fpath = self.resolve_path(fpath, self.metapath)
+            #         fpath = resolve_path(fpath, self.metapath)
             #         if not os.path.exists(fpath):
-            #             logging.warning('file in metadata does not exist'
+            #             logger.warning('file in metadata does not exist'
             #                             ': {}'.format(fpath))
             #         else:
             #             external_files.append(fpath)
@@ -161,12 +233,11 @@ class LatexDocLinks(Preprocessor):
 
             if hasattr(nb.metadata.ipub, 'bibliography'):
                 bib = nb.metadata.ipub.bibliography
-                bib = self.resolve_path(bib, self.metapath)
+                bib = resolve_path(bib, self.metapath)
                 if not os.path.exists(bib):
-                    logging.warning('bib in metadata does not exist'
-                                    ': {}'.format(bib))
+                    resources['unfound_file_paths'].append(bib)
                 else:
-                    external_files.append(bib)
+                    resources['external_file_paths'].append(bib)
                     resources['bibliopath'] = bib
 
                 nb.metadata.ipub.bibliography = os.path.join(
@@ -175,21 +246,26 @@ class LatexDocLinks(Preprocessor):
             if hasattr(nb.metadata.ipub, 'titlepage'):
                 if hasattr(nb.metadata.ipub.titlepage, 'logo'):
                     logo = nb.metadata.ipub.titlepage.logo
-                    logo = self.resolve_path(logo, self.metapath)
+                    logo = resolve_path(logo, self.metapath)
                     if not os.path.exists(logo):
-                        logging.warning('logo in metadata does not exist'
-                                        ': {}'.format(logo))
+                        resources['unfound_file_paths'].append(logo)
                     else:
-                        external_files.append(logo)
+                        resources['external_file_paths'].append(logo)
 
                     nb.metadata.ipub.titlepage.logo = os.path.join(
                         self.filesfolder, os.path.basename(logo))
 
-        resources.setdefault("external_file_paths", [])
-        resources['external_file_paths'] += external_files
-
         for index, cell in enumerate(nb.cells):
             nb.cells[index], resources = self.preprocess_cell(
                 cell, resources, index)
+
+        # filter unique
+        resources['external_file_paths'] = list(
+            set(resources['external_file_paths']))
+
+        upaths = set(resources.pop("unfound_file_paths"))
+        if upaths:
+            logger.warning('referenced file(s) do not exist'
+                           ': {}'.format(list(upaths)))
 
         return nb, resources
