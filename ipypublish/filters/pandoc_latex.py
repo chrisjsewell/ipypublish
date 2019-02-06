@@ -66,7 +66,10 @@ def resolve_references(source, reftag="cref", at_notation=False):
                             attach_attrs_factory, detach_attrs_factory)
     from pandocxnos import init as get_pandoc_version
     # TODO is there a better way to get the pandoc-api-version
-    api_version = json.loads(source)["pandoc-api-version"]
+    source_json = json.loads(source)
+    if isinstance(source_json, (tuple, list)):
+        source_json = source_json[0]
+    api_version = source_json["pandoc-api-version"]
 
     global Image
     if get_pandoc_version() < '1.16':
