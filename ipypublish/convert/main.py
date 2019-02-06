@@ -223,7 +223,7 @@ def export_notebook(final_nb, exporter_cls, config, jinja_template):
     try:
         exporter = exporter_cls(**kwargs)
     except TypeError:
-        logger.warn(
+        logger.warning(
             "the exporter class can not be parsed the arguments: {}".format(
                 list(kwargs.keys())))
         exporter = exporter_cls()

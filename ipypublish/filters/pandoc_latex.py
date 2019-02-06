@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """pandoc filters used in converting markdown cells to the target type.
-usage in jinja template:
+Usage in jinja template:
+
     convert_pandoc('markdown', 'json') | resolve_references | convert_pandoc('json','latex')  # noqa: E501
 
 adapted from nbconvert/filters/filter_links.py
@@ -110,7 +111,7 @@ def _sanitize_label(label):
     and internal punctuation characters (:.#$%&-+?<>~/)
     """
     label = str(label).lower()
-    label = re.sub("[^a-zA-Z0-9-:\.]+", "", label)
+    label = re.sub("[^a-zA-Z0-9-:\\.]+", "", label)
     # TODO raise warning if changed?
     return label
 

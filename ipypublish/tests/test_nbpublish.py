@@ -275,10 +275,10 @@ def compare_tex_files(testpath, outpath):
             ("\\\\expandafter\\\\def\\\\csname "
                 "PY\\@tok\\@[0-9a-zA-Z]*\\\\endcsname[^\n]*"),
             re.MULTILINE)
-        content = pyg_rgx.sub("\<pygments definition\>", content)
+        content = pyg_rgx.sub(r"\<pygments definition\>", content)
 
         # also remove all space from start of lines
-        space_rgx = re.compile("^[\s]*", re.MULTILINE)
+        space_rgx = re.compile(r"^[\s]*", re.MULTILINE)
         content = space_rgx.sub("", content)
         output.append(content)
 
