@@ -61,7 +61,7 @@ def test_publish_ipynb1_pdf(temp_folder, ipynb1):
 
 
 @pytest.mark.requires_latexmk
-def test_publish_with_attachments_latex(temp_folder, nb_markdown_cells):
+def test_publish_markdown_cells_latex(temp_folder, nb_markdown_cells):
     """ test notebook containing attachments
 
     """

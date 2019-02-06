@@ -67,7 +67,7 @@ matrix:
 
 before_install:
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update ; fi
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y pandoc ; fi
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y pandoc ; fi  # TODO this version of pandoc is quite old
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y texlive ; fi
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y texlive-xetex ; fi
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y texlive-latex-extra ; fi

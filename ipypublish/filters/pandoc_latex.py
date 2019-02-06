@@ -194,9 +194,10 @@ def _resolve_one_ref_func(cmnd="cref", prefix="", use_at_notation=False):
 
         """
         if key == 'Link':
-            target = value[2][0]
+            target = value[-1][0]  # in older pandoc, no attributes at front
             m = re.match(r'#(.+)$', target)
             if m:
+                print(value)
                 # pandoc automatically makes labels for headings.
                 label = _sanitize_label(m.group(1))
                 return RawInline(
