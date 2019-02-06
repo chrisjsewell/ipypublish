@@ -55,6 +55,7 @@ Badges
 
 .. toctree::
    :maxdepth: 2
+   :numbered:
    :caption: Contents:
 
    getting_started

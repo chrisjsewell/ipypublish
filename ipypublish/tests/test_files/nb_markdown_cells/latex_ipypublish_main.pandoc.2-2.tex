@@ -378,6 +378,11 @@ nohead,includefoot,footskip=25pt}
 \renewcommand\thefigure{\thesection.\arabic{figure}}
 \renewcommand\theequation{\thesection.\arabic{equation}}
 
+    % set global options for float placement
+    \makeatletter
+        \providecommand*\setfloatlocations[2]{\@namedef{fps@#1}{#2}}
+    \makeatother
+
 % align captions to left (indented)
 \captionsetup{justification=raggedright,
 singlelinecheck=false,format=hang,labelfont={it,bf}}
@@ -416,6 +421,15 @@ singlelinecheck=false,format=hang,labelfont={it,bf}}
 %%%%%%%%%%%%
 
 \begin{document}
+
+    \title{Notebook}
+  \date{\today}
+  \maketitle
+
+    \begingroup
+    \let\cleardoublepage\relax
+    \let\clearpage\relax
+    \endgroup
 
 \hypertarget{notebook-to-test-markdown-cells}{%
 \section{Notebook to Test Markdown

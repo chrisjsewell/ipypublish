@@ -8,6 +8,13 @@ def strip_ext(path):
     return os.path.splitext(path)[0]
 
 
+def get_empty_lines(text):
+    """Get number of empty lines before and after text."""
+    before = len(text) - len(text.lstrip('\n'))
+    after = len(text) - len(text.strip('\n')) - before
+    return before, after
+
+
 def wrap_latex(input, max_length=75, **kwargs):
     if len(input) > max_length:
         # remove double dollars, as they don't allow word wrap

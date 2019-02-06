@@ -16,7 +16,7 @@
       "ansi2listings": "ipypublish.filters.ansi_listings.ansi2listings",
       "is_equation": "ipypublish.filters.filters.is_equation",
       "strip_ext": "ipypublish.filters.filters.strip_ext",
-      "resolve_references": "ipypublish.filters.pandoc_latex.resolve_references"
+      "pandoc_jsonfilters": "ipypublish.filters.pandoc_jsonfilters.pandoc_jsonfilters"
     },
     "preprocessors": [
       {
@@ -98,7 +98,7 @@
       },
       {
         "module": "ipypublish.templates.segments",
-        "file": "ipy-contents_output.latex-tpl.json"
+        "file": "ipy-contents_output-new.latex-tpl.json"
       },
       {
         "module": "ipypublish.templates.segments",

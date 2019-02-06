@@ -25,7 +25,14 @@
     ],
     "notebook_input_markdown": [
       "",
-      "((( cell.source | citation2latex | strip_files_prefix | convert_pandoc('markdown', 'json',extra_args=[]) | resolve_references | convert_pandoc('json','latex'))))"
+      "((* set at_notation = False *))",
+      "((*- if nb.metadata.ipub and nb.metadata.ipub.at_notation: -*))",
+      "((* set at_notation = nb.metadata.ipub.at_notation *))",
+      "((*- endif *))",
+      "((*- if cell.metadata.ipub and cell.metadata.ipub.at_notation: -*))",
+      "((* set at_notation = cell.metadata.ipub.at_notation *))",
+      "((*- endif *))",
+      "((( cell.source | citation2latex | strip_files_prefix | convert_pandoc('markdown', 'json',extra_args=[]) | pandoc_jsonfilters(at_notation=at_notation) | convert_pandoc('json','latex'))))"
     ],
     "notebook_input_raw": [
       "",
@@ -50,8 +57,15 @@
     "notebook_output_markdown": [
       "",
       "((*- if cell.metadata.ipub: -*))",
-      "    ((*- if cell.metadata.ipub.mkdown: -*))",
-      "((( output.data['text/markdown'] | citation2latex | strip_files_prefix | convert_pandoc('markdown', 'json',extra_args=[]) | resolve_references | convert_pandoc('json','latex'))))",
+      "((*- if cell.metadata.ipub.mkdown: -*))",
+      "((* set at_notation = False *))",
+      "((*- if nb.metadata.ipub and nb.metadata.ipub.at_notation: -*))",
+      "((* set at_notation = nb.metadata.ipub.at_notation *))",
+      "((*- endif *))",
+      "((*- if cell.metadata.ipub and cell.metadata.ipub.at_notation: -*))",
+      "((* set at_notation = cell.metadata.ipub.at_notation *))",
+      "((*- endif *))",
+      "((( output.data['text/markdown'] | citation2latex | strip_files_prefix | convert_pandoc('markdown', 'json',extra_args=[]) | pandoc_jsonfilters(at_notation=at_notation) | convert_pandoc('json','latex'))))",
       "((*- endif *))",
       "((*- endif *))"
     ],

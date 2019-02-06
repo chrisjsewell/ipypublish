@@ -74,6 +74,7 @@ extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.napoleon',
               'sphinx.ext.autosummary']
 
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
@@ -218,6 +219,11 @@ intersphinx_aliases = {
     ('py:class', 'nbformat.notebooknode.NotebookNode'):
         ('py:class', 'nbformat.NotebookNode')
 }
+
+numfig = True
+math_numfig = True
+math_eqref_format = "eq.{number}"
+numfig_secnum_depth = 2
 
 
 def add_intersphinx_aliases_to_inv(app):

@@ -1,0 +1,47 @@
+{
+    "description": [
+      "sphinx reStructuredText in the main ipypublish format",
+      "- only output cells with metadata tags are used",
+      "- code, figures, tables and code are formatted accordingly"
+      ],
+    "exporter": {
+      "class": "nbconvert.exporters.RSTExporter",
+      "filters": {
+        "get_empty_lines": "ipypublish.filters.filters.get_empty_lines",
+        "choose_output_type": "ipypublish.filters.rst_choose_output.choose_output_type",
+        "pandoc_jsonfilters": "ipypublish.filters.pandoc_jsonfilters.pandoc_jsonfilters"
+      },
+      "preprocessors": [
+        {
+            "class": "ipypublish.preprocessors.split_outputs.SplitOutputs",
+            "args": {
+              "split": true
+            }
+          },
+          {
+            "class": "ipypublish.preprocessors.latex_doc_links.LatexDocLinks",
+            "args": {
+              "metapath": "${meta_path}",
+              "filesfolder": "${files_path}"
+            }
+          },
+          {
+            "class": "ipypublish.preprocessors.latex_doc_captions.LatexCaptions",
+            "args": {}
+          }          
+      ],
+      "other_args": {}
+    },
+    "template": {
+      "outline": {
+        "module": "ipypublish.templates.outline_schemas",
+        "file": "rst_outline.rst.j2"
+      },
+      "segments": [
+        {
+          "module": "ipypublish.templates.segments",
+          "file": "ipy-sphinx.yaml.j2"
+        }
+      ]
+    }
+  }

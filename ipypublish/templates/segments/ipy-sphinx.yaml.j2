@@ -1,39 +1,46 @@
 "$schema": "../../schema/segment.schema.json"
-"identifier": "nbsphinx-standard-content"
-"description": "standard sphinx nbsphinx content"
+"identifier": "nbsphinx-ipypublish-content"
+"description": "ipypublish sphinx content"
 "segments":
 
     "notebook_input_all": |
-        {%- if cell.metadata.nbsphinx != 'hidden' %}
-        {{ super() }}
-        {% endif %}
-    
-    "notebook_input_code": |
-        .. nbinput:: {% if cell.metadata.magics_language -%}
-        {{ cell.metadata.magics_language }}
-        {%- elif nb.metadata.language_info -%}
-        {{ nb.metadata.language_info.pygments_lexer or nb.metadata.language_info.name }}
+        {%- if "ipub" in cell.metadata and cell.metadata.ipub.ignore %}
         {%- else -%}
-        {{ resources.codecell_lexer }}
-        {%- endif -%}
-        {{ insert_empty_lines(cell.source) }}
-        {%- if cell.execution_count %}
-            :execution-count: {{ cell.execution_count }}
-        {%- endif %}
-        {%- if not cell.outputs %}
-            :no-output:
-        {%- endif %}
-        {%- if cell.source.strip() %}
+            {%- if "ipub" in cell.metadata and cell.metadata.ipub.slideonly %}
+            {%- else -%}
+            {{ super() }}
+            {% endif %}
+        {% endif %}
 
-        {{ cell.source.strip('\n') | indent }}
+    "notebook_input_code": |
+        {%- if "ipub" in cell.metadata and cell.metadata.ipub.code -%}
+        {%- if cell.source.strip() -%}
+        {{'.. code:: '}}
+        {%- if 'magics_language' in cell.metadata  -%}
+            {{ cell.metadata.magics_language}}
+        {%- elif 'pygments_lexer' in nb.metadata.get('language_info', {}) -%}
+            {{ nb.metadata.language_info.pygments_lexer }}
+        {%- elif 'name' in nb.metadata.get('language_info', {}) -%}
+            {{ nb.metadata.language_info.name }}
         {%- endif %}
+
+        {{ cell.source | indent}}
+        {% endif -%}
+        {% endif -%}
 
     "notebook_input_markdown": |
-        {%- if 'nbsphinx-toctree' in cell.metadata %}
-        {{ cell | extract_toctree }}
-        {%- else %}
-        {{ cell | save_attachments or cell.source | convert_pandoc("markdown", "rst") | replace_attachments }}
-        {% endif %}
+        {% set at_notation = False %}
+        {%- if nb.metadata.ipub and nb.metadata.ipub.at_notation -%}
+        {% set at_notation = nb.metadata.ipub.at_notation %}
+        {%- endif %}
+        {%- if cell.metadata.ipub and cell.metadata.ipub.at_notation -%}
+        {% set at_notation = cell.metadata.ipub.at_notation %}
+        {%- endif %}
+        {% set use_numref = False %}
+        {%- if nb.metadata.ipub and nb.metadata.ipub.use_numref -%}
+        {% set use_numref = nb.metadata.ipub.use_numref %}
+        {%- endif %}
+        {{ cell.source | convert_pandoc('markdown', 'json', extra_args=[]) | pandoc_jsonfilters(out='rst', at_notation=at_notation, use_numref=use_numref) | convert_pandoc('json','rst') }}
 
     "notebook_input_raw": |
         {%- set raw_mimetype = cell.metadata.get('raw_mimetype', '').lower() %}
@@ -68,12 +75,10 @@
 
     "notebook_input_unknown": |
         .. unknown type  {{cell.type}}
-    
-
 
     "new_blocks": |
         {% block nboutput -%}
-        {%- set html_datatype, latex_datatype = output | get_output_type %}
+        {%- set html_datatype, latex_datatype = output | choose_output_type %}
         {%- if html_datatype == latex_datatype %}
         {{ insert_nboutput(html_datatype, output, cell) }}
         {% else %}
@@ -84,17 +89,41 @@
 
         {{ insert_nboutput(latex_datatype, output, cell) | indent }}
         {% endif %}
-        {% endblock nboutput %}    
-    
-    "notebook_output_error": |
-        {{ self.nboutput() }}
+        {% endblock nboutput %}  
 
-    "notebook_output_stream": |
+    "notebook_output_error": |
+        {%- if "ipub" in cell.metadata and cell.metadata.ipub.error -%}
         {{ self.nboutput() }}
+        {% endif %}
+#        ::
+#
+#        {{ super() }}
+
+#    "notebook_output_traceback_line": |
+#        {{ line | indent | strip_ansi }}
+
+    # stdin and stderr
+    "notebook_output_stream": |
+        {%- if "ipub" in cell.metadata and cell.metadata.ipub.text -%}
+        {{ self.nboutput() }}
+        {% endif %}
+#        .. parsed-literal::
+#
+#        {{ output.text | indent }}
 
     "notebook_output_data_all": |
         {{ self.nboutput() }}
     
+    "footer": |
+        {% if 'application/vnd.jupyter.widget-state+json' in nb.metadata.widgets %}
+
+        .. raw:: html
+
+            <script type="application/vnd.jupyter.widget-state+json">
+            {{ nb.metadata.widgets['application/vnd.jupyter.widget-state+json'] | json_dumps }}
+            </script>
+        {% endif %}
+
     "jinja_macros": |
         {% macro insert_empty_lines(text) %}
         {%- set before, after = text | get_empty_lines %}
@@ -107,6 +136,20 @@
         {%- endmacro %}
 
         {% macro insert_nboutput(datatype, output, cell) -%}
+        {%- if datatype == 'text/plain' %}
+        {%- if "ipub" in cell.metadata and cell.metadata.ipub.text -%}
+        {{ create_nboutput(datatype, output, cell) }}
+        {%- endif %}
+        {%- elif datatype == 'text/markdown' %}
+        {%- if "ipub" in cell.metadata and cell.metadata.ipub.mkdown -%}
+        {{ create_nboutput(datatype, output, cell) }}
+        {%- endif %}
+        {%- else %}
+        {{ create_nboutput(datatype, output, cell) }}
+        {%- endif %}
+        {% endmacro %}
+
+        {% macro create_nboutput(datatype, output, cell) -%}
         .. nboutput::
         {%- if datatype == 'text/plain' %}{# nothing #}
         {%- elif datatype == 'ansi' %} ansi
@@ -140,7 +183,7 @@
         {% endif %}
         {%- elif datatype in ['text/markdown'] %}
 
-        {{ output.data['text/markdown'] | markdown2rst | indent }}
+        {{ output.data['text/markdown'] | convert_pandoc('markdown', 'json', extra_args=[]) | pandoc_jsonfilters(out='rst', at_notation=at_notation) | convert_pandoc('json','rst') | indent }}
         {%- elif datatype in ['text/latex'] %}
 
             .. math::
@@ -205,12 +248,4 @@
         {%- endif %}
         {% endmacro %}
 
-    "footer": |
-        {% if 'application/vnd.jupyter.widget-state+json' in nb.metadata.widgets %}
-
-        .. raw:: html
-
-            <script type="application/vnd.jupyter.widget-state+json">
-            {{ nb.metadata.widgets['application/vnd.jupyter.widget-state+json'] | json_dumps }}
-            </script>
-        {% endif %}
+# END
