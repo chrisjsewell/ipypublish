@@ -11,7 +11,7 @@ from ipypublish.tests import TEST_FILES_DIR
 @pytest.fixture(autouse=True)
 def pandocxnos_fix(monkeypatch):
     monkeypatch.setattr('sys.stdin',
-                        io.TextIOWrapper(io.StringIO("dummy stream")))
+                        io.TextIOWrapper(io.StringIO(None)))
 
 
 @pytest.fixture
