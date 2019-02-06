@@ -36,7 +36,9 @@ def nb_markdown_cells():
             TEST_FILES_DIR, 'nb_markdown_cells',
             'nb_markdown_cells.ipynb')),
         "latex_ipypublish_main": pathlib.Path(os.path.join(
-            TEST_FILES_DIR, 'nb_markdown_cells', expected))
+            TEST_FILES_DIR, 'nb_markdown_cells', expected)),
+        "sphinx_ipypublish_main": pathlib.Path(os.path.join(
+            TEST_FILES_DIR, 'nb_markdown_cells', "sphinx_ipypublish_main.rst"))
     }
 
 
@@ -95,10 +97,12 @@ def ipynb_folder_with_external(temp_folder):
                                      'ipynb_with_external.html'))
     slides = pathlib.Path(os.path.join(TEST_FILES_DIR, 'ipynb_with_external',
                                        'ipynb_with_external.slides.html'))
-
+    rst = pathlib.Path(os.path.join(TEST_FILES_DIR, 'ipynb_with_external',
+                                    'sphinx_ipypublish_main.rst'))
     yield {
         "input_folder": folder,
         "latex_ipypublish_main": tex,
         "html_ipypublish_main": html,
-        "slides_ipypublish_main": slides
+        "slides_ipypublish_main": slides,
+        "sphinx_ipypublish_main": rst
     }

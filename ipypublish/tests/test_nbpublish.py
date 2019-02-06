@@ -73,10 +73,27 @@ def test_publish_markdown_cells_latex(temp_folder, nb_markdown_cells):
     pdf_path = os.path.join(temp_folder,
                             os.path.splitext(ipynb.name)[0] + '.pdf')
 
-    publish(ipynb, outpath=temp_folder, create_pdf=True)
+    publish(ipynb,
+            conversion="latex_ipypublish_main",
+            outpath=temp_folder, create_pdf=True)
     assert os.path.exists(tex_path)
     assert os.path.exists(pdf_path)
     compare_tex_files(tex_file, tex_path)
+
+
+def test_publish_markdown_cells_rst(temp_folder, nb_markdown_cells):
+    """ test notebook containing attachments
+
+    """
+    ipynb = nb_markdown_cells["input_file"]
+    rst_file = nb_markdown_cells["sphinx_ipypublish_main"]
+
+    rst_path = os.path.join(temp_folder,
+                            os.path.splitext(ipynb.name)[0] + '.rst')
+
+    publish(ipynb, conversion="sphinx_ipypublish_main", outpath=temp_folder)
+    assert os.path.exists(rst_path)
+    compare_rst_files(rst_file, rst_path)
 
 
 @pytest.mark.requires_latexmk
@@ -163,6 +180,27 @@ def test_publish_complex_slides(ipynb_folder_with_external):
     compare_html_files(expected, html_path)
 
 
+def test_publish_complex_rst(ipynb_folder_with_external):
+    """ includes:
+
+    - internal (image) files
+    - external logo and bib
+
+    """
+    input_folder = ipynb_folder_with_external["input_folder"]
+    expected = ipynb_folder_with_external["sphinx_ipypublish_main"]
+
+    basename = os.path.basename(input_folder)
+    rst_path = os.path.join(input_folder,
+                            basename + '.rst')
+
+    publish(input_folder,
+            conversion="sphinx_ipypublish_main",
+            outpath=input_folder)
+    assert os.path.exists(rst_path)
+    compare_rst_files(expected, rst_path)
+
+
 def test_publish_ipynb1_html(temp_folder, ipynb1):
 
     html_path = os.path.join(temp_folder,
@@ -206,6 +244,26 @@ def test_publish_run_all_plugins(temp_folder, ipynb1,
         compare_html_files(testfile, outfile)
     elif exporter.output_mimetype == 'text/restructuredtext':
         pass  # TODO test rst output
+
+
+def compare_rst_files(testpath, outpath):
+    # only compare body of html, since styles differ by
+    # nbconvert/pandoc version (e.g. different versions of font-awesome)
+
+    output = []
+    for path in [testpath, outpath]:
+
+        with io.open(str(path), encoding='utf8') as fobj:
+            content = fobj.read()
+        output.append(content)
+
+    test_content, out_content = output
+
+    # only report differences
+    if out_content != test_content:
+        raise AssertionError("\n"+"\n".join(context_diff(
+            test_content.splitlines(), out_content.splitlines(),
+            fromfile=str(testpath), tofile=str(outpath))))
 
 
 def compare_html_files(testpath, outpath):

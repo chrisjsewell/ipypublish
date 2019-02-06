@@ -32,8 +32,8 @@ text
 References and Citations
 ------------------------
 
-References to :numref:`fig:example`, :numref:`tbl:example`,
-:numref:`eqn:example_sympy` and :numref:`code:example_mpl`.
+References to :ref:`fig:example`, :ref:`tbl:example`,
+:ref:`eqn:example_sympy` and :ref:`code:example_mpl`.
 
 A latex citation.:cite:`zelenyak_molecular_2016`
 
