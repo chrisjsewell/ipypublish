@@ -26,6 +26,8 @@ def ipynb2():
 
 @pytest.fixture
 def nb_markdown_cells():
+
+    # Table format has changed through the versions
     from pandocxnos import init as get_pandoc_version
     if get_pandoc_version() < '1.18':
         expected_ltx = 'latex_ipypublish_main.pandoc.1-12.tex'
@@ -84,6 +86,16 @@ def ipynb_folder(temp_folder, ipynb1, ipynb2):
 @pytest.fixture
 def ipynb_folder_with_external(temp_folder):
 
+    # Table format has changed through the versions
+    from pandocxnos import init as get_pandoc_version
+    if get_pandoc_version() < '1.18':
+        sphinx_ipypublish_all = 'sphinx_ipypublish_all.pandoc.1-12.rst'
+    else:
+        if get_pandoc_version() < '2.6':
+            sphinx_ipypublish_all = 'sphinx_ipypublish_all.pandoc.2-6.rst'
+        else:
+            sphinx_ipypublish_all = 'sphinx_ipypublish_all.pandoc.2-2.rst'
+
     folder = os.path.join(temp_folder, "ipynb_with_external")
     os.makedirs(folder)
 
@@ -104,7 +116,7 @@ def ipynb_folder_with_external(temp_folder):
     slides = pathlib.Path(os.path.join(TEST_FILES_DIR, 'ipynb_with_external',
                                        'ipynb_with_external.slides.html'))
     rst = pathlib.Path(os.path.join(TEST_FILES_DIR, 'ipynb_with_external',
-                                    'sphinx_ipypublish_all.rst'))
+                                    sphinx_ipypublish_all))
     yield {
         "input_folder": folder,
         "latex_ipypublish_main": tex,
