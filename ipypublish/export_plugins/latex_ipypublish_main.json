@@ -7,7 +7,8 @@
   "exporter": {
     "class": "nbconvert.exporters.LatexExporter",
     "filters": {
-      "remove_dollars": "ipypublish.filters.filters.remove_dollars",
+      "wrap_eqn": "ipypublish.filters.filters.wrap_eqn",
+      "get_caption": "ipypublish.filters.filters.get_caption",
       "first_para": "ipypublish.filters.filters.first_para",
       "create_key": "ipypublish.filters.filters.create_key",
       "dict_to_kwds": "ipypublish.filters.filters.dict_to_kwds",
@@ -65,11 +66,11 @@
       },
       {
         "module": "ipypublish.templates.segments",
-        "file": "ipy-contents_output-new.latex-tpl.json"
+        "file": "ipy-contents_output-new.yaml.tex.j2"
       },
       {
         "module": "ipypublish.templates.segments",
-        "file": "ipy-contents_framed_code.latex-tpl.json"
+        "file": "ipy-contents_framed_code-new.yaml.tex.j2"
       }
     ]
   }

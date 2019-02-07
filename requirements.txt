@@ -9,6 +9,7 @@ bibtexparser
 jsonextended>=0.7
 six
 jsonschema
-pyyaml
+ruamel.yaml
 pandocfilters
 pandoc-xnos
+docutils

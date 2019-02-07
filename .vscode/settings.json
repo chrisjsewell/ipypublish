@@ -42,7 +42,7 @@
         "FIXME",
         "NOTE"
       ],
-    "todo-tree.regex": "((//|#|<!--|\\.\\.|;|/\\*|^)\\s*($TAGS)|^\\s*- \\[ \\])",
+    "todo-tree.regex": "((//|#-?|<!--|\\.\\.|;|/\\*|^)\\s*($TAGS)|^\\s*- \\[ \\])",
     "todo-tree.defaultHighlight": {
         "icon": "alert",
         "type": "tag",

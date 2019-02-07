@@ -8,6 +8,7 @@ bibtexparser==1.1.0
 bleach==3.1.0             # via nbconvert
 decorator==4.3.2          # via traitlets
 defusedxml==0.5.0         # via nbconvert
+docutils==0.14
 entrypoints==0.3          # via nbconvert
 future==0.17.1            # via bibtexparser
 ipython-genutils==0.2.0   # via nbformat, traitlets
@@ -25,7 +26,7 @@ pathlib2==2.3.3
 psutil==5.5.0             # via pandoc-xnos
 pygments==2.3.1           # via nbconvert
 pyparsing==2.3.1          # via bibtexparser
-pyyaml==4.2b1
+ruamel.yaml==0.15.87
 six==1.12.0
 testpath==0.4.2           # via nbconvert
 tornado==5.1.1

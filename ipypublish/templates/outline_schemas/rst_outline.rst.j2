@@ -1,5 +1,7 @@
 {% extends 'display_priority.tpl' %}
 
+@ipubreplace{below}{globals}
+
 @ipubreplace{below}{new_blocks}
 
 {# HEADER #}
@@ -57,10 +59,10 @@
 
 {# OUTPUT #}
 
+{# This need to contain super to show any output #}
 {% block output %}
 @ipubreplace{above}{notebook_output_pre}
-@ipubreplace{below}{notebook_output_prompt}
-{{ super() }}
+@ipubreplace{below}{notebook_output_all}
 @ipubreplace{below}{notebook_output_post}
 {% endblock output %}
 

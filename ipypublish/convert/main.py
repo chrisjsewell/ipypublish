@@ -233,6 +233,10 @@ def postprocess_nb(body, resources):
 
     # reduce multiple blank lines to single
     body = re.sub(r'\n\s*\n', '\n\n', body)
+
+    # remove trailing whitespace
+    body = "\n".join([l.rstrip() for l in body.splitlines()])
+
     # make sure references refer to correct slides
     if 'refslide' in resources:
         for k, (col, row) in resources['refslide'].items():

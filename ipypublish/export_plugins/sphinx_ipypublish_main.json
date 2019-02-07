@@ -8,8 +8,12 @@
       "class": "nbconvert.exporters.RSTExporter",
       "filters": {
         "get_empty_lines": "ipypublish.filters.filters.get_empty_lines",
+        "get_caption": "ipypublish.filters.filters.get_caption",
+        "wrap_eqn": "ipypublish.filters.filters.wrap_eqn",
         "choose_output_type": "ipypublish.filters.rst_choose_output.choose_output_type",
-        "pandoc_jsonfilters": "ipypublish.filters.pandoc_jsonfilters.pandoc_jsonfilters"
+        "pandoc_jsonfilters": "ipypublish.filters.pandoc_jsonfilters.pandoc_jsonfilters",
+        "is_equation": "ipypublish.filters.filters.is_equation",
+        "basename": "ipypublish.filters.filters.basename"
       },
       "preprocessors": [
         {

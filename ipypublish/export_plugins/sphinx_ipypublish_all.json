@@ -1,21 +1,19 @@
 {
   "description": [
-    "latex article in the main ipypublish format, preprocessed with default metadata tags:",
-    "- all output/code/error is rendered",
-    "- a basic titlepage and table of contents and tables of figures/tables/code"
+    "sphinx reStructuredText in the main ipypublish format",
+    "- only output cells with metadata tags are used",
+    "- code, figures, tables and code are formatted accordingly"
   ],
   "exporter": {
-    "class": "nbconvert.exporters.LatexExporter",
+    "class": "nbconvert.exporters.RSTExporter",
     "filters": {
-      "wrap_eqn": "ipypublish.filters.filters.wrap_eqn",
+      "get_empty_lines": "ipypublish.filters.filters.get_empty_lines",
       "get_caption": "ipypublish.filters.filters.get_caption",
-      "first_para": "ipypublish.filters.filters.first_para",
-      "create_key": "ipypublish.filters.filters.create_key",
-      "dict_to_kwds": "ipypublish.filters.filters.dict_to_kwds",
-      "ansi2listings": "ipypublish.filters.ansi_listings.ansi2listings",
+      "wrap_eqn": "ipypublish.filters.filters.wrap_eqn",
+      "choose_output_type": "ipypublish.filters.rst_choose_output.choose_output_type",
+      "pandoc_jsonfilters": "ipypublish.filters.pandoc_jsonfilters.pandoc_jsonfilters",
       "is_equation": "ipypublish.filters.filters.is_equation",
-      "strip_ext": "ipypublish.filters.filters.strip_ext",
-      "pandoc_jsonfilters": "ipypublish.filters.pandoc_jsonfilters.pandoc_jsonfilters"
+      "basename": "ipypublish.filters.filters.basename"
     },
     "preprocessors": [
       {
@@ -72,36 +70,12 @@
   "template": {
     "outline": {
       "module": "ipypublish.templates.outline_schemas",
-      "file": "latex_outline.latex.j2"
+      "file": "rst_outline.rst.j2"
     },
     "segments": [
       {
         "module": "ipypublish.templates.segments",
-        "file": "std-standard_packages.latex-tpl.json"
-      },
-      {
-        "module": "ipypublish.templates.segments",
-        "file": "std-standard_definitions.latex-tpl.json"
-      },
-      {
-        "module": "ipypublish.templates.segments",
-        "file": "ipy-doc_article.latex-tpl.json"
-      },
-      {
-        "module": "ipypublish.templates.segments",
-        "file": "ipy-front_pages.latex-tpl.json"
-      },
-      {
-        "module": "ipypublish.templates.segments",
-        "file": "ipy-biblio_natbib.latex-tpl.json"
-      },
-      {
-        "module": "ipypublish.templates.segments",
-        "file": "ipy-contents_output-new.yaml.tex.j2"
-      },
-      {
-        "module": "ipypublish.templates.segments",
-        "file": "ipy-contents_framed_code-new.yaml.tex.j2"
+        "file": "ipy-sphinx.yaml.j2"
       }
     ]
   }

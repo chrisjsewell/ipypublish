@@ -29,6 +29,11 @@ setup(
     extras_require={
         "docs": {
             "sphinx"
+        },
+        "sphinx": {
+            "docutils"
+            "sphinx>=1.6",
+            "sphinxcontrib-bibtex"
         }
     },
     license='MIT',

@@ -3,7 +3,7 @@ Usage in jinja template:
 
     convert_pandoc('markdown', 'json') | pandoc_jsonfilters(at_notation=True) | convert_pandoc('json','latex')  # noqa: E501
 
-adapted from nbconvert/filters/filter_links.py
+initially adapted from nbconvert/filters/filter_links.py
 
 Other sources of information:
 
@@ -12,13 +12,10 @@ Other sources of information:
 - [reStructuredText Primer](http://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html)
 - [reStructuredText Directives](http://docutils.sourceforge.net/docs/ref/rst/directives.html#figure)
 - [sphinxcontrib-bibtex](https://sphinxcontrib-bibtex.readthedocs.io/en/latest/usage.html)
-- http://pygments.org/docs/lexers/
-- https://github.com/tell-k/sphinxjp.themes.revealjs
 
 
 NOTE could use panflute, for more pythonic API, however,
 it only supports ``pandoc >= 1.17``
-TODO option to choose whether to use numref
 
 """
 
@@ -61,7 +58,7 @@ LATEX_FIG_UNLABELLED = """\\begin{{figure}}[{options}]
 \\end{{figure}}"""  # noqa: E501
 
 
-def pandoc_jsonfilters(source, out="latex", at_notation=False,
+def pandoc_jsonfilters(source, out="latex", at_notation=True,
                        reftag="cref", use_numref=True):
     """
     Apply filters to the pandoc json object to convert it to required type
@@ -160,7 +157,7 @@ def _replace_latex2rst(use_numref=True):
                 rst_dir = {"cref": ":{numref}:`{label}`",
                            "Cref": ":{numref}:`{label}`",
                            "ref": ":ref:`{label}`",
-                           "cite": ":cite:`{label}`",
+                           "cite": " :cite:`{label}` ",
                            "todo": "\n\n.. todo:: {label}\n\n",
                            }.get(tag, None)
                 if rst_dir:
@@ -300,6 +297,7 @@ def _resolve_one_ref_func(out="latex", use_at_notation=False,
                     return None
 
         # replace html style citations; <cite data-cite="cite_key"></cite>
+        # TODO this does not remove any content between the start-end tags
         if key == 'RawInline' and value[0] == 'html':
             if re.match(r"^\s*</cite>\s*$", value[1]):
                 return []  # remove
@@ -313,7 +311,8 @@ def _resolve_one_ref_func(out="latex", use_at_notation=False,
             if out == "latex":
                 return RawInline('tex', "\\cite{{{0}}}".format(key))
             if out == "rst":
-                return RawInline('rst', ":cite:`{0}`".format(key))
+                return RawInline('rst', " :cite:`{0}` ".format(key))
+                # NB citations must have space at either side to be resolved
 
         # replace @label style references
         if use_at_notation:
@@ -350,7 +349,7 @@ def _process_at_refs(el, out="latex", use_numref=True):
             modifier = None
             if el[i-1]['t'] == 'Str':
                 modifier = el[i - 1]['c'][-1]
-                if modifier in ['^', '+', '!']:
+                if modifier in ['^', '+', '!', '=']:
                     if len(el[i - 1]['c']) > 1:
                         # Cut the modifier off of the string
                         el[i-1]['c'] = el[i-1]['c'][:-1]
@@ -376,7 +375,10 @@ def _process_at_refs(el, out="latex", use_numref=True):
             if out == "rst":
                 tag = {'+': numref, '^': numref, "!": "ref", "=": "eq",
                        }.get(modifier, 'cite')
-                if tag == "cite" or len(citations) == 1:
+                if tag == "cite":
+                    rst = ' :{0}:`{1}` '.format(tag, ",".join(labels))
+                    # NB citations must have space either side to be resolved
+                elif len(citations) == 1:
                     rst = ':{0}:`{1}`'.format(tag, ",".join(labels))
                 else:
                     rst = (

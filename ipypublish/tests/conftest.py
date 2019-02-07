@@ -104,11 +104,11 @@ def ipynb_folder_with_external(temp_folder):
     slides = pathlib.Path(os.path.join(TEST_FILES_DIR, 'ipynb_with_external',
                                        'ipynb_with_external.slides.html'))
     rst = pathlib.Path(os.path.join(TEST_FILES_DIR, 'ipynb_with_external',
-                                    'sphinx_ipypublish_main.rst'))
+                                    'sphinx_ipypublish_all.rst'))
     yield {
         "input_folder": folder,
         "latex_ipypublish_main": tex,
         "html_ipypublish_main": html,
         "slides_ipypublish_main": slides,
-        "sphinx_ipypublish_main": rst
+        "sphinx_ipypublish_all": rst
     }

@@ -7,7 +7,7 @@
         {%- if cell.metadata.nbsphinx != 'hidden' %}
         {{ super() }}
         {% endif %}
-    
+
     "notebook_input_code": |
         .. nbinput:: {% if cell.metadata.magics_language -%}
         {{ cell.metadata.magics_language }}
@@ -69,7 +69,8 @@
     "notebook_input_unknown": |
         .. unknown type  {{cell.type}}
     
-
+    "notebook_output_all": |
+        {{ super() }}
 
     "new_blocks": |
         {% block nboutput -%}

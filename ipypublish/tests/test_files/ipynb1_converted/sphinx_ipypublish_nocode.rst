@@ -8,3 +8,17 @@ a title
 =======
 
 some text
+
+.. nboutput:: ansi
+
+    .. rst-class:: highlight
+
+    .. raw:: html
+
+        <pre>
+        1
+        </pre>
+
+    .. raw:: latex
+
+        1

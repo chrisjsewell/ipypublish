@@ -188,14 +188,14 @@ def test_publish_complex_rst(ipynb_folder_with_external):
 
     """
     input_folder = ipynb_folder_with_external["input_folder"]
-    expected = ipynb_folder_with_external["sphinx_ipypublish_main"]
+    expected = ipynb_folder_with_external["sphinx_ipypublish_all"]
 
     basename = os.path.basename(input_folder)
     rst_path = os.path.join(input_folder,
                             basename + '.rst')
 
     publish(input_folder,
-            conversion="sphinx_ipypublish_main",
+            conversion="sphinx_ipypublish_all",
             outpath=input_folder)
     assert os.path.exists(rst_path)
     compare_rst_files(expected, rst_path)
@@ -257,6 +257,9 @@ def compare_rst_files(testpath, outpath):
             content = fobj.read()
         output.append(content)
 
+        # python 3.5 used .jpg instead of .jpeg
+        content = content.replace(".jpg", ".jpeg")
+
     test_content, out_content = output
 
     # only report differences
@@ -287,6 +290,9 @@ def compare_html_files(testpath, outpath):
         # remove script environments which can change (e.g. reveal)
         script_rgx = re.compile("\\<script\\>(.*)\\</script\\>", re.DOTALL)
         content = script_rgx.sub("<script></script>", content)
+
+        # remove trailing whitespace
+        content = "\n".join([l.rstrip() for l in content.splitlines()])
 
         output.append(content)
 
@@ -338,6 +344,10 @@ def compare_tex_files(testpath, outpath):
         # also remove all space from start of lines
         space_rgx = re.compile(r"^[\s]*", re.MULTILINE)
         content = space_rgx.sub("", content)
+
+        # remove trailing whitespace
+        content = "\n".join([l.rstrip() for l in content.splitlines()])
+
         output.append(content)
 
     test_content, out_content = output

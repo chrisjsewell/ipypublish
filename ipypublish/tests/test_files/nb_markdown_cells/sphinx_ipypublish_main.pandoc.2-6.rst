@@ -72,4 +72,3 @@ References Using @ Notation
 
 :numref:`cell-with-link-to-header`, and multiple references
 :numref:`tbl:id` and :numref:`eq:id1`
-

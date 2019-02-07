@@ -14,10 +14,10 @@ DISPLAY_DATA_PRIORITY_HTML = (
 # See nbconvert/exporters/latex.py:
 DISPLAY_DATA_PRIORITY_LATEX = (
     'text/latex',
+    'image/svg+xml',  # this requires sphinx.ext.imgconverter
     'application/pdf',
     'image/png',
     'image/jpeg',
-    'image/svg+xml',
     'text/markdown',
     'text/plain',
 )

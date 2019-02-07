@@ -5,7 +5,7 @@ import importlib
 import re
 
 from six import string_types
-import yaml  # TODO use ruamel.yaml instead?
+import ruamel.yaml as yaml
 
 # python 2/3 compatibility
 try:
@@ -83,7 +83,7 @@ def read_file_from_module(module_path, file_name, jtype,
                           logger, interp_ext=False,
                           ext_types=(
                               ("json", (".json")),
-                              ("yaml", (".yaml", ".yaml.j2")))):
+                              ("yaml", (".yaml", ".yaml.j2", "yaml.tex.j2")))):
     """load a file situated in a python module
 
     if ``interp_ext=True``:
