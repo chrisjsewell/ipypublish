@@ -1,3 +1,5 @@
 matplotlib
 pandas
 sympy
+PIL
+ipypublish
