@@ -1,5 +1,5 @@
 matplotlib
 pandas
 sympy
-PIL
+pillow
 ipypublish
