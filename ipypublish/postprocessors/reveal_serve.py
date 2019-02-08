@@ -54,7 +54,7 @@ class RevealServer(IPyPostProcessor):
 
     @property
     def logger_name(self):
-        return "reveal_server"
+        return "reveal-server"
 
     open_in_browser = Bool(
         True,

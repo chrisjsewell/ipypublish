@@ -1,4 +1,4 @@
-from ipypublish.scripts import nbmerge
+from ipypublish.convert import nbmerge
 
 
 def test_nbmerge_one_notebook(ipynb1):

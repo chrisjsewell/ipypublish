@@ -1,6 +1,7 @@
 import logging
 
 from six import string_types
+from traitlets import Bool
 from traitlets.config.configurable import LoggingConfigurable
 
 from ipypublish.utils import handle_error, pathlib
@@ -52,17 +53,22 @@ class IPyPostProcessor(LoggingConfigurable):
     def logger(self):
         return logging.getLogger(self.logger_name)
 
+    skip_mime = Bool(
+        True,
+        help="if False, raise a TypeError if the mimetype is not allowed, "
+        "else return without processing").tag(config=True)
+
     def __init__(self, config=None):
         super(IPyPostProcessor, self).__init__(config=config)
 
-    def __call__(self, stream, mimetype, filepath=None):
+    def __call__(self, stream, mimetype, filepath, resources=None):
         """
         See def postprocess() ...
         """
-        self.postprocess(stream, mimetype, filepath)
+        self.postprocess(stream, mimetype, filepath, resources)
 
     def postprocess(self, stream, mimetype, filepath,
-                    resources=None, skip_mime=False):
+                    resources=None):
         """ Post-process output.
 
         Parameters
@@ -76,9 +82,6 @@ class IPyPostProcessor(LoggingConfigurable):
             the path does not have to exist, but must be absolute
         resources: None or dict
             a resources dict, output from exporter.from_notebook_node   
-        skip_mime:
-            if False, raise a TypeError if the mimetype is not allowed,
-            else return without processing
 
         Returns
         -------
@@ -89,7 +92,7 @@ class IPyPostProcessor(LoggingConfigurable):
 
         if (self.allowed_mimetypes is not None
                 and mimetype not in self.allowed_mimetypes):
-            if not skip_mime:
+            if not self.skip_mime:
                 self.handle_error(
                     "the mimetype {0} is not in the allowed list: {1}".format(
                         mimetype, self.allowed_mimetypes),

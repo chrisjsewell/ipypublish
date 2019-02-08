@@ -1,4 +1,4 @@
-from ipypublish.scripts import nbmerge
+from ipypublish.convert import nbmerge
 from ipypublish.convert.config_manager import (
     create_exporter_cls, str_to_jinja
 )

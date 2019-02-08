@@ -70,6 +70,17 @@ setup(
         'console_scripts': [
             'nbpublish = ipypublish.frontend.nbpublish:run',
             'nbpresent = ipypublish.frontend.nbpresent:run'
+        ],
+        'ipypublish.postprocessors': [
+            'remove-blank-lines = ipypublish.postprocessors.stream_modify:RemoveBlankLines',
+            'remove-trailing-space = ipypublish.postprocessors.stream_modify:RemoveTrailingSpace',
+            'filter-output-files = ipypublish.postprocessors.stream_modify:FilterOutputFiles',
+            'fix-slide-refs = ipypublish.postprocessors.stream_modify:FixSlideReferences',
+            'pdf-export = ipypublish.postprocessors.pdfexport:PDFExport',
+            'write-text-file = ipypublish.postprocessors.file_actions:WriteTextFile',
+            'remove-folder = ipypublish.postprocessors.file_actions:RemoveFolder',
+            'write-resource-files = ipypublish.postprocessors.file_actions:WriteResourceFiles',
+            'copy-resource-paths = ipypublish.postprocessors.file_actions:CopyResourcePaths'
         ]
     }
 )

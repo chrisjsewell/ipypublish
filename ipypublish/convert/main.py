@@ -4,6 +4,8 @@ from typing import List, Tuple, Union, Dict  # noqa: F401
 import logging
 import os
 import time
+import pkg_resources
+
 from traitlets.config import Config
 from jsonextended import edict
 from six import string_types
@@ -11,12 +13,11 @@ from six import string_types
 
 import ipypublish
 from ipypublish.utils import pathlib, handle_error, get_valid_filename
-from ipypublish.scripts.nbmerge import merge_notebooks
+from ipypublish.convert.nbmerge import merge_notebooks
 from ipypublish.convert.config_manager import (get_export_config_path,
                                                load_export_config,
                                                load_template,
                                                create_exporter_cls)
-from ipypublish.postprocessors.pdfexport import PDFExport
 
 logger = logging.getLogger("conversion")
 
@@ -134,63 +135,43 @@ def publish(ipynb_path,
     exporter, stream, resources = export_notebook(final_nb, exporter_cls,
                                                   config, jinja_template)
 
-    main_filepath = os.path.join(outdir, ipynb_name + exporter.file_extension)
-
     # postprocess results
-    from ipypublish.postprocessors.stream_modify import (
-        RemoveBlankLines, RemoveTrailingSpace,
-        FilterOutputFiles, FixSlideReferences
-    )
+    # TODO allow for override of default config and postprocessors
+    main_filepath = os.path.join(outdir, ipynb_name + exporter.file_extension)
+    postproc_config = Config({
+        "PDFExport": {
+            "files_folder": files_folder,
+            "convert_in_temp": pdf_in_temp,
+            "debug_mode": pdf_debug,
+            "open_in_browser": launch_browser,
+            "skip_mime": False
+        },
+        "CopyResourcePaths": {
+            "files_folder": files_folder
+        }
+    })
 
-    for proc_class in (RemoveBlankLines, RemoveTrailingSpace,
-                       FilterOutputFiles, FixSlideReferences):
-        stream, main_filepath, resources = proc_class().postprocess(
-            stream, exporter.output_mimetype, main_filepath,
-            resources, skip_mime=True)
+    post_proc_names = [
+        'remove-blank-lines',
+        'remove-trailing-space',
+        'filter-output-files',
+        'fix-slide-refs']
+    if not dry_run:
+        if clear_existing:
+            post_proc_names.append('remove-folder')
+        post_proc_names.append('write-text-file')
+        if dump_files or create_pdf:
+            post_proc_names.extend(
+                ['write-resource-files', 'copy-resource-paths'])
+        if create_pdf:
+            post_proc_names.append('pdf-export')
 
-    if dry_run:
-        return outpath, exporter
-
-    from ipypublish.postprocessors.file_actions import (
-        RemoveFolder, WriteTextFile, WriteResourceFiles, CopyResourcePaths
-    )
-
-    if clear_existing:
-        proc = RemoveFolder()
-        proc.files_folder = files_folder
+    for post_proc_name in post_proc_names:
+        proc_class = find_postproc(post_proc_name)
+        proc = proc_class(postproc_config)
         stream, main_filepath, resources = proc.postprocess(
             stream, exporter.output_mimetype, main_filepath,
-            resources, skip_mime=True)
-
-    proc = WriteTextFile()
-    stream, main_filepath, resources = proc.postprocess(
-        stream, exporter.output_mimetype, main_filepath,
-        resources, skip_mime=True)
-
-    if dump_files or create_pdf:
-
-        proc = WriteResourceFiles()
-        stream, main_filepath, resources = proc.postprocess(
-            stream, exporter.output_mimetype, main_filepath,
-            resources, skip_mime=True)
-
-        proc = CopyResourcePaths()
-        proc.files_folder = files_folder
-        stream, main_filepath, resources = proc.postprocess(
-            stream, exporter.output_mimetype, main_filepath,
-            resources, skip_mime=True)
-
-    # create pdf
-    if create_pdf:
-        export_pdf = PDFExport()
-
-        # TODO these should be passed as a configurable
-        export_pdf.files_folder = files_folder
-        export_pdf.convert_in_temp = pdf_in_temp
-        export_pdf.debug_mode = pdf_debug
-        export_pdf.open_in_browser = launch_browser
-
-        export_pdf.postprocess(stream, exporter.output_mimetype, main_filepath)
+            resources)
 
     logger.info('process finished successfully')
 
@@ -257,6 +238,33 @@ def export_notebook(final_nb, exporter_cls, config, jinja_template):
 
     body, resources = exporter.from_notebook_node(final_nb)
     return exporter, body, resources
+
+
+def find_postproc(name):
+    """find a postprocessor entry point by name"""
+    entry_points = list(pkg_resources.iter_entry_points(
+        'ipypublish.postprocessors', name))
+    if len(entry_points) == 0:
+        handle_error(
+            "The ipypublish.postprocessors plugin "
+            "{} could not be found".format(name),
+            pkg_resources.ResolutionError, logger)
+    elif len(entry_points) != 1:
+        # default to the original
+        oentry_points = [ep for ep in entry_points
+                         if ep.module_name.startswith("ipypublish")]
+        if len(oentry_points) != 1:
+            handle_error(
+                "Multiple ipypublish.postprocessors plugins found for "
+                "{0}: {1}".format(name, entry_points),
+                pkg_resources.ResolutionError, logger)
+        logger.info(
+            "Multiple ipypublish.postprocessors plugins found for "
+            "{0}, defaulting to the ipypublish version".format(name))
+        entry_point = oentry_points[0]
+    else:
+        entry_point = entry_points[0]
+    return entry_point.load()
 
 
 if __name__ == "__main__":
