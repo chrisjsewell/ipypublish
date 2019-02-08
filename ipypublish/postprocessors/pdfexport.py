@@ -113,7 +113,7 @@ class PDFExport(IPyPostProcessor):
             view_pdf = VIEW_PDF.format(
                 pdf_name=texname.replace(' ', '%20') + '.pdf')
             view_pdf_path = texpath.parent.joinpath(texname + '.view_pdf.html')
-            with view_pdf_path.open('w') as fobj:
+            with view_pdf_path.open('w', encoding='utf-8') as fobj:
                 fobj.write(view_pdf)
         else:
             self.handle_error(
