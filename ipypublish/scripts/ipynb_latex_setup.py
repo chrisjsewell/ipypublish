@@ -62,9 +62,13 @@ if _mpl_present:
     mpl.rcParams['lines.markersize'] = 8
     mpl.rcParams['legend.fontsize'] = 14
     mpl.rcParams['text.usetex'] = True
+    # TODO use matplotlib.font_manager.get_fontconfig_fonts(fontext='ttf')
+    # names = [matplotlib.font_manager.FontProperties(fname=fname).get_name() for fname in flist]
+    # if "serif" in names ...
     mpl.rcParams['font.family'] = "serif"
     mpl.rcParams['font.serif'] = "cm"
     mpl.rcParams['text.latex.preamble'] = r"\usepackage{subdepth}, \usepackage{type1cm}"
+    # matplotlib.verbose.level = 'debug-annoying'
 
 # PANDAS
 # ======

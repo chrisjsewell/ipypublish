@@ -180,8 +180,8 @@ Equations (with ipython or sympy)
     :name: code:example_sym
     :caption: The plotting code for a sympy equation (:eq:`eqn:example_sympy`).
 
-    f = sym.Function('f')
-    y,n = sym.symbols(r'y \alpha')
+    y = sym.Function('y')
+    n = sym.symbols(r'\alpha')
     f = y(n)-2*y(n-1/sym.pi)-5*y(n-2)
     sym.rsolve(f,y(n),[1,4])
 

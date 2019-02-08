@@ -114,6 +114,11 @@ def parse_options(sys_args, program):
         pdf_group.add_argument("-pbug", "--pdf-debug", action="store_true",
                                help='run latexmk in interactive mode')
 
+        view_group = parser.add_argument_group('view output')
+        view_group.add_argument(
+            "-lb", "--launch-browser", action="store_true",
+            help='open the output in an available web-browser')
+
     debug_group = parser.add_argument_group('debugging')
     debug_group.add_argument("-log", "--log-level", type=str, default='info',
                              choices=['debug', 'info', 'warning', 'error'],

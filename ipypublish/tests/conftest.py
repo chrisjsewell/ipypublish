@@ -2,6 +2,7 @@ import os
 import io
 import shutil
 import tempfile
+import logging
 import pytest
 
 from ipypublish.utils import pathlib
@@ -23,12 +24,12 @@ def ipynb1():
 def ipynb2():
     return pathlib.Path(os.path.join(TEST_FILES_DIR, 'ipynb2.ipynb'))
 
-
 @pytest.fixture
 def nb_markdown_cells():
 
     # Table format has changed through the versions
     from pandocxnos import init as get_pandoc_version
+    logging.debug(get_pandoc_version())
     if get_pandoc_version() < '1.18':
         expected_ltx = 'latex_ipypublish_main.pandoc.1-12.tex'
         expected_rst = 'sphinx_ipypublish_main.pandoc.1-12.rst'
@@ -88,13 +89,14 @@ def ipynb_folder_with_external(temp_folder):
 
     # Table format has changed through the versions
     from pandocxnos import init as get_pandoc_version
+    logging.debug(get_pandoc_version())
     if get_pandoc_version() < '1.18':
         sphinx_ipypublish_all = 'sphinx_ipypublish_all.pandoc.1-12.rst'
     else:
         if get_pandoc_version() < '2.6':
-            sphinx_ipypublish_all = 'sphinx_ipypublish_all.pandoc.2-6.rst'
-        else:
             sphinx_ipypublish_all = 'sphinx_ipypublish_all.pandoc.2-2.rst'
+        else:
+            sphinx_ipypublish_all = 'sphinx_ipypublish_all.pandoc.2-6.rst'
 
     folder = os.path.join(temp_folder, "ipynb_with_external")
     os.makedirs(folder)

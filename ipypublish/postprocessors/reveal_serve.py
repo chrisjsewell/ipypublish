@@ -15,7 +15,9 @@ import webbrowser
 from tornado import web, ioloop, httpserver, log
 from tornado.httpclient import AsyncHTTPClient
 from traitlets import Bool, Unicode, Int
-from traitlets.config.configurable import LoggingConfigurable
+from ipypublish.postprocessors.base import IPyPostProcessor
+
+logger = logging.getLogger("reveal_server")
 
 
 class ProxyHandler(web.RequestHandler):
@@ -40,11 +42,18 @@ class ProxyHandler(web.RequestHandler):
         self.finish(response.body)
 
 
-class RevealServer(LoggingConfigurable):
+class RevealServer(IPyPostProcessor):
     """Post processor designed to serve files
 
     Proxies reveal.js requests to a CDN if no local reveal.js is present
     """
+    @property
+    def allowed_mimetypes(self):
+        return ("text/html")
+
+    @property
+    def requires_file(self):
+        return True
 
     open_in_browser = Bool(
         True,
@@ -65,13 +74,10 @@ class RevealServer(LoggingConfigurable):
     port = Int(
         8000, help="port for the server to listen on.").tag(config=True)
 
-    def serve(self, input):
+    def run_postprocess(self, stream, filepath):
         """Serve the build directory with a webserver."""
-        if not os.path.exists(input):
-            logging.error('the html path does not exist: {}'.format(input))
-            raise IOError('the html path does not exist: {}'.format(input))
 
-        dirname, filename = os.path.split(input)
+        dirname, filename = os.path.split(str(filepath))
 
         handlers = [
             (r"/(.+)", web.StaticFileHandler, {'path': dirname}),
@@ -84,12 +90,12 @@ class RevealServer(LoggingConfigurable):
         elif os.path.isdir(os.path.join(dirname, self.reveal_prefix)):
             # reveal prefix exists
             self.log.info("Serving local %s", self.reveal_prefix)
-            logging.info("Serving local %s", self.reveal_prefix)
+            logger.info("Serving local %s", self.reveal_prefix)
         else:
             self.log.info("Redirecting %s requests to %s",
                           self.reveal_prefix, self.reveal_cdn)
-            logging.info("Redirecting %s requests to %s",
-                         self.reveal_prefix, self.reveal_cdn)
+            logger.info("Redirecting %s requests to %s",
+                        self.reveal_prefix, self.reveal_cdn)
             handlers.insert(0, (r"/(%s)/(.*)" %
                                 self.reveal_prefix, ProxyHandler))
 
@@ -108,33 +114,35 @@ class RevealServer(LoggingConfigurable):
         for port_attempt in port_attempts:
             try:
                 url = "http://%s:%i/%s" % (self.ip, self.port, filename)
-                logging.info("Attempting to serve at %s" % url)
+                logger.info("Attempting to serve at %s" % url)
                 http_server.listen(self.port, address=self.ip)
                 break
             except IOError:
                 self.port += 1
         if port_attempt == port_attempts[-1]:
-            logging.error(
+            self.handle_error(
                 'no port available to launch slides on, '
-                'try closing some slideshows')
-            raise IOError(
-                'no port available to launch slides on, '
-                'try closing some slideshows')
+                'try closing some slideshows',
+                IOError, logger)
 
-        logging.info("Serving your slides at %s" % url)
-        logging.info("Use Control-C to stop this server")
+        logger.info("Serving your slides at %s" % url)
+        logger.info("Use Control-C to stop this server")
 
         # don't let people press ctrl-z, which leaves port open
         def handler(signum, frame):
-            logging.info('Control-Z pressed, but ignored, use Control-C!')
+            logger.info('Control-Z pressed, but ignored, use Control-C!')
 
         signal.signal(signal.SIGTSTP, handler)
 
         if self.open_in_browser:
+            #  2 opens the url in a new tab
             webbrowser.open(url, new=2)
+
         try:
             ioloop.IOLoop.instance().start()
         except KeyboardInterrupt:
             # dosen't look like line below is necessary
             # ioloop.IOLoop.instance().stop()
-            logging.info("\nInterrupted")
+            logger.info("\nInterrupted")
+
+        return stream, filepath

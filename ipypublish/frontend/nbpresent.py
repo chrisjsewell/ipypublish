@@ -5,7 +5,7 @@ import sys
 
 from ipypublish.frontend.shared import parse_options
 from ipypublish.convert.main import publish
-from ipypublish.scripts.reveal_serve import RevealServer
+from ipypublish.postprocessors.reveal_serve import RevealServer
 
 logger = logging.getLogger("nbpresent")
 
@@ -80,8 +80,8 @@ def nbpresent(inpath,
     if outpath:
         server = RevealServer()
         if not dry_run:
-            server.serve(inpath)
-   
+            server.postprocess("", "text/html", outpath)
+
     return 0
 
 

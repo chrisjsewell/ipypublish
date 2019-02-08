@@ -19,7 +19,7 @@ from ipypublish.convert.config_manager import (get_export_config_path,
                                                load_export_config,
                                                load_template,
                                                create_exporter_cls)
-from ipypublish.scripts.pdfexport import export_pdf
+from ipypublish.postprocessors.pdfexport import PDFExport
 
 logger = logging.getLogger("conversion")
 
@@ -33,6 +33,7 @@ def publish(ipynb_path,
             create_pdf=False,
             pdf_in_temp=False,
             pdf_debug=False,
+            launch_browser=False,
             plugin_folder_paths=(),
             dry_run=False):
     """ convert one or more Jupyter notebooks to a published format
@@ -62,6 +63,8 @@ def publish(ipynb_path,
         whether to run pdf conversion in a temporary folder
     pdf_debug: bool
         if True, run latexmk in interactive mode
+    pdf_browser: bool
+        if True, launch webrowser of pdf
     dry_run: bool
         if True, do not create any files
 
@@ -90,7 +93,7 @@ def publish(ipynb_path,
     logger.info('with conversion configuration: {0}'.format(conversion))
 
     # merge all notebooks (this handles checking ipynb_path exists)
-    # TODO allow notebooks to remain separate 
+    # TODO allow notebooks to remain separate
     # (would require creating a main.tex with the preamble in etc )
     final_nb, meta_path = merge_notebooks(ipynb_path,
                                           ignore_prefix=ignore_prefix)
@@ -131,11 +134,11 @@ def publish(ipynb_path,
 
     # run nbconvert
     logger.info('running nbconvert')
-    exporter, body, resources = export_notebook(final_nb, exporter_cls,
-                                                config, jinja_template)
+    exporter, stream, resources = export_notebook(final_nb, exporter_cls,
+                                                  config, jinja_template)
 
     # postprocess results
-    body, resources, internal_files = postprocess_nb(body, resources)
+    stream, resources, internal_files = postprocess_nb(stream, resources)
 
     if dry_run:
         return outpath, exporter
@@ -143,23 +146,23 @@ def publish(ipynb_path,
     # write results
     logger.info("writing results")
     main_file_name = ipynb_name + exporter.file_extension
-    outpath, outfilespath = write_output(body, resources, outdir,
-                                         main_file_name,
-                                         dump_files or create_pdf,
-                                         files_folder, internal_files,
-                                         clear_existing)
+    outpath, rel_files_folder = write_output(stream, resources, outdir,
+                                             main_file_name,
+                                             dump_files or create_pdf,
+                                             files_folder, internal_files,
+                                             clear_existing)
 
     # create pdf
-    if create_pdf and exporter.output_mimetype == 'text/latex':
-        logger.info('running pdf conversion')
+    if create_pdf:
+        export_pdf = PDFExport()
 
-        if not export_pdf(outpath, outdir=outdir,
-                          files_path=outfilespath,
-                          convert_in_temp=pdf_in_temp,
-                          html_viewer=True,
-                          debug_mode=pdf_debug):
-            handle_error('pdf export failed, try running with pdf_debug=True',
-                         RuntimeError, logger)
+        # TODO these should be passed as a configurable
+        export_pdf.files_folder = rel_files_folder
+        export_pdf.convert_in_temp = pdf_in_temp
+        export_pdf.debug_mode = pdf_debug
+        export_pdf.open_in_browser = launch_browser
+
+        export_pdf.postprocess(stream, exporter.output_mimetype, outpath)
 
     logger.info('process finished successfully')
 
@@ -265,6 +268,7 @@ def write_output(body, resources, outdir, main_file_name, output_external,
 
     # output main file
     outpath = os.path.join(outdir, main_file_name)
+    rel_files_folder = files_folder
     outfilespath = os.path.join(outdir, files_folder)
 
     logger.info('outputting converted file to: {}'.format(outpath))
@@ -282,7 +286,7 @@ def write_output(body, resources, outdir, main_file_name, output_external,
         elif resources.get('external_file_paths', False) or internal_files:
             os.makedirs(outfilespath)
         else:
-            outfilespath = None
+            rel_files_folder = None
 
         for internal_path, fcontents in internal_files.items():
             with open(os.path.join(outdir, internal_path), "wb") as fh:
@@ -292,9 +296,9 @@ def write_output(body, resources, outdir, main_file_name, output_external,
                             os.path.join(outfilespath,
                                          os.path.basename(external_path)))
     else:
-        outfilespath = None
+        rel_files_folder = None
 
-    return outpath, outfilespath
+    return outpath, rel_files_folder
 
 
 if __name__ == "__main__":

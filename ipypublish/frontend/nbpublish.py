@@ -13,8 +13,11 @@ def nbpublish(ipynb_path,
               outformat='latex_ipypublish_main',
               outpath=None, dump_files=True,
               ignore_prefix='_', clear_files=False,
-              create_pdf=False, pdf_in_temp=False, pdf_debug=False,
-              log_level='INFO', dry_run=False, print_traceback=False,
+              create_pdf=False,
+              pdf_in_temp=False, pdf_debug=False,
+              launch_browser=False,
+              log_level='INFO', dry_run=False,
+              print_traceback=False,
               export_paths=()):
     """ convert one or more Jupyter notebooks to a published format
 
@@ -79,6 +82,7 @@ def nbpublish(ipynb_path,
                 ignore_prefix=ignore_prefix, clear_existing=clear_files,
                 create_pdf=create_pdf, pdf_in_temp=pdf_in_temp,
                 pdf_debug=pdf_debug, dry_run=dry_run,
+                launch_browser=launch_browser,
                 plugin_folder_paths=export_paths)
     except Exception as err:
         logger.error("Run Failed: {}".format(err))

@@ -4,6 +4,8 @@ import traitlets as traits
 from nbconvert.preprocessors import Preprocessor
 from nbformat.notebooknode import NotebookNode
 
+logger = logging.getLogger("captions")
+
 
 class LatexCaptions(Preprocessor):
     """ a preprocessor to:
@@ -19,7 +21,7 @@ class LatexCaptions(Preprocessor):
 
     def preprocess(self, nb, resources):
 
-        logging.info('extracting caption cells')
+        logger.info('extracting caption cells')
 
         # extract captions
         final_cells = []
@@ -62,7 +64,7 @@ class LatexCaptions(Preprocessor):
                 for key in cell.metadata.ipub:
                     if hasattr(cell.metadata.ipub[key], 'label'):
                         if cell.metadata.ipub[key]['label'] in captions:
-                            logging.debug('replacing caption for: {}'.format(cell.metadata.ipub[key]['label']))
+                            logger.debug('replacing caption for: {}'.format(cell.metadata.ipub[key]['label']))
                             cell.metadata.ipub[key]['caption'] = captions[cell.metadata.ipub[key]['label']]
 
                     # add float type/number prefix to caption, if required

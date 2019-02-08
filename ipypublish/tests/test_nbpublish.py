@@ -6,27 +6,8 @@ from difflib import context_diff
 import pytest
 
 from ipypublish.convert.main import publish
-from ipypublish.scripts import pdfexport
 from ipypublish.convert.config_manager import iter_all_export_paths
 from ipypublish.tests import TEST_FILES_DIR
-
-
-def test_pdf_export(temp_folder):
-
-    tex_content = """
-\\documentclass{article}
-\\begin{document}
-hallo world
-\\end{document}
-"""
-
-    tex_path = os.path.join(temp_folder, 'test.tex')
-    pdf_path = os.path.join(temp_folder, 'test.pdf')
-
-    with open(tex_path, 'w') as f:
-        f.write(tex_content)
-    pdfexport.export_pdf(tex_path, temp_folder)
-    assert os.path.exists(pdf_path)
 
 
 def test_publish_ipynb1_latex(temp_folder, ipynb1):
