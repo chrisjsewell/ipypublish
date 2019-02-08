@@ -211,13 +211,18 @@ def test_publish_run_all_plugins(temp_folder, ipynb1,
     outpath, exporter = publish(
         ipynb1, conversion=plugin_name, outpath=temp_folder)
 
-    if plugin_name in ["python_with_meta_stream"]:
-        return
-    
     outname = os.path.splitext(ipynb1.name)[0] + exporter.file_extension
     outfile = os.path.join(temp_folder, outname)
     testfile = os.path.join(TEST_FILES_DIR, "ipynb1_converted",
                             plugin_name + exporter.file_extension)
+    
+    if plugin_name in ["python_with_meta_stream"]:
+        return
+    if plugin_name in ["sphinx_ipypublish_all.run"]:
+        assert os.path.join(temp_folder, "build", "html",
+                            os.path.splitext(ipynb1.name)[0] + ".html")
+        return
+    
     assert os.path.exists(outfile), "could not find: {} for {}".format(
         outfile, plugin_name)
     assert os.path.exists(testfile), "could not find: {} for {}".format(
