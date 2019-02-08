@@ -210,6 +210,10 @@ def test_publish_run_all_plugins(temp_folder, ipynb1,
 
     outpath, exporter = publish(
         ipynb1, conversion=plugin_name, outpath=temp_folder)
+
+    if plugin_name in ["python_with_meta_stream"]:
+        return
+    
     outname = os.path.splitext(ipynb1.name)[0] + exporter.file_extension
     outfile = os.path.join(temp_folder, outname)
     testfile = os.path.join(TEST_FILES_DIR, "ipynb1_converted",
@@ -224,7 +228,7 @@ def test_publish_run_all_plugins(temp_folder, ipynb1,
     elif exporter.output_mimetype == 'text/html':
         compare_html_files(testfile, outfile)
     elif exporter.output_mimetype == 'text/restructuredtext':
-        pass  # TODO test rst output
+        compare_rst_files(testfile, outfile)
 
 
 def compare_rst_files(testpath, outpath):

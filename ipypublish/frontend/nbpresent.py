@@ -68,16 +68,14 @@ def nbpresent(inpath,
                                         ignore_prefix=ignore_prefix,
                                         clear_existing=clear_files,
                                         create_pdf=False, dry_run=dry_run,
-                                        plugin_folder_paths=export_paths)
+                                        plugin_folder_paths=export_paths,
+                                        serve_html=True)
         except Exception as err:
             logger.error("Run Failed: {}".format(err))
             if print_traceback:
                 raise err
             return 1
     else:
-        outpath = inpath
-
-    if outpath:
         server = RevealServer()
         if not dry_run:
             server.postprocess("", "text/html", outpath)

@@ -77,10 +77,12 @@ setup(
             'filter-output-files = ipypublish.postprocessors.stream_modify:FilterOutputFiles',
             'fix-slide-refs = ipypublish.postprocessors.stream_modify:FixSlideReferences',
             'pdf-export = ipypublish.postprocessors.pdfexport:PDFExport',
+            'write-stream = ipypublish.postprocessors.to_stream:WriteStream',
             'write-text-file = ipypublish.postprocessors.file_actions:WriteTextFile',
             'remove-folder = ipypublish.postprocessors.file_actions:RemoveFolder',
             'write-resource-files = ipypublish.postprocessors.file_actions:WriteResourceFiles',
-            'copy-resource-paths = ipypublish.postprocessors.file_actions:CopyResourcePaths'
+            'copy-resource-paths = ipypublish.postprocessors.file_actions:CopyResourcePaths',
+            'reveal-server = ipypublish.postprocessors.reveal_serve:RevealServer'
         ]
     }
 )

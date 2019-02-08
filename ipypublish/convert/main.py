@@ -33,7 +33,8 @@ def publish(ipynb_path,
             pdf_debug=False,
             launch_browser=False,
             plugin_folder_paths=(),
-            dry_run=False):
+            dry_run=False,
+            serve_html=False):
     """ convert one or more Jupyter notebooks to a published format
 
     paths can be string of an existing file or folder,
@@ -74,6 +75,9 @@ def publish(ipynb_path,
         the exporter used
 
     """
+    # TODO control logging and dry_run, etc through config, and related
+    # TODO turn whole thing into a traitlets Application
+
     # setup the input and output paths
     if isinstance(ipynb_path, string_types):
         ipynb_path = pathlib.Path(ipynb_path)
@@ -93,10 +97,71 @@ def publish(ipynb_path,
     # merge all notebooks (this handles checking ipynb_path exists)
     # TODO allow notebooks to remain separate
     # (would require creating a main.tex with the preamble in etc )
+    # Could make everything a 'PyProcess', with support for multiple streams
     final_nb, meta_path = merge_notebooks(ipynb_path,
                                           ignore_prefix=ignore_prefix)
     logger.debug('notebooks meta path: {}'.format(meta_path))
 
+    # set defaults
+    default_pproc_config = {
+        "PDFExport": {
+            "files_folder": files_folder,
+            "convert_in_temp": pdf_in_temp,
+            "debug_mode": pdf_debug,
+            "open_in_browser": launch_browser,
+            "skip_mime": False
+        },
+        "CopyResourcePaths": {
+            "files_folder": files_folder
+        }
+    }
+
+    default_pprocs = [
+        'remove-blank-lines',
+        'remove-trailing-space',
+        'filter-output-files',
+        'fix-slide-refs']
+    if not dry_run:
+        if clear_existing:
+            default_pprocs.append('remove-folder')
+        default_pprocs.append('write-text-file')
+        if dump_files or create_pdf or serve_html:
+            default_pprocs.extend(
+                ['write-resource-files', 'copy-resource-paths'])
+        if create_pdf:
+            default_pprocs.append('pdf-export')
+        elif serve_html:
+            default_pprocs.append('reveal-server')
+
+    # load configuration file
+    exporter_cls, jinja_template, econfig, pprocs, pconfig = load_config_file(
+        conversion, plugin_folder_paths,
+        default_pprocs, default_pproc_config,
+        {"${meta_path}": str(meta_path), "${files_path}": str(files_folder)})
+
+    # run nbconvert
+    logger.info('running nbconvert')
+    exporter, stream, resources = export_notebook(final_nb, exporter_cls,
+                                                  econfig, jinja_template)
+
+    # postprocess results
+    main_filepath = os.path.join(outdir, ipynb_name + exporter.file_extension)
+
+    for post_proc_name in pprocs:
+        proc_class = find_postproc(post_proc_name)
+        proc = proc_class(pconfig)
+        stream, main_filepath, resources = proc.postprocess(
+            stream, exporter.output_mimetype, main_filepath,
+            resources)
+
+    logger.info('process finished successfully')
+
+    return outpath, exporter
+
+
+def load_config_file(conversion, plugin_folder_paths,
+                     default_pprocs, default_pproc_config,
+                     replacements):
     # find conversion configuration
     logger.info('finding conversion configuration: {}'.format(conversion))
     export_config_path = None
@@ -125,60 +190,17 @@ def publish(ipynb_path,
     logger.info('creating template')
     template_name = "template_file"
     jinja_template = load_template(template_name, data["template"])
-    logger.info('creating nbconvert configuration')
-    config = create_config(data["exporter"], template_name,
-                           {"${meta_path}": str(meta_path),
-                            "${files_path}": str(files_folder)})
+    logger.info('creating process configuration')
+    export_config = create_export_config(data["exporter"], template_name,
+                                         replacements)
+    pprocs, pproc_config = create_pproc_config(
+        data.get("postprocessors", {}), default_pprocs, default_pproc_config,
+        replacements)
 
-    # run nbconvert
-    logger.info('running nbconvert')
-    exporter, stream, resources = export_notebook(final_nb, exporter_cls,
-                                                  config, jinja_template)
-
-    # postprocess results
-    # TODO allow for override of default config and postprocessors
-    main_filepath = os.path.join(outdir, ipynb_name + exporter.file_extension)
-    postproc_config = Config({
-        "PDFExport": {
-            "files_folder": files_folder,
-            "convert_in_temp": pdf_in_temp,
-            "debug_mode": pdf_debug,
-            "open_in_browser": launch_browser,
-            "skip_mime": False
-        },
-        "CopyResourcePaths": {
-            "files_folder": files_folder
-        }
-    })
-
-    post_proc_names = [
-        'remove-blank-lines',
-        'remove-trailing-space',
-        'filter-output-files',
-        'fix-slide-refs']
-    if not dry_run:
-        if clear_existing:
-            post_proc_names.append('remove-folder')
-        post_proc_names.append('write-text-file')
-        if dump_files or create_pdf:
-            post_proc_names.extend(
-                ['write-resource-files', 'copy-resource-paths'])
-        if create_pdf:
-            post_proc_names.append('pdf-export')
-
-    for post_proc_name in post_proc_names:
-        proc_class = find_postproc(post_proc_name)
-        proc = proc_class(postproc_config)
-        stream, main_filepath, resources = proc.postprocess(
-            stream, exporter.output_mimetype, main_filepath,
-            resources)
-
-    logger.info('process finished successfully')
-
-    return outpath, exporter
+    return exporter_cls, jinja_template, export_config, pprocs, pproc_config
 
 
-def create_config(exporter_data, template_name, replacements):
+def create_export_config(exporter_data, template_name, replacements):
     # type: (dict, Dict[str, str]) -> Config
     config = {}
     exporter_name = exporter_data["class"].split(".")[-1]
@@ -215,6 +237,28 @@ def create_config(exporter_data, template_name, replacements):
     ] = files_path + '/{unique_key}_{cell_index}_{index}{extension}'
 
     return _dict_to_config(config, True)
+
+
+def create_pproc_config(
+        pproc_data, default_pprocs, default_pproc_config, replacements):
+    if "order" in pproc_data:
+        pprocs_list = pproc_data["order"]
+    else:
+        pprocs_list = default_pprocs
+
+    pproc_config = Config(default_pproc_config)
+
+    if "config" in pproc_data:
+        override_config = pproc_data["config"]
+        flat = edict.flatten(override_config)
+        for instr, outstr in replacements.items():
+            for key in flat:
+                if isinstance(flat[key], string_types):
+                    flat[key] = flat[key].replace(instr, outstr)
+        override_config = edict.unflatten(flat)
+        pproc_config.update(pproc_config)
+
+    return pprocs_list, pproc_config
 
 
 def _dict_to_config(config, unflatten=True):

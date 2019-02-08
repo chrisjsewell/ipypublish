@@ -39,4 +39,3 @@ some text
         % cells and some other stuff (e.g. bullet lists) following ANSI cells.
         % See https://github.com/sphinx-doc/sphinx/issues/3594
         \relax
-
