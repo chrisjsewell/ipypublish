@@ -22,7 +22,7 @@ class PDFExport(IPyPostProcessor):
         return ("text/latex")
 
     @property
-    def requires_file(self):
+    def requires_path(self):
         return True
 
     @property
@@ -30,8 +30,9 @@ class PDFExport(IPyPostProcessor):
         return "pdf-export"
 
     files_folder = Unicode(
-        None, allow_none=True,
-        help="the path (relative to the main file path) of external files"
+        "_static",
+        help="the path (relative to the main file path) "
+        "containing external files"
     ).tag(config=True)
 
     convert_in_temp = Bool(
@@ -70,26 +71,24 @@ class PDFExport(IPyPostProcessor):
 
     def _export_pdf(self, texpath):
 
+        if not texpath.exists():
+            self.handle_error(
+                'the target file path does not exist: {}'.format(
+                    texpath), IOError)
+
         texname = os.path.splitext(texpath.name)[0]
-        # TODO outdir was originally passed, but would this ever be different
+        # NOTE outdir was originally passed, but would this ever be different
         # to the texpath's parent
 
-        if self.files_folder is not None:
-            abs_files_path = texpath.parent.joinpath(self.files_folder)
-            self.logger.info(abs_files_path)
-            if not abs_files_path.exists():
-                self.handle_error(
-                    'the external folder path does not exist: {}'.format(
-                        abs_files_path), IOError, self.logger)
-            if not abs_files_path.is_dir():
-                self.handle_error(
-                    'the external folder path is not a directory: {}'.format(
-                        abs_files_path), IOError, self.logger)
-        else:
-            abs_files_path = None
+        external_files = texpath.parent.joinpath(self.files_folder)
+
+        if external_files.exists() and not external_files.is_dir():
+            self.handle_error(
+                'the external folder path is not a directory: {}'.format(
+                    external_files), IOError)
 
         self.check_exe_exists(
-            'latexmk', self.logger,
+            'latexmk',
             'requires the latexmk executable to run. '
             'See http://mg.readthedocs.io/latexmk.html#installation',
         )
@@ -98,7 +97,7 @@ class PDFExport(IPyPostProcessor):
             out_folder = tempfile.mkdtemp()
             try:
                 exitcode = self._run_latexmk(
-                    texpath, out_folder, abs_files_path)
+                    texpath, out_folder, external_files)
                 if exitcode == 0:
                     shutil.copyfile(
                         os.path.join(out_folder, texname + '.pdf'),
@@ -107,7 +106,7 @@ class PDFExport(IPyPostProcessor):
                 shutil.rmtree(out_folder)
         else:
             exitcode = self._run_latexmk(
-                texpath, str(texpath.parent), abs_files_path)
+                texpath, str(texpath.parent), external_files)
 
         if exitcode == 0:
             self.logger.info('pdf conversion complete')
@@ -121,7 +120,7 @@ class PDFExport(IPyPostProcessor):
             self.handle_error(
                 'pdf conversion failed: '
                 'Try running with pdf-debug flag',
-                RuntimeError, self.logger)
+                RuntimeError)
 
         if self.open_in_browser:
             #  2 opens the url in a new tab
@@ -129,7 +128,7 @@ class PDFExport(IPyPostProcessor):
 
         return
 
-    def _run_latexmk(self, texpath, out_folder, abs_files_path):
+    def _run_latexmk(self, texpath, out_folder, external_files):
         """ run latexmk conversion
         """
         # make sure tex file in right place
@@ -141,22 +140,22 @@ class PDFExport(IPyPostProcessor):
                 str(out_folder), texpath.name))
 
         # make sure the external files folder is in right place
-        if abs_files_path is not None:
+        if external_files.exists():
             self.logger.debug('external files folder set')
-            outfilespath = os.path.join(out_folder, str(abs_files_path.name))
-            if str(abs_files_path) != str(outfilespath):
+            outfilespath = os.path.join(out_folder, str(external_files.name))
+            if str(external_files) != str(outfilespath):
                 self.logger.debug(
                     'copying external files to: {}'.format(outfilespath))
                 if os.path.exists(outfilespath):
                     shutil.rmtree(outfilespath)
-                shutil.copytree(str(abs_files_path), str(outfilespath))
+                shutil.copytree(str(external_files), str(outfilespath))
 
         # run latexmk in correct folder
         with change_dir(out_folder):
             latexmk = ['latexmk', '-xelatex', '-bibtex', '-pdf']
             latexmk += [] if self.debug_mode else ["--interaction=batchmode"]
-            self.logger.info('running: ' + ' '.join(latexmk + ['<outpath>']))
             latexmk += [outpath]
+            self.logger.info('running: ' + ' '.join(latexmk))
 
             def log_latexmk_output(pipe):
                 for line in iter(pipe.readline, b''):

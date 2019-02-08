@@ -22,23 +22,25 @@ class IPyPostProcessor(LoggingConfigurable):
         return a list of allowed mime types
         if None, then all are allowed
 
-        Text based mime-types include: text/plain, text/latex, text/restructuredtext,
-        text/html, text/x-python, application/json, text/markdown,
-        text/asciidoc, text/yaml
+        Text based mime-types include: text/plain, text/latex, 
+        text/restructuredtext, text/html, text/x-python, application/json, 
+        text/markdown, text/asciidoc, text/yaml
 
         """
         raise NotImplementedError('allowed_mimetypes')
 
     @property
-    def requires_file(self):
+    def requires_path(self):
         """ override in subclasses
 
-        whether the stream should be output to file (if not already)
-        before processing
+        whether the prostprocessor requires the supplied filepath
+        to have an existing parent directory
 
-        return True or False
+        if True and filepath is None, will raise an IOError, otherwise,
+        will try to make the directory if it doesn't exist
+
         """
-        raise NotImplementedError('requires_file')
+        raise NotImplementedError('requires_path')
 
     @property
     def logger_name(self):
@@ -71,6 +73,7 @@ class IPyPostProcessor(LoggingConfigurable):
             the mimetype of the file
         filepath: None or str or pathlib.Path
             the path to the output file
+            the path does not have to exist, but must be absolute
         resources: None or dict
             a resources dict, output from exporter.from_notebook_node   
         skip_mime:
@@ -90,28 +93,37 @@ class IPyPostProcessor(LoggingConfigurable):
                 self.handle_error(
                     "the mimetype {0} is not in the allowed list: {1}".format(
                         mimetype, self.allowed_mimetypes),
-                    TypeError, self.logger)
+                    TypeError)
             else:
                 self.logger.debug(
                     "skipping incorrect mime type: {}".format(mimetype))
                 return stream, filepath, resources
 
-        if self.requires_file and filepath is None:
+        if self.requires_path and filepath is None:
             self.handle_error(
-                "the filepath is None, but the post-processor requires a file",
-                TypeError, self.logger)
+                "the filepath is None, "
+                "but the post-processor requires a folder",
+                IOError)
 
         if filepath is not None and isinstance(filepath, string_types):
             filepath = pathlib.Path(filepath)
 
-        if self.requires_file:
-            if filepath.exists() and not filepath.is_file():
+        if self.requires_path:
+
+            if not filepath.is_absolute():
                 self.handle_error(
-                    "the filepath is {} is a folder".format(filepath),
-                    TypeError, self.logger)
-            if not filepath.exists():
-                with filepath.open("w") as fobj:
-                    fobj.write(stream)
+                    "the post-processor requires a folder, "
+                    "but the filepath is not absolute",
+                    IOError)
+
+            if filepath.parent.exists() and not filepath.parent.is_dir():
+                self.handle_error(
+                    "the filepath's parent is not a folder: {}".format(
+                        filepath),
+                    TypeError)
+
+            if not filepath.parent.exists():
+                filepath.parent.mkdir(parents=True)
 
         if resources is None:
             resources = {}
@@ -140,18 +152,18 @@ class IPyPostProcessor(LoggingConfigurable):
         """
         raise NotImplementedError('run_postprocess')
 
-    def handle_error(self, msg, err_type, logger,
+    def handle_error(self, msg, err_type,
                      raise_msg=None, log_msg=None):
         """ handle error by logging it then raising
         """
-        handle_error(msg, err_type, logger,
+        handle_error(msg, err_type, self.logger,
                      raise_msg=raise_msg, log_msg=log_msg)
 
-    def check_exe_exists(self, name, logger, msg):
+    def check_exe_exists(self, name, error_msg):
         """ test if an executable exists
         """
         if not exe_exists('latexmk'):
-            handle_error(msg, RuntimeError, logger)
+            handle_error(error_msg, RuntimeError)
         return True
 
 

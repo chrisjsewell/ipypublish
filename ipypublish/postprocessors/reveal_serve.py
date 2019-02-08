@@ -49,7 +49,7 @@ class RevealServer(IPyPostProcessor):
         return ("text/html")
 
     @property
-    def requires_file(self):
+    def requires_path(self):
         return True
 
     @property
@@ -78,6 +78,12 @@ class RevealServer(IPyPostProcessor):
     def run_postprocess(self, stream, filepath, resources):
         """Serve the build directory with a webserver."""
 
+        if not filepath.exists():
+            self.handle_error(
+                'the target file path does not exist: {}'.format(
+                    filepath), IOError)
+
+        # TODO rewrite this as pathlib
         dirname, filename = os.path.split(str(filepath))
 
         handlers = [
@@ -124,7 +130,7 @@ class RevealServer(IPyPostProcessor):
             self.handle_error(
                 'no port available to launch slides on, '
                 'try closing some slideshows',
-                IOError, self.logger)
+                IOError)
 
         self.logger.info("Serving your slides at %s" % url)
         self.logger.info("Use Control-C to stop this server")
