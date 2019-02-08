@@ -215,14 +215,14 @@ def test_publish_run_all_plugins(temp_folder, ipynb1,
     outfile = os.path.join(temp_folder, outname)
     testfile = os.path.join(TEST_FILES_DIR, "ipynb1_converted",
                             plugin_name + exporter.file_extension)
-    
+
     if plugin_name in ["python_with_meta_stream"]:
         return
     if plugin_name in ["sphinx_ipypublish_all.run"]:
-        assert os.path.join(temp_folder, "build", "html",
-                            os.path.splitext(ipynb1.name)[0] + ".html")
+        assert os.path.exists(os.path.join(temp_folder, "build", "html",
+                                           os.path.splitext(ipynb1.name)[0] + ".html"))
         return
-    
+
     assert os.path.exists(outfile), "could not find: {} for {}".format(
         outfile, plugin_name)
     assert os.path.exists(testfile), "could not find: {} for {}".format(
@@ -248,7 +248,7 @@ def compare_rst_files(testpath, outpath):
 
         # python 3.5 used .jpg instead of .jpeg
         content = content.replace(".jpg", ".jpeg")
-        
+
         output.append(content)
 
     test_content, out_content = output
