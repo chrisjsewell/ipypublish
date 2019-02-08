@@ -31,8 +31,8 @@ setup(
             "sphinx"
         },
         "sphinx": {
-            "docutils"
             "sphinx>=1.6",
+            "docutils",
             "sphinxcontrib-bibtex"
         }
     },
@@ -82,7 +82,8 @@ setup(
             'remove-folder = ipypublish.postprocessors.file_actions:RemoveFolder',
             'write-resource-files = ipypublish.postprocessors.file_actions:WriteResourceFiles',
             'copy-resource-paths = ipypublish.postprocessors.file_actions:CopyResourcePaths',
-            'reveal-server = ipypublish.postprocessors.reveal_serve:RevealServer'
+            'reveal-server = ipypublish.postprocessors.reveal_serve:RevealServer',
+            'run-sphinx = ipypublish.postprocessors.sphinx:RunSphinx [sphinx]'
         ]
     }
 )

@@ -58,6 +58,7 @@
         "background": "white",
         "opacity": 10
         }
-    }
+    },
+    "yaml.format.enable": true
 
 }

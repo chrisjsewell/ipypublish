@@ -3,6 +3,7 @@ import json
 import inspect
 import importlib
 import re
+import pkg_resources
 
 from six import string_types
 import ruamel.yaml as yaml
@@ -116,3 +117,43 @@ def get_valid_filename(s):
     """
     s = str(s).strip().replace(' ', '_')
     return re.sub(r'(?u)[^-\w.]', '', s)
+
+
+def find_entry_point(name, group, logger, preferred=None):
+    """find an entry point by name and group
+
+    Parameters
+    ----------
+    name: str
+        name of entry point
+    group: str
+        group of entry point
+    preferred: str
+        if multiple matches are found, prefer one from this module
+
+    """
+    entry_points = list(pkg_resources.iter_entry_points(
+        group, name))
+    if len(entry_points) == 0:
+        handle_error(
+            "The {0} entry point "
+            "{1} could not be found".format(group, name),
+            pkg_resources.ResolutionError, logger)
+    elif len(entry_points) != 1:
+        # default to the preferred package
+        oentry_points = []
+        if preferred:
+            oentry_points = [ep for ep in entry_points
+                             if ep.module_name.startswith(preferred)]
+        if len(oentry_points) != 1:
+            handle_error(
+                "Multiple {0} plugins found for "
+                "{1}: {2}".format(group, name, entry_points),
+                pkg_resources.ResolutionError, logger)
+        logger.info(
+            "Multiple {0} plugins found for {1}, "
+            "defaulting to the {2} version".format(group, name, preferred))
+        entry_point = oentry_points[0]
+    else:
+        entry_point = entry_points[0]
+    return entry_point.load()

@@ -4,7 +4,6 @@ from typing import List, Tuple, Union, Dict  # noqa: F401
 import logging
 import os
 import time
-import pkg_resources
 
 from traitlets.config import Config
 from jsonextended import edict
@@ -12,7 +11,8 @@ from six import string_types
 
 
 import ipypublish
-from ipypublish.utils import pathlib, handle_error, get_valid_filename
+from ipypublish.utils import (pathlib, handle_error,
+                              get_valid_filename, find_entry_point)
 from ipypublish.convert.nbmerge import merge_notebooks
 from ipypublish.convert.config_manager import (get_export_config_path,
                                                load_export_config,
@@ -111,6 +111,9 @@ def publish(ipynb_path,
             "open_in_browser": launch_browser,
             "skip_mime": False
         },
+        "RunSphinx": {
+            "open_in_browser": launch_browser,
+        },
         "CopyResourcePaths": {
             "files_folder": files_folder
         }
@@ -139,6 +142,8 @@ def publish(ipynb_path,
         default_pprocs, default_pproc_config,
         {"${meta_path}": str(meta_path), "${files_path}": str(files_folder)})
 
+    # TODO do replacements separately (so configuration can be loaded earlier)
+
     # run nbconvert
     logger.info('running nbconvert')
     exporter, stream, resources = export_notebook(final_nb, exporter_cls,
@@ -148,7 +153,8 @@ def publish(ipynb_path,
     main_filepath = os.path.join(outdir, ipynb_name + exporter.file_extension)
 
     for post_proc_name in pprocs:
-        proc_class = find_postproc(post_proc_name)
+        proc_class = find_entry_point(
+            post_proc_name, "ipypublish.postprocessors", logger, "ipypublish")
         proc = proc_class(pconfig)
         stream, main_filepath, resources = proc.postprocess(
             stream, exporter.output_mimetype, main_filepath,
@@ -282,33 +288,6 @@ def export_notebook(final_nb, exporter_cls, config, jinja_template):
 
     body, resources = exporter.from_notebook_node(final_nb)
     return exporter, body, resources
-
-
-def find_postproc(name):
-    """find a postprocessor entry point by name"""
-    entry_points = list(pkg_resources.iter_entry_points(
-        'ipypublish.postprocessors', name))
-    if len(entry_points) == 0:
-        handle_error(
-            "The ipypublish.postprocessors plugin "
-            "{} could not be found".format(name),
-            pkg_resources.ResolutionError, logger)
-    elif len(entry_points) != 1:
-        # default to the original
-        oentry_points = [ep for ep in entry_points
-                         if ep.module_name.startswith("ipypublish")]
-        if len(oentry_points) != 1:
-            handle_error(
-                "Multiple ipypublish.postprocessors plugins found for "
-                "{0}: {1}".format(name, entry_points),
-                pkg_resources.ResolutionError, logger)
-        logger.info(
-            "Multiple ipypublish.postprocessors plugins found for "
-            "{0}, defaulting to the ipypublish version".format(name))
-        entry_point = oentry_points[0]
-    else:
-        entry_point = entry_points[0]
-    return entry_point.load()
 
 
 if __name__ == "__main__":

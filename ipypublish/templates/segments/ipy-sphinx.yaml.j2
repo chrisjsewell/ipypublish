@@ -4,7 +4,6 @@
 "segments":
 
     # TODO instead of filtering output/input cells/types could just mark them with e.g. :hidden: field
-    # TODO title page and toc
     # TODO allow slide cells in rst but wrap them in directive
     # TODO slide content control and creation (see https://github.com/tell-k/sphinxjp.themes.revealjs)
 
@@ -19,6 +18,11 @@
         {%- if nb.metadata.ipub and nb.metadata.ipub.use_numref -%}
         {% set use_numref = nb.metadata.ipub.use_numref %}
         {%- endif %}
+        {# re-route ipub metadata into resources, so we can use it in post-processing #}
+        {# see https://stackoverflow.com/a/43265291/5033292 #}
+        {% if "ipub" in nb.metadata %}
+        {% set x = resources.__setitem__("ipub", nb.metadata.ipub) %}
+        {% endif %}
 
     "notebook_input_all": |
         {# ignore input cells if cell.metadata.ipub.ignore = True #}
@@ -30,7 +34,6 @@
             {% endif %}
         {% endif %}
 
-    # TODO add :label: :caption: options to nbinput
     "notebook_input_code": |
         {# only output code blocks if cell.metadata.ipub.code = True #}
         {% if "ipub" in cell.metadata and cell.metadata.ipub.code -%}
@@ -69,7 +72,6 @@
         {{ cell.source.strip('\n') | indent}}
         {%- endif %}
         {%- endif %}
-    # TODO best-parctice would be to remove any trailing whitespace per line
 
     "notebook_input_markdown": |
         {# only use @label notation if specified in nb/cell metadata #}
@@ -250,7 +252,7 @@
         {{ insert_empty_lines(output.data[datatype]) }}
 
         {{ output.data[datatype].strip('\n') | indent }}
-        {# output figure type outputs # TODO set width of figures from ipub metadata #}
+        {# output figure type outputs # TODO set width of figures from ipub metadata (need to convert fraction -> percentage) #}
         {%- elif datatype in ['image/svg+xml', 'image/png', 'image/jpeg', 'application/pdf'] and ipub.get('figure', False) %}
         
             .. figure:: {{ output.metadata.filenames[datatype] | posix_path }}
@@ -281,7 +283,7 @@
         {%- elif datatype in ['text/markdown'] and ipub.get('mkdown', False) %}
 
         {{ output.data['text/markdown'] | convert_pandoc('markdown', 'json', extra_args=[]) | pandoc_jsonfilters(out='rst', at_notation=at_notation) | convert_pandoc('json','rst') | indent }}
-        {#- output latex equations #}{#- TODO additional ipub options (e.g. wrapping in environments)  #}
+        {#- output latex equations #}
         {%- elif datatype in ['text/latex'] and ipub.get('equation', False) and output.data['text/latex'] | is_equation %}
 
             .. math::
