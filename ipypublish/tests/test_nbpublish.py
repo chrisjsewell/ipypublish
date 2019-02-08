@@ -236,10 +236,11 @@ def compare_rst_files(testpath, outpath):
 
         with io.open(str(path), encoding='utf8') as fobj:
             content = fobj.read()
-        output.append(content)
 
         # python 3.5 used .jpg instead of .jpeg
         content = content.replace(".jpg", ".jpeg")
+        
+        output.append(content)
 
     test_content, out_content = output
 
