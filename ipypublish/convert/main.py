@@ -138,7 +138,17 @@ def publish(ipynb_path,
                                                   config, jinja_template)
 
     # postprocess results
-    stream, resources, internal_files = postprocess_nb(stream, resources)
+    from ipypublish.postprocessors.stream_modify import (
+        RemoveBlankLines, RemoveTrailingSpace,
+        FilterOutputFiles, FixSlideReferences
+    )
+
+    filepath = None
+    for proc in (RemoveBlankLines, RemoveTrailingSpace,
+                 FilterOutputFiles, FixSlideReferences):
+        stream, filepath, resources = proc().postprocess(
+            stream, exporter.output_mimetype, filepath,
+            resources, skip_mime=True)
 
     if dry_run:
         return outpath, exporter
@@ -149,7 +159,8 @@ def publish(ipynb_path,
     outpath, rel_files_folder = write_output(stream, resources, outdir,
                                              main_file_name,
                                              dump_files or create_pdf,
-                                             files_folder, internal_files,
+                                             files_folder,
+                                             resources.get("outputs", None),
                                              clear_existing)
 
     # create pdf
@@ -229,33 +240,6 @@ def export_notebook(final_nb, exporter_cls, config, jinja_template):
 
     body, resources = exporter.from_notebook_node(final_nb)
     return exporter, body, resources
-
-
-def postprocess_nb(body, resources):
-    # TODO could this be written as nbconvert component?
-
-    # reduce multiple blank lines to single
-    body = re.sub(r'\n\s*\n', '\n\n', body)
-
-    # remove trailing whitespace
-    body = "\n".join([l.rstrip() for l in body.splitlines()])
-
-    # make sure references refer to correct slides
-    if 'refslide' in resources:
-        for k, (col, row) in resources['refslide'].items():
-            body = body.replace('{{id_home_prefix}}{0}'.format(
-                k), '#/{0}/{1}{2}'.format(col, row, k))
-
-    # filter internal files by those that are referenced in the document body
-    if resources['outputs']:
-        for path in list(resources['outputs'].keys()):
-            if path not in body:
-                resources['outputs'].pop(path)
-        internal_files = resources['outputs']
-    else:
-        internal_files = {}
-
-    return body, resources, internal_files
 
 
 def write_output(body, resources, outdir, main_file_name, output_external,

@@ -7,7 +7,6 @@ TODO the RevealServer setting should be available at front end
 
 from __future__ import print_function
 
-import logging
 import os
 import signal
 import webbrowser
@@ -16,8 +15,6 @@ from tornado import web, ioloop, httpserver, log
 from tornado.httpclient import AsyncHTTPClient
 from traitlets import Bool, Unicode, Int
 from ipypublish.postprocessors.base import IPyPostProcessor
-
-logger = logging.getLogger("reveal_server")
 
 
 class ProxyHandler(web.RequestHandler):
@@ -55,6 +52,10 @@ class RevealServer(IPyPostProcessor):
     def requires_file(self):
         return True
 
+    @property
+    def logger_name(self):
+        return "reveal_server"
+
     open_in_browser = Bool(
         True,
         help="Should the browser be opened automatically?"
@@ -74,7 +75,7 @@ class RevealServer(IPyPostProcessor):
     port = Int(
         8000, help="port for the server to listen on.").tag(config=True)
 
-    def run_postprocess(self, stream, filepath):
+    def run_postprocess(self, stream, filepath, resources):
         """Serve the build directory with a webserver."""
 
         dirname, filename = os.path.split(str(filepath))
@@ -90,12 +91,12 @@ class RevealServer(IPyPostProcessor):
         elif os.path.isdir(os.path.join(dirname, self.reveal_prefix)):
             # reveal prefix exists
             self.log.info("Serving local %s", self.reveal_prefix)
-            logger.info("Serving local %s", self.reveal_prefix)
+            self.logger.info("Serving local %s", self.reveal_prefix)
         else:
             self.log.info("Redirecting %s requests to %s",
                           self.reveal_prefix, self.reveal_cdn)
-            logger.info("Redirecting %s requests to %s",
-                        self.reveal_prefix, self.reveal_cdn)
+            self.logger.info("Redirecting %s requests to %s",
+                             self.reveal_prefix, self.reveal_cdn)
             handlers.insert(0, (r"/(%s)/(.*)" %
                                 self.reveal_prefix, ProxyHandler))
 
@@ -104,7 +105,7 @@ class RevealServer(IPyPostProcessor):
                               client=AsyncHTTPClient(),
                               )
 
-        # hook up tornado logging to our logger
+        # hook up tornado logging to our self.logger
         log.app_log = self.log
 
         http_server = httpserver.HTTPServer(app)
@@ -114,7 +115,7 @@ class RevealServer(IPyPostProcessor):
         for port_attempt in port_attempts:
             try:
                 url = "http://%s:%i/%s" % (self.ip, self.port, filename)
-                logger.info("Attempting to serve at %s" % url)
+                self.logger.info("Attempting to serve at %s" % url)
                 http_server.listen(self.port, address=self.ip)
                 break
             except IOError:
@@ -123,14 +124,14 @@ class RevealServer(IPyPostProcessor):
             self.handle_error(
                 'no port available to launch slides on, '
                 'try closing some slideshows',
-                IOError, logger)
+                IOError, self.logger)
 
-        logger.info("Serving your slides at %s" % url)
-        logger.info("Use Control-C to stop this server")
+        self.logger.info("Serving your slides at %s" % url)
+        self.logger.info("Use Control-C to stop this server")
 
         # don't let people press ctrl-z, which leaves port open
         def handler(signum, frame):
-            logger.info('Control-Z pressed, but ignored, use Control-C!')
+            self.logger.info('Control-Z pressed, but ignored, use Control-C!')
 
         signal.signal(signal.SIGTSTP, handler)
 
@@ -143,6 +144,6 @@ class RevealServer(IPyPostProcessor):
         except KeyboardInterrupt:
             # dosen't look like line below is necessary
             # ioloop.IOLoop.instance().stop()
-            logger.info("\nInterrupted")
+            self.logger.info("\nInterrupted")
 
-        return stream, filepath
+        return stream, filepath, resources
