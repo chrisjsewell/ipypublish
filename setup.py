@@ -10,8 +10,6 @@ from setuptools import setup, find_packages
 
 with open('requirements.txt') as f:
     requirements = f.read().splitlines()
-with open('test_requirements.txt') as f:
-    test_requirements = f.read().splitlines()
 
 with io.open('README.md') as readme:
     readme_str = readme.read()
@@ -25,7 +23,6 @@ setup(
     long_description=readme_str,
     long_description_content_type='text/markdown',
     install_requires=requirements,
-    tests_require=test_requirements,
     extras_require={
         "docs": {
             "sphinx"
@@ -34,6 +31,13 @@ setup(
             "sphinx>=1.6",
             "docutils",
             "sphinxcontrib-bibtex"
+        },
+        "tests": {
+            "pytest>=3.6",
+            "pytest-cov",
+            "coverage",
+            "pillow",
+            "nbsphinx"
         }
     },
     license='MIT',

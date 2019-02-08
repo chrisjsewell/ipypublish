@@ -78,9 +78,7 @@ before_install:
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y latexmk ; fi
 - pip install -U pip setuptools wheel
 install:
-- travis_wait pip install -r requirements.txt
-- pip install -r test_requirements.txt
-- pip install .[sphinx]
+- travis_wait pip install .[tests,sphinx]
 - pip install --quiet coveralls
 script:
 # - nosetests -v --nocapture --with-doctest --with-coverage --exe --cover-package=ipypublish
