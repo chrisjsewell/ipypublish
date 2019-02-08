@@ -9,6 +9,7 @@ import tempfile
 from subprocess import Popen, PIPE, STDOUT
 import webbrowser
 
+import six
 from traitlets import Bool, Unicode
 
 from ipypublish.postprocessors.base import IPyPostProcessor
@@ -114,7 +115,7 @@ class PDFExport(IPyPostProcessor):
                 pdf_name=texname.replace(' ', '%20') + '.pdf')
             view_pdf_path = texpath.parent.joinpath(texname + '.view_pdf.html')
             with view_pdf_path.open('w', encoding='utf-8') as fobj:
-                fobj.write(view_pdf)
+                fobj.write(six.u(view_pdf))
         else:
             self.handle_error(
                 'pdf conversion failed: '
