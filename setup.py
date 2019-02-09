@@ -25,7 +25,8 @@ setup(
     install_requires=requirements,
     extras_require={
         "docs": {
-            "sphinx"
+            "matplotlib"
+            "numpy"
         },
         "sphinx": {
             "sphinx>=1.6",
@@ -37,7 +38,8 @@ setup(
             "pytest-cov",
             "coverage",
             "pillow",
-            "nbsphinx"
+            "nbsphinx",
+            "jupyter_client"
         }
     },
     license='MIT',
