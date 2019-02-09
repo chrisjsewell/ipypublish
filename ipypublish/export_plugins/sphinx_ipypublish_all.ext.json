@@ -85,11 +85,7 @@
         "args": {}
       }
     ],
-    "other_args": {
-      "ExtractOutputPreprocessor": {
-        "enabled": true
-     }
-    }
+    "other_args": {}
   },
   "template": {
     "outline": {

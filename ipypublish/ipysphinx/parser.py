@@ -22,7 +22,15 @@ class NBParser(rst.Parser):
     adapted from nbsphinx
     """
 
-    supported = 'jupyter_notebook',
+    supported = 'jupyter_notebook'
+
+    def __init__(self, *args, **kwargs):
+        
+        self.app = None
+        self.config = None
+        self.env = None
+
+        super(NBParser, self).__init__(*args, **kwargs)
 
     def set_application(self, app):
         # type: (Sphinx) -> None
@@ -41,6 +49,10 @@ class NBParser(rst.Parser):
     def parse(self, inputstring, document):
         # type: (Union[str, StringList], nodes.document) -> None
         """Parse text and generate a document tree."""
+
+        # fix for when calling on readthedocs
+        self.env = self.env or document.settings.env
+        self.config = self.config or document.settings.env.config
 
         # get file for conversion
         filepath = self.env.doc2path(self.env.docname)
