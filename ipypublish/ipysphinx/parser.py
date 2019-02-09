@@ -22,7 +22,7 @@ class NBParser(rst.Parser):
     adapted from nbsphinx
     """
 
-    supported = 'jupyter_notebook'
+    supported = 'jupyter_notebook',
 
     def __init__(self, *args, **kwargs):
         
