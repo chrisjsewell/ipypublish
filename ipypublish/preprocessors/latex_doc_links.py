@@ -85,26 +85,32 @@ def extract_file_links(source, parent_path, redirect_path,
 class LatexDocLinks(Preprocessor):
     """ a preprocessor to resolve file paths in the notebook:
 
-    1. Creates resources['external_file_paths'] = [] and adds to it:
+    1. Extract attachments from markdown cells, to resources['outputs'],
+       and redirect their file links to self.filesfolder
+
+    2. If nb.metadata.ipub.bibliography, create resources['bibliopath']
+
+    3. Creates resources['external_file_paths'] = [] and adds to it:
 
         - local relative file paths referenced in markdown cells by
           '[](path/to/file)'
         - path to nb.metadata.ipub.bibliography (if present)
         - path to nb.metadata.ipub.titlepage.logo (if present)
 
-    2. If the above paths are relative, redirects them to self.filesfolder 
-
-    3. if nb.metadata.ipub.bibliography, create resources['bibliopath']
-
-    4. Extract attachments from markdown cells, to resources['outputs'],
-       and redirect their file links to self.filesfolder 
+    4. If self.redirect_external=True,
+       redirects relative external file paths to self.filesfolder 
 
     """
 
     metapath = traits.Unicode(
         '', help="the file path to the notebook").tag(config=True)
     filesfolder = traits.Unicode(
-        '', help="the folder path to redirect file links to").tag(config=True)
+        '', help=("the folder path to dump dump internal content to "
+                  "(e.g. images, etc)")).tag(config=True)
+    redirect_external = traits.Bool(
+        True,
+        help="if True, redirect relatively linked paths to filesfolder"
+    ).tag(config=True)
     extract_attachments = traits.Bool(
         True,
         help=("extract attachments stored in the notebook"
@@ -134,7 +140,8 @@ class LatexDocLinks(Preprocessor):
         # extract local linked files
         source, rpaths, npaths = extract_file_links(
             cell.source, self.metapath, self.filesfolder)
-        cell.source = source
+        if self.redirect_external:
+            cell.source = source
         resources['external_file_paths'].extend(rpaths)
         resources['unfound_file_paths'].extend(npaths)
 
@@ -217,20 +224,6 @@ class LatexDocLinks(Preprocessor):
 
         if 'ipub' in nb.metadata:
 
-            # if hasattr(nb.metadata.ipub, 'files'):
-            #     mfiles = []
-            #     for fpath in nb.metadata.ipub.files:
-            #         fpath = resolve_path(fpath, self.metapath)
-            #         if not os.path.exists(fpath):
-            #             logger.warning('file in metadata does not exist'
-            #                             ': {}'.format(fpath))
-            #         else:
-            #             external_files.append(fpath)
-            #         mfiles.append(os.path.join(
-            # self.filesfolder, os.path.basename(fpath)))
-            #
-            #     nb.metadata.ipub.files = mfiles
-
             if hasattr(nb.metadata.ipub, 'bibliography'):
                 bib = nb.metadata.ipub.bibliography
                 bib = resolve_path(bib, self.metapath)
@@ -240,8 +233,9 @@ class LatexDocLinks(Preprocessor):
                     resources['external_file_paths'].append(bib)
                     resources['bibliopath'] = bib
 
-                nb.metadata.ipub.bibliography = os.path.join(
-                    self.filesfolder, os.path.basename(bib))
+                if self.redirect_external:
+                    nb.metadata.ipub.bibliography = os.path.join(
+                        self.filesfolder, os.path.basename(bib))
 
             if hasattr(nb.metadata.ipub, 'titlepage'):
                 if hasattr(nb.metadata.ipub.titlepage, 'logo'):
@@ -252,8 +246,9 @@ class LatexDocLinks(Preprocessor):
                     else:
                         resources['external_file_paths'].append(logo)
 
-                    nb.metadata.ipub.titlepage.logo = os.path.join(
-                        self.filesfolder, os.path.basename(logo))
+                    if self.redirect_external:
+                        nb.metadata.ipub.titlepage.logo = os.path.join(
+                            self.filesfolder, os.path.basename(logo))
 
         for index, cell in enumerate(nb.cells):
             nb.cells[index], resources = self.preprocess_cell(

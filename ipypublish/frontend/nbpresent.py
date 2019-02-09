@@ -2,6 +2,7 @@
 import logging
 import os
 import sys
+from mimetypes import guess_type
 
 from ipypublish.frontend.shared import parse_options
 from ipypublish.convert.main import publish
@@ -51,6 +52,9 @@ def nbpresent(inpath,
     inpath_name, inpath_ext = os.path.splitext(os.path.basename(inpath))
 
     outpath = None
+    output_mimetype = guess_type(inpath, strict=False)[0]
+    output_mimetype = 'unknown' if output_mimetype is None else output_mimetype
+
     if inpath_ext == '.ipynb':
         outdir = os.path.join(
             os.getcwd(), 'converted') if outpath is None else outpath
@@ -62,14 +66,18 @@ def nbpresent(inpath,
         root.addHandler(flogger)
 
         try:
-            outpath, exporter = publish(inpath,
-                                        conversion=outformat,
-                                        outpath=outpath, dump_files=dump_files,
-                                        ignore_prefix=ignore_prefix,
-                                        clear_existing=clear_files,
-                                        create_pdf=False, dry_run=dry_run,
-                                        plugin_folder_paths=export_paths,
-                                        serve_html=True)
+            outdata = publish(inpath,
+                              conversion=outformat,
+                              outpath=outpath, dump_files=dump_files,
+                              ignore_prefix=ignore_prefix,
+                              clear_existing=clear_files,
+                              create_pdf=False, dry_run=dry_run,
+                              plugin_folder_paths=export_paths,
+                              serve_html=True)
+
+            outpath = outdata["outpath"]
+            output_mimetype = outdata["exporter"].output_mimetype
+
         except Exception as err:
             logger.error("Run Failed: {}".format(err))
             if print_traceback:
@@ -78,7 +86,7 @@ def nbpresent(inpath,
     else:
         server = RevealServer()
         if not dry_run:
-            server.postprocess("", "text/html", outpath)
+            server.postprocess("", output_mimetype, outpath)
 
     return 0
 

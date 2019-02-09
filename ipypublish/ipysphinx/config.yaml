@@ -19,7 +19,7 @@ source_suffix: [".rst"]
 exclude_patterns: ["_build", "build", "**.ipynb_checkpoints"]
 
 extensions: [ 
-    'ipypublish.sphinx',  # includes .. nboutput:: and .. nbinput:: directives
+    'ipypublish.ipysphinx',  # includes .. nboutput:: and .. nbinput:: directives
     'sphinx.ext.mathjax',  # convert latex math to html
     'sphinxcontrib.bibtex',  # allows for :cite: and .. bibligraphy::
     'sphinx.ext.todo',  # allows for .. todo:: directive

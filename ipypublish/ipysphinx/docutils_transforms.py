@@ -11,8 +11,8 @@ except ImportError:
 import docutils
 import nbconvert
 
-from ipypublish.sphinx.directives import AdmonitionNode
-from ipypublish.sphinx.utils import import_sphinx
+from ipypublish.ipysphinx.directives import AdmonitionNode
+from ipypublish.ipysphinx.utils import import_sphinx
 
 
 class ReplaceAlertDivs(docutils.transforms.Transform):

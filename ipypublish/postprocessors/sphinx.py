@@ -9,8 +9,8 @@ from traitlets import TraitError, validate, Bool, Dict, Unicode
 from ipypublish import __version__
 from ipypublish.utils import find_entry_point
 from ipypublish.postprocessors.base import IPyPostProcessor
-from ipypublish.sphinx.utils import import_sphinx
-from ipypublish.sphinx.create_setup import make_conf, make_index
+from ipypublish.ipysphinx.utils import import_sphinx
+from ipypublish.ipysphinx.create_setup import make_conf, make_index
 
 
 # NOTE Interesting note about adding a directive to actually run python code
@@ -87,9 +87,9 @@ class RunSphinx(IPyPostProcessor):
 
         # create a conf.py
         kwargs = {} if not self.conf_kwargs else self.conf_kwargs
-        kwargs["nbsphinx_show_prompts"] = self.show_prompts
-        kwargs["nbsphinx_input_prompt"] = self.prompt_style
-        kwargs["nbsphinx_output_prompt"] = self.prompt_style
+        kwargs["ipysphinx_show_prompts"] = self.show_prompts
+        kwargs["ipysphinx_input_prompt"] = self.prompt_style
+        kwargs["ipysphinx_output_prompt"] = self.prompt_style
         if "author" in titlepage:
             kwargs["author"] = titlepage["author"]
         if "tagline" in titlepage:

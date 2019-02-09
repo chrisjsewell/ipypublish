@@ -73,14 +73,14 @@ def make_index(toc_files, toc_depth=3, toc_title="Table of Contents",
 
     Parameters
     ----------
-    toc_files: List[str]
+    toc_files: list[str]
         list of file paths (relative to the index) 
         to be included in the toc tree
     toc_depth=3: int
         depth of toc tree
     toc_title: str
         title of toc tree 
-    toc_numbered=True: 
+    toc_numbered=True: bool
         number sections and figures, tables, etc
     header: None or str
     prolog: None or str

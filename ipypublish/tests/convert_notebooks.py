@@ -13,8 +13,11 @@ def convert_all(inpath, outpath):
 
         out_folder = tempfile.mkdtemp()
         try:
-            outpath, exporter = publish(
+            outdata = publish(
                 str(inpath), conversion=plugin_name, outpath=out_folder)
+
+            exporter = outdata["exporter"]
+            outpath = outdata["outpath"]
 
             extension = exporter.file_extension
             out_name = os.path.splitext(

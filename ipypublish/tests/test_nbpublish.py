@@ -208,15 +208,17 @@ def test_publish_ipynb1_slides(temp_folder, ipynb1):
 def test_publish_run_all_plugins(temp_folder, ipynb1,
                                  plugin_name, plugin_path):
 
-    outpath, exporter = publish(
+    outdata = publish(
         ipynb1, conversion=plugin_name, outpath=temp_folder)
+  
+    exporter = outdata["exporter"]
 
     outname = os.path.splitext(ipynb1.name)[0] + exporter.file_extension
     outfile = os.path.join(temp_folder, outname)
     testfile = os.path.join(TEST_FILES_DIR, "ipynb1_converted",
                             plugin_name + exporter.file_extension)
 
-    if plugin_name in ["python_with_meta_stream"]:
+    if plugin_name in ["python_with_meta_stream", "sphinx_ipypublish_all.ext"]:
         return
     if plugin_name in ["sphinx_ipypublish_all.run"]:
         assert os.path.exists(os.path.join(temp_folder, "build", "html",

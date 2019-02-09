@@ -123,6 +123,11 @@
                         "super",
                         "sort&compress"
                     ]
+                },
+                "orphan": {
+                    "description": "whether the :orphan: directive is added in sphinx extension (to allow it to not be included in toc tree)",
+                    "type": "boolean",
+                    "default": false
                 }
             }
         }

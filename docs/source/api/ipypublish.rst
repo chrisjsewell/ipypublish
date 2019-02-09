@@ -10,7 +10,9 @@ Subpackages
     ipypublish.export_plugins
     ipypublish.filters
     ipypublish.frontend
+    ipypublish.ipysphinx
     ipypublish.port_api
+    ipypublish.postprocessors
     ipypublish.preprocessors
     ipypublish.schema
     ipypublish.scripts

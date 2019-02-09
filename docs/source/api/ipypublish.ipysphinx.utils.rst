@@ -1,7 +1,7 @@
-ipypublish\.scripts\.nbmerge module
+ipypublish\.ipysphinx\.utils module
 ===================================
 
-.. automodule:: ipypublish.scripts.nbmerge
+.. automodule:: ipypublish.ipysphinx.utils
     :members:
     :undoc-members:
     :show-inheritance:

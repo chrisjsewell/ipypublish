@@ -5,14 +5,14 @@ import docutils
 from docutils.parsers import rst
 from docutils.statemachine import StringList
 
-from ipypublish.sphinx.utils import import_sphinx
+from ipypublish.ipysphinx.utils import import_sphinx
 
 
 class AdmonitionNode(docutils.nodes.Element):
     """A custom node for info and warning boxes."""
 
 
-class _NbAdmonition(rst.Directive):
+class NbAdmonition(rst.Directive):
     """Base class for NbInfo and NbWarning."""
 
     required_arguments = 0
@@ -27,13 +27,13 @@ class _NbAdmonition(rst.Directive):
         return [node]
 
 
-class NbWarning(_NbAdmonition):
+class NbWarning(NbAdmonition):
     """A warning box."""
 
     _class = 'warning'
 
 
-class NbInfo(_NbAdmonition):
+class NbInfo(NbAdmonition):
     """An information box."""
 
     _class = 'note'
@@ -108,7 +108,7 @@ def _create_nbcell_nodes(directive):
         inner_classes = ['input_area']
         if directive.arguments:
             language = directive.arguments[0]
-        prompt_template = config.nbsphinx_input_prompt
+        prompt_template = config.ipysphinx_input_prompt
         if not execution_count:
             execution_count = ' '
     elif isinstance(directive, NbOutput):
@@ -118,7 +118,7 @@ def _create_nbcell_nodes(directive):
         inner_classes = ['output_area']
         # 'class' can be 'stderr'
         inner_classes.append(directive.options.get('class', ''))
-        prompt_template = config.nbsphinx_output_prompt
+        prompt_template = config.ipysphinx_output_prompt
         if directive.arguments and directive.arguments[0] in ['rst', 'ansi']:
             fancy_output = True
     else:
@@ -127,14 +127,14 @@ def _create_nbcell_nodes(directive):
     outer_node = docutils.nodes.container(classes=outer_classes)
 
     # add prompts
-    if config.nbsphinx_show_prompts and execution_count:
+    if config.ipysphinx_show_prompts and execution_count:
         prompt = prompt_template % (execution_count,)
         prompt_node = docutils.nodes.literal_block(
             prompt, prompt, language='none', classes=['prompt'])
-    elif config.nbsphinx_show_prompts:
+    elif config.ipysphinx_show_prompts:
         prompt = ''
         prompt_node = docutils.nodes.container(classes=['prompt', 'empty'])
-    if config.nbsphinx_show_prompts:
+    if config.ipysphinx_show_prompts:
         # NB: Prompts are added manually in LaTeX output
         outer_node += sphinx.addnodes.only('', prompt_node, expr='html')
 

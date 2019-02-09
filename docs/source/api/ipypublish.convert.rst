@@ -8,6 +8,7 @@ Submodules
 
    ipypublish.convert.config_manager
    ipypublish.convert.main
+   ipypublish.convert.nbmerge
 
 Module contents
 ---------------

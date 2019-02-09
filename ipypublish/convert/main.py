@@ -26,6 +26,7 @@ def publish(ipynb_path,
             conversion='latex_ipypublish_main',
             outpath=None,
             dump_files=False,
+            files_folder="{filename}_files",
             ignore_prefix='_',
             clear_existing=False,
             create_pdf=False,
@@ -40,7 +41,7 @@ def publish(ipynb_path,
     paths can be string of an existing file or folder,
     or a pathlib.Path like object
 
-    all files linked in the documents are placed into a single folder
+    all files linked in the documents are placed into a single files_folder
 
     Parameters
     ----------
@@ -52,6 +53,11 @@ def publish(ipynb_path,
         path to output converted files
     dump_files: bool
         whether to write files from nbconvert (images, etc) to outpath
+    files_folder: str
+        the path (relative to outpath) to dump files to
+        will be formated as files_folder.format(filename=filename)
+        where filename is the input file name,
+        stripped of its extension and sanitized
     ignore_prefix: str
         ignore ipynb files with this prefix
     clear_existing : str
@@ -69,20 +75,23 @@ def publish(ipynb_path,
 
     Returns
     --------
-    outpath: str
-        path to output file
-    exporter: nbconvert.exporters.Exporter
-        the exporter used
+    outdata: dict
+        containing keys;
+        "outpath", "exporter", "stream", "main_filepath", "resources"
 
     """
     # TODO control logging and dry_run, etc through config, and related
+    # (make sure this doesnt break sphinx nbparser)
     # TODO turn whole thing into a traitlets Application
+    # TODO allow for parsing logger 
+    # (needs to also be parsed on to called functions)
 
     # setup the input and output paths
     if isinstance(ipynb_path, string_types):
         ipynb_path = pathlib.Path(ipynb_path)
     ipynb_name = os.path.splitext(ipynb_path.name)[0]
-    files_folder = get_valid_filename(ipynb_name) + '_files'
+    files_folder = files_folder.format(filename=get_valid_filename(ipynb_name))
+
     outdir = os.path.join(
         os.getcwd(), 'converted') if outpath is None else outpath
 
@@ -102,7 +111,7 @@ def publish(ipynb_path,
                                           ignore_prefix=ignore_prefix)
     logger.debug('notebooks meta path: {}'.format(meta_path))
 
-    # set defaults
+    # set post-processor defaults
     default_pproc_config = {
         "PDFExport": {
             "files_folder": files_folder,
@@ -113,6 +122,9 @@ def publish(ipynb_path,
         },
         "RunSphinx": {
             "open_in_browser": launch_browser,
+        },
+        "RemoveFolder": {
+            "files_folder": files_folder
         },
         "CopyResourcePaths": {
             "files_folder": files_folder
@@ -162,7 +174,13 @@ def publish(ipynb_path,
 
     logger.info('process finished successfully')
 
-    return outpath, exporter
+    return {
+        "outpath": outpath,
+        "exporter": exporter,
+        "stream": stream,
+        "main_filepath": main_filepath,
+        "resources": resources
+    }
 
 
 def load_config_file(conversion, plugin_folder_paths,

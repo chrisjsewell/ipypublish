@@ -128,6 +128,9 @@
                             "open_in_browser": false,
                             "skip_mime": false
                         },
+                        "RemoveFolder": {
+                            "files_folder": "${files_path}"
+                        },
                         "CopyResourcePaths": {
                             "files_folder": "${files_path}"
                         }

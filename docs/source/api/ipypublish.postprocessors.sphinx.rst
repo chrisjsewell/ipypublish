@@ -1,7 +1,7 @@
-ipypublish\.scripts\.reveal\_serve module
+ipypublish\.postprocessors\.sphinx module
 =========================================
 
-.. automodule:: ipypublish.scripts.reveal_serve
+.. automodule:: ipypublish.postprocessors.sphinx
     :members:
     :undoc-members:
     :show-inheritance:

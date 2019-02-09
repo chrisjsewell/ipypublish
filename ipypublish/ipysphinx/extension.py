@@ -2,13 +2,15 @@ import os
 from docutils.parsers import rst
 
 from ipypublish import __version__
-from ipypublish.sphinx.directives import (NbInfo, NbInput, NbOutput, NbWarning,
-                                          AdmonitionNode, CodeAreaNode,
-                                          FancyOutputNode)
-from ipypublish.sphinx.docutils_transforms import (
+from ipypublish.ipysphinx.directives import (NbInfo, NbInput,
+                                             NbOutput, NbWarning,
+                                             AdmonitionNode, CodeAreaNode,
+                                             FancyOutputNode)
+from ipypublish.ipysphinx.docutils_transforms import (
     CreateDomainObjectLabels, CreateSectionLabels, RewriteLocalLinks
 )
-from ipypublish.sphinx.utils import import_sphinx
+from ipypublish.ipysphinx.utils import import_sphinx
+from ipypublish.ipysphinx.parser import NBParser
 
 try:
     from sphinx.application import Sphinx  # noqa: F401
@@ -20,16 +22,60 @@ def setup(app):
     # type: (Sphinx) -> dict
     """Initialize Sphinx extension.
 
-    TODO latex output 
-    (but not really interested in this as it would be duplication of effort)
+
+    Notes
+    -----
+
+    TODO better latex output 
+    but not really interested in this as it would be duplication of effort,
+    and if much better todo ipynb -> tex, rather than ipynb -> rst -> tex
+    TODO handling of svg in latex
+    ipypublish sets latex to output svg rather than pdf, so we don't have to
+    split output into '.. only html/latex', which is an issue its something
+    with a label (duplication error), however,
+    this requires sphinx.ext.imgconverter to work
+
     """
 
+    # delayed import of sphinx
     sphinx = import_sphinx()
 
-    # variables for cell prompts
-    app.add_config_value('nbsphinx_show_prompts', False, rebuild='env')
-    app.add_config_value('nbsphinx_input_prompt', '[%s]:', rebuild='env')
-    app.add_config_value('nbsphinx_output_prompt', '[%s]:', rebuild='env')
+    # add mapping of suffix to parser
+    try:
+        # Available since Sphinx 1.8:
+        app.add_source_suffix('.ipynb', 'jupyter_notebook')
+        app.add_source_parser(NBParser)
+    except AttributeError:
+        _add_notebook_parser(app)
+
+    # config for export config
+    app.add_config_value(
+        'ipysphinx_export_config', 'sphinx_ipypublish_all.ext', rebuild='env')
+
+    # config for contolling conversion process
+    # where to dump internal images, etc of the notebook
+    app.add_config_value(
+        'ipysphinx_files_folder', "{filename}_files", rebuild='env')
+    # whether to raise error if nb_name.rst already exists
+    app.add_config_value('ipysphinx_overwrite_existing', False, rebuild='env')
+    # additional folders containing conversion files
+    app.add_config_value('ipysphinx_config_folders', (), rebuild='env')
+
+    # config for cell prompts
+    app.add_config_value('ipysphinx_show_prompts', False, rebuild='env')
+    app.add_config_value('ipysphinx_input_prompt', '[%s]:', rebuild='env')
+    app.add_config_value('ipysphinx_output_prompt', '[%s]:', rebuild='env')
+
+    # config for html css
+    app.add_config_value('nbsphinx_responsive_width', '540px', rebuild='html')
+    app.add_config_value('nbsphinx_prompt_width', None, rebuild='html')
+
+    # config for additions to the output rst (per file)
+    app.add_config_value('ipysphinx_prolog', None, rebuild='env')
+    app.add_config_value('ipysphinx_epilog', None, rebuild='env')
+
+    # config for hook to jupytext  # TODO requires implementation in parser
+    # app.add_config_value('ipysphinx_custom_formats', {}, rebuild='env')
 
     # add the main directives
     app.add_directive('nbinput', NbInput)
@@ -75,9 +121,6 @@ def setup(app):
                  )
 
     # setup html style
-    app.add_config_value('nbsphinx_responsive_width', '540px', rebuild='html')
-    app.add_config_value('nbsphinx_prompt_width', None, rebuild='html')
-    app.add_config_value('nbsphinx_custom_formats', {}, rebuild='env')
     app.connect('builder-inited', builder_inited)
     app.connect('html-page-context', html_add_css)
 
@@ -109,6 +152,30 @@ def setup(app):
         'parallel_write_safe': True,
         'env_version': 1,
     }
+
+
+def _add_notebook_parser(app):
+    """Ugly hack to modify source_suffix and source_parsers.
+
+    Once https://github.com/sphinx-doc/sphinx/pull/2209 is merged (and
+    some additional time has passed), this should be replaced by ::
+
+        app.add_source_parser('.ipynb', NotebookParser)
+
+    See also https://github.com/sphinx-doc/sphinx/issues/2162.
+
+    """
+    sphinx = import_sphinx()
+    source_suffix = app.config._raw_config.get('source_suffix', ['.rst'])
+    if isinstance(source_suffix, sphinx.config.string_types):
+        source_suffix = [source_suffix]
+    if '.ipynb' not in source_suffix:
+        source_suffix.append('.ipynb')
+        app.config._raw_config['source_suffix'] = source_suffix
+    source_parsers = app.config._raw_config.get('source_parsers', {})
+    if '.ipynb' not in source_parsers and 'ipynb' not in source_parsers:
+        source_parsers['.ipynb'] = NBParser
+        app.config._raw_config['source_parsers'] = source_parsers
 
 
 def visit_admonition_html(self, node):
@@ -159,8 +226,9 @@ def builder_inited(app):
             'traditional': '4ex',
         }.get(app.config.html_theme, '7ex')
 
-    for suffix in app.config.nbsphinx_custom_formats:
-        app.add_source_suffix(suffix, 'jupyter_notebook')
+    # TODO requires implementation in parser
+    # for suffix in app.config.nbsphinx_custom_formats:
+    #     app.add_source_suffix(suffix, 'jupyter_notebook')
 
 
 def html_add_css(app, pagename, templatename, context, doctree):
