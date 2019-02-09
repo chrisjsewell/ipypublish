@@ -26,7 +26,9 @@ setup(
     extras_require={
         "docs": {
             "matplotlib"
-            "numpy"
+            "numpy",
+            "pandas",
+            "sympy"
         },
         "sphinx": {
             "sphinx>=1.6",
@@ -39,7 +41,7 @@ setup(
             "coverage",
             "pillow",
             "nbsphinx",
-            "jupyter_client"
+            "ipykernel"
         }
     },
     license='MIT',
