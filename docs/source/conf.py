@@ -35,10 +35,12 @@ on_rtd = os.environ.get('READTHEDOCS') == 'True'
 this_folder = os.path.join(os.path.dirname(os.path.realpath(__file__)))
 api_folder = os.path.join(this_folder, "api")
 # module_path = ipypublish.utils.get_module_path(ipypublish)
-module_path = os.path.join(this_folder, "../../../ipypublish/")
-ignore_setup = os.path.join(this_folder, "../../../ipypublish/setup.py")
-ignore_tests = os.path.join(
-    this_folder, "../../../ipypublish/ipypublish/tests")
+module_path = os.path.normpath(
+    os.path.join(this_folder, "../../../ipypublish/"))
+ignore_setup = os.path.normpath(
+    os.path.join(this_folder, "../../../ipypublish/setup.py"))
+ignore_tests = os.path.normpath(
+    os.path.join(this_folder, "../../../ipypublish/ipypublish/tests"))
 
 if os.path.exists(api_folder):
     shutil.rmtree(api_folder)
