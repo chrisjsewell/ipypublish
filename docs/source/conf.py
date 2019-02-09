@@ -194,6 +194,9 @@ numfig_format: {'section': 'Section %s',
 math_number_all = True
 math_eqref_format = "Eq. {number}"  # TODO this isn't working
 
+mathjax_config = {
+    'TeX': {'equationNumbers': {'autoNumber': 'AMS', 'useLabelIds': True}},
+}
 
 # Napoleon Docstring settings
 napoleon_numpy_docstring = True
@@ -350,7 +353,10 @@ def run_apidoc(app):
     See: https://github.com/rtfd/readthedocs.org/issues/1139
     """
     # get correct paths
-    this_folder = os.path.abspath(
+    if on_rtd:
+        this_folder = os.path.abspath(".")
+    else:
+        this_folder = os.path.abspath(
             os.path.dirname(os.path.realpath(__file__)))
     api_folder = os.path.join(this_folder, "api")
     # module_path = ipypublish.utils.get_module_path(ipypublish)

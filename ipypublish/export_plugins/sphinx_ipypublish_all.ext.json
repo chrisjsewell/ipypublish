@@ -23,7 +23,7 @@
       {
         "class": "nbconvert.preprocessors.ExecutePreprocessor",
         "args": {
-          "timeout": 30,
+          "timeout": 60,
           "allow_errors": false,
           "interrupt_on_timeout": false,
           "kernel_name": ""
