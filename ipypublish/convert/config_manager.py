@@ -72,17 +72,24 @@ def load_export_config(export_config_path):
     return data
 
 
-def iter_all_export_infos(config_folder_paths=(), regex="*.json"):
+def iter_all_export_infos(config_folder_paths=(),
+                          regex="*.json", get_mime=False):
     """iterate through all export configuration and yield a dict of info"""
     for name, path in iter_all_export_paths(config_folder_paths, regex):
         data = load_export_config(path)
 
-        yield dict([
+        info = dict([
             ("key", str(name)),
             ("class", data["exporter"]["class"]),
             ("path", str(path)),
             ("description", data["description"])
         ])
+
+        if get_mime:
+            info["mime_type"] = create_exporter_cls(
+                data["exporter"]["class"]).output_mimetype
+
+        yield info
 
 
 def create_exporter_cls(class_str):

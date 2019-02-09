@@ -1,7 +1,9 @@
 import sys
 import os
 import argparse
+import fnmatch
 
+from ipypublish import __version__
 from ipypublish.convert.config_manager import iter_all_export_infos
 
 
@@ -25,23 +27,35 @@ def get_parser(**kwargs):
     )
 
 
-def get_plugin_str(plugin_folder_paths):
+def get_plugin_str(plugin_folder_paths, regex, verbose):
     """return string listing all available export configurations """
     outstrs = []
     # outstrs.append('Available Export Configurations')
     # outstrs.append('-------------------------------')
-    for item in sorted(iter_all_export_infos(plugin_folder_paths),
-                       key=lambda i: (i["class"], i["key"])):
+    configs = [e for e in iter_all_export_infos(
+        plugin_folder_paths, get_mime=verbose)
+        if fnmatch.fnmatch(e["key"], "*{}*".format(regex))]
+
+    for item in sorted(configs, key=lambda i: (i["class"], i["key"])):
         outstrs.append("- Key:   {}".format(item["key"]))
         outstrs.append("  Class: {}".format(item["class"]))
         path = item["path"].split(os.path.sep)
+        if verbose:
+            outstrs.append("  Type:  {}".format(item["mime_type"]))
+            path = os.path.join(*path)
+        else:
+            path = os.path.join("...", *path[-3:])
+
         if len(path) < 4:
             outstrs.append("  Path:  {}".format(item["path"]))
         else:
-            outstrs.append("  Path:  {}".format(
-                os.path.join("...", *path[-3:])))
+            outstrs.append("  Path:  {}".format(path))
+
         outstrs.append("  About: {}".format(item["description"][0].strip()))
-        # TODO could wrap description (less than x characters)
+        if verbose:
+            for descript in item["description"][1:]:
+                outstrs.append("         {}".format(descript.strip()))
+        # note could wrap description (less than x characters)
         outstrs.append(" ")
 
     return "\n".join(outstrs)
@@ -66,6 +80,8 @@ def parse_options(sys_args, program):
         file_help = 'notebook file or directory'
         default_key = 'latex_ipypublish_main'
 
+    parser.add_argument('--version', action='version', version=__version__)
+
     parser.add_argument("filepath", type=str, nargs='?',
                         help=file_help,
                         metavar='filepath')
@@ -83,10 +99,13 @@ def parse_options(sys_args, program):
                                     "containing export configurations"),
                               default=[os.path.join(os.getcwd(),
                                                     'ipypublish_plugins')])
-    export_group.add_argument("-le", "--list-exporters", action="store_true",
-                              help=("list all known, "
-                                    "export configurations"))
-    # TODO filter list by part of key
+    export_group.add_argument("-le", "--list-exporters", type=str,
+                              metavar='filter', nargs='?', const='*',
+                              help=("list export configurations, "
+                                    "optionally filtered e.g. -le html*"))
+    export_group.add_argument("-lv", "--list-verbose", action="store_true",
+                              help=("when listing export configurations, "
+                                    "give a verbose description"))
 
     nbmerge_group = parser.add_argument_group('nb merge')
     nbmerge_group.add_argument("-i", "--ignore-prefix",
@@ -134,9 +153,11 @@ def parse_options(sys_args, program):
 
     filepath = options.pop('filepath')
     list_plugins = options.pop("list_exporters")
+    list_verbose = options.pop("list_verbose")
 
     if filepath is None and list_plugins:
-        parser.exit(message=get_plugin_str(options["export_paths"]))
+        parser.exit(message=get_plugin_str(
+            options["export_paths"], list_plugins, list_verbose))
     elif filepath is None:
         parser.error("no filepath specified")
 
