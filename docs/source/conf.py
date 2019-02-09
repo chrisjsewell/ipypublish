@@ -23,34 +23,13 @@ import io
 import urllib
 import json
 import shutil
-import subprocess
 
 import ipypublish
 
 from sphinx.application import Sphinx  # noqa
 
-on_rtd = os.environ.get('READTHEDOCS') == 'True'
-
-# generate apidoc
-this_folder = os.path.join(os.path.dirname(os.path.realpath(__file__)))
-api_folder = os.path.join(this_folder, "api")
-# module_path = ipypublish.utils.get_module_path(ipypublish)
-module_path = os.path.normpath(
-    os.path.join(this_folder, "../../../ipypublish/"))
-ignore_setup = os.path.normpath(
-    os.path.join(this_folder, "../../../ipypublish/setup.py"))
-ignore_tests = os.path.normpath(
-    os.path.join(this_folder, "../../../ipypublish/ipypublish/tests"))
-
-if os.path.exists(api_folder):
-    shutil.rmtree(api_folder)
-os.mkdir(api_folder)
-subprocess.check_call(["sphinx-apidoc", "--separate", "-o", api_folder,
-                       module_path, ignore_setup, ignore_tests])
-if os.path.exists(os.path.join(api_folder, "modules.rst")):
-    os.remove(os.path.join(api_folder, "modules.rst"))
-
 # -- General configuration ------------------------------------------------
+
 
 # If your documentation needs a minimal Sphinx version, state it here.
 #
@@ -227,7 +206,7 @@ napoleon_use_param = True
 napoleon_use_rtype = True
 
 
-# INTERSPHINK
+# INTERSPHINX
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
@@ -254,25 +233,6 @@ intersphinx_aliases = {
     ('py:class', 'nbformat.notebooknode.NotebookNode'):
         ('py:class', 'nbformat.NotebookNode')
 }
-
-
-def add_intersphinx_aliases_to_inv(app):
-    """see https://github.com/sphinx-doc/sphinx/issues/5603"""
-    from sphinx.ext.intersphinx import InventoryAdapter
-    inventories = InventoryAdapter(app.builder.env)
-
-    for alias, target in app.config.intersphinx_aliases.items():
-        alias_domain, alias_name = alias
-        target_domain, target_name = target
-        try:
-            found = inventories.main_inventory[target_domain][target_name]
-            try:
-                inventories.main_inventory[alias_domain][alias_name] = found
-            except KeyError:
-                continue
-        except KeyError:
-            continue
-
 
 # Warnings to ignore when using the -n (nitpicky) option
 # We should ignore any python built-in exception, for instance
@@ -322,37 +282,81 @@ nitpick_ignore = [('py:exc', 'ArithmeticError'), ('py:exc', 'AssertionError'),
                   ('py:obj', 'sphinx.application.Sphinx')
                   ]
 
-# create releases page
-if on_rtd:
-    git_history = urllib.request.urlopen(
-        'https://api.github.com/repos/chrisjsewell/ipypublish/releases'
-    ).read().decode('utf-8')
-    # NOTE on vscode this could fail with urllib.error.HTTPError
-    git_history_json = json.loads(git_history)
-    # NOTE on vscode this was failing unless encoding='utf8' was present
-    with io.open('releases.md', 'w', encoding="utf8") as f:
-        f.write('# Releases\n')
-        f.write('\n')
-        for r in git_history_json:
-            subtitle = '## ' + ' '.join([r['tag_name'], '-', r['name'], '\n'])
-            f.write(subtitle)
+
+def create_git_releases():
+
+    if os.environ.get('READTHEDOCS') == 'True':
+        git_history = urllib.request.urlopen(
+            'https://api.github.com/repos/chrisjsewell/ipypublish/releases'
+        ).read().decode('utf-8')
+        # NOTE on vscode this could fail with urllib.error.HTTPError
+        git_history_json = json.loads(git_history)
+        # NOTE on vscode this was failing unless encoding='utf8' was present
+        with io.open('releases.md', 'w', encoding="utf8") as f:
+            f.write('# Releases\n')
             f.write('\n')
-            for line in r['body'].split('\n'):
-                f.write(' '.join([line, '\n']))
-            f.write('\n')
+            for r in git_history_json:
+                subtitle = '## ' + ' '.join([r['tag_name'], '-', r['name'], '\n'])
+                f.write(subtitle)
+                f.write('\n')
+                for line in r['body'].split('\n'):
+                    f.write(' '.join([line, '\n']))
+                f.write('\n')
 
 
-def setup(app):
-    # type: (Sphinx) -> dict
+def add_intersphinx_aliases_to_inv(app):
+    """see https://github.com/sphinx-doc/sphinx/issues/5603"""
+    from sphinx.ext.intersphinx import InventoryAdapter
+    inventories = InventoryAdapter(app.builder.env)
+
+    for alias, target in app.config.intersphinx_aliases.items():
+        alias_domain, alias_name = alias
+        target_domain, target_name = target
+        try:
+            found = inventories.main_inventory[target_domain][target_name]
+            try:
+                inventories.main_inventory[alias_domain][alias_name] = found
+            except KeyError:
+                continue
+        except KeyError:
+            continue
+
+
+def run_apidoc():
+    """ generate apidoc 
+    
+    See: https://github.com/rtfd/readthedocs.org/issues/1139
     """
-    extension for sphinx, for custom config
-    """
+    # get correct paths
+    this_folder = os.path.abspath(os.path.dirname(os.path.realpath(__file__)))
+    api_folder = os.path.join(this_folder, "api")
+    # module_path = ipypublish.utils.get_module_path(ipypublish)
+    module_path = os.path.normpath(
+        os.path.join(this_folder, "../../../ipypublish/"))
+    ignore_setup = os.path.normpath(
+        os.path.join(this_folder, "../../../ipypublish/setup.py"))
+    ignore_tests = os.path.normpath(
+        os.path.join(this_folder, "../../../ipypublish/ipypublish/tests"))
+    if os.path.exists(api_folder):
+        shutil.rmtree(api_folder)
+    os.mkdir(api_folder)
 
-    # app.connect('autodoc-skip-member', skip_deprecated)
+    argv = ["--separate", "-o", api_folder,
+            module_path, ignore_setup, ignore_tests]
 
-    # add aliases for intersphinx
-    app.add_config_value('intersphinx_aliases', {}, 'env')
-    app.connect('builder-inited', add_intersphinx_aliases_to_inv)
+    try:
+        # Sphinx 1.7+
+        from sphinx.ext import apidoc
+    except ImportError:
+        # Sphinx 1.6 (and earlier)
+        from sphinx import apidoc
+        argv.insert(0, apidoc.__file__)
+
+    apidoc.main(argv)
+
+    # we don't use this
+    if os.path.exists(os.path.join(api_folder, "modules.rst")):
+        os.remove(os.path.join(api_folder, "modules.rst"))
 
 
 def get_version():
@@ -368,3 +372,18 @@ def get_version():
     if not match:
         raise IOError("couldn't find __version__ in: {}".format(init_file))
     return match.group(1)
+
+
+def setup(app):
+    # type: (Sphinx) -> dict
+    """
+    extension for sphinx, for custom config
+    """
+
+    # app.connect('autodoc-skip-member', skip_deprecated)
+
+    # add aliases for intersphinx
+    app.add_config_value('intersphinx_aliases', {}, 'env')
+    app.connect('builder-inited', run_apidoc)
+    app.connect('builder-inited', create_git_releases)
+    app.connect('builder-inited', add_intersphinx_aliases_to_inv)
