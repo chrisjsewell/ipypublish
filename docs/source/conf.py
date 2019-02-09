@@ -350,18 +350,16 @@ def run_apidoc(app):
     See: https://github.com/rtfd/readthedocs.org/issues/1139
     """
     # get correct paths
-    if on_rtd:
-        this_folder = os.path.abspath("docs")
-    else:
-        os.path.abspath(os.path.dirname(os.path.realpath(__file__)))
+    this_folder = os.path.abspath(
+            os.path.dirname(os.path.realpath(__file__)))
     api_folder = os.path.join(this_folder, "api")
     # module_path = ipypublish.utils.get_module_path(ipypublish)
     module_path = os.path.normpath(
-        os.path.join(this_folder, "../../../ipypublish/"))
+        os.path.join(this_folder, "../../"))
     ignore_setup = os.path.normpath(
-        os.path.join(this_folder, "../../../ipypublish/setup.py"))
+        os.path.join(this_folder, "../../setup.py"))
     ignore_tests = os.path.normpath(
-        os.path.join(this_folder, "../../../ipypublish/ipypublish/tests"))
+        os.path.join(this_folder, "../../ipypublish/tests"))
     if os.path.exists(api_folder):
         shutil.rmtree(api_folder)
     os.mkdir(api_folder)
