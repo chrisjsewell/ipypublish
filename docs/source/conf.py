@@ -353,10 +353,7 @@ def run_apidoc(app):
     See: https://github.com/rtfd/readthedocs.org/issues/1139
     """
     # get correct paths
-    if on_rtd:
-        this_folder = os.path.abspath(".")
-    else:
-        this_folder = os.path.abspath(
+    this_folder = os.path.abspath(
             os.path.dirname(os.path.realpath(__file__)))
     api_folder = os.path.join(this_folder, "api")
     # module_path = ipypublish.utils.get_module_path(ipypublish)
