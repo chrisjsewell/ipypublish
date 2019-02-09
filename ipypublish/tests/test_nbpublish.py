@@ -212,6 +212,8 @@ def test_publish_run_all_plugins(temp_folder, ipynb1,
     if (plugin_name in ["sphinx_ipypublish_all.ext"]
             and sys.version_info[0] < 3):
         # TODO this fails because the kernel is set as python3 in the notebook
+        # could add a replacement variable e.g. ${pykernel}
+        # and allow parsing of it to main.publish (default = "")
         return
 
     outdata = publish(
