@@ -101,5 +101,17 @@ class NBParser(rst.Parser):
         if outdata["resources"].get("ipub", {}).get("orphan", False):
             rst.Parser.parse(self, ':orphan:', document)
 
+        # parse a prolog
+        if self.env.config.ipysphinx_prolog:
+            prolog = exporter.environment.from_string(
+                self.env.config.ipysphinx_prolog).render(env=self.env)
+            rst.Parser.parse(self, prolog, document)
+
         # parse the main body of the file
         rst.Parser.parse(self, outdata["stream"], document)
+
+        # parse an epilog
+        if self.env.config.ipysphinx_epilog:
+            prolog = exporter.environment.from_string(
+                self.env.config.ipysphinx_epilog).render(env=self.env)
+            rst.Parser.parse(self, prolog, document)

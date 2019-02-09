@@ -55,7 +55,7 @@ def setup(app):
     # config for contolling conversion process
     # where to dump internal images, etc of the notebook
     app.add_config_value(
-        'ipysphinx_files_folder', "{filename}_files", rebuild='env')
+        'ipysphinx_files_folder', "{filename}_nbfiles", rebuild='env')
     # whether to raise error if nb_name.rst already exists
     app.add_config_value('ipysphinx_overwrite_existing', False, rebuild='env')
     # additional folders containing conversion files
@@ -71,6 +71,7 @@ def setup(app):
     app.add_config_value('nbsphinx_prompt_width', None, rebuild='html')
 
     # config for additions to the output rst (per file)
+    # these strings are processed by the exporters jinja template
     app.add_config_value('ipysphinx_prolog', None, rebuild='env')
     app.add_config_value('ipysphinx_epilog', None, rebuild='env')
 

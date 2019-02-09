@@ -28,8 +28,9 @@ import ipypublish
 
 from sphinx.application import Sphinx  # noqa
 
-# -- General configuration ------------------------------------------------
+on_rtd = os.environ.get('READTHEDOCS') == 'True'
 
+# -- General configuration ------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
 #
@@ -282,10 +283,30 @@ nitpick_ignore = [('py:exc', 'ArithmeticError'), ('py:exc', 'AssertionError'),
                   ('py:obj', 'sphinx.application.Sphinx')
                   ]
 
+# TODO can you retrieve the branch that is being built in?
+# if not in master, then replace env.config.release with branch?
+ipysphinx_prolog = r"""
+{% set docname = env.doc2path(env.docname, base='docs/source') %}
+
+.. only:: html
+
+    .. role:: raw-html(raw)
+        :format: html
+
+    .. nbinfo::
+
+        | This page was generated from `{{ docname }}`__.
+        | Interactive online version: :raw-html:`<a href="https://mybinder.org/v2/gh/chrisjsewell/ipypublish/v{{ env.config.release }}?filepath={{ docname }}"><img alt="Binder badge" src="https://mybinder.org/badge_logo.svg" style="vertical-align:text-bottom"></a>`
+
+    __ https://github.com/chrisjsewell/ipypublish/tree/v
+        {{ env.config.release }}/{{ docname }}
+
+"""
+
 
 def create_git_releases(app):
 
-    if os.environ.get('READTHEDOCS') == 'True':
+    if on_rtd:
         git_history = urllib.request.urlopen(
             'https://api.github.com/repos/chrisjsewell/ipypublish/releases'
         ).read().decode('utf-8')
@@ -329,7 +350,10 @@ def run_apidoc(app):
     See: https://github.com/rtfd/readthedocs.org/issues/1139
     """
     # get correct paths
-    this_folder = os.path.abspath(os.path.dirname(os.path.realpath(__file__)))
+    if on_rtd:
+        this_folder = os.path.abspath(".")
+    else:
+        os.path.abspath(os.path.dirname(os.path.realpath(__file__)))
     api_folder = os.path.join(this_folder, "api")
     # module_path = ipypublish.utils.get_module_path(ipypublish)
     module_path = os.path.normpath(
