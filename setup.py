@@ -24,15 +24,8 @@ setup(
     long_description_content_type='text/markdown',
     install_requires=requirements,
     extras_require={
-        "docs": {
-            "matplotlib"
-            "numpy",
-            "pandas",
-            "sympy"
-        },
         "sphinx": {
             "sphinx>=1.6",
-            "docutils",
             "sphinxcontrib-bibtex"
         },
         "tests": {
@@ -42,6 +35,12 @@ setup(
             "pillow",
             "nbsphinx",
             "ipykernel"
+        },
+        "science": {
+            "matplotlib",
+            "numpy",
+            "pandas",
+            "sympy"
         }
     },
     license='MIT',
