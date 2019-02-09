@@ -351,7 +351,7 @@ def run_apidoc(app):
     """
     # get correct paths
     if on_rtd:
-        this_folder = os.path.abspath(".")
+        this_folder = os.path.abspath("docs")
     else:
         os.path.abspath(os.path.dirname(os.path.realpath(__file__)))
     api_folder = os.path.join(this_folder, "api")
