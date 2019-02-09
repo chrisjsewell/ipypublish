@@ -21,21 +21,6 @@
     },
     "preprocessors": [
       {
-        "class": "nbconvert.preprocessors.ExecutePreprocessor",
-        "args": {
-          "timeout": 60,
-          "allow_errors": false,
-          "interrupt_on_timeout": false,
-          "kernel_name": ""
-        }
-      },
-      {
-        "class": "nbconvert.preprocessors.ExtractOutputPreprocessor",
-        "args": {
-          "enabled": true
-        }
-      },
-      {
         "class": "ipypublish.preprocessors.latex_doc_defaults.MetaDefaults",
         "args": {
           "cell_defaults": {
@@ -85,7 +70,15 @@
         "args": {}
       }
     ],
-    "other_args": {}
+    "other_args": {
+      "ExecutePreprocessor": {
+        "enabled": true,
+        "timeout": 60,
+        "allow_errors": false,
+        "interrupt_on_timeout": false,
+        "kernel_name": ""
+      }
+    }
   },
   "template": {
     "outline": {
