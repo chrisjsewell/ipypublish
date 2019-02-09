@@ -283,7 +283,7 @@ nitpick_ignore = [('py:exc', 'ArithmeticError'), ('py:exc', 'AssertionError'),
                   ]
 
 
-def create_git_releases():
+def create_git_releases(app):
 
     if os.environ.get('READTHEDOCS') == 'True':
         git_history = urllib.request.urlopen(
@@ -296,7 +296,8 @@ def create_git_releases():
             f.write('# Releases\n')
             f.write('\n')
             for r in git_history_json:
-                subtitle = '## ' + ' '.join([r['tag_name'], '-', r['name'], '\n'])
+                subtitle = '## ' + ' '.join([r['tag_name'],
+                                             '-', r['name'], '\n'])
                 f.write(subtitle)
                 f.write('\n')
                 for line in r['body'].split('\n'):
@@ -322,9 +323,9 @@ def add_intersphinx_aliases_to_inv(app):
             continue
 
 
-def run_apidoc():
+def run_apidoc(app):
     """ generate apidoc 
-    
+
     See: https://github.com/rtfd/readthedocs.org/issues/1139
     """
     # get correct paths
