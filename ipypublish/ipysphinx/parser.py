@@ -67,54 +67,11 @@ class NBParser(rst.Parser):
 
         # get file for conversion
         filepath = self.env.doc2path(self.env.docname)
-        fileext = os.path.splitext(filepath)[1]
         filedir = os.path.dirname(filepath)
         self.logger.info("ipypublish: converting {}".format(filepath))
 
-        # handle pre-conversion
-        nbnode = None
-        if fileext != ".ipynb":
-            self.logger.info(
-                "ipypublish: attempting pre-conversion with jupytext")
-            try:
-                import jupytext
-            except ImportError:
-                handle_error('jupytext package is not installed',
-                             self.error_nb, self.logger)
-            try:
-                nbnode = jupytext.readf(filepath, format_name="notebook")
-            except TypeError as err:  # noqa: F841
-                pass
-                # handle_error("jupytext: {}".format(err),
-                #              self.error_nb, self.logger)
-
-        if (fileext != ".ipynb" and nbnode is None):
-            handle_error(
-                'ipypublish: the file extension is not associated with any '
-                'converter: {}'.format(fileext), self.error_nb, self.logger)
-
-        # get conversion configuration
-        conversion = self.config.ipysphinx_export_config
-        if not isinstance(conversion, string_types):
-            handle_error(
-                'ipysphinx_export_config is not a string: '
-                '{}'.format(conversion), self.error_config, self.logger)
-        self.logger.info(
-            "ipypublish: using export config {}".format(conversion))
-
-        # type checking config values
-        if not isinstance(self.config.ipysphinx_folder_suffix, string_types):
-            handle_error(
-                'ipysphinx_folder_suffix is not a string: '
-                '{}'.format(conversion), self.error_config, self.logger)
-        if not isinstance(self.config.ipysphinx_config_folders,
-                          (list, set, tuple)):
-            handle_error(
-                'ipysphinx_config_folders is not an iterable: '
-                '{}'.format(conversion), self.error_config, self.logger)
-
         config = {"IpyPubMain": {
-            "conversion": conversion,
+            "conversion": self.config.ipysphinx_export_config,
             "plugin_folder_paths": self.config.ipysphinx_config_folders,
             "outpath": filedir,
             "folder_suffix": self.config.ipysphinx_folder_suffix,
@@ -124,8 +81,12 @@ class NBParser(rst.Parser):
                 clear_existing=False,
                 dump_files=True)
         }}
+        if self.config.ipysphinx_preconverters:
+            # NB: jupytext is already a default for .Rmd
+            config["IpyPubMain"]["pre_conversion_funcs"] = (
+                self.config.ipysphinx_preconverters)
         publish = IpyPubMain(config=config)
-        outdata = publish(filepath, nb_node=nbnode)
+        outdata = publish(filepath)
 
         self.logger.info("ipypublish: successful conversion")
 

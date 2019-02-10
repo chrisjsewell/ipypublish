@@ -5,9 +5,10 @@ import logging
 import os
 import time
 import sys
+import inspect
 
 import traitlets as T
-from traitlets import default
+from traitlets import default, validate, TraitError
 # from traitlets import validate
 from traitlets.config.configurable import Configurable
 from traitlets.config import Config
@@ -43,6 +44,16 @@ class IpyPubMain(Configurable):
         help="a list of folders containing conversion configurations"
     ).tag(config=True)
 
+    @validate("plugin_folder_paths")
+    def _validate_plugin_folder_paths(self, proposal):
+        folder_paths = proposal['value']
+        for path in folder_paths:
+            if not os.path.exists(path):
+                raise TraitError(
+                    "the configuration folder path does not exist: "
+                    "{}".format(path))
+        return proposal['value']
+
     outpath = T.Union(
         [T.Unicode(), T.Instance(pathlib.Path)],
         allow_none=True, default_value=None,
@@ -76,6 +87,42 @@ class IpyPubMain(Configurable):
               "this placeholder will be be replaced with the path "
               "(relative to outpath) to the folder where files will be dumped")
     ).tag(config=True)
+
+    pre_conversion_funcs = T.Dict(
+        help=("a mapping of file extensions to functions that can convert"
+              "that file type Instance(nbformat.NotebookNode) = func(pathstr)")
+    ).tag(config=True)
+
+    @default("pre_conversion_funcs")
+    def _default_pre_conversion_funcs(self):
+        try:
+            import jupytext
+            return {
+                ".Rmd": jupytext.readf
+            }
+        except ImportError:
+            return {}
+
+    @validate("pre_conversion_funcs")
+    def _validate_pre_conversion_funcs(self, proposal):
+        for ext, func in proposal['value'].items():
+            if not ext.startswith("."):
+                raise TraitError(
+                    "the extension key should start with a '.': "
+                    "{}".format(ext))
+            try:
+                func("string")
+                # TODO should do this safely with inspect,
+                # but no obvious solution
+                # to check if it only requires one string argument
+            except TypeError:
+                raise TraitError(
+                    "the function for {} can not be "
+                    "called with a single string arg: "
+                    "{}".format(ext, func))
+            except Exception:
+                pass
+        return proposal['value']
 
     log_to_stdout = T.Bool(
         True,
@@ -291,7 +338,7 @@ class IpyPubMain(Configurable):
         # setup the input and output paths
         if isinstance(ipynb_path, string_types):
             ipynb_path = pathlib.Path(ipynb_path)
-        ipynb_name = os.path.splitext(ipynb_path.name)[0]
+        ipynb_name, ipynb_ext = os.path.splitext(ipynb_path.name)
         outdir = os.path.join(
             os.getcwd(), 'converted') if self.outpath is None else self.outpath
 
@@ -309,6 +356,23 @@ class IpyPubMain(Configurable):
         self.logger.info('running for ipynb(s) at: {0}'.format(ipynb_path))
         self.logger.info(
             'with conversion configuration: {0}'.format(self.conversion))
+
+        if nb_node is None and ipynb_ext in self.pre_conversion_funcs:
+            func = self.pre_conversion_funcs[ipynb_ext]
+            self.logger.info(
+                "running pre-conversion with: {}".format(
+                    inspect.getmodule(func)))
+            try:
+                nb_node = func(ipynb_path)
+            except Exception as err:
+                handle_error(
+                    "pre-conversion failed for {}: {}".format(ipynb_path, err),
+                    err, self.logger)
+
+        # if (ipynb_ext != ".ipynb" and nb_node is None):
+        #     handle_error(
+        #         'the file extension is not associated with any '
+        #         'pre-converter: {}'.format(ipynb_ext), TypeError, self.logger)
 
         if nb_node is None:
             # merge all notebooks

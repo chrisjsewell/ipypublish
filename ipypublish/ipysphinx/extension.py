@@ -79,10 +79,9 @@ def setup(app):
     app.add_config_value('ipysphinx_prolog', None, rebuild='env')
     app.add_config_value('ipysphinx_epilog', None, rebuild='env')
 
-    # additional file extensions converted by jupytext
-    # TODO could add fully configurable formater {ext: function}
-    # (but this is more user friendly)
-    app.add_config_value('ipysphinx_jupytext', [], rebuild='env')
+    # map additional file extensions to pre-converters
+    # NB: jupytext is already a default for .Rmd
+    app.add_config_value('ipysphinx_preconverters', {}, rebuild='env')
     app.connect('builder-inited', associate_extensions)
 
     # add the main directives
@@ -159,9 +158,9 @@ def setup(app):
 
 
 def associate_extensions(app):
-    for suffix in app.config.ipysphinx_jupytext:
+    for suffix in app.config.ipysphinx_preconverters:
         associate_single_extension(app, suffix,
-                                   config_value="ipysphinx_jupytext")
+                                   config_value="ipysphinx_preconverters")
 
 
 def associate_single_extension(app, extension, suffix='jupyter_notebook',
