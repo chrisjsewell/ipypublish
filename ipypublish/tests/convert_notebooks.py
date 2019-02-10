@@ -3,7 +3,7 @@ import tempfile
 import os
 
 from ipypublish.convert.config_manager import iter_all_export_paths
-from ipypublish.convert.main import publish
+from ipypublish.convert.main import IpyPubMain
 from ipypublish.tests import TEST_FILES_DIR
 
 
@@ -12,9 +12,14 @@ def convert_all(inpath, outpath):
     for plugin_name, plugin_path in iter_all_export_paths():
 
         out_folder = tempfile.mkdtemp()
+        publish = IpyPubMain(
+            config={
+                "IpyPubMain": {
+                    "conversion": plugin_name,
+                    "outpath": out_folder
+                }})
         try:
-            outdata = publish(
-                str(inpath), conversion=plugin_name, outpath=out_folder)
+            outdata = publish(str(inpath))
 
             exporter = outdata["exporter"]
             outpath = outdata["outpath"]

@@ -1,12 +1,11 @@
 import os
 import logging
-import warnings
 
 from docutils.parsers import rst
 from six import string_types
 from ipypublish.utils import handle_error
 from ipypublish.ipysphinx.utils import import_sphinx
-from ipypublish.convert.main import publish
+from ipypublish.convert.main import IpyPubMain
 
 
 # TODO should inherit from sphinx.parsers.RSTParser
@@ -104,9 +103,9 @@ class NBParser(rst.Parser):
             "ipypublish: using export config {}".format(conversion))
 
         # type checking config values
-        if not isinstance(self.config.ipysphinx_files_folder, string_types):
+        if not isinstance(self.config.ipysphinx_folder_suffix, string_types):
             handle_error(
-                'ipysphinx_files_folder is not a string: '
+                'ipysphinx_folder_suffix is not a string: '
                 '{}'.format(conversion), self.error_config, self.logger)
         if not isinstance(self.config.ipysphinx_config_folders,
                           (list, set, tuple)):
@@ -114,16 +113,16 @@ class NBParser(rst.Parser):
                 'ipysphinx_config_folders is not an iterable: '
                 '{}'.format(conversion), self.error_config, self.logger)
 
-        outdata = publish(
-            filepath,
-            nb_node=nbnode,
-            conversion=conversion,
-            outpath=filedir,
-            clear_existing=False,
-            dump_files=True,
-            files_folder=self.config.ipysphinx_files_folder,
-            plugin_folder_paths=self.config.ipysphinx_config_folders
-        )
+        config = {"IpyPubMain": {
+            "conversion": conversion,
+            "plugin_folder_paths": self.config.ipysphinx_config_folders,
+            "outpath": filedir,
+            "folder_suffix":  self.config.ipysphinx_folder_suffix
+        }}
+        publish = IpyPubMain(config=config,
+                             clear_existing=False,
+                             dump_files=True)
+        outdata = publish(filepath, nb_node=nbnode)
 
         self.logger.info("ipypublish: successful conversion")
 

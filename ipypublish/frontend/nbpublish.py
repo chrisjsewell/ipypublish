@@ -4,7 +4,7 @@ import os
 import sys
 
 from ipypublish.frontend.shared import parse_options
-from ipypublish.convert.main import publish
+from ipypublish.convert.main import IpyPubMain
 
 logger = logging.getLogger("nbpublish")
 
@@ -75,15 +75,23 @@ def nbpublish(ipynb_path,
     root.addHandler(flogger)
 
     # run
+    config = {"IpyPubMain": {
+        "conversion": outformat,
+        "plugin_folder_paths": export_paths,
+        "outpath": outpath,
+        "ignore_prefix": ignore_prefix
+    }}
+    publish = IpyPubMain(config=config,
+                         dump_files=dump_files,
+                         clear_existing=clear_files,
+                         create_pdf=create_pdf,
+                         pdf_in_temp=pdf_in_temp,
+                         pdf_debug=pdf_debug,
+                         dry_run=dry_run,
+                         launch_browser=launch_browser,
+                         )
     try:
-        publish(ipynb_path,
-                conversion=outformat,
-                outpath=outpath, dump_files=dump_files,
-                ignore_prefix=ignore_prefix, clear_existing=clear_files,
-                create_pdf=create_pdf, pdf_in_temp=pdf_in_temp,
-                pdf_debug=pdf_debug, dry_run=dry_run,
-                launch_browser=launch_browser,
-                plugin_folder_paths=export_paths)
+        publish(ipynb_path)
     except Exception as err:
         logger.error("Run Failed: {}".format(err))
         if print_traceback:

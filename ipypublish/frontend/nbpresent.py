@@ -5,7 +5,7 @@ import sys
 from mimetypes import guess_type
 
 from ipypublish.frontend.shared import parse_options
-from ipypublish.convert.main import publish
+from ipypublish.convert.main import IpyPubMain
 from ipypublish.postprocessors.reveal_serve import RevealServer
 
 logger = logging.getLogger("nbpresent")
@@ -65,15 +65,20 @@ def nbpresent(inpath,
         flogger.setLevel(getattr(logging, log_level.upper()))
         root.addHandler(flogger)
 
+        config = {"IpyPubMain": {
+            "conversion": outformat,
+            "plugin_folder_paths": export_paths,
+            "outpath": outpath,
+            "ignore_prefix": ignore_prefix
+        }}
+        publish = IpyPubMain(config=config,
+                             dump_files=dump_files,
+                             clear_existing=clear_files,
+                             serve_html=True,
+                             slides=True,
+                             dry_run=dry_run)
         try:
-            outdata = publish(inpath,
-                              conversion=outformat,
-                              outpath=outpath, dump_files=dump_files,
-                              ignore_prefix=ignore_prefix,
-                              clear_existing=clear_files,
-                              create_pdf=False, dry_run=dry_run,
-                              plugin_folder_paths=export_paths,
-                              serve_html=True)
+            outdata = publish(inpath)
 
             outpath = outdata["outpath"]
             output_mimetype = outdata["exporter"].output_mimetype

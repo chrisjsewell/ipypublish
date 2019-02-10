@@ -56,7 +56,7 @@ def setup(app):
     # config for contolling conversion process
     # where to dump internal images, etc of the notebook
     app.add_config_value(
-        'ipysphinx_files_folder', "{filename}_nbfiles", rebuild='env')
+        'ipysphinx_folder_suffix', "_nbfiles", rebuild='env')
     # whether to raise error if nb_name.rst already exists
     app.add_config_value('ipysphinx_overwrite_existing', False, rebuild='env')
     # additional folders containing conversion files
