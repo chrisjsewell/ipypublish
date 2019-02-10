@@ -42,7 +42,7 @@ class IpyPubMain(LoggingConfigurable):
     ).tag(config=True)
 
     outpath = T.Union(
-        [T.Unicode(), T.Instance('pathlib.Path')],
+        [T.Unicode(), T.Instance(pathlib.Path)],
         allow_none=True, default_value=None,
         help="path to output converted files"
     ).tag(config=True)
@@ -60,6 +60,20 @@ class IpyPubMain(LoggingConfigurable):
         '_',
         help=("prefixes to ignore, "
               "when finding notebooks to merge")).tag(config=True)
+
+    meta_path_placeholder = T.Unicode(
+        "${meta_path}",
+        help=("all string values in the export configuration containing "
+              "this placeholder will be be replaced with the path to the "
+              "notebook from which the metadata was obtained")
+    ).tag(config=True)
+
+    files_folder_placeholder = T.Unicode(
+        "${files_path}",
+        help=("all string values in the export configuration containing "
+              "this placeholder will be be replaced with the path "
+              "(relative to outpath) to the folder where files will be dumped")
+    ).tag(config=True)
 
     @property
     def default_exporter_config(self):
@@ -213,9 +227,9 @@ class IpyPubMain(LoggingConfigurable):
 
         # TODO beter way to handle this?
         replacements = {
-            "${meta_path}": str(meta_path),
-            "${files_path}": "{}{}".format(get_valid_filename(ipynb_name),
-                                           self.folder_suffix)
+            self.meta_path_placeholder: str(meta_path),
+            self.files_folder_placeholder: "{}{}".format(
+                get_valid_filename(ipynb_name), self.folder_suffix)
         }
 
         self.logger.debug('notebooks meta path: {}'.format(meta_path))
@@ -355,14 +369,14 @@ class IpyPubMain(LoggingConfigurable):
 
 
 def replace_placeholders(mapping, replacements):
-    """ recurse through a mapping and perform (inplace) string replacements
-    
+    """ recurse through a mapping and perform (in-place) string replacements
+
     Parameters
     ----------
     mapping:
         any object which has an items() attribute
     replacements: dict
-        {to: from}  
+        {placeholder: replacement}
 
     """
     for key, val in mapping.items():
