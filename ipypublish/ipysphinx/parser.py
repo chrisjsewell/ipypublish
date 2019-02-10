@@ -1,17 +1,12 @@
 import os
 import logging
+import warnings
 
 from docutils.parsers import rst
 from six import string_types
 from ipypublish.utils import handle_error
 from ipypublish.ipysphinx.utils import import_sphinx
 from ipypublish.convert.main import publish
-
-try:
-    sphinx = import_sphinx()
-    logger = sphinx.util.logging.getLogger('nbparser')
-except (ImportError, AttributeError):
-    logger = logging.getLogger('nbparser')
 
 
 # TODO should inherit from sphinx.parsers.RSTParser
@@ -25,10 +20,27 @@ class NBParser(rst.Parser):
     supported = 'jupyter_notebook',
 
     def __init__(self, *args, **kwargs):
-        
+
         self.app = None
         self.config = None
         self.env = None
+
+        try:
+            sphinx = import_sphinx()
+
+            class NotebookError(sphinx.errors.SphinxError):
+                """Error during notebook parsing."""
+
+                category = 'Notebook error'
+
+            self.error_nb = NotebookError
+            self.error_config = sphinx.errors.ConfigError
+            self.logger = sphinx.util.logging.getLogger('nbparser')
+
+        except (ImportError, AttributeError):
+            self.error_nb = IOError
+            self.error_config = TypeError
+            self.logger = logging.getLogger('nbparser')
 
         super(NBParser, self).__init__(*args, **kwargs)
 
@@ -56,29 +68,55 @@ class NBParser(rst.Parser):
 
         # get file for conversion
         filepath = self.env.doc2path(self.env.docname)
+        fileext = os.path.splitext(filepath)[1]
         filedir = os.path.dirname(filepath)
-        # filename = os.path.splitext(os.path.basename(filepath))[0]
-        # outpath = os.path.join(filedir, filename + ".rst")
-        logger.info("ipypublish: converting {}".format(filepath))
+        self.logger.info("ipypublish: converting {}".format(filepath))
+
+        # handle pre-conversion
+        nbnode = None
+        if fileext != ".ipynb":
+            self.logger.info(
+                "ipypublish: attempting pre-conversion with jupytext")
+            try:
+                import jupytext
+            except ImportError:
+                handle_error('jupytext package is not installed',
+                             self.error_nb, self.logger)
+            try:
+                nbnode = jupytext.readf(filepath, format_name="notebook")
+            except TypeError as err:  # noqa: F841
+                pass
+                # handle_error("jupytext: {}".format(err),
+                #              self.error_nb, self.logger)
+
+        if (fileext != ".ipynb" and nbnode is None):
+            handle_error(
+                'ipypublish: the file extension is not associated with any '
+                'converter: {}'.format(fileext), self.error_nb, self.logger)
 
         # get conversion configuration
         conversion = self.config.ipysphinx_export_config
         if not isinstance(conversion, string_types):
-            handle_error('ipysphinx_export_config is not a string: '
-                         '{}'.format(conversion), TypeError, logger)
-        logger.info("ipypublish: using export config {}".format(conversion))
+            handle_error(
+                'ipysphinx_export_config is not a string: '
+                '{}'.format(conversion), self.error_config, self.logger)
+        self.logger.info(
+            "ipypublish: using export config {}".format(conversion))
 
         # type checking config values
         if not isinstance(self.config.ipysphinx_files_folder, string_types):
-            handle_error('ipysphinx_files_folder is not a string: '
-                         '{}'.format(conversion), TypeError, logger)
+            handle_error(
+                'ipysphinx_files_folder is not a string: '
+                '{}'.format(conversion), self.error_config, self.logger)
         if not isinstance(self.config.ipysphinx_config_folders,
                           (list, set, tuple)):
-            handle_error('ipysphinx_config_folders is not an iterable: '
-                         '{}'.format(conversion), TypeError, logger)
+            handle_error(
+                'ipysphinx_config_folders is not an iterable: '
+                '{}'.format(conversion), self.error_config, self.logger)
 
         outdata = publish(
             filepath,
+            nb_node=nbnode,
             conversion=conversion,
             outpath=filedir,
             clear_existing=False,
@@ -86,7 +124,8 @@ class NBParser(rst.Parser):
             files_folder=self.config.ipysphinx_files_folder,
             plugin_folder_paths=self.config.ipysphinx_config_folders
         )
-        logger.info("ipypublish: successful conversion")
+
+        self.logger.info("ipypublish: successful conversion")
 
         # check we got back restructuredtext
         exporter = outdata["exporter"]
@@ -94,7 +133,7 @@ class NBParser(rst.Parser):
             handle_error(
                 "ipypublish: the output content is not of type "
                 "text/restructuredtext: {}".format(exporter.output_mimetype),
-                TypeError, logger
+                TypeError, self.logger
             )
 
         # TODO document use of orphan

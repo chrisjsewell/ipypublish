@@ -1,5 +1,6 @@
 import os
 from docutils.parsers import rst
+from six import string_types
 
 from ipypublish import __version__
 from ipypublish.ipysphinx.directives import (NbInfo, NbInput,
@@ -36,17 +37,17 @@ def setup(app):
     this requires sphinx.ext.imgconverter to work
 
     """
-
     # delayed import of sphinx
     sphinx = import_sphinx()
 
-    # add mapping of suffix to parser
     try:
         # Available since Sphinx 1.8:
-        app.add_source_suffix('.ipynb', 'jupyter_notebook')
         app.add_source_parser(NBParser)
-    except AttributeError:
-        _add_notebook_parser(app)
+    except TypeError:
+        # Available since Sphinx 1.4:
+        app.add_source_parser('jupyter_notebook', NBParser)
+
+    associate_single_extension(app, '.ipynb', called_from_setup=True)
 
     # config for export config
     app.add_config_value(
@@ -69,14 +70,20 @@ def setup(app):
     # config for html css
     app.add_config_value('nbsphinx_responsive_width', '540px', rebuild='html')
     app.add_config_value('nbsphinx_prompt_width', None, rebuild='html')
+    # setup html style
+    app.connect('builder-inited', set_css_prompts)
+    app.connect('html-page-context', html_add_css)
 
     # config for additions to the output rst (per file)
     # these strings are processed by the exporters jinja template
     app.add_config_value('ipysphinx_prolog', None, rebuild='env')
     app.add_config_value('ipysphinx_epilog', None, rebuild='env')
 
-    # config for hook to jupytext  # TODO requires implementation in parser
-    # app.add_config_value('ipysphinx_custom_formats', {}, rebuild='env')
+    # additional file extensions converted by jupytext
+    # TODO could add fully configurable formater {ext: function}
+    # (but this is more user friendly)
+    app.add_config_value('ipysphinx_jupytext', [], rebuild='env')
+    app.connect('builder-inited', associate_extensions)
 
     # add the main directives
     app.add_directive('nbinput', NbInput)
@@ -121,10 +128,6 @@ def setup(app):
                  #  )
                  )
 
-    # setup html style
-    app.connect('builder-inited', builder_inited)
-    app.connect('html-page-context', html_add_css)
-
     # add transformations
     app.add_transform(CreateSectionLabels)
     app.add_transform(CreateDomainObjectLabels)
@@ -155,31 +158,68 @@ def setup(app):
     }
 
 
-def _add_notebook_parser(app):
-    """Ugly hack to modify source_suffix and source_parsers.
+def associate_extensions(app):
+    for suffix in app.config.ipysphinx_jupytext:
+        associate_single_extension(app, suffix,
+                                   config_value="ipysphinx_jupytext")
 
-    Once https://github.com/sphinx-doc/sphinx/pull/2209 is merged (and
-    some additional time has passed), this should be replaced by ::
 
-        app.add_source_parser('.ipynb', NotebookParser)
+def associate_single_extension(app, extension, suffix='jupyter_notebook',
+                               called_from_setup=False,
+                               config_value=None):
+    # type: (Sphinx, str) -> None
+    """ associate a file extension with the NBParser
 
+    Notes
+    -----
+    The Ugly hack to modify source_suffix and source_parsers.
+    Once https://github.com/sphinx-doc/sphinx/pull/2209 
+    is merged it won't be necessary.
     See also https://github.com/sphinx-doc/sphinx/issues/2162.
 
     """
+    if not isinstance(extension, string_types):
+        raise AssertionError("extension is not a string: {}".format(extension))
+    if not extension.startswith("."):
+        raise AssertionError(
+            "extension should start with a '.': {}".format(extension))
+
     sphinx = import_sphinx()
-    source_suffix = app.config._raw_config.get('source_suffix', ['.rst'])
-    if isinstance(source_suffix, sphinx.config.string_types):
-        source_suffix = [source_suffix]
-    if '.ipynb' not in source_suffix:
-        source_suffix.append('.ipynb')
-        app.config._raw_config['source_suffix'] = source_suffix
-    source_parsers = app.config._raw_config.get('source_parsers', {})
-    if '.ipynb' not in source_parsers and 'ipynb' not in source_parsers:
-        source_parsers['.ipynb'] = NBParser
-        app.config._raw_config['source_parsers'] = source_parsers
+
+    try:
+        # Available since Sphinx 1.8:
+        app.add_source_suffix(extension, suffix)
+    except AttributeError:
+
+        if not called_from_setup:
+            # too late to set up, see
+            # https://github.com/sphinx-doc/sphinx/issues/2162#issuecomment-169193107
+            raise sphinx.errors.ExtensionError(
+                "Using sphinx<1.8, {0} cannot be used.\n"
+                "Instead use: source_parsers = "
+                "{{'{1}': 'ipypublish.ipysphinx.parser.NBParser'}} "
+                "in conf.py".format(config_value, extension))
+
+        source_suffix = app.config._raw_config.get('source_suffix', ['.rst'])
+
+        if isinstance(source_suffix, sphinx.config.string_types):
+            source_suffix = [source_suffix]
+        if extension not in source_suffix:
+            source_suffix.append(extension)
+            app.config._raw_config['source_suffix'] = source_suffix
+        source_parsers = app.config._raw_config.get('source_parsers', {})
+
+        if (extension not in source_parsers
+                and extension[1:] not in source_parsers):
+            source_parsers[extension] = NBParser
+            app.config._raw_config['source_parsers'] = source_parsers
+
+    sphinx.util.logging.getLogger('nbparser').info(
+        "ipypublish: associated {} with NBParser".format(extension))
 
 
 def visit_admonition_html(self, node):
+    """add openeing div and set classes  """
     self.body.append(self.starttag(node, 'div'))
     if len(node.children) >= 2:
         node[0]['classes'].append('admonition-title')
@@ -207,8 +247,8 @@ def read_css(name):
     return content
 
 
-def builder_inited(app):
-    # Set default value for CSS prompt width
+def set_css_prompts(app):
+    """ Set default value for CSS prompt width """
     if app.config.nbsphinx_prompt_width is None:
         app.config.nbsphinx_prompt_width = {
             'agogo': '4ex',
@@ -226,10 +266,6 @@ def builder_inited(app):
             'sphinx_rtd_theme': '5ex',
             'traditional': '4ex',
         }.get(app.config.html_theme, '7ex')
-
-    # TODO requires implementation in parser
-    # for suffix in app.config.nbsphinx_custom_formats:
-    #     app.add_source_suffix(suffix, 'jupyter_notebook')
 
 
 def html_add_css(app, pagename, templatename, context, doctree):

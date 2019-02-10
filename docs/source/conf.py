@@ -71,10 +71,13 @@ templates_path = ['_templates']
 #     '.md': 'markdown',
 #     '.ipynb': 'jupyter_notebook'
 # }
-source_suffix = ['.rst', '.md', '.ipynb']
+# source_suffix = ['.rst', '.md', '.ipynb']
 source_parsers = {
-    '.md': 'recommonmark.parser.CommonMarkParser'
+    '.md': 'recommonmark.parser.CommonMarkParser',
+    '.Rmd': 'ipypublish.ipysphinx.parser.NBParser'
 }
+# ipysphinx_jupytext = [".Rmd"]
+
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This patterns also effect to html_static_path and html_extra_path
@@ -299,7 +302,10 @@ ipysphinx_prolog = r"""
     .. nbinfo::
 
         | This page was generated from `{{ docname }}`__.
-        | Interactive online version: :raw-html:`<a href="https://mybinder.org/v2/gh/chrisjsewell/ipypublish/v{{ env.config.release }}?filepath={{ docname }}"><img alt="Binder badge" src="https://mybinder.org/badge_logo.svg" style="vertical-align:text-bottom"></a>`
+        {%- if docname.endswith('.ipynb') %}
+        | Interactive online version:
+          :raw-html:`<a href="https://mybinder.org/v2/gh/chrisjsewell/ipypublish/v{{ env.config.release }}?filepath={{ docname }}"><img alt="Binder badge" src="https://mybinder.org/badge_logo.svg" style="vertical-align:text-bottom"></a>`
+        {%- endif %}
 
     __ https://github.com/chrisjsewell/ipypublish/tree/v
         {{ env.config.release }}/{{ docname }}

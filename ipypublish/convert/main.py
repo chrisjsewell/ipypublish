@@ -22,7 +22,9 @@ from ipypublish.convert.config_manager import (get_export_config_path,
 logger = logging.getLogger("conversion")
 
 
+# TODO make this into a (callable) Configurable class
 def publish(ipynb_path,
+            nb_node=None,
             conversion='latex_ipypublish_main',
             outpath=None,
             dump_files=False,
@@ -47,8 +49,10 @@ def publish(ipynb_path,
     ----------
     ipynb_path
         notebook file or directory
-    outformat: str
-        output format to use
+    nb_node: None or nbformat.NotebookNode
+        a pre-converted notebook
+    conversion: str
+        conversion format or path to use
     outpath : str or pathlib.Path
         path to output converted files
     dump_files: bool
@@ -83,12 +87,16 @@ def publish(ipynb_path,
     # TODO control logging and dry_run, etc through config, and related
     # (make sure this doesnt break sphinx nbparser)
     # TODO turn whole thing into a traitlets Application
-    # TODO allow for parsing logger 
+    # TODO allow for parsing logger
     # (needs to also be parsed on to called functions)
 
     # setup the input and output paths
     if isinstance(ipynb_path, string_types):
         ipynb_path = pathlib.Path(ipynb_path)
+    if not ipynb_path.exists():
+        handle_error('the notebook path does not exist: {}'.format(
+            ipynb_path), IOError, logger)
+
     ipynb_name = os.path.splitext(ipynb_path.name)[0]
     files_folder = files_folder.format(filename=get_valid_filename(ipynb_name))
 
@@ -103,12 +111,17 @@ def publish(ipynb_path,
     logger.info('running for ipynb(s) at: {0}'.format(ipynb_path))
     logger.info('with conversion configuration: {0}'.format(conversion))
 
-    # merge all notebooks (this handles checking ipynb_path exists)
-    # TODO allow notebooks to remain separate
-    # (would require creating a main.tex with the preamble in etc )
-    # Could make everything a 'PyProcess', with support for multiple streams
-    final_nb, meta_path = merge_notebooks(ipynb_path,
-                                          ignore_prefix=ignore_prefix)
+    if nb_node is None:
+        # merge all notebooks
+        # TODO allow notebooks to remain separate
+        # (would require creating a main.tex with the preamble in etc )
+        # Could make everything a 'PyProcess',
+        # with support for multiple streams
+        final_nb, meta_path = merge_notebooks(ipynb_path,
+                                              ignore_prefix=ignore_prefix)
+    else:
+        final_nb, meta_path = (nb_node, ipynb_path)
+
     logger.debug('notebooks meta path: {}'.format(meta_path))
 
     # set post-processor defaults

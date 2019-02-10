@@ -69,6 +69,7 @@ Badges
    package_api
    releases
    ipynb1
+   ipynb2
 
 .. toctree::
    :maxdepth: 2

@@ -26,7 +26,8 @@ setup(
     extras_require={
         "sphinx": {
             "sphinx>=1.6",
-            "sphinxcontrib-bibtex"
+            "sphinxcontrib-bibtex",
+            "jupytext"
         },
         "tests": {
             "pytest>=3.6",

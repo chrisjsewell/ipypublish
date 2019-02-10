@@ -7,6 +7,7 @@ dependencies:
   - nbconvert!=5.4
   - ipykernel
   - sphinxcontrib-bibtex
+  - jupytext
   - numpy
   - matplotlib
   - pandas
