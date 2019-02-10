@@ -23,6 +23,7 @@ import io
 import urllib
 import json
 import shutil
+import subprocess
 
 import ipypublish
 
@@ -72,11 +73,18 @@ templates_path = ['_templates']
 #     '.ipynb': 'jupyter_notebook'
 # }
 # source_suffix = ['.rst', '.md', '.ipynb']
-source_parsers = {
-    '.md': 'recommonmark.parser.CommonMarkParser',
-    '.Rmd': 'ipypublish.ipysphinx.parser.NBParser'
-}
-# ipysphinx_jupytext = [".Rmd"]
+
+import sphinx
+if sphinx.version_info[0:2] < (1, 8):
+    source_parsers = {
+        '.md': 'recommonmark.parser.CommonMarkParser',
+        '.Rmd': 'ipypublish.ipysphinx.parser.NBParser'
+    }
+else:
+    source_parsers = {
+        '.md': 'recommonmark.parser.CommonMarkParser'
+    }
+    ipysphinx_jupytext = [".Rmd"]
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -289,10 +297,19 @@ nitpick_ignore = [('py:exc', 'ArithmeticError'), ('py:exc', 'AssertionError'),
                   ('py:obj', 'sphinx.application.Sphinx')
                   ]
 
-# TODO can you retrieve the branch that is being built in?
-# if not in master, then replace env.config.release with branch?
+try:
+    out = subprocess.check_output(["git", "branch"]).decode("utf8")
+    current = next(line for line in out.split("\n") if line.startswith("*"))
+    branch = current.strip("*").strip()
+except subprocess.CalledProcessError:
+    branch = None
+
+if branch == "master" or None:
+    branch = "v{}".format(ipypublish.__version__)
+
+
 ipysphinx_prolog = r"""
-{% set docname = env.doc2path(env.docname, base='docs/source') %}
+{{% set docname = env.doc2path(env.docname, base='docs/source') %}}
 
 .. only:: html
 
@@ -301,16 +318,16 @@ ipysphinx_prolog = r"""
 
     .. nbinfo::
 
-        | This page was generated from `{{ docname }}`__.
-        {%- if docname.endswith('.ipynb') %}
+        | This page was generated from `{{{{ docname }}}}`__.
+        {{%- if docname.endswith('.ipynb') %}}
         | Interactive online version:
-          :raw-html:`<a href="https://mybinder.org/v2/gh/chrisjsewell/ipypublish/v{{ env.config.release }}?filepath={{ docname }}"><img alt="Binder badge" src="https://mybinder.org/badge_logo.svg" style="vertical-align:text-bottom"></a>`
-        {%- endif %}
+          :raw-html:`<a href="https://mybinder.org/v2/gh/chrisjsewell/ipypublish/{branch}?filepath={{{{ docname }}}}"><img alt="Binder badge" src="https://mybinder.org/badge_logo.svg" style="vertical-align:text-bottom"></a>`
+        {{%- endif %}}
 
-    __ https://github.com/chrisjsewell/ipypublish/tree/v
-        {{ env.config.release }}/{{ docname }}
+    __ https://github.com/chrisjsewell/ipypublish/tree/
+        {branch}/{{{{ docname }}}}
 
-"""
+""".format(branch=branch)
 
 
 def create_git_releases(app):
