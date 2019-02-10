@@ -25,9 +25,10 @@ import json
 import shutil
 import subprocess
 
-import ipypublish
-
+import sphinx
 from sphinx.application import Sphinx  # noqa
+
+import ipypublish
 
 on_rtd = os.environ.get('READTHEDOCS') == 'True'
 
@@ -74,7 +75,6 @@ templates_path = ['_templates']
 # }
 # source_suffix = ['.rst', '.md', '.ipynb']
 
-import sphinx
 if sphinx.version_info[0:2] < (1, 8):
     source_parsers = {
         '.md': 'recommonmark.parser.CommonMarkParser',
@@ -300,13 +300,17 @@ nitpick_ignore = [('py:exc', 'ArithmeticError'), ('py:exc', 'AssertionError'),
 try:
     out = subprocess.check_output(["git", "branch"]).decode("utf8")
     current = next(line for line in out.split("\n") if line.startswith("*"))
-    branch = current.strip("*").strip()
+    gitbranch = current.strip("*").strip()
 except subprocess.CalledProcessError:
-    branch = None
+    gitbranch = None
 
-if branch == "master" or None:
-    branch = "v{}".format(ipypublish.__version__)
-
+# on rtd, returns e.g. (HEAD detached at origin/develop)
+if gitbranch is not None and "develop" in gitbranch:
+    gitpath = "blob/develop"
+    binderpath = "develop"
+else:
+    gitpath = "blob/v{}".format(ipypublish.__version__)
+    binderpath = "v{}".format(ipypublish.__version__)
 
 ipysphinx_prolog = r"""
 {{% set docname = env.doc2path(env.docname, base='docs/source') %}}
@@ -321,35 +325,45 @@ ipysphinx_prolog = r"""
         | This page was generated from `{{{{ docname }}}}`__.
         {{%- if docname.endswith('.ipynb') %}}
         | Interactive online version:
-          :raw-html:`<a href="https://mybinder.org/v2/gh/chrisjsewell/ipypublish/{branch}?filepath={{{{ docname }}}}"><img alt="Binder badge" src="https://mybinder.org/badge_logo.svg" style="vertical-align:text-bottom"></a>`
+          :raw-html:`<a href="https://mybinder.org/v2/gh/chrisjsewell/ipypublish/{binderpath}?filepath={{{{ docname }}}}"><img alt="Binder badge" src="https://mybinder.org/badge_logo.svg" style="vertical-align:text-bottom"></a>`
         {{%- endif %}}
 
-    __ https://github.com/chrisjsewell/ipypublish/tree/
-        {branch}/{{{{ docname }}}}
+    __ https://github.com/chrisjsewell/ipypublish/{gitpath}/{{{{ docname }}}}
 
-""".format(branch=branch)
+""".format(gitpath=gitpath, binderpath=binderpath)
 
 
 def create_git_releases(app):
 
-    if on_rtd:
-        git_history = urllib.request.urlopen(
-            'https://api.github.com/repos/chrisjsewell/ipypublish/releases'
-        ).read().decode('utf-8')
-        # NOTE on vscode this could fail with urllib.error.HTTPError
-        git_history_json = json.loads(git_history)
-        # NOTE on vscode this was failing unless encoding='utf8' was present
-        with io.open('releases.md', 'w', encoding="utf8") as f:
-            f.write('# Releases\n')
+    # on_rtd:
+    this_folder = os.path.abspath(
+        os.path.dirname(os.path.realpath(__file__)))
+
+    git_history = urllib.request.urlopen(
+        'https://api.github.com/repos/chrisjsewell/ipypublish/releases'
+    ).read().decode('utf-8')
+    # NOTE on vscode this could fail with urllib.error.HTTPError
+    git_history_json = json.loads(git_history)
+    # NOTE on vscode this was failing unless encoding='utf8' was present
+    with io.open(os.path.join(this_folder, 'releases.md'),
+                 'w', encoding="utf8") as f:
+        f.write('# Releases\n')
+        f.write('\n')
+        for i, r in enumerate(git_history_json):
+            if r['tag_name'].split(".")[-1] == "0":
+                level = '## '
+            elif i == 0:
+                f.write("## Current Version\n")
+                level = '### '
+            else:
+                level = '### '
+            subtitle = level + ' '.join([r['tag_name'],
+                                         '-', r['name'], '\n'])
+            f.write(subtitle)
             f.write('\n')
-            for r in git_history_json:
-                subtitle = '## ' + ' '.join([r['tag_name'],
-                                             '-', r['name'], '\n'])
-                f.write(subtitle)
-                f.write('\n')
-                for line in r['body'].split('\n'):
-                    f.write(' '.join([line, '\n']))
-                f.write('\n')
+            for line in r['body'].split('\n'):
+                f.write(' '.join([line, '\n']))
+            f.write('\n')
 
 
 def add_intersphinx_aliases_to_inv(app):
@@ -377,7 +391,7 @@ def run_apidoc(app):
     """
     # get correct paths
     this_folder = os.path.abspath(
-            os.path.dirname(os.path.realpath(__file__)))
+        os.path.dirname(os.path.realpath(__file__)))
     api_folder = os.path.join(this_folder, "api")
     # module_path = ipypublish.utils.get_module_path(ipypublish)
     module_path = os.path.normpath(
