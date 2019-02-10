@@ -45,7 +45,7 @@ class NBParser(rst.Parser):
 
     def set_application(self, app):
         # type: (Sphinx) -> None
-        """set_application will be called from Sphinx to set app 
+        """set_application will be called from Sphinx to set app
         and other instance variables
 
         Parameters
@@ -117,11 +117,14 @@ class NBParser(rst.Parser):
             "conversion": conversion,
             "plugin_folder_paths": self.config.ipysphinx_config_folders,
             "outpath": filedir,
-            "folder_suffix":  self.config.ipysphinx_folder_suffix
+            "folder_suffix": self.config.ipysphinx_folder_suffix,
+            "log_to_stdout": False,
+            "log_to_file": False,
+            "default_pporder_kwargs": dict(
+                clear_existing=False,
+                dump_files=True)
         }}
-        publish = IpyPubMain(config=config,
-                             clear_existing=False,
-                             dump_files=True)
+        publish = IpyPubMain(config=config)
         outdata = publish(filepath, nb_node=nbnode)
 
         self.logger.info("ipypublish: successful conversion")

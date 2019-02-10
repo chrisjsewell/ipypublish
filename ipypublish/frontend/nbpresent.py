@@ -55,14 +55,16 @@ def nbpresent(inpath,
             "log_to_stdout": True,
             "log_level_stdout": log_level,
             "log_to_file": True,
-            "log_level_file": log_level
+            "log_level_file": log_level,
+            "default_pporder_kwargs": dict(
+                dry_run=dry_run,
+                clear_existing=clear_files,
+                dump_files=dump_files,
+                serve_html=True,
+                slides=True
+            )
         }}
-        publish = IpyPubMain(config=config,
-                             dump_files=dump_files,
-                             clear_existing=clear_files,
-                             serve_html=True,
-                             slides=True,
-                             dry_run=dry_run)
+        publish = IpyPubMain(config=config)
         try:
             outdata = publish(inpath)
 

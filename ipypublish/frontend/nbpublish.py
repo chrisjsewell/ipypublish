@@ -58,16 +58,20 @@ def nbpublish(ipynb_path,
         "log_to_stdout": True,
         "log_level_stdout": log_level,
         "log_to_file": True,
-        "log_level_file": log_level
+        "log_level_file": log_level,
+        "default_pporder_kwargs": dict(
+            dry_run=dry_run,
+            clear_existing=clear_files,
+            dump_files=dump_files,
+            create_pdf=create_pdf,
+        ),
+        "default_ppconfig_kwargs": dict(
+            pdf_in_temp=pdf_in_temp,
+            pdf_debug=pdf_debug,
+            launch_browser=launch_browser
+        )
     }}
-    publish = IpyPubMain(config=config,
-                         dump_files=dump_files,
-                         clear_existing=clear_files,
-                         create_pdf=create_pdf,
-                         pdf_in_temp=pdf_in_temp,
-                         pdf_debug=pdf_debug,
-                         dry_run=dry_run,
-                         launch_browser=launch_browser)
+    publish = IpyPubMain(config=config)
     try:
         publish(ipynb_path)
     except Exception as err:

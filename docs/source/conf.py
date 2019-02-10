@@ -246,7 +246,9 @@ intersphinx_aliases = {
     ('py:class', 'nbconvert.preprocessors.base.Preprocessor'):
         ('py:class', 'nbconvert.preprocessors.Preprocessor'),
     ('py:class', 'nbformat.notebooknode.NotebookNode'):
-        ('py:class', 'nbformat.NotebookNode')
+        ('py:class', 'nbformat.NotebookNode'),
+    ('py:class', 'traitlets.config.configurable.Configurable'):
+        ('py:module', 'traitlets.config')
 }
 
 # Warnings to ignore when using the -n (nitpicky) option

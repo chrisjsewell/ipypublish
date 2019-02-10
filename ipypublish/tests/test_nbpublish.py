@@ -37,8 +37,10 @@ def test_publish_ipynb1_pdf(temp_folder, ipynb1):
     pdf_path = os.path.join(temp_folder,
                             os.path.splitext(ipynb1.name)[0] + '.pdf')
 
-    IpyPubMain(config={"IpyPubMain": {"outpath": temp_folder}},
-               create_pdf=True)(ipynb1)
+    IpyPubMain(config={"IpyPubMain":
+                       {"outpath": temp_folder,
+                        "default_pporder_kwargs": {"create_pdf": True}}},
+               )(ipynb1)
     assert os.path.exists(tex_path)
     assert os.path.exists(pdf_path)
 
@@ -56,9 +58,11 @@ def test_publish_markdown_cells_latex(temp_folder, nb_markdown_cells):
     pdf_path = os.path.join(temp_folder,
                             os.path.splitext(ipynb.name)[0] + '.pdf')
 
-    IpyPubMain(config={"IpyPubMain": {"outpath": temp_folder,
-                                      "conversion": "latex_ipypublish_main"}},
-               create_pdf=True)(ipynb)
+    IpyPubMain(config={"IpyPubMain":
+                       {"outpath": temp_folder,
+                        "conversion": "latex_ipypublish_main",
+                        "default_pporder_kwargs": {"create_pdf": True}}}
+               )(ipynb)
     assert os.path.exists(tex_path)
     assert os.path.exists(pdf_path)
     compare_tex_files(tex_file, tex_path)
@@ -76,7 +80,8 @@ def test_publish_markdown_cells_rst(temp_folder, nb_markdown_cells):
 
     IpyPubMain(config={"IpyPubMain": {
         "outpath": temp_folder,
-        "conversion": "sphinx_ipypublish_main"}})(ipynb)
+        "conversion": "sphinx_ipypublish_main"}}
+    )(ipynb)
     assert os.path.exists(rst_path)
     compare_rst_files(rst_file, rst_path)
 
@@ -88,8 +93,10 @@ def test_publish_withbib(temp_folder, ipynb_with_bib):
     pdf_path = os.path.join(temp_folder,
                             os.path.splitext(ipynb_with_bib.name)[0] + '.pdf')
 
-    IpyPubMain(config={"IpyPubMain": {"outpath": temp_folder}},
-               create_pdf=True)(ipynb_with_bib)
+    IpyPubMain(config={"IpyPubMain": {
+        "outpath": temp_folder,
+        "default_pporder_kwargs": {"create_pdf": True}}}
+    )(ipynb_with_bib)
     assert os.path.exists(tex_path)
     assert os.path.exists(pdf_path)
 
@@ -117,9 +124,12 @@ def test_publish_complex_latex(ipynb_folder_with_external):
                             basename + '.tex')
     pdf_path = os.path.join(input_folder,
                             basename + '.pdf')
-    IpyPubMain(config={"IpyPubMain": {"outpath": input_folder,
-                                      "conversion": "latex_ipypublish_main"}},
-               create_pdf=True, pdf_debug=True)(input_folder)
+    IpyPubMain(config={"IpyPubMain":
+                       {"outpath": input_folder,
+                        "conversion": "latex_ipypublish_main",
+                        "default_pporder_kwargs": {"create_pdf": True},
+                        "default_ppconfig_kwargs":  {"pdf_debug": True}}}
+               )(input_folder)
     assert os.path.exists(tex_path)
     assert os.path.exists(pdf_path)
     compare_tex_files(expected, tex_path)
@@ -140,7 +150,7 @@ def test_publish_complex_html(ipynb_folder_with_external):
                              basename + '.html')
     IpyPubMain(config={"IpyPubMain": {"outpath": input_folder,
                                       "conversion": "html_ipypublish_main"}
-                                      })(input_folder)
+                       })(input_folder)
     assert os.path.exists(html_path)
     compare_html_files(expected, html_path)
 
@@ -158,10 +168,11 @@ def test_publish_complex_slides(ipynb_folder_with_external):
     basename = os.path.basename(input_folder)
     html_path = os.path.join(input_folder,
                              basename + '.slides.html')
-    IpyPubMain(config={"IpyPubMain": {"outpath": input_folder,
-                                      "conversion": "slides_ipypublish_main"}
-                       },
-               slides=True)(input_folder)
+    IpyPubMain(config={"IpyPubMain":
+                       {"outpath": input_folder,
+                        "conversion": "slides_ipypublish_main",
+                        "default_pporder_kwargs": {"slides": True}}
+                       })(input_folder)
     assert os.path.exists(html_path)
     compare_html_files(expected, html_path)
 
@@ -203,10 +214,11 @@ def test_publish_ipynb1_slides(temp_folder, ipynb1):
     html_path = os.path.join(temp_folder, os.path.splitext(
         ipynb1.name)[0] + '.slides.html')
 
-    IpyPubMain(config={"IpyPubMain": {"outpath": temp_folder,
-                                      "conversion": "slides_ipypublish_main"}
-                       },
-               slides=True)(ipynb1)
+    IpyPubMain(config={"IpyPubMain":
+                       {"outpath": temp_folder,
+                        "conversion": "slides_ipypublish_main",
+                        "default_pporder_kwargs": {"slides": True}}
+                       })(ipynb1)
     assert os.path.exists(html_path)
 
 

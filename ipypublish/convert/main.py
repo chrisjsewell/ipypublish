@@ -7,6 +7,7 @@ import time
 import sys
 
 import traitlets as T
+from traitlets import default
 # from traitlets import validate
 from traitlets.config.configurable import Configurable
 from traitlets.config import Config
@@ -114,19 +115,45 @@ class IpyPubMain(Configurable):
         '%(levelname)s:%(name)s:%(message)s'
     ).tag(config=True)
 
-    @property
-    def default_exporter_config(self):
-        return {
-            "ExtractOutputPreprocessor": {
-                "output_filename_template":
-                "${files_path}/{unique_key}_{cell_index}_{index}{extension}"
-            }
-        }
+    default_ppconfig_kwargs = T.Dict(
+        trait=T.Bool,
+        default_value=(
+            ('pdf_in_temp', False),
+            ('pdf_debug', False),
+            ('launch_browser', False)),
+        help=("convenience arguments for constructing the post-processors "
+              "default configuration")
+    ).tag(config=True)
+
+    default_pporder_kwargs = T.Dict(
+        trait=T.Bool,
+        default_value=(
+            ('dry_run', False),
+            ('clear_existing', False),
+            ('dump_files', False),
+            ('create_pdf', False),
+            ('serve_html', False),
+            ('slides', False)),
+        help=("convenience arguments for constructing the post-processors "
+              "default list")
+    ).tag(config=True)
+
+    # TODO validate that default_ppconfig/pporder_kwargs can be parsed to funcs
+
+    default_exporter_config = T.Dict(
+        help="default configuration for exporters"
+    ).tag(config=True)
+
+    @default('default_exporter_config')
+    def _default_exporter_config(self):
+        temp = '${files_path}/{unique_key}_{cell_index}_{index}{extension}'
+        return {'ExtractOutputPreprocessor': {
+            'output_filename_template': temp}}
 
     def _create_default_ppconfig(self, pdf_in_temp=False, pdf_debug=False,
-                                 launch_browser=False, **kwargs):
+                                 launch_browser=False):
         """create a default config for postprocessors"""
-        return {
+        return Config({
             "PDFExport": {
                 "files_folder": "${files_path}",
                 "convert_in_temp": pdf_in_temp,
@@ -143,12 +170,12 @@ class IpyPubMain(Configurable):
             "CopyResourcePaths": {
                 "files_folder": "${files_path}"
             }
-        }
+        })
 
     def _create_default_pporder(self, dry_run=False, clear_existing=False,
                                 dump_files=False, create_pdf=False,
-                                serve_html=False, slides=False, **kwargs):
-        """create a default list of postprocessors"""
+                                serve_html=False, slides=False):
+        """create a default list of postprocessors to run"""
         default_pprocs = [
             'remove-blank-lines',
             'remove-trailing-space',
@@ -176,8 +203,11 @@ class IpyPubMain(Configurable):
     def _setup_logger(self, ipynb_name, outdir):
 
         root = logging.getLogger()
-        root.handlers = []  # remove any existing handlers
-        root.setLevel(logging.DEBUG)
+
+        if self.log_to_stdout or self.log_to_file:
+            # remove any existing handlers
+            root.handlers = []
+            root.setLevel(logging.DEBUG)
 
         if self.log_to_stdout:
             # setup logging to terminal
@@ -205,7 +235,7 @@ class IpyPubMain(Configurable):
             flogger.propogate = False
             root.addHandler(flogger)
 
-    def __init__(self, config=None, **kwargs):
+    def __init__(self, config=None):
         """
         Public constructor
 
@@ -213,8 +243,6 @@ class IpyPubMain(Configurable):
         ----------
         config: traitlets.config.Config
             User configuration instance.
-        kwargs:
-            Additional keyword arguments passed to parent __init__
 
         """
         # with_default_config = self.default_config
@@ -226,11 +254,7 @@ class IpyPubMain(Configurable):
             config = Config(config)
         with_default_config = config
 
-        super(IpyPubMain, self).__init__(config=with_default_config, **kwargs)
-
-        # TODO really this is just for legacy purposes and should be removed
-        self.default_pproc_config = self._create_default_ppconfig(**kwargs)
-        self.default_pprocs = self._create_default_pporder(**kwargs)
+        super(IpyPubMain, self).__init__(config=with_default_config)
 
     def __call__(self, ipynb_path, nb_node=None):
         """see IpyPubMain.publish"""
@@ -411,9 +435,11 @@ class IpyPubMain(Configurable):
         if "order" in pproc_data:
             pprocs_list = pproc_data["order"]
         else:
-            pprocs_list = self.default_pprocs
+            pprocs_list = self._create_default_pporder(
+                **self.default_pporder_kwargs)
 
-        pproc_config = Config(self.default_pproc_config)
+        pproc_config = self._create_default_ppconfig(
+            **self.default_ppconfig_kwargs)
 
         if "config" in pproc_data:
             override_config = pproc_data["config"]
