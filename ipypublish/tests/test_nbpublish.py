@@ -139,7 +139,8 @@ def test_publish_complex_html(ipynb_folder_with_external):
     html_path = os.path.join(input_folder,
                              basename + '.html')
     IpyPubMain(config={"IpyPubMain": {"outpath": input_folder,
-                                      "conversion": "html_ipypublish_main"}})(input_folder)
+                                      "conversion": "html_ipypublish_main"}
+                                      })(input_folder)
     assert os.path.exists(html_path)
     compare_html_files(expected, html_path)
 

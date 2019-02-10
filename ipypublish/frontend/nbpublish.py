@@ -49,37 +49,16 @@ def nbpublish(ipynb_path,
         the logging level (debug, info, critical, ...)
 
     """
-    ipynb_name = os.path.splitext(os.path.basename(ipynb_path))[0]
-    outdir = os.path.join(
-        os.getcwd(), 'converted') if outpath is None else outpath
-    if not os.path.exists(outdir):
-        os.mkdir(outdir)
-
-    # setup logging to terminal
-    root = logging.getLogger()
-    root.handlers = []  # remove any existing handlers
-    root.setLevel(logging.DEBUG)
-    slogger = logging.StreamHandler(sys.stdout)
-    slogger.setLevel(getattr(logging, log_level.upper()))
-    formatter = logging.Formatter('%(levelname)s:%(name)s:%(message)s')
-    slogger.setFormatter(formatter)
-    slogger.propogate = False
-    root.addHandler(slogger)
-
-    # setup logging to file
-    flogger = logging.FileHandler(os.path.join(
-        outdir, ipynb_name + '.nbpub.log'), 'w')
-    flogger.setLevel(getattr(logging, log_level.upper()))
-    flogger.setFormatter(formatter)
-    flogger.propogate = False
-    root.addHandler(flogger)
-
     # run
     config = {"IpyPubMain": {
         "conversion": outformat,
         "plugin_folder_paths": export_paths,
         "outpath": outpath,
-        "ignore_prefix": ignore_prefix
+        "ignore_prefix": ignore_prefix,
+        "log_to_stdout": True,
+        "log_level_stdout": log_level,
+        "log_to_file": True,
+        "log_level_file": log_level
     }}
     publish = IpyPubMain(config=config,
                          dump_files=dump_files,
@@ -88,8 +67,7 @@ def nbpublish(ipynb_path,
                          pdf_in_temp=pdf_in_temp,
                          pdf_debug=pdf_debug,
                          dry_run=dry_run,
-                         launch_browser=launch_browser,
-                         )
+                         launch_browser=launch_browser)
     try:
         publish(ipynb_path)
     except Exception as err:

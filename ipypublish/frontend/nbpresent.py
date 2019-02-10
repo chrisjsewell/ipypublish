@@ -39,16 +39,6 @@ def nbpresent(inpath,
         the logging level (debug, info, critical, ...)
 
     """
-    # setup logging to terminal
-    root = logging.getLogger()
-    root.handlers = []  # remove any existing handlers
-    root.setLevel(logging.DEBUG)
-    slogger = logging.StreamHandler(sys.stdout)
-    slogger.setLevel(getattr(logging, log_level.upper()))
-    formatter = logging.Formatter('%(levelname)s:%(module)s:%(message)s')
-    slogger.setFormatter(formatter)
-    root.addHandler(slogger)
-
     inpath_name, inpath_ext = os.path.splitext(os.path.basename(inpath))
 
     outpath = None
@@ -56,20 +46,16 @@ def nbpresent(inpath,
     output_mimetype = 'unknown' if output_mimetype is None else output_mimetype
 
     if inpath_ext == '.ipynb':
-        outdir = os.path.join(
-            os.getcwd(), 'converted') if outpath is None else outpath
-        if not os.path.exists(outdir):
-            os.mkdir(outdir)
-        flogger = logging.FileHandler(os.path.join(
-            outdir, inpath_name + '.nbpub.log'), 'w')
-        flogger.setLevel(getattr(logging, log_level.upper()))
-        root.addHandler(flogger)
 
         config = {"IpyPubMain": {
             "conversion": outformat,
             "plugin_folder_paths": export_paths,
             "outpath": outpath,
-            "ignore_prefix": ignore_prefix
+            "ignore_prefix": ignore_prefix,
+            "log_to_stdout": True,
+            "log_level_stdout": log_level,
+            "log_to_file": True,
+            "log_level_file": log_level
         }}
         publish = IpyPubMain(config=config,
                              dump_files=dump_files,

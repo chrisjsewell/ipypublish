@@ -4,10 +4,11 @@ from typing import List, Tuple, Union, Dict  # noqa: F401
 import logging
 import os
 import time
+import sys
 
 import traitlets as T
 # from traitlets import validate
-from traitlets.config.configurable import LoggingConfigurable
+from traitlets.config.configurable import Configurable
 from traitlets.config import Config
 from jsonextended import edict
 from six import string_types
@@ -28,7 +29,7 @@ def dict_to_config(config, unflatten=True, key_as_tuple=False):
     return Config(config)
 
 
-class IpyPubMain(LoggingConfigurable):
+class IpyPubMain(Configurable):
 
     conversion = T.Unicode(
         'latex_ipypublish_main',
@@ -73,6 +74,44 @@ class IpyPubMain(LoggingConfigurable):
         help=("all string values in the export configuration containing "
               "this placeholder will be be replaced with the path "
               "(relative to outpath) to the folder where files will be dumped")
+    ).tag(config=True)
+
+    log_to_stdout = T.Bool(
+        True,
+        help="whether to log to sys.stdout"
+    ).tag(config=True)
+
+    log_level_stdout = T.Enum(
+        ['debug', 'info', 'warning', 'error',
+         'DEBUG', 'INFO', 'WARNING', 'ERROR'],
+        default_value='INFO',
+        help='the logging level to output to stdout'
+    ).tag(config=True)
+
+    log_stdout_formatstr = T.Unicode(
+        '%(levelname)s:%(name)s:%(message)s'
+    ).tag(config=True)
+
+    log_to_file = T.Bool(
+        False,
+        help="whether to log to file"
+    ).tag(config=True)
+
+    log_level_file = T.Enum(
+        ['debug', 'info', 'warning', 'error',
+         'DEBUG', 'INFO', 'WARNING', 'ERROR'],
+        default_value='INFO',
+        help='the logging level to output to file'
+    ).tag(config=True)
+
+    log_file_path = T.Unicode(
+        None,
+        allow_none=True,
+        help="if None, will output to {outdir}/{ipynb_name}.nbpub.log"
+    ).tag(config=True)
+
+    log_file_formatstr = T.Unicode(
+        '%(levelname)s:%(name)s:%(message)s'
     ).tag(config=True)
 
     @property
@@ -130,10 +169,41 @@ class IpyPubMain(LoggingConfigurable):
 
         return default_pprocs
 
-    # TODO use LoggingConfigurable log
     @property
     def logger(self):
-        return logging.getLogger("conversion")
+        return logging.getLogger("ipypublish")
+
+    def _setup_logger(self, ipynb_name, outdir):
+
+        root = logging.getLogger()
+        root.handlers = []  # remove any existing handlers
+        root.setLevel(logging.DEBUG)
+
+        if self.log_to_stdout:
+            # setup logging to terminal
+            slogger = logging.StreamHandler(sys.stdout)
+            slogger.setLevel(getattr(logging, self.log_level_stdout.upper()))
+            formatter = logging.Formatter(self.log_stdout_formatstr)
+            slogger.setFormatter(formatter)
+            slogger.propogate = False
+            root.addHandler(slogger)
+
+        if self.log_to_file:
+            # setup logging to file
+            if self.log_file_path:
+                path = self.log_file_path
+            else:
+                path = os.path.join(outdir, ipynb_name + '.nbpub.log')
+
+            if not os.path.exists(os.path.dirname(path)):
+                os.makedirs(os.path.dirname(path))
+
+            flogger = logging.FileHandler(path, 'w')
+            flogger.setLevel(getattr(logging, self.log_level_file.upper()))
+            formatter = logging.Formatter(self.log_file_formatstr)
+            flogger.setFormatter(formatter)
+            flogger.propogate = False
+            root.addHandler(flogger)
 
     def __init__(self, config=None, **kwargs):
         """
@@ -162,8 +232,9 @@ class IpyPubMain(LoggingConfigurable):
         self.default_pproc_config = self._create_default_ppconfig(**kwargs)
         self.default_pprocs = self._create_default_pporder(**kwargs)
 
-    def __call__(self, *args, **kwargs):
-        return self.publish(*args, **kwargs)
+    def __call__(self, ipynb_path, nb_node=None):
+        """see IpyPubMain.publish"""
+        return self.publish(ipynb_path, nb_node)
 
     def publish(self, ipynb_path, nb_node=None):
         """ convert one or more Jupyter notebooks to a published format
@@ -196,14 +267,15 @@ class IpyPubMain(LoggingConfigurable):
         # setup the input and output paths
         if isinstance(ipynb_path, string_types):
             ipynb_path = pathlib.Path(ipynb_path)
-        if not ipynb_path.exists():
-            handle_error('the notebook path does not exist: {}'.format(
-                ipynb_path), IOError, self.logger)
-
         ipynb_name = os.path.splitext(ipynb_path.name)[0]
-
         outdir = os.path.join(
             os.getcwd(), 'converted') if self.outpath is None else self.outpath
+
+        self._setup_logger(ipynb_name, outdir)
+
+        if not ipynb_path.exists() and not nb_node:
+            handle_error('the notebook path does not exist: {}'.format(
+                ipynb_path), IOError, self.logger)
 
         # log start of conversion
         self.logger.info('started ipypublish v{0} at {1}'.format(
