@@ -296,7 +296,8 @@ nitpick_ignore = [('py:exc', 'ArithmeticError'), ('py:exc', 'AssertionError'),
                   ('py:class', 'docutils.transforms.Transform'),
                   ('py:class', 'docutils.parsers.rst.Parser'),
                   ('py:class', 'sphinx.parsers.RSTParser'),
-                  ('py:obj', 'sphinx.application.Sphinx')
+                  ('py:obj', 'sphinx.application.Sphinx'),
+                  ('py:exc', 'nbconvert.pandoc.PandocMissing')
                   ]
 
 try:

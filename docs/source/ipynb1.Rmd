@@ -13,10 +13,10 @@ jupyter:
     language: python
     name: python3
 ---
-# a title
+
+# as rmd
 
 some text jhgjhgjjhgjg
-
 
 ```{python}
 a=1
@@ -33,8 +33,4 @@ for i in [1, 2, 3]:
 import matplotlib.pyplot as plt
 import numpy as np
 plt.plot(np.sin(np.linspace(0, 6)))
-```
-
-```{python}
-
 ```
