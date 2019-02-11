@@ -84,7 +84,10 @@ else:
     source_parsers = {
         '.md': 'recommonmark.parser.CommonMarkParser'
     }
-    ipysphinx_jupytext = [".Rmd"]
+    import jupytext
+    ipysphinx_preconverters = {
+        ".Rmd": jupytext.readf
+    }
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
