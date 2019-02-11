@@ -59,6 +59,9 @@
         "opacity": 10
         }
     },
-    "yaml.format.enable": true
+    "yaml.format.enable": true,
 
+    "markdown-preview-enhanced.usePandocParser": true,
+    "markdown-preview-enhanced.pandocPath": "/anaconda/envs/lsr/bin/pandoc",
+    "markdown-preview-enhanced.pandocArguments": "--filter=/anaconda/envs/lsr/bin/ipubpandoc"
 }

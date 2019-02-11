@@ -77,7 +77,8 @@ setup(
     entry_points={
         'console_scripts': [
             'nbpublish = ipypublish.frontend.nbpublish:run',
-            'nbpresent = ipypublish.frontend.nbpresent:run'
+            'nbpresent = ipypublish.frontend.nbpresent:run',
+            'ipubpandoc = ipypublish.filters_pandoc.main:pandoc_filters'
         ],
         'ipypublish.postprocessors': [
             'remove-blank-lines = ipypublish.postprocessors.stream_modify:RemoveBlankLines',

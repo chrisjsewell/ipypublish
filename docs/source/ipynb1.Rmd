@@ -1,4 +1,6 @@
 ---
+ipub:
+  at_notation: true
 jupyter:
   jupytext:
     metadata_filter:
@@ -17,6 +19,7 @@ jupyter:
 # as rmd
 
 some text jhgjhgjjhgjg
+
 
 ```{python}
 a=1
