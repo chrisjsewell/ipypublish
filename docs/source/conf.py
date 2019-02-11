@@ -324,7 +324,8 @@ ipysphinx_prolog = r"""
 
     .. nbinfo::
 
-        | This page was generated from `{{{{ docname }}}}`__.
+        | This page was generated from `{{{{ docname }}}}`__,
+          with configuration: ``{{{{ env.config.ipysphinx_export_config }}}}``
         {{%- if docname.endswith('.ipynb') %}}
         | Interactive online version:
           :raw-html:`<a href="https://mybinder.org/v2/gh/chrisjsewell/ipypublish/{binderpath}?filepath={{{{ docname }}}}"><img alt="Binder badge" src="https://mybinder.org/badge_logo.svg" style="vertical-align:text-bottom"></a>`
@@ -337,7 +338,6 @@ ipysphinx_prolog = r"""
 
 def create_git_releases(app):
 
-    # on_rtd:
     this_folder = os.path.abspath(
         os.path.dirname(os.path.realpath(__file__)))
 

@@ -104,6 +104,7 @@ class CreateNotebookSectionAnchors(docutils.transforms.Transform):
     Note: Sphinx lower-cases the HTML section IDs, Jupyter doesn't.
     This transform creates anchors in the Jupyter style.
 
+    # TODO do this in postprocessor?
     """
 
     default_priority = 200  # Before CreateSectionLabels (250)

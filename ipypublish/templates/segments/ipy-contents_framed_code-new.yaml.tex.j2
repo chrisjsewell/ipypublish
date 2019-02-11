@@ -129,7 +129,7 @@
 
     ((*- set caption = type | get_caption(meta, resources) -*))
     ((*- if caption *))
-    \caption{((( caption | convert_pandoc('markdown', 'json') | pandoc_jsonfilters(out='latex', at_notation=at_notation) | convert_pandoc('json','latex') )))}
+    \caption{((( caption | ipypandoc('latex', at_notation=at_notation) )))}
     ((*- endif *))
 
     ((*- endif *))

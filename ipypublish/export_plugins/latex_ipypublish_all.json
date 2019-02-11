@@ -15,7 +15,7 @@
       "ansi2listings": "ipypublish.filters.ansi_listings.ansi2listings",
       "is_equation": "ipypublish.filters.filters.is_equation",
       "strip_ext": "ipypublish.filters.filters.strip_ext",
-      "pandoc_jsonfilters": "ipypublish.filters.pandoc_jsonfilters.pandoc_jsonfilters"
+      "ipypandoc": "ipypublish.filters_pandoc.main.jinja_filter"
     },
     "preprocessors": [
       {

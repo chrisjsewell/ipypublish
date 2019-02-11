@@ -329,12 +329,6 @@ class IpyPubMain(Configurable):
             "outpath", "exporter", "stream", "main_filepath", "resources"
 
         """
-        # TODO control logging and dry_run, etc through config, and related
-        # (make sure this doesnt break sphinx nbparser)
-        # TODO turn whole thing into a traitlets Application
-        # TODO allow for parsing logger
-        # (needs to also be parsed on to called functions)
-
         # setup the input and output paths
         if isinstance(ipynb_path, string_types):
             ipynb_path = pathlib.Path(ipynb_path)
@@ -369,10 +363,12 @@ class IpyPubMain(Configurable):
                     "pre-conversion failed for {}: {}".format(ipynb_path, err),
                     err, self.logger)
 
+        # doesn't work with folders
         # if (ipynb_ext != ".ipynb" and nb_node is None):
         #     handle_error(
         #         'the file extension is not associated with any '
-        #         'pre-converter: {}'.format(ipynb_ext), TypeError, self.logger)
+        #         'pre-converter: {}'.format(ipynb_ext), 
+        # TypeError, self.logger)
 
         if nb_node is None:
             # merge all notebooks
@@ -385,7 +381,6 @@ class IpyPubMain(Configurable):
         else:
             final_nb, meta_path = (nb_node, ipynb_path)
 
-        # TODO beter way to handle this?
         replacements = {
             self.meta_path_placeholder: str(meta_path),
             self.files_folder_placeholder: "{}{}".format(
@@ -454,7 +449,7 @@ class IpyPubMain(Configurable):
         data = load_export_config(export_config_path)
         self.logger.info('creating exporter')
         exporter_cls = create_exporter_cls(data["exporter"]["class"])
-        self.logger.info('creating template')
+        self.logger.info('creating template and loading filters')
         template_name = "template_file"
         jinja_template = load_template(template_name, data["template"])
         self.logger.info('creating process configuration')

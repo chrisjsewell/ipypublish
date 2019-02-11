@@ -1,10 +1,7 @@
 {
   "$schema": "../schema/export_config.schema.json",
   "description": [
-    "For use with the ipypublish.ipyshinx Sphinx extension",
-    "- unlike the, conventional version, this does not output a file, ",
-    "  and does not redirect/copy external files to the files_folder",
-    "- execute the notebook",
+    "The same as sphinx_ipypublish_all, but also executes the workbook before exporting",
     "- only output cells with metadata tags are used",
     "- code, figures, tables and code are formatted accordingly"
   ],
@@ -61,8 +58,7 @@
         "class": "ipypublish.preprocessors.latex_doc_links.LatexDocLinks",
         "args": {
           "metapath": "${meta_path}",
-          "filesfolder": "${files_path}",
-          "redirect_external": false
+          "filesfolder": "${files_path}"
         }
       },
       {
@@ -77,7 +73,7 @@
         "allow_errors": false,
         "interrupt_on_timeout": false,
         "kernel_name": ""
-      }
+      }     
     }
   },
   "template": {
@@ -98,7 +94,21 @@
       "remove-trailing-space",
       "filter-output-files",
       "remove-folder",
-      "write-resource-files"
-    ]
+      "write-text-file",
+      "write-resource-files",
+      "copy-resource-paths",
+      "run-sphinx"
+    ],
+    "config": {
+      "IPyPostProcessor": {
+        "skip_mime": true
+      },
+      "CopyResourcePaths": {
+        "files_folder": "${files_path}"
+      },
+      "RunSphinx": {
+        "show_prompts": true
+      }
+    }
   }
 }

@@ -34,7 +34,7 @@
     ((*- if cell.metadata.ipub and cell.metadata.ipub.at_notation: -*))
     ((* set at_notation = cell.metadata.ipub.at_notation *))
     ((*- endif *))
-    ((( cell.source | citation2latex | strip_files_prefix | convert_pandoc('markdown', 'json',extra_args=[]) | pandoc_jsonfilters(at_notation=at_notation) | convert_pandoc('json','latex'))))
+    ((( cell.source | citation2latex | strip_files_prefix | ipypandoc('latex', at_notation=at_notation) )))
 
   "notebook_input_raw": |2
 
@@ -85,7 +85,7 @@
     ((*- if cell.metadata.ipub and cell.metadata.ipub.at_notation: -*))
     ((* set at_notation = cell.metadata.ipub.at_notation *))
     ((*- endif *))
-    ((( output.data['text/markdown'] | citation2latex | strip_files_prefix | convert_pandoc('markdown', 'json',extra_args=[]) | pandoc_jsonfilters(at_notation=at_notation) | convert_pandoc('json','latex'))))
+    ((( output.data['text/markdown'] | citation2latex | strip_files_prefix | ipypandoc('latex', at_notation=at_notation) )))
     ((*- endif *))
     ((*- endif *))
 
@@ -149,7 +149,7 @@
 
         ((*- set caption = "figure" | get_caption(meta, resources) -*))
         ((*- if caption -*))
-        \caption{((( caption | convert_pandoc('markdown', 'json') | pandoc_jsonfilters(out='latex', at_notation=at_notation) | convert_pandoc('json','latex') )))}
+        \caption{((( caption | ipypandoc('latex', at_notation=at_notation) )))}
         ((*- endif *))
         ((*- if meta.ipub.figure.label: -*))
         \label{((( meta.ipub.figure.label )))}
@@ -173,7 +173,7 @@
 
     ((*- set caption = "table" | get_caption(cell.metadata, resources) -*))
     ((*- if caption *))
-    \caption{((( caption | convert_pandoc('markdown', 'json') | pandoc_jsonfilters(out='latex', at_notation=at_notation) | convert_pandoc('json','latex') )))}
+    \caption{((( caption | ipypandoc('latex', at_notation=at_notation) )))}
     ((*- endif *))
 
     ((*- if cell.metadata.ipub.table.label -*))

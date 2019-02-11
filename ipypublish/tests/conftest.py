@@ -14,6 +14,11 @@ def pandocxnos_fix(monkeypatch):
     monkeypatch.setattr('sys.stdin',
                         io.TextIOWrapper(io.StringIO(None)))
 
+@pytest.fixture(autouse=True)
+def dont_open_webbrowser(monkeypatch):
+    def nullfunc(*arg, **kwrgs):
+        pass
+    monkeypatch.setattr('webbrowser.open', nullfunc)
 
 @pytest.fixture
 def ipynb1():

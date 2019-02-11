@@ -97,8 +97,7 @@ def parse_options(sys_args, program):
                               action='append', metavar='path', type=str,
                               help=("add additional folder paths, "
                                     "containing export configurations"),
-                              default=[os.path.join(os.getcwd(),
-                                                    'ipypublish_plugins')])
+                              default=[])
     export_group.add_argument("-le", "--list-exporters", type=str,
                               metavar='filter', nargs='?', const='*',
                               help=("list export configurations, "
