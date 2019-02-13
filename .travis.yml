@@ -66,8 +66,14 @@ matrix:
 # TODO add read the docs test `pip install .[docs] cd docs; make`
 
 before_install:
+# Pandoc
+- url="https://github.com/jgm/pandoc/releases/tag/2.5"
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then path=$(curl -L $url | grep -o '/jgm/pandoc/releases/download/.*-amd64\.deb') ; fi
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then downloadUrl="https://github.com$path" ; fi
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then wget $downloadUrl && sudo dpkg -i $file ; fi
+# LaTeX
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update ; fi
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y pandoc ; fi  # TODO this version of pandoc is quite old
+# - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y pandoc ; fi
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y texlive ; fi
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y texlive-xetex ; fi
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y texlive-latex-extra ; fi
