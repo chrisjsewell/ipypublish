@@ -42,8 +42,7 @@ References to :numref:`fig:example`, :numref:`tbl:example`,
 
 A latex citation. :cite:`zelenyak_molecular_2016`
 
-A html citation. :cite:`kirkeminde_thermodynamic_2012` (Kirkeminde,
-2012)
+A html citation. :cite:`kirkeminde_thermodynamic_2012`
 
 Todo notes
 ----------

@@ -10,7 +10,7 @@ from distutils.util import strtobool
 from ipypublish.filters_pandoc.utils import ElementTypes as el
 from ipypublish.filters_pandoc.utils import (
     traverse_meta, sanitize_label, compare_version, convert_pandoc
-    )
+)
 
 # TODO at present we defer import, so we can monkey patch stdin during tests
 # from pandocxnos import (elt, PandocAttributes,
@@ -112,7 +112,10 @@ def extract_image_attrs(x, n):
 
 
 def resolve_math_filter(key, value, fmt, meta):
-    """ see https://github.com/tomduck/pandoc-eqnos/blob/master/pandoc_eqnos.py
+    """
+
+    adapted from https://github.com/tomduck/pandoc-eqnos/blob/master/pandoc_eqnos.py
+    but adds rst handling
 
     Parameters
     ----------
@@ -130,10 +133,8 @@ def resolve_math_filter(key, value, fmt, meta):
     """
     # if the MATH element has been marked with attributes
     if key == 'Math' and len(value) == 3:
-
         body = value[-1]
-        # mtype = value[1]
-        # # e.g. {'t': 'InlineMath'} or {'t': 'DisplayMath'}
+        mtype = value[1]['t']  # InlineMath or DisplayMath
         attributes = value[0]
         label = attributes[0]
         keywords = dict(attributes[-1])
@@ -151,7 +152,8 @@ def resolve_math_filter(key, value, fmt, meta):
 
         if fmt == "latex":
             return el.RawInline('tex', tex)
-        elif fmt == "rst":
+
+        if fmt == "rst":
             if not label:
                 return el.RawInline(
                     'rst',
@@ -159,6 +161,30 @@ def resolve_math_filter(key, value, fmt, meta):
             return el.RawInline(
                 'rst', '\n\n.. math::\n   :nowrap:\n   :label: {0}'
                 '\n\n   {1}\n\n'.format(label, tex))
+
+        if fmt in ('html', 'html5'):
+            # associate label with a number
+            counter = 1
+
+            outerspan = el.RawInline(
+                'html',
+                '<span id={0} style="display: inline-block; '
+                'position: relative; width: 100%">'.format(label))
+            innerspan = el.RawInline(
+                'html',
+                '<span style="position: absolute; '
+                'right: 0em; top: {0}; line-height:0; '
+                'text-align: right">'.format(
+                    '0' if mtype == "DisplayMath" else '50%'))
+
+            endspans = el.RawInline('html', '</span></span>')
+
+            if mtype == "DisplayMath":
+                # TODO how to add contain counter on same line?
+                return [outerspan, el.AttrMath(*value), innerspan, endspans]
+            else:
+                return [outerspan, el.AttrMath(*value),
+                        el.Str(" ({0})".format(counter)), innerspan, endspans]
 
 
 def _convert_scale(string, out_units):
@@ -189,7 +215,7 @@ def _convert_scale(string, out_units):
 def resolve_figures_filter(key, value, fmt, meta):
     """ see https://github.com/tomduck/pandoc-eqnos/
 
-    NB: for latex fmt, to convert captions, a 'pandoc_api' key 
+    NB: for latex fmt, to convert captions, a 'pandoc_api' key
     is required in the metadata of the form '1.2.3.4'
 
     Parameters
@@ -281,6 +307,9 @@ def resolve_figures_filter(key, value, fmt, meta):
             # TODO rst figure, all works except convert width/height to %
             return None
 
+        if fmt in ("html", "html5"):
+            return None  # TODO
+
 
 def resolve_tables_filter(key, value, fmt, meta):
     """ see https://github.com/tomduck/pandoc-tablenos
@@ -309,6 +338,9 @@ def resolve_tables_filter(key, value, fmt, meta):
             value[1] += [el.RawInline('tex', '\\label{{{0}}}'.format(label))]
             return [el.AttrTable(*value)]
 
-        elif fmt == "rst":
+        if fmt == "rst":
             rst_label = el.RawInline('rst', '\n.. _`{0}`:\n\n'.format(label))
             return [{"t": "Para", "c": [rst_label]}, el.AttrTable(*value)]
+
+        if fmt in ("html", "html5"):
+            return None  # TODO

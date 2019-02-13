@@ -42,6 +42,7 @@ inline: :math:`a = b`
 
 .. math::
    :nowrap:
+   :label: eq:id2
 
    \begin{align*}c &= d \\ other &= e\end{align*}
 

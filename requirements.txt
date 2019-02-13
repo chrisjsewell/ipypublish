@@ -12,4 +12,5 @@ jsonschema
 ruamel.yaml
 pandocfilters
 pandoc-xnos
+panflute
 docutils

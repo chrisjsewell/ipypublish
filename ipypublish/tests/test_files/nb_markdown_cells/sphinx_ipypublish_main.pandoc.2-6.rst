@@ -16,7 +16,7 @@ Cell with Attached Image
 
    output_13_0.jpeg
 
-:numref:`fig:id1` `mkdown_ref <#fig:id1>`__
+:numref:`fig:id1` :numref:`fig:id1`
 
 Cell with Linked Image
 ----------------------
@@ -31,7 +31,7 @@ Cell with Linked Image
 Cell with Link to Header
 ------------------------
 
-`link_to_header <#cell-with-link-to-header>`__
+:numref:`cell-with-link-to-header`
 
 Cell with Math
 --------------
@@ -46,6 +46,7 @@ inline: :math:`a = b`
 
 .. math::
    :nowrap:
+   :label: eq:id2
 
    \begin{align*}c &= d \\ other &= e\end{align*}
 

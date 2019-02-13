@@ -1,6 +1,7 @@
 ---
 ipub:
   at_notation: true
+  test: [1, 2]
 jupyter:
   jupytext:
     metadata_filter:
@@ -20,6 +21,11 @@ jupyter:
 
 some text jhgjhgjjhgjg
 
+@label
+
+b $$a$$ {a} a
+
+\begin{equation}a=b\end{equation}
 
 ```{python}
 a=1

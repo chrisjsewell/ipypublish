@@ -6,6 +6,7 @@ from ipypublish.filters_pandoc.utils import ElementTypes as el
 from ipypublish.filters_pandoc.utils import traverse_meta, sanitize_label
 
 # TODO sphinx directives (like todo, warning etc...) to latex
+# TODO latex_to_html
 
 
 def latex2rst(key, value, fmt, meta):
@@ -109,6 +110,8 @@ def resolve_references_filter(key, value, fmt, meta):
                 # RawInline('rst', ":ref:``".format(label))
                 # TODO link vs ref?
                 return None
+            if fmt in ("html", "html5"):
+                return None  # TODO
 
     # replace html style citations; <cite data-cite="cite_key"></cite>
     # TODO this does not remove any content between the start-end tags
@@ -127,28 +130,30 @@ def resolve_references_filter(key, value, fmt, meta):
         if fmt == "rst":
             return el.RawInline('rst', " :cite:`{0}` ".format(key))
             # NB citations must have space at either side to be resolved
+        if fmt in ("html", "html5"):
+                return None  # TODO
 
     # replace @label style references
     if use_at_notation:
         # References may occur in a variety of places; we must process them
         # all.
         if key in ['Para', 'Plain']:
-            _process_at_refs(value, fmt, use_numref)
+            _process_at_refs(value, meta, fmt, use_numref)
         elif key == 'Image':
-            _process_at_refs(value[-2], fmt, use_numref)
+            _process_at_refs(value[-2], meta, fmt, use_numref)
         elif key == 'Table':
-            _process_at_refs(value[-5], fmt, use_numref)
+            _process_at_refs(value[-5], meta, fmt, use_numref)
         elif key == 'Span':
-            _process_at_refs(value[-1], fmt, use_numref)
+            _process_at_refs(value[-1], meta, fmt, use_numref)
         elif key == 'Emph':
-            _process_at_refs(value, fmt, use_numref)
+            _process_at_refs(value, meta, fmt, use_numref)
         elif key == 'Strong':
-            _process_at_refs(value, fmt, use_numref)
+            _process_at_refs(value, meta, fmt, use_numref)
 
     return None
 
 
-def _process_at_refs(element, fmt="latex", use_numref=True):
+def _process_at_refs(element, meta, fmt="latex", use_numref=True):
     """ find citation elements using @ notation
     and replace with appropriate latex tags / rst roles
 
@@ -203,6 +208,9 @@ def _process_at_refs(element, fmt="latex", use_numref=True):
                         ' and :{0}:`{1}`'.format(tag, labels[-1]))
 
                 element[i] = el.RawInline('rst', rst)
+
+            if fmt in ("html", "html5"):
+                return None  # TODO
 
     # delete in place
     deleted = 0
