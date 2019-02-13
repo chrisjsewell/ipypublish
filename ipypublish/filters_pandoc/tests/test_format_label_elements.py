@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from ipypublish.filters_pandoc.utils import apply_filter
 from ipypublish.filters_pandoc import prepare_labels
 from ipypublish.filters_pandoc import format_label_elements

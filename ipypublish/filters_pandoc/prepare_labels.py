@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """ a panflute filter to prepare document labelling in markdown files:
 
 1) Add a ``$$reference`` key to the Document metadata
