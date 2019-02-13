@@ -26,7 +26,7 @@ would be converted to this html:
 
    <p>
    <span id="a" class="labelled-Math" data-b="2">
-   <span class="math inline"><em>a</em> = 1</span>
+   <span class="math inline"><em>a</em> = 1</span>
    </span>
    </p>
 
@@ -42,8 +42,8 @@ LABELLED_MATH_CLASS = "labelled-Math"
 LABELLED_TABLE_CLASS = "labelled-Table"
 
 REFTYPE_TABLE = "Table"
-REFTYPE_IMAGE= "Image"
-REFTYPE_MATH= "Math"
+REFTYPE_IMAGE = "Image"
+REFTYPE_MATH = "Math"
 
 
 def _find_attribute(start_el,

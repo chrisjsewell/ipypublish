@@ -68,7 +68,7 @@ def test_math_span_html():
     assert out_string.strip() == "\n".join([
         '<p><a id="a" class="anchor-link" name="#a">'
         '<br />'
-        '<span class="math display"><em>a</em> = 1</span>'
+        '<span class="math display"><em>a</em> = 1</span>'
         '<br />'
         '</a></p>'
     ])
