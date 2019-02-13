@@ -10,7 +10,5 @@ jsonextended>=0.7
 six
 jsonschema
 ruamel.yaml
-pandocfilters
-pandoc-xnos
 panflute
 docutils

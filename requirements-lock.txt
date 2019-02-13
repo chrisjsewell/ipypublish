@@ -6,11 +6,12 @@
 #
 bibtexparser==1.1.0
 bleach==3.1.0             # via nbconvert
+click==7.0                # via panflute
 decorator==4.3.2          # via traitlets
 defusedxml==0.5.0         # via nbconvert
 docutils==0.14
 entrypoints==0.3          # via nbconvert
-future==0.17.1            # via bibtexparser
+future==0.17.1            # via bibtexparser, panflute
 ipython-genutils==0.2.0   # via nbformat, traitlets
 jinja2==2.10
 jsonextended==0.7.7
@@ -20,13 +21,14 @@ markupsafe==1.1.0         # via jinja2
 mistune==0.8.4            # via nbconvert
 nbconvert==5.4.0
 nbformat==4.4.0
-pandoc-xnos==1.1.1
-pandocfilters==1.4.2
+pandocfilters==1.4.2      # via nbconvert
+panflute==1.11.2
 pathlib2==2.3.3
-psutil==5.5.0             # via pandoc-xnos
 pygments==2.3.1           # via nbconvert
 pyparsing==2.3.1          # via bibtexparser
+pyyaml==3.13              # via panflute
 ruamel.yaml==0.15.87
+shutilwhich==1.1.0        # via panflute
 six==1.12.0
 testpath==0.4.2           # via nbconvert
 tornado==5.1.1
