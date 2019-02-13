@@ -1,18 +1,12 @@
 import os
-import io
 import shutil
 import tempfile
 import logging
 import pytest
+from nbconvert.utils.pandoc import get_pandoc_version
 
 from ipypublish.utils import pathlib
 from ipypublish.tests import TEST_FILES_DIR
-
-
-@pytest.fixture(autouse=True)
-def pandocxnos_fix(monkeypatch):
-    monkeypatch.setattr('sys.stdin',
-                        io.TextIOWrapper(io.StringIO(None)))
 
 @pytest.fixture(autouse=True)
 def dont_open_webbrowser(monkeypatch):
@@ -33,8 +27,7 @@ def ipynb2():
 def nb_markdown_cells():
 
     # Table format has changed through the versions
-    from pandocxnos import init as get_pandoc_version
-    logging.debug(get_pandoc_version())
+    logging.debug("pandoc version: {}".format(get_pandoc_version()))
     if get_pandoc_version() < '1.18':
         expected_ltx = 'latex_ipypublish_main.pandoc.1-12.tex'
         expected_rst = 'sphinx_ipypublish_main.pandoc.1-12.rst'
@@ -93,8 +86,7 @@ def ipynb_folder(temp_folder, ipynb1, ipynb2):
 def ipynb_folder_with_external(temp_folder):
 
     # Table format has changed through the versions
-    from pandocxnos import init as get_pandoc_version
-    logging.debug(get_pandoc_version())
+    logging.debug("pandoc version: {}".format(get_pandoc_version()))
     if get_pandoc_version() < '1.18':
         sphinx_ipypublish_all = 'sphinx_ipypublish_all.pandoc.1-12.rst'
     else:

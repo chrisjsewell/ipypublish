@@ -157,7 +157,7 @@ def process_latex(element, doc):
 
 def process_rst(element, doc):
     # type: (RawInline, Doc) -> Element
-    """extract all rst adhering to :role:`label`
+    """extract all rst adhering to ``:role:`label```
     to a Span element with class RAWSPAN_CLASS and attributes:
 
     ::

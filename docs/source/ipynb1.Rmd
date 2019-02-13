@@ -1,8 +1,9 @@
 ---
-ipub:
-  at_notation: true
-  test: [1, 2]
 jupyter:
+  ipub:
+    at_notation: false
+    test: [1, 2]
+    use_numref: false
   jupytext:
     metadata_filter:
       notebook: ipub
@@ -21,11 +22,11 @@ jupyter:
 
 some text jhgjhgjjhgjg
 
-@label
+=@label
 
-b $$a$$ {a} a
+$$a$$ {#label}
 
-\begin{equation}a=b\end{equation}
+$a=b$
 
 ```{python}
 a=1

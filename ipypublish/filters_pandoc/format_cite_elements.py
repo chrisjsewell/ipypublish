@@ -19,7 +19,7 @@ def format_cites(cite, doc):
     # type: (Cite, Doc) -> Element
     """
     originally adapted from:
-    `https://github.com/tomduck/pandoc-xnos/`_
+    `pandoc-xnos <https://github.com/tomduck/pandoc-xnos/>`_
     """
     if not isinstance(cite, pf.Cite):
         return None

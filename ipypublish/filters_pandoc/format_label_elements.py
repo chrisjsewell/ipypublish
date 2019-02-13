@@ -50,7 +50,7 @@ def format_math(math, doc):
     # type: (Math, Doc) -> Element
     """
     originally adapted from:
-    `https://github.com/tomduck/pandoc-eqnos/`_
+    `pandoc-eqnos <https://github.com/tomduck/pandoc-eqnos/>`_
     """
     if not isinstance(math, pf.Math):
         return None
@@ -107,7 +107,7 @@ def format_image(image, doc):
     # type: (Image, Doc) -> Element
     """
     originally adapted from:
-    `https://github.com/tomduck/pandoc-fignos/`_
+    `pandoc-fignos <https://github.com/tomduck/pandoc-fignos/>`_
     """
     if not isinstance(image, pf.Image):
         return None
@@ -178,7 +178,7 @@ def format_table(table, doc):
     # type: (Table, Doc) -> Element
     """
     originally adapted from:
-    `https://github.com/tomduck/pandoc-tablenos`_
+    `pandoc-tablenos <https://github.com/tomduck/pandoc-tablenos>`_
     """
     if not isinstance(table, pf.Table):
         return None

@@ -85,6 +85,7 @@ def jinja_filter(source, to_format, from_format="markdown",
     for section numbering, a toc tree with ``:numbered:``
 
     """
+    print(from_format)
     doc = apply_filter(source, dry_run=True)  # type: pf.Doc
 
     # if the ipypublish options are not already in the metadata add them
@@ -108,7 +109,7 @@ def jinja_filter(source, to_format, from_format="markdown",
                            ],
                            out_format=to_format,
                            in_format=from_format,
-                           # strip_meta=True TODO should this be done?
+                           strip_meta=True
                            )
     if strip:
         out_str = out_str.strip()
