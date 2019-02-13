@@ -1,3 +1,4 @@
+import pytest
 from ipypublish.filters_pandoc.utils import apply_filter
 from ipypublish.filters_pandoc import prepare_labels
 from ipypublish.filters_pandoc import format_label_elements
@@ -49,6 +50,8 @@ def test_math_span_rst():
     ])
 
 
+@pytest.mark.skip(
+    reason="there's an issue with pandoc outputting unicode in '/em> = 1'")
 def test_math_span_html():
 
     in_json = {"blocks": [{"t": "Para", "c": [

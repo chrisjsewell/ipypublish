@@ -67,7 +67,7 @@ matrix:
 
 before_install:
 # Pandoc
-- url="https://github.com/jgm/pandoc/releases/tag/2.5"
+- url="https://github.com/jgm/pandoc/releases/tag/2.6"
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then path=$(curl -L $url | grep -o '/jgm/pandoc/releases/download/.*-amd64\.deb') ; fi
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then downloadUrl="https://github.com$path" ; fi
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then file=${path##*/} ; fi
