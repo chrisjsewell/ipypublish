@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """ a panflute filter to prepare document labelling in markdown files:
 
 1) Add a ``$$reference`` key to the Document metadata
@@ -17,19 +18,18 @@ in the form; ``{#id .class-name a="an attribute"}``
 
 For example:
 
-```
-'$a=1$ {#a b=$2$}'
-```
+    '$a=1$ {#a b=$2$}'
+
 
 would be converted to this html:
 
-```html
-<p>
-<span id="a" class="labelled-Math" data-b="2">
-<span class="math inline"><em>a</em> = 1</span>
-</span>
-</p>
-```
+.. code-block:: html
+
+   <p>
+   <span id="a" class="labelled-Math" data-b="2">
+   <span class="math inline"><em>a</em> = 1</span>
+   </span>
+   </p>
 
 """
 import re
