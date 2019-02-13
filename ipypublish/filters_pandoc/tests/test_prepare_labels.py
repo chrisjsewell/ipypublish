@@ -2,6 +2,7 @@ import io
 import json
 import panflute as pf
 from jsonextended import edict
+from six import u
 
 from panflute import Element, Doc  # noqa: F401
 from types import FunctionType  # noqa: F401
@@ -12,7 +13,7 @@ from ipypublish.filters_pandoc.prepare_labels import main
 
 def apply_to_json(in_json, filter_func):
     # type: (dict, FunctionType) -> dict
-    f = io.StringIO(json.dumps(in_json))
+    f = io.StringIO(u(json.dumps(in_json)))
     doc = pf.load(f)
     new_doc = filter_func(doc)  # type: Doc
     return new_doc.to_json()
