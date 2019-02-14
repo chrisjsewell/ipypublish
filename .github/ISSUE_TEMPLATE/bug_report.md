@@ -20,9 +20,6 @@ Steps to reproduce the behavior:
 **Expected behavior**
 A clear and concise description of what you expected to happen.
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
-
 **Version Information (please complete the following information):**
  - IPyPublish:
  - Python: [e.g. 3.6]
@@ -31,3 +28,6 @@ If applicable, add screenshots to help explain your problem.
 
 **Additional context**
 Add any other context about the problem here.
+
+**Screenshots**
+If applicable, add screenshots to help explain your problem.
