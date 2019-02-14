@@ -9,16 +9,6 @@
     # NOTE adding a toc not in separate index.rst doesn't work at mooment https://github.com/sphinx-doc/sphinx/issues/2103
 
     "globals": |
-        {# use of @label #}
-        {% set at_notation = True %}
-        {%- if nb.metadata.ipub and nb.metadata.ipub.at_notation -%}
-        {% set at_notation = nb.metadata.ipub.at_notation %}
-        {%- endif %}
-        {# use of :numref #}
-        {% set use_numref = True %}
-        {%- if nb.metadata.ipub and nb.metadata.ipub.use_numref -%}
-        {% set use_numref = nb.metadata.ipub.use_numref %}
-        {%- endif %}
         {# re-route ipub metadata into resources, so we can use it in post-processing #}
         {# see https://stackoverflow.com/a/43265291/5033292 #}
         {% if "ipub" in nb.metadata %}
@@ -61,10 +51,10 @@
         {%- endif -%}
         {# find captions #}
         {%- if resources.captions and resources.captions[ipubcode.get("label", False)] %}
-        {%- set caption = resources.captions[ipubcode["label"]] | convert_pandoc('markdown', 'json') | ipypandoc(out='rst', at_notation=at_notation, use_numref=use_numref) | convert_pandoc('json','rst') %}
+        {%- set caption = resources.captions[ipubcode["label"]] | ipypandoc('rst', nb.metadata, cell.metadata) %}
             :caption: {{ caption.replace("\n", " ") }}
         {%- elif ipubcode is mapping and "caption" in ipubcode and ipubcode["caption"] %}
-        {%- set caption = ipubcode.get("caption") | ipypandoc('rst', at_notation=at_notation, use_numref=use_numref) %}
+        {%- set caption = ipubcode.get("caption") | ipypandoc('rst', nb.metadata, cell.metadata) %}
             :caption: {{ caption.replace("\n", " ") }}
         {%- endif %}
         {# add output code if there is any #}
@@ -76,10 +66,7 @@
 
     "notebook_input_markdown": |
         {# only use @label notation if specified in nb/cell metadata #}
-        {%- if cell.metadata.ipub and cell.metadata.ipub.at_notation -%}
-        {% set at_notation = cell.metadata.ipub.at_notation %}
-        {%- endif %}
-        {{ cell.source | ipypandoc('rst', at_notation=at_notation, use_numref=use_numref) }}
+        {{ cell.source | ipypandoc('rst', nb.metadata, cell.metadata) }}
 
     "notebook_input_raw": |
         {# output raw input with the correct identifier #}
@@ -225,11 +212,11 @@
         {# find captions #}
         {%- set ipubfigcaption = "figure" | get_caption(cell.metadata, resources) %}
         {% if ipubfigcaption %}
-        {%- set ipubfigcaption = ipubfigcaption | ipypandoc('rst', at_notation=at_notation, use_numref=use_numref) %}        
+        {%- set ipubfigcaption = ipubfigcaption | ipypandoc('rst', nb.metadata, cell.metadata) %}        
         {% endif %}
         {%- set ipubtblcaption = "table" | get_caption(cell.metadata, resources)  %}
         {% if ipubtblcaption %}
-        {%- set ipubtblcaption = ipubtblcaption | ipypandoc('rst', at_notation=at_notation, use_numref=use_numref) %}        
+        {%- set ipubtblcaption = ipubtblcaption | ipypandoc('rst', nb.metadata, cell.metadata) %}        
         {% endif %}
         {# create the output directive and supply it with the type of data #}
         .. nboutput::
@@ -283,7 +270,7 @@
         {# output markdown type outputs #}
         {%- elif datatype in ['text/markdown'] and ipub.get('mkdown', False) %}
 
-        {{ output.data['text/markdown'] | ipypandoc(out='rst', at_notation=at_notation) | indent }}
+        {{ output.data['text/markdown'] | ipypandoc('rst', nb.metadata, cell.metadata) | indent }}
         {#- output latex equations #}
         {%- elif datatype in ['text/latex'] and ipub.get('equation', False) and output.data['text/latex'] | is_equation %}
 

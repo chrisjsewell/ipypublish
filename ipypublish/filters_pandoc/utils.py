@@ -217,3 +217,69 @@ def convert_units(string, out_units):
                          "{0} to {1}: {2}".format(in_units, out_units, string))
 
     return convert(value)
+
+
+def get_option(*locations, keypath=None, default=None,
+               delimiter=".", error_on_missing=False):
+    """ fetch an option variable from a hierarchy of preferred locations
+
+    The value returned will be from the first available location or the default
+
+    Parameters
+    ----------
+    *locations: list[dict]
+        a list of mappings to search in
+    keypath: list[str] or str
+        a key path to search in, if str, then split by delimiter
+    default=None: object
+        a default value to return
+    delimiter: str
+        if a str then the keypath is expected to be a str
+    error_on_missing: bool
+        raise KeyError if not found in any of the options
+
+    Examples
+    --------
+
+    >>> a = {"m": 1}
+    >>> b = {"x": {"y": 2}}
+    >>> c = {"x": {"y": 3}}
+    >>> get_option(a, b, c, keypath=("x", "y"))
+    2
+    >>> get_option(a, c, b, keypath=("x", "y"))
+    3
+    >>> get_option(a, c, b, keypath="x.y")
+    3
+    >>> get_option(a, c, b, keypath="l", default=4)
+    4
+
+    """
+    if keypath is None:
+        raise ValueError("the keypath has not been set")
+    if isinstance(keypath, string_types):
+        keypath = keypath.split(delimiter)
+
+    found_var = False
+    variable = None
+
+    for opt in locations:
+        final_opt = opt
+        found_key = True
+        for key in keypath:
+            try:
+                final_opt = final_opt[key]
+            except (KeyError, TypeError):
+                found_key = False
+                break
+        if found_key:
+            found_var = True
+            variable = final_opt
+            break
+
+    if found_var:
+        return variable
+    elif error_on_missing:
+        raise ValueError(
+            "could not retrieve the option keypath: {}".format(keypath))
+
+    return default
