@@ -29,7 +29,7 @@ xyz
 
 Optionally, this can be turned off by adding to the Document metadata
 
-meta["ipub"]["at_notation"] = False
+meta["ipub"]["pandoc"]["at_notation"] = False
 
 """
 from panflute import Element, Doc, Cite, RawInline, Link  # noqa: F401
@@ -38,7 +38,7 @@ import panflute as pf
 
 from ipypublish.filters_pandoc.utils import process_attributes
 from ipypublish.filters_pandoc.definitions import (
-    ATTRIBUTE_CITE_CLASS, PREFIX_MAP_LATEX)
+    ATTRIBUTE_CITE_CLASS, PREFIX_MAP_LATEX, IPUB_META_ROUTE)
 
 
 def find_attributes(element):
@@ -111,7 +111,7 @@ def find_attributes(element):
 
 def process_citations(element, doc):
     # type: (Cite, Doc) -> Element
-    if not doc.get_metadata("ipub.at_notation", True):
+    if not doc.get_metadata(IPUB_META_ROUTE + ".at_notation", True):
         return None
 
     if not isinstance(element, pf.Cite):

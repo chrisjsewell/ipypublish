@@ -6,7 +6,8 @@ from panflute import Element, Doc, Cite, RawInline, Link  # noqa: F401
 import panflute as pf
 
 from ipypublish.filters_pandoc.definitions import (
-    PREFIX_MAP_LATEX_R, PREFIX_MAP_RST_R, ATTRIBUTE_CITE_CLASS
+    PREFIX_MAP_LATEX_R, PREFIX_MAP_RST_R, ATTRIBUTE_CITE_CLASS,
+    IPUB_META_ROUTE
 )
 
 RAWSPAN_CLASS = "raw-content"
@@ -47,7 +48,7 @@ def process_internal_links(link, doc):
     return create_cite_span(
         match.group(1), "markdown", False,
         prefix=dict(PREFIX_MAP_LATEX_R).get(
-            doc.get_metadata("ipub.reftag", "cref"), "cref"),
+            doc.get_metadata(IPUB_META_ROUTE + ".reftag", "cref"), "cref"),
         alt=pf.stringify(pf.Plain(*list(link.content))).strip())
 
 

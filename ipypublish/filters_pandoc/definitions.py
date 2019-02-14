@@ -1,4 +1,6 @@
 
+IPUB_META_ROUTE = "ipub.pandoc"
+
 ATTRIBUTE_CITE_CLASS = "attribute-Cite"
 
 

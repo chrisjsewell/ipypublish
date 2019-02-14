@@ -20,7 +20,6 @@ def test_latex_to_rst():
                                format_cite_elements.main,
                                format_raw_spans.main], "rst")
 
-    print(out_string)
     assert out_string == "\n".join([
         ":ref:`label1` :ref:`label2` :cite:`a-cite-key_2019`",
         "",
@@ -32,7 +31,6 @@ def test_latex_to_rst():
         "",
         ".. todo:: something else todo",
         "",
-        "",
         ""
     ])
 
@@ -42,6 +40,7 @@ def test_latex_to_rst_with_numref():
     in_string = [
         "---",
         "ipub:",
+        "  pandoc:",
         "    use_numref: true",
         "---",
         "",
@@ -57,8 +56,7 @@ def test_latex_to_rst_with_numref():
                                format_cite_elements.main,
                                format_raw_spans.main], "rst")
 
-    print(out_string)
-    assert out_string == "\n".join([
+    assert out_string.strip() == "\n".join([
         ":numref:`label1` :numref:`label2` :cite:`a-cite-key_2019`",
         "",
         ":ref:`label3`",
@@ -68,10 +66,7 @@ def test_latex_to_rst_with_numref():
         "",
         "",
         "",
-        ".. todo:: something else todo",
-        "",
-        "",
-        ""
+        ".. todo:: something else todo"
     ])
 
 
@@ -86,8 +81,7 @@ def test_html_to_latex_label():
         [prepare_raw.main, format_cite_elements.main], "latex")
 
     assert out_string == "\n".join([
-        r"\cref{alabel}",
-        ""
+        r"\cref{alabel}"
     ])
 
 
@@ -96,6 +90,7 @@ def test_html_to_latex_label_with_custom_tag():
     in_string = [
         "---",
         "ipub:",
+        "  pandoc:",
         "    reftag: other",
         "---",
         "",
@@ -108,8 +103,7 @@ def test_html_to_latex_label_with_custom_tag():
         strip_meta=True)
 
     assert out_string == "\n".join([
-        r"\other{alabel}",
-        ""
+        r"\other{alabel}"
     ])
 
 
@@ -126,8 +120,7 @@ def test_html_to_latex_cite():
         [prepare_raw.main, format_cite_elements.main], "latex")
 
     assert out_string == "\n".join([
-        r"surrounding \cite{cite_key} text \cite{cite_key2}",
-        ""
+        r"surrounding \cite{cite_key} text \cite{cite_key2}"
     ])
 
 
@@ -146,8 +139,7 @@ def test_html_to_rst_cite():
     assert out_string == "\n".join([
         "surrounding :cite:`cite_key` text",
         "",
-        ":cite:`cite_key2`",
-        ""
+        ":cite:`cite_key2`"
     ])
 
 

@@ -1,4 +1,5 @@
 from ipypublish.filters_pandoc.main import jinja_filter
+from ipypublish.filters_pandoc.utils import create_ipub_meta
 
 
 def test_basic():
@@ -28,7 +29,7 @@ def test_reference_prefix():
 def test_option_in_nb_meta():
 
     out_str = jinja_filter(
-        "+@label", "rst", {"ipub": {"use_numref": False}}, {}
+        "+@label", "rst", create_ipub_meta({"use_numref": False}), {}
     )
     assert out_str == ":ref:`label`"
 
@@ -36,23 +37,28 @@ def test_option_in_nb_meta():
 def test_option_in_cell_meta():
 
     out_str = jinja_filter(
-        "+@label", "rst", {"ipub": {"use_numref": False}},
-        {"ipub": {"use_numref": True}}
+        "+@label", "rst", create_ipub_meta({"use_numref": False}),
+        create_ipub_meta({"use_numref": True})
     )
     assert out_str == ":numref:`label`"
 
 
 def test_option_in_top_matter():
+    # TODO create ipub yaml from IPUB_META_ROUTE
 
-    out_str = jinja_filter(
-        "\n".join([
+    in_str = "\n".join([
             "---",
             "ipub:",
-            "    use_numref: True",
-            "---",
+            "  pandoc:",
+            "    use_numref: true",
+            "",
+            "...",
+            "",
             "+@label"
-        ]),
-        "rst", {"ipub": {"use_numref": False}}, {}
+        ])
+
+    out_str = jinja_filter(
+        in_str, "rst", create_ipub_meta({"use_numref": False}), {}
     )
     assert out_str == ":numref:`label`"
 
@@ -60,7 +66,7 @@ def test_option_in_top_matter():
 def test_at_notation_false():
 
     out_str = jinja_filter(
-        "+@label", "rst", {"ipub": {"at_notation": False}}, {}
+        "+@label", "rst", create_ipub_meta({"at_notation": False}), {}
     )
     assert out_str == "+ :cite:`label`"
 
@@ -68,6 +74,6 @@ def test_at_notation_false():
 def test_remove_filter():
 
     out_str = jinja_filter(
-        "+@label", "rst", {"ipub": {"filter_mkdown": False}}, {}
+        "+@label", "rst", create_ipub_meta({"apply_filters": False}), {}
     )
     assert out_str == "+@label"

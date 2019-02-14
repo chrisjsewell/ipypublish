@@ -1,8 +1,9 @@
 ---
 jupyter:
   ipub:
-    at_notation: true
-    use_numref: true
+    pandoc:
+      at_notation: true
+      use_numref: true
   jupytext:
     metadata_filter:
       notebook: ipub

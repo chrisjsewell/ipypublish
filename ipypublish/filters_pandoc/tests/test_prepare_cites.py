@@ -1,3 +1,5 @@
+import sys
+import pytest
 from ipypublish.filters_pandoc.utils import apply_filter
 from ipypublish.filters_pandoc.prepare_cites import main
 
@@ -25,6 +27,8 @@ def test_para_rst():
     ])
 
 
+@pytest.mark.skipif((3, 0) < sys.version_info < (3, 6),
+                    reason="html attributes not in sorted order")
 def test_para_html():
     """
     """

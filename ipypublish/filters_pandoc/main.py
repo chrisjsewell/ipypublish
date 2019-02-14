@@ -13,7 +13,9 @@ import panflute as pf
 # from panflute.elements import builtin2meta
 from ipypublish.filters_pandoc import builtin2meta
 
-from ipypublish.filters_pandoc.utils import apply_filter, get_option
+from ipypublish.filters_pandoc.definitions import IPUB_META_ROUTE
+from ipypublish.filters_pandoc.utils import (
+    apply_filter, get_option, create_ipub_meta)
 from ipypublish.filters_pandoc import (
     prepare_cites, prepare_labels, prepare_raw,
     format_cite_elements, format_label_elements, format_raw_spans
@@ -70,7 +72,7 @@ def jinja_filter(source, to_format, nb_metadata, cell_metadata,
 
     The following options are available in {"ipub": {}}
 
-    filter_mkdown=True: bool
+    apply_filters=True: bool
         apply filters to markdown
     at_notation=True: bool
         interpret @label as a reference type based on its prefix modifier,
@@ -79,7 +81,7 @@ def jinja_filter(source, to_format, nb_metadata, cell_metadata,
     reftag="cref": str
         default latex tag for references
     use_numref=True: bool
-        whether to use the ``:numref:`` directive or just ``:ref:``
+        whether to use the ``:numref:`` role or just ``:ref:``
         ``:numref:`` requires ``numfig = True`` in conf.py and,
         for section numbering, a toc tree with ``:numbered:``
     strip_meta=True: bool
@@ -94,6 +96,7 @@ def jinja_filter(source, to_format, nb_metadata, cell_metadata,
 
         ---
         ipub:
+          pandoc:
             use_numref: True
         ---
         +@label
@@ -104,28 +107,41 @@ def jinja_filter(source, to_format, nb_metadata, cell_metadata,
 
     # convert the source to a format agnostic Doc
     doc = apply_filter(source, dry_run=True)  # type: pf.Doc
-    # store the original metadata
-    # original_meta = copy.deepcopy(doc.metadata)
 
-    # if the ipypublish options are not already in the metadata add them
-    if "ipub" not in doc.metadata:
-        doc.metadata["ipub"] = pf.MetaMap()
+    # find the preferential versions of the metadata values
     option_preference = [doc.metadata, cell_metadata, nb_metadata]
-    filter_mkdown = get_option(option_preference,
-                               keypath="ipub.filter_mkdown", default=True)
+    apply_filters = get_option(option_preference,
+                               keypath=IPUB_META_ROUTE + ".apply_filters",
+                               default=True)
     numref = get_option(option_preference,
-                        keypath="ipub.use_numref", default=True)
+                        keypath=IPUB_META_ROUTE + ".use_numref", default=True)
     at_notation = get_option(option_preference,
-                             keypath="ipub.at_notation", default=True)
+                             keypath=IPUB_META_ROUTE + ".at_notation",
+                             default=True)
     reftag = get_option(option_preference,
-                        keypath="ipub.reftag", default="cref")
+                        keypath=IPUB_META_ROUTE + ".reftag", default="cref")
     strip_meta = get_option(option_preference,
-                            keypath="ipub.strip_meta", default=True)
+                            keypath=IPUB_META_ROUTE + ".strip_meta",
+                            default=True)
 
-    if filter_mkdown:
-        doc.metadata["ipub"]["use_numref"] = builtin2meta(numref)
-        doc.metadata["ipub"]["at_notation"] = builtin2meta(at_notation)
-        doc.metadata["ipub"]["reftag"] = builtin2meta(reftag)
+    if apply_filters:
+        # TODO store the original metadata and replace it at end?
+        # original_meta = copy.deepcopy(doc.metadata)
+
+        # set metadata with preferential values
+        meta = pf.tools.meta2builtin(doc.metadata)
+        meta.update(create_ipub_meta({
+            "use_numref": numref,
+            "at_notation": at_notation,
+            "reftag": reftag
+            }))
+        doc.metadata = meta  # builtin2meta(meta)
+
+        # doc.metadata["ipub"]["use_numref"] = builtin2meta(numref)
+        # doc.metadata["ipub"]["at_notation"] = builtin2meta(at_notation)
+        # doc.metadata["ipub"]["reftag"] = builtin2meta(reftag)
+
+        # set filters
         filters = [
             prepare_cites.main,
             prepare_labels.main,

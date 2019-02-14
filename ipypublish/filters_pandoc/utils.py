@@ -11,6 +11,8 @@ import panflute as pf
 from panflute import Element, Doc  # noqa: F401
 from types import FunctionType  # noqa: F401
 
+from ipypublish.filters_pandoc.definitions import IPUB_META_ROUTE
+
 
 def apply_filter(in_object, filter_func=None,
                  out_format="panflute", in_format="markdown",
@@ -89,10 +91,10 @@ def apply_filter(in_object, filter_func=None,
         raise TypeError("object not accepted: {}".format(in_object))
 
     if not isinstance(in_object, pf.Doc):
-        in_json = pf.run_pandoc(in_str,
-                                ["-f", in_format, "-t", "json"])
-        f = io.StringIO(in_json)
-        doc = pf.load(f)
+        doc = pf.convert_text(
+            in_str, input_format=in_format, standalone=True)
+        # f = io.StringIO(in_json)
+        # doc = pf.load(f)
     else:
         doc = in_object
 
@@ -115,12 +117,13 @@ def apply_filter(in_object, filter_func=None,
         return out_doc
 
     # create out str
-    with io.StringIO() as f:
-        pf.dump(doc, f)
-        jsonstr = f.getvalue()
+    # with io.StringIO() as f:
+    #     pf.dump(doc, f)
+    #     jsonstr = f.getvalue()
     # jsonstr = json.dumps(out_doc.to_json()
-    out_str = pf.run_pandoc(jsonstr,
-                            ["-f", "json", "-t", out_format])
+    out_str = pf.convert_text(doc,
+                              input_format="panflute",
+                              output_format=out_format)
 
     # post-process final str
     if strip_blank_lines:
@@ -281,3 +284,13 @@ def get_option(locations, keypath, default=None,
             "could not retrieve the option keypath: {}".format(keypath))
 
     return default
+
+
+def create_ipub_meta(options):
+    meta = {}
+    submeta = meta
+    for key in IPUB_META_ROUTE.split(".")[:-1]:
+        submeta[key] = {}
+        submeta = submeta[key]
+    submeta[IPUB_META_ROUTE.split(".")[-1]] = options
+    return meta

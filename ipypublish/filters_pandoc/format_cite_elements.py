@@ -11,7 +11,7 @@ from ipypublish.filters_pandoc.definitions import ATTRIBUTE_CITE_CLASS
 from ipypublish.filters_pandoc.prepare_raw import CONVERTED_CITE_CLASS
 
 from ipypublish.filters_pandoc.definitions import (
-    PREFIX_MAP_LATEX, PREFIX_MAP_RST
+    PREFIX_MAP_LATEX, PREFIX_MAP_RST, IPUB_META_ROUTE
 )
 
 
@@ -25,7 +25,7 @@ def format_cites(cite, doc):
         return None
 
     # default tags for latex and rst
-    cite_tag = doc.get_metadata("ipub.reftag", "cref")
+    cite_tag = doc.get_metadata(IPUB_META_ROUTE + ".reftag", "cref")
     cite_role = "cite"
 
     # check is the Cite has a surrounding Span to supply attributed
@@ -41,7 +41,7 @@ def format_cites(cite, doc):
                 span.attributes["prefix"], cite_role)
 
     if (cite_role == "numref" and
-            (not doc.get_metadata("ipub.use_numref", False))):
+            (not doc.get_metadata(IPUB_META_ROUTE + ".use_numref", False))):
         cite_role = "ref"
 
     if doc.format in ("latex", "tex"):

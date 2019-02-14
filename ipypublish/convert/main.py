@@ -14,10 +14,14 @@ from traitlets.config.configurable import Configurable
 from traitlets.config import Config
 from jsonextended import edict
 from six import string_types
+import jsonschema
 
 import ipypublish
 from ipypublish.utils import (pathlib, handle_error,
+                              read_file_from_directory,
+                              get_module_path,
                               get_valid_filename, find_entry_point)
+from ipypublish import schema
 from ipypublish.convert.nbmerge import merge_notebooks
 from ipypublish.convert.config_manager import (get_export_config_path,
                                                load_export_config,
@@ -86,6 +90,12 @@ class IpyPubMain(Configurable):
         help=("all string values in the export configuration containing "
               "this placeholder will be be replaced with the path "
               "(relative to outpath) to the folder where files will be dumped")
+    ).tag(config=True)
+
+    validate_nb_metadata = T.Bool(
+        True,
+        help=("before running the exporter, validate that "
+              "the notebook level metadata is valid again the schema")
     ).tag(config=True)
 
     pre_conversion_funcs = T.Dict(
@@ -367,7 +377,7 @@ class IpyPubMain(Configurable):
         # if (ipynb_ext != ".ipynb" and nb_node is None):
         #     handle_error(
         #         'the file extension is not associated with any '
-        #         'pre-converter: {}'.format(ipynb_ext), 
+        #         'pre-converter: {}'.format(ipynb_ext),
         # TypeError, self.logger)
 
         if nb_node is None:
@@ -381,6 +391,21 @@ class IpyPubMain(Configurable):
         else:
             final_nb, meta_path = (nb_node, ipynb_path)
 
+        # valdate the notebook metadata against the schema
+        if self.validate_nb_metadata:
+            nb_metadata_schema = read_file_from_directory(
+                get_module_path(schema), "doc_metadata.schema.json",
+                "doc_metadata.schema", self.logger, interp_ext=True)
+            try:
+                jsonschema.validate(final_nb.metadata, nb_metadata_schema)
+            except jsonschema.ValidationError as err:
+                handle_error(
+                    "validation of notebook level metadata failed: {}\n"
+                    "see the doc_metadata.schema.json for full spec".format(
+                        err.message),
+                    jsonschema.ValidationError, logger=self.logger)
+
+        # set text replacements for export configuration
         replacements = {
             self.meta_path_placeholder: str(meta_path),
             self.files_folder_placeholder: "{}{}".format(

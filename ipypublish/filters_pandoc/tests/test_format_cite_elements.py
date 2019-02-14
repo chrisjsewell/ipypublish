@@ -16,8 +16,7 @@ def test_multiple_references_rst():
 
     print(out_string)
     assert out_string == "\n".join([
-        "multiple references :ref:`fig:id`, :ref:`tbl:id` and :ref:`eq:id1`",
-        ""
+        "multiple references :ref:`fig:id`, :ref:`tbl:id` and :ref:`eq:id1`"
     ])
 
 
@@ -34,6 +33,5 @@ def test_multiple_references_latex():
 
     print(out_string)
     assert out_string == "\n".join([
-        r"multiple references \cref{fig:id,tbl:id,eq:id1}",
-        ""
+        r"multiple references \cref{fig:id,tbl:id,eq:id1}"
     ])
