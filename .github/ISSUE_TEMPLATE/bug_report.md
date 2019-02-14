@@ -31,6 +31,10 @@ A clear and concise description of what you expected to happen.
  - Python: [e.g. 3.6.1]
  - OS: [e.g. OSX 10.5.1]
  - Pandoc: [run `pandoc --version`]
+
+ - (optional for pdf issues) texlive: [run `tex`]
+ - (optional for pdf issues) latexmk: [run `latexmk --version`]
+ 
  - Versions of any other relevant python packages
 
 **Additional context**
