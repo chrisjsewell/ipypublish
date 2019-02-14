@@ -85,6 +85,8 @@ def test_table_html():
     ])
 
 
+@pytest.mark.skipif((3, 0) < sys.version_info < (3, 6),
+                    reason="html attributes not in sorted order")
 def test_image_html():
 
     in_string = [
