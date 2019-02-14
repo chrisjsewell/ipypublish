@@ -32,7 +32,8 @@ def builtin2meta(val):
                           pf.MetaList, pf.MetaMap, pf.MetaBlocks,
                           pf.MetaInlines)):
         return val
-    
+
     raise TypeError("unknown type: {} (type: {})".format(val, type(val)))
 
-    pf.elements.builtin2meta = builtin2meta
+
+pf.elements.builtin2meta = builtin2meta
