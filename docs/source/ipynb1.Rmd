@@ -1,9 +1,8 @@
 ---
 jupyter:
   ipub:
-    at_notation: false
-    test: [1, 2]
-    use_numref: false
+    at_notation: true
+    use_numref: true
   jupytext:
     metadata_filter:
       notebook: ipub
