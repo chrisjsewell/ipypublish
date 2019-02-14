@@ -219,7 +219,7 @@ def convert_units(string, out_units):
     return convert(value)
 
 
-def get_option(*locations, keypath=None, default=None,
+def get_option(locations, keypath, default=None,
                delimiter=".", error_on_missing=False):
     """ fetch an option variable from a hierarchy of preferred locations
 
@@ -227,7 +227,7 @@ def get_option(*locations, keypath=None, default=None,
 
     Parameters
     ----------
-    *locations: list[dict]
+    locations: list[dict]
         a list of mappings to search in
     keypath: list[str] or str
         a key path to search in, if str, then split by delimiter
@@ -244,18 +244,16 @@ def get_option(*locations, keypath=None, default=None,
     >>> a = {"m": 1}
     >>> b = {"x": {"y": 2}}
     >>> c = {"x": {"y": 3}}
-    >>> get_option(a, b, c, keypath=("x", "y"))
+    >>> get_option([a, b, c], keypath=("x", "y"))
     2
-    >>> get_option(a, c, b, keypath=("x", "y"))
+    >>> get_option([a, c, b], keypath=("x", "y"))
     3
-    >>> get_option(a, c, b, keypath="x.y")
+    >>> get_option([a, c, b], keypath="x.y")
     3
-    >>> get_option(a, c, b, keypath="l", default=4)
+    >>> get_option([a, c, b], keypath="l", default=4)
     4
 
     """
-    if keypath is None:
-        raise ValueError("the keypath has not been set")
     if isinstance(keypath, string_types):
         keypath = keypath.split(delimiter)
 

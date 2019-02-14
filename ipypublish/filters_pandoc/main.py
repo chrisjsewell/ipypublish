@@ -66,22 +66,12 @@ def jinja_filter(source, to_format, nb_metadata, cell_metadata,
     Notes
     -----
 
-    if ``at_notation``, ``reftag``, ``use_numref`` are already set in the 
-    source metadata, under key ``ipub``, this will preferentially be used.
-    See https://pandoc.org/MANUAL.html#metadata-blocks, e.g.
+    **Available Meta Options**
 
-    .. code-block:: yaml
+    The following options are available in {"ipub": {}}
 
-        ---
-        ipub:
-            use_numref: True
-        ---
-
-
-
-    Available Meta Options
-    ~~~~~~~~~~~~~~~~~~~~~~
-
+    filter_mkdown=True: bool
+        apply filters to markdown
     at_notation=True: bool
         interpret @label as a reference type based on its prefix modifier,
         latex: '' = cite '+' = cref,    '^' = Cref,    '!' = ref,  '=' = eqref
@@ -95,6 +85,19 @@ def jinja_filter(source, to_format, nb_metadata, cell_metadata,
     strip_meta=True: bool
         if True strip any source metadata, contained in the top matter
 
+    The options will be taken in order of preference from:
+    source.metadata > cell.metadata > nb.metadata
+
+    For source.metadata, see https://pandoc.org/MANUAL.html#metadata-blocks:
+
+    .. code-block:: yaml
+
+        ---
+        ipub:
+            use_numref: True
+        ---
+        +@label
+
     """
     if not source.strip():
         return source.strip() if strip else source
@@ -107,15 +110,16 @@ def jinja_filter(source, to_format, nb_metadata, cell_metadata,
     # if the ipypublish options are not already in the metadata add them
     if "ipub" not in doc.metadata:
         doc.metadata["ipub"] = pf.MetaMap()
-    filter_mkdown = get_option(doc.metadata, cell_metadata, nb_metadata,
+    option_preference = [doc.metadata, cell_metadata, nb_metadata]
+    filter_mkdown = get_option(option_preference,
                                keypath="ipub.filter_mkdown", default=True)
-    numref = get_option(doc.metadata, cell_metadata, nb_metadata,
+    numref = get_option(option_preference,
                         keypath="ipub.use_numref", default=True)
-    at_notation = get_option(doc.metadata, cell_metadata, nb_metadata,
+    at_notation = get_option(option_preference,
                              keypath="ipub.at_notation", default=True)
-    reftag = get_option(doc.metadata, cell_metadata, nb_metadata,
+    reftag = get_option(option_preference,
                         keypath="ipub.reftag", default="cref")
-    strip_meta = get_option(doc.metadata, cell_metadata, nb_metadata,
+    strip_meta = get_option(option_preference,
                             keypath="ipub.strip_meta", default=True)
 
     if filter_mkdown:
