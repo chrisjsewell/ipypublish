@@ -22,25 +22,44 @@ jupyter:
 
 some text jhgjhgjjhgjg
 
-=@label
-
-$$a$$ {#label}
+={@eqn1 .capitalize}
 
 $a=b$
+
+$$a$$ {#eqn1}
+
+$$a=1+2$$ {#eqn3}
+
+={@eqn3 .capitalize}
+
+a b
+- -
+1 2
+
+Table: Caption {#tbl1}
+
++@tbl1
+
+![a caption](_static/example.jpg){#fig1}
+
++@fig1
 
 ```{python}
 a=1
 print(a)
 ```
 
-```{python}
+```{python continue=1}
 for i in [1, 2, 3]:
     print(i)
+print(a)
 ```
+
 
 ```{python ipub={'figure': {'caption': 'this is a caption'}}}
 # %matplotlib inline
 import matplotlib.pyplot as plt
 import numpy as np
 plt.plot(np.sin(np.linspace(0, 6)))
+plt.show()
 ```

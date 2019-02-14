@@ -11,7 +11,7 @@ from ipypublish.filters_pandoc.definitions import ATTRIBUTE_CITE_CLASS
 from ipypublish.filters_pandoc.prepare_raw import CONVERTED_CITE_CLASS
 
 from ipypublish.filters_pandoc.definitions import (
-    PREFIX_MAP_LATEX, PREFIX_MAP_RST, IPUB_META_ROUTE
+    PREFIX_MAP_LATEX, PREFIX_MAP_RST, IPUB_META_ROUTE, CITE_HTML_NAMES
 )
 
 
@@ -27,6 +27,7 @@ def format_cites(cite, doc):
     # default tags for latex and rst
     cite_tag = doc.get_metadata(IPUB_META_ROUTE + ".reftag", "cref")
     cite_role = "cite"
+    html_capitalize = False
 
     # check is the Cite has a surrounding Span to supply attributed
     span = None
@@ -39,6 +40,7 @@ def format_cites(cite, doc):
                 span.attributes["prefix"], cite_tag)
             cite_role = dict(PREFIX_MAP_RST).get(
                 span.attributes["prefix"], cite_role)
+            html_capitalize = "capitalize" in span.classes
 
     if (cite_role == "numref" and
             (not doc.get_metadata(IPUB_META_ROUTE + ".use_numref", False))):
@@ -82,6 +84,27 @@ def format_cites(cite, doc):
                 raw.append(pf.Space())
 
         return raw
+
+    if doc.format in ("html", "html5"):
+        elements = []
+        found_ref = False
+        for citation in cite.citations:
+            ref = doc.get_metadata(
+                "$$references.{}".format(citation.id), False)
+            if ref:
+                # ref -> e.g. {"type": "Math", "number": 1}
+                text = dict(CITE_HTML_NAMES).get(ref["type"], ref["type"])
+                text = text.capitalize() if html_capitalize else text
+                label = "{} {}".format(
+                    text, ref["number"])
+                elements.append(pf.RawInline(
+                    '<a href="#{0}">{1}</a>'.format(citation.id, label),
+                    format=doc.format))
+                found_ref = True
+            else:
+                elements.append(pf.Cite(citations=[citation]))
+        if found_ref:
+            return elements
 
 
 def format_span_cites(span, doc):

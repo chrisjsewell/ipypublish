@@ -118,6 +118,7 @@ def resolve_tables(element, doc):
 
     ref_type = REFTYPE_TABLE
 
+    attributes = None
     if element.caption:  # type: Inline
         attributes = _find_attribute(element.caption[0],
                                      allow_any=True, delete_preceding=False)

@@ -18,7 +18,8 @@ from ipypublish.filters_pandoc.utils import (
     apply_filter, get_option, create_ipub_meta)
 from ipypublish.filters_pandoc import (
     prepare_cites, prepare_labels, prepare_raw,
-    format_cite_elements, format_label_elements, format_raw_spans
+    format_cite_elements, format_label_elements, format_raw_spans,
+    rmarkdown_to_mpe
 )
 
 
@@ -32,7 +33,8 @@ def pandoc_filters():
         prepare_raw.main,
         format_cite_elements.main,
         format_raw_spans.main,
-        format_label_elements.main
+        format_label_elements.main,
+        rmarkdown_to_mpe.main
     ]
 
     doc = pf.load()
