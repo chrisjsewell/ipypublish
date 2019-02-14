@@ -182,7 +182,7 @@ def test_citations_rst():
         '[an external link](http://something.org)',
         '',
         '![a citation @label](path/to/image.png)',
-        
+
     ]
 
     out_string = apply_filter(
@@ -198,4 +198,34 @@ def test_citations_rst():
         "   :alt: a citation :cite:`label`",
         "",
         "   a citation :cite:`label`"
+    ])
+
+
+def test_rst_to_rst():
+
+    in_string = [
+        'a :ref:`label` b'
+    ]
+
+    out_string = apply_filter(
+        in_string,
+        [prepare_raw.main, format_cite_elements.main], "rst")
+
+    assert out_string.strip() == "\n".join([
+        'a :ref:`label` b'
+    ])
+
+
+def test_rst_to_latex():
+
+    in_string = [
+        'a :ref:`label` b'
+    ]
+
+    out_string = apply_filter(
+        in_string,
+        [prepare_raw.main, format_cite_elements.main], "latex")
+
+    assert out_string.strip() == "\n".join([
+        r'a \ref{label} b'
     ])

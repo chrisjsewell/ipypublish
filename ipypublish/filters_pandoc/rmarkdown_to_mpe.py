@@ -20,6 +20,7 @@ See https://github.com/shd101wyy/vscode-markdown-preview-enhanced/issues/185
 
 """
 # TODO remove when fixed?
+import sys
 import re
 from panflute import Element, Doc, CodeBlock  # noqa: F401
 import panflute as pf
@@ -35,8 +36,8 @@ def format_code_html(code, doc):
 
         attr = code.attributes.get('data-info', '')
 
-        parsed = "cmd=true"
-        normed = '{"cmd":true'
+        parsed = "cmd='{}'".format(sys.executable)
+        normed = '{{"cmd":"{}"'.format(sys.executable)
 
         if doc.last_id is None:
             this_id = 1

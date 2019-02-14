@@ -20,6 +20,8 @@ jupyter:
 
 # as rmd
 
+remeber to document that you have to associate rmd with md in vs code
+
 some text jhgjhgjjhgjg
 
 ={@eqn1 .capitalize}
@@ -47,6 +49,11 @@ Table: Caption {#tbl1}
 ```{python}
 a=1
 print(a)
+```
+
+```{python}
+from ipypublish.convert.main import IpyPubMain
+IpyPubMain.class_print_help()
 ```
 
 ```{python continue=1}

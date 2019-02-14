@@ -156,47 +156,69 @@ def process_latex(element, doc):
     return None
 
 
-def process_rst(element, doc):
-    # type: (RawInline, Doc) -> Element
-    """extract all rst adhering to ``:role:`label```
-    to a Span element with class RAWSPAN_CLASS and attributes:
+def process_rst(para, doc):
+    # type: (pf.Para, Doc) -> Element
+    """extract rst adhering to ``:role:`label```, where role is a known
+    to a Cite element with class RAWSPAN_CLASS and CONVERTED_CITE_CLASS
+    and attributes:
 
     ::
 
         attributes={"format": "rst",
                     "role": tag, "content": content}
 
-    - ref, numref, and cite tags will also have class CONVERTED_CITE_CLASS
-    - everything else will also have CONVERTED_OTHER_CLASS
-
     """
-    if not (isinstance(element, (pf.RawInline, pf.RawBlock)) and
-            element.format in ("rst",)):
+    # "a :ref:`label` b" is converted to:
+    # ListContainer(Para(Str(a) Space Str(:ref:) Code(label) Space Str(b)))
+    if not (isinstance(para, (pf.Para))):
         return None
 
-    match_latex_noopts = re.match(
-        r"^\s*\\([^\{\[]+)\{([^\}]+)\}\s*$", element.text)
+    # match_rst_role = re.match(
+    #     "^\\s*\\:([a-z]+)\\:\\`([^\\`]+)\\`$", element.text)
 
-    if match_latex_noopts:
+    new_para = []
+    skip_next = False
 
-        role = match_latex_noopts.group(1)
-        content = match_latex_noopts.group(2)
+    for element in para.content:
+
+        if skip_next:
+            skip_next = False
+            continue
+
+        if not (isinstance(element, pf.Str)
+                and isinstance(element.next, pf.Code)):
+            new_para.append(element)
+            continue
+
+        if not (len(element.text) > 2 and
+                element.text.startswith(":") and
+                element.text.endswith(":")):
+            new_para.append(element)
+            continue
+
+        role = element.text[1:-1]
+        content = element.next.text
 
         if role in dict(PREFIX_MAP_RST_R):
-            return create_cite_span(
-                content, "rst", isinstance(element, pf.RawBlock),
+            new_element = create_cite_span(
+                content, "rst", False,
                 prefix=dict(PREFIX_MAP_RST_R).get(role, ""))
-
+            new_para.append(new_element)
+            skip_next = True
         else:
-            span = pf.Span(
-                classes=[RAWSPAN_CLASS, CONVERTED_OTHER_CLASS],
-                attributes={"format": "rst", "role": role,
-                            "content": content, "original": element.text}
-            )
-            if isinstance(element, pf.RawBlock):
-                return pf.Plain(span)
-            else:
-                return span
+            new_para.append(element)
+            # span = pf.Span(
+            #     classes=[RAWSPAN_CLASS, CONVERTED_OTHER_CLASS],
+            #     attributes={"format": "rst", "role": role,
+            #                 "content": content, "original": element.text}
+            # )
+            # if isinstance(element, pf.RawBlock):
+            #     return pf.Plain(span)
+            # else:
+            #     return span
+    
+    if len(new_para) != len(para.content):
+        return pf.Para(*new_para)
 
 
 def gather_processors(element, doc):
@@ -211,8 +233,7 @@ def gather_processors(element, doc):
     if (isinstance(element, (pf.RawInline, pf.RawBlock)) and
             element.format in ("tex", "latex")):
         return process_latex(element, doc)
-    if (isinstance(element, (pf.RawInline, pf.RawBlock)) and
-            element.format in ("rst",)):
+    if (isinstance(element, (pf.Para,))):
         return process_rst(element, doc)
 
 
