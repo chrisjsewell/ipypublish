@@ -27,17 +27,43 @@ def pandoc_filters():
     """ run a set of ipypublish pandoc filters directly on the pandoc AST,
     via ``pandoc --filter ipubpandoc``
     """
-    filters = [
-        prepare_cites.main,
-        prepare_labels.main,
-        prepare_raw.main,
-        format_cite_elements.main,
-        format_raw_spans.main,
-        format_label_elements.main,
-        rmarkdown_to_mpe.main
-    ]
-
     doc = pf.load()
+
+    # in an rmarkdown file, the metadata will be under a root `jupyter` key
+    jmeta = doc.get_metadata('jupyter', {})
+    meta = pf.tools.meta2builtin(doc.metadata)
+    if 'jupyter' in meta and hasattr(meta["jupyter"], 'items'):
+        jmeta = meta.pop("jupyter")
+        meta.update(jmeta)
+        doc.metadata = meta  # builtin2meta(meta)
+
+    apply_filters = doc.get_metadata(IPUB_META_ROUTE + ".apply_filters",
+                                     default=True)
+    convert_raw = doc.get_metadata(IPUB_META_ROUTE + ".convert_raw",
+                                   default=True)
+
+    if apply_filters:
+        if convert_raw:
+            filters = [
+                prepare_raw.main,
+                prepare_cites.main,
+                prepare_labels.main,
+                format_cite_elements.main,
+                format_raw_spans.main,
+                format_label_elements.main,
+                rmarkdown_to_mpe.main
+            ]
+        else:
+            filters = [
+                prepare_cites.main,
+                prepare_labels.main,
+                format_cite_elements.main,
+                format_label_elements.main,
+                rmarkdown_to_mpe.main
+            ]            
+    else:
+        filters = []
+
     out_doc = doc
     for func in filters:
         out_doc = func(out_doc)  # type: Doc
@@ -76,6 +102,9 @@ def jinja_filter(source, to_format, nb_metadata, cell_metadata,
 
     apply_filters=True: bool
         apply filters to markdown
+    convert_raw=True: bool
+        if True attempt to extract non-markdown formats
+        and convert them to the target format, e.g. rst roles to latex tags
     at_notation=True: bool
         interpret @label as a reference type based on its prefix modifier,
         latex: '' = cite '+' = cref,    '^' = Cref,    '!' = ref,  '=' = eqref
@@ -115,6 +144,9 @@ def jinja_filter(source, to_format, nb_metadata, cell_metadata,
     apply_filters = get_option(option_preference,
                                keypath=IPUB_META_ROUTE + ".apply_filters",
                                default=True)
+    convert_raw = get_option(option_preference,
+                             keypath=IPUB_META_ROUTE + ".convert_raw",
+                             default=True)
     numref = get_option(option_preference,
                         keypath=IPUB_META_ROUTE + ".use_numref", default=True)
     at_notation = get_option(option_preference,
@@ -136,7 +168,7 @@ def jinja_filter(source, to_format, nb_metadata, cell_metadata,
             "use_numref": numref,
             "at_notation": at_notation,
             "reftag": reftag
-            }))
+        }))
         doc.metadata = meta  # builtin2meta(meta)
 
         # doc.metadata["ipub"]["use_numref"] = builtin2meta(numref)
@@ -144,14 +176,22 @@ def jinja_filter(source, to_format, nb_metadata, cell_metadata,
         # doc.metadata["ipub"]["reftag"] = builtin2meta(reftag)
 
         # set filters
-        filters = [
-            prepare_cites.main,
-            prepare_labels.main,
-            prepare_raw.main,
-            format_cite_elements.main,
-            format_raw_spans.main,
-            format_label_elements.main
-        ]
+        if convert_raw:
+            filters = [
+                prepare_raw.main,
+                prepare_cites.main,
+                prepare_labels.main,
+                format_cite_elements.main,
+                format_raw_spans.main,
+                format_label_elements.main
+            ]
+        else:
+            filters = [
+                prepare_cites.main,
+                prepare_labels.main,
+                format_cite_elements.main,
+                format_label_elements.main
+            ]
     else:
         filters = []
 

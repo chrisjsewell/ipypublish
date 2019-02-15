@@ -136,6 +136,11 @@
                             "type": "boolean",
                             "default": true
                         },
+                        "convert_raw": {
+                            "description": "attempt to extract non-markdown formats and convert them to the target format, e.g. rst roles to latex tags",
+                            "type": "boolean",
+                            "default": true
+                        },
                         "at_notation": {
                             "description": "interpret +@label as a reference type based on its prefix modifier",
                             "type": "boolean",

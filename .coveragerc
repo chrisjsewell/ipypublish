@@ -1,2 +1,2 @@
 [run]
-omit = ipypublish/ipysphinx/docutils_transforms/*
+omit = ipypublish/ipysphinx/docutils_transforms.py

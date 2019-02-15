@@ -68,7 +68,7 @@ def format_cites(cite, doc):
         else:
             raw = pf.RawInline(
                 ", ".join([':{0}:`{1}`'.format(cite_role, c.id)
-                          for c in cite.citations[:-1]]) +
+                           for c in cite.citations[:-1]]) +
                 ' and :{0}:`{1}`'.format(cite_role, cite.citations[-1].id),
                 format="rst")
 
@@ -105,6 +105,11 @@ def format_cites(cite, doc):
                 elements.append(pf.Cite(citations=[citation]))
         if found_ref:
             return elements
+        else:
+            return pf.RawInline(
+                '<span style="background-color:rgba(225, 0, 0, .5)">'
+                'No reference found for: {}</span>'.format(
+                    ", ".join([c.id for c in cite.citations])))
 
 
 def format_span_cites(span, doc):

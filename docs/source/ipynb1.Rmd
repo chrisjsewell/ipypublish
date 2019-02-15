@@ -2,6 +2,7 @@
 jupyter:
   ipub:
     pandoc:
+      convert_raw: true 
       at_notation: true
       use_numref: true
   jupytext:
@@ -20,9 +21,29 @@ jupyter:
 
 # as rmd
 
-remeber to document that you have to associate rmd with md in vs code
+```
+.. note::
+
+    reference in @ notation ={@eqn1 .capitalize}
+
+    reference in rst notation :eq:`eqn1`
+
+    reference in latex notation \eqref{eqn1}
+```
+
+.. note::
+
+    reference in @ notation ={@eqn1 .capitalize}
+
+    reference in rst notation :eq:`eqn1`
+
+    reference in latex notation \eqref{eqn1}
+
+remember to document that you have to associate rmd with md in vs code
 
 some text jhgjhgjjhgjg
+
+a :eq:`eqn1`
 
 ={@eqn1 .capitalize}
 

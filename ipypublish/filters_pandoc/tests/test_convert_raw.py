@@ -201,7 +201,7 @@ def test_citations_rst():
     ])
 
 
-def test_rst_to_rst():
+def test_rst_cite_to_rst():
 
     in_string = [
         'a :ref:`label` b'
@@ -216,7 +216,7 @@ def test_rst_to_rst():
     ])
 
 
-def test_rst_to_latex():
+def test_rst_cite_to_latex():
 
     in_string = [
         'a :ref:`label` b'
@@ -228,4 +228,42 @@ def test_rst_to_latex():
 
     assert out_string.strip() == "\n".join([
         r'a \ref{label} b'
+    ])
+
+
+def test_rst_known_role_to_rst():
+
+    in_string = [
+        'a :py:func:`label` b'
+    ]
+
+    out_string = apply_filter(
+        in_string,
+        [prepare_raw.main, format_raw_spans.main], "rst")
+
+    assert out_string.strip() == "\n".join([
+        'a :py:func:`label` b'
+    ])
+
+
+def test_rst_known_directive_to_rst():
+
+    in_string = [
+        '.. versionchanged:: v0.8.3',
+        '',
+        '    abc',
+        '',
+        '    xyz'
+    ]
+
+    out_string = apply_filter(
+        in_string,
+        [prepare_raw.main, format_raw_spans.main], "rst")
+
+    assert out_string.strip() == "\n".join([
+        '.. versionchanged:: v0.8.3',
+        '',
+        '    abc',
+        '',
+        '    xyz'
     ])

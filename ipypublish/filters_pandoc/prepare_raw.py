@@ -7,13 +7,9 @@ import panflute as pf
 
 from ipypublish.filters_pandoc.definitions import (
     PREFIX_MAP_LATEX_R, PREFIX_MAP_RST_R, ATTRIBUTE_CITE_CLASS,
-    IPUB_META_ROUTE
+    IPUB_META_ROUTE, RST_KNOWN_ROLES, RAWSPAN_CLASS, RAWDIV_CLASS,
+    CONVERTED_CITE_CLASS, CONVERTED_OTHER_CLASS
 )
-
-RAWSPAN_CLASS = "raw-content"
-
-CONVERTED_CITE_CLASS = "converted-Cite"
-CONVERTED_OTHER_CLASS = "converted-Other"
 
 
 def create_cite_span(identifier, rawformat, is_block,
@@ -205,18 +201,19 @@ def process_rst(para, doc):
                 prefix=dict(PREFIX_MAP_RST_R).get(role, ""))
             new_para.append(new_element)
             skip_next = True
+        elif role in RST_KNOWN_ROLES:
+            new_element = pf.Span(
+                classes=[RAWSPAN_CLASS, CONVERTED_OTHER_CLASS],
+                attributes={"format": "rst", "role": role,
+                            "content": content,
+                            "original": "{0}`{1}`".format(
+                                element.text, element.next.text)
+                            })
+            new_para.append(new_element)
+            skip_next = True
         else:
             new_para.append(element)
-            # span = pf.Span(
-            #     classes=[RAWSPAN_CLASS, CONVERTED_OTHER_CLASS],
-            #     attributes={"format": "rst", "role": role,
-            #                 "content": content, "original": element.text}
-            # )
-            # if isinstance(element, pf.RawBlock):
-            #     return pf.Plain(span)
-            # else:
-            #     return span
-    
+
     if len(new_para) != len(para.content):
         return pf.Para(*new_para)
 
@@ -240,6 +237,43 @@ def gather_processors(element, doc):
 def prepare(doc):
     # type: (Doc) -> None
     doc.to_delete = {}
+
+    # search for rst directives,
+    # with top line starting ``Str(..)Space()Str(name::)``, above a CodeBlock
+    final_blocks = []
+    skip_next = False
+    for block in doc.content:
+        if skip_next:
+            skip_next = False
+            continue
+        if not isinstance(block, pf.Para):
+            final_blocks.append(block)
+            continue
+        if len(block.content) < 3:
+            final_blocks.append(block)
+            continue
+        # raise Exception(block.next)
+        if (isinstance(block.content[0], pf.Str)
+            and block.content[0].text == ".."
+                and isinstance(block.content[1], pf.Space)
+                and isinstance(block.content[2], pf.Str)
+                and block.content[2].text.endswith("::")
+                and isinstance(block.next, pf.CodeBlock)):
+                # NB: we allow any directive name
+            skip_next = True
+            new_block = pf.Div(
+                block,
+                *pf.convert_text(block.next.text),
+                classes=[RAWDIV_CLASS, CONVERTED_OTHER_CLASS],
+                attributes={"format": "rst",
+                            "directive": block.content[2].text[:-2]
+                            }
+            )
+            final_blocks.append(new_block)
+            continue
+        final_blocks.append(block)
+
+    doc.content = final_blocks
 
 
 def finalize(doc):

@@ -8,24 +8,50 @@ first to access the functionality below:
 from panflute import Element, Doc, Span  # noqa: F401
 import panflute as pf
 
-from ipypublish.filters_pandoc.prepare_raw import (
-    CONVERTED_OTHER_CLASS, CONVERTED_CITE_CLASS)
+from ipypublish.filters_pandoc.definitions import (
+    CONVERTED_OTHER_CLASS, CONVERTED_CITE_CLASS,
+    RAWSPAN_CLASS, RAWDIV_CLASS, CONVERTED_CITE_CLASS, CONVERTED_OTHER_CLASS
+)
 
 
-def process_raw_spans(span, doc):
+def process_raw_spans(container, doc):
     # type: (Span, Doc) -> Element
-    if not isinstance(span, pf.Span):
+    if not isinstance(container, (pf.Span, pf.Div)):
         return None
-    if CONVERTED_OTHER_CLASS not in span.classes:
+    if CONVERTED_OTHER_CLASS not in container.classes:
         return None
 
-    if doc.format == "rst" and span.attributes["format"] == "latex":
-        if span.attributes["tag"] in ["todo"]:
-            return pf.Str("\n\n.. {}:: {}\n\n".format(
-                span.attributes["tag"], span.attributes["content"]))
+    if isinstance(container, pf.Span):
+        if doc.format == "rst" and container.attributes["format"] == "latex":
+            if container.attributes["tag"] in ["todo"]:
+                return pf.Str("\n\n.. {}:: {}\n\n".format(
+                    container.attributes["tag"], container.attributes["content"]))
 
-    return pf.RawInline(span.attributes.get("original"),
-                        format=span.attributes["format"])
+        return pf.RawInline(container.attributes.get("original"),
+                            format=container.attributes["format"])
+    else:
+        if doc.format in ("rst", "html", "html5"):
+            # we need to indent each paragraph of the directive
+            content = [container.content[0]]
+            for para in container.content[1:]:
+                para.content = [pf.Str("    ")] + list(para.content)
+                content.append(para)
+
+            if (doc.format in ("html", "html5")
+                    and container.attributes["format"] == "rst"):
+                return pf.RawBlock(
+                    '<div {0} style="background-color:rgba(10, 225, 10, .2)">'
+                    '{1}</div>'.format(
+                        container.attributes.get("directive", ""),
+                        "".join([
+                            "<p>"+pf.stringify(c)+"</p>" for c in content])),
+                    format="html"
+                )
+            else:
+                return pf.RawBlock(pf.stringify(pf.Div(*content)),
+                                   format=container.attributes["format"])
+
+            # TODO latex conversion
 
 
 def prepare(doc):
