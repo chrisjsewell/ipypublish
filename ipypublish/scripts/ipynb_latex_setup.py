@@ -89,7 +89,7 @@ except ImportError:
 if _pandas_present and ipython:
     pd.set_option('display.latex.repr', True)
     pd.set_option('display.latex.longtable', False)
-    pd.set_option('display.latex.escape', False)
+    pd.set_option('display.latex.escape', True)
 
 # SYMPY
 # =====
