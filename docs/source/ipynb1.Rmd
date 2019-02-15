@@ -65,6 +65,8 @@ Table: Caption {#tbl1}
 
 ![a caption](_static/example.jpg){#fig1}
 
+![a caption](_static/main_image.png)
+
 +@fig1
 
 ```{python}

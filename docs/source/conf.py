@@ -29,6 +29,7 @@ import sphinx
 from sphinx.application import Sphinx  # noqa
 
 import ipypublish
+from ipypublish.filters_pandoc.main import jinja_filter
 
 on_rtd = os.environ.get('READTHEDOCS') == 'True'
 
@@ -88,11 +89,12 @@ else:
     ipysphinx_preconverters = {
         ".Rmd": jupytext.readf
     }
+ipysphinx_show_prompts = True
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This patterns also effect to html_static_path and html_extra_path
-exclude_patterns = ["_build", "build", "**.ipynb_checkpoints"]
+exclude_patterns = ["_build", "build", "**.ipynb_checkpoints", "converted"]
 
 
 # General information about the project.
@@ -351,24 +353,30 @@ def create_git_releases(app):
     # NOTE on vscode this could fail with urllib.error.HTTPError
     git_history_json = json.loads(git_history)
     # NOTE on vscode this was failing unless encoding='utf8' was present
-    with io.open(os.path.join(this_folder, 'releases.md'),
+    with io.open(os.path.join(this_folder, 'releases.rst'),
                  'w', encoding="utf8") as f:
-        f.write('# Releases\n')
-        f.write('\n')
+        f.write('.. _releases:\n\n')
+        f.write('Releases\n')
+        f.write('========\n\n')
         for i, r in enumerate(git_history_json):
             if r['tag_name'].split(".")[-1] == "0":
-                level = '## '
+                level = 2
             elif i == 0:
-                f.write("## Current Version\n")
-                level = '### '
+                f.write("Current Version\n")
+                f.write("---------------\n\n")
+                level = 3
             else:
-                level = '### '
-            subtitle = level + ' '.join([r['tag_name'],
-                                         '-', r['name'], '\n'])
+                level = 3
+            subtitle = ' '.join([r['tag_name'], '-', r['name'].rstrip(), '\n'])
             f.write(subtitle)
+            if level == 2:
+                f.write("-" * (len(subtitle)-1)+"\n")
+            else:
+                f.write("~" * (len(subtitle)-1)+"\n")
             f.write('\n')
-            for line in r['body'].split('\n'):
-                f.write(' '.join([line, '\n']))
+            source = jinja_filter(r['body'], "rst", {}, {})
+            for line in source.split('\n'):
+                f.write(' '.join([line.rstrip(), '\n']))
             f.write('\n')
 
 

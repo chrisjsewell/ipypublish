@@ -8,7 +8,7 @@ import panflute as pf
 from ipypublish.filters_pandoc.definitions import (
     PREFIX_MAP_LATEX_R, PREFIX_MAP_RST_R, ATTRIBUTE_CITE_CLASS,
     IPUB_META_ROUTE, RST_KNOWN_ROLES, RAWSPAN_CLASS, RAWDIV_CLASS,
-    CONVERTED_CITE_CLASS, CONVERTED_OTHER_CLASS
+    CONVERTED_CITE_CLASS, CONVERTED_OTHER_CLASS, CONVERTED_DIRECTIVE_CLASS
 )
 
 
@@ -239,7 +239,8 @@ def prepare(doc):
     doc.to_delete = {}
 
     # search for rst directives,
-    # with top line starting ``Str(..)Space()Str(name::)``, above a CodeBlock
+    # with top line starting ``Str(..)Space()Str(name::)``, above a CodeBlock,
+    # and rst labels of the form ``Str(..)Space()Str(_name:)``
     final_blocks = []
     skip_next = False
     for block in doc.content:
@@ -252,25 +253,39 @@ def prepare(doc):
         if len(block.content) < 3:
             final_blocks.append(block)
             continue
-        # raise Exception(block.next)
+
         if (isinstance(block.content[0], pf.Str)
             and block.content[0].text == ".."
                 and isinstance(block.content[1], pf.Space)
-                and isinstance(block.content[2], pf.Str)
-                and block.content[2].text.endswith("::")
-                and isinstance(block.next, pf.CodeBlock)):
+                and isinstance(block.content[2], pf.Str)):
+
+            if (block.content[2].text.endswith("::")
+                    and isinstance(block.next, pf.CodeBlock)):
                 # NB: we allow any directive name
-            skip_next = True
-            new_block = pf.Div(
-                block,
-                *pf.convert_text(block.next.text),
-                classes=[RAWDIV_CLASS, CONVERTED_OTHER_CLASS],
-                attributes={"format": "rst",
-                            "directive": block.content[2].text[:-2]
-                            }
-            )
-            final_blocks.append(new_block)
-            continue
+                # the block may contain option directives, e.g. :width:
+                #  
+                skip_next = True
+                new_block = pf.Div(
+                    block,
+                    *pf.convert_text(block.next.text),
+                    classes=[RAWDIV_CLASS, CONVERTED_DIRECTIVE_CLASS],
+                    attributes={"format": "rst",
+                                "directive": block.content[2].text[:-2]
+                                }
+                )
+                final_blocks.append(new_block)
+                continue
+            elif (len(block.content) == 3
+                  and block.content[2].text.startswith("_")
+                  and block.content[2].text.endswith(":")):
+                new_block = pf.Div(
+                    block,
+                    classes=[RAWDIV_CLASS, CONVERTED_OTHER_CLASS],
+                    attributes={"format": "rst"}
+                    )
+                final_blocks.append(new_block)
+                continue
+
         final_blocks.append(block)
 
     doc.content = final_blocks

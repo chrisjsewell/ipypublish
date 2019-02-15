@@ -121,7 +121,7 @@ def apply_filter(in_object, filter_func=None,
     #     pf.dump(doc, f)
     #     jsonstr = f.getvalue()
     # jsonstr = json.dumps(out_doc.to_json()
-    out_str = pf.convert_text(doc,
+    out_str = pf.convert_text(out_doc,
                               input_format="panflute",
                               output_format=out_format)
 

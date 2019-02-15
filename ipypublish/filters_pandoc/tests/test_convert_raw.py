@@ -246,7 +246,7 @@ def test_rst_known_role_to_rst():
     ])
 
 
-def test_rst_known_directive_to_rst():
+def test_rst_directive_to_rst():
 
     in_string = [
         '.. versionchanged:: v0.8.3',
@@ -266,4 +266,46 @@ def test_rst_known_directive_to_rst():
         '    abc',
         '',
         '    xyz'
+    ])
+
+
+def test_rst_directive_with_options_to_rst():
+
+    in_string = [
+        '.. toctree::',
+        '    :maxdepth: 2',
+        '    :numbered:',
+        '',
+        '    abc',
+        '    xyz'
+    ]
+
+    out_string = apply_filter(
+        in_string,
+        [prepare_raw.main, format_raw_spans.main], "rst")
+
+    assert out_string == "\n".join([
+        '.. toctree::',
+        '    :maxdepth: 2',
+        '    :numbered:',
+        '',
+        '    abc',
+        '    xyz',
+        '',
+        ''
+    ])
+
+
+def test_rst_label_to_rst():
+
+    in_string = [
+        '.. _alabel:'
+    ]
+
+    out_string = apply_filter(
+        in_string,
+        [prepare_raw.main, format_raw_spans.main], "rst")
+
+    assert out_string.strip() == "\n".join([
+        '.. _alabel:'
     ])

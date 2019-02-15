@@ -2,9 +2,10 @@
 IPUB_META_ROUTE = "ipub.pandoc"
 
 ATTRIBUTE_CITE_CLASS = "attribute-Cite"
-RAWSPAN_CLASS = "raw-content"
-RAWDIV_CLASS = "raw-content"
+RAWSPAN_CLASS = "raw-span-content"
+RAWDIV_CLASS = "raw-div-content"
 CONVERTED_CITE_CLASS = "converted-Cite"
+CONVERTED_DIRECTIVE_CLASS = "converted-rst-dir"
 CONVERTED_OTHER_CLASS = "converted-Other"
 
 # NB: it appears '-' is already used by sphinx, but '?' and '*' are also viable

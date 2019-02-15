@@ -28,6 +28,7 @@
     "python.linting.flake8Enabled": true,
     "latex-workshop.latex.autoBuild.onSave.enabled": false,
     "cSpell.words": [
+        "Jupyter",
         "ipynb",
         "ipypublish",
         "jupytext",

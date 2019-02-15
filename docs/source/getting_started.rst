@@ -7,19 +7,24 @@ Installation
 Using `Conda <https://conda.io/docs/>`__ is recommended for package
 management, in order to create self contained environments with specific
 versions of packages. The main external packages required are the
-Jupyter notebook and `Pandoc <http://pandoc.org>`__ (for conversion
-between file formats):
+Jupyter notebook and `Pandoc <http://pandoc.org>`__ (for markdown conversion):
 
 .. code-block:: console
 
-   conda create --name ipyreport -c conda-forge jupyter pandoc
+   $ conda create --name ipyreport -c conda-forge jupyter pandoc
 
 ipypublish can then be installed into this environment:
 
 .. code-block:: console
 
-   source activate ipyreport
-   pip install ipypublish
+   $ source activate ipyreport
+   $ pip install ipypublish
+
+optionally, to include install dependencies for sphinx exporters:
+
+.. code-block:: console
+
+   $ pip install ipypublish[sphinx]
 
 For converting to PDF, the TeX document preparation ecosystem is
 required, in particular
@@ -36,7 +41,7 @@ package <http://jupyter-contrib-nbextensions.readthedocs.io/en/latest/>`__:
 
 .. code-block:: console
 
-   conda install --name ipyreport jupyter_contrib_nbextensions
+   $ conda install --name ipyreport jupyter_contrib_nbextensions
 
 Additionally, a more extensive setup of useful packages (used to create
 the examples) are provided by the
@@ -45,35 +50,49 @@ which can be installed in to a new environment
 
 .. code-block:: console
 
-   conda create --name ipyreport anaconda
+   $ conda create --name ipyreport anaconda
 
 Basic Conversion
 ----------------
 
-The **nbpublish** script handles parsing the notebooks to nbconvert,
-with the appropriate converter.
+The **nbpublish** script provides terminal access to the notebook conversion
+application. To see all the options:
+
 
 .. code-block:: console
 
-   nbpublish -h
-   nbpublish -pdf -f latex_ipypublish_nocode path/to/notebook.ipynb
+   $ nbpublish --help
+
+To see all the builtin conversion configurations:
+
+.. code-block:: console
+
+   $ nbpublish -le
+
+To run a basic conversion to PDF and auto-load it in a web browser
+
+.. code-block:: console
+
+   $ nbpublish -pdf -lb -f latex_ipypublish_nocode path/to/notebook.ipynb
 
 For a more detailed explanation see the :ref:`notebook_conversion` section.
 
-The **nbpresent** script handles serving
+The **nbpresent** script additionally handles serving
 `reveal.js <http://lab.hakim.se/reveal-js/#/>`__ slides to a webbrowser.
 
 .. code-block:: console
 
-   nbpresent -h
-   nbpresent -f slides_ipypublish_nocode path/to/notebook.ipynb
+   $ nbpresent -h
+   $ nbpresent -f slides_ipypublish_nocode path/to/notebook.ipynb
 
-Note that, for offline use, simply download the latest version of
-reveal.js `here <https://github.com/hakimel/reveal.js/releases>`__,
-rename the entire folder to reveal.js and place it in the same folder as
-the converted .slides.html file. The slides can also be saved to PDF by
-appending ``pdf-export`` to the url (see
-`here <https://github.com/hakimel/reveal.js#pdf-export>`__ for details).
+.. note::
+
+    For offline use, simply download the latest version of
+    reveal.js `here <https://github.com/hakimel/reveal.js/releases>`__,
+    rename the entire folder to reveal.js and place it in the same folder as
+    the converted .slides.html file. The slides can also be saved to PDF by
+    appending ``pdf-export`` to the url (see
+    `here <https://github.com/hakimel/reveal.js#pdf-export>`__ for details).
 
 Troubleshooting
 ---------------
@@ -98,7 +117,7 @@ Try running with options:
 
 .. code-block:: console
 
-    nbpublish --log-level debug --print-traceback notebook.ipynb
+    $ nbpublish --log-level debug --print-traceback notebook.ipynb
 
 To debug PDF conversions, use the ``--pdf-debug`` flag. If there is
 still an error, please raise an issue on the `GitHub

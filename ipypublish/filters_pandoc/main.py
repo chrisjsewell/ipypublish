@@ -10,8 +10,6 @@ Other sources of information:
 
 """
 import panflute as pf
-# from panflute.elements import builtin2meta
-from ipypublish.filters_pandoc import builtin2meta
 
 from ipypublish.filters_pandoc.definitions import IPUB_META_ROUTE
 from ipypublish.filters_pandoc.utils import (

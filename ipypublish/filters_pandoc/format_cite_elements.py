@@ -108,7 +108,8 @@ def format_cites(cite, doc):
         else:
             return pf.RawInline(
                 '<span style="background-color:rgba(225, 0, 0, .5)">'
-                'No reference found for: {}</span>'.format(
+                # 'No reference found for: {}</span>'.format(
+                '{}</span>'.format(
                     ", ".join([c.id for c in cite.citations])))
 
 
