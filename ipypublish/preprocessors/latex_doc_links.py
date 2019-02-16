@@ -10,6 +10,11 @@ from six import string_types
 import traitlets as traits
 from nbconvert.preprocessors import Preprocessor
 
+if sys.version_info[0] == 2:
+    from urlparse import urlparse
+else:
+    from urllib.parse import urlparse
+
 logger = logging.getLogger("resolve_links")
 
 
@@ -26,8 +31,19 @@ def guess_extension_without_jpe(mimetype):
     return ext
 
 
+def is_hyperlink(path):
+    """test whether a path is a hyperlink, e.g. https://site.org"""
+    if urlparse(path).scheme:
+        return True
+    return False
+
+
 def resolve_path(fpath, filepath):
     """resolve a relative path, w.r.t. another filepath """
+
+    if is_hyperlink(fpath):
+        return fpath
+
     if not os.path.isabs(fpath):
         fpath = os.path.join(os.path.dirname(str(filepath)), fpath)
         fpath = os.path.abspath(fpath)
@@ -69,6 +85,8 @@ def extract_file_links(source, parent_path, redirect_path,
         if not path:  # internal links
             continue
         respath = resolve_path(path, parent_path)
+        if is_hyperlink(respath):
+            continue
         if not os.path.exists(respath):
             nonexistent_paths.append(respath)
         if os.path.exists(respath) or replace_nonexistent:

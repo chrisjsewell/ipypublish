@@ -259,30 +259,46 @@ def prepare(doc):
                 and isinstance(block.content[1], pf.Space)
                 and isinstance(block.content[2], pf.Str)):
 
+            if (len(block.content) == 3
+                and block.content[2].text.startswith("_")
+                    and block.content[2].text.endswith(":")):
+                # the block is an rst label
+                new_block = pf.Div(
+                    block,
+                    classes=[RAWDIV_CLASS, CONVERTED_OTHER_CLASS],
+                    attributes={"format": "rst"}
+                )
+                final_blocks.append(new_block)
+                continue
+
             if (block.content[2].text.endswith("::")
                     and isinstance(block.next, pf.CodeBlock)):
-                # NB: we allow any directive name
+                # the block is a directive with body content
+                # TODO at present we allow any directive name
                 # the block may contain option directives, e.g. :width:
-                #  
                 skip_next = True
                 new_block = pf.Div(
                     block,
                     *pf.convert_text(block.next.text),
                     classes=[RAWDIV_CLASS, CONVERTED_DIRECTIVE_CLASS],
                     attributes={"format": "rst",
-                                "directive": block.content[2].text[:-2]
-                                }
+                                "directive": block.content[2].text[:-2],
+                                "has_body": True}
                 )
                 final_blocks.append(new_block)
                 continue
-            elif (len(block.content) == 3
-                  and block.content[2].text.startswith("_")
-                  and block.content[2].text.endswith(":")):
+
+            if (block.content[2].text.endswith("::")):
+                # the block is a directive without body content
+                # TODO at present we allow any directive name
+                # the block may contain option directives, e.g. :width:
                 new_block = pf.Div(
                     block,
-                    classes=[RAWDIV_CLASS, CONVERTED_OTHER_CLASS],
-                    attributes={"format": "rst"}
-                    )
+                    classes=[RAWDIV_CLASS, CONVERTED_DIRECTIVE_CLASS],
+                    attributes={"format": "rst",
+                                "directive": block.content[2].text[:-2],
+                                "has_body": False}
+                )
                 final_blocks.append(new_block)
                 continue
 

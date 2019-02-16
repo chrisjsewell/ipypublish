@@ -49,3 +49,8 @@ seamlessly switch between them:
     code_cells
     markdown_cells
     nb_conversion
+
+
+<!-- ## Setting up a Notebook
+
+To take advantage of the above modes, we first need to add some additional -->

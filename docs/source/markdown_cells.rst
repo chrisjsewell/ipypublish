@@ -1,5 +1,0 @@
-
-Writing in RMarkdown
-====================
-
-hallo

@@ -1,0 +1,34 @@
+---
+jupyter:
+  ipub:
+    pandoc:
+      convert_raw: true 
+      at_notation: true
+      use_numref: true
+  jupytext:
+    metadata_filter:
+      notebook: ipub
+    text_representation:
+      extension: .Rmd
+      format_name: rmarkdown
+      format_version: '1.0'
+      jupytext_version: 0.8.6
+  kernelspec:
+    display_name: Python 3
+    language: python
+    name: python3
+---
+
+# Writing in RMarkdown
+
+In IPyPublish, all Markdown content is converted *via* [Pandoc](https://pandoc.org/). [Pandoc](https://pandoc.org/) alllows for [filters](https://pandoc.org/filters.html) to be applied to the intermediary representation of the content,
+which IPyPublish supplies through a group of
+[panflute](http://scorreia.com/software/panflute/) filters, wrapped in a single 'master' filter; `ipubpandoc`.
+
+This filter is detached from the rest of the
+notebook conversion process, and so can be used as a standalone process:
+
+```console
+$ pandoc -f markdown -t html --filter ipubpandoc path/to/file.md
+```
+
