@@ -30,9 +30,9 @@ which IPyPublish supplies through a group of
 wrapped in a single 'master' filter; `ipubpandoc`.
 This filter extends the common markdown syntax to:
 
-- Handle labelling and referencing of figures, tables and equations
 - Correctly translate pieces of documentation written in other formats
   (such as using LaTeX commands like `\cite` or RST roles like `:cite:`)
+- Handle labelling and referencing of figures, tables and equations
 
 `ipubpandoc` is detached from the rest of the
 notebook conversion process, and so can be used as a standalone process:
@@ -61,6 +61,7 @@ jupyter:
   ipub:
     pandoc:
       convert_raw: true
+      hide_raw: false
       at_notation: true
       use_numref: true
   jupytext:
@@ -83,3 +84,84 @@ jupyter:
     To preserve ipypublish notebook metadata, you must add:
     \`{\"jupytext\": {\"metadata_filter\": \"notebook\": \"ipub\"}}\`
     To your notebooks metadata.
+
+.. note::
+
+    If a file with a .Rmd extension is supplied to
+    \`nbpublish\`, it will automatically call \`jupytext`\.
+    So it is possible to only ever write in the RMarkdown format!
+
+.. seealso::
+
+    [Using YAML metadata blocks in Pandoc](https://pandoc.org/MANUAL.html#extension-yaml_metadata_block)
+
+
+## Working with RMarkdown files
+
+The recommended way to edit RMarkdown files is in
+[Visual Studio Code](https://code.visualstudio.com/), with the
+[Markdown Preview Enhanced](https://shd101wyy.github.io/markdown-preview-enhanced/#/) extension. Add this to your
+[VS Code Settings](https://code.visualstudio.com/docs/getstarted/settings):
+
+```json
+{
+    "files.associations": {
+        "*.Rmd": "markdown"
+    },
+    "markdown-preview-enhanced.usePandocParser": true,
+    "markdown-preview-enhanced.pandocArguments": "--filter=ipubpandoc",
+    "markdown-preview-enhanced.enableScriptExecution": true
+}
+```
+
+If you are using a Conda environment, you may also need to use:
+
+```json
+{
+    "markdown-preview-enhanced.pandocPath": "/anaconda/envs/myenv/bin/pandoc",
+    "markdown-preview-enhanced.pandocArguments": "--filter=/anaconda/myenv/lsr/bin/ipubpandoc"
+}
+```
+
+You will now be able to open a dynamic preview of your notebook,
+with executable code cells:
+
+![MPE Screenshot](_static/markdown_preview_enhanced_screenshot.png)
+
+```{python}
+print(1)
+```
+
+## Inter-Format Translation
+
+`ipubpandoc` attempts to detect any segments of documentation written in
+[LaTeX](https://www.latex-project.org/about/) or
+[Sphinx reStructuredText](http://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html) (and HTML citations), and convert them into
+a relevant [panflute element](http://scorreia.com/software/panflute/code.html).
+
+Because of this we can write something like this:
+
+```
+$$a = b + c$$ {#eqnlabel}
+
+- a reference in @ notation ={@eqnlabel .capitalize}
+- a reference in rst notation :eq:`eqnlabel`
+- a reference in latex notation \eqref{eqnlabel}
+
+.. note::
+
+   a reference in latex notation within an RST directive \eqref{eqnlabel}
+
+```
+
+and it will be correctly resolved in the output document:
+
+$$a = b + c$$ {#eqnlabel}
+
+- a reference in @ notation ={@eqnlabel .capitalize}
+- a reference in rst notation :eq:`eqnlabel`
+- a reference in latex notation \eqref{eqnlabel}
+
+.. note::
+
+    a reference in latex notation within an RST directive \eqref{eqnlabel}

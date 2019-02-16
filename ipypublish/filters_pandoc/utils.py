@@ -294,3 +294,42 @@ def create_ipub_meta(options):
         submeta = submeta[key]
     submeta[IPUB_META_ROUTE.split(".")[-1]] = options
     return meta
+
+
+def get_panflute_containers(element):
+    """return list of all possible container classes for an element"""
+    panflute_inline_containers = (
+        pf.Cite,
+        pf.Emph,
+        pf.Header,
+        pf.Image,
+        pf.LineItem,
+        pf.Link,
+        pf.Para,
+        pf.Plain,
+        pf.Quoted,
+        pf.SmallCaps,
+        pf.Span,
+        pf.Strikeout,
+        pf.Strong,
+        pf.Subscript,
+        pf.Superscript
+    )
+
+    panflute_block_containers = (
+        pf.BlockQuote,
+        pf.Definition,
+        pf.Div,
+        pf.Doc,
+        pf.ListItem,
+        pf.Note,
+        pf.TableCell
+    )
+
+    if issubclass(element, pf.Inline):
+        return panflute_inline_containers
+
+    elif issubclass(element, pf.Block):
+        return panflute_block_containers
+    
+    raise TypeError("not Inline or Block: {}".format(element))

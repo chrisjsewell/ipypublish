@@ -2,6 +2,7 @@
 and convert them to format agnostic Span elements
 """
 import re
+from typing import Union  # noqa: F401
 from panflute import Element, Doc, Cite, RawInline, Link  # noqa: F401
 import panflute as pf
 
@@ -10,10 +11,12 @@ from ipypublish.filters_pandoc.definitions import (
     IPUB_META_ROUTE, RST_KNOWN_ROLES, RAWSPAN_CLASS, RAWDIV_CLASS,
     CONVERTED_CITE_CLASS, CONVERTED_OTHER_CLASS, CONVERTED_DIRECTIVE_CLASS
 )
+from ipypublish.filters_pandoc.utils import get_panflute_containers
 
 
 def create_cite_span(identifier, rawformat, is_block,
                      prefix="", alt=None):
+    """create a cite element from an identifier """
     citation = pf.Citation(
         identifier
     )
@@ -48,44 +51,61 @@ def process_internal_links(link, doc):
         alt=pf.stringify(pf.Plain(*list(link.content))).strip())
 
 
-def process_html(element, doc):
-    # type: (RawInline, Doc) -> Element
+def process_html_cites(block, doc):
+    # type: (pf.Block, Doc) -> Element
     """extract raw html <cite data-cite="cite_key">text</cite>"""
-    if not (isinstance(element, (pf.RawInline, pf.RawBlock)) and
-            element.format in ("html", "html5")):
+    if not (isinstance(block, get_panflute_containers(pf.RawInline))
+            or isinstance(block, get_panflute_containers(pf.RawBlock))):
         return None
 
-    match = re.match(
-        r"<cite\s*data-cite\s*=\"?([^>\"]*)\"?>", element.text)
-    if not match:
-        return None
+    new_content = []
+    skip = 0
 
-    # look for the closing tag
-    content = []
-    closing = element.next
+    for element in block.content:
 
-    while closing:
-        if (isinstance(closing, pf.RawInline) and
-                closing.format in ("html", "html5")):
-            endmatch = re.match(r"^\s*</cite>\s*$", closing.text)
-            if endmatch:
-                break
-        content.append(closing)
-        closing = closing.next
+        if skip > 0:
+            skip = skip - 1
+            continue
 
-    if not closing:
-        # TODO emit warning?
-        return None
+        if not (isinstance(element, (pf.RawInline, pf.RawBlock)) and
+                element.format in ("html", "html4", "html5")):
+            new_content.append(element)
+            continue
 
-    doc.to_delete.setdefault(element.parent, set()).update(content+[closing])
+        match = re.match(
+            r"<cite\s*data-cite\s*=\"?([^>\"]*)\"?>", element.text)
+        if not match:
+            new_content.append(element)
+            continue
 
-    # TODO include original content
-    return create_cite_span(match.group(1), "html",
-                            isinstance(element, pf.RawBlock))
+        # look for the closing tag
+        span_content = []
+        closing = element.next
+
+        while closing:
+            if (isinstance(closing, pf.RawInline) and
+                    closing.format in ("html", "html5")):
+                endmatch = re.match(r"^\s*</cite>\s*$", closing.text)
+                if endmatch:
+                    break
+            span_content.append(closing)
+            closing = closing.next
+
+        if not closing:
+            new_content.append(element)
+            continue
+
+        # TODO include original content
+        new_content.append(create_cite_span(match.group(1), "html",
+                                            isinstance(element, pf.RawBlock)))
+        skip = len(span_content) + 1
+
+    block.content = new_content
+    return block
 
 
-def process_latex(element, doc):
-    # type: (RawInline, Doc) -> Element
+def process_latex_raw(element, doc):
+    # type: (Union[RawInline, RawBlock], Doc) -> Element
     """extract all latex adhering to \\tag{content} or \\tag[options]{content}
     to a Span element with class RAWSPAN_CLASS attributes:
 
@@ -102,37 +122,66 @@ def process_latex(element, doc):
             element.format in ("tex", "latex")):
         return None
 
+    return assess_latex(element.text, isinstance(element, pf.RawBlock))
+
+
+def process_latex_str(block, doc):
+    # type: (pf.Block, Doc) -> Union[pf.Block,None]
+    """see process_latex_raw 
+
+    same but sometimes pandoc doesn't convert to a raw element
+    """
+    # TODO in the tests '\cite{a}' -> RawInline,
+    # yet running a file with pandoc \cite{a}' -> Str?!
+    if not (isinstance(block, get_panflute_containers(pf.Str))):
+        return None
+    new_content = []
+    for element in block.content:
+        if not isinstance(element, pf.Str):
+            new_content.append(element)
+            continue
+        for string in re.split(
+            r"(\\[^\{\[]+\{[^\}]+\}|\\[^\{\[]+\[[^\]]*\]\{[^\}]+\})",
+                element.text):
+            if not string:
+                continue
+            new_element = assess_latex(string, False)
+            if new_element is None:
+                new_content.append(pf.Str(string))
+            else:
+                new_content.append(assess_latex(string, False))
+    block.content = new_content
+    return block
+
+
+def assess_latex(text, is_block):
+
     # find tags with no option, i.e \tag{label}
     match_latex_noopts = re.match(
-        r"^\s*\\([^\{\[]+)\{([^\}]+)\}\s*$", element.text)
-
+        r"^\s*\\([^\{\[]+)\{([^\}]+)\}\s*$", text)
     if match_latex_noopts:
-
         tag = match_latex_noopts.group(1)
         content = match_latex_noopts.group(2)
-
         if tag in dict(PREFIX_MAP_LATEX_R):
-            return create_cite_span(
-                content, "latex", isinstance(element, pf.RawBlock),
+            new_element = create_cite_span(
+                content, "latex", is_block,
                 prefix=dict(PREFIX_MAP_LATEX_R).get(tag, ""))
+            return new_element
 
+        span = pf.Span(
+            classes=[RAWSPAN_CLASS, CONVERTED_OTHER_CLASS],
+            attributes={"format": "latex", "tag": tag,
+                        "content": content, "original": text}
+        )
+        if is_block:
+            return pf.Plain(span)
         else:
-            span = pf.Span(
-                classes=[RAWSPAN_CLASS, CONVERTED_OTHER_CLASS],
-                attributes={"format": "latex", "tag": tag,
-                            "content": content, "original": element.text}
-            )
-            if isinstance(element, pf.RawBlock):
-                return pf.Plain(span)
-            else:
-                return span
+            return span
 
     # find tags with option, i.e \tag[options]{label}
     match_latex_wopts = re.match(
-        r"^\s*\\([^\{\[]+)\[([^\]]*)\]\{([^\}]+)\}\s*$", element.text)
-
+        r"^\s*\\([^\{\[]+)\[([^\]]*)\]\{([^\}]+)\}\s*$", text)
     if match_latex_wopts:
-
         tag = match_latex_wopts.group(1)
         options = match_latex_wopts.group(2)
         content = match_latex_wopts.group(3)
@@ -142,9 +191,9 @@ def process_latex(element, doc):
             attributes={"format": "latex",
                         "tag": tag, "content": content,
                         options: "options",
-                        "original": element.text}
+                        "original": text}
         )
-        if isinstance(element, pf.RawBlock):
+        if is_block:
             return pf.Plain(span)
         else:
             return span
@@ -152,8 +201,8 @@ def process_latex(element, doc):
     return None
 
 
-def process_rst(para, doc):
-    # type: (pf.Para, Doc) -> Element
+def process_rst_roles(block, doc):
+    # type: (pf.Block, Doc) -> Union[pf.Block,None]
     """extract rst adhering to ``:role:`label```, where role is a known
     to a Cite element with class RAWSPAN_CLASS and CONVERTED_CITE_CLASS
     and attributes:
@@ -165,17 +214,17 @@ def process_rst(para, doc):
 
     """
     # "a :ref:`label` b" is converted to:
-    # ListContainer(Para(Str(a) Space Str(:ref:) Code(label) Space Str(b)))
-    if not (isinstance(para, (pf.Para))):
+    # (Str(a) Space Str(:ref:) Code(label) Space Str(b))
+    if not (isinstance(block, get_panflute_containers(pf.Str))):
         return None
 
     # match_rst_role = re.match(
     #     "^\\s*\\:([a-z]+)\\:\\`([^\\`]+)\\`$", element.text)
 
-    new_para = []
+    new_content = []
     skip_next = False
 
-    for element in para.content:
+    for element in block.content:
 
         if skip_next:
             skip_next = False
@@ -183,13 +232,13 @@ def process_rst(para, doc):
 
         if not (isinstance(element, pf.Str)
                 and isinstance(element.next, pf.Code)):
-            new_para.append(element)
+            new_content.append(element)
             continue
 
         if not (len(element.text) > 2 and
                 element.text.startswith(":") and
                 element.text.endswith(":")):
-            new_para.append(element)
+            new_content.append(element)
             continue
 
         role = element.text[1:-1]
@@ -199,7 +248,7 @@ def process_rst(para, doc):
             new_element = create_cite_span(
                 content, "rst", False,
                 prefix=dict(PREFIX_MAP_RST_R).get(role, ""))
-            new_para.append(new_element)
+            new_content.append(new_element)
             skip_next = True
         elif role in RST_KNOWN_ROLES:
             new_element = pf.Span(
@@ -209,47 +258,74 @@ def process_rst(para, doc):
                             "original": "{0}`{1}`".format(
                                 element.text, element.next.text)
                             })
-            new_para.append(new_element)
+            new_content.append(new_element)
             skip_next = True
         else:
-            new_para.append(element)
+            new_content.append(element)
 
-    if len(new_para) != len(para.content):
-        return pf.Para(*new_para)
+    if len(new_content) != len(block.content):
+        block.content = new_content
+        return block
 
 
 def gather_processors(element, doc):
     """ we gather the processors,
     so that we don't have to do multiple passes
     """
-    if isinstance(element, pf.Link):
-        return process_internal_links(element, doc)
-    if (isinstance(element, (pf.RawInline, pf.RawBlock)) and
-            element.format in ("html", "html5")):
-        return process_html(element, doc)
-    if (isinstance(element, (pf.RawInline, pf.RawBlock)) and
-            element.format in ("tex", "latex")):
-        return process_latex(element, doc)
-    if (isinstance(element, (pf.Para,))):
-        return process_rst(element, doc)
+
+    # apply processors that change one elements
+
+    new_element = process_internal_links(element, doc)
+    if new_element is not None:
+        return new_element
+
+    new_element = process_latex_raw(element, doc)
+    if new_element is not None:
+        return new_element
+
+    # apply processors that change multiple inline elements in a block
+
+    if isinstance(element, get_panflute_containers(pf.Inline)):
+
+        new_element = process_html_cites(element, doc)
+        if new_element is not None:
+            element = new_element
+        new_element = process_latex_str(element, doc)
+        if new_element is not None:
+            element = new_element
+        new_element = process_rst_roles(element, doc)
+        if new_element is not None:
+            element = new_element
+
+    # apply processors that change multiple block elements
+    if isinstance(element, get_panflute_containers(pf.Block)):
+
+        new_element = process_html_cites(element, doc)
+        if new_element is not None:
+            element = new_element
+
+    return element
 
 
-def prepare(doc):
-    # type: (Doc) -> None
-    doc.to_delete = {}
+def wrap_rst_directives(doc):
+    """search for rst directives and wrap them in divs
 
-    # search for rst directives,
-    # with top line starting ``Str(..)Space()Str(name::)``, above a CodeBlock,
-    # and rst labels of the form ``Str(..)Space()Str(_name:)``
+    with top line starting ``Str(..)Space()Str(name::)``, above a CodeBlock,
+    and rst labels of the form ``Str(..)Space()Str(_name:)``
+
+    """
     final_blocks = []
     skip_next = False
     for block in doc.content:
+
         if skip_next:
             skip_next = False
             continue
+
         if not isinstance(block, pf.Para):
             final_blocks.append(block)
             continue
+
         if len(block.content) < 3:
             final_blocks.append(block)
             continue
@@ -307,15 +383,14 @@ def prepare(doc):
     doc.content = final_blocks
 
 
+def prepare(doc):
+    # type: (Doc) -> None
+    wrap_rst_directives(doc)
+
+
 def finalize(doc):
     # type: (Doc) -> None
-    # TODO is this the best approach? see sergiocorreia/panflute#96
-    for element, delete in doc.to_delete.items():
-        if isinstance(element, pf.Table):
-            element.caption = [e for e in element.caption if e not in delete]
-        else:
-            element.content = [e for e in element.content if e not in delete]
-    del doc.to_delete
+    pass
 
 
 def main(doc=None, extract_formats=True):
