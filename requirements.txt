@@ -12,3 +12,4 @@ jsonschema
 ruamel.yaml
 panflute
 docutils
+jupytext

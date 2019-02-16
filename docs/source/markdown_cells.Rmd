@@ -3,6 +3,7 @@ jupyter:
   ipub:
     pandoc:
       convert_raw: true 
+      hide_raw: false
       at_notation: true
       use_numref: true
   jupytext:
@@ -21,14 +22,64 @@ jupyter:
 
 # Writing in RMarkdown
 
-In IPyPublish, all Markdown content is converted *via* [Pandoc](https://pandoc.org/). [Pandoc](https://pandoc.org/) alllows for [filters](https://pandoc.org/filters.html) to be applied to the intermediary representation of the content,
+In IPyPublish, all Markdown content is converted *via* [Pandoc](https://pandoc.org/).
+[Pandoc](https://pandoc.org/) alllows for [filters](https://pandoc.org/filters.html)
+to be applied to the intermediary representation of the content,
 which IPyPublish supplies through a group of
-[panflute](http://scorreia.com/software/panflute/) filters, wrapped in a single 'master' filter; `ipubpandoc`.
+[panflute](http://scorreia.com/software/panflute/) filters,
+wrapped in a single 'master' filter; `ipubpandoc`.
+This filter extends the common markdown syntax to:
 
-This filter is detached from the rest of the
+- Handle labelling and referencing of figures, tables and equations
+- Correctly translate pieces of documentation written in other formats
+  (such as using LaTeX commands like `\cite` or RST roles like `:cite:`)
+
+`ipubpandoc` is detached from the rest of the
 notebook conversion process, and so can be used as a standalone process:
 
 ```console
 $ pandoc -f markdown -t html --filter ipubpandoc path/to/file.md
 ```
 
+## Converting Notebooks to RMarkdown
+
+Thanks to [jupytext](https://github.com/mwouts/jupytext), we can easily
+convert an existing notebooks to RMarkdown (and back):
+
+```console
+$ jupytext --to rmarkdown notebook.ipynb
+$ jupytext --to notebook notebook.Rmd            # overwrite notebook.ipynb (remove outputs)
+$ jupytext --to notebook --update notebook.Rmd   # update notebook.ipynb (preserve outputs)
+```
+
+Alternatively, simply create a notebook.Rmd,
+and add this to the top of the file:
+
+```yaml
+---
+jupyter:
+  ipub:
+    pandoc:
+      convert_raw: true
+      at_notation: true
+      use_numref: true
+  jupytext:
+    metadata_filter:
+      notebook: ipub
+    text_representation:
+      extension: .Rmd
+      format_name: rmarkdown
+      format_version: '1.0'
+      jupytext_version: 0.8.6
+  kernelspec:
+    display_name: Python 3
+    language: python
+    name: python3
+---
+```
+
+.. important::
+
+    To preserve ipypublish notebook metadata, you must add:
+    \`{\"jupytext\": {\"metadata_filter\": \"notebook\": \"ipub\"}}\`
+    To your notebooks metadata.

@@ -141,6 +141,11 @@
                             "type": "boolean",
                             "default": true
                         },
+                        "hide_raw": {
+                            "description": "if the extracted non-markdown does not match the output format, this controls if it is shown in the output document",
+                            "type": "boolean",
+                            "default": false
+                        },
                         "at_notation": {
                             "description": "interpret +@label as a reference type based on its prefix modifier",
                             "type": "boolean",

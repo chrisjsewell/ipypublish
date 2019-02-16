@@ -2,7 +2,8 @@
 jupyter:
   ipub:
     pandoc:
-      convert_raw: true 
+      convert_raw: true
+      hide_raw: false
       at_notation: true
       use_numref: true
   jupytext:

@@ -275,6 +275,32 @@ def test_rst_directive_to_rst():
     ])
 
 
+def test_rst_directive_to_latex():
+    in_string = [
+        '.. versionchanged:: v0.8.3',
+        '',
+        '    abc',
+        '',
+        '    xyz'
+    ]
+    
+    out_string = apply_filter(
+        in_string,
+        [prepare_raw.main, format_raw_spans.main], "latex")
+
+    assert out_string.strip() == "\n".join([
+        '\\begin{lstlisting}',
+        '.. versionchanged:: v0.8.3',
+        '',
+        '    abc',
+        '',
+        '    xyz',
+        '',
+        '',
+        '\\end{lstlisting}',
+        ])
+
+
 def test_rst_directive_with_options_to_rst():
 
     in_string = [

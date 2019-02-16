@@ -11,7 +11,7 @@ from panflute import Element, Doc, Span  # noqa: F401
 import panflute as pf
 
 from ipypublish.filters_pandoc.definitions import (
-    CONVERTED_OTHER_CLASS, CONVERTED_DIRECTIVE_CLASS
+    CONVERTED_OTHER_CLASS, CONVERTED_DIRECTIVE_CLASS, IPUB_META_ROUTE
 )
 
 
@@ -20,12 +20,15 @@ def process_raw_spans(container, doc):
     if not isinstance(container, (pf.Span, pf.Div)):
         return None
 
+    hide_raw = doc.get_metadata(IPUB_META_ROUTE + ".hide_raw", False)
+
     if (CONVERTED_OTHER_CLASS in container.classes
             and isinstance(container, pf.Span)):
         if doc.format == "rst" and container.attributes["format"] == "latex":
             if container.attributes["tag"] in ["todo"]:
                 return pf.Str("\n\n.. {}:: {}\n\n".format(
-                    container.attributes["tag"], container.attributes["content"]))
+                    container.attributes["tag"],
+                    container.attributes["content"]))
 
         return pf.RawInline(container.attributes.get("original"),
                             format=container.attributes["format"])
@@ -49,7 +52,8 @@ def process_raw_spans(container, doc):
 
         elif (doc.format in ("html", "html5")
                 and container.attributes["format"] == "rst"):
-            # TODO option to show or hide rst directives in html output
+            if hide_raw:
+                return []
             content = split_soft_breaks(
                 container.content[0], indent_first=False, indent=4, fmt="html",
                 pre_content="<p>", post_content="</p>", post_chunk="<br>",
@@ -69,13 +73,28 @@ def process_raw_spans(container, doc):
                 format="html"
             )
 
+        elif (doc.format in ("tex", "latex")
+                and container.attributes["format"] == "rst"):
+            if hide_raw:
+                return []
+            content = split_soft_breaks(container.content[0],
+                                        indent_first=False, indent=4)
+            for para in container.content[1:]:
+                content.extend(split_soft_breaks(
+                    para, indent_first=True, indent=4))
+            content_str = pf.stringify(pf.Doc(*content))
+            return pf.RawBlock(
+                "\\begin{lstlisting}\n" + content_str + "\n\\end{lstlisting}",
+                format="tex")
+
+        return pf.RawBlock(pf.stringify(pf.Doc(*container.content)),
+                           format=container.attributes["format"])
+
     if (CONVERTED_OTHER_CLASS in container.classes
             and isinstance(container, pf.Div)):
         return pf.RawBlock(pf.stringify(
             pf.Doc(*container.content)),
             format=container.attributes["format"])
-
-    # TODO latex conversion
 
 
 def split_soft_breaks(container,

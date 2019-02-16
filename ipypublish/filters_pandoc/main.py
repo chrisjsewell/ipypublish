@@ -58,7 +58,7 @@ def pandoc_filters():
                 format_cite_elements.main,
                 format_label_elements.main,
                 rmarkdown_to_mpe.main
-            ]            
+            ]
     else:
         filters = []
 
@@ -138,6 +138,7 @@ def jinja_filter(source, to_format, nb_metadata, cell_metadata,
     doc = apply_filter(source, dry_run=True)  # type: pf.Doc
 
     # find the preferential versions of the metadata values
+    # TODO a make this autopopulate (possibly from schema)
     option_preference = [doc.metadata, cell_metadata, nb_metadata]
     apply_filters = get_option(option_preference,
                                keypath=IPUB_META_ROUTE + ".apply_filters",
@@ -145,6 +146,9 @@ def jinja_filter(source, to_format, nb_metadata, cell_metadata,
     convert_raw = get_option(option_preference,
                              keypath=IPUB_META_ROUTE + ".convert_raw",
                              default=True)
+    hide_raw = get_option(option_preference,
+                          keypath=IPUB_META_ROUTE + ".hide_raw",
+                          default=False)
     numref = get_option(option_preference,
                         keypath=IPUB_META_ROUTE + ".use_numref", default=True)
     at_notation = get_option(option_preference,
@@ -165,7 +169,8 @@ def jinja_filter(source, to_format, nb_metadata, cell_metadata,
         meta.update(create_ipub_meta({
             "use_numref": numref,
             "at_notation": at_notation,
-            "reftag": reftag
+            "reftag": reftag,
+            "hide_raw": hide_raw
         }))
         doc.metadata = meta  # builtin2meta(meta)
 
