@@ -31,7 +31,7 @@ def test_latex_to_rst():
     assert out_string == "\n".join([
         ":ref:`label1` :ref:`label2` :cite:`a-cite-key_2019`",
         "",
-        ":cite:`label1` and :cite:`label2`",
+        ":cite:`label1,label2`",
         "",
         ":ref:`label3`",
         "",
