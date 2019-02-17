@@ -6,6 +6,7 @@ jupyter:
       hide_raw: false
       at_notation: true
       use_numref: true
+    bibliography: _static/example.bib
   jupytext:
     metadata_filter:
       notebook: ipub
@@ -126,11 +127,16 @@ If you are using a Conda environment, you may also need to use:
 You will now be able to open a dynamic preview of your notebook,
 with executable code cells:
 
-![MPE Screenshot](_static/markdown_preview_enhanced_screenshot.png)
+![MPE Screenshot](_static/markdown_preview_enhanced_screenshot.png){#mpe}
 
 ```{python}
 print(1)
 ```
+
+.. seealso::
+
+    VS Code Extensions: [Markdown Extended](https://marketplace.visualstudio.com/items?itemName=jebbs.markdown-extended) and
+    [markdownlint](https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint)
 
 ## Inter-Format Translation
 
@@ -142,6 +148,10 @@ a relevant [panflute element](http://scorreia.com/software/panflute/code.html).
 Because of this we can write something like this:
 
 ```
+- citations in @ notation \cite{zelenyak_molecular_2016,kirkeminde_thermodynamic_2012}
+- citations in rst notation :cite:`zelenyak_molecular_2016,kirkeminde_thermodynamic_2012`
+- citations in latex notation[@zelenyak_molecular_2016; @kirkeminde_thermodynamic_2012]
+
 $$a = b + c$$ {#eqnlabel}
 
 - a reference in @ notation ={@eqnlabel .capitalize}
@@ -155,6 +165,10 @@ $$a = b + c$$ {#eqnlabel}
 ```
 
 and it will be correctly resolved in the output document:
+
+- citations in @ notation \cite{zelenyak_molecular_2016,kirkeminde_thermodynamic_2012}
+- citations in rst notation :cite:`zelenyak_molecular_2016,kirkeminde_thermodynamic_2012`
+- citations in latex notation [@zelenyak_molecular_2016; @kirkeminde_thermodynamic_2012]
 
 $$a = b + c$$ {#eqnlabel}
 

@@ -59,7 +59,8 @@ extensions = [
     'sphinx.ext.autosummary',
     # 'sphinx.ext.imgconverter'  # converts svg to pdf in latex output
     # TODO imgconverter failing (I guess for process.svg),
-    'ipypublish.ipysphinx'
+    'ipypublish.ipysphinx',
+    'sphinxcontrib.bibtex'
 ]
 
 

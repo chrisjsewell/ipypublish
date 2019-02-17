@@ -14,16 +14,16 @@ from ipypublish.filters_pandoc.definitions import (
 from ipypublish.filters_pandoc.utils import get_panflute_containers
 
 
-def create_cite_span(identifier, rawformat, is_block,
+def create_cite_span(identifiers, rawformat, is_block,
                      prefix="", alt=None):
     """create a cite element from an identifier """
-    citation = pf.Citation(
+    citations = [pf.Citation(
         identifier
-    )
+    ) for identifier in identifiers]
     attributes = {"raw-format": rawformat, "prefix": prefix}
     if alt is not None:
         attributes["alt"] = str(alt)
-    cite = Cite(citations=[citation])
+    cite = Cite(citations=citations)
     span = pf.Span(
         cite,
         classes=[RAWSPAN_CLASS, CONVERTED_CITE_CLASS, ATTRIBUTE_CITE_CLASS],
@@ -45,7 +45,7 @@ def process_internal_links(link, doc):
         return None
 
     return create_cite_span(
-        match.group(1), "markdown", False,
+        [match.group(1)], "markdown", False,
         prefix=dict(PREFIX_MAP_LATEX_R).get(
             doc.get_metadata(IPUB_META_ROUTE + ".reftag", "cref"), "cref"),
         alt=pf.stringify(pf.Plain(*list(link.content))).strip())
@@ -96,7 +96,7 @@ def process_html_cites(block, doc):
             continue
 
         # TODO include original content
-        new_content.append(create_cite_span(match.group(1), "html",
+        new_content.append(create_cite_span([match.group(1)], "html",
                                             isinstance(element, pf.RawBlock)))
         skip = len(span_content) + 1
 
@@ -164,7 +164,7 @@ def assess_latex(text, is_block):
         content = match_latex_noopts.group(2)
         if tag in dict(PREFIX_MAP_LATEX_R):
             new_element = create_cite_span(
-                content, "latex", is_block,
+                content.split(","), "latex", is_block,
                 prefix=dict(PREFIX_MAP_LATEX_R).get(tag, ""))
             return new_element
 
@@ -246,7 +246,7 @@ def process_rst_roles(block, doc):
 
         if role in dict(PREFIX_MAP_RST_R):
             new_element = create_cite_span(
-                content, "rst", False,
+                content.split(","), "rst", False,
                 prefix=dict(PREFIX_MAP_RST_R).get(role, ""))
             new_content.append(new_element)
             skip_next = True

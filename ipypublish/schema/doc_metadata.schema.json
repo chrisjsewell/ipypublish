@@ -157,9 +157,9 @@
                             "default": true
                         },
                         "reftag": {
-                            "description": "in latex, default tag for references",
+                            "description": "in latex, default tag for citations",
                             "type": "string",
-                            "default": "cref"
+                            "default": "cite"
                         }
                     }
                 },

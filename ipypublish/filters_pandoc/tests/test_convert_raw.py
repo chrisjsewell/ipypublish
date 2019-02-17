@@ -16,6 +16,8 @@ def test_latex_to_rst():
     in_string = [
         r"\cref{label1} \Cref{label2}  \cite{a-cite-key_2019}",
         "",
+        "\\cite{label1,label2}",
+        "",
         r"\ref{label3}  \todo{something todo}",
         "",
         r"\todo{something else todo}"
@@ -28,6 +30,8 @@ def test_latex_to_rst():
 
     assert out_string == "\n".join([
         ":ref:`label1` :ref:`label2` :cite:`a-cite-key_2019`",
+        "",
+        ":cite:`label1` and :cite:`label2`",
         "",
         ":ref:`label3`",
         "",
@@ -154,6 +158,8 @@ def test_citations_latex():
     in_string = [
         '@label1',
         '',
+        '[@label1;@label2]',
+        '',
         '[an internal link](#label2)'
         '',
         '[an external link](http://something.org)',
@@ -166,14 +172,16 @@ def test_citations_latex():
         [prepare_raw.main, format_cite_elements.main], "latex")
 
     assert out_string.strip() == "\n".join([
-        "\\cref{label1}",
+        "\\cite{label1}",
+        "",
+        "\\cite{label1,label2}",
         "",
         "\\cref{label2} \\href{http://something.org}{an external link}",
         "",
         "\\begin{figure}",
         "\\centering",
         "\includegraphics{path/to/image.png}",
-        "\\caption{a citation \cref{label}}",
+        "\\caption{a citation \cite{label}}",
         "\\end{figure}"
     ])
 
