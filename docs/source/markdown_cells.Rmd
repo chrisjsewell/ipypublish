@@ -157,7 +157,7 @@ Because of this we can write something like this:
 
 $$a = b + c$$ {#eqnlabel}
 
-- a reference in @ notation ={@eqnlabel .capitalize}
+- a reference in @ notation =@eqnlabel {.capitalize}
 - a reference in rst notation :eq:`eqnlabel`
 - a reference in latex notation \eqref{eqnlabel}
 
@@ -176,7 +176,7 @@ and it will be correctly resolved in the output document:
 
 $$a = b + c$$ {#eqnlabel}
 
-- a reference in @ notation ={@eqnlabel .capitalize}
+- a reference in @ notation =@eqnlabel {.capitalize}
 - a reference in rst notation :eq:`eqnlabel`
 - a reference in latex notation \eqref{eqnlabel}
 
@@ -212,7 +212,7 @@ Labels can also have *classes* and *attributes*, which parse on additional infor
 
 ![image caption](_static/example.jpg){#fig:example}
 
-^@fig:example
++@fig:example
 
 Column 1 Column 2
 -------- --------
@@ -220,4 +220,4 @@ Column 1 Column 2
 
 Table: table caption {#tbl:example align=rc widths=[0.5,0.5]}
 
-^@tbl:example
++@tbl:example

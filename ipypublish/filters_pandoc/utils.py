@@ -176,6 +176,183 @@ def strip_quotes(string):
     return string
 
 
+def find_attributes(element, allow_space=True,
+                    search_left=False, include_element=False):
+    """find an attribute 'container' for an element, 
+    of the form <element><space>{#id .class1 .class2 a=1 b="a string"}
+    and extract its content
+
+    Parameters
+    ----------
+    element:
+        the element to find attributes for
+    allow_space=True: bool
+        whether to allow space between the element and attribute container
+    search_left=False: bool
+        search to the left of the element, rather than the right
+    include_element=False: bool
+        whether to include the element in the search
+
+
+    Returns
+    -------
+    dict or None:
+        {"classes": list[str], "attributes": dict[str],
+         "id": str, "elements": list[Element]}, where elements is
+         the elements containing the attributes (including space)
+
+    """
+    if search_left:
+        return _search_attribute_left(element, include_element, allow_space)
+    else:
+        return _search_attribute_right(element, include_element, allow_space)
+
+
+def _search_attribute_right(element, include_element, allow_space):
+    if (not element.next) and not include_element:
+        return None
+
+    if include_element:
+        adjacent = element
+    else:
+        adjacent = element.next
+
+    attr_elements = []
+    found_start = False
+    found_end = False
+    while adjacent:
+        if (isinstance(adjacent, pf.Space) and allow_space):
+            attr_elements.append(adjacent)
+            adjacent = adjacent.next
+            continue
+        elif (isinstance(adjacent, pf.Str)
+              #   and adjacent.text.startswith("{")
+              #   and adjacent.text.endswith("}")):
+              and re.search(r'^\{[^}]*\}', adjacent.text)):
+            # TODO this won't handle } in strings, e.g. {a="} "}
+            found_start = True
+            found_end = True
+            attr_elements.append(adjacent)
+            break
+        elif (isinstance(adjacent, pf.Str)
+              #   and adjacent.text.startswith("{")):
+              and re.search(r'^[^\}]*\{', adjacent.text)):
+            found_start = True
+            found_end = False
+            attr_elements.append(adjacent)
+            break
+        break
+        # adjacent = adjacent.next
+
+    if found_start and not found_end:
+        adjacent = adjacent.next
+        while adjacent:
+            if (isinstance(adjacent, pf.Str)
+                    # and adjacent.text.endswith("}")):
+                    and re.search(r'^[^\{]*\}', adjacent.text)):
+                # TODO this won't handle } in strings, e.g. {a="} "}
+                found_end = True
+                attr_elements.append(adjacent)
+                break
+            else:
+                attr_elements.append(adjacent)
+            adjacent = adjacent.next
+
+    if not (found_start and found_end):
+        return None
+
+    attribute_str = pf.stringify(
+        pf.Para(*attr_elements)).replace("\n", " ").strip()
+
+    # split into the label and the rest
+    match = re.match("^\\{(#[^\s]+|)([^\\}]*)\\}", attribute_str)
+    if not match:
+        raise ValueError(attribute_str)
+    classes, attributes = process_attributes(match.group(2))
+
+    new_str = attribute_str[len(match.group(0)):]
+
+    return {
+        "id": match.group(1)[1:],
+        "classes": classes,
+        "attributes": attributes,
+        "elements": attr_elements,
+        "append": pf.Str(new_str) if new_str else None
+    }
+
+
+def _search_attribute_left(element, include_element, allow_space):
+    if (not element.prev) and not include_element:
+        return None
+
+    if include_element:
+        adjacent = element
+    else:
+        adjacent = element.prev
+
+    attr_elements = []
+    found_start = False
+    found_end = False
+    while adjacent:
+        if (isinstance(adjacent, pf.Space) and allow_space):
+            attr_elements.append(adjacent)
+            adjacent = adjacent.prev
+            continue
+        elif (isinstance(adjacent, pf.Str)
+              and adjacent.text.endswith("}")
+              and adjacent.text.startswith("{")):
+            # TODO this won't handle } in strings, e.g. {a="} "}
+            # TODO this won't handle characters after } e.g. {a=1})
+            found_start = True
+            found_end = True
+            attr_elements.append(adjacent)
+            break
+        elif (isinstance(adjacent, pf.Str)
+              and adjacent.text.endswith("}")):
+            found_start = False
+            found_end = True
+            attr_elements.append(adjacent)
+            break
+        break
+        # adjacent = adjacent.prev
+
+    if found_end and not found_start:
+        adjacent = adjacent.prev
+        while adjacent:
+            if (isinstance(adjacent, pf.Str)
+                    and adjacent.text.startswith("{")):
+                # TODO this won't handle { in strings, e.g. {a="{ "}
+                # TODO this won't handle characters before { e.g. ({a=1}
+                found_start = True
+                attr_elements.append(adjacent)
+                break
+            else:
+                attr_elements.append(adjacent)
+            adjacent = adjacent.prev
+
+    if not (found_start and found_end):
+        return None
+
+    attr_elements = list(reversed(attr_elements))
+
+    attribute_str = pf.stringify(
+        pf.Para(*attr_elements)).replace("\n", " ").strip()
+
+    # split into the label and the rest
+    match = re.match("^\\{(#[^\s]+|)([^\\}]*)\\}$", attribute_str)
+    if not match:
+        raise ValueError(attribute_str)
+    classes, attributes = process_attributes(match.group(2))
+
+    return {
+        "id": match.group(1)[1:],
+        "classes": classes,
+        "attributes": attributes,
+        "elements": attr_elements,
+        "append": None
+    }
+
+
 def process_attributes(attr_string):
     """process a string of classes and attributes, 
     e.g. '.class-name .other a=1 b="some text"' will be returned as:
@@ -345,5 +522,62 @@ def get_panflute_containers(element):
 
     elif issubclass(element, pf.Block):
         return panflute_block_containers
-    
+
     raise TypeError("not Inline or Block: {}".format(element))
+
+
+def get_pf_content_attr(container, target):
+
+    panflute_inline_containers = [
+        pf.Cite,
+        pf.Emph,
+        pf.Header,
+        pf.Image,
+        pf.LineItem,
+        pf.Link,
+        pf.Para,
+        pf.Plain,
+        pf.Quoted,
+        pf.SmallCaps,
+        pf.Span,
+        pf.Strikeout,
+        pf.Strong,
+        pf.Subscript,
+        pf.Superscript,
+        pf.Table,
+        pf.DefinitionItem
+    ]
+
+    panflute_block_containers = (
+        pf.BlockQuote,
+        pf.Definition,
+        pf.Div,
+        pf.Doc,
+        pf.ListItem,
+        pf.Note,
+        pf.TableCell
+    )
+
+    if issubclass(target, pf.Cite):
+        # we assume a Cite can't contain another Cite
+        if not isinstance(container, tuple(panflute_inline_containers[1:])):
+            return False
+
+    if issubclass(target, pf.Inline):
+        if isinstance(container, tuple(panflute_inline_containers)):
+            if isinstance(container, pf.Table):
+                return "caption"
+            elif isinstance(container, pf.DefinitionItem):
+                return "term"
+            else:
+                return "content"
+        else:
+            return False
+
+    if issubclass(target, pf.Block):
+        if isinstance(container, tuple(panflute_block_containers)):
+            return "content"
+        else:
+            return False
+
+    raise TypeError("target not Inline or Block: {}".format(target))

@@ -24,7 +24,7 @@ jupyter:
 ```
 .. note::
 
-    reference in @ notation ={@eqn1 .capitalize}
+    reference in @ notation =@eqn1 {.capitalize}
 
     reference in rst notation :eq:`eqn1`
 
@@ -33,7 +33,7 @@ jupyter:
 
 .. note::
 
-    reference in @ notation ={@eqn1 .capitalize}
+    reference in @ notation =@eqn1 {.capitalize}
 
     reference in rst notation :eq:`eqn1`
 
@@ -45,7 +45,7 @@ some text jhgjhgjjhgjg
 
 a :eq:`eqn1`
 
-={@eqn1 .capitalize}
+=@eqn1 {.capitalize}
 
 $a=b$
 
@@ -53,7 +53,7 @@ $$a$$ {#eqn1}
 
 $$a=1+2$$ {#eqn3}
 
-={@eqn3 .capitalize}
+=@eqn3 {.capitalize}
 
 a b
 - -

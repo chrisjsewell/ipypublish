@@ -9,7 +9,7 @@ with attributes and prefixes,
 For example:
 
 ```
-+{@label .class-name a=1} xyz *@label2* {@label3 .b}
++@label {}.class-name a=1} xyz *@label2* @label3{ .b}
 ```
 
 would be converted to this html:
@@ -36,119 +36,86 @@ from panflute import Element, Doc, Cite, RawInline, Link  # noqa: F401
 import panflute as pf
 
 
-from ipypublish.filters_pandoc.utils import process_attributes
+from ipypublish.filters_pandoc.utils import (
+    find_attributes, get_pf_content_attr)
 from ipypublish.filters_pandoc.definitions import (
-    ATTRIBUTE_CITE_CLASS, PREFIX_MAP_LATEX, IPUB_META_ROUTE)
-
-
-def find_attributes(element):
-    # type: (Cite) -> (list, dict, list)
-    classes = []
-    attributes = {}
-    delete_content = []
-
-    # check if it is braced
-    if isinstance(element.prev, pf.Str) and element.prev.text.endswith("{"):
-        open_brace = element.prev
-    else:
-        open_brace = None
-
-    # get classes and attributes of citation
-    if open_brace:
-        closing = False
-        attr_content = []
-        # find the closing brace
-        neighbour = element.next
-        # TODO respect brace in quote?
-        while neighbour:
-            # only allow certain elements within the attributes section
-            # TODO document this requirement
-            if not isinstance(neighbour, (pf.Str, pf.Space)):
-                break
-            if isinstance(neighbour, pf.Str) and "}" in neighbour.text:
-                closing = True
-                # make sure we only process attribute matter 
-                # to the left of the brace, and that it is deleted
-                brace_index = neighbour.text.find("}")
-                if len(neighbour.text) == brace_index + 1:
-                    attr_content.append(neighbour)
-                    delete_content.extend(attr_content)
-                else:
-                    left_content = pf.Str(neighbour.text[:brace_index+1])
-                    neighbour.text = neighbour.text[brace_index+1:]
-                    delete_content.append(left_content)
-                break
-            attr_content.append(neighbour)
-            neighbour = neighbour.next
-        if closing:
-            # extract classes and attributes from the attribute matter
-            _attr_string = pf.stringify(pf.Plain(*delete_content),
-                                        newlines=False)[:-1].strip()
-            classes, attributes = process_attributes(_attr_string)
-
-    # check for prefix and modify or delete its Str container
-    if open_brace and len(open_brace.text) == 1:
-        delete_content.append(open_brace)
-    elif open_brace and len(open_brace.text) > 1:
-        if open_brace.text[-2] in dict(PREFIX_MAP_LATEX).keys():
-            attributes["prefix"] = open_brace.text[-2]
-            if len(open_brace.text) == 2:
-                delete_content.append(open_brace)
-            else:
-                open_brace.text = open_brace.text[:-2]
-        else:
-            open_brace.text = open_brace.text[:-1]
-    elif isinstance(element.prev, pf.Str):
-        if element.prev.text[-1] in dict(PREFIX_MAP_LATEX).keys():
-            attributes["prefix"] = element.prev.text[-1]
-            if len(element.prev.text) == 1:
-                delete_content.append(element.prev)
-            else:
-                element.prev.text = element.prev.text[:-1]
-
-    return classes, attributes, delete_content
+    ATTRIBUTE_CITE_CLASS, IPUB_META_ROUTE, PREFIX_ALLOWED)
 
 
 def process_citations(element, doc):
-    # type: (Cite, Doc) -> Element
+    # type: (Element, Doc) -> Element
     if not doc.get_metadata(IPUB_META_ROUTE + ".at_notation", True):
         return None
 
-    if not isinstance(element, pf.Cite):
+    content_attr = get_pf_content_attr(element, pf.Cite)
+    if not content_attr:
+        return None
+    initial_content = getattr(element, content_attr)
+
+    if not initial_content:
         return None
 
-    classes, attributes, delete_content = find_attributes(element)
+    final_content = []
+    skip = 0
+    for subel in initial_content:
 
-    if delete_content:
-        doc.to_delete.setdefault(element.parent, set()).update(delete_content)
+        if skip:
+            skip -= 1
+            continue
 
-    if attributes or classes:
-        # wrap in a span
-        classes.append(ATTRIBUTE_CITE_CLASS)
-        return pf.Span(element,
-                       classes=classes,
-                       attributes=attributes)
+        if not isinstance(subel, pf.Cite):
+            final_content.append(subel)
+            continue
+
+        classes = []
+        attributes = {}
+        append = None
+
+        # check if the cite has a valid prefix, if so extract it
+        if (isinstance(subel.prev, pf.Str) and subel.prev.text
+                and (subel.prev.text[-1] in PREFIX_ALLOWED)):
+            attributes["prefix"] = subel.prev.text[-1]
+            # remove prefix from preceding string
+            string = final_content.pop()
+            if len(string.text) > 1:
+                final_content.append(pf.Str(string.text[:-1]))
+
+        # check if the cite has a preceding class/attribute container
+        attr_dict = find_attributes(subel, allow_space=True)
+        if attr_dict:
+            classes = attr_dict["classes"]
+            attributes.update(attr_dict["attributes"])
+            skip = len(attr_dict["elements"])
+            append = attr_dict["append"]
+
+        if classes or attributes:
+            classes.append(ATTRIBUTE_CITE_CLASS)
+            final_content.append(pf.Span(subel,
+                                         classes=classes,
+                                         attributes=attributes))
+        else:
+            final_content.append(subel)
+        
+        if append:
+            final_content.append(append)
+
+    setattr(element, content_attr, final_content)
+    return element
 
 
 def prepare(doc):
     # type: (Doc) -> None
-    doc.to_delete = {}
+    pass
 
 
 def finalize(doc):
     # type: (Doc) -> None
-    # TODO is this the best approach? see sergiocorreia/panflute#96
-    for element, delete in doc.to_delete.items():
-        if isinstance(element, pf.Table):
-            element.caption = [e for e in element.caption if e not in delete]
-        else:
-            element.content = [e for e in element.content if e not in delete]
-    del doc.to_delete
+    pass
 
 
 def main(doc=None, extract_formats=True):
     # type: (Doc) -> None
-    """if extract_formats then convert citations defined in 
+    """if extract_formats then convert citations defined in
     latex, rst or html formats to special Span elements
     """
     return pf.run_filter(process_citations,

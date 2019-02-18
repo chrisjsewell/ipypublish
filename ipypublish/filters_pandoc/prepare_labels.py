@@ -31,12 +31,11 @@ would be converted to this html:
    </p>
 
 """
-import re
 from panflute import Element, Doc, Table, Inline  # noqa: F401
 import panflute as pf
 
 from ipypublish.filters_pandoc.utils import (
-    compare_version, process_attributes, get_panflute_containers)
+    compare_version, get_panflute_containers, find_attributes)
 
 LABELLED_IMAGE_CLASS = "labelled-Image"
 LABELLED_MATH_CLASS = "labelled-Math"
@@ -45,71 +44,6 @@ LABELLED_TABLE_CLASS = "labelled-Table"
 REFTYPE_TABLE = "Table"
 REFTYPE_IMAGE = "Image"
 REFTYPE_MATH = "Math"
-
-
-def _find_attribute(start_el,
-                    allow_space=True, allow_any=False, delete_preceding=True):
-    # TODO allow_space should be optional per type
-    # TODO should non-labelled attributes be allowed? i.e. {# .class a=1}
-
-    adjacent = start_el
-    attr_elements = []
-    found_start = False
-    found_end = False
-    while adjacent:
-        if (isinstance(adjacent, pf.Space) and (allow_space or allow_any)):
-            if delete_preceding:
-                attr_elements.append(adjacent)
-            adjacent = adjacent.next
-            continue
-        elif (isinstance(adjacent, pf.Str)
-              and re.match("^\\{\\#.+\\}$", adjacent.text)):
-            found_start = True
-            found_end = True
-            attr_elements.append(adjacent)
-            break
-        elif (isinstance(adjacent, pf.Str)
-              and re.match("^\\{\\#.+", adjacent.text)):
-            found_start = True
-            found_end = False
-            attr_elements.append(adjacent)
-            break
-        elif not allow_any:
-            break
-        elif delete_preceding:
-            attr_elements.append(adjacent)
-        adjacent = adjacent.next
-
-    if found_start and not found_end:
-        adjacent = adjacent.next
-        while adjacent:
-            if (isinstance(adjacent, pf.Str)
-                    and re.match(".*\\}$", adjacent.text)):
-                found_end = True
-                attr_elements.append(adjacent)
-                break
-            else:
-                attr_elements.append(adjacent)
-            adjacent = adjacent.next
-
-    if not (found_start and found_end):
-        return None
-
-    string = pf.stringify(pf.Para(*attr_elements)
-                          ).replace("\n", " ").strip()
-
-    # split into the label and the rest
-    # TODO does there always have to be a label?
-    match = re.match("^\\{\\#([^\s]+)(.*)\\}$", string)
-    label = match.group(1)
-    classes, attributes = process_attributes(match.group(2))
-
-    return {
-        "label": label,
-        "classes": classes,
-        "attributes": attributes,
-        "to_delete": attr_elements
-    }
 
 
 def resolve_tables(element, doc):
@@ -121,8 +55,10 @@ def resolve_tables(element, doc):
 
     attributes = None
     if element.caption:  # type: Inline
-        attributes = _find_attribute(element.caption[0],
-                                     allow_any=True, delete_preceding=False)
+        # attributes = _find_attribute(element.caption[0],
+        #                              allow_any=True, delete_preceding=False)
+        attributes = find_attributes(
+            element.caption[-1], search_left=True, include_element=True)
 
     if not attributes:
         return None
@@ -131,25 +67,26 @@ def resolve_tables(element, doc):
     doc.refcount[ref_type] += 1
     # add to metadata
     doc.metadata[
-        "$$references"][attributes["label"]] = pf.MetaMap(**{
+        "$$references"][attributes["id"]] = pf.MetaMap(**{
             "type": pf.MetaString(ref_type),
             "number": doc.refcount[ref_type]
         })
     # remove attribute from caption
     element.caption = [el for el in element.caption
-                       if el not in attributes["to_delete"]]
+                       if el not in attributes["elements"]]
 
     # wrap in a div
     return pf.Div(element,
                   classes=[
                       "labelled-{}".format(ref_type)] + attributes["classes"],
                   attributes=attributes["attributes"],
-                  identifier=attributes["label"])
+                  identifier=attributes["id"])
 
 
 def resolve_equations_images(element, doc):
     # type: (Element, Doc) -> None
 
+    # attribute equations in table captions / definition items?
     if not isinstance(element, get_panflute_containers(pf.Math)):
         return None
 
@@ -180,29 +117,30 @@ def resolve_equations_images(element, doc):
             # to the image path, as occurs with image references
             # see https://github.com/tomduck/pandoc-fignos/issues/14
             attributes = {
-                "label": subel.identifier,
+                "id": subel.identifier,
                 # "classes": subel.classes,
                 # "attributes": subel.attributes,
-                "to_delete": []
+                "elements": []
             }
+            
         else:
-            attributes = _find_attribute(subel.next)
+            attributes = find_attributes(subel)
             if attributes:
                 to_wrap[subel] = attributes
-                for _ in attributes["to_delete"]:
+                for _ in attributes["elements"]:
                     subel = subel.next
 
-        if attributes and attributes["label"]:
+        if attributes and attributes["id"]:
             # update count
             doc.refcount[ref_type] += 1
             # add to metadata
             doc.metadata[
-                "$$references"][attributes["label"]] = pf.MetaMap(**{
+                "$$references"][attributes["id"]] = pf.MetaMap(**{
                     "type": pf.MetaString(ref_type),
                     "number": doc.refcount[ref_type]
                 })
 
-            to_delete.update(attributes["to_delete"])
+            to_delete.update(attributes["elements"])
 
         subel = subel.next
 
@@ -211,7 +149,7 @@ def resolve_equations_images(element, doc):
                 classes=[
                     "labelled-{}".format(ref_type)] + to_wrap[el]["classes"],
                 attributes=to_wrap[el]["attributes"],
-                identifier=to_wrap[el]["label"]
+                identifier=to_wrap[el]["id"]
                 )
         if el in to_wrap else el
         for el in element.content

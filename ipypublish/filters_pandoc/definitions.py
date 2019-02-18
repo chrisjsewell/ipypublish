@@ -9,11 +9,12 @@ CONVERTED_DIRECTIVE_CLASS = "converted-rst-dir"
 CONVERTED_OTHER_CLASS = "converted-Other"
 
 # NB: it appears '-' is already used by sphinx, but '?' and '*' are also viable
-PREFIX_MAP_LATEX = (('+', 'cref'), ('^', 'Cref'),
+PREFIX_ALLOWED = ('+', '!', '=', '?')
+PREFIX_MAP_LATEX = (('+', 'cref'), ('?', 'Cref'),
                     ('!', 'ref'), ('=', 'eqref'), ("", "cite"))
-PREFIX_MAP_LATEX_R = (('cref', '+'), ('Cref', '^'),
+PREFIX_MAP_LATEX_R = (('cref', '+'), ('Cref', '?'),
                       ('ref', '!'), ('eqref', '='), ("cite", ""))
-PREFIX_MAP_RST = (('+', 'numref'), ('^', 'numref'), ('!', 'ref'),
+PREFIX_MAP_RST = (('+', 'numref'), ('?', 'numref'), ('!', 'ref'),
                   ('=', 'eq'), ("", "cite"))
 PREFIX_MAP_RST_R = (('numref', '+'), ('ref', '!'), ('eq', '='), ("cite", ""))
 

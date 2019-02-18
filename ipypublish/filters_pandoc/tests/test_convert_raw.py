@@ -95,27 +95,27 @@ def test_html_to_latex_label():
     ])
 
 
-# TODO instead of this, allow ovverride/addition of prefix
-# def test_html_to_latex_label_with_custom_tag():
+def test_cite_in_table_caption():
 
-#     in_string = [
-#         "---",
-#         "ipub:",
-#         "  pandoc:",
-#         "    reftag: other",
-#         "---",
-#         "",
-#         "[some text](#alabel)"
-#     ]
+    in_string = [
+        'a b',
+        '- -',
+        '1 2',
+        '',
+        'Table: Caption \cite{a}'
+    ]
 
-#     out_string = apply_filter(
-#         in_string,
-#         [prepare_raw.main, format_cite_elements.main], "latex",
-#         strip_meta=True)
+    out_string = apply_filter(
+        in_string,
+        [prepare_raw.main, format_cite_elements.main], "markdown")
 
-#     assert out_string == "\n".join([
-#         r"\other{alabel}"
-#     ])
+    assert out_string == "\n".join([
+        '  a   b',
+        '  --- ---',
+        '  1   2',
+        '',
+        '  : Caption [@a]'
+        ])
 
 
 def test_html_to_latex_cite():

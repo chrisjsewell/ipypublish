@@ -11,7 +11,8 @@ from ipypublish.filters_pandoc.definitions import (
     IPUB_META_ROUTE, RST_KNOWN_ROLES, RAWSPAN_CLASS, RAWDIV_CLASS,
     CONVERTED_CITE_CLASS, CONVERTED_OTHER_CLASS, CONVERTED_DIRECTIVE_CLASS
 )
-from ipypublish.filters_pandoc.utils import get_panflute_containers
+from ipypublish.filters_pandoc.utils import (
+    get_panflute_containers, get_pf_content_attr)
 
 
 def create_cite_span(identifiers, rawformat, is_block,
@@ -50,17 +51,27 @@ def process_internal_links(link, doc):
         alt=pf.stringify(pf.Plain(*list(link.content))).strip())
 
 
-def process_html_cites(block, doc):
+def process_html_cites(container, doc):
     # type: (pf.Block, Doc) -> Element
     """extract raw html <cite data-cite="cite_key">text</cite>"""
-    if not (isinstance(block, get_panflute_containers(pf.RawInline))
-            or isinstance(block, get_panflute_containers(pf.RawBlock))):
+    # if not (isinstance(block, get_panflute_containers(pf.RawInline))
+    #         or isinstance(block, get_panflute_containers(pf.RawBlock))):
+    #     return None
+    content_attr = get_pf_content_attr(container, pf.RawInline)
+    if not content_attr:
+        content_attr = get_pf_content_attr(container, pf.RawBlock)
+
+    if not content_attr:
+        return None
+    initial_content = getattr(container, content_attr)
+
+    if not initial_content:
         return None
 
     new_content = []
     skip = 0
 
-    for element in block.content:
+    for element in initial_content:
 
         if skip > 0:
             skip = skip - 1
@@ -99,8 +110,8 @@ def process_html_cites(block, doc):
                                             isinstance(element, pf.RawBlock)))
         skip = len(span_content) + 1
 
-    block.content = new_content
-    return block
+    setattr(container, content_attr, new_content)
+    return container
 
 
 def process_latex_raw(element, doc):
@@ -132,10 +143,20 @@ def process_latex_str(block, doc):
     """
     # TODO in the tests '\cite{a}' -> RawInline,
     # yet running a file with pandoc \cite{a}' -> Str?!
-    if not (isinstance(block, get_panflute_containers(pf.Str))):
+    # if not (isinstance(block, get_panflute_containers(pf.Str))):
+    #     return None
+
+    content_attr = get_pf_content_attr(block, pf.Str)
+    if not content_attr:
         return None
+    initial_content = getattr(block, content_attr)
+
+    if not initial_content:
+        return None
+
     new_content = []
-    for element in block.content:
+
+    for element in initial_content:
         if not isinstance(element, pf.Str):
             new_content.append(element)
             continue
@@ -149,7 +170,8 @@ def process_latex_str(block, doc):
                 new_content.append(pf.Str(string))
             else:
                 new_content.append(assess_latex(string, False))
-    block.content = new_content
+
+    setattr(block, content_attr, new_content)
     return block
 
 
@@ -214,7 +236,14 @@ def process_rst_roles(block, doc):
     """
     # "a :ref:`label` b" is converted to:
     # (Str(a) Space Str(:ref:) Code(label) Space Str(b))
-    if not (isinstance(block, get_panflute_containers(pf.Str))):
+    # if not (isinstance(block, get_panflute_containers(pf.Str))):
+    #     return None
+    content_attr = get_pf_content_attr(block, pf.Str)
+    if not content_attr:
+        return None
+    initial_content = getattr(block, content_attr)
+
+    if not initial_content:
         return None
 
     # match_rst_role = re.match(
@@ -223,7 +252,7 @@ def process_rst_roles(block, doc):
     new_content = []
     skip_next = False
 
-    for element in block.content:
+    for element in initial_content:
 
         if skip_next:
             skip_next = False
@@ -262,9 +291,11 @@ def process_rst_roles(block, doc):
         else:
             new_content.append(element)
 
-    if len(new_content) != len(block.content):
-        block.content = new_content
-        return block
+    # if len(new_content) != len(block.content):
+    #     block.content = new_content
+    #     return block
+    setattr(block, content_attr, new_content)
+    return block
 
 
 def gather_processors(element, doc):
@@ -284,7 +315,8 @@ def gather_processors(element, doc):
 
     # apply processors that change multiple inline elements in a block
 
-    if isinstance(element, get_panflute_containers(pf.Inline)):
+    if (isinstance(element, get_panflute_containers(pf.Inline))
+            or isinstance(pf.Table, pf.DefinitionItem)):
 
         new_element = process_html_cites(element, doc)
         if new_element is not None:
