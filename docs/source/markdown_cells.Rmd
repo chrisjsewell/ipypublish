@@ -33,7 +33,8 @@ This filter extends the common markdown syntax to:
 
 - Correctly translate pieces of documentation written in other formats
   (such as using LaTeX commands like `\cite` or RST roles like `:cite:`)
-- Handle labelling and referencing of figures, tables and equations
+- Handle labelling and referencing of figures, tables and equations, and
+  add additional formatting options. 
 
 `ipubpandoc` is detached from the rest of the
 notebook conversion process, and so can be used as a standalone process on any markdown content:
@@ -84,13 +85,13 @@ jupyter:
 .. important::
 
     To preserve ipypublish notebook metadata, you must add:
-    \`{\"jupytext\": {\"metadata_filter\": \"notebook\": \"ipub\"}}\`
-    To your notebooks metadata.
+    `{"jupytext": {"metadata_filter": "notebook": "ipub"}}` to
+    your notebooks metadata.
 
 .. note::
 
     If a file with a .Rmd extension is supplied to
-    \`nbpublish\`, it will automatically call \`jupytext`\.
+    `nbpublish`, it will automatically call `jupytext`.
     So it is possible to only ever write in the RMarkdown format!
 
 .. seealso::
@@ -148,10 +149,10 @@ a relevant [panflute element](http://scorreia.com/software/panflute/code.html).
 
 Because of this we can write something like this:
 
-```
-- citations in @ notation \cite{zelenyak_molecular_2016,kirkeminde_thermodynamic_2012}
+```md
+- citations in @ notation [@zelenyak_molecular_2016; @kirkeminde_thermodynamic_2012]
 - citations in rst notation :cite:`zelenyak_molecular_2016,kirkeminde_thermodynamic_2012`
-- citations in latex notation[@zelenyak_molecular_2016; @kirkeminde_thermodynamic_2012]
+- citations in latex notation \cite{zelenyak_molecular_2016,kirkeminde_thermodynamic_2012}
 - citation in html notation <cite data-cite="kirkeminde_thermodynamic_2012">text</cite>
 
 $$a = b + c$$ {#eqnlabel}
@@ -183,8 +184,40 @@ $$a = b + c$$ {#eqnlabel}
 
     a reference in latex notation within an RST directive \eqref{eqnlabel}
 
-```json
-{
-  "a": 1
-}
+Inter-format translation is turned on by default, but if you wish to turn it
+off, or hide it, simply add to the document metadata:
+
+```yaml
+jupyter:
+  ipub:
+    pandoc:
+      convert_raw: true
+      hide_raw: false
 ```
+
+## Labelling, Formatting and Referencing Figures, Tables and Equations
+
+`ipubpandoc` allows for figures, tables and equations to be labelled and
+referenced *via* '@ notation'.
+
+To create a label, simply add `{#label}` to the side of the figure or equation,
+or to the side of a table's caption. 
+Labels can also have *classes* and *attributes*, which parse on additional information to the formatter, e.g. `{#label .numbered width=10}`.
+
+```md
+![image caption](_static/example.jpg){#fig:example}
+
+@fig:example
+```
+
+![image caption](_static/example.jpg){#fig:example}
+
+^@fig:example
+
+Column 1 Column 2
+-------- --------
+1          2
+
+Table: table caption {#tbl:example align=rc widths=[0.5,0.5]}
+
+^@tbl:example

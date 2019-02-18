@@ -24,7 +24,7 @@ import json
 from panflute import Element, Doc, Span, Div, Math, Image, Table  # noqa: F401
 import panflute as pf
 
-from ipypublish.filters_pandoc.utils import convert_units
+from ipypublish.filters_pandoc.utils import convert_units, convert_attributes
 from ipypublish.filters_pandoc.prepare_labels import (
     LABELLED_IMAGE_CLASS, LABELLED_MATH_CLASS, LABELLED_TABLE_CLASS
 )
@@ -183,7 +183,7 @@ def format_table(table, doc):
     if not isinstance(table, pf.Table):
         return None
 
-    div = None
+    div = None  # type: pf.Div
     if (isinstance(table.parent, pf.Div)
             and LABELLED_TABLE_CLASS in table.parent.classes):
         div = table.parent
@@ -191,12 +191,62 @@ def format_table(table, doc):
     if div is None:
         return None
 
+    attributes = convert_attributes(div.attributes)
+
+    if "align" in div.attributes:
+        align_text = attributes["align"]
+        align = [
+            {'l': 'AlignLeft',
+             'r': 'AlignRight',
+             'c': 'AlignCenter'}.get(a, None) for a in align_text]
+        if None in align:
+            raise ValueError(
+                "table '{0}' alignment must contain only l,r,c:"
+                " {1}".format(div.identifier, align_text))
+        table.alignment = align
+        attributes["align"] = align
+
+    if "widths" in div.attributes:
+        widths = attributes["widths"]
+        try:
+            widths = [float(w) for w in widths]
+        except Exception:
+            raise ValueError(
+                "table '{0}' widths must be a list of numbers:"
+                " {1}".format(div.identifier, widths))
+        table.width = widths
+        attributes["widths"] = widths
+
     if doc.format in ("tex", "latex"):
         table.caption.append(pf.RawInline(
             '\\label{{{0}}}'.format(div.identifier), format="tex"))
         return table
 
     if doc.format in ("rst",):
+        # pandoc 2.6 doesn't output table options
+        if attributes:
+            tbl_doc = pf.Doc(table)
+            tbl_doc.api_version = doc.api_version
+            tbl_str = pf.convert_text(tbl_doc,
+                                      input_format="panflute",
+                                      output_format="rst")
+
+            tbl_lines = tbl_str.splitlines()
+            if tbl_lines[1].strip() == "":
+                tbl_lines.insert(1, "   :align: center")
+                if "widths" in attributes:
+                    # in rst widths must be integers
+                    widths = " ".join([str(int(w*10)) for w in table.width])
+                    tbl_lines.insert(1, "   :widths: {}".format(widths))
+            # TODO rst column alignment, see
+            # https://cloud-sptheme.readthedocs.io/en/latest/lib/cloud_sptheme.ext.table_styling.html
+
+            return [
+                pf.Para(pf.RawInline(
+                    '.. _`{0}`:'.format(div.identifier), format="rst")),
+                pf.RawBlock("\n".join(tbl_lines)+"\n\n", format=doc.format)
+            ]
+
         return [
             pf.Para(pf.RawInline(
                 '.. _`{0}`:'.format(div.identifier), format="rst")),

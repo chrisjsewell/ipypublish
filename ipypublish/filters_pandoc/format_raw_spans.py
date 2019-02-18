@@ -6,7 +6,7 @@ first to access the functionality below:
 
 """
 import itertools
-from textwrap import fill as textwrap
+# from textwrap import fill as textwrap
 
 from panflute import Element, Doc, Span  # noqa: F401
 import panflute as pf
@@ -61,26 +61,37 @@ def process_raw_spans(container, doc):
             if len(container.content) == 1:
                 return head_block
 
+            # split into lines by soft breaks, we use indicators to tell
+            # us where to indent in the converted text
+            body_blocks = []
+            for block in container.content[1:]:
+                new_elements = [pf.RawInline("%^*", format=doc.format)]
+                for el in block.content:
+                    if isinstance(el, pf.SoftBreak):
+                        new_elements.append(
+                            pf.RawInline("?&@", format=doc.format))
+                    else:
+                        new_elements.append(el)
+                block.content = new_elements
+                body_blocks.append(block)
+
             # convert body content with pandoc
-            body_doc = pf.Doc(*container.content[1:])
+            body_doc = pf.Doc(*body_blocks)
             body_doc.api_version = doc.api_version
             body_str = pf.convert_text(body_doc,
                                        input_format="panflute",
                                        output_format=doc.format)
-            # split by paragraph, wrap and indent
-            if container.attributes.get("directive", "") == "toctree":
-                # toctree is a special case, because it requires each word
-                # on a new line
-                # TODO is there any other special cases?
-                body_str = (
-                    "    "+"\n    ".join([w for w in body_str.split()]) + "\n")
-            else:
-                body_str = "\n\n".join(
-                    [textwrap(p,
-                              initial_indent="    ", subsequent_indent="    ")
-                     for p in body_str.split("\n\n")]) + "\n\n"
-            body_block = pf.RawBlock(body_str, format=doc.format)
+            # raise ValueError(body_blocks)
+            body_str = body_str.replace(
+                "%^*", "    ").replace("?&@", "\n    ")
 
+            # ensure all lines are indented correctly
+            # (doesn't occur by default?)
+            body_str = "\n".join(
+                ["    " + l.lstrip() if l.strip() else l
+                 for l in body_str.splitlines()]) + '\n\n'
+
+            body_block = pf.RawBlock(body_str, format=doc.format)
             return [head_block, body_block]
 
         elif (doc.format in ("html", "html5")

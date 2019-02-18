@@ -1,9 +1,10 @@
-from six import string_types
-import re
-import json
-import io
 from collections import OrderedDict
+import copy
+import io
+import json
+import re
 
+from six import string_types
 from nbconvert.utils.pandoc import get_pandoc_version
 from distutils.version import LooseVersion
 import panflute as pf
@@ -193,8 +194,21 @@ def process_attributes(attr_string):
         attr_string)}
     # TODO this generally works, but should be stricter against any weird
     # fringe cases
+
     # TODO add tests
     return classes, attr
+
+
+def convert_attributes(attr):
+    """attempt to convert values to python types, e.g. float, list, dict"""
+    attr = copy.deepcopy(attr)
+    for key in list(attr.keys()):
+        try:
+            new_value = json.loads(attr[key])
+            attr[key] = new_value
+        except Exception:
+            pass
+    return attr
 
 
 def convert_units(string, out_units):

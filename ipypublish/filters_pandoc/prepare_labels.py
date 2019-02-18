@@ -35,7 +35,8 @@ import re
 from panflute import Element, Doc, Table, Inline  # noqa: F401
 import panflute as pf
 
-from ipypublish.filters_pandoc.utils import compare_version, process_attributes
+from ipypublish.filters_pandoc.utils import (
+    compare_version, process_attributes, get_panflute_containers)
 
 LABELLED_IMAGE_CLASS = "labelled-Image"
 LABELLED_MATH_CLASS = "labelled-Math"
@@ -149,8 +150,10 @@ def resolve_tables(element, doc):
 def resolve_equations_images(element, doc):
     # type: (Element, Doc) -> None
 
-    if not isinstance(element, (pf.Para, pf.Plain)):
-        # TODO can we definitely assume all Math/Images will be in these
+    if not isinstance(element, get_panflute_containers(pf.Math)):
+        return None
+
+    if not element.content:
         return None
 
     to_delete = set()
@@ -214,10 +217,12 @@ def resolve_equations_images(element, doc):
         for el in element.content
         if el not in to_delete]
 
-    if isinstance(element, pf.Plain):
-        return pf.Plain(*new_content)
-    else:
-        return pf.Para(*new_content)
+    # if isinstance(element, pf.Plain):
+    #     return pf.Plain(*new_content)
+    # else:
+    #     return pf.Para(*new_content)
+    element.content = new_content
+    return element
 
 
 def prepare(doc):

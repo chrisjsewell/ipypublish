@@ -319,8 +319,8 @@ def test_rst_directive_with_options_to_rst():
         '    abc',
         '    xyz',
         '',
-        '    a very very long line that needs wrapping, '
-        'its very very long and needs wrapping '
+        '    new paragraph',
+        ''
     ]
 
     out_string = apply_filter(
@@ -332,40 +332,12 @@ def test_rst_directive_with_options_to_rst():
         '    :maxdepth: 2',
         '    :numbered:',
         '',
-        '    abc xyz',
-        '',
-        '    a very very long line that needs wrapping, '
-        'its very very long and',
-        '    needs wrapping',
-        '',
-        ''
-    ])
-
-
-def test_rst_directive_toctree_rst():
-
-    in_string = [
-        '.. toctree::',
-        '    :maxdepth: 2',
-        '    :numbered:',
-        '',
         '    abc',
         '    xyz',
-        ''
-    ]
-
-    out_string = apply_filter(
-        in_string,
-        [prepare_raw.main, format_raw_spans.main], "rst")
-
-    assert out_string == "\n".join([
-        '.. toctree::',
-        '    :maxdepth: 2',
-        '    :numbered:',
         '',
-        '    abc',
-        '    xyz',
-        ''
+        '    new paragraph',
+        "",
+        ""
     ])
 
 

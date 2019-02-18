@@ -11,7 +11,7 @@ Jupyter notebook and `Pandoc <http://pandoc.org>`__ (for markdown conversion):
 
 .. code-block:: console
 
-   $ conda create --name ipyreport -c conda-forge jupyter pandoc
+   $ conda create --name ipyreport -c conda-forge jupyter pandoc==2.6
 
 ipypublish can then be installed into this environment:
 
