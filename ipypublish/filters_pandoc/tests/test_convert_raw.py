@@ -95,26 +95,27 @@ def test_html_to_latex_label():
     ])
 
 
-def test_html_to_latex_label_with_custom_tag():
+# TODO instead of this, allow ovverride/addition of prefix
+# def test_html_to_latex_label_with_custom_tag():
 
-    in_string = [
-        "---",
-        "ipub:",
-        "  pandoc:",
-        "    reftag: other",
-        "---",
-        "",
-        "[some text](#alabel)"
-    ]
+#     in_string = [
+#         "---",
+#         "ipub:",
+#         "  pandoc:",
+#         "    reftag: other",
+#         "---",
+#         "",
+#         "[some text](#alabel)"
+#     ]
 
-    out_string = apply_filter(
-        in_string,
-        [prepare_raw.main, format_cite_elements.main], "latex",
-        strip_meta=True)
+#     out_string = apply_filter(
+#         in_string,
+#         [prepare_raw.main, format_cite_elements.main], "latex",
+#         strip_meta=True)
 
-    assert out_string == "\n".join([
-        r"\other{alabel}"
-    ])
+#     assert out_string == "\n".join([
+#         r"\other{alabel}"
+#     ])
 
 
 def test_html_to_latex_cite():

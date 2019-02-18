@@ -46,8 +46,7 @@ def process_internal_links(link, doc):
 
     return create_cite_span(
         [match.group(1)], "markdown", False,
-        prefix=dict(PREFIX_MAP_LATEX_R).get(
-            doc.get_metadata(IPUB_META_ROUTE + ".reftag", "cref"), "cref"),
+        prefix=dict(PREFIX_MAP_LATEX_R).get("cref"),
         alt=pf.stringify(pf.Plain(*list(link.content))).strip())
 
 
