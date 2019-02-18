@@ -107,7 +107,7 @@ def jinja_filter(source, to_format, nb_metadata, cell_metadata,
         interpret @label as a reference type based on its prefix modifier,
         latex: '' = cite '+' = cref,    '^' = Cref,    '!' = ref,  '=' = eqref
         rst: '' = :cite: '+' = :numref: '^' = :numref: '!' = :ref: '=' = :eq:
-    reftag="cref": str
+    reftag="cite": str
         default latex tag for references
     use_numref=True: bool
         whether to use the ``:numref:`` role or just ``:ref:``
@@ -155,7 +155,7 @@ def jinja_filter(source, to_format, nb_metadata, cell_metadata,
                              keypath=IPUB_META_ROUTE + ".at_notation",
                              default=True)
     reftag = get_option(option_preference,
-                        keypath=IPUB_META_ROUTE + ".reftag", default="cref")
+                        keypath=IPUB_META_ROUTE + ".reftag", default="cite")
     strip_meta = get_option(option_preference,
                             keypath=IPUB_META_ROUTE + ".strip_meta",
                             default=True)

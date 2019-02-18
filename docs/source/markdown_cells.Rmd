@@ -21,7 +21,7 @@ jupyter:
     name: python3
 ---
 
-# Writing in RMarkdown
+# Writing Markdown
 
 In IPyPublish, all Markdown content is converted *via* [Pandoc](https://pandoc.org/).
 [Pandoc](https://pandoc.org/) alllows for [filters](https://pandoc.org/filters.html)
@@ -36,7 +36,7 @@ This filter extends the common markdown syntax to:
 - Handle labelling and referencing of figures, tables and equations
 
 `ipubpandoc` is detached from the rest of the
-notebook conversion process, and so can be used as a standalone process:
+notebook conversion process, and so can be used as a standalone process on any markdown content:
 
 ```console
 $ pandoc -f markdown -t html --filter ipubpandoc path/to/file.md
@@ -44,6 +44,7 @@ $ pandoc -f markdown -t html --filter ipubpandoc path/to/file.md
 
 ## Converting Notebooks to RMarkdown
 
+RMarkdown is a plain text representation of the workbook.
 Thanks to [jupytext](https://github.com/mwouts/jupytext), we can easily
 convert an existing notebooks to RMarkdown (and back):
 
@@ -151,24 +152,7 @@ Because of this we can write something like this:
 - citations in @ notation \cite{zelenyak_molecular_2016,kirkeminde_thermodynamic_2012}
 - citations in rst notation :cite:`zelenyak_molecular_2016,kirkeminde_thermodynamic_2012`
 - citations in latex notation[@zelenyak_molecular_2016; @kirkeminde_thermodynamic_2012]
-
-$$a = b + c$$ {#eqnlabel}
-
-- a reference in @ notation ={@eqnlabel .capitalize}
-- a reference in rst notation :eq:`eqnlabel`
-- a reference in latex notation \eqref{eqnlabel}
-
-.. note::
-
-   a reference in latex notation within an RST directive \eqref{eqnlabel}
-
-```
-
-and it will be correctly resolved in the output document:
-
-- citations in @ notation \cite{zelenyak_molecular_2016,kirkeminde_thermodynamic_2012}
-- citations in rst notation :cite:`zelenyak_molecular_2016,kirkeminde_thermodynamic_2012`
-- citations in latex notation [@zelenyak_molecular_2016; @kirkeminde_thermodynamic_2012]
+- citation in html notation <cite data-cite="kirkeminde_thermodynamic_2012">text</cite>
 
 $$a = b + c$$ {#eqnlabel}
 
@@ -179,3 +163,28 @@ $$a = b + c$$ {#eqnlabel}
 .. note::
 
     a reference in latex notation within an RST directive \eqref{eqnlabel}
+
+```
+
+and it will be correctly resolved in the output document:
+
+- citations in @ notation [@zelenyak_molecular_2016; @kirkeminde_thermodynamic_2012]
+- citations in rst notation :cite:`zelenyak_molecular_2016,kirkeminde_thermodynamic_2012`
+- citations in latex notation \cite{zelenyak_molecular_2016,kirkeminde_thermodynamic_2012}
+- citation in html notation <cite data-cite="kirkeminde_thermodynamic_2012">text</cite>
+
+$$a = b + c$$ {#eqnlabel}
+
+- a reference in @ notation ={@eqnlabel .capitalize}
+- a reference in rst notation :eq:`eqnlabel`
+- a reference in latex notation \eqref{eqnlabel}
+
+.. note::
+
+    a reference in latex notation within an RST directive \eqref{eqnlabel}
+
+```json
+{
+  "a": 1
+}
+```

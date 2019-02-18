@@ -297,19 +297,51 @@ def test_rst_directive_to_latex():
         [prepare_raw.main, format_raw_spans.main], "latex")
 
     assert out_string.strip() == "\n".join([
-        '\\begin{lstlisting}',
-        '.. versionchanged:: v0.8.3',
+        '\\begin{mdframed}[frametitle={versionchanged},frametitlerule=true]',
+        '\\mdfsubtitle{v0.8.3}',
         '',
-        '    abc',
+        'abc',
         '',
-        '    xyz',
+        'xyz',
         '',
-        '',
-        '\\end{lstlisting}',
+        '\\end{mdframed}',
         ])
 
 
 def test_rst_directive_with_options_to_rst():
+
+    in_string = [
+        '.. dir::',
+        '    :maxdepth: 2',
+        '    :numbered:',
+        '',
+        '    abc',
+        '    xyz',
+        '',
+        '    a very very long line that needs wrapping, '
+        'its very very long and needs wrapping '
+    ]
+
+    out_string = apply_filter(
+        in_string,
+        [prepare_raw.main, format_raw_spans.main], "rst")
+
+    assert out_string == "\n".join([
+        '.. dir::',
+        '    :maxdepth: 2',
+        '    :numbered:',
+        '',
+        '    abc xyz',
+        '',
+        '    a very very long line that needs wrapping, '
+        'its very very long and',
+        '    needs wrapping',
+        '',
+        ''
+    ])
+
+
+def test_rst_directive_toctree_rst():
 
     in_string = [
         '.. toctree::',
@@ -317,7 +349,8 @@ def test_rst_directive_with_options_to_rst():
         '    :numbered:',
         '',
         '    abc',
-        '    xyz'
+        '    xyz',
+        ''
     ]
 
     out_string = apply_filter(
@@ -331,7 +364,6 @@ def test_rst_directive_with_options_to_rst():
         '',
         '    abc',
         '    xyz',
-        '',
         ''
     ])
 

@@ -353,12 +353,25 @@ def wrap_rst_directives(doc):
                 # TODO at present we allow any directive name
                 # the block may contain option directives, e.g. :width:
                 skip_next = True
+
+                inline_arg = ''
+                if len(block.content) > 3:
+                    inline_content = []
+                    for el in block.content[3:]:
+                        if isinstance(el, pf.SoftBreak):
+                            break
+                        inline_content.append(el)
+                    if inline_content:
+                        inline_arg = pf.stringify(
+                            pf.Para(*inline_content)).replace("\n", "").strip()
+
                 new_block = pf.Div(
                     block,
                     *pf.convert_text(block.next.text),
                     classes=[RAWDIV_CLASS, CONVERTED_DIRECTIVE_CLASS],
                     attributes={"format": "rst",
                                 "directive": block.content[2].text[:-2],
+                                "inline": inline_arg,
                                 "has_body": True}
                 )
                 final_blocks.append(new_block)
@@ -368,11 +381,24 @@ def wrap_rst_directives(doc):
                 # the block is a directive without body content
                 # TODO at present we allow any directive name
                 # the block may contain option directives, e.g. :width:
+
+                inline_arg = ''
+                if len(block.content) > 3:
+                    inline_content = []
+                    for el in block.content[3:]:
+                        if isinstance(el, pf.SoftBreak):
+                            break
+                        inline_content.append(el)
+                    if inline_content:
+                        inline_arg = pf.stringify(
+                            pf.Para(*inline_content)).replace("\n", "").strip()
+
                 new_block = pf.Div(
                     block,
                     classes=[RAWDIV_CLASS, CONVERTED_DIRECTIVE_CLASS],
                     attributes={"format": "rst",
                                 "directive": block.content[2].text[:-2],
+                                "inline": inline_arg,
                                 "has_body": False}
                 )
                 final_blocks.append(new_block)

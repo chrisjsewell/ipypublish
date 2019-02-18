@@ -6,6 +6,7 @@ first to access the functionality below:
 
 """
 import itertools
+from textwrap import fill as textwrap
 
 from panflute import Element, Doc, Span  # noqa: F401
 import panflute as pf
@@ -39,53 +40,117 @@ def process_raw_spans(container, doc):
         # Para(Str(..) Space Str(toctree::) SoftBreak Str(:maxdepth:) Space Str(2) SoftBreak Str(:numbered:))  # noqa
         # we need to spilt on the soft breaks,
         # place them on a new line and re-indent them
+
         if doc.format in ("rst"):
 
-            content = split_soft_breaks(container.content[0],
-                                        indent_first=False, indent=4)
-            for para in container.content[1:]:
-                content.extend(split_soft_breaks(
-                    para, indent_first=True, indent=4))
+            # split into lines by soft breaks
+            header_lines = [list(y) for x, y in itertools.groupby(
+                container.content[0].content,
+                lambda z: isinstance(z, pf.SoftBreak)) if not x]
 
-            return pf.RawBlock(pf.stringify(pf.Doc(*content)),
-                               format="rst")
+            # wrap each line in a Para and convert block with pandoc
+            head_doc = pf.Doc(*[pf.Para(*l) for l in header_lines])
+            head_doc.api_version = doc.api_version
+            head_str = pf.convert_text(head_doc,
+                                       input_format="panflute",
+                                       output_format=doc.format)
+            # remove blank lines and indent
+            head_str = head_str.replace("\n\n", "\n    ") + "\n\n"
+            head_block = pf.RawBlock(head_str, format=doc.format)
+
+            if len(container.content) == 1:
+                return head_block
+
+            # convert body content with pandoc
+            body_doc = pf.Doc(*container.content[1:])
+            body_doc.api_version = doc.api_version
+            body_str = pf.convert_text(body_doc,
+                                       input_format="panflute",
+                                       output_format=doc.format)
+            # split by paragraph, wrap and indent
+            if container.attributes.get("directive", "") == "toctree":
+                # toctree is a special case, because it requires each word
+                # on a new line
+                # TODO is there any other special cases?
+                body_str = (
+                    "    "+"\n    ".join([w for w in body_str.split()]) + "\n")
+            else:
+                body_str = "\n\n".join(
+                    [textwrap(p,
+                              initial_indent="    ", subsequent_indent="    ")
+                     for p in body_str.split("\n\n")]) + "\n\n"
+            body_block = pf.RawBlock(body_str, format=doc.format)
+
+            return [head_block, body_block]
 
         elif (doc.format in ("html", "html5")
                 and container.attributes["format"] == "rst"):
+
             if hide_raw:
                 return []
-            content = split_soft_breaks(
-                container.content[0], indent_first=False, indent=4, fmt="html",
-                pre_content="<p>", post_content="</p>", post_chunk="<br>",
-                raw_space="&nbsp")
-            for para in container.content[1:]:
-                content.extend(split_soft_breaks(
-                    para, indent_first=True, indent=4, fmt="html",
-                    pre_content='<p>', post_content="</p>", post_chunk="<br>",
-                    raw_space="&nbsp"))
+
+            head_para = pf.Para(
+                *[pf.RawInline("<br>" + "&nbsp" * 4)
+                  if isinstance(c, pf.SoftBreak)
+                  else c
+                  for c in container.content[0].content])
+            head_str = pf.convert_text(head_para,
+                                       input_format="panflute",
+                                       output_format=doc.format)
+
+            if len(container.content) > 1:
+
+                body_doc = pf.Doc(*container.content[1:])
+                body_doc.api_version = doc.api_version
+                body_str = pf.convert_text(body_doc,
+                                           input_format="panflute",
+                                           output_format=doc.format)
+                body_str = ('<p></p><div style="margin-left: 20px">'
+                            '{0}</div>').format(body_str)
+            else:
+                body_str = ""
 
             return pf.RawBlock(
                 '<div {0} style="background-color:rgba(10, 225, 10, .2)">'
-                '{1}</div>'.format(
+                '{1}{2}'
+                '</div>'.format(
                     container.attributes.get("directive", ""),
-                    pf.stringify(pf.Doc(*content))
+                    head_str,
+                    body_str
                 ),
                 format="html"
             )
 
         elif (doc.format in ("tex", "latex")
                 and container.attributes["format"] == "rst"):
+
             if hide_raw:
                 return []
-            content = split_soft_breaks(container.content[0],
-                                        indent_first=False, indent=4)
-            for para in container.content[1:]:
-                content.extend(split_soft_breaks(
-                    para, indent_first=True, indent=4))
-            content_str = pf.stringify(pf.Doc(*content))
-            return pf.RawBlock(
-                "\\begin{lstlisting}\n" + content_str + "\n\\end{lstlisting}",
-                format="tex")
+
+            directive = container.attributes.get("directive", "")
+            inline = container.attributes.get("inline", "")
+            # TODO handle directive with options and/or inline body
+            # e.g. .. figure:: path/to/figure
+            #          :centre:
+
+            box_open = (
+                "\\begin{{mdframed}}"
+                "[frametitle={{{0}}},frametitlerule=true]".format(directive)
+            )
+            if inline:
+                box_open += "\n\\mdfsubtitle{{{0}}}".format(inline)
+            box_close = "\\end{mdframed}"
+
+            if len(container.content) == 1:
+                return pf.RawBlock(
+                    box_open + box_close,
+                    format="tex")
+            else:
+                return (
+                    [pf.RawBlock(box_open, format="tex")] +
+                    list(container.content[1:]) +
+                    [pf.RawBlock(box_close, format="tex")]
+                )
 
         return pf.RawBlock(pf.stringify(pf.Doc(*container.content)),
                            format=container.attributes["format"])
@@ -97,43 +162,57 @@ def process_raw_spans(container, doc):
             format=container.attributes["format"])
 
 
-def split_soft_breaks(container,
-                      indent=4, fmt="rst", indent_first=False,
-                      pre_content="", post_content="",
-                      pre_chunk="", post_chunk="",
-                      linebreak="\n", raw_space=None):
-    """rst conversion doesn't recognise soft breaks as new lines,
-    so add them manually and return a list containing the new elements
-    """
-    content = []
-    if pre_content:
-        content.append(pf.RawBlock(pre_content, fmt))
+# now unused
+# def split_soft_breaks(container,
+#                       indent=4, fmt="rst", indent_first=False,
+#                       pre_content="", post_content="",
+#                       pre_chunk="", post_chunk="",
+#                       linebreak="\n", raw_indent=None):
+#     """rst conversion doesn't recognise soft breaks as new lines,
+#     so add them manually and return a list containing the new elements
+#     """
+#     content = []
+#     if pre_content:
+#         content.append(pf.RawBlock(pre_content, fmt))
 
-    chunks = [list(y) for x, y in itertools.groupby(
-        container.content,
-        lambda z: isinstance(z, pf.SoftBreak)) if not x]
+#     chunks = [list(y) for x, y in itertools.groupby(
+#         container.content,
+#         lambda z: isinstance(z, pf.SoftBreak)) if not x]
 
-    for i, chunk in enumerate(chunks):
-        if i > 0 or indent_first:
-            if raw_space is not None:
-                chunk = [pf.RawInline(raw_space, fmt)] * indent + chunk
-            else:
-                chunk = [pf.Space()] * indent + chunk
+#     for i, chunk in enumerate(chunks):
+#         if i > 0 or indent_first:
+#             if raw_indent is not None:
+#                 chunk = [pf.RawInline(raw_indent, fmt)] * indent + chunk
+#             else:
+#                 chunk = [pf.Space()] * indent + chunk
 
-        if pre_chunk:
-            content.append(pf.RawBlock(pre_chunk, fmt))
-        content.append(pf.Plain(*chunk))
-        content.append(pf.RawBlock(linebreak, fmt))
-        if post_chunk:
-            content.append(pf.RawBlock(post_chunk, fmt))
+#         if pre_chunk:
+#             content.append(pf.RawBlock(pre_chunk, fmt))
+#         content.append(pf.Plain(*chunk))
+#         content.append(pf.RawBlock(linebreak, fmt))
+#         if post_chunk:
+#             content.append(pf.RawBlock(post_chunk, fmt))
 
-    if isinstance(container, pf.Para):
-        content.append(pf.RawBlock(linebreak, fmt))
+#     # if isinstance(container, pf.Para):
+#     #     content.append(pf.RawBlock(linebreak, fmt))
 
-    if post_content:
-        content.append(pf.RawBlock(post_content, fmt))
+#     if post_content:
+#         content.append(pf.RawBlock(post_content, fmt))
 
-    return content
+#     return content
+
+def process_code_latex(code, doc):
+    # type: (pf.CodeBlock, Doc) -> Element
+    if doc.format not in ("tex", "latex"):
+        return None
+    if not isinstance(code, pf.CodeBlock):
+        return None
+    # TODO line wrapping
+    return [
+        pf.RawBlock("\\begin{mdframed}", format=doc.format),
+        code,
+        pf.RawBlock("\\end{mdframed}", format=doc.format),
+    ]
 
 
 def prepare(doc):
@@ -150,8 +229,8 @@ def main(doc=None):
     # type: (Doc) -> None
     """
     """
-    return pf.run_filter(process_raw_spans,
-                         prepare, finalize, doc=doc)
+    return pf.run_filters([process_raw_spans, process_code_latex],
+                          prepare, finalize, doc=doc)
 
 
 if __name__ == '__main__':
