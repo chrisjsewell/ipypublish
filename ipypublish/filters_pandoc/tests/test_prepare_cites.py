@@ -25,8 +25,8 @@ def test_para_rst():
     ])
 
 
-# @pytest.mark.skipif(sys.version_info < (3, 6),
-#                     reason="html attributes not in same order")
+@pytest.mark.skipif(sys.version_info < (3, 6),
+                    reason="html attributes not in same order")
 def test_para_html():
     """
     """
@@ -50,8 +50,8 @@ def test_para_html():
     ])
 
 
-# @pytest.mark.skipif(sys.version_info < (3, 6),
-#                     reason="html attributes not in same order")
+@pytest.mark.skipif(sys.version_info < (3, 6),
+                    reason="html attributes not in same order")
 def test_table_html():
     """
     """
@@ -86,8 +86,8 @@ def test_table_html():
     ])
 
 
-# @pytest.mark.skipif(sys.version_info < (3, 6),
-#                     reason="html attributes not in same order")
+@pytest.mark.skipif(sys.version_info < (3, 6),
+                    reason="html attributes not in same order")
 def test_image_html():
 
     in_string = [
