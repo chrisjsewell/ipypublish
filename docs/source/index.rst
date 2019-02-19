@@ -64,17 +64,17 @@ Badges
    :caption: Contents:
 
    getting_started
-   ipypub_basics
+   code_cells
+   markdown_cells
+   nb_conversion
    examples
    metadata_tags
    custom_export_config
-   additional_tools
    applications
+   additional_tools
    acknowledgements
    package_api
    releases
-   ipynb1
-   ipynb2
 
 .. toctree::
    :maxdepth: 2

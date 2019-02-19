@@ -5,6 +5,7 @@ jupyter:
       convert_raw: true 
       at_notation: true
       use_numref: true
+    orphan: true
   jupytext:
     metadata_filter:
       notebook: ipub
@@ -18,56 +19,10 @@ jupyter:
     language: python
     name: python3
 ---
+.. _code_cells:
 
-# as rmd
+# Writing Code and Formatting Output
 
-```
-.. note::
-
-    reference in @ notation =@eqn1 {.capitalize}
-
-    reference in rst notation :eq:`eqn1`
-
-    reference in latex notation \eqref{eqn1}
-```
-
-.. note::
-
-    reference in @ notation =@eqn1 {.capitalize}
-
-    reference in rst notation :eq:`eqn1`
-
-    reference in latex notation \eqref{eqn1}
-
-remember to document that you have to associate rmd with md in vs code
-
-some text jhgjhgjjhgjg
-
-a :eq:`eqn1`
-
-=@eqn1 {.capitalize}
-
-$a=b$
-
-$$a$$ {#eqn1}
-
-$$a=1+2$$ {#eqn3}
-
-=@eqn3 {.capitalize}
-
-a b
-- -
-1 2
-
-Table: Caption {#tbl1}
-
-+@tbl1
-
-![a caption](_static/example.jpg){#fig1}
-
-![a caption](_static/main_image.png)
-
-+@fig1
 
 ```{python}
 a=1

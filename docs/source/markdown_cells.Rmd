@@ -21,6 +21,8 @@ jupyter:
     name: python3
 ---
 
+.. _markdown_cells:
+
 # Writing Markdown
 
 In IPyPublish, all Markdown content is converted *via* [Pandoc](https://pandoc.org/).
