@@ -96,7 +96,7 @@ def process_citations(element, doc):
         if classes or attributes:
             classes.append(ATTRIBUTE_CITE_CLASS)
             final_content.append(pf.Span(subel,
-                                         classes=list(set(classes)),
+                                         classes=sorted(set(classes)),
                                          attributes=attributes))
         else:
             final_content.append(subel)

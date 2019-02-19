@@ -37,13 +37,13 @@ def test_para_html():
 
     assert out_string.strip() == "\n".join([
         '<p>'
-        '<span class="class attribute-Cite" '
+        '<span class="attribute-Cite class" '
         'data-latex="cref" data-rst="numref" data-a="1">'
         '<span class="citation" data-cites="label">@label</span>'
         '</span> '
         'xyz '
         '<em><span class="citation" data-cites="label2">@label2</span></em> '
-        '<span class="b attribute-Cite">'
+        '<span class="attribute-Cite b">'
         '<span class="citation" data-cites="label3">@label3</span>'
         '</span>'
         '</p>',
@@ -100,7 +100,7 @@ def test_image_html():
         '<img src="path/to/image.png" alt="a title with a @label1 @label2" />'
         '<figcaption>a title with a '
         '<span class="citation" data-cites="label1">@label1</span> '
-        '<span class="nclass attribute-Cite" '
+        '<span class="attribute-Cite nclass" '
         'data-latex="cref" data-rst="numref" data-x="3">'
         '<span class="citation" data-cites="label2">@label2</span>'
         '</span></figcaption>',
