@@ -55,49 +55,46 @@ def format_math(math, doc):
     if not isinstance(math, pf.Math):
         return None
 
+    if math.format != "DisplayMath":
+        return None
+
     span = None
+    number = ""
+    env = "equation"
+    label_tag = ""
     if (isinstance(math.parent, pf.Span)
             and LABELLED_MATH_CLASS in math.parent.classes):
         span = math.parent
 
-    if doc.format in ("tex", "latex", "rst"):
-
-        if math.format != "DisplayMath":
-            return None
-
-        # construct latex environment
-        if span:
-            number = '*' if "unnumbered" in span.classes else ''
-            env = span.attributes.get("env", "equation")
-            if doc.format in ("tex", "latex"):
-                label_tag = "\\label{{{0}}}".format(span.identifier)
-            else:
-                label_tag = ""
+        number = '*' if "unnumbered" in span.classes else ''
+        env = span.attributes.get("env", "equation")
+        if doc.format in ("tex", "latex"):
+            label_tag = "\\label{{{0}}}".format(span.identifier)
         else:
-            number = ""
-            env = "equation"
             label_tag = ""
 
-        tex = '\\begin{{{0}{1}}}{2}{3}\\end{{{0}{1}}}'.format(
-            env, number, math.text, label_tag)
+    # construct latex environment
+    tex = '\\begin{{{0}{1}}}{2}{3}\\end{{{0}{1}}}'.format(
+        env, number, math.text, label_tag)
 
-        if doc.format in ("tex", "latex"):
-            return pf.RawInline(tex, format="tex")
+    if doc.format in ("tex", "latex"):
+        return pf.RawInline(tex, format="tex")
 
-        elif doc.format in ("rst"):
-            if not span:
-                rst = '\n\n.. math::\n   :nowrap:\n\n   {0}\n\n'.format(tex)
-            else:
-                rst = (
-                    '\n\n.. math::\n   :nowrap:\n   :label: {0}'
-                    '\n\n   {1}\n\n'.format(span.identifier, tex))
-            return pf.RawInline(rst, format="rst")
+    elif doc.format in ("rst"):
+        if not span:
+            rst = '\n\n.. math::\n   :nowrap:\n\n   {0}\n\n'.format(tex)
+        else:
+            rst = (
+                '\n\n.. math::\n   :nowrap:\n   :label: {0}'
+                '\n\n   {1}\n\n'.format(span.identifier, tex))
+        return pf.RawInline(rst, format="rst")
 
     elif doc.format in ('html', 'html5'):
         # new_span = pf.Span(anchor_start, math, anchor_end)
         # TODO add formatting
         # TODO name by count
         if span:
+            math.text = tex
             return _wrap_in_anchor(math, span.identifier)
         else:
             return None
@@ -218,6 +215,7 @@ def format_table(table, doc):
         attributes["widths"] = widths
 
     if doc.format in ("tex", "latex"):
+        # TODO placement
         table.caption.append(pf.RawInline(
             '\\label{{{0}}}'.format(div.identifier), format="tex"))
         return table

@@ -17,7 +17,7 @@ in the form; ``{#id .class-name a="an attribute"}``
 
 For example:
 
-    '$a=1$ {#a b=$2$}'
+    '$$a=1$$ {#a b=$2$}'
 
 
 would be converted to this html:

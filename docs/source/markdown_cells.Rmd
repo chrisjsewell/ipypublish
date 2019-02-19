@@ -197,27 +197,146 @@ jupyter:
 
 ## Labelling, Formatting and Referencing Figures, Tables and Equations
 
-`ipubpandoc` allows for figures, tables and equations to be labelled and
-referenced *via* '@ notation'.
+`ipubpandoc` allows for figures, tables, equations and references to be
+supplied with an 'attribute container'. This is a braced section to the side
+of the figures, equations, reference or table caption, that
+parses on additional information to the formatter,
+e.g. `{#id .class-name attribute1=10}`.
 
-To create a label, simply add `{#label}` to the side of the figure or equation,
-or to the side of a table's caption. 
-Labels can also have *classes* and *attributes*, which parse on additional information to the formatter, e.g. `{#label .numbered width=10}`.
+Attribute containers are turned on by default, but if you wish to turn them
+off, simply add to the document metadata:
+
+```yaml
+jupyter:
+  ipub:
+    pandoc:
+      at_notation: false
+```
+
+### Figures
+
+Figures can have an identifier and a width or height.
+Additionally, `placement` will be used by LaTeX output.
 
 ```md
-![image caption](_static/example.jpg){#fig:example}
+![Image caption](_static/example.jpg){#fig:example width=50% placement='H'}
 
 @fig:example
 ```
 
-![image caption](_static/example.jpg){#fig:example}
+![Image caption](_static/example.jpg){#fig:example width=50% placement='H'}
 
-+@fig:example
+### Tables
+
+Tables can have an identifier and relative widths (per column).
+Additionally, `align` will be used by LaTeX and HTML to set the alignment of the columns (l=left, r=right, c=center)
 
 Column 1 Column 2
 -------- --------
 1          2
 
-Table: table caption {#tbl:example align=rc widths=[0.5,0.5]}
+Table: Table caption {#tbl:example align=rc widths=[0.5,0.5]}
 
-+@tbl:example
+### Equations
+
+Equations can have an identifier and an `env` denoting the
+[amsmath environment](https://www.overleaf.com/learn/latex/Aligning_equations_with_amsmath).
+
+```md
+$$2x &=  8 \\ 3x + 9y &= -12$$ {#eqn:example2 env=align}
+```
+
+$$2x &=  8 \\ 3x + 9y &= -12$$ {#eqn:example2 env=align}
+
+.. note::
+
+    Labelled math must be 'display math', rather than inline, i.e. wrapped in double dollars.
+
+### References
+
+Pandoc references are start with @ and multiple references can be wrapped in square brackets:
+
+```md
+Citation [@zelenyak_molecular_2016; @kirkeminde_thermodynamic_2012]
+```
+
+Citation [@zelenyak_molecular_2016; @kirkeminde_thermodynamic_2012]
+
+References can have attributes; `latex` (defining the LaTeX tag to use),
+`rst` (defining the RST role to use) and class `.capital` (defining if HTML naming if capitalized)
+
+```md
+@fig:example {.capital latex=cref rst=numref}, [@eqnlabel;@eqn:example2] {latex=eqref rst=eq}
+```
+
+@fig:example {.capital latex=cref rst=numref}, [@eqnlabel;@eqn:example2] {latex=eqref rst=eq}
+
+A number of prefixes are available, as shorthand's to define attributes:
+
+prefix attribute
+------ -----------------------
+""     {latex=cite rst=cite}
+"+"    {latex=cref rst=numref}
+"!"    {latex=ref rst=ref}
+"="    {latex=eqref rst=eq}
+"?"    {.capital latex=Cref rst=numref}
+
+Table: Prefixes for reference attributes {#tbl:prefixes}
+
+```md
+?@fig:example, =[@eqnlabel;@eqn:example2]
+```
+
+?@fig:example, =[@eqnlabel;@eqn:example2]
+
+
+## A Note on Implementation
+
+To assign attributes to items, we use a preparation filter, to extract prefixes and attributes, and wrap the items in a Span containing them.
+For example:
+
+```md
+$$a=1$$ {#a env=align}
+```
+
+will be transformed to:
+
+```html
+<p>
+<span id="a" class="labelled-Math" data-env="align">
+<br />
+<span class="math display">
+<em>a</em> = 1
+</span>
+<br />
+</span>
+</p>
+```
+
+and
+
+```md
+"+@label{ .class a=1} xyz *@label2* @label3{ .b}"
+```
+
+will be transformed to:
+
+```html
+<p>
+<span class="attribute-Cite class"
+data-latex="cref" data-rst="numref" data-a="1">
+<span class="citation" data-cites="label">
+@label
+</span></span>
+xyz 
+<em><span class="citation" data-cites="label2">
+@label2
+</span></em> 
+<span class="attribute-Cite b">
+<span class="citation" data-cites="label3">
+@label3
+</span></span>
+</p>
+```
+
+Formatter filters, then look for these parent spans, to provide identifiers, classes and attributes.

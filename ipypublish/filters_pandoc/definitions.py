@@ -27,7 +27,7 @@ PREFIX_MAP = (
         ("attributes", (("latex", "eqref"), ("rst", "eq")))
     )),
     ("?", (
-        ("classes", ("capital")),
+        ("classes", ("capital",)),
         ("attributes", (("latex", "Cref"), ("rst", "numref")))
     )),
 )
