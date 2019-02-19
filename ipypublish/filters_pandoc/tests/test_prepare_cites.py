@@ -25,8 +25,8 @@ def test_para_rst():
     ])
 
 
-@pytest.mark.skipif((3, 0) < sys.version_info < (3, 6),
-                    reason="html attributes not in sorted order")
+# @pytest.mark.skipif(sys.version_info < (3, 6),
+#                     reason="html attributes not in same order")
 def test_para_html():
     """
     """
@@ -37,7 +37,8 @@ def test_para_html():
 
     assert out_string.strip() == "\n".join([
         '<p>'
-        '<span class="class attribute-Cite" data-prefix="+" data-a="1">'
+        '<span class="class attribute-Cite" '
+        'data-latex="cref" data-rst="numref" data-a="1">'
         '<span class="citation" data-cites="label">@label</span>'
         '</span> '
         'xyz '
@@ -49,6 +50,8 @@ def test_para_html():
     ])
 
 
+# @pytest.mark.skipif(sys.version_info < (3, 6),
+#                     reason="html attributes not in same order")
 def test_table_html():
     """
     """
@@ -64,7 +67,7 @@ def test_table_html():
     assert out_string.strip() == "\n".join([
          '<table>',
          '<caption>Caption '
-         '<span class="attribute-Cite" data-prefix="+">'
+         '<span class="attribute-Cite" data-latex="cref" data-rst="numref">'
          '<span class="citation" data-cites="label">@label</span>'
          '</span></caption>',
          '<thead>',
@@ -83,8 +86,8 @@ def test_table_html():
     ])
 
 
-@pytest.mark.skipif((3, 0) < sys.version_info < (3, 6),
-                    reason="html attributes not in sorted order")
+# @pytest.mark.skipif(sys.version_info < (3, 6),
+#                     reason="html attributes not in same order")
 def test_image_html():
 
     in_string = [
@@ -97,9 +100,9 @@ def test_image_html():
         '<img src="path/to/image.png" alt="a title with a @label1 @label2" />'
         '<figcaption>a title with a '
         '<span class="citation" data-cites="label1">@label1</span> '
-        '<span class="nclass attribute-Cite" data-prefix="+" data-x="3">'
+        '<span class="nclass attribute-Cite" '
+        'data-latex="cref" data-rst="numref" data-x="3">'
         '<span class="citation" data-cites="label2">@label2</span>'
         '</span></figcaption>',
         '</figure>'
         ])
-

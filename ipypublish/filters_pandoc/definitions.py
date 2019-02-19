@@ -8,14 +8,37 @@ CONVERTED_CITE_CLASS = "converted-Cite"
 CONVERTED_DIRECTIVE_CLASS = "converted-rst-dir"
 CONVERTED_OTHER_CLASS = "converted-Other"
 
-# NB: it appears '-' is already used by sphinx, but '?' and '*' are also viable
-PREFIX_ALLOWED = ('+', '!', '=', '?')
-PREFIX_MAP_LATEX = (('+', 'cref'), ('?', 'Cref'),
-                    ('!', 'ref'), ('=', 'eqref'), ("", "cite"))
+# NB: it appears '-' and '^' are already used by sphinx
+PREFIX_MAP = (
+    ("", (
+        ("classes", ()),
+        ("attributes", (("latex", "cite"), ("rst", "cite")))
+    )),
+    ("+", (
+        ("classes", ()),
+        ("attributes", (("latex", "cref"), ("rst", "numref")))
+    )),
+    ("!", (
+        ("classes", ()),
+        ("attributes", (("latex", "ref"), ("rst", "ref")))
+    )),
+    ("=", (
+        ("classes", ()),
+        ("attributes", (("latex", "eqref"), ("rst", "eq")))
+    )),
+    ("?", (
+        ("classes", ("capital")),
+        ("attributes", (("latex", "Cref"), ("rst", "numref")))
+    )),
+)
+
+# PREFIX_ALLOWED = ('+', '!', '=', '?')
+# PREFIX_MAP_LATEX = (('+', 'cref'), ('?', 'Cref'),
+#                     ('!', 'ref'), ('=', 'eqref'), ("", "cite"))
 PREFIX_MAP_LATEX_R = (('cref', '+'), ('Cref', '?'),
                       ('ref', '!'), ('eqref', '='), ("cite", ""))
-PREFIX_MAP_RST = (('+', 'numref'), ('?', 'numref'), ('!', 'ref'),
-                  ('=', 'eq'), ("", "cite"))
+# PREFIX_MAP_RST = (('+', 'numref'), ('?', 'numref'), ('!', 'ref'),
+#                   ('=', 'eq'), ("", "cite"))
 PREFIX_MAP_RST_R = (('numref', '+'), ('ref', '!'), ('eq', '='), ("cite", ""))
 
 CITE_HTML_NAMES = (

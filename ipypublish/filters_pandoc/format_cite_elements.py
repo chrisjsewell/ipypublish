@@ -9,7 +9,7 @@ import panflute as pf
 
 from ipypublish.filters_pandoc.definitions import (
     ATTRIBUTE_CITE_CLASS, CONVERTED_CITE_CLASS,
-    PREFIX_MAP_LATEX, PREFIX_MAP_RST, IPUB_META_ROUTE, CITE_HTML_NAMES
+    IPUB_META_ROUTE, CITE_HTML_NAMES
 )
 from ipypublish.filters_pandoc.html_bib import (
     read_bibliography, process_bib_entry
@@ -36,12 +36,9 @@ def format_cites(cite, doc):
             and ATTRIBUTE_CITE_CLASS in cite.parent.classes):
         span = cite.parent
 
-        if "prefix" in span.attributes:
-            cite_tag = dict(PREFIX_MAP_LATEX).get(
-                span.attributes["prefix"], cite_tag)
-            cite_role = dict(PREFIX_MAP_RST).get(
-                span.attributes["prefix"], cite_role)
-            html_capitalize = "capitalize" in span.classes
+        cite_tag = span.attributes.get("latex", cite_tag)
+        cite_role = span.attributes.get("rst", cite_role)
+        html_capitalize = "capital" in span.classes
 
     if (cite_role == "numref" and
             (not doc.get_metadata(IPUB_META_ROUTE + ".use_numref", False))):

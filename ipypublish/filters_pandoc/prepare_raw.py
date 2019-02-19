@@ -7,8 +7,8 @@ from panflute import Element, Doc, Cite, RawInline, Link  # noqa: F401
 import panflute as pf
 
 from ipypublish.filters_pandoc.definitions import (
-    PREFIX_MAP_LATEX_R, PREFIX_MAP_RST_R, ATTRIBUTE_CITE_CLASS,
-    IPUB_META_ROUTE, RST_KNOWN_ROLES, RAWSPAN_CLASS, RAWDIV_CLASS,
+    ATTRIBUTE_CITE_CLASS, PREFIX_MAP, PREFIX_MAP_LATEX_R, PREFIX_MAP_RST_R,
+    RST_KNOWN_ROLES, RAWSPAN_CLASS, RAWDIV_CLASS,
     CONVERTED_CITE_CLASS, CONVERTED_OTHER_CLASS, CONVERTED_DIRECTIVE_CLASS
 )
 from ipypublish.filters_pandoc.utils import (
@@ -21,13 +21,17 @@ def create_cite_span(identifiers, rawformat, is_block,
     citations = [pf.Citation(
         identifier
     ) for identifier in identifiers]
-    attributes = {"raw-format": rawformat, "prefix": prefix}
+    pmapping = dict(dict(PREFIX_MAP)[prefix])
+    classes = list(pmapping["classes"])
+    classes += [RAWSPAN_CLASS, CONVERTED_CITE_CLASS, ATTRIBUTE_CITE_CLASS]
+    attributes = dict(pmapping["attributes"])
+    attributes["raw-format"] = rawformat
     if alt is not None:
         attributes["alt"] = str(alt)
     cite = Cite(citations=citations)
     span = pf.Span(
         cite,
-        classes=[RAWSPAN_CLASS, CONVERTED_CITE_CLASS, ATTRIBUTE_CITE_CLASS],
+        classes=classes,
         attributes=attributes
     )
     if is_block:

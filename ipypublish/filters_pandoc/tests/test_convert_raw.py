@@ -4,10 +4,10 @@ from ipypublish.filters_pandoc import (prepare_raw,
                                        format_raw_spans)
 
 
-# def test_mkdown_hlink_to_rst():
-#     out_string = apply_filter(
-#         "[a link](https://pandoc.org/filters.html)", [], "rst")
-#     assert out_string == "`a link <https://pandoc.org/filters.html>`__"
+def test_mkdown_hlink_to_rst():
+    out_string = apply_filter(
+        "[a link](https://pandoc.org/filters.html)", [], "rst")
+    assert out_string == "`a link <https://pandoc.org/filters.html>`__"
 
 
 def test_latex_to_rst():

@@ -39,7 +39,7 @@ import panflute as pf
 from ipypublish.filters_pandoc.utils import (
     find_attributes, get_pf_content_attr)
 from ipypublish.filters_pandoc.definitions import (
-    ATTRIBUTE_CITE_CLASS, IPUB_META_ROUTE, PREFIX_ALLOWED)
+    ATTRIBUTE_CITE_CLASS, IPUB_META_ROUTE, PREFIX_MAP)
 
 
 def process_citations(element, doc):
@@ -73,8 +73,13 @@ def process_citations(element, doc):
 
         # check if the cite has a valid prefix, if so extract it
         if (isinstance(subel.prev, pf.Str) and subel.prev.text
-                and (subel.prev.text[-1] in PREFIX_ALLOWED)):
-            attributes["prefix"] = subel.prev.text[-1]
+                and (subel.prev.text[-1] in dict(PREFIX_MAP))):
+
+            prefix = subel.prev.text[-1]
+            mapping = dict(dict(PREFIX_MAP)[prefix])
+            classes.extend(mapping["classes"])
+            attributes.update(mapping["attributes"])
+
             # remove prefix from preceding string
             string = final_content.pop()
             if len(string.text) > 1:
@@ -83,7 +88,7 @@ def process_citations(element, doc):
         # check if the cite has a preceding class/attribute container
         attr_dict = find_attributes(subel, allow_space=True)
         if attr_dict:
-            classes = attr_dict["classes"]
+            classes.extend(attr_dict["classes"])
             attributes.update(attr_dict["attributes"])
             skip = len(attr_dict["elements"])
             append = attr_dict["append"]
@@ -91,11 +96,11 @@ def process_citations(element, doc):
         if classes or attributes:
             classes.append(ATTRIBUTE_CITE_CLASS)
             final_content.append(pf.Span(subel,
-                                         classes=classes,
+                                         classes=list(set(classes)),
                                          attributes=attributes))
         else:
             final_content.append(subel)
-        
+
         if append:
             final_content.append(append)
 
