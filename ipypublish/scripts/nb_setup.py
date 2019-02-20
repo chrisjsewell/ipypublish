@@ -22,7 +22,6 @@ usage:
 # from __future__ import print_function as _print_function
 import json
 from io import BytesIO
-from shutilwhich import which
 
 # from IPython.display import Image, Latex
 
@@ -201,6 +200,7 @@ def setup_matplotlib(
     from IPython import get_ipython
     from IPython.display import set_matplotlib_formats
     import matplotlib as mpl
+    from shutilwhich import which
 
     ipython = get_ipython()
     latex_available = which('latex') is not None
