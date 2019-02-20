@@ -6,7 +6,7 @@
     # TODO instead of filtering output/input cells/types could just mark them with e.g. :hidden: field
     # TODO allow slide cells in rst but wrap them in directive
     # TODO slide content control and creation (see https://github.com/tell-k/sphinxjp.themes.revealjs)
-    # NOTE adding a toc not in separate index.rst doesn't work at mooment https://github.com/sphinx-doc/sphinx/issues/2103
+    # NOTE adding a toc not in separate index.rst doesn't work at moment https://github.com/sphinx-doc/sphinx/issues/2103
 
     "globals": |
         {# re-route ipub metadata into resources, so we can use it in post-processing #}
@@ -246,7 +246,10 @@
             .. figure:: {{ output.metadata.filenames[datatype] | posix_path }}
                 :alt: {{ output.metadata.filenames[datatype] | posix_path | basename }}
                 :align: center
-        {%- if datatype in output.metadata %}
+        {%- if "width" in ipubfigure %}
+        {%- set width = ipubfigure.get("width") %}
+                :width: {{ width * 100 }}%
+        {%- elif datatype in output.metadata %}
         {%- set width = output.metadata[datatype].width %}
         {%- if width %}
                 :width: {{ width }}

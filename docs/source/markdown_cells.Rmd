@@ -1,6 +1,24 @@
 ---
 jupyter:
   ipub:
+    language: british
+    toc: true
+    listcode: true
+    listfigures: true
+    listtables: true
+    titlepage:
+      author: Chris Sewell
+      email: chrisj\_sewell@hotmail.com
+      logo: _static/logo_example.png
+      title: Example of Converted Jupyter Notebook 
+      subtitle: Formatting Markdown Cells
+      tagline: Converted using IPyPublish.
+      supervisors:
+      - First Supervisor
+      - Second Supervisor
+      institution:
+      - Institution1
+      - Institution2
     pandoc:
       convert_raw: true 
       hide_raw: false
@@ -45,6 +63,8 @@ notebook conversion process, and so can be used as a standalone process on any m
 $ pandoc -f markdown -t html --filter ipubpandoc path/to/file.md
 ```
 
+.. _jupytext_rmarkdown:
+
 ## Converting Notebooks to RMarkdown
 
 RMarkdown is a plain text representation of the workbook.
@@ -87,18 +107,20 @@ jupyter:
 .. important::
 
     To preserve ipypublish notebook metadata, you must add:
-    `{"jupytext": {"metadata_filter": "notebook": "ipub"}}` to
-    your notebooks metadata.
+    `{"jupytext": {"metadata_filter": {"notebook": "ipub"}}}` to
+    your notebooks metadata before conversion.
 
 .. note::
 
     If a file with a .Rmd extension is supplied to
-    `nbpublish`, it will automatically call `jupytext`.
+    `nbpublish`, it will automatically call `jupytext` and convert it.
     So it is possible to only ever write in the RMarkdown format!
 
 .. seealso::
 
-    [Using YAML metadata blocks in Pandoc](https://pandoc.org/MANUAL.html#extension-yaml_metadata_block)
+    [Using YAML metadata blocks in Pandoc](https://pandoc.org/MANUAL.html#extension-yaml_metadata_block).
+
+    :ref:`jupytext_python`
 
 
 ## Working with RMarkdown files
@@ -215,6 +237,10 @@ jupyter:
       at_notation: false
 ```
 
+.. tip::
+
+    Zero or more Space is generally allowed between the element and the attribute container.
+
 ### Figures
 
 Figures can have an identifier and a width or height.
@@ -291,6 +317,9 @@ Table: Prefixes for reference attributes {#tbl:prefixes}
 
 ?@fig:example, =[@eqnlabel;@eqn:example2]
 
+.. tip::
+
+    Pandoc interprets `(@label)` as a [numbered example](https://pandoc.org/MANUAL.html#numbered-example-lists), so instead use `(@label{})`
 
 ## A Note on Implementation
 

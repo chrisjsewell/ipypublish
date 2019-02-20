@@ -1,3 +1,5 @@
+.. _metadata_tags:
+
 Metadata Tags
 =============
 
@@ -43,85 +45,8 @@ There are three levels of metadata:
 
     :ref:`nbformat:notebook_file_format`
 
+    :ref:`jupytext_python`
 
-Visualising Metadata
---------------------
-
-.. versionadded:: 0.7.0
-
-    To view all the metadata in a notebook, you can now use the
-    ``python_with_meta`` exporter.
-
-.. code-block:: console
-
-    nbpublish -f python_with_meta example.ipynb
-
-This will produce a standard python file, with metadata commented by ``#~~``
-and each cell beginning with ``#%%`` (known as the percent format):
-
-.. code-block:: python
-
-  #~~ language_info:
-    #~~   name: python
-    #~~   nbconvert_exporter: python
-    #~~   pygments_lexer: ipython3
-    #~~   version: 3.6.1
-
-  #%% [markdown]
-  #~~ {}
-  # # Document Title
-
-  #%%
-  #~~ ipub:
-  #~~   figure:
-  #~~     caption: A nice picture.
-  #~~     label: fig:example
-  #~~     placement: '!bh'
-  Image('example.jpg',height=400)
-
-Alternatively, you can use the excellent
-`jupytext <https://github.com/mwouts/jupytext>`_ package, to convert between
-a notebook and `percent format <https://github.com/mwouts/jupytext#the-percent-format>`_.
-Simply add, this section to the notebook-level metadata:
-
-.. code-block:: json
-
-   {
-      "jupytext": {
-        "metadata_filter": {
-          "notebook": "ipub"
-        }
-      }
-   }
-
-and run:
-
-.. code-block:: console
-
-    jupytext --to py:percent notebook.py
-
-Then, after altering the python file, run:
-
-.. code-block:: console
-
-    jupytext --to notebook notebook.py              # overwrite notebook.ipynb (remove outputs)
-    jupytext --to notebook --update notebook.py     # update notebook.ipynb (preserve outputs)
-
-The `percent format <https://github.com/mwouts/jupytext#the-percent-format>`_
-can be utilised in IDEs, such as
-`Spyder <https://docs.spyder-ide.org/editor.html#defining-code-cells>`_,
-`Atom <https://atom.io/packages/hydrogen>`_,
-`PyCharm <https://www.jetbrains.com/pycharm/>`_, and
-`VS Code <https://code.visualstudio.com/docs/python/jupyter-support>`_,
-to run individual cells:
-
-.. figure:: _static/vscode_python.png
-    :align: center
-    :height: 350px
-    :alt: alternate text
-    :figclass: align-center
-
-    Running Python File in VS Code
 
 Document Level
 --------------

@@ -214,7 +214,7 @@ def setup_matplotlib(
     return mpl.pyplot
 
 
-def setup_pandas(escape_latex=True, use_longtable=False):
+def setup_pandas(escape_latex=False, use_longtable=False):
     """ import and setup pandas in the jupyter notebook
 
     Parameters
