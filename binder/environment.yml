@@ -1,0 +1,12 @@
+name: ipypublish-environment
+channels:
+  - conda-forge
+dependencies:
+  - python==3.6
+  - numpy
+  - matplotlib
+  - pandas
+  - sympy<1.3
+  - pillow
+  - pip:
+    - ipypublish
