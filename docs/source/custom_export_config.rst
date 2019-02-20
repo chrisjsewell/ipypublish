@@ -1,5 +1,7 @@
-Custom Export Configurations
-============================
+.. _customise_conversion:
+
+Customising the Conversion Process
+==================================
 
 The simplest application of this, would be to copy
 :ref:`latex_ipypublish_all.json <latex_ipypublish_all>`
@@ -14,7 +16,7 @@ needs, then run:
 The Conversion Process
 ----------------------
 
-iPyPublish uses export configuration files to control how the Notebook(s)
+IPyPublish uses export configuration files to control how the Notebook(s)
 will be exported. As shown in the figure below, they define two key components:
 
 1. The export class, and its associated pre-processors and filter functions.

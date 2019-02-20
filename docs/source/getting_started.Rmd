@@ -48,9 +48,7 @@ seamlessly switch between them:
 2. :ref:`markdown_cells`
 3. :ref:`notebook_conversion`
 
-
-Installation
-------------
+## Installation
 
 Using [Conda](https://conda.io/docs/) is recommended for package
 management, in order to create self contained environments with specific
@@ -124,6 +122,19 @@ $ nbpublish -pdf -lb -f latex_ipypublish_nocode path/to/notebook.ipynb
 
 For a more detailed explanation see the
 `notebook_conversion`{.interpreted-text role="ref"} section.
+
+.. important::
+
+    The default conversion (``latex_ipypublish_main``) will **NOT**
+    output any cells that are not tagged with metadata.
+    To output all notebook content by default, use ``_ipypublish_all``.
+
+.. tip::
+
+    For existing notebooks: the **nb_ipypublish_all** and
+    **nb_ipypublish_nocode** converters (see below) can be helpful for
+    outputting a notebook, with identical content to that input, but with
+    default metatags defining how content is to be output.
 
 The **nbpresent** script additionally handles serving
 [reveal.js](http://lab.hakim.se/reveal-js/#/) slides to a webbrowser.

@@ -60,7 +60,7 @@ MPL_OPTIONS = (
     ('font.serif', 'cm'),
     ('font.size', 16),
     ('text.usetex', True),
-    ('text.latex.unicode', False),
+    # ('text.latex.unicode', False),
     ('text.latex.preamble', (
      '\\usepackage{subdepth}', '\\usepackage{type1cm}')),
     ('text.latex.preview', False),
