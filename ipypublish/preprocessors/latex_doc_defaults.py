@@ -54,9 +54,15 @@ class MetaDefaults(Preprocessor):
 
     """
 
-    nb_defaults = traits.Dict(default_value={}, help='dict of notebook level defaults').tag(config=True)
-    cell_defaults = traits.Dict(default_value={}, help='dict of cell level defaults').tag(config=True)
-    overwrite = traits.Bool(False, help="whether existing values should be overwritten").tag(config=True)
+    nb_defaults = traits.Dict(
+        default_value={},
+        help='dict of notebook level defaults').tag(config=True)
+    cell_defaults = traits.Dict(
+        default_value={},
+        help='dict of cell level defaults').tag(config=True)
+    overwrite = traits.Bool(
+        False,
+        help="whether existing values should be overwritten").tag(config=True)
 
     def preprocess(self, nb, resources):
 
@@ -74,13 +80,25 @@ class MetaDefaults(Preprocessor):
                 dct[keys[-1]] = val
 
         for cell in nb.cells:
+
             for keys, val in flatten(self.cell_defaults).items():
                 dct = cell.metadata
+                leaf_not_dict = False
                 for key in keys[:-1]:
                     if key not in dct:
                         dct[key] = NotebookNode({})
+                    elif dct[key] is False and self.overwrite:
+                        dct[key] = NotebookNode({})
+                    elif dct[key] is True:
+                        dct[key] = NotebookNode({})
+                    elif not hasattr(dct[key], 'items'):
+                        leaf_not_dict = True
+                        break
                     dct = dct[key]
-                if keys[-1] not in dct:
+
+                if leaf_not_dict:
+                    pass
+                elif keys[-1] not in dct:
                     dct[keys[-1]] = val
                 elif self.overwrite:
                     dct[keys[-1]] = val

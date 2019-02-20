@@ -31,10 +31,8 @@ There are three levels of metadata:
 -  For output level: using
    ``IPython.display.display(obj,metadata={"ipub":{}})``, you can set
    metadata specific to a certain output. Options set at the output
-   level will override options set at the cell level. for an example of
-   this, download and run the
-   :download:`MultiOutput_Example.ipynb <../../example/notebooks/MultiOutput_Example.ipynb>`.
-
+   level will override options set at the cell level. For an example of
+   this, see :ref:`multiple_outputs`.
 
 .. important::
 
@@ -408,48 +406,6 @@ For **slide output**:
 
 -  the value of slide can be true, “new” (to indicate the start of a new
    slide) or “notes”
-
-Object Output Formats
-~~~~~~~~~~~~~~~~~~~~~
-
-The format of the Jupyter Notebook (.ipynb) file allows for the storage
-of a single output in multiple formats. This is taken advantage of by
-packages such as matplotlib and pandas, etc to store a figure/table in
-both latex and html formats, which can then be selected by ipypublish
-based on the document type required.
-
-Sometimes a user may wish to have greater control over the output format
-and/or which output types are to be stored. It it possible to achieve
-this *via* the Jupyter ``display`` function. For example, if we wanted
-to display a pandas.DataFrame table without the index column, such that
-it can be output to both a pdf and html document:
-
-.. code:: python
-
-   from IPython.display import display
-   import pandas as pd
-   import numpy as np
-   df = pd.DataFrame(np.random.random((3, 3)))
-   latex = df.to_latex(index=False)
-   html = df.to_html(index=False)
-   display({'text/latex': latex,
-            'text/html': html}, raw=True)
-
-If you wish to create your own object with multiple output formats, you
-should create a class with multiple ``_repr_*_()`` methods (as described
-`here <http://ipython.readthedocs.io/en/stable/config/integrating.html#rich-display>`__):
-
-.. code:: python
-
-   class MyObject(object):
-       def __init__(self, text):
-           self.text = text
-
-       def _repr_latex_(self):
-           return "\\textbf{" + self.text + "}"
-
-       def _repr_html_(self):
-           return "<b>" + self.text + "</b>"
 
 Captions in a Markdown cell
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~

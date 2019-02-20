@@ -12,7 +12,7 @@ jupyter:
       logo: _static/logo_example.png
       title: Example of Converted Jupyter Notebook 
       subtitle: Formatting Markdown Cells
-      tagline: Converted using IPyPublish.
+      tagline: Converted using IPyPublish ('latex_ipypublish_all.exec').
       supervisors:
       - First Supervisor
       - Second Supervisor

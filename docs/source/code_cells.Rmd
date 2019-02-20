@@ -12,7 +12,7 @@ jupyter:
       logo: _static/logo_example.png
       title: Example of Converted Jupyter Notebook 
       subtitle: Formatting Code Cells
-      tagline: Converted using IPyPublish.
+      tagline: Converted using IPyPublish ('latex_ipypublish_all.exec').
       supervisors:
       - First Supervisor
       - Second Supervisor
@@ -41,7 +41,7 @@ jupyter:
 
 # Writing Code and Formatting Output
 
-IPyPublish utilises metadata to to mark-up the notebook with information on
+IPyPublish utilises metadata to mark-up the notebook with information on
 how output should be represented in the converted notebook,
 as shown in :numref:`fig:mpl1`.
 
@@ -182,7 +182,7 @@ df.round(3)
     `escape_latex=True` will also escape math (e.g. `$\delta$`) causing it not
     to render.
 
-# Equations (with ipython or sympy)
+## Equations (with ipython or sympy)
 
 ```{python ipub={'equation': {'label': 'eqn:example_ipy'}}}
 from IPython.display import Latex
@@ -195,4 +195,79 @@ f = sym.Function('f')
 y,n = sym.symbols(r'y \alpha')
 f = y(n)-2*y(n-1/sym.pi)-5*y(n-2)
 sym.rsolve(f,y(n),[1,4])
+```
+
+## Object Output Formats
+
+The format of the Jupyter Notebook file allows for the storage
+of a single output in multiple formats. This is taken advantage of by
+packages such as matplotlib and pandas, etc to store a figure/table in
+both latex and html formats, which can then be selected by ipypublish
+based on the document type required.
+
+Sometimes a user may wish to have greater control over the output format
+and/or which output types are to be stored. It it possible to achieve
+this *via* the Jupyter `display` function. For example, if we wanted
+to display a pandas.DataFrame table without the index column, such that
+it can be output to both a pdf and html document:
+
+```{python}
+from IPython.display import display
+df = pd.DataFrame(np.random.random((3, 3)))
+latex = df.to_latex(index=False)
+html = df.to_html(index=False)
+display({'text/latex': latex,
+        'text/html': html}, raw=True)
+```
+
+If you wish to create your own object with multiple output formats, you
+should create a class with multiple `_repr_*_()` methods:
+
+```{python ipub={'table': False, 'equation': False}}
+class MyObject(object):
+    def __init__(self, text):
+        self.text = text
+
+    def _repr_latex_(self):
+        return "\\textbf{LaTex: " + self.text + "}"
+
+    def _repr_html_(self):
+        return "<b>HTML: " + self.text + "</b>"
+
+MyObject('hallo')
+```
+
+.. seealso::
+
+    :ref:`nbformat:notebook_file_format`
+
+    [IPython Rich Display](http://ipython.readthedocs.io/en/stable/config/integrating.html#rich-display)
+
+.. _multiple_outputs:
+
+## Multiple Outputs from a Single Code Cell
+
+Similarly, with the Jupyter `display` functionality, you can control the output
+metadata for multiple outputs in a single code cell:
+
+```{python}
+from IPython.display import display
+from IPython.display import display_latex
+from IPython.display import display_markdown
+
+x = np.linspace(0, 3.42)
+
+for i in range(1,3):
+
+    display_markdown(
+      '### Code Created Heading {0}'.format(i), raw=True)
+
+    fig, ax = plt.subplots()
+    ax.plot(x, np.sin(x*i))
+    metadata={'ipub': {
+      'figure': {
+        'caption': 'Code Created Heading {0}'.format(i)}}}
+    display(fig, metadata=metadata)
+    plt.close()
+
 ```

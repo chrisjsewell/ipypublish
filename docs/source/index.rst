@@ -67,9 +67,9 @@ Badges
    code_cells
    markdown_cells
    nb_conversion
-   examples
    metadata_tags
    custom_export_config
+   examples
    applications
    additional_tools
    acknowledgements
