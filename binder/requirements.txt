@@ -3,4 +3,3 @@ matplotlib
 pandas
 sympy<1.3
 pillow
-ipypublish

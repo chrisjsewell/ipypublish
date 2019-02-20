@@ -337,7 +337,6 @@ ipysphinx_prolog = r"""
         | Interactive online version:
           :raw-html:`<a href="https://mybinder.org/v2/gh/chrisjsewell/ipypublish/{binderpath}?filepath={{{{ docname }}}}"><img alt="Binder badge" src="https://mybinder.org/badge_logo.svg" style="vertical-align:text-bottom"></a>`
         {{%- endif %}}
-
     __ https://github.com/chrisjsewell/ipypublish/{gitpath}/{{{{ docname }}}}
 
 """.format(gitpath=gitpath, binderpath=binderpath)
