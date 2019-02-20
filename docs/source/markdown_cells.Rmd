@@ -12,7 +12,7 @@ jupyter:
       logo: _static/logo_example.png
       title: Example of Converted Jupyter Notebook 
       subtitle: Formatting Markdown Cells
-      tagline: Converted using IPyPublish ('latex_ipypublish_all.exec').
+      tagline: Converted using IPyPublish ('latex\_ipypublish\_all.exec').
       supervisors:
       - First Supervisor
       - Second Supervisor
@@ -62,6 +62,10 @@ notebook conversion process, and so can be used as a standalone process on any m
 ```console
 $ pandoc -f markdown -t html --filter ipubpandoc path/to/file.md
 ```
+
+.. seealso::
+
+    [The PDF representation of this notebook](_static/markdown_cells.pdf)
 
 .. _jupytext_rmarkdown:
 

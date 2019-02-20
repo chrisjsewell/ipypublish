@@ -12,7 +12,7 @@ jupyter:
       logo: _static/logo_example.png
       title: Example of Converted Jupyter Notebook 
       subtitle: Formatting Code Cells
-      tagline: Converted using IPyPublish ('latex_ipypublish_all.exec').
+      tagline: Converted using IPyPublish ('latex\_ipypublish\_all.exec').
       supervisors:
       - First Supervisor
       - Second Supervisor
@@ -54,6 +54,8 @@ plt.show()
 ```
 
 .. seealso::
+
+    [The PDF representation of this notebook](_static/code_cells.pdf)
 
     :ref:`metadata_tags`, for a full description and list of ipypublish metadata
 
@@ -183,6 +185,8 @@ df.round(3)
     to render.
 
 ## Equations (with ipython or sympy)
+
+An ipython and sympy equation =[@eqn:example_ipy;@eqn:example_sympy].
 
 ```{python ipub={'equation': {'label': 'eqn:example_ipy'}}}
 from IPython.display import Latex
