@@ -13,3 +13,4 @@ ruamel.yaml
 panflute
 docutils
 jupytext
+shutilwhich

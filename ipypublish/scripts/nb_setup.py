@@ -22,6 +22,7 @@ usage:
 # from __future__ import print_function as _print_function
 import json
 from io import BytesIO
+from shutilwhich import which
 
 # from IPython.display import Image, Latex
 
@@ -177,24 +178,51 @@ MPL_OPTIONS = (
 
 
 def setup_matplotlib(
-    print_errors=False,
     output=('pdf', 'svg'),
-    rcparams=MPL_OPTIONS
+    rcparams=None,
+    usetex=True,
+    print_errors=False
 ):
-    """ import and setup matplotlib in the jupyter notebook"""
+    """ import and setup matplotlib in the jupyter notebook
+    
+    Parameters
+    ----------
+    output: tuple[str]
+        the output formats to save to the notebook
+    rcparams: None or dict
+        update default parameters set for matplotlib
+    usetex: bool
+        if True, and the 'latex' command is available,
+        create figures with LaTeX
+    print_errors: bool
+        print errors for unavailable rcparams
+
+    """
     from IPython import get_ipython
     from IPython.display import set_matplotlib_formats
     import matplotlib as mpl
 
     ipython = get_ipython()
+    latex_available = which('latex') is not None
+    # if not latex_available:
+    #     output = [o for o in output if o != "pdf"]
+
     set_matplotlib_formats(*output)
     ipython.magic("matplotlib inline")
     if 'svg' in output:
         ipython.magic("config InlineBackend.figure_format = 'svg'")
 
+    final_params = dict(MPL_OPTIONS)
+    if rcparams is not None:
+        final_params.update(rcparams)
+    if usetex and latex_available:
+        final_params.update({'text.usetex': True})
+    else:
+        final_params.update({'text.usetex': False})
+
     keyerrors = []
     valerrors = {}
-    for key, val in rcparams:
+    for key, val in final_params.items():
         try:
             mpl.rcParams[key] = val
         except KeyError:
