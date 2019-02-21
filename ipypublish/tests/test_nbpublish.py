@@ -251,7 +251,8 @@ def test_publish_run_all_plugins(temp_folder, ipynb1,
 
     if plugin_name in ["python_with_meta_stream", "sphinx_ipypublish_all.ext"]:
         return
-    if plugin_name in ["sphinx_ipypublish_all.run"]:
+    if plugin_name in [
+            "sphinx_ipypublish_all.run", "sphinx_ipypublish_main.run"]:
         assert os.path.exists(os.path.join(
             temp_folder, "build", "html",
             os.path.splitext(ipynb1.name)[0] + ".html"))

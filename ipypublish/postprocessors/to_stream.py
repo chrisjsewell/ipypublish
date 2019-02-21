@@ -29,7 +29,7 @@ class WriteStream(IPyPostProcessor):
         ["stdout", "stderr", "stdin"],
         default_value="stdout",
         help="where to write the output to"
-    )
+    ).tag(config=True)
 
     def run_postprocess(self, stream, filepath, resources):
 
