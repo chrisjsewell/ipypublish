@@ -1,4 +1,4 @@
-""" serve HTML page 
+""" serve HTML page
 TODO the RevealServer setting should be available at front end
 """
 

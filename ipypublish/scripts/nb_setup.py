@@ -183,7 +183,7 @@ def setup_matplotlib(
     print_errors=False
 ):
     """ import and setup matplotlib in the jupyter notebook
-    
+
     Parameters
     ----------
     output: tuple[str]

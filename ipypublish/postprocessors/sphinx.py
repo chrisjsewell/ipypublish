@@ -157,7 +157,7 @@ class RunSphinx(IPyPostProcessor):
         # this way overrides the logging
         # sphinx_build = find_entry_point("sphinx-build", "console_scripts",
         #                                 self.logger, "sphinx")
-        
+
         def log_process_output(pipe):
             for line in iter(pipe.readline, b''):
                 self.logger.info('{}'.format(

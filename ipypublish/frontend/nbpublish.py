@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 import logging
-import os
 import sys
 
 from ipypublish.frontend.shared import parse_options

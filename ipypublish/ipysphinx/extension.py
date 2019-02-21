@@ -27,7 +27,7 @@ def setup(app):
     Notes
     -----
 
-    TODO better latex output 
+    TODO better latex output
     but not really interested in this as it would be duplication of effort,
     and if much better todo ipynb -> tex, rather than ipynb -> rst -> tex
     TODO handling of svg in latex
@@ -172,7 +172,7 @@ def associate_single_extension(app, extension, suffix='jupyter_notebook',
     Notes
     -----
     The Ugly hack to modify source_suffix and source_parsers.
-    Once https://github.com/sphinx-doc/sphinx/pull/2209 
+    Once https://github.com/sphinx-doc/sphinx/pull/2209
     is merged it won't be necessary.
     See also https://github.com/sphinx-doc/sphinx/issues/2162.
 

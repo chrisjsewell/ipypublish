@@ -2,7 +2,6 @@ import os
 import logging
 
 from docutils.parsers import rst
-from six import string_types
 from ipypublish.utils import handle_error
 from ipypublish.ipysphinx.utils import import_sphinx
 from ipypublish.convert.main import IpyPubMain

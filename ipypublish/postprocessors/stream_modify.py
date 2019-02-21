@@ -47,7 +47,7 @@ class RemoveTrailingSpace(IPyPostProcessor):
 
 
 class FilterOutputFiles(IPyPostProcessor):
-    """ filter internal files in resources['outputs'], 
+    """ filter internal files in resources['outputs'],
     by those that are referenced in the stream """
     @property
     def allowed_mimetypes(self):

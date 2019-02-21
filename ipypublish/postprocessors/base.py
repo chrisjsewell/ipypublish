@@ -23,8 +23,8 @@ class IPyPostProcessor(Configurable):
         return a list of allowed mime types
         if None, then all are allowed
 
-        Text based mime-types include: text/plain, text/latex, 
-        text/restructuredtext, text/html, text/x-python, application/json, 
+        Text based mime-types include: text/plain, text/latex,
+        text/restructuredtext, text/html, text/x-python, application/json,
         text/markdown, text/asciidoc, text/yaml
 
         """
@@ -144,7 +144,7 @@ class IPyPostProcessor(Configurable):
         filepath: None or pathlib.Path
             the path to the output file
         resources: dict
-            a resources dict, output from exporter.from_notebook_node    
+            a resources dict, output from exporter.from_notebook_node
 
         Returns
         -------
@@ -165,8 +165,8 @@ class IPyPostProcessor(Configurable):
     def check_exe_exists(self, name, error_msg):
         """ test if an executable exists
         """
-        if not exe_exists('latexmk'):
-            handle_error(error_msg, RuntimeError)
+        if not exe_exists(name):
+            self.handle_error(error_msg, RuntimeError)
         return True
 
 

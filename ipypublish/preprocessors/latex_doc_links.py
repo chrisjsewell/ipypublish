@@ -116,7 +116,7 @@ class LatexDocLinks(Preprocessor):
         - path to nb.metadata.ipub.titlepage.logo (if present)
 
     4. If self.redirect_external=True,
-       redirects relative external file paths to self.filesfolder 
+       redirects relative external file paths to self.filesfolder
 
     """
 
