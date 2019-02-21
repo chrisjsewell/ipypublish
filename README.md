@@ -17,7 +17,7 @@ general user interface, but anyone using custom converter plugins will
 be required to update them (see [Plugin Conversion](https://ipypublish.readthedocs.io/en/latest/custom_export_config.html#conversion-of-plugins-from-old-api))
 
 
-![Conversion Process](/docs/source/_static/process.svg)
+![Conversion Process](/docs/source/_static/main_image.png)
 
 For an example of the potential input/output, see:
 [Example.ipynb](example/notebooks/Example.ipynb),
