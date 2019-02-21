@@ -81,7 +81,7 @@ class IPyPostProcessor(Configurable):
             the path to the output file
             the path does not have to exist, but must be absolute
         resources: None or dict
-            a resources dict, output from exporter.from_notebook_node   
+            a resources dict, output from exporter.from_notebook_node
 
         Returns
         -------

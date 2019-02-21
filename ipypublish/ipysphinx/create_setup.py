@@ -74,12 +74,12 @@ def make_index(toc_files, toc_depth=3, toc_title="Table of Contents",
     Parameters
     ----------
     toc_files: list[str]
-        list of file paths (relative to the index) 
+        list of file paths (relative to the index)
         to be included in the toc tree
     toc_depth=3: int
         depth of toc tree
     toc_title: str
-        title of toc tree 
+        title of toc tree
     toc_numbered=True: bool
         number sections and figures, tables, etc
     header: None or str
@@ -123,7 +123,6 @@ def make_index(toc_files, toc_depth=3, toc_title="Table of Contents",
         index_str.append(str(epilog))
 
     return "\n".join(index_str) + "\n"
-    
 
 
 if __name__ == "__main__":
@@ -136,4 +135,3 @@ if __name__ == "__main__":
     ))
 
     print(make_index(['path/to/file.rst'], header="Header"))
-
