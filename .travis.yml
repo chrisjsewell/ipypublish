@@ -66,8 +66,15 @@ matrix:
 # TODO add read the docs test `pip install .[docs] cd docs; make`
 
 before_install:
+# Pandoc
+- url="https://github.com/jgm/pandoc/releases/tag/2.6"
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then path=$(curl -L $url | grep -o '/jgm/pandoc/releases/download/.*-amd64\.deb') ; fi
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then downloadUrl="https://github.com$path" ; fi
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then file=${path##*/} ; fi
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then wget $downloadUrl && sudo dpkg -i $file ; fi
+# LaTeX
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update ; fi
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y pandoc ; fi
+# - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y pandoc ; fi
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y texlive ; fi
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y texlive-xetex ; fi
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y texlive-latex-extra ; fi
@@ -78,13 +85,11 @@ before_install:
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y latexmk ; fi
 - pip install -U pip setuptools wheel
 install:
-- travis_wait pip install -r requirements.txt
-- pip install -r test_requirements.txt
-- pip install .
+- travis_wait pip install .[tests,sphinx]
 - pip install --quiet coveralls
 script:
 # - nosetests -v --nocapture --with-doctest --with-coverage --exe --cover-package=ipypublish
-- pytest -v --cov=ipypublish --cov-report= ipypublish
+- pytest -v --cov=ipypublish --cov-config .coveragerc --cov-report= ipypublish
 - nbpublish -pdf --pdf-debug -log debug example/notebooks/Example.ipynb
 after_success:
 - coveralls

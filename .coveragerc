@@ -1,0 +1,6 @@
+[run]
+omit = 
+    ipypublish/ipysphinx/docutils_transforms.py
+    ipypublish/ipysphinx/extension.py
+    ipypublish/ipysphinx/directives.py
+    ipypublish/scripts/nb_setup.py

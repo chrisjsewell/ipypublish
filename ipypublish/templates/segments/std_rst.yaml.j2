@@ -34,6 +34,9 @@
     "notebook_input_unknown": |
         unknown type  {{cell.type}}
 
+    "notebook_output_all": |
+        {{ super() }}
+
     "notebook_output_error": |
         ::
 
@@ -41,6 +44,9 @@
 
     "notebook_output_traceback_line": |
         {{ line | indent | strip_ansi }}
+
+    "notebook_output_stream": |
+        {{ super() }}
 
     "notebook_output_stream_stdout": |
         .. parsed-literal::

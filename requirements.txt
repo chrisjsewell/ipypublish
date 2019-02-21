@@ -9,4 +9,8 @@ bibtexparser
 jsonextended>=0.7
 six
 jsonschema
-pyyaml
+ruamel.yaml
+panflute
+docutils
+jupytext
+shutilwhich

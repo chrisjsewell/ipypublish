@@ -23,6 +23,8 @@ if __name__ == "__main__":
     # uri = 'http://jinja.pocoo.org/docs/dev/objects.inv'
     uri = "http://nbconvert.readthedocs.io/en/latest/objects.inv"
     # uri = "http://nbformat.readthedocs.io/en/latest/objects.inv"
+    # uri = "https://docutils.readthedocs.io/en/sphinx-docs/objects.inv"
+    #uri = "https://traitlets.readthedocs.io/en/latest/objects.inv"
 
     # Read inventory into a dictionary
     inv = fetch_inventory(uri)

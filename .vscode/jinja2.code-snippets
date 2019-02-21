@@ -1,0 +1,76 @@
+{
+    "super": {
+        "prefix": "super",
+        "scope": "jinja,jinja-yaml,jinja-html",
+        "body": "{{ super() }}",
+        "description": "call inherited block"
+    },
+    "set": {
+        "prefix": "set",
+        "scope": "jinja,jinja-yaml,jinja-html",
+        "body": "{% set ${1:name} = ${2:value} %}",
+        "description": "set variable"
+    },   
+    "print": {
+        "prefix": "print",
+        "scope": "jinja,jinja-yaml,jinja-html",
+        "body": "{{ ${1:variable} }}",
+        "description": "print variable"
+    },   
+    "block": {
+        "prefix": "block",
+        "scope": "jinja,jinja-yaml,jinja-html",
+        "body": [
+          "{% block ${1:name} %}",
+          "$2",
+          "{% endblock ${1:name} %}"
+        ],
+        "description": "jinja block"
+    },
+    "macro": {
+        "prefix": "macro",
+        "scope": "jinja,jinja-yaml,jinja-html",
+        "body": [
+          "{% macro ${1:name} %}",
+          "$2",
+          "{% endmacro %}"
+        ],
+        "description": "macro function"
+    },
+    "if": {
+        "prefix": "if",
+        "scope": "jinja,jinja-yaml,jinja-html",
+        "body": [
+          "{% if ${1:condition} %}",
+          "$2",
+          "{% endif %}"
+        ],
+        "description": "if condition"
+    },
+    "if-else": {
+        "prefix": "if-else",
+        "scope": "jinja,jinja-yaml,jinja-html",
+        "body": [
+          "{% if ${1:condition} %}",
+          "$2",
+          "{% else %}",
+          "$3",
+          "{% endif %}"
+        ],
+        "description": "if-else condition"
+    },
+    "if-elif-else": {
+        "prefix": "if-elif-else",
+        "scope": "jinja,jinja-yaml,jinja-html",
+        "body": [
+          "{% if ${1:condition} %}",
+          "$2",
+          "{% else %}",
+          "$3",
+          "{% elif ${1:condition2} %}",
+          "",
+          "{% endif %}"
+        ],
+        "description": "if-else condition"
+    }
+}

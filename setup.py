@@ -10,8 +10,6 @@ from setuptools import setup, find_packages
 
 with open('requirements.txt') as f:
     requirements = f.read().splitlines()
-with open('test_requirements.txt') as f:
-    test_requirements = f.read().splitlines()
 
 with io.open('README.md') as readme:
     readme_str = readme.read()
@@ -25,10 +23,24 @@ setup(
     long_description=readme_str,
     long_description_content_type='text/markdown',
     install_requires=requirements,
-    tests_require=test_requirements,
     extras_require={
-        "docs": {
-            "sphinx"
+        "sphinx": {
+            "sphinx>=1.6",
+            "sphinxcontrib-bibtex"
+        },
+        "tests": {
+            "pytest>=3.6",
+            "pytest-cov",
+            "coverage",
+            "pillow",
+            "nbsphinx",
+            "ipykernel"
+        },
+        "science": {
+            "matplotlib",
+            "numpy",
+            "pandas",
+            "sympy"
         }
     },
     license='MIT',
@@ -64,7 +76,22 @@ setup(
     entry_points={
         'console_scripts': [
             'nbpublish = ipypublish.frontend.nbpublish:run',
-            'nbpresent = ipypublish.frontend.nbpresent:run'
+            'nbpresent = ipypublish.frontend.nbpresent:run',
+            'ipubpandoc = ipypublish.filters_pandoc.main:pandoc_filters'
+        ],
+        'ipypublish.postprocessors': [
+            'remove-blank-lines = ipypublish.postprocessors.stream_modify:RemoveBlankLines',
+            'remove-trailing-space = ipypublish.postprocessors.stream_modify:RemoveTrailingSpace',
+            'filter-output-files = ipypublish.postprocessors.stream_modify:FilterOutputFiles',
+            'fix-slide-refs = ipypublish.postprocessors.stream_modify:FixSlideReferences',
+            'pdf-export = ipypublish.postprocessors.pdfexport:PDFExport',
+            'write-stream = ipypublish.postprocessors.to_stream:WriteStream',
+            'write-text-file = ipypublish.postprocessors.file_actions:WriteTextFile',
+            'remove-folder = ipypublish.postprocessors.file_actions:RemoveFolder',
+            'write-resource-files = ipypublish.postprocessors.file_actions:WriteResourceFiles',
+            'copy-resource-paths = ipypublish.postprocessors.file_actions:CopyResourcePaths',
+            'reveal-server = ipypublish.postprocessors.reveal_serve:RevealServer',
+            'run-sphinx = ipypublish.postprocessors.sphinx:RunSphinx [sphinx]'
         ]
     }
 )

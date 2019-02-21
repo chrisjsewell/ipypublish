@@ -1,5 +1,7 @@
 {% extends 'display_priority.tpl' %}
 
+@ipubreplace{below}{globals}
+
 @ipubreplace{below}{new_blocks}
 
 {# HEADER #}
@@ -57,10 +59,10 @@
 
 {# OUTPUT #}
 
+{# This need to contain super to show any output #}
 {% block output %}
 @ipubreplace{above}{notebook_output_pre}
-@ipubreplace{below}{notebook_output_prompt}
-{{ super() }}
+@ipubreplace{below}{notebook_output_all}
 @ipubreplace{below}{notebook_output_post}
 {% endblock output %}
 
@@ -78,7 +80,10 @@
 @ipubreplace{below}{notebook_output_traceback_line}
 {% endblock traceback_line %}
 
-{# {% block stream %} #}
+{% block stream %}
+@ipubreplace{below}{notebook_output_stream}
+{% endblock stream %}
+{# stdout and stderr require super() to be called in stream #}
 {% block stream_stdout %}
 @ipubreplace{above}{notebook_output_stream_stdout_pre}
 @ipubreplace{below}{notebook_output_stream_stdout}
@@ -89,7 +94,6 @@
 @ipubreplace{below}{notebook_output_stream_stderr}
 @ipubreplace{below}{notebook_output_stream_stderr_post}
 {% endblock stream_stderr %}
-{# {% endblock stream %} #}
 
 {# OUTPUT DATA #}
 

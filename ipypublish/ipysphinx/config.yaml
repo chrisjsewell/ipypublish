@@ -1,0 +1,48 @@
+# This file contain general settings fot the creation of sphinx conf.py
+# docstring is a special keys, inserted at the top of the file,
+# all others are output as <key> = <val>
+
+docstring: |4
+    a default sphinx configuration file
+
+    This file is execfile()d by Sphinx,
+    with the current directory set to its containing dir
+
+    .. seealso::  
+
+        http://www.sphinx-doc.org/en/master/usage/configuration.html
+
+needs_sphinx: "1.6"  # sphinx.ext.imgconverter requires 1.6
+master_doc: "index"
+source_suffix: [".rst"]
+# Exclude build directory and Jupyter backup files:
+exclude_patterns: ["_build", "build", "**.ipynb_checkpoints"]
+
+extensions: [ 
+    'ipypublish.ipysphinx',  # includes .. nboutput:: and .. nbinput:: directives
+    'sphinx.ext.mathjax',  # convert latex math to html
+    'sphinxcontrib.bibtex',  # allows for :cite: and .. bibligraphy::
+    'sphinx.ext.todo',  # allows for .. todo:: directive
+    'sphinx.ext.imgconverter'  # converts svg to pdf in latex output
+]
+# If true, `todo` and `todoList` produce output, else they produce nothing.
+todo_include_todos: false
+
+# html_theme: 'alabaster'
+
+numfig: true # allow elements to be numbered
+numfig_secnum_depth: 2
+numfig_format: {'section': 'Section %s',
+                 'figure': 'Fig. %s',
+                 'table': 'Table %s',
+                 'code-block': 'Code Block %s'}
+math_numfig: true # allow equations to be numbered
+math_eqref_format: "eq.{number}"   # TODO this isn't working
+
+linkcheck_ignore: [r'http://localhost:\d+/']
+
+# # List of arguments to be passed to the kernel that executes the notebooks:
+# nbsphinx_execute_arguments: [  
+#     "--InlineBackend.figure_formats={'svg', 'pdf'}",
+#     "--InlineBackend.rc={'figure.dpi': 96}",
+# ]

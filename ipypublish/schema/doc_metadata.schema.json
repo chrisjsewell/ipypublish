@@ -5,6 +5,7 @@
     "properties": {
         "ipub": {
             "type": "object",
+            "additionalProperties": false,
             "properties": {
                 "language": {
                     "description": "the language can be any specified in the babel package",
@@ -17,6 +18,7 @@
                         "boolean",
                         "object"
                     ],
+                    "additionalProperties": false,
                     "properties": {
                         "author": {
                             "type": "string",
@@ -123,6 +125,48 @@
                         "super",
                         "sort&compress"
                     ]
+                },
+                "pandoc": {
+                    "description": "settings for running the ipypandoc filters, to convert markdown to other formats",
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                        "apply_filters": {
+                            "description": "whether to apply filters to markdown",
+                            "type": "boolean",
+                            "default": true
+                        },
+                        "convert_raw": {
+                            "description": "attempt to extract non-markdown formats and convert them to the target format, e.g. rst roles to latex tags",
+                            "type": "boolean",
+                            "default": true
+                        },
+                        "hide_raw": {
+                            "description": "if the extracted non-markdown does not match the output format, this controls if it is shown in the output document",
+                            "type": "boolean",
+                            "default": false
+                        },
+                        "at_notation": {
+                            "description": "interpret +@label as a reference type based on its prefix modifier",
+                            "type": "boolean",
+                            "default": true
+                        },
+                        "use_numref": {
+                            "description": "in rst, whether to use the ``:numref:`` role or just ``:ref:``",
+                            "type": "boolean",
+                            "default": true
+                        },
+                        "reftag": {
+                            "description": "in latex, default tag for citations",
+                            "type": "string",
+                            "default": "cite"
+                        }
+                    }
+                },
+                "orphan": {
+                    "description": "whether the :orphan: directive is added in sphinx extension (to allow it to not be included in toc tree)",
+                    "type": "boolean",
+                    "default": false
                 }
             }
         }

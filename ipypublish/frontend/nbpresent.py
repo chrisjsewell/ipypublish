@@ -2,10 +2,11 @@
 import logging
 import os
 import sys
+from mimetypes import guess_type
 
 from ipypublish.frontend.shared import parse_options
-from ipypublish.convert.main import publish
-from ipypublish.scripts.reveal_serve import RevealServer
+from ipypublish.convert.main import IpyPubMain
+from ipypublish.postprocessors.reveal_serve import RevealServer
 
 logger = logging.getLogger("nbpresent")
 
@@ -38,50 +39,48 @@ def nbpresent(inpath,
         the logging level (debug, info, critical, ...)
 
     """
-    # setup logging to terminal
-    root = logging.getLogger()
-    root.handlers = []  # remove any existing handlers
-    root.setLevel(logging.DEBUG)
-    slogger = logging.StreamHandler(sys.stdout)
-    slogger.setLevel(getattr(logging, log_level.upper()))
-    formatter = logging.Formatter('%(levelname)s:%(module)s:%(message)s')
-    slogger.setFormatter(formatter)
-    root.addHandler(slogger)
-
     inpath_name, inpath_ext = os.path.splitext(os.path.basename(inpath))
 
     outpath = None
-    if inpath_ext == '.ipynb':
-        outdir = os.path.join(
-            os.getcwd(), 'converted') if outpath is None else outpath
-        if not os.path.exists(outdir):
-            os.mkdir(outdir)
-        flogger = logging.FileHandler(os.path.join(
-            outdir, inpath_name + '.nbpub.log'), 'w')
-        flogger.setLevel(getattr(logging, log_level.upper()))
-        root.addHandler(flogger)
+    output_mimetype = guess_type(inpath, strict=False)[0]
+    output_mimetype = 'unknown' if output_mimetype is None else output_mimetype
 
+    if inpath_ext == '.ipynb':
+
+        config = {"IpyPubMain": {
+            "conversion": outformat,
+            "plugin_folder_paths": export_paths,
+            "outpath": outpath,
+            "ignore_prefix": ignore_prefix,
+            "log_to_stdout": True,
+            "log_level_stdout": log_level,
+            "log_to_file": True,
+            "log_level_file": log_level,
+            "default_pporder_kwargs": dict(
+                dry_run=dry_run,
+                clear_existing=clear_files,
+                dump_files=dump_files,
+                serve_html=True,
+                slides=True
+            )
+        }}
+        publish = IpyPubMain(config=config)
         try:
-            outpath, exporter = publish(inpath,
-                                        conversion=outformat,
-                                        outpath=outpath, dump_files=dump_files,
-                                        ignore_prefix=ignore_prefix,
-                                        clear_existing=clear_files,
-                                        create_pdf=False, dry_run=dry_run,
-                                        plugin_folder_paths=export_paths)
+            outdata = publish(inpath)
+
+            outpath = outdata["outpath"]
+            output_mimetype = outdata["exporter"].output_mimetype
+
         except Exception as err:
             logger.error("Run Failed: {}".format(err))
             if print_traceback:
                 raise err
             return 1
     else:
-        outpath = inpath
-
-    if outpath:
         server = RevealServer()
         if not dry_run:
-            server.serve(inpath)
-   
+            server.postprocess("", output_mimetype, outpath)
+
     return 0
 
 

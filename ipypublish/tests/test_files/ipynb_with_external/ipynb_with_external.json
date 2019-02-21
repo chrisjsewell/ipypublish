@@ -1,0 +1,1882 @@
+{
+    "blocks": [
+        {
+            "t": "Para",
+            "c": [
+                {
+                    "t": "Code",
+                    "c": [
+                        [
+                            "",
+                            [],
+                            []
+                        ],
+                        "{python init_cell=TRUE, slideshow={'slide_type': 'skip'}} from ipypublish.scripts.ipynb_latex_setup import *"
+                    ]
+                }
+            ]
+        },
+        {
+            "t": "Header",
+            "c": [
+                1,
+                [
+                    "markdown",
+                    [],
+                    []
+                ],
+                [
+                    {
+                        "t": "Str",
+                        "c": "Markdown"
+                    }
+                ]
+            ]
+        },
+        {
+            "t": "Header",
+            "c": [
+                2,
+                [
+                    "general",
+                    [],
+                    []
+                ],
+                [
+                    {
+                        "t": "Str",
+                        "c": "General"
+                    }
+                ]
+            ]
+        },
+        {
+            "t": "Para",
+            "c": [
+                {
+                    "t": "Str",
+                    "c": "Some"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "markdown"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "text."
+                }
+            ]
+        },
+        {
+            "t": "Para",
+            "c": [
+                {
+                    "t": "Str",
+                    "c": "A"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "list:"
+                }
+            ]
+        },
+        {
+            "t": "BulletList",
+            "c": [
+                [
+                    {
+                        "t": "Plain",
+                        "c": [
+                            {
+                                "t": "Str",
+                                "c": "something"
+                            }
+                        ]
+                    }
+                ],
+                [
+                    {
+                        "t": "Plain",
+                        "c": [
+                            {
+                                "t": "Str",
+                                "c": "something"
+                            },
+                            {
+                                "t": "Space"
+                            },
+                            {
+                                "t": "Str",
+                                "c": "else"
+                            }
+                        ]
+                    }
+                ]
+            ]
+        },
+        {
+            "t": "Para",
+            "c": [
+                {
+                    "t": "Str",
+                    "c": "A"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "numbered"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "list"
+                }
+            ]
+        },
+        {
+            "t": "OrderedList",
+            "c": [
+                [
+                    1,
+                    {
+                        "t": "Decimal"
+                    },
+                    {
+                        "t": "Period"
+                    }
+                ],
+                [
+                    [
+                        {
+                            "t": "Plain",
+                            "c": [
+                                {
+                                    "t": "Str",
+                                    "c": "something"
+                                }
+                            ]
+                        }
+                    ],
+                    [
+                        {
+                            "t": "Plain",
+                            "c": [
+                                {
+                                    "t": "Str",
+                                    "c": "something"
+                                },
+                                {
+                                    "t": "Space"
+                                },
+                                {
+                                    "t": "Str",
+                                    "c": "else"
+                                }
+                            ]
+                        }
+                    ]
+                ]
+            ]
+        },
+        {
+            "t": "Para",
+            "c": [
+                {
+                    "t": "Str",
+                    "c": "non-ascii"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "characters"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "TODO"
+                }
+            ]
+        },
+        {
+            "t": "Para",
+            "c": [
+                {
+                    "t": "Str",
+                    "c": "This"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "is"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "a"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "long"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "section"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "of"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "text,"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "which"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "we"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "only"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "want"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "in"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "a"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "document"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "(not"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "a"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "presentation)"
+                },
+                {
+                    "t": "SoftBreak"
+                },
+                {
+                    "t": "Str",
+                    "c": "some"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "text"
+                },
+                {
+                    "t": "SoftBreak"
+                },
+                {
+                    "t": "Str",
+                    "c": "some"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "more"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "text"
+                },
+                {
+                    "t": "SoftBreak"
+                },
+                {
+                    "t": "Str",
+                    "c": "some"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "more"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "text"
+                },
+                {
+                    "t": "SoftBreak"
+                },
+                {
+                    "t": "Str",
+                    "c": "some"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "more"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "text"
+                },
+                {
+                    "t": "SoftBreak"
+                },
+                {
+                    "t": "Str",
+                    "c": "some"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "more"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "text"
+                },
+                {
+                    "t": "SoftBreak"
+                },
+                {
+                    "t": "Str",
+                    "c": "some"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "more"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "text"
+                },
+                {
+                    "t": "SoftBreak"
+                },
+                {
+                    "t": "Str",
+                    "c": "some"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "more"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "text"
+                },
+                {
+                    "t": "SoftBreak"
+                },
+                {
+                    "t": "Str",
+                    "c": "some"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "more"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "text"
+                },
+                {
+                    "t": "SoftBreak"
+                },
+                {
+                    "t": "Str",
+                    "c": "some"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "more"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "text"
+                }
+            ]
+        },
+        {
+            "t": "Para",
+            "c": [
+                {
+                    "t": "Str",
+                    "c": "This"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "is"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "an"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "abbreviated"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "section"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "of"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "the"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "document"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "text,"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "which"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "we"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "only"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "want"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "in"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "a"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "presentation"
+                }
+            ]
+        },
+        {
+            "t": "BulletList",
+            "c": [
+                [
+                    {
+                        "t": "Plain",
+                        "c": [
+                            {
+                                "t": "Str",
+                                "c": "summary"
+                            },
+                            {
+                                "t": "Space"
+                            },
+                            {
+                                "t": "Str",
+                                "c": "of"
+                            },
+                            {
+                                "t": "Space"
+                            },
+                            {
+                                "t": "Str",
+                                "c": "document"
+                            },
+                            {
+                                "t": "Space"
+                            },
+                            {
+                                "t": "Str",
+                                "c": "text"
+                            }
+                        ]
+                    }
+                ]
+            ]
+        },
+        {
+            "t": "Header",
+            "c": [
+                2,
+                [
+                    "references-and-citations",
+                    [],
+                    []
+                ],
+                [
+                    {
+                        "t": "Str",
+                        "c": "References"
+                    },
+                    {
+                        "t": "Space"
+                    },
+                    {
+                        "t": "Str",
+                        "c": "and"
+                    },
+                    {
+                        "t": "Space"
+                    },
+                    {
+                        "t": "Str",
+                        "c": "Citations"
+                    }
+                ]
+            ]
+        },
+        {
+            "t": "Para",
+            "c": [
+                {
+                    "t": "Str",
+                    "c": "References"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "to"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "RawInline",
+                    "c": [
+                        "tex",
+                        "\\cref{fig:example}"
+                    ]
+                },
+                {
+                    "t": "Str",
+                    "c": ","
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "RawInline",
+                    "c": [
+                        "tex",
+                        "\\cref{tbl:example}"
+                    ]
+                },
+                {
+                    "t": "Str",
+                    "c": ","
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "="
+                },
+                {
+                    "t": "Cite",
+                    "c": [
+                        [
+                            {
+                                "citationSuffix": [],
+                                "citationNoteNum": 0,
+                                "citationMode": {
+                                    "t": "AuthorInText"
+                                },
+                                "citationPrefix": [],
+                                "citationId": "eqn:example_sympy",
+                                "citationHash": 0
+                            }
+                        ],
+                        [
+                            {
+                                "t": "Str",
+                                "c": "@eqn:example_sympy"
+                            }
+                        ]
+                    ]
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "and"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "RawInline",
+                    "c": [
+                        "tex",
+                        "\\cref{code:example_mpl}"
+                    ]
+                },
+                {
+                    "t": "Str",
+                    "c": "."
+                }
+            ]
+        },
+        {
+            "t": "Para",
+            "c": [
+                {
+                    "t": "Str",
+                    "c": "A"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "latex"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "citation."
+                },
+                {
+                    "t": "RawInline",
+                    "c": [
+                        "tex",
+                        "\\cite{zelenyak_molecular_2016}"
+                    ]
+                }
+            ]
+        },
+        {
+            "t": "Para",
+            "c": [
+                {
+                    "t": "Str",
+                    "c": "A"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "html"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "citation."
+                },
+                {
+                    "t": "RawInline",
+                    "c": [
+                        "html",
+                        "<cite data-cite=\"kirkeminde_thermodynamic_2012\">"
+                    ]
+                },
+                {
+                    "t": "Str",
+                    "c": "(Kirkeminde,"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "2012)"
+                },
+                {
+                    "t": "RawInline",
+                    "c": [
+                        "html",
+                        "</cite>"
+                    ]
+                }
+            ]
+        },
+        {
+            "t": "Header",
+            "c": [
+                2,
+                [
+                    "todo-notes",
+                    [],
+                    []
+                ],
+                [
+                    {
+                        "t": "Str",
+                        "c": "Todo"
+                    },
+                    {
+                        "t": "Space"
+                    },
+                    {
+                        "t": "Str",
+                        "c": "notes"
+                    }
+                ]
+            ]
+        },
+        {
+            "t": "RawBlock",
+            "c": [
+                "latex",
+                "\\todo[inline]{an inline todo}"
+            ]
+        },
+        {
+            "t": "Para",
+            "c": [
+                {
+                    "t": "Str",
+                    "c": "Some"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "text."
+                },
+                {
+                    "t": "RawInline",
+                    "c": [
+                        "tex",
+                        "\\todo{a todo in the margins}"
+                    ]
+                }
+            ]
+        },
+        {
+            "t": "Header",
+            "c": [
+                1,
+                [
+                    "text-output",
+                    [],
+                    []
+                ],
+                [
+                    {
+                        "t": "Str",
+                        "c": "Text"
+                    },
+                    {
+                        "t": "Space"
+                    },
+                    {
+                        "t": "Str",
+                        "c": "Output"
+                    }
+                ]
+            ]
+        },
+        {
+            "t": "Para",
+            "c": [
+                {
+                    "t": "Code",
+                    "c": [
+                        [
+                            "",
+                            [],
+                            []
+                        ],
+                        "{python ipub={'text': {'format': {'backgroundcolor': '\\\\color{blue!10}'}}}} print(\"\"\" This is some printed text, with a nicely formatted output. \"\"\")"
+                    ]
+                }
+            ]
+        },
+        {
+            "t": "Header",
+            "c": [
+                1,
+                [
+                    "images-and-figures",
+                    [],
+                    []
+                ],
+                [
+                    {
+                        "t": "Str",
+                        "c": "Images"
+                    },
+                    {
+                        "t": "Space"
+                    },
+                    {
+                        "t": "Str",
+                        "c": "and"
+                    },
+                    {
+                        "t": "Space"
+                    },
+                    {
+                        "t": "Str",
+                        "c": "Figures"
+                    }
+                ]
+            ]
+        },
+        {
+            "t": "Para",
+            "c": [
+                {
+                    "t": "Code",
+                    "c": [
+                        [
+                            "",
+                            [],
+                            []
+                        ],
+                        "{python ipub={'figure': {'caption': 'A nice picture.', 'label': 'fig:example', 'placement': '!bh'}}} Image('example.jpg',height=400)"
+                    ]
+                }
+            ]
+        },
+        {
+            "t": "Header",
+            "c": [
+                2,
+                [
+                    "displaying-a-plot-with-its-code",
+                    [],
+                    []
+                ],
+                [
+                    {
+                        "t": "Str",
+                        "c": "Displaying"
+                    },
+                    {
+                        "t": "Space"
+                    },
+                    {
+                        "t": "Str",
+                        "c": "a"
+                    },
+                    {
+                        "t": "Space"
+                    },
+                    {
+                        "t": "Str",
+                        "c": "plot"
+                    },
+                    {
+                        "t": "Space"
+                    },
+                    {
+                        "t": "Str",
+                        "c": "with"
+                    },
+                    {
+                        "t": "Space"
+                    },
+                    {
+                        "t": "Str",
+                        "c": "its"
+                    },
+                    {
+                        "t": "Space"
+                    },
+                    {
+                        "t": "Str",
+                        "c": "code"
+                    }
+                ]
+            ]
+        },
+        {
+            "t": "Para",
+            "c": [
+                {
+                    "t": "Str",
+                    "c": "A"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "matplotlib"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "figure,"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "with"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "the"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "caption"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "set"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "in"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "the"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "markdowncell"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "above"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "the"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "figure."
+                }
+            ]
+        },
+        {
+            "t": "Para",
+            "c": [
+                {
+                    "t": "Str",
+                    "c": "The"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "plotting"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "code"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "for"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "a"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "matplotlib"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "figure"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "("
+                },
+                {
+                    "t": "RawInline",
+                    "c": [
+                        "tex",
+                        "\\cref{fig:example_mpl}"
+                    ]
+                },
+                {
+                    "t": "Str",
+                    "c": ")."
+                }
+            ]
+        },
+        {
+            "t": "Para",
+            "c": [
+                {
+                    "t": "Code",
+                    "c": [
+                        [
+                            "",
+                            [],
+                            []
+                        ],
+                        "{python ipub={'code': {'asfloat': True, 'caption': 'a', 'label': 'code:example_mpl', 'widefigure': False}, 'figure': {'caption': '', 'label': 'fig:example_mpl', 'widefigure': False}}} plt.scatter(np.random.rand(10), np.random.rand(10),              label='data label') plt.ylabel(r'a y label with latex $\\alpha$') plt.legend();"
+                    ]
+                }
+            ]
+        },
+        {
+            "t": "Header",
+            "c": [
+                1,
+                [
+                    "tables-with-pandas",
+                    [],
+                    []
+                ],
+                [
+                    {
+                        "t": "Str",
+                        "c": "Tables"
+                    },
+                    {
+                        "t": "Space"
+                    },
+                    {
+                        "t": "Str",
+                        "c": "(with"
+                    },
+                    {
+                        "t": "Space"
+                    },
+                    {
+                        "t": "Str",
+                        "c": "pandas)"
+                    }
+                ]
+            ]
+        },
+        {
+            "t": "Para",
+            "c": [
+                {
+                    "t": "Str",
+                    "c": "The"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "plotting"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "code"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "for"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "a"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "pandas"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "Dataframe"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "table"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "("
+                },
+                {
+                    "t": "RawInline",
+                    "c": [
+                        "tex",
+                        "\\cref{tbl:example}"
+                    ]
+                },
+                {
+                    "t": "Str",
+                    "c": ")."
+                }
+            ]
+        },
+        {
+            "t": "Para",
+            "c": [
+                {
+                    "t": "Code",
+                    "c": [
+                        [
+                            "",
+                            [],
+                            []
+                        ],
+                        "{python ipub={'code': {'asfloat': True, 'caption': '', 'label': 'code:example_pd', 'placement': 'H', 'widefigure': False}, 'table': {'alternate': 'gray!20', 'caption': 'An example of a table created with pandas dataframe.', 'label': 'tbl:example', 'placement': 'H'}}} df = pd.DataFrame(np.random.rand(3,4),columns=['a','b','c','d']) df.a = ['$\\delta$','x','y'] df.b = ['l','m','n'] df.set_index(['a','b']) df.round(3)"
+                    ]
+                }
+            ]
+        },
+        {
+            "t": "Header",
+            "c": [
+                1,
+                [
+                    "equations-with-ipython-or-sympy",
+                    [],
+                    []
+                ],
+                [
+                    {
+                        "t": "Str",
+                        "c": "Equations"
+                    },
+                    {
+                        "t": "Space"
+                    },
+                    {
+                        "t": "Str",
+                        "c": "(with"
+                    },
+                    {
+                        "t": "Space"
+                    },
+                    {
+                        "t": "Str",
+                        "c": "ipython"
+                    },
+                    {
+                        "t": "Space"
+                    },
+                    {
+                        "t": "Str",
+                        "c": "or"
+                    },
+                    {
+                        "t": "Space"
+                    },
+                    {
+                        "t": "Str",
+                        "c": "sympy)"
+                    }
+                ]
+            ]
+        },
+        {
+            "t": "Para",
+            "c": [
+                {
+                    "t": "Code",
+                    "c": [
+                        [
+                            "",
+                            [],
+                            []
+                        ],
+                        "{python ipub={'equation': {'label': 'eqn:example_ipy'}}} Latex('$$ a = b+c $$')"
+                    ]
+                }
+            ]
+        },
+        {
+            "t": "Para",
+            "c": [
+                {
+                    "t": "Str",
+                    "c": "The"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "plotting"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "code"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "for"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "a"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "sympy"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "equation"
+                },
+                {
+                    "t": "Space"
+                },
+                {
+                    "t": "Str",
+                    "c": "(="
+                },
+                {
+                    "t": "Cite",
+                    "c": [
+                        [
+                            {
+                                "citationSuffix": [],
+                                "citationNoteNum": 0,
+                                "citationMode": {
+                                    "t": "AuthorInText"
+                                },
+                                "citationPrefix": [],
+                                "citationId": "eqn:example_sympy",
+                                "citationHash": 0
+                            }
+                        ],
+                        [
+                            {
+                                "t": "Str",
+                                "c": "@eqn:example_sympy"
+                            }
+                        ]
+                    ]
+                },
+                {
+                    "t": "Str",
+                    "c": ")."
+                }
+            ]
+        },
+        {
+            "t": "Para",
+            "c": [
+                {
+                    "t": "Code",
+                    "c": [
+                        [
+                            "",
+                            [],
+                            []
+                        ],
+                        "{python ipub={'code': {'asfloat': True, 'caption': '', 'label': 'code:example_sym', 'placement': 'H', 'widefigure': False}, 'equation': {'environment': 'equation', 'label': 'eqn:example_sympy'}}} y = sym.Function('y') n = sym.symbols(r'\\alpha') f = y(n)-2*y(n-1/sym.pi)-5*y(n-2) sym.rsolve(f,y(n),[1,4])"
+                    ]
+                }
+            ]
+        }
+    ],
+    "pandoc-api-version": [
+        1,
+        17,
+        5,
+        1
+    ],
+    "meta": {
+        "jupyter": {
+            "t": "MetaMap",
+            "c": {
+                "jupytext": {
+                    "t": "MetaMap",
+                    "c": {
+                        "metadata_filter": {
+                            "t": "MetaMap",
+                            "c": {
+                                "notebook": {
+                                    "t": "MetaInlines",
+                                    "c": [
+                                        {
+                                            "t": "Str",
+                                            "c": "ipub"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "text_representation": {
+                            "t": "MetaMap",
+                            "c": {
+                                "format_version": {
+                                    "t": "MetaInlines",
+                                    "c": [
+                                        {
+                                            "t": "Str",
+                                            "c": "1.0"
+                                        }
+                                    ]
+                                },
+                                "jupytext_version": {
+                                    "t": "MetaInlines",
+                                    "c": [
+                                        {
+                                            "t": "Str",
+                                            "c": "0.8.6"
+                                        }
+                                    ]
+                                },
+                                "extension": {
+                                    "t": "MetaInlines",
+                                    "c": [
+                                        {
+                                            "t": "Str",
+                                            "c": ".Rmd"
+                                        }
+                                    ]
+                                },
+                                "format_name": {
+                                    "t": "MetaInlines",
+                                    "c": [
+                                        {
+                                            "t": "Str",
+                                            "c": "rmarkdown"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "kernelspec": {
+                    "t": "MetaMap",
+                    "c": {
+                        "display_name": {
+                            "t": "MetaInlines",
+                            "c": [
+                                {
+                                    "t": "Str",
+                                    "c": "Python"
+                                },
+                                {
+                                    "t": "Space"
+                                },
+                                {
+                                    "t": "Str",
+                                    "c": "3"
+                                }
+                            ]
+                        },
+                        "name": {
+                            "t": "MetaInlines",
+                            "c": [
+                                {
+                                    "t": "Str",
+                                    "c": "python3"
+                                }
+                            ]
+                        },
+                        "language": {
+                            "t": "MetaInlines",
+                            "c": [
+                                {
+                                    "t": "Str",
+                                    "c": "python"
+                                }
+                            ]
+                        }
+                    }
+                },
+                "ipub": {
+                    "t": "MetaMap",
+                    "c": {
+                        "at_notation": {
+                            "t": "MetaBool",
+                            "c": true
+                        },
+                        "toc": {
+                            "t": "MetaMap",
+                            "c": {
+                                "depth": {
+                                    "t": "MetaString",
+                                    "c": "2"
+                                }
+                            }
+                        },
+                        "listfigures": {
+                            "t": "MetaBool",
+                            "c": true
+                        },
+                        "use_numref": {
+                            "t": "MetaBool",
+                            "c": true
+                        },
+                        "bibstyle": {
+                            "t": "MetaInlines",
+                            "c": [
+                                {
+                                    "t": "Str",
+                                    "c": "unsrtnat"
+                                }
+                            ]
+                        },
+                        "bibliography": {
+                            "t": "MetaInlines",
+                            "c": [
+                                {
+                                    "t": "Str",
+                                    "c": "example.bib"
+                                }
+                            ]
+                        },
+                        "biboptions": {
+                            "t": "MetaList",
+                            "c": [
+                                {
+                                    "t": "MetaInlines",
+                                    "c": [
+                                        {
+                                            "t": "Str",
+                                            "c": "super"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "t": "MetaInlines",
+                                    "c": [
+                                        {
+                                            "t": "Str",
+                                            "c": "sort"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        "listcode": {
+                            "t": "MetaBool",
+                            "c": true
+                        },
+                        "listtables": {
+                            "t": "MetaBool",
+                            "c": true
+                        },
+                        "language": {
+                            "t": "MetaInlines",
+                            "c": [
+                                {
+                                    "t": "Str",
+                                    "c": "portuges"
+                                }
+                            ]
+                        },
+                        "titlepage": {
+                            "t": "MetaMap",
+                            "c": {
+                                "institution": {
+                                    "t": "MetaList",
+                                    "c": [
+                                        {
+                                            "t": "MetaInlines",
+                                            "c": [
+                                                {
+                                                    "t": "Str",
+                                                    "c": "Institution1"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "t": "MetaInlines",
+                                            "c": [
+                                                {
+                                                    "t": "Str",
+                                                    "c": "Institution2"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                "email": {
+                                    "t": "MetaInlines",
+                                    "c": [
+                                        {
+                                            "t": "Str",
+                                            "c": "authors@email.com"
+                                        }
+                                    ]
+                                },
+                                "supervisors": {
+                                    "t": "MetaList",
+                                    "c": [
+                                        {
+                                            "t": "MetaInlines",
+                                            "c": [
+                                                {
+                                                    "t": "Str",
+                                                    "c": "First"
+                                                },
+                                                {
+                                                    "t": "Space"
+                                                },
+                                                {
+                                                    "t": "Str",
+                                                    "c": "Supervisor"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "t": "MetaInlines",
+                                            "c": [
+                                                {
+                                                    "t": "Str",
+                                                    "c": "Second"
+                                                },
+                                                {
+                                                    "t": "Space"
+                                                },
+                                                {
+                                                    "t": "Str",
+                                                    "c": "Supervisor"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                "subtitle": {
+                                    "t": "MetaInlines",
+                                    "c": [
+                                        {
+                                            "t": "Str",
+                                            "c": "Sub-Title"
+                                        }
+                                    ]
+                                },
+                                "tagline": {
+                                    "t": "MetaInlines",
+                                    "c": [
+                                        {
+                                            "t": "Str",
+                                            "c": "A"
+                                        },
+                                        {
+                                            "t": "Space"
+                                        },
+                                        {
+                                            "t": "Str",
+                                            "c": "tagline"
+                                        },
+                                        {
+                                            "t": "Space"
+                                        },
+                                        {
+                                            "t": "Str",
+                                            "c": "for"
+                                        },
+                                        {
+                                            "t": "Space"
+                                        },
+                                        {
+                                            "t": "Str",
+                                            "c": "the"
+                                        },
+                                        {
+                                            "t": "Space"
+                                        },
+                                        {
+                                            "t": "Str",
+                                            "c": "report."
+                                        }
+                                    ]
+                                },
+                                "author": {
+                                    "t": "MetaInlines",
+                                    "c": [
+                                        {
+                                            "t": "Str",
+                                            "c": "Authors"
+                                        },
+                                        {
+                                            "t": "Space"
+                                        },
+                                        {
+                                            "t": "Str",
+                                            "c": "Name"
+                                        }
+                                    ]
+                                },
+                                "title": {
+                                    "t": "MetaInlines",
+                                    "c": [
+                                        {
+                                            "t": "Str",
+                                            "c": "Main-Title"
+                                        }
+                                    ]
+                                },
+                                "logo": {
+                                    "t": "MetaInlines",
+                                    "c": [
+                                        {
+                                            "t": "Str",
+                                            "c": "logo_example.png"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

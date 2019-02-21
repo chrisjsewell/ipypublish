@@ -17,4 +17,3 @@ some text
 .. parsed-literal::
 
     1
-

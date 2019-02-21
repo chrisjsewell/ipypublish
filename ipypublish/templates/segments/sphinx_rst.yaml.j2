@@ -7,7 +7,7 @@
         {%- if cell.metadata.nbsphinx != 'hidden' %}
         {{ super() }}
         {% endif %}
-    
+
     "notebook_input_code": |
         .. nbinput:: {% if cell.metadata.magics_language -%}
         {{ cell.metadata.magics_language }}
@@ -67,9 +67,10 @@
         {{ ("#" * cell.level + cell.source) | replace('\n', ' ') | convert_pandoc("markdown", "rst") }}
 
     "notebook_input_unknown": |
-        unknown type  {{cell.type}}
+        .. unknown type  {{cell.type}}
     
-
+    "notebook_output_all": |
+        {{ super() }}
 
     "new_blocks": |
         {% block nboutput -%}
@@ -89,13 +90,10 @@
     "notebook_output_error": |
         {{ self.nboutput() }}
 
-    "notebook_output_stream_stdout": |
+    "notebook_output_stream": |
         {{ self.nboutput() }}
 
-    "notebook_output_stream_stderr": |
-        {{ self.nboutput() }}
-
-    "notebook_output_data_any": |
+    "notebook_output_data_all": |
         {{ self.nboutput() }}
     
     "jinja_macros": |

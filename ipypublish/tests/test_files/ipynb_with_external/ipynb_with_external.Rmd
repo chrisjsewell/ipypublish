@@ -1,0 +1,161 @@
+---
+jupyter:
+  ipub:
+    at_notation: true
+    bibliography: example.bib
+    biboptions:
+    - super
+    - sort
+    bibstyle: unsrtnat
+    language: portuges
+    listcode: true
+    listfigures: true
+    listtables: true
+    titlepage:
+      author: Authors Name
+      email: authors@email.com
+      institution:
+      - Institution1
+      - Institution2
+      logo: logo_example.png
+      subtitle: Sub-Title
+      supervisors:
+      - First Supervisor
+      - Second Supervisor
+      tagline: A tagline for the report.
+      title: Main-Title
+    toc:
+      depth: 2
+    use_numref: true
+  jupytext:
+    metadata_filter:
+      notebook: ipub
+    text_representation:
+      extension: .Rmd
+      format_name: rmarkdown
+      format_version: '1.0'
+      jupytext_version: 0.8.6
+  kernelspec:
+    display_name: Python 3
+    language: python
+    name: python3
+---
+
+```{python init_cell=TRUE, slideshow={'slide_type': 'skip'}}
+from ipypublish.scripts.ipynb_latex_setup import *
+```
+
+# Markdown
+
+
+## General
+
+
+Some markdown text.
+
+A list:
+
+- something
+- something else
+
+A numbered list
+
+1. something
+2. something else
+
+non-ascii characters TODO
+
+
+This is a long section of text, which we only want in a document (not a presentation)
+some text
+some more text
+some more text
+some more text
+some more text
+some more text
+some more text
+some more text
+some more text
+
+
+
+This is an abbreviated section of the document text, which we only want in a presentation
+
+- summary of document text
+
+
+## References and Citations
+
+
+References to \cref{fig:example}, \cref{tbl:example}, =@eqn:example_sympy and \cref{code:example_mpl}.
+
+A latex citation.\cite{zelenyak_molecular_2016}
+
+A html citation.<cite data-cite="kirkeminde_thermodynamic_2012">(Kirkeminde, 2012)</cite> 
+
+
+## Todo notes
+
+
+\todo[inline]{an inline todo}
+
+Some text.\todo{a todo in the margins}
+
+
+# Text Output
+
+```{python ipub={'text': {'format': {'backgroundcolor': '\\color{blue!10}'}}}}
+print("""
+This is some printed text,
+with a nicely formatted output.
+""")
+```
+
+# Images and Figures
+
+```{python ipub={'figure': {'caption': 'A nice picture.', 'label': 'fig:example', 'placement': '!bh'}}}
+Image('example.jpg',height=400)
+```
+
+## Displaying a plot with its code
+
+
+A matplotlib figure, with the caption set in the markdowncell above the figure.
+
+
+The plotting code for a matplotlib figure (\cref{fig:example_mpl}).
+
+```{python ipub={'code': {'asfloat': True, 'caption': 'a', 'label': 'code:example_mpl', 'widefigure': False}, 'figure': {'caption': '', 'label': 'fig:example_mpl', 'widefigure': False}}}
+plt.scatter(np.random.rand(10), np.random.rand(10), 
+            label='data label')
+plt.ylabel(r'a y label with latex $\alpha$')
+plt.legend();
+```
+
+# Tables (with pandas)
+
+
+The plotting code for a pandas Dataframe table (\cref{tbl:example}).
+
+```{python ipub={'code': {'asfloat': True, 'caption': '', 'label': 'code:example_pd', 'placement': 'H', 'widefigure': False}, 'table': {'alternate': 'gray!20', 'caption': 'An example of a table created with pandas dataframe.', 'label': 'tbl:example', 'placement': 'H'}}}
+df = pd.DataFrame(np.random.rand(3,4),columns=['a','b','c','d'])
+df.a = ['$\delta$','x','y']
+df.b = ['l','m','n']
+df.set_index(['a','b'])
+df.round(3)
+```
+
+# Equations (with ipython or sympy)
+
+```{python ipub={'equation': {'label': 'eqn:example_ipy'}}}
+Latex('$$ a = b+c $$')
+```
+
+The plotting code for a sympy equation (=@eqn:example_sympy).
+
+```{python ipub={'code': {'asfloat': True, 'caption': '', 'label': 'code:example_sym', 'placement': 'H', 'widefigure': False}, 'equation': {'environment': 'equation', 'label': 'eqn:example_sympy'}}}
+y = sym.Function('y')
+n = sym.symbols(r'\alpha')
+f = y(n)-2*y(n-1/sym.pi)-5*y(n-2)
+sym.rsolve(f,y(n),[1,4])
+```

@@ -1,0 +1,3 @@
+rm -f source/api/*.rst
+sphinx-apidoc --force --separate -o . ../../ipypublish/ ../../ipypublish/ipypublish/tests ../../ipypublish/setup.py
+rm -f source/api/modules.rst

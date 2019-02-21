@@ -1,7 +1,13 @@
-Custom Export Configurations
-============================
+.. _customise_conversion:
 
-The simplest application of this, would be to copy
+Customising the Conversion Process
+==================================
+
+The entire conversion process is controlled by the
+:py:class:`ipypublish.convert.main.IpyPubMain` configurable class,
+which can be parsed a configuration file, in JSON format.
+
+The simplest customisation, would be to copy
 :ref:`latex_ipypublish_all.json <latex_ipypublish_all>`
 (or the html/slides variants) and make changes to the
 ``cell_defaults`` and ``nb_defaults`` dictionaries, to suit your output
@@ -11,14 +17,15 @@ needs, then run:
 
     nbpublish -f path/to/latex_ipypublish_all.json notebook.ipynb
 
-The Conversion Process
+Outline of the Process
 ----------------------
 
-iPyPublish uses export configuration files to control how the Notebook(s)
-will be exported. As shown in the figure below, they define two key components:
+IPyPublish uses configuration files to control how the Notebook(s) will
+be exported. As shown in the figure below, they define three key components:
 
 1. The export class, and its associated pre-processors and filter functions.
 2. The `jinja`_ template outline and segments to be inserted into it.
+3. The type and order of post-processors.
 
 .. figure:: _static/process.svg
     :align: center
@@ -36,16 +43,14 @@ This process extends :py:mod:`nbconvert` in a number of ways:
 - `jinja`_ templates are constructed *via* segment insertions,
   into a skeleton (outline) template, rather than by inheritance only.
   This allows for greater control and modularity in their construction.
+- A new set of :py:class:`ipypublish.postprocessors.base.IPyPostProcessor`
+  plugin classes, to handle post-processing of outputs.
 - The use of ``latexmk`` with XeLaTeX to convert TeX to PDF,
   and correct resolution of file references and citations.
 
 .. versionadded:: v0.8.3
 
     Drag and drop cell attachments are now extracted and correctly referenced
-
-
-.. todo:: document this feature and other non-metadata features in a separate section 
-
 
 The Configuration File Format
 -----------------------------
@@ -92,6 +97,17 @@ The configuration file is a JSON file, with a validation schema given in
                 "file": "a_user_defined_segment.json"
                 }
             ]
+        },
+        "postprocessors": {
+            "order": [
+                "remove-blank-lines",
+                "remove-trailing-space",
+                "filter-output-files",
+                "remove-folder",
+                "write-text-file",
+                "write-resource-files",
+                "copy-resource-paths"
+            ]
         }
     }
 
@@ -99,7 +115,7 @@ The configuration file is a JSON file, with a validation schema given in
 Exporter Class
 ~~~~~~~~~~~~~~
 
-In line 6, we define the exporter class, which can be any class in the python
+On line 6, we define the exporter class, which can be any class in the python
 environment namespace that inherits from
 :py:class:`nbconvert.exporters.Exporter`.
 
@@ -131,7 +147,7 @@ notebook, and are parsed to the `jinja`_ templating engine.
 Template Construction
 ~~~~~~~~~~~~~~~~~~~~~
 
-In line 22, we define how to construct the `jinja`_ template.
+On line 22, we define how to construct the `jinja`_ template.
 The ``outline`` key defines the path to an outline template,
 such as in :ref:`outline_schema`.
 
@@ -202,6 +218,38 @@ define segments that overwrite any previously defined content in that section.
     - The jinja documentation on :doc:`jinja:templates`
 
     - The nbconvert documentation on :doc:`nbconvert:customizing`
+
+.. _post-processors:
+
+Post-Processors
+---------------
+
+On line 38 we define how to post-process the converted output and resources.
+See :py:mod:`ipypublish.postprocessors` for a list of built-in post-processors,
+which include, outputting to file or stdout, dumping files to a folder,
+and running ``latexmk`` or ``sphinx-build``.
+
+Additional post-processors may be registered as named `entry_points`_.
+ipypublish uses the ``ipypublish.postprocessors`` entry point to find
+post-processors from any package you may have installed.
+
+If you are writing a Python package that provides custom post-processors,
+you can register them in your package's :file:`setup.py`. For
+example, your package may contain one named "simple",
+which would be registered in your package's :file:`setup.py` as follows:
+
+.. code-block:: python
+
+    setup(
+        ...
+        entry_points = {
+            'ipypublish.postprocessors': [
+                'simple = mymodule:SimplePostProcessor'
+            ],
+        }
+    )
+
+.. _entry_points: https://packaging.python.org/en/latest/distributing/#entry-points
 
 Loading Custom Configurations
 -----------------------------

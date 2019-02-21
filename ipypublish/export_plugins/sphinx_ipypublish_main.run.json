@@ -1,0 +1,74 @@
+{
+    "description": [
+      "sphinx reStructuredText in the main ipypublish format, and also calls Sphinx",
+      "- only output cells with metadata tags are used",
+      "- code, figures, tables and code are formatted accordingly"
+      ],
+    "exporter": {
+      "class": "nbconvert.exporters.RSTExporter",
+      "filters": {
+        "get_empty_lines": "ipypublish.filters.filters.get_empty_lines",
+        "get_caption": "ipypublish.filters.filters.get_caption",
+        "wrap_eqn": "ipypublish.filters.filters.wrap_eqn",
+        "choose_output_type": "ipypublish.filters.rst_choose_output.choose_output_type",
+        "ipypandoc": "ipypublish.filters_pandoc.main.jinja_filter",
+        "is_equation": "ipypublish.filters.filters.is_equation",
+        "basename": "ipypublish.filters.filters.basename"
+      },
+      "preprocessors": [
+        {
+            "class": "ipypublish.preprocessors.split_outputs.SplitOutputs",
+            "args": {
+              "split": true
+            }
+          },
+          {
+            "class": "ipypublish.preprocessors.latex_doc_links.LatexDocLinks",
+            "args": {
+              "metapath": "${meta_path}",
+              "filesfolder": "${files_path}"
+            }
+          },
+          {
+            "class": "ipypublish.preprocessors.latex_doc_captions.LatexCaptions",
+            "args": {}
+          }          
+      ],
+      "other_args": {}
+    },
+    "template": {
+      "outline": {
+        "module": "ipypublish.templates.outline_schemas",
+        "file": "rst_outline.rst.j2"
+      },
+      "segments": [
+        {
+          "module": "ipypublish.templates.segments",
+          "file": "ipy-sphinx.yaml.j2"
+        }
+      ]
+    },
+    "postprocessors": {
+      "order": [
+        "remove-blank-lines",
+        "remove-trailing-space",
+        "filter-output-files",
+        "remove-folder",
+        "write-text-file",
+        "write-resource-files",
+        "copy-resource-paths",
+        "run-sphinx"
+      ],
+      "config": {
+        "IPyPostProcessor": {
+          "skip_mime": true
+        },
+        "CopyResourcePaths": {
+          "files_folder": "${files_path}"
+        },
+        "RunSphinx": {
+          "show_prompts": true
+        }
+      }
+    }
+  }

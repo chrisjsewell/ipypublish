@@ -1,3 +1,5 @@
+.. _metadata_tags:
+
 Metadata Tags
 =============
 
@@ -29,10 +31,8 @@ There are three levels of metadata:
 -  For output level: using
    ``IPython.display.display(obj,metadata={"ipub":{}})``, you can set
    metadata specific to a certain output. Options set at the output
-   level will override options set at the cell level. for an example of
-   this, download and run the
-   :download:`MultiOutput_Example.ipynb <../../example/notebooks/MultiOutput_Example.ipynb>`.
-
+   level will override options set at the cell level. For an example of
+   this, see :ref:`multiple_outputs`.
 
 .. important::
 
@@ -43,85 +43,8 @@ There are three levels of metadata:
 
     :ref:`nbformat:notebook_file_format`
 
+    :ref:`jupytext_python`
 
-Visualising Metadata
---------------------
-
-.. versionadded:: 0.7.0
-
-    To view all the metadata in a notebook, you can now use the
-    ``python_with_meta`` exporter.
-
-.. code-block:: console
-
-    nbpublish -f python_with_meta example.ipynb
-
-This will produce a standard python file, with metadata commented by ``#~~``
-and each cell beginning with ``#%%`` (known as the percent format):
-
-.. code-block:: python
-
-  #~~ language_info:
-    #~~   name: python
-    #~~   nbconvert_exporter: python
-    #~~   pygments_lexer: ipython3
-    #~~   version: 3.6.1
-
-  #%% [markdown]
-  #~~ {}
-  # # Document Title
-
-  #%%
-  #~~ ipub:
-  #~~   figure:
-  #~~     caption: A nice picture.
-  #~~     label: fig:example
-  #~~     placement: '!bh'
-  Image('example.jpg',height=400)
-
-Alternatively, you can use the excellent
-`jupytext <https://github.com/mwouts/jupytext>`_ package, to convert between
-a notebook and `percent format <https://github.com/mwouts/jupytext#the-percent-format>`_.
-Simply add, this section to the notebook-level metadata:
-
-.. code-block:: json
-
-   {
-      "jupytext": {
-        "metadata_filter": {
-          "notebook": "ipub"
-        }
-      }
-   }
-
-and run:
-
-.. code-block:: console
-
-    jupytext --to py:percent notebook.py
-
-Then, after altering the python file, run:
-
-.. code-block:: console
-
-    jupytext --to notebook notebook.py              # overwrite notebook.ipynb (remove outputs)
-    jupytext --to notebook --update notebook.py     # update notebook.ipynb (preserve outputs)
-
-The `percent format <https://github.com/mwouts/jupytext#the-percent-format>`_
-can be utilised in IDEs, such as
-`Spyder <https://docs.spyder-ide.org/editor.html#defining-code-cells>`_,
-`Atom <https://atom.io/packages/hydrogen>`_,
-`PyCharm <https://www.jetbrains.com/pycharm/>`_, and
-`VS Code <https://code.visualstudio.com/docs/python/jupyter-support>`_,
-to run individual cells:
-
-.. figure:: _static/vscode_python.png
-    :align: center
-    :height: 350px
-    :alt: alternate text
-    :figclass: align-center
-
-    Running Python File in VS Code
 
 Document Level
 --------------
@@ -483,48 +406,6 @@ For **slide output**:
 
 -  the value of slide can be true, “new” (to indicate the start of a new
    slide) or “notes”
-
-Object Output Formats
-~~~~~~~~~~~~~~~~~~~~~
-
-The format of the Jupyter Notebook (.ipynb) file allows for the storage
-of a single output in multiple formats. This is taken advantage of by
-packages such as matplotlib and pandas, etc to store a figure/table in
-both latex and html formats, which can then be selected by ipypublish
-based on the document type required.
-
-Sometimes a user may wish to have greater control over the output format
-and/or which output types are to be stored. It it possible to achieve
-this *via* the Jupyter ``display`` function. For example, if we wanted
-to display a pandas.DataFrame table without the index column, such that
-it can be output to both a pdf and html document:
-
-.. code:: python
-
-   from IPython.display import display
-   import pandas as pd
-   import numpy as np
-   df = pd.DataFrame(np.random.random((3, 3)))
-   latex = df.to_latex(index=False)
-   html = df.to_html(index=False)
-   display({'text/latex': latex,
-            'text/html': html}, raw=True)
-
-If you wish to create your own object with multiple output formats, you
-should create a class with multiple ``_repr_*_()`` methods (as described
-`here <http://ipython.readthedocs.io/en/stable/config/integrating.html#rich-display>`__):
-
-.. code:: python
-
-   class MyObject(object):
-       def __init__(self, text):
-           self.text = text
-
-       def _repr_latex_(self):
-           return "\\textbf{" + self.text + "}"
-
-       def _repr_html_(self):
-           return "<b>" + self.text + "</b>"
 
 Captions in a Markdown cell
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~

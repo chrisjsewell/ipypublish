@@ -1,0 +1,369 @@
+"$schema": "../../schema/segment.schema.json"
+"identifier": "nbsphinx-ipypublish-content"
+"description": "ipypublish sphinx content"
+"segments":
+
+    # TODO instead of filtering output/input cells/types could just mark them with e.g. :hidden: field
+    # TODO allow slide cells in rst but wrap them in directive
+    # TODO slide content control and creation (see https://github.com/tell-k/sphinxjp.themes.revealjs)
+    # NOTE adding a toc not in separate index.rst doesn't work at moment https://github.com/sphinx-doc/sphinx/issues/2103
+
+    "globals": |
+        {# re-route ipub metadata into resources, so we can use it in post-processing #}
+        {# see https://stackoverflow.com/a/43265291/5033292 #}
+        {% if "ipub" in nb.metadata %}
+        {% set x = resources.__setitem__("ipub", nb.metadata.ipub) %}
+        {% endif %}
+
+    "notebook_input_all": |
+        {# ignore input cells if cell.metadata.ipub.ignore = True #}
+        {%- if "ipub" in cell.metadata and cell.metadata.ipub.ignore %}
+        {%- else -%}
+            {%- if "ipub" in cell.metadata and cell.metadata.ipub.slideonly %}
+            {%- else -%}
+            {{ super() }}
+            {% endif %}
+        {% endif %}
+
+    "notebook_input_code": |
+        {# only output code blocks if cell.metadata.ipub.code = True #}
+        {% if "ipub" in cell.metadata and cell.metadata.ipub.code -%}
+        {# always create the input directive even if it is empty #}
+        {# supply the directive with the lexer to use (see http://pygments.org/docs/lexers/) #}
+        {{'.. nbinput:: '}} {%- if 'magics_language' in cell.metadata  -%}
+            {{ cell.metadata.magics_language }}
+        {%- elif 'pygments_lexer' in nb.metadata.get('language_info', {}) -%}
+            {{ nb.metadata.language_info.pygments_lexer }}
+        {%- elif 'name' in nb.metadata.get('language_info', {}) -%}
+            {{ nb.metadata.language_info.name }}
+        {%- endif -%}
+        {#- add option fields for input directive -#}
+        {{ insert_empty_lines(cell.source) }}
+        {%- if cell.execution_count %}
+            :execution-count: {{ cell.execution_count }}
+        {%- endif %}
+        {%- if not cell.outputs %}
+            :no-output:
+        {%- endif -%}
+        {%- set ipubcode = cell.metadata.get("ipub", {}).get("code", {}) %}
+        {%- if ipubcode is mapping and ipubcode.get("label", False) %}
+            :name: {{ ipubcode['label'] }}
+        {%- endif -%}
+        {# find captions #}
+        {%- if resources.captions and resources.captions[ipubcode.get("label", False)] %}
+        {%- set caption = resources.captions[ipubcode["label"]] | ipypandoc('rst', nb.metadata, cell.metadata) %}
+            :caption: {{ caption.replace("\n", " ") }}
+        {%- elif ipubcode is mapping and "caption" in ipubcode and ipubcode["caption"] %}
+        {%- set caption = ipubcode.get("caption") | ipypandoc('rst', nb.metadata, cell.metadata) %}
+            :caption: {{ caption.replace("\n", " ") }}
+        {%- endif %}
+        {# add output code if there is any #}
+        {%- if cell.source.strip() %}
+
+        {{ cell.source.strip('\n') | indent}}
+        {%- endif %}
+        {%- endif %}
+
+    "notebook_input_markdown": |
+        {# only use @label notation if specified in nb/cell metadata #}
+        {{ cell.source | ipypandoc('rst', nb.metadata, cell.metadata) }}
+
+    "notebook_input_raw": |
+        {# output raw input with the correct identifier #}
+        {%- set raw_mimetype = cell.metadata.get('raw_mimetype', '').lower() %}
+        {%- if raw_mimetype == '' %}
+        .. raw:: html
+
+        {{ cell.source | indent }}
+
+        .. raw:: latex
+
+        {{ cell.source | indent }}
+        {%- elif raw_mimetype == 'text/html' %}
+        .. raw:: html
+
+        {{ cell.source | indent }}
+        {%- elif raw_mimetype == 'text/latex' %}
+        .. raw:: latex
+
+        {{ cell.source | indent }}
+        {%- elif raw_mimetype == 'text/markdown' %}
+        ..
+        {# Empty comment to make sure the preceding directive (if any) is closed #}
+        {{ cell.source | markdown2rst }}
+        {%- elif raw_mimetype == 'text/restructuredtext' %}
+        ..
+        {# Empty comment to make sure the preceding directive (if any) is closed #}
+        {{ cell.source }}
+        {% endif %}
+
+    "notebook_input_heading": |
+        {{ ("#" * cell.level + cell.source) | replace('\n', ' ') | convert_pandoc("markdown", "rst") }}
+
+    "notebook_input_unknown": |
+        .. unknown type  {{cell.type}}
+
+    "notebook_output_all": |
+        {# ignore output cells if cell.metadata.ipub.ignore = True #}
+        {%- if "ipub" in cell.metadata and cell.metadata.ipub.ignore %}
+        {%- else -%}
+            {%- if "ipub" in cell.metadata and cell.metadata.ipub.slideonly %}
+            {%- else -%}
+            {{ super() }}
+            {% endif %}
+        {% endif %}
+
+    "new_blocks": |
+        {% block nboutput -%}
+        {%- set html_datatype, latex_datatype = output | choose_output_type %}
+        {%- if html_datatype == latex_datatype %}
+        {{ insert_nboutput(html_datatype, output, cell) }}
+        {% elif cell.metadata.ipub and cell.metadata.ipub.table %}
+        {# only use the latex output (since we convert both to rst) #}
+        {{ insert_nboutput(latex_datatype, output, cell) }}
+        {% else %}
+        .. only:: html
+
+        {{ insert_nboutput(html_datatype, output, cell) | indent }}
+        .. only:: latex
+
+        {{ insert_nboutput(latex_datatype, output, cell) | indent }}
+        {% endif %}
+        {% endblock nboutput %}  
+
+    "notebook_output_error": |
+        {%- if "ipub" in cell.metadata and cell.metadata.ipub.error -%}
+        {{ self.nboutput() }}
+        {% endif %}
+#        ::
+#
+#        {{ super() }}
+
+#    "notebook_output_traceback_line": |
+#        {{ line | indent | strip_ansi }}
+
+    # stdin and stderr
+    "notebook_output_stream": |
+        {%- if "ipub" in cell.metadata and cell.metadata.ipub.text -%}
+        {{ self.nboutput() }}
+        {% endif %}
+#        .. parsed-literal::
+#
+#        {{ output.text | indent }}
+
+    "notebook_output_data_all": |
+        {{ self.nboutput() }}
+    
+    "footer": |
+        {# output a bibligraphy if there is one 
+        (see https://sphinxcontrib-bibtex.readthedocs.io/en/latest/usage.html) #}
+        {%- if nb.metadata.ipub: -%}
+        {%- if nb.metadata.ipub.bibliography: -%}
+        {% set filename = nb.metadata.ipub.bibliography | posix_path %}
+        .. bibliography:: {{ filename }}
+        {%- endif -%}
+        {% if nb.metadata.ipub.bibstyle and nb.metadata.ipub.bibstyle in ['plain', 'unsrt', 'unsrtalpha', 'alpha'] %}
+           :style: {{ nb.metadata.ipub.bibstyle }}
+        {%- endif %}
+        {%- endif %}
+        {% if 'application/vnd.jupyter.widget-state+json' in nb.metadata.widgets %}
+
+        .. raw:: html
+
+            <script type="application/vnd.jupyter.widget-state+json">
+            {{ nb.metadata.widgets['application/vnd.jupyter.widget-state+json'] | json_dumps }}
+            </script>
+        {% endif %}
+
+    "jinja_macros": |
+
+        {# tell the output directive about any empty lines before/after text #}
+        {% macro insert_empty_lines(text) %}
+        {%- set before, after = text | get_empty_lines %}
+        {%- if before %}
+            :empty-lines-before: {{ before }}
+        {%- endif %}
+        {%- if after %}
+            :empty-lines-after: {{ after }}
+        {%- endif %}
+        {%- endmacro %}
+
+        {# initial filter of output by type #}
+        {% macro insert_nboutput(datatype, output, cell) -%}
+        {%- if datatype == 'text/plain' %}
+        {%- if "ipub" in cell.metadata and cell.metadata.ipub.text -%}
+        {{ create_nboutput(datatype, output, cell) }}
+        {%- endif %}
+        {%- elif datatype == 'text/markdown' %}
+        {%- if "ipub" in cell.metadata and cell.metadata.ipub.mkdown -%}
+        {{ create_nboutput(datatype, output, cell) }}
+        {%- endif %}
+        {%- else %}
+        {{ create_nboutput(datatype, output, cell) }}
+        {%- endif %}
+        {% endmacro %}
+
+        {% macro create_nboutput(datatype, output, cell) -%}
+        {#- set main tags #}
+        {%- set ipub = cell.metadata.get('ipub', {}) %}
+        {% set ipubfigure = ipub.get("figure", {}) %}
+        {% set ipubtable = ipub.get("table", {}) %}
+        {% set ipubeqn = ipub.get("equation", {}) %}
+        {# find captions #}
+        {%- set ipubfigcaption = "figure" | get_caption(cell.metadata, resources) %}
+        {% if ipubfigcaption %}
+        {%- set ipubfigcaption = ipubfigcaption | ipypandoc('rst', nb.metadata, cell.metadata) %}        
+        {% endif %}
+        {%- set ipubtblcaption = "table" | get_caption(cell.metadata, resources)  %}
+        {% if ipubtblcaption %}
+        {%- set ipubtblcaption = ipubtblcaption | ipypandoc('rst', nb.metadata, cell.metadata) %}        
+        {% endif %}
+        {# create the output directive and supply it with the type of data #}
+        .. nboutput::
+        {%- if datatype == 'text/plain' %}{# nothing #}
+        {%- elif datatype == 'ansi' %} ansi
+        {%- else %} rst
+        {%- endif %}
+        {# add output directive options #}
+        {%- if output.output_type == 'execute_result' and cell.execution_count %}
+            :execution-count: {{ cell.execution_count }}
+        {%- endif %}
+        {%- if output != cell.outputs[-1] %}
+            :more-to-come:
+        {%- endif %}
+        {%- if output.name == 'stderr' %}
+            :class: stderr
+        {%- endif %}
+
+        {# output plain text type outputs #}
+        {%- if datatype == 'text/plain' and ipub.get('text', False) -%}
+        {{ insert_empty_lines(output.data[datatype]) }}
+
+        {{ output.data[datatype].strip('\n') | indent }}
+        {# output figure type outputs # TODO set width of figures from ipub metadata (need to convert fraction -> percentage) #}
+        {%- elif datatype in ['image/svg+xml', 'image/png', 'image/jpeg', 'application/pdf'] and ipub.get('figure', False) %}
+        
+            .. figure:: {{ output.metadata.filenames[datatype] | posix_path }}
+                :alt: {{ output.metadata.filenames[datatype] | posix_path | basename }}
+                :align: center
+        {%- if "width" in ipubfigure %}
+        {%- set width = ipubfigure.get("width") %}
+                :width: {{ width * 100 }}%
+        {%- elif datatype in output.metadata %}
+        {%- set width = output.metadata[datatype].width %}
+        {%- if width %}
+                :width: {{ width }}
+        {%- endif %}
+        {%- set height = output.metadata[datatype].height %}
+        {%- if height %}
+                :height: {{ height }}
+        {%- endif %}
+        {%- endif %}
+        {%- if ipubfigure.get("label", False) %}
+                :name: {{ ipubfigure["label"] }}
+        {%- endif %}
+        {%- if ipubfigcaption %}
+
+        {{ ipubfigcaption | indent | indent }}
+        {%- else %}
+        {#- The figure must have a caption for the references to work #}
+
+                {{ output.metadata.filenames[datatype] | posix_path | basename }}
+        {% endif %}
+        {# output markdown type outputs #}
+        {%- elif datatype in ['text/markdown'] and ipub.get('mkdown', False) %}
+
+        {{ output.data['text/markdown'] | ipypandoc('rst', nb.metadata, cell.metadata) | indent }}
+        {#- output latex equations #}
+        {%- elif datatype in ['text/latex'] and ipub.get('equation', False) and output.data['text/latex'] | is_equation %}
+
+            .. math::
+                :nowrap:
+        {%- if ipubeqn is mapping and ipubeqn.get("label", False) %}
+                :label: {{ ipubeqn["label"] }}
+        {%- endif %}
+
+        {{ output.data['text/latex'] | wrap_eqn(cell_meta=cell.metadata, nb_meta=nb.metadata, out="rst") | indent | indent }}
+        {#- output latex and html tables #}
+        {%- elif datatype in ['text/latex'] and ipub.get('table', False) %}
+
+            .. table::
+        {%- if ipubtblcaption %} {{ ipubtblcaption }}
+        {%- endif %}
+        {%- if ipubtable is mapping and ipubtable.get("label", False) %}
+                :name: {{ ipubtable["label"] }}
+        {%- endif %}
+
+        {{ output.data['text/latex'] | convert_pandoc('latex', 'rst') | indent | indent }}
+        {%- elif datatype in ['text/html'] and ipub.get('table', False) %}
+
+            .. table::
+        {%- if ipubtblcaption %} {{ ipubtblcaption }}
+        {%- endif %}
+        {%- if ipubtable is mapping and ipubtable.get("label", False) %}
+                :name: {{ ipubtable["label"] }}
+        {%- endif %}
+
+        {{ output.data['text/html'] | convert_pandoc('html-native_divs-native_spans', 'markdown') | convert_pandoc('markdown', 'rst') | indent | indent }}
+        {#- TODO need to strip any surrounding html (e.g. divs) and convert $$ :math:`` to math directive -#}
+        {#- the initial conversion to markdown is a quick fix to strip the divs  #}
+        {%- elif datatype == 'text/html' %}
+            :class: rendered_html
+
+            .. raw:: html
+
+        {{ output.data['text/html'] | indent | indent }}
+        {%- elif datatype == 'application/javascript' %}
+
+            .. raw:: html
+
+                <div></div>
+                <script type="text/javascript">
+                var element = document.currentScript.previousSibling.previousSibling;
+        {{ output.data['application/javascript'] | indent | indent }}
+                </script>
+        {%- elif datatype.startswith('application/vnd.jupyter') and datatype.endswith('+json') %}
+
+            .. raw:: html
+
+                <script type="{{ datatype }}">{{ output.data[datatype] | json_dumps }}</script>
+        {%- elif datatype == 'ansi' and ipub.get('text', False) %}
+
+            .. rst-class:: highlight
+
+            .. raw:: html
+
+                <pre>
+        {{ output.data[datatype] | ansi2html | indent | indent }}
+                </pre>
+
+            .. raw:: latex
+
+        {{ output.data[datatype] | escape_latex | ansi2latex | indent | indent }}
+                {# %
+                {
+                \\kern-\\sphinxverbatimsmallskipamount\\kern-\\baselineskip
+                \\kern+\\FrameHeightAdjust\\kern-\\fboxrule
+                \\vspace{\\nbsphinxcodecellspacing}
+                \\sphinxsetup{VerbatimBorderColor={named}{nbsphinx-code-border}}
+            {%- if output.name == 'stderr' %}
+                \\sphinxsetup{VerbatimColor={named}{nbsphinx-stderr}}
+            {%- else %}
+                \\sphinxsetup{VerbatimColor={named}{white}}
+            {%- endif %}
+                \\fvset{hllines={, ,}}%
+                \\begin{sphinxVerbatim}[commandchars=\\\\\\{\\}]
+        {{ output.data[datatype] | escape_latex | ansi2latex | indent | indent }}
+                \\end{sphinxVerbatim}
+                }
+                % The following \\relax is needed to avoid problems with adjacent ANSI
+                % cells and some other stuff (e.g. bullet lists) following ANSI cells.
+                % See https://github.com/sphinx-doc/sphinx/issues/3594
+                \\relax #}
+        {% else %}
+
+            .. nbwarning:: Data type cannot be displayed: {{ datatype }}
+        {%- endif %}
+        {% endmacro %}
+
+# END

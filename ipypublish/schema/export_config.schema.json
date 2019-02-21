@@ -94,6 +94,50 @@
                     }
                 }
             }
+        },
+        "postprocessors": {
+            "description": "configuration for post-processing of the stream output from the exporter",
+            "type": "object",
+            "properties": {
+                "order": {
+                    "description": "the order of application of the post-processors, named by their entry-point",
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "default": [
+                        "remove-blank-lines",
+                        "remove-trailing-space",
+                        "filter-output-files",
+                        "fix-slide-refs",
+                        "remove-folder",
+                        "write-text-file",
+                        "write-resource-files",
+                        "copy-resource-paths"
+                    ]
+                },
+                "config": {
+                    "description": "the traitlets configuration for post-processor classes",
+                    "type": "object",
+                    "default": {
+                        "IPyPostProcessor": {
+                            "skip_mime": true
+                        },
+                        "PDFExport": {
+                            "files_folder": "${files_path}",
+                            "convert_in_temp": false,
+                            "debug_mode": false,
+                            "open_in_browser": false,
+                            "skip_mime": false
+                        },
+                        "RemoveFolder": {
+                            "files_folder": "${files_path}"
+                        },
+                        "CopyResourcePaths": {
+                            "files_folder": "${files_path}"
+                        }
+                    }
+                }
+            }
+            
         }
     },
     "definitions": {

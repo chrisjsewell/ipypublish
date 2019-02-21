@@ -28,6 +28,7 @@
     "python.linting.flake8Enabled": true,
     "latex-workshop.latex.autoBuild.onSave.enabled": false,
     "cSpell.words": [
+        "Jupyter",
         "ipynb",
         "ipypublish",
         "jupytext",
@@ -42,7 +43,7 @@
         "FIXME",
         "NOTE"
       ],
-    "todo-tree.regex": "((//|#|<!--|\\.\\.|;|/\\*|^)\\s*($TAGS)|^\\s*- \\[ \\])",
+    "todo-tree.regex": "((//|#-?|<!--|\\.\\.|;|/\\*|^)\\s*($TAGS)|^\\s*- \\[ \\])",
     "todo-tree.defaultHighlight": {
         "icon": "alert",
         "type": "tag",
@@ -58,6 +59,11 @@
         "background": "white",
         "opacity": 10
         }
-    }
+    },
+    "yaml.format.enable": true,
 
+    "markdown-preview-enhanced.usePandocParser": true,
+    "markdown-preview-enhanced.pandocPath": "/anaconda/envs/lsr/bin/pandoc",
+    "markdown-preview-enhanced.pandocArguments": "--filter=/anaconda/envs/lsr/bin/ipubpandoc",
+    "markdown-preview-enhanced.enableScriptExecution": true
 }

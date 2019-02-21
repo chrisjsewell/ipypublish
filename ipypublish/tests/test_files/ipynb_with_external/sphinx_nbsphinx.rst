@@ -248,8 +248,8 @@ The plotting code for a sympy equation (:nbsphinx-math:`\cref{eqn:example_sympy}
 .. nbinput:: ipython3
     :execution-count: 10
 
-    f = sym.Function('f')
-    y,n = sym.symbols(r'y \alpha')
+    y = sym.Function('y')
+    n = sym.symbols(r'\alpha')
     f = y(n)-2*y(n-1/sym.pi)-5*y(n-2)
     sym.rsolve(f,y(n),[1,4])
 

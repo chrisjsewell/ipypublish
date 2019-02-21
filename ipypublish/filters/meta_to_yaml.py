@@ -1,5 +1,5 @@
 
-import yaml
+import ruamel.yaml as yaml
 from nbformat.notebooknode import NotebookNode
 
 

@@ -20,59 +20,49 @@
 #
 import os
 import io
-import sys
 import urllib
 import json
+import shutil
+import subprocess
 
+import sphinx
 from sphinx.application import Sphinx  # noqa
 
-on_rtd = os.environ.get('READTHEDOCS') == 'True'
-
-# sys.path.insert(0, os.path.abspath('.'))
-sys.path.insert(0, os.path.abspath('../..'))
 import ipypublish
+from ipypublish.filters_pandoc.main import jinja_filter
 
-# TODO run script api/run_apidoc automatically
-
-if on_rtd:
-    # create releases page
-    git_history = urllib.request.urlopen(
-        'https://api.github.com/repos/chrisjsewell/ipypublish/releases'
-    ).read().decode('utf-8')
-    # NOTE on vscode this could fail with urllib.error.HTTPError
-    git_history_json = json.loads(git_history)
-    # NOTE on vscode this was failing unless encoding='utf8' was present
-    with io.open('releases.md', 'w', encoding="utf8") as f:
-        f.write('# Releases\n')
-        f.write('\n')
-        for r in git_history_json:
-            subtitle = '## ' + ' '.join([r['tag_name'], '-', r['name'], '\n'])
-            f.write(subtitle)
-            f.write('\n')
-            for line in r['body'].split('\n'):
-                f.write(' '.join([line, '\n']))
-            f.write('\n')
+on_rtd = os.environ.get('READTHEDOCS') == 'True'
 
 # -- General configuration ------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
 #
-# needs_sphinx = '1.0'
+needs_sphinx = '1.6'
+
+# The master toctree document.
+master_doc = 'index'
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ['sphinx.ext.autodoc',
-              'sphinx.ext.doctest',
-              'sphinx.ext.intersphinx',
-              'sphinx.ext.todo',
-              'sphinx.ext.coverage',
-              'sphinx.ext.mathjax',
-              'sphinx.ext.ifconfig',
-              'sphinx.ext.viewcode',
-              'sphinx.ext.githubpages',  # TODO is this needed?
-              'sphinx.ext.napoleon',
-              'sphinx.ext.autosummary']
+extensions = [
+    'sphinx.ext.autodoc',
+    'sphinx.ext.doctest',
+    'sphinx.ext.intersphinx',
+    'sphinx.ext.todo',
+    'sphinx.ext.coverage',
+    'sphinx.ext.mathjax',
+    'sphinx.ext.ifconfig',
+    'sphinx.ext.viewcode',
+    'sphinx.ext.githubpages',  # TODO is this needed?
+    'sphinx.ext.napoleon',
+    'sphinx.ext.autosummary',
+    # 'sphinx.ext.imgconverter'  # converts svg to pdf in latex output
+    # TODO imgconverter failing (I guess for process.svg),
+    'ipypublish.ipysphinx',
+    'sphinxcontrib.bibtex'
+]
+
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -80,14 +70,33 @@ templates_path = ['_templates']
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
 #
-source_parsers = {
-    '.md': 'recommonmark.parser.CommonMarkParser',
-}
-source_suffix = ['.rst', '.md']
-# source_suffix = '.rst'
+# source_suffix = {
+#     '.rst': 'restructuredtext',
+#     '.md': 'markdown',
+#     '.ipynb': 'jupyter_notebook'
+# }
+# source_suffix = ['.rst', '.md', '.ipynb']
 
-# The master toctree document.
-master_doc = 'index'
+if sphinx.version_info[0:2] < (1, 8):
+    source_parsers = {
+        '.md': 'recommonmark.parser.CommonMarkParser',
+        '.Rmd': 'ipypublish.ipysphinx.parser.NBParser'
+    }
+else:
+    source_parsers = {
+        '.md': 'recommonmark.parser.CommonMarkParser'
+    }
+    import jupytext
+    ipysphinx_preconverters = {
+        ".Rmd": jupytext.readf
+    }
+ipysphinx_show_prompts = True
+
+# List of patterns, relative to source directory, that match files and
+# directories to ignore when looking for source files.
+# This patterns also effect to html_static_path and html_extra_path
+exclude_patterns = ["_build", "build", "**.ipynb_checkpoints", "converted"]
+
 
 # General information about the project.
 project = u'ipypublish'
@@ -111,11 +120,6 @@ release = ipypublish.__version__
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
 language = None
-
-# List of patterns, relative to source directory, that match files and
-# directories to ignore when looking for source files.
-# This patterns also effect to html_static_path and html_extra_path
-exclude_patterns = []
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
@@ -196,6 +200,35 @@ texinfo_documents = [
      'Miscellaneous'),
 ]
 
+# Numbered Elements
+numfig = True
+math_numfig = True
+numfig_secnum_depth = 2
+numfig_format: {'section': 'Section %s',
+                'figure': 'Fig. %s',
+                'table': 'Table %s',
+                'code-block': 'Code Block %s'}
+math_number_all = True
+math_eqref_format = "Eq. {number}"  # TODO this isn't working
+
+mathjax_config = {
+    'TeX': {'equationNumbers': {'autoNumber': 'AMS', 'useLabelIds': True}},
+}
+
+# Napoleon Docstring settings
+napoleon_numpy_docstring = True
+napoleon_include_private_with_doc = False
+napoleon_include_special_with_doc = False
+napoleon_use_admonition_for_examples = False
+napoleon_use_admonition_for_notes = False
+napoleon_use_admonition_for_references = False
+napoleon_use_ivar = True
+napoleon_use_param = True
+napoleon_use_rtype = True
+
+
+# INTERSPHINX
+
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
     'python': ('https://docs.python.org/3.6', None),
@@ -209,137 +242,20 @@ intersphinx_mapping = {
     'nbformat': ("http://nbformat.readthedocs.io/en/latest/", None),
     'tornado': ("https://www.tornadoweb.org/en/stable/", None),
     'traitlets': ("https://traitlets.readthedocs.io/en/stable/", None),
-    'jinja': ('http://jinja.pocoo.org/docs/dev', None)
+    'jinja': ('http://jinja.pocoo.org/docs/dev', None),
+    # 'docutils': ("https://docutils.readthedocs.io/en/sphinx-docs", None),
+    # # TODO docutils intersphinx
+    # 'sphinx': ('http://www.sphinx-doc.org/en/latest/', None)
 }
 
 intersphinx_aliases = {
     ('py:class', 'nbconvert.preprocessors.base.Preprocessor'):
         ('py:class', 'nbconvert.preprocessors.Preprocessor'),
     ('py:class', 'nbformat.notebooknode.NotebookNode'):
-        ('py:class', 'nbformat.NotebookNode')
+        ('py:class', 'nbformat.NotebookNode'),
+    ('py:class', 'traitlets.config.configurable.Configurable'):
+        ('py:module', 'traitlets.config')
 }
-
-
-def add_intersphinx_aliases_to_inv(app):
-    """see https://github.com/sphinx-doc/sphinx/issues/5603"""
-    from sphinx.ext.intersphinx import InventoryAdapter
-    inventories = InventoryAdapter(app.builder.env)
-
-    for alias, target in app.config.intersphinx_aliases.items():
-        alias_domain, alias_name = alias
-        target_domain, target_name = target
-        try:
-            found = inventories.main_inventory[target_domain][target_name]
-            try:
-                inventories.main_inventory[alias_domain][alias_name] = found
-            except KeyError:
-                continue
-        except KeyError:
-            continue
-
-
-# Napoleon settings
-napoleon_numpy_docstring = True
-napoleon_include_private_with_doc = False
-napoleon_include_special_with_doc = False
-napoleon_use_admonition_for_examples = False
-napoleon_use_admonition_for_notes = False
-napoleon_use_admonition_for_references = False
-napoleon_use_ivar = True
-napoleon_use_param = True
-napoleon_use_rtype = True
-
-
-def setup(app):
-    # type: (Sphinx) -> dict
-    """
-    extension for sphinx 
-    to genrate add an autofuncsummary directive
-
-    adapted from 
-    https://github.com/markovmodel/PyEMMA/blob/devel/doc/source/conf.py#L285
-    and discussed here:
-    https://stackoverflow.com/questions/20569011/python-sphinx-autosummary-automated-listing-of-member-functions
-    """
-
-    # app.connect('autodoc-skip-member', skip_deprecated)
-
-    app.add_config_value('intersphinx_aliases', {}, 'env')
-    app.connect('builder-inited', add_intersphinx_aliases_to_inv)
-
-    try:
-        from sphinx.ext.autosummary import Autosummary
-        # from sphinx.ext.autosummary import get_documenter
-        from docutils.parsers.rst import directives
-        # from sphinx.util.inspect import safe_getattr
-        # import re
-        import inspect
-        from types import FunctionType
-
-        class AutoFunctionSummary(Autosummary):
-
-            option_spec = {
-                'functions': directives.unchanged,
-                'classes': directives.unchanged,
-                'toctree': directives.unchanged,
-                'nosignatures': directives.unchanged
-            }
-
-            required_arguments = 1
-
-            @staticmethod
-            def get_functions(mod):
-
-                def is_function_local(obj):
-                    return (isinstance(obj, FunctionType) and
-                            obj.__module__ == mod.__name__)
-
-                members = inspect.getmembers(mod, predicate=is_function_local)
-                return [name for name, value in members
-                        if not name.startswith('_')]
-
-            @staticmethod
-            def get_classes(mod):
-
-                def is_class_local(obj):
-                    return (inspect.isclass(obj)
-                            and obj.__module__ == mod.__name__)
-
-                members = inspect.getmembers(mod, predicate=is_class_local)
-                return [name for name, value in members
-                        if not name.startswith('_')]
-
-            def run(self):
-
-                mod_path = self.arguments[0]
-
-                (package_name, mod_name) = mod_path.rsplit('.', 1)
-                pkg = __import__(package_name, globals(), locals(), [mod_name])
-                mod = getattr(pkg, mod_name)
-
-                if 'classes' in self.options:
-                    klasses = self.get_classes(mod)
-                    self.content = ["~%s.%s" % (mod_path, klass)
-                                    for klass in klasses
-                                    if not klass.startswith('_')]
-                if 'functions' in self.options:
-                    functions = self.get_functions(mod)
-                    content = ["~%s.%s" % (mod_path, func)
-                               for func in functions
-                               if not func.startswith('_')]
-                    if self.content:
-                        self.content += content
-                    else:
-                        self.content = content
-                try:
-                    pass
-                finally:
-                    return super(AutoFunctionSummary, self).run()
-
-        app.add_directive('autofuncsummary', AutoFunctionSummary)
-    except BaseException as e:
-        raise e
-
 
 # Warnings to ignore when using the -n (nitpicky) option
 # We should ignore any python built-in exception, for instance
@@ -380,4 +296,171 @@ nitpick_ignore = [('py:exc', 'ArithmeticError'), ('py:exc', 'AssertionError'),
                   ('py:func', 'str.format'),
                   ('py:class', '_abcoll.MutableMapping'),
                   ('py:class',
-                   'traitlets.config.configurable.LoggingConfigurable')]
+                   'traitlets.config.configurable.LoggingConfigurable'),
+                  ('py:class', 'docutils.nodes.Element'),
+                  ('py:class', 'docutils.parsers.rst.Directive'),
+                  ('py:class', 'docutils.transforms.Transform'),
+                  ('py:class', 'docutils.parsers.rst.Parser'),
+                  ('py:class', 'sphinx.parsers.RSTParser'),
+                  ('py:obj', 'sphinx.application.Sphinx'),
+                  ('py:exc', 'nbconvert.pandoc.PandocMissing')
+                  ]
+
+try:
+    out = subprocess.check_output(["git", "branch"]).decode("utf8")
+    current = next(line for line in out.split("\n") if line.startswith("*"))
+    gitbranch = current.strip("*").strip()
+except subprocess.CalledProcessError:
+    gitbranch = None
+
+# on rtd, returns e.g. (HEAD detached at origin/develop)
+if gitbranch is not None and "develop" in gitbranch:
+    gitpath = "blob/develop"
+    binderpath = "develop"
+else:
+    gitpath = "blob/v{}".format(ipypublish.__version__)
+    binderpath = "v{}".format(ipypublish.__version__)
+
+ipysphinx_prolog = r"""
+{{% set docname = env.doc2path(env.docname, base='docs/source') %}}
+
+.. only:: html
+
+    .. role:: raw-html(raw)
+        :format: html
+
+    .. nbinfo::
+
+        | This page was generated from `{{{{ docname }}}}`__,
+          with configuration: ``{{{{ env.config.ipysphinx_export_config }}}}``
+        {{%- if docname.endswith('.ipynb') %}}
+        | Interactive online version:
+          :raw-html:`<a href="https://mybinder.org/v2/gh/chrisjsewell/ipypublish/{binderpath}?filepath={{{{ docname }}}}"><img alt="Binder badge" src="https://mybinder.org/badge_logo.svg" style="vertical-align:text-bottom"></a>`
+        {{%- endif %}}
+    __ https://github.com/chrisjsewell/ipypublish/{gitpath}/{{{{ docname }}}}
+
+""".format(gitpath=gitpath, binderpath=binderpath)
+
+
+def create_git_releases(app):
+
+    this_folder = os.path.abspath(
+        os.path.dirname(os.path.realpath(__file__)))
+
+    git_history = urllib.request.urlopen(
+        'https://api.github.com/repos/chrisjsewell/ipypublish/releases'
+    ).read().decode('utf-8')
+    # NOTE on vscode this could fail with urllib.error.HTTPError
+    git_history_json = json.loads(git_history)
+    # NOTE on vscode this was failing unless encoding='utf8' was present
+    with io.open(os.path.join(this_folder, 'releases.rst'),
+                 'w', encoding="utf8") as f:
+        f.write('.. _releases:\n\n')
+        f.write('Releases\n')
+        f.write('========\n\n')
+        for i, r in enumerate(git_history_json):
+            if r['tag_name'].split(".")[-1] == "0":
+                level = 2
+            elif i == 0:
+                f.write("Current Version\n")
+                f.write("---------------\n\n")
+                level = 3
+            else:
+                level = 3
+            subtitle = ' '.join([r['tag_name'], '-', r['name'].rstrip(), '\n'])
+            f.write(subtitle)
+            if level == 2:
+                f.write("-" * (len(subtitle)-1)+"\n")
+            else:
+                f.write("~" * (len(subtitle)-1)+"\n")
+            f.write('\n')
+            source = jinja_filter(r['body'], "rst", {}, {})
+            for line in source.split('\n'):
+                f.write(' '.join([line.rstrip(), '\n']))
+            f.write('\n')
+
+
+def add_intersphinx_aliases_to_inv(app):
+    """see https://github.com/sphinx-doc/sphinx/issues/5603"""
+    from sphinx.ext.intersphinx import InventoryAdapter
+    inventories = InventoryAdapter(app.builder.env)
+
+    for alias, target in app.config.intersphinx_aliases.items():
+        alias_domain, alias_name = alias
+        target_domain, target_name = target
+        try:
+            found = inventories.main_inventory[target_domain][target_name]
+            try:
+                inventories.main_inventory[alias_domain][alias_name] = found
+            except KeyError:
+                continue
+        except KeyError:
+            continue
+
+
+def run_apidoc(app):
+    """ generate apidoc 
+
+    See: https://github.com/rtfd/readthedocs.org/issues/1139
+    """
+    # get correct paths
+    this_folder = os.path.abspath(
+        os.path.dirname(os.path.realpath(__file__)))
+    api_folder = os.path.join(this_folder, "api")
+    # module_path = ipypublish.utils.get_module_path(ipypublish)
+    module_path = os.path.normpath(
+        os.path.join(this_folder, "../../"))
+    ignore_setup = os.path.normpath(
+        os.path.join(this_folder, "../../setup.py"))
+    ignore_tests = os.path.normpath(
+        os.path.join(this_folder, "../../ipypublish/tests"))
+    if os.path.exists(api_folder):
+        shutil.rmtree(api_folder)
+    os.mkdir(api_folder)
+
+    argv = ["--separate", "-o", api_folder,
+            module_path, ignore_setup, ignore_tests]
+
+    try:
+        # Sphinx 1.7+
+        from sphinx.ext import apidoc
+    except ImportError:
+        # Sphinx 1.6 (and earlier)
+        from sphinx import apidoc
+        argv.insert(0, apidoc.__file__)
+
+    apidoc.main(argv)
+
+    # we don't use this
+    if os.path.exists(os.path.join(api_folder, "modules.rst")):
+        os.remove(os.path.join(api_folder, "modules.rst"))
+
+
+def get_version():
+    """alternative to getting directly"""
+    import re
+    this_folder = os.path.join(os.path.dirname(os.path.realpath(__file__)))
+    init_file = os.path.join(this_folder, "../../ipypublish/__init__.py")
+    with open(init_file) as fobj:
+        content = fobj.read()
+
+    match = re.match(
+        "\\_\\_version\\_\\_\\s*\\=\\s*[\\'\\\"]([0-9\\.]+)", content)
+    if not match:
+        raise IOError("couldn't find __version__ in: {}".format(init_file))
+    return match.group(1)
+
+
+def setup(app):
+    # type: (Sphinx) -> dict
+    """
+    extension for sphinx, for custom config
+    """
+
+    # app.connect('autodoc-skip-member', skip_deprecated)
+
+    # add aliases for intersphinx
+    app.add_config_value('intersphinx_aliases', {}, 'env')
+    app.connect('builder-inited', run_apidoc)
+    # app.connect('builder-inited', create_git_releases)
+    app.connect('builder-inited', add_intersphinx_aliases_to_inv)

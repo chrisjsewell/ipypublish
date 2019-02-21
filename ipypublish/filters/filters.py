@@ -8,6 +8,20 @@ def strip_ext(path):
     return os.path.splitext(path)[0]
 
 
+def basename(path, ext=False):
+    basename = os.path.basename(path)
+    if not ext:
+        basename = os.path.splitext(basename)[0]
+    return basename
+
+
+def get_empty_lines(text):
+    """Get number of empty lines before and after text."""
+    before = len(text) - len(text.lstrip('\n'))
+    after = len(text) - len(text.strip('\n')) - before
+    return before, after
+
+
 def wrap_latex(input, max_length=75, **kwargs):
     if len(input) > max_length:
         # remove double dollars, as they don't allow word wrap
@@ -21,13 +35,101 @@ def wrap_latex(input, max_length=75, **kwargs):
     return input
 
 
-def remove_dollars(input, **kwargs):
-    """remove dollars from start/end of file"""
-    while input.startswith('$'):
-        input = input[1:]
-    while input.endswith('$'):
-        input = input[0:-1]
-    return input
+def remove_dollars(text):
+    """remove dollars from start/end of text"""
+    while text.startswith('$'):
+        text = text[1:]
+    while text.endswith('$'):
+        text = text[0:-1]
+    return text
+
+
+def wrap_eqn(text, cell_meta, nb_meta, out="latex"):
+    """ wrap an equation in a latex equation environment
+
+    environment obtained (if present) from cell_meta.ipub.equation.environment)
+    label obtained (if present) from cell_meta.ipub.equation.label)
+    also, nb_meta.ipub.enable_breqn used
+
+    Parameters
+    ----------
+    text: str
+    cell_meta: dict
+        the cell metadata
+    nb_meta: dict
+        the notebook metadata
+
+    Returns
+    -------
+    new_text: str
+
+    """
+    numbered = True
+    try:
+        environment = cell_meta["ipub"]["equation"]["environment"]
+    except (KeyError, TypeError):
+        environment = None
+    if environment == "none":
+        environment = None
+    elif environment in ["equation*", "align*", "multline*",
+                         "gather*", "eqnarray*"]:
+        numbered = False
+    elif environment in ["equation", "align",
+                         "multline", "gather", "eqnarray"]:
+        pass
+    elif environment == "breqn" and out == "latex":
+        if nb_meta.get("ipub", {}).get("enable_breqn", False):
+            environment = "dmath*"
+        else:
+            environment = None
+    else:
+        environment = None
+
+    try:
+        label = cell_meta["ipub"]["equation"]["label"]
+    except (KeyError, TypeError):
+        label = None
+
+    if environment:
+        outtext = "\\begin{{{0}}}".format(environment)
+        if label and numbered and out == "latex":
+            outtext += "\\label{{{0}}}".format(label)
+        outtext += "\n" + remove_dollars(text)
+        outtext += "\n\\end{{{0}}}".format(environment)
+    else:
+        outtext = text
+
+    return outtext
+
+
+def get_caption(etype, cell_meta, resources):
+    """return an ipypublish caption or False
+
+    captions can either be located at cell_meta.ipub.<type>.caption,
+    or at resources.caption[cell_meta.ipub.<type>.label]
+
+    the resources version is proritised
+    """
+    try:
+        caption = cell_meta["ipub"][etype]["caption"]
+    except (KeyError, TypeError):
+        caption = False
+
+    try:
+        label = cell_meta["ipub"][etype]["label"]
+    except (KeyError, TypeError):
+        label = False
+
+    rcaption = False
+    if label:
+        try:
+            rcaption = resources["caption"][label]
+        except (KeyError, TypeError):
+            pass
+
+    if rcaption:
+        return rcaption
+    return caption
 
 
 def first_para(input, **kwargs):
@@ -163,6 +265,7 @@ def dict_to_kwds(inobject, kwdstr='', overwrite=True):
 
 
 def is_equation(text):
+    """test if a piece of text is a latex equation, by how it is wrapped"""
     text = text.strip()
 
     if any([text.startswith('\\begin{{{0}}}'.format(env))

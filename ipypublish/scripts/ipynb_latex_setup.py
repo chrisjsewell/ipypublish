@@ -9,11 +9,19 @@ at top of workbook, use:
     from ipynb_latex_setup import *
 
 """
-
 from __future__ import division as _division
 # Py2/Py3 compatibility
 # =====================
 from __future__ import print_function as _print_function
+
+import warnings
+warnings.warn(
+    "this approach is now deprecated, "
+    "instead please use\n`from ipypublish.scripts import nb_setup`\n"
+    "then use the individual functions it provides to setup matplotlib, etc",
+    DeprecationWarning,
+    stacklevel=2)
+
 
 # PYTHON
 # =======
@@ -31,9 +39,12 @@ except ImportError:
 if _ipy_present:
     ipython = get_ipython()
     if ipython is not None:
-        ipython.magic("config InlineBackend.figure_format = 'svg'")
-        ipython.magic("matplotlib inline")
-        set_matplotlib_formats('pdf', 'svg')
+        try:
+            ipython.magic("config InlineBackend.figure_format = 'svg'")
+            ipython.magic("matplotlib inline")
+            set_matplotlib_formats('pdf', 'svg')
+        except Exception:
+            pass
 
 # NUMPY
 # =====
@@ -78,7 +89,7 @@ except ImportError:
 if _pandas_present and ipython:
     pd.set_option('display.latex.repr', True)
     pd.set_option('display.latex.longtable', False)
-    pd.set_option('display.latex.escape', False)
+    pd.set_option('display.latex.escape', True)
 
 # SYMPY
 # =====

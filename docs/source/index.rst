@@ -1,27 +1,28 @@
 .. image:: _static/logo_name.png
     :alt: **IPyPublish**
 
-A package for creating and editing publication ready scientific reports and presentations,
-from Jupyter Notebooks.
+A package for creating and editing publication ready scientific reports
+and presentations, from Jupyter Notebooks.
+
+
+.. figure:: _static/main_image.*
+    :width: 60%
+    :align: center
+    :alt: image of cycle
+
 
 .. attention::
 
-    A major API improvement occurred in ``v0.7.0``.
-    This has not changed the general user interface,
-    but anyone using custom converter plugins will be required to update them
-    (see :ref:`convert_from_old_api`)
+    IPyPublish has evolved!
 
-.. todo:: update gif
-
-.. figure:: https://github.com/chrisjsewell/ipypublish/raw/master/example_workflow.gif
-    :alt: example_workflow.gif
+    Please see :ref:`releases` for all the exciting new feature.
 
 
 IPyPublish: Features
 ====================
 
 Combining features of the Jupyter Notebook,
-WYSIWYG editors and the Latex document preparation system,
+WYSIWYG editors, Latex document preparation system and Sphinx HTML creation,
 to provide a workflow for:
 
 - Dynamic editing and visualisation of key document components
@@ -36,11 +37,10 @@ to provide a workflow for:
 - Output the same source document to different layouts and formats
   (pdf, html, presentation slides, etc).
 
-.. figure:: _static/process.svg
-    :align: center
-    :height: 300px
-    :alt: conversion process
-    :figclass: align-center
+Another strength of IPyPublish,
+is that it is almost entirely modular and configurable, making it very easy to
+modify or extend the current functionality.
+
 
 Citation
 ========
@@ -55,15 +55,19 @@ Badges
 
 .. toctree::
    :maxdepth: 2
+   :numbered:
    :caption: Contents:
 
    getting_started
-   examples
-   notebook_conversion
+   code_cells
+   markdown_cells
+   nb_conversion
    metadata_tags
    custom_export_config
-   additional_tools
+   sphinx_extension
+   examples
    applications
+   additional_tools
    acknowledgements
    package_api
    releases

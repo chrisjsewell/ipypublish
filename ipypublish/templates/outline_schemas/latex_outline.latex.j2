@@ -1,10 +1,12 @@
 ((*- extends 'display_priority.tplx' -*))
 
+@ipubreplace{below}{globals}
+
 %% Latex Document Setup
 %% ====================
 
 ((* block header *))
-% A latex document created by ipypublish @ipubreplace{below}{ipypub_version}
+% A latex document created by ipypublish@ipubreplace{below}{ipypub_version}
 ((( '@ipubreplace{below}{meta_docstring}' | comment_lines('% ') )))
 %
 

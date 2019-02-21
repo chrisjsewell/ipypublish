@@ -1,0 +1,23 @@
+/* CSS overrides for cloud theme */
+
+/* nicer titles and more space for info and warning logos */
+
+div.admonition p.admonition-title {
+    background: rgba(0, 0, 0, .05);
+    margin: .5em -1em;
+    margin-top: -.5em !important;
+    padding: .5em .5em .5em 2.65em;
+}
+
+/* indent single paragraph */
+div.admonition {
+    text-indent: 20px;
+}
+/* don't indent multiple paragraphs */
+div.admonition > p {
+    text-indent: 0;
+}
+/* remove excessive padding */
+div.admonition.inline-title p.admonition-title {
+    padding-left: .2em;
+}

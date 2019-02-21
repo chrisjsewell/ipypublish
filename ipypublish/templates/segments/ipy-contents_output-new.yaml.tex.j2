@@ -1,0 +1,178 @@
+"schema": "../../schema/segment.schema.json"
+"description": "with the main ipypublish content"
+"identifier": "ipypublish-contents_output"
+"segments":
+
+  "document_packages": |2
+
+    ((*- if nb.metadata.ipub: -*))
+    ((*- if nb.metadata.ipub.enable_breqn: -*))
+    \usepackage{breqn}
+    ((*- endif *))
+    ((*- endif *))
+
+  "notebook_input": |2
+
+    ((*- if cell.metadata.ipub: -*))
+        ((*- if cell.metadata.ipub.ignore: -*))
+        ((*- elif cell.metadata.ipub.slideonly: -*))
+        ((*- else -*))
+        ((( super() )))
+        ((*- endif *))
+    ((*- else -*))
+        ((( super() )))
+    ((*- endif *))
+
+  "notebook_input_markdown": |2
+
+    ((( cell.source | citation2latex | strip_files_prefix | ipypandoc('latex', nb.metadata, cell.metadata) )))
+
+  "notebook_input_raw": |2
+
+    ((*- if cell.metadata.raw_mimetype: -*))  
+    ((*- if cell.metadata.raw_mimetype == "text/latex" -*))  
+    ((( super() )))    
+    ((*- endif *))
+    ((*- endif *))
+
+  "notebook_output": |2
+
+    ((*- if cell.metadata.ipub: -*))
+        ((*- if cell.metadata.ipub.ignore: -*))
+        ((*- elif cell.metadata.ipub.slideonly: -*))
+        ((*- else -*))
+        ((( super() )))
+        ((*- endif *))
+    ((*- else -*))
+        ((( super() )))
+    ((*- endif *))
+
+  "notebook_output_latex": |2
+
+    ((*- if cell.metadata.ipub: *))
+    ((*- if cell.metadata.ipub.table and cell.metadata.ipub.equation *))
+    ((*- if output.data['text/latex'] | is_equation *))
+    ((( output.data['text/latex'] | wrap_eqn(cell_meta=cell.metadata, nb_meta=nb.metadata) )))
+    ((*- else *))
+    ((( draw_table(cell, resources, output.data['text/latex']) )))
+    ((*- endif *))
+    ((*- else *))
+    ((*- if cell.metadata.ipub.table: *))
+    ((( draw_table(cell, resources, output.data['text/latex']) )))
+    ((*- elif cell.metadata.ipub.equation: *))
+    ((( output.data['text/latex'] | wrap_eqn(cell_meta=cell.metadata, nb_meta=nb.metadata) )))
+    ((*- endif *))
+    ((*- endif *))
+    ((*- endif *))
+
+  "notebook_output_markdown": |2
+
+    ((*- if cell.metadata.ipub: -*))
+    ((*- if cell.metadata.ipub.mkdown: -*))
+    ((( output.data['text/markdown'] | citation2latex | strip_files_prefix | ipypandoc('latex', nb.metadata, cell.metadata) )))
+    ((*- endif *))
+    ((*- endif *))
+
+  "notebook_output_stream": |2
+
+    ((*- if cell.metadata.ipub and cell.metadata.ipub.ignore -*))
+    ((*- else -*))
+        ((( super() )))
+    ((*- endif *))
+
+  "notebook_output_pdf": |2
+
+    ((( draw_figure(output.metadata.filenames['application/pdf'],
+    cell.metadata) )))
+
+  "notebook_output_png": |2
+
+    ((( draw_figure(output.metadata.filenames['image/png'],
+    cell.metadata) )))
+
+  "notebook_output_jpg": |2
+
+    ((( draw_figure(output.metadata.filenames['image/jpeg'],
+    cell.metadata) )))
+
+  "notebook_output_svg": |2
+
+    ((( draw_figure(output.metadata.filenames['image/svg+xml'],
+    cell.metadata) )))
+
+  "jinja_macros": |2
+
+    ((# draw figures #))
+    ((* macro draw_figure(filename, meta) -*))
+    ((*- if meta.ipub: -*))
+    ((*- if meta.ipub.figure: -*))
+    ((* set filename = filename | posix_path *))
+    ((*- block figure scoped -*))
+
+        ((*- if meta.ipub.figure.placement: -*))
+            ((*- if meta.ipub.figure.widefigure: -*))
+        \begin{figure*}[(((meta.ipub.figure.placement)))]
+            ((*- else -*))
+        \begin{figure}[(((meta.ipub.figure.placement)))]
+            ((*- endif *))
+        ((*- else -*))
+            ((*- if meta.ipub.figure.widefigure: -*))
+        \begin{figure*}
+            ((*- else -*))
+        \begin{figure}
+            ((*- endif *))
+        ((*- endif *))
+
+        ((*- if meta.ipub.figure.width: -*))
+        \begin{center}\adjustimage{max size={0.9\linewidth}{0.9\paperheight},width=(((meta.ipub.figure.width)))\linewidth}{((( filename )))}\end{center}
+        ((*- elif meta.ipub.figure.height: -*))
+        \begin{center}\adjustimage{max size={0.9\linewidth}{0.9\paperheight},height=(((meta.ipub.figure.height)))\paperheight}{((( filename )))}\end{center}
+        ((*- else -*))
+        \begin{center}\adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{((( filename )))}\end{center}
+        ((*- endif *))
+
+        ((*- set caption = "figure" | get_caption(meta, resources) -*))
+        ((*- if caption -*))
+        \caption{((( caption | ipypandoc('latex', nb.metadata, meta) )))}
+        ((*- endif *))
+        ((*- if meta.ipub.figure.label: -*))
+        \label{((( meta.ipub.figure.label )))}
+        ((*- endif *))
+        \end{figure}
+
+    ((*- endblock figure -*))
+    ((*- endif *))
+    ((*- endif *))
+    ((*- endmacro *))
+
+    ((# draw tables #))
+    ((* macro draw_table(cell, resources, text) -*))
+    ((*- block table scoped -*))
+
+    ((*- if cell.metadata.ipub.table.placement: -*))
+    \begin{table}[(((cell.metadata.ipub.table.placement)))]
+    ((*- else -*))
+    \begin{table}
+    ((*- endif *))
+
+    ((*- set caption = "table" | get_caption(cell.metadata, resources) -*))
+    ((*- if caption *))
+    \caption{((( caption | ipypandoc('latex', nb.metadata, cell.metadata) )))}
+    ((*- endif *))
+
+    ((*- if cell.metadata.ipub.table.label -*))
+    \label{((( cell.metadata.ipub.table.label )))}
+    ((*- endif *))
+    \centering
+    \begin{adjustbox}{max width=\textwidth}
+    ((*- if cell.metadata.ipub.table.alternate: -*))
+    \rowcolors{2}{(((cell.metadata.ipub.table.alternate)))}{white}
+    ((*- endif *))
+    ((( text )))
+    \end{adjustbox}
+    \end{table}
+
+    ((*- endblock table -*))
+    ((*- endmacro *))
+
+  
