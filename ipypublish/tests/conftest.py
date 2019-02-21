@@ -50,6 +50,18 @@ def nb_markdown_cells():
 
 
 @pytest.fixture
+def ipynb_with_attach():
+    return {
+        "input_file": pathlib.Path(os.path.join(
+            TEST_FILES_DIR, 'nb_with_attachment',
+            'nb_with_attachment.ipynb')),
+        "latex_ipypublish_main": pathlib.Path(os.path.join(
+            TEST_FILES_DIR, 'nb_with_attachment',
+            'latex_ipypublish_main.tex'))
+    }
+
+
+@pytest.fixture
 def ipynb_with_bib():
     return pathlib.Path(os.path.join(TEST_FILES_DIR, 'ipynb_with_bib.ipynb'))
 

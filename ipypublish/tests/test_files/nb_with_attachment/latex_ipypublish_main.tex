@@ -1,6 +1,6 @@
 
 
-% A latex document created by ipypublish
+% A latex document created by ipypublish 
 % outline: ipypublish.templates.outline_schemas/latex_outline.latex.j2
 % with segments:
 % - standard-standard_packages: with standard nbconvert packages
@@ -17,10 +17,6 @@
 toc=sectionentrywithdots,
 bibliography=totocnumbered,
 captions=tableheading,numbers=noendperiod]{scrartcl}
-%\usepackage{polyglossia}
-%\setmainlanguage{portuges}
-%\DeclareTextCommandDefault{\nobreakspace}{\leavevmode\nobreak\ }
-\usepackage[portuges]{babel}
 
 %%%%%%%%%%%%
 
@@ -73,7 +69,7 @@ captions=tableheading,numbers=noendperiod]{scrartcl}
 \usepackage[footsepline=0.25pt]{scrlayer-scrpage}
 
 % bibliography formatting
-\usepackage[sort,super]{natbib}
+\usepackage[numbers, square, super, sort&compress]{natbib}
 % hyperlink doi's
 \usepackage{doi}
 
@@ -382,11 +378,6 @@ nohead,includefoot,footskip=25pt}
 \renewcommand\thefigure{\thesection.\arabic{figure}}
 \renewcommand\theequation{\thesection.\arabic{equation}}
 
-    % set global options for float placement
-    \makeatletter
-        \providecommand*\setfloatlocations[2]{\@namedef{fps@#1}{#2}}
-    \makeatother
-
 % align captions to left (indented)
 \captionsetup{justification=raggedright,
 singlelinecheck=false,format=hang,labelfont={it,bf}}
@@ -405,9 +396,6 @@ singlelinecheck=false,format=hang,labelfont={it,bf}}
 \ofoot{\pagemark}
 \cfoot{}
 
-% set depth of table of contents
-\setcounter{tocdepth}{2}
-
 %%%%%%%%%%%%
 
 %%%%%%%%%%%% FINAL HEADER MATERIAL
@@ -425,205 +413,18 @@ singlelinecheck=false,format=hang,labelfont={it,bf}}
 % make the text float work with cleverref
 \crefname{errorcell}{error}{errors}
 \Crefname{errorcell}{error}{errors}
-
 %%%%%%%%%%%%
 
 \begin{document}
 
-    \begin{titlepage}
-  \begin{flushright}
-    \includegraphics[width=0.7\textwidth]{ipynb_with_external_files/logo_example.png}
-  \end{flushright}
+\hypertarget{notebook-with-attachment}{%
+\section{Notebook with attachment}\label{notebook-with-attachment}}
 
-  \begin{center}
-
-  \vspace*{1cm}
-
-  \Huge\textbf{Main-Title}
-
-  \vspace{0.5cm}\LARGE{Sub-Title}
-
-  \vspace{1.5cm}
-
-  \begin{minipage}{0.8\textwidth}
-    \begin{center}
-    \begin{minipage}{0.39\textwidth}
-    \begin{flushleft} \Large
-    \emph{\GetTranslation{Author}:}\\Authors Name\\\href{mailto:authors@email.com}{authors@email.com}
-    \end{flushleft}
-    \end{minipage}
-    \hspace{\fill}
-    \begin{minipage}{0.39\textwidth}
-    \begin{flushright} \Large\emph{\GetTranslation{Supervisors}:} \\
-        First Supervisor
-        Second Supervisor
-    \end{flushright}
-    \end{minipage}
-    \end{center}
-  \end{minipage}
-
-  \vfill
-
-  \begin{minipage}{0.8\textwidth}
-  \begin{center}\LARGE{A tagline for the report.}
-  \end{center}
-  \end{minipage}
-
-  \vspace{0.8cm}
-      \LARGE{Institution1}\\
-      \LARGE{Institution2}\\
-
-  \vspace{0.4cm}
-
-  \today
-
-  \end{center}
-  \end{titlepage}
-
-    \begingroup
-    \let\cleardoublepage\relax
-    \let\clearpage\relax\tableofcontents\listoffigures\listoftables\listof{codecell}{\GetTranslation{List of Codes}}
-    \endgroup
-
-\hypertarget{markdown}{%
-\section{Markdown}\label{markdown}}
-
-\hypertarget{general}{%
-\subsection{General}\label{general}}
-
-Some markdown text.
-
-A list:
-
-\begin{itemize}
-\tightlist
-\item
-  something
-\item
-  something else
-\end{itemize}
-
-A numbered list
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  something
-\item
-  something else
-\end{enumerate}
-
-non-ascii characters TODO
-
-This is a long section of text, which we only want in a document (not a
-presentation) some text some more text some more text some more text
-some more text some more text some more text some more text some more
-text
-
-\hypertarget{references-and-citations}{%
-\subsection{References and Citations}\label{references-and-citations}}
-
-References to \cref{fig:example}, \cref{tbl:example},
-\eqref{eqn:example_sympy} and \cref{code:example_mpl}.
-
-A latex citation.\cite{zelenyak_molecular_2016}
-
-A html citation.\cite{kirkeminde_thermodynamic_2012}
-
-\hypertarget{todo-notes}{%
-\subsection{Todo notes}\label{todo-notes}}
-
-\todo[inline]{an inline todo}
-
-Some text.\todo{a todo in the margins}
-
-\hypertarget{text-output}{%
-\section{Text Output}\label{text-output}}
-
-\begin{lstlisting}[aboveskip=5pt,backgroundcolor=\color{blue!10},belowskip=5pt,breakindent=0pt,language={},numbers=none,postbreak={},xrightmargin=7pt]
-
-This is some printed text,
-with a nicely formatted output.
-
-\end{lstlisting}
-
-\hypertarget{images-and-figures}{%
-\section{Images and Figures}\label{images-and-figures}}
-
-    \begin{figure}[!bh]\begin{center}\adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{ipynb_with_external_files/output_13_0.jpeg}\end{center}\caption{A nice picture.}\label{fig:example}
-    \end{figure}
-
-\hypertarget{displaying-a-plot-with-its-code}{%
-\subsection{Displaying a plot with its
-code}\label{displaying-a-plot-with-its-code}}
-
-\begin{codecell}
-\caption{The plotting code for a matplotlib figure (\cref{fig:example_mpl}).}
-\label{code:example_mpl}
-\begin{lstlisting}[language=Python,numbers=left,xleftmargin=20pt,xrightmargin=5pt,belowskip=5pt,aboveskip=5pt]
-plt.scatter(np.random.rand(10), np.random.rand(10),
-            label='data label')
-plt.ylabel(r'a y label with latex $\alpha$')
-plt.legend();
-\end{lstlisting}\end{codecell}
-
-\begin{figure}\begin{center}\adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{ipynb_with_external_files/output_17_0.pdf}\end{center}\caption{A matplotlib figure, with the caption set in the markdowncell above the
-figure.}\label{fig:example_mpl}
-    \end{figure}
-
-\hypertarget{tables-with-pandas}{%
-\section{Tables (with pandas)}\label{tables-with-pandas}}
-
-\begin{codecell}[H]
-\caption{The plotting code for a pandas Dataframe table (\cref{tbl:example}).}
-\label{code:example_pd}
-\begin{lstlisting}[language=Python,numbers=left,xleftmargin=20pt,xrightmargin=5pt,belowskip=5pt,aboveskip=5pt]
-df = pd.DataFrame(np.random.rand(3,4),columns=['a','b','c','d'])
-df.a = ['$\delta$','x','y']
-df.b = ['l','m','n']
-df.set_index(['a','b'])
-df.round(3)
-\end{lstlisting}\end{codecell}
-
-\begin{table}[H]
-\caption{An example of a table created with pandas dataframe.}\label{tbl:example}
+\begin{figure}[htbp]
 \centering
-\begin{adjustbox}{max width=\textwidth}\rowcolors{2}{gray!20}{white}
-\begin{tabular}{lllrr}
-\toprule
-{} &         a &  b &      c &      d \\
-\midrule
-0 &  $\delta$ &  l &  0.583 &  0.279 \\
-1 &         x &  m &  0.914 &  0.021 \\
-2 &         y &  n &  0.333 &  0.116 \\
-\bottomrule
-\end{tabular}
-
-\end{adjustbox}
-\end{table}
-
-\hypertarget{equations-with-ipython-or-sympy}{%
-\section{Equations (with ipython or
-sympy)}\label{equations-with-ipython-or-sympy}}
-
-$$ a = b+c $$
-
-\begin{codecell}[H]
-\caption{The plotting code for a sympy equation (\eqref{eqn:example_sympy}).}
-\label{code:example_sym}
-\begin{lstlisting}[language=Python,numbers=left,xleftmargin=20pt,xrightmargin=5pt,belowskip=5pt,aboveskip=5pt]
-y = sym.Function('y')
-n = sym.symbols(r'\alpha')
-f = y(n)-2*y(n-1/sym.pi)-5*y(n-2)
-sym.rsolve(f,y(n),[1,4])
-\end{lstlisting}\end{codecell}
-
-\begin{equation}\label{eqn:example_sympy}
-\left(\sqrt{5} i\right)^{\alpha} \left(\frac{1}{2} - \frac{2 i}{5} \sqrt{5}\right) + \left(- \sqrt{5} i\right)^{\alpha} \left(\frac{1}{2} + \frac{2 i}{5} \sqrt{5}\right)
-\end{equation}
-
-      \bibliographystyle{unsrtnat}
-\bibliography{ipynb_with_external_files/example}
+\includegraphics{nb_with_attachment_files/attach_1_output_13_0.jpeg}
+\caption{output\_13\_0.jpeg}
+\end{figure}
 
 \end{document}
+
