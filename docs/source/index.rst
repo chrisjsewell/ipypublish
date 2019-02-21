@@ -17,11 +17,6 @@ and presentations, from Jupyter Notebooks.
 
     Please see :ref:`releases` for all the exciting new feature.
 
-.. A major API improvement occurred in ``v0.7.0``.
-.. This has not changed the general user interface,
-.. but anyone using custom converter plugins will be required to update them
-.. (see :ref:`convert_from_old_api`)
-
 
 IPyPublish: Features
 ====================
@@ -69,6 +64,7 @@ Badges
    nb_conversion
    metadata_tags
    custom_export_config
+   sphinx_extension
    examples
    applications
    additional_tools

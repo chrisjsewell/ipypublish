@@ -2,7 +2,7 @@ import logging
 
 from six import string_types
 from traitlets import Bool
-from traitlets.config.configurable import LoggingConfigurable
+from traitlets.config.configurable import Configurable
 
 from ipypublish.utils import handle_error, pathlib
 
@@ -12,7 +12,7 @@ except ImportError:
     from distutils.spawn import find_executable as exe_exists  # noqa: F401
 
 
-class IPyPostProcessor(LoggingConfigurable):
+class IPyPostProcessor(Configurable):
     """ an abstract class for post-processors
     """
 

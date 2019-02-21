@@ -1,7 +1,7 @@
 {
   "$schema": "../schema/export_config.schema.json",
   "description": [
-    "sphinx reStructuredText in the main ipypublish format",
+    "sphinx reStructuredText in the main ipypublish format, and also calls Sphinx",
     "- only output cells with metadata tags are used",
     "- code, figures, tables and code are formatted accordingly"
   ],

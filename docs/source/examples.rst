@@ -3,7 +3,8 @@
 Examples
 --------
 
-For an example of the potential input/output:
+For an example of the potential input/output,
+see :ref:`code_cells` and also:
 
 - :download:`Example.ipynb <../../example/notebooks/Example.ipynb>`
 - `Example.pdf <https://chrisjsewell.github.io/ipypublish/Example.view_pdf.html>`__

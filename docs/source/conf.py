@@ -462,5 +462,5 @@ def setup(app):
     # add aliases for intersphinx
     app.add_config_value('intersphinx_aliases', {}, 'env')
     app.connect('builder-inited', run_apidoc)
-    app.connect('builder-inited', create_git_releases)
+    # app.connect('builder-inited', create_git_releases)
     app.connect('builder-inited', add_intersphinx_aliases_to_inv)
