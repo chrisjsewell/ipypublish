@@ -1,5 +1,6 @@
 import webbrowser
 import shutil
+import os
 from subprocess import Popen, PIPE, STDOUT
 from distutils.spawn import find_executable
 
@@ -174,7 +175,9 @@ class RunSphinx(IPyPostProcessor):
 
         if self.open_in_browser and not exitcode:
             # get entry path
-            entry_path = filepath.parent.joinpath('build/html/index.html')
+            entry_path = filepath.parent.joinpath('build/html')
+            entry_path = entry_path.joinpath(
+                os.path.splitext(filepath.name)[0] + '.html')
             if entry_path.exists():
                 #  2 opens the url in a new tab
                 webbrowser.open(entry_path.as_uri(), new=2)

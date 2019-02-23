@@ -224,7 +224,7 @@
         {%- elif datatype == 'ansi' %} ansi
         {%- else %} rst
         {%- endif %}
-        {# add output directive options #}
+        {#- add output directive options #}
         {%- if output.output_type == 'execute_result' and cell.execution_count %}
             :execution-count: {{ cell.execution_count }}
         {%- endif %}
