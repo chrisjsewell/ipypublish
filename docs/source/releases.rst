@@ -13,6 +13,11 @@ Releases
 Version 0.9
 -----------
 
+v0.9.1
+~~~~~~
+
+Minor big fix.
+
 v0.9.0
 ~~~~~~
 
