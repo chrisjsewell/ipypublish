@@ -235,7 +235,7 @@
             :class: stderr
         {%- endif %}
 
-        {# output plain text type outputs #}
+        {#- output plain text type outputs #}
         {%- if datatype == 'text/plain' and ipub.get('text', False) -%}
         {{ insert_empty_lines(output.data[datatype]) }}
 
@@ -270,7 +270,7 @@
 
                 {{ output.metadata.filenames[datatype] | posix_path | basename }}
         {% endif %}
-        {# output markdown type outputs #}
+        {#- output markdown type outputs #}
         {%- elif datatype in ['text/markdown'] and ipub.get('mkdown', False) %}
 
         {{ output.data['text/markdown'] | ipypandoc('rst', nb.metadata, cell.metadata) | indent }}

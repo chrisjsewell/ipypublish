@@ -13,10 +13,10 @@ Releases
 Version 0.9
 -----------
 
-v0.9.1
-~~~~~~
+v0.9.1 & 0.9.2
+~~~~~~~~~~~~~~
 
-Minor big fix.
+Minor big fix to fix blank line between directives and options in RST
 
 v0.9.0
 ~~~~~~
