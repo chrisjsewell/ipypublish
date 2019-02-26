@@ -138,7 +138,20 @@
         ((*- if meta.ipub.figure.label: -*))
         \label{((( meta.ipub.figure.label )))}
         ((*- endif *))
+
+        ((*- if meta.ipub.figure.placement: -*))
+            ((*- if meta.ipub.figure.widefigure: -*))
+        \end{figure*}
+            ((*- else -*))
         \end{figure}
+            ((*- endif *))
+        ((*- else -*))
+            ((*- if meta.ipub.figure.widefigure: -*))
+        \end{figure*}
+            ((*- else -*))
+        \end{figure}
+            ((*- endif *))
+        ((*- endif *))
 
     ((*- endblock figure -*))
     ((*- endif *))
