@@ -1,3 +1,6 @@
+include LICENSE
+include README.md
+include requirements.txt
 recursive-include ipypublish *.json
 recursive-include ipypublish *.j2
 recursive-include ipypublish *.yaml
