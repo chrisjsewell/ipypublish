@@ -51,7 +51,7 @@ Please cite |DOI| if using IPyPublish.
 Badges
 ======
 
-|Build Status| |Coverage Status| |PyPI|
+|Build Status| |Coverage Status| |PyPI| |Conda|
 
 .. toctree::
    :maxdepth: 2
@@ -100,3 +100,5 @@ Index and Search
    :target: https://pypi.python.org/pypi/ipypublish/
 .. |DOI| image:: https://zenodo.org/badge/96322423.svg
    :target: https://zenodo.org/badge/latestdoi/96322423
+.. |Conda| image:: https://anaconda.org/conda-forge/ipypublish/badges/version.svg
+   :target: https://anaconda.org/conda-forge/ipypublish

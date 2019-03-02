@@ -7,7 +7,7 @@ traitlets
 tornado
 bibtexparser
 jsonextended>=0.7
-six
+six>=1.11.0
 jsonschema
 ruamel.yaml
 panflute

@@ -13,6 +13,15 @@ Releases
 Version 0.9
 -----------
 
+v0.9.3
+~~~~~~
+
+Added Conda distribution:
+
+```console
+$ conda install -c conda-forge ipypublish
+```
+
 v0.9.1 & 0.9.2
 ~~~~~~~~~~~~~~
 

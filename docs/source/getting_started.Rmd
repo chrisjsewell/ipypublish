@@ -58,12 +58,20 @@ conversion):
 
 ```console
 $ conda create --name ipyreport -c conda-forge jupyter pandoc==2.6
+$ source activate ipyreport
 ```
 
-ipypublish can then be installed into this environment:
+.. versionadded:: 0.9.3
+
+    ipypublish is now available on Conda (recommended):
 
 ```console
-$ source activate ipyreport
+$ conda install -c conda-forge ipypublish
+```
+
+ipypublish can also be pip installed into this environment:
+
+```console
 $ pip install ipypublish
 ```
 
