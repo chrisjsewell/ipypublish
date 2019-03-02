@@ -4,7 +4,7 @@ nbconvert
 nbformat
 jinja2
 traitlets
-tornado
+tornado<6
 bibtexparser
 jsonextended>=0.7
 six>=1.11.0
