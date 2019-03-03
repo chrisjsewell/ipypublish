@@ -10,7 +10,6 @@ python:
       path: .
       extra_requirements:
           - rtd
-  system_packages: true
 
 # default
 # sphinx:
