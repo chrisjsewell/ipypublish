@@ -116,10 +116,16 @@ conversion application. To see all the options:
 $ nbpublish --help
 ```
 
-To see all the builtin conversion configurations:
+To see all the conversion configurations:
 
 ```console
 $ nbpublish -le
+```
+
+or to see a subset of configurations with a verbose description, use a regex:
+
+```console
+$ nbpublish -le *latex* -lv
 ```
 
 To run a basic conversion to PDF and auto-load it in a web browser
@@ -133,7 +139,7 @@ For a more detailed explanation see the
 
 .. important::
 
-    The default conversion (``latex_ipypublish_main``) will **NOT**
+    The default conversion (``latex_ipypublish_main``) will **NOT** 
     output any cells that are not tagged with metadata.
     To output all notebook content by default, use ``_ipypublish_all``.
 
