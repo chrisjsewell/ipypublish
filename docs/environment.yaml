@@ -1,15 +1,4 @@
 channels:
   - conda-forge
 dependencies:
-  # - python>=3
-  # - sphinx>=1.6
   - pandoc
-  # - nbconvert!=5.4
-  # - ipykernel
-  # - sphinxcontrib-bibtex
-  # - jupytext
-  # - numpy
-  # - matplotlib
-  # - pandas
-  # - sympy<1.3
-  # - pytest>=3.6

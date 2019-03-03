@@ -44,9 +44,6 @@ setup(
         },
         "rtd": {
             "pytest>=3.6",
-            "numpy",
-            "matplotlib",
-            "pandas",
             "sympy<1.3",
             "sphinx>=1.6",
             "sphinxcontrib-bibtex",
