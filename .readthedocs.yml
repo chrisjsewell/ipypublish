@@ -8,6 +8,7 @@ python:
   install:
     - method: pip
       path: .
+  system_packages: true
 
 # default
 # sphinx:
