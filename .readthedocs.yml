@@ -8,7 +8,8 @@ python:
   install:
     - method: pip
       path: .
-  system_packages: true
+    - requirements: docs/requirements.txt
+  # system_packages: true
 
 # default
 # sphinx:
