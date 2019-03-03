@@ -6,9 +6,9 @@ conda:
 python:
   version: 3.6
   install:
+    # - requirements: docs/requirements.txt
     - method: pip
       path: .
-    - requirements: docs/requirements.txt
   # system_packages: true
 
 # default
