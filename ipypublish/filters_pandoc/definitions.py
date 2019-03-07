@@ -30,16 +30,25 @@ PREFIX_MAP = (
         ("classes", ("capital",)),
         ("attributes", (("latex", "Cref"), ("rst", "numref")))
     )),
+    ("&", (
+        ("classes", ()),
+        ("attributes", (("latex", "gls"), ("rst", "term")))
+    )),
 )
 
-# PREFIX_ALLOWED = ('+', '!', '=', '?')
-# PREFIX_MAP_LATEX = (('+', 'cref'), ('?', 'Cref'),
-#                     ('!', 'ref'), ('=', 'eqref'), ("", "cite"))
-PREFIX_MAP_LATEX_R = (('cref', '+'), ('Cref', '?'),
-                      ('ref', '!'), ('eqref', '='), ("cite", ""))
-# PREFIX_MAP_RST = (('+', 'numref'), ('?', 'numref'), ('!', 'ref'),
-#                   ('=', 'eq'), ("", "cite"))
-PREFIX_MAP_RST_R = (('numref', '+'), ('ref', '!'), ('eq', '='), ("cite", ""))
+PREFIX_MAP_LATEX_R = (
+    ('cref', '+'),
+    ('Cref', '?'),
+    ('ref', '!'),
+    ('eqref', '='),
+    ("cite", ""),
+    ("gls", "&"))
+PREFIX_MAP_RST_R = (
+    ('numref', '+'),
+    ('ref', '!'),
+    ('eq', '='),
+    ("cite", ""),
+    ("term", "&"))
 
 CITE_HTML_NAMES = (
     ("Math", "eqn."),
