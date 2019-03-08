@@ -1,12 +1,30 @@
 """
-adapted from
-https://github.com/agronholm/sphinx-autodoc-typehints/blob/master/tests/test_sphinx_autodoc_typehints.py
+Uses sphinx's pytest fixture to run builds
+
+usage:
+
+.. code-block:: python
+
+    from ipypublish.ipysphinx.tests import get_test_source_dir
+
+    @pytest.mark.sphinx(
+        buildername='html',
+        srcdir=get_test_source_dir('notebook'))
+    def test_basic(app, status, warning, get_app_output):
+
+        app.build()
+
+        assert 'build succeeded' in status.getvalue()  # Build succeeded
+        warnings = warning.getvalue().strip()
+        assert warnings == ""
+
+        output = get_app_output(app, buildername='html')
 
 parameters available to parse to ``@pytest.mark.sphinx``:
 
 - buildername='html'
 - srcdir=None
-- testroot='root' (only use if srcdir not set)
+- testroot='root' (only used if srcdir not set)
 - freshenv=False
 - confoverrides=None
 - status=None
@@ -27,9 +45,6 @@ except ImportError:
     import pathlib2 as pathlib
 
 from ipypublish.ipysphinx.tests import get_test_source_dir
-
-pytest_plugins = 'sphinx.testing.fixtures'
-collect_ignore = ['sourcedirs']
 
 
 # @pytest.fixture(scope='session', autouse=True)
@@ -53,6 +68,7 @@ def remove_sphinx_builds():
     for entry in srcdirs.iterdir():  # type: pathlib.Path
         if entry.is_dir() and entry.joinpath("_build").exists():
             shutil.rmtree(str(entry.joinpath("_build")))
+
 
 @pytest.fixture
 def get_app_output():
