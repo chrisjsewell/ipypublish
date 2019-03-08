@@ -94,7 +94,7 @@ Images and Figures
 
 .. nboutput:: rst
 
-    .. figure:: ipynb_with_external_files/output_13_0.jpeg
+    .. figure:: ipynb_complex_files/output_13_0.jpeg
         :alt: output_13_0
         :align: center
         :height: 400
@@ -118,7 +118,7 @@ Displaying a plot with its code
 
 .. nboutput:: rst
 
-    .. figure:: ipynb_with_external_files/output_17_0.svg
+    .. figure:: ipynb_complex_files/output_17_0.svg
         :alt: output_17_0
         :align: center
         :name: fig:example_mpl
@@ -194,4 +194,6 @@ Equations (with ipython or sympy)
         \left(\sqrt{5} i\right)^{\alpha} \left(\frac{1}{2} - \frac{2 i}{5} \sqrt{5}\right) + \left(- \sqrt{5} i\right)^{\alpha} \left(\frac{1}{2} + \frac{2 i}{5} \sqrt{5}\right)
         \end{equation}
 
-.. bibliography:: ipynb_with_external_files/example.bib
+.. rubric:: My Bibliography
+
+.. bibliography:: ipynb_complex_files/example.bib

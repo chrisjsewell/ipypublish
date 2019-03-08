@@ -12,7 +12,38 @@
         {# re-route ipub metadata into resources, so we can use it in post-processing #}
         {# see https://stackoverflow.com/a/43265291/5033292 #}
         {% if "ipub" in nb.metadata %}
+
         {% set x = resources.__setitem__("ipub", nb.metadata.ipub) %}
+
+        {% if "sphinx" in nb.metadata.ipub %}
+        {% set output_bib = not nb.metadata.ipub.sphinx.no_bib %}
+        {% set output_gloss = not nb.metadata.ipub.sphinx.no_glossary %}
+
+        {% if nb.metadata.ipub.sphinx.bib_title %}
+        {% set bib_title = nb.metadata.ipub.sphinx.bib_title %}
+        {% else %}
+        {% set bib_title = "Bibliography" %}
+        {% endif %}
+
+        {% if nb.metadata.ipub.sphinx.glossary_title %}
+        {% set glossary_title = nb.metadata.ipub.sphinx.glossary_title %}
+        {% else %}
+        {% set glossary_title = "Glossary" %}
+        {% endif %}
+
+        {% else %}
+
+        {% set output_bib = True %}
+        {% set output_gloss = True %}
+        {% set bib_title = "Bibliography" %}
+        {% set glossary_title = "Glossary" %}
+
+        {% endif %}
+        {% endif %}
+
+    "header": |
+        {% if sphinx_opts and sphinx_opts.orphan %}
+        {{':orphan:'}}
         {% endif %}
 
     "notebook_input_all": |
@@ -155,17 +186,31 @@
         {{ self.nboutput() }}
     
     "footer": |
+        {# output a bibglossary if there is one  #}
+        {%- if nb.metadata.ipub and nb.metadata.ipub.bibglossary: -%}
+        {%- if nb.metadata.ipub.bibglossary.filepath and output_gloss: -%}
+        {% set filename = nb.metadata.ipub.bibglossary.filepath | posix_path %}
+        .. rubric:: {{ glossary_title }}
+
+        .. bibglossary:: {{ filename }}
+        {%- endif -%}
+        {%- endif %}
+
         {# output a bibligraphy if there is one 
         (see https://sphinxcontrib-bibtex.readthedocs.io/en/latest/usage.html) #}
         {%- if nb.metadata.ipub: -%}
-        {%- if nb.metadata.ipub.bibliography: -%}
+        {%- if nb.metadata.ipub.bibliography and output_bib: -%}
         {% set filename = nb.metadata.ipub.bibliography | posix_path %}
+        .. rubric:: {{ bib_title }}
+
         .. bibliography:: {{ filename }}
         {%- endif -%}
         {% if nb.metadata.ipub.bibstyle and nb.metadata.ipub.bibstyle in ['plain', 'unsrt', 'unsrtalpha', 'alpha'] %}
            :style: {{ nb.metadata.ipub.bibstyle }}
         {%- endif %}
         {%- endif %}
+
+        {# output jupyter widget states #}
         {% if 'application/vnd.jupyter.widget-state+json' in nb.metadata.widgets %}
 
         .. raw:: html
