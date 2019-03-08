@@ -11,7 +11,7 @@ import os
 import signal
 import webbrowser
 
-from tornado import web, ioloop, httpserver, log
+from tornado import web, ioloop, httpserver, log, gen
 from tornado.httpclient import AsyncHTTPClient
 from traitlets import Bool, Unicode, Int
 from ipypublish.postprocessors.base import IPyPostProcessor
@@ -20,17 +20,13 @@ from ipypublish.postprocessors.base import IPyPostProcessor
 class ProxyHandler(web.RequestHandler):
     """handler the proxies requests from a local prefix to a CDN"""
 
-    @web.asynchronous
+    @gen.coroutine
     def get(self, prefix, url):
         """proxy a request to a CDN"""
         proxy_url = "/".join([self.settings['cdn'], url])
         client = self.settings['client']
         client.fetch(proxy_url, callback=self.finish_get)
-
-    def finish_get(self, response):
-        """finish the request"""
-        # rethrow errors
-        response.rethrow()
+        response = yield client.fetch(proxy_url)
 
         for header in ["Content-Type", "Cache-Control",
                        "Date", "Last-Modified", "Expires"]:
@@ -96,11 +92,11 @@ class RevealServer(IPyPostProcessor):
             pass
         elif os.path.isdir(os.path.join(dirname, self.reveal_prefix)):
             # reveal prefix exists
-            self.log.info("Serving local %s", self.reveal_prefix)
+            self.logger.info("Serving local %s", self.reveal_prefix)
             self.logger.info("Serving local %s", self.reveal_prefix)
         else:
-            self.log.info("Redirecting %s requests to %s",
-                          self.reveal_prefix, self.reveal_cdn)
+            self.logger.info("Redirecting %s requests to %s",
+                             self.reveal_prefix, self.reveal_cdn)
             self.logger.info("Redirecting %s requests to %s",
                              self.reveal_prefix, self.reveal_cdn)
             handlers.insert(0, (r"/(%s)/(.*)" %
@@ -112,7 +108,7 @@ class RevealServer(IPyPostProcessor):
                               )
 
         # hook up tornado logging to our self.logger
-        log.app_log = self.log
+        log.app_log = self.logger
 
         http_server = httpserver.HTTPServer(app)
 
@@ -149,7 +145,7 @@ class RevealServer(IPyPostProcessor):
             ioloop.IOLoop.instance().start()
         except KeyboardInterrupt:
             # dosen't look like line below is necessary
-            # ioloop.IOLoop.instance().stop()
+            ioloop.IOLoop.instance().stop()
             self.logger.info("\nInterrupted")
 
         return stream, filepath, resources

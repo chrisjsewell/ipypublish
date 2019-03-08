@@ -41,11 +41,10 @@ def nbpresent(inpath,
     """
     inpath_name, inpath_ext = os.path.splitext(os.path.basename(inpath))
 
-    outpath = None
     output_mimetype = guess_type(inpath, strict=False)[0]
     output_mimetype = 'unknown' if output_mimetype is None else output_mimetype
 
-    if inpath_ext == '.ipynb':
+    if output_mimetype != "text/html":
 
         config = {"IpyPubMain": {
             "conversion": outformat,
@@ -77,9 +76,10 @@ def nbpresent(inpath,
                 raise err
             return 1
     else:
+        logging.basicConfig(stream=sys.stdout, level=logging.INFO)
         server = RevealServer()
         if not dry_run:
-            server.postprocess("", output_mimetype, outpath)
+            server.postprocess("", output_mimetype, os.path.abspath(inpath))
 
     return 0
 
