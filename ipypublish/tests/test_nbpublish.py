@@ -87,7 +87,7 @@ def test_publish_markdown_cells_rst(temp_folder, nb_markdown_cells):
 
 
 @pytest.mark.requires_latexmk
-def test_publish_withbib(temp_folder, ipynb_with_bib):
+def test_publish_withbib_latex(temp_folder, ipynb_with_bib):
     tex_path = os.path.join(temp_folder,
                             os.path.splitext(ipynb_with_bib.name)[0] + '.tex')
     pdf_path = os.path.join(temp_folder,

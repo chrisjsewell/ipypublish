@@ -61,7 +61,10 @@
                     }
                 },
                 "toc": {
-                    "type": ["boolean", "object"],
+                    "type": [
+                        "boolean",
+                        "object"
+                    ],
                     "description": "output a table of contents",
                     "default": "false",
                     "properties": {
@@ -106,11 +109,11 @@
                     }
                 },
                 "bibliography": {
-                    "description": "the path to the bibliography file (absolute or relative)",
+                    "description": "the path to the bibliography bibtex file (absolute or relative)",
                     "type": "string"
                 },
                 "bibstyle": {
-                    "description": "a natbib stylename",
+                    "description": "a natbib stylename, to control the output style of the bibliography",
                     "type": "string"
                 },
                 "biboptions": {
@@ -125,6 +128,17 @@
                         "super",
                         "sort&compress"
                     ]
+                },
+                "bibglossary": {
+                    "description": "option for a glossary, controlled by a custom bibtex file",
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                        "filepath": {
+                            "description": "path to the bibtex file (absolute or relative)",
+                            "type": "string"
+                        }
+                    }
                 },
                 "pandoc": {
                     "description": "settings for running the ipypandoc filters, to convert markdown to other formats",
@@ -163,10 +177,37 @@
                         }
                     }
                 },
-                "orphan": {
-                    "description": "whether the :orphan: directive is added in sphinx extension (to allow it to not be included in toc tree)",
-                    "type": "boolean",
-                    "default": false
+                "sphinx": {
+                    "description": "settings for outputting a sphinx document",
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                        "orphan": {
+                            "description": "whether the :orphan: directive is added to the top of the file (to suppress warnings if it is not included in a toc tree)",
+                            "type": "boolean",
+                            "default": false
+                        },
+                        "no_bib": {
+                            "description": "suppress the `.. bibliography::` directive that will be output at the end of the file (if bibliography set)",
+                            "type": "boolean",
+                            "default": false
+                        },
+                        "no_glossary": {
+                            "description": "suppress the `.. bibglossary::` directive that will be output at the end of the file (if bibglossary set)",
+                            "type": "boolean",
+                            "default": false
+                        },
+                        "bib_title": {
+                            "description": "created as '.. rubric:: bib_title'",
+                            "type": "string",
+                            "default": "Bibliography"
+                        },
+                        "glossary_title": {
+                            "description": "created as '.. rubric:: glossary_title'",
+                            "type": "string",
+                            "default": "Glossary"
+                        }
+                    }
                 }
             }
         }

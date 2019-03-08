@@ -32,12 +32,16 @@ def nb_markdown_cells():
     # Table format has changed through the versions
     logging.debug("pandoc version: {}".format(get_pandoc_version()))
     if get_pandoc_version() < '1.18':
-        expected_ltx = 'latex_ipypublish_main.pandoc.1-12.tex'
-        expected_rst = 'sphinx_ipypublish_main.pandoc.1-12.rst'
+        # expected_ltx = 'latex_ipypublish_main.pandoc.1-12.tex'
+        # expected_rst = 'sphinx_ipypublish_main.pandoc.1-12.rst'
+        raise DeprecationWarning(
+            'testing with pandoc < 2.6 no longer supported')
     else:
         expected_ltx = 'latex_ipypublish_main.pandoc.2-2.tex'
         if get_pandoc_version() < '2.6':
-            expected_rst = 'sphinx_ipypublish_main.pandoc.2-2.rst'
+            raise DeprecationWarning(
+                'testing with pandoc < 2.6 no longer supported')
+            # expected_rst = 'sphinx_ipypublish_main.pandoc.2-2.rst'
         else:
             expected_rst = 'sphinx_ipypublish_main.pandoc.2-6.rst'
 
@@ -103,33 +107,37 @@ def ipynb_folder_with_external(temp_folder):
     # Table format has changed through the versions
     logging.debug("pandoc version: {}".format(get_pandoc_version()))
     if get_pandoc_version() < '1.18':
-        sphinx_ipypublish_all = 'sphinx_ipypublish_all.pandoc.1-12.rst'
+        # sphinx_ipypublish_all = 'sphinx_ipypublish_all.pandoc.1-12.rst'
+        raise DeprecationWarning(
+            'testing with pandoc < 2.6 no longer supported')
     else:
         if get_pandoc_version() < '2.6':
-            sphinx_ipypublish_all = 'sphinx_ipypublish_all.pandoc.2-2.rst'
+            # sphinx_ipypublish_all = 'sphinx_ipypublish_all.pandoc.2-2.rst'
+            raise DeprecationWarning(
+                'testing with pandoc < 2.6 no longer supported')
         else:
             sphinx_ipypublish_all = 'sphinx_ipypublish_all.pandoc.2-6.rst'
 
-    folder = os.path.join(temp_folder, "ipynb_with_external")
+    folder = os.path.join(temp_folder, "ipynb_complex")
     os.makedirs(folder)
 
-    shutil.copyfile(os.path.join(TEST_FILES_DIR, 'ipynb_with_external',
-                                 'ipynb_with_external.ipynb'),
-                    os.path.join(folder, 'ipynb_with_external.ipynb'))
-    shutil.copyfile(os.path.join(TEST_FILES_DIR, 'ipynb_with_external',
+    shutil.copyfile(os.path.join(TEST_FILES_DIR, 'ipynb_complex',
+                                 'ipynb_complex.ipynb'),
+                    os.path.join(folder, 'ipynb_complex.ipynb'))
+    shutil.copyfile(os.path.join(TEST_FILES_DIR, 'ipynb_complex',
                                  'example.bib'),
                     os.path.join(folder, 'example.bib'))
-    shutil.copyfile(os.path.join(TEST_FILES_DIR, 'ipynb_with_external',
+    shutil.copyfile(os.path.join(TEST_FILES_DIR, 'ipynb_complex',
                                  'logo_example.png'),
                     os.path.join(folder, 'logo_example.png'))
 
-    tex = pathlib.Path(os.path.join(TEST_FILES_DIR, 'ipynb_with_external',
-                                    'ipynb_with_external.tex'))
-    html = pathlib.Path(os.path.join(TEST_FILES_DIR, 'ipynb_with_external',
-                                     'ipynb_with_external.html'))
-    slides = pathlib.Path(os.path.join(TEST_FILES_DIR, 'ipynb_with_external',
-                                       'ipynb_with_external.slides.html'))
-    rst = pathlib.Path(os.path.join(TEST_FILES_DIR, 'ipynb_with_external',
+    tex = pathlib.Path(os.path.join(TEST_FILES_DIR, 'ipynb_complex',
+                                    'ipynb_complex.tex'))
+    html = pathlib.Path(os.path.join(TEST_FILES_DIR, 'ipynb_complex',
+                                     'ipynb_complex.html'))
+    slides = pathlib.Path(os.path.join(TEST_FILES_DIR, 'ipynb_complex',
+                                       'ipynb_complex.slides.html'))
+    rst = pathlib.Path(os.path.join(TEST_FILES_DIR, 'ipynb_complex',
                                     sphinx_ipypublish_all))
     yield {
         "input_folder": folder,

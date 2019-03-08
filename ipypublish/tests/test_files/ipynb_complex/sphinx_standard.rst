@@ -80,7 +80,7 @@ Images and Figures
 
     Image('example.jpg',height=400)
 
-.. image:: ipynb_with_external_files/output_13_0.jpeg
+.. image:: ipynb_complex_files/output_13_0.jpeg
    :height: 400px
 
 Displaying a plot with its code
