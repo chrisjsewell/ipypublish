@@ -294,6 +294,11 @@ Citation [@zelenyak_molecular_2016; @kirkeminde_thermodynamic_2012]
 
 Citation [@zelenyak_molecular_2016; @kirkeminde_thermodynamic_2012]
 
+.. note::
+
+    Citation in sphinx are provided by the excellent 
+    [sphinxcontrib-bibtex extension](https://sphinxcontrib-bibtex.readthedocs.io)
+
 References can have attributes; `latex` (defining the LaTeX tag to use),
 `rst` (defining the RST role to use) and class `.capital` (defining if HTML naming if capitalized)
 
