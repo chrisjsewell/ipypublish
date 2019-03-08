@@ -19,7 +19,8 @@ from ipypublish.ipysphinx.bibgloss.directives import BibGlossaryDirective
 from ipypublish.ipysphinx.bibgloss.roles import GLSRole
 from ipypublish.ipysphinx.bibgloss.nodes import BibGlossaryNode
 from ipypublish.ipysphinx.bibgloss.transforms import (
-    BibGlossaryTransform, OverrideCitationReferences)
+    BibGlossaryTransform, OverrideCitationReferences,
+    HandleMissingCitesTransform)
 
 try:
     from sphinx.application import Sphinx  # noqa: F401
@@ -184,6 +185,8 @@ def setup(app):
         app.add_transform(BibGlossaryTransform)
     if OverrideCitationReferences not in transforms:
         app.add_transform(OverrideCitationReferences)
+    if HandleMissingCitesTransform not in transforms:
+        app.add_post_transform(HandleMissingCitesTransform)
 
     # Parallel read is not safe at the moment: in the current design,
     # the document that contains references must be read last for all

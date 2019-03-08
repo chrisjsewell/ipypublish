@@ -14,15 +14,24 @@ def test_sphinx(sphinx_app):
     app.builder.build_all()
     warnings = warning.getvalue()
     assert warnings == ""
-    # assert re.search(u'could not relabel citation \\[Test01\\]', warnings)
-    # assert re.search(u'could not relabel citation \\[Test02\\]', warnings)
-    # assert re.search(u'could not relabel citation \\[Wa04\\]', warnings)
-    # assert re.search(
-    #     u'could not relabel citation reference \\[Test01\\]',
-    #     warnings)
-    # assert re.search(
-    #     u'could not relabel citation reference \\[Test02\\]',
-    #     warnings)
-    # assert re.search(
-    #     u'could not relabel citation reference \\[Wa04\\]',
-    #     warnings)
+    output = (app.outdir / "contents.html").read_text(encoding='utf-8')
+
+    assert re.search(
+        ('<a class="bibglossary reference internal" '
+         'href="#term1" id="id1">name</a>'),
+        output
+    )
+    assert re.search(
+        ('<a class="bibglossary reference internal" '
+         'href="#acro1" id="id2">OTHER</a>'),
+        output)
+    assert re.search(
+        ('<tr><td class="label"><a.*'
+         'href="\\#id2">\\[OTHER\\]</a></td><td>Abbrev of other</td></tr>'),
+        output
+    )
+    assert re.search(
+        ('<tr><td class="label"><a.*'
+         'href="\\#id1">\\[name\\]</a></td><td>the description</td></tr>'),
+        output
+    )
