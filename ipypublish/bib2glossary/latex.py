@@ -1,6 +1,6 @@
 import logging
 
-from ipypublish.bib2glossary.shared import (
+from ipypublish.bib2glossary.common import (
     parse_bib, DEFAULT_ACRONYM_P2F, DEFAULT_GLOSS_P2F,
     DEFAULT_GLOSS_ETYPE, DEFAULT_ACRONYM_ETYPE
 )
@@ -8,14 +8,17 @@ from ipypublish.bib2glossary.shared import (
 logger = logging.getLogger(__name__)
 
 
-def bib_to_tex_glossterms(text_str, entry_type=DEFAULT_GLOSS_ETYPE,
+def bib_to_tex_glossterms(text_str=None, bib=None,
+                          entry_type=DEFAULT_GLOSS_ETYPE,
                           param2field=None):
     """create a list of tex newglossaryentry strings
 
     Parameters
     ----------
-    text_str: str
-        the .bib file text
+    text_str: str or None
+        the .bib file text to parse
+    bib: None or object
+        a bibtexparser.bibdatabase.BibDatabase instance
     entry_type: None or str
         if given, filter by entry_type
     param2field: None or dict
@@ -27,6 +30,8 @@ def bib_to_tex_glossterms(text_str, entry_type=DEFAULT_GLOSS_ETYPE,
         list of newglossaryentry
 
     """
+    entries = parse_bib(text_str, bib).get_entry_dict()
+
     param2field_default = dict(DEFAULT_GLOSS_P2F)
     if param2field is not None:
         param2field_default.update(param2field)
@@ -36,8 +41,6 @@ def bib_to_tex_glossterms(text_str, entry_type=DEFAULT_GLOSS_ETYPE,
     assert "name" in param2field
     name_field = param2field.get("name")
     descript_field = param2field.get("description")
-
-    entries = parse_bib(text_str)
 
     glossaries = []
     for key in sorted(entries.keys()):
@@ -70,14 +73,17 @@ def bib_to_tex_glossterms(text_str, entry_type=DEFAULT_GLOSS_ETYPE,
     return glossaries
 
 
-def bib_to_tex_acronyms(text_str, entry_type=DEFAULT_ACRONYM_ETYPE,
+def bib_to_tex_acronyms(text_str=None, bib=None,
+                        entry_type=DEFAULT_ACRONYM_ETYPE,
                         param2field=None):
     """create a list of tex newacronym strings
 
     Parameters
     ----------
-    text_str: str
-        the .bib file text
+    text_str: str or None
+        the .bib file text to parse
+    bib: None or object
+        a bibtexparser.bibdatabase.BibDatabase instance
     entry_type: None or str
         if given, filter by entry_type
     param2field: None or dict
@@ -85,9 +91,12 @@ def bib_to_tex_acronyms(text_str, entry_type=DEFAULT_ACRONYM_ETYPE,
 
     Returns
     -------
-    acronyms: a list of string
+    list[str]
+        list of acronyms
 
     """
+    entries = parse_bib(text_str, bib).get_entry_dict()
+
     param2field_default = dict(DEFAULT_ACRONYM_P2F)
     if param2field is not None:
         param2field_default.update(param2field)
@@ -97,8 +106,6 @@ def bib_to_tex_acronyms(text_str, entry_type=DEFAULT_ACRONYM_ETYPE,
     assert "longname" in param2field
     abbrev_field = param2field.pop("abbreviation")
     name_field = param2field.pop("longname")
-
-    entries = parse_bib(text_str)
 
     acronyms = []
     for key in sorted(entries.keys()):

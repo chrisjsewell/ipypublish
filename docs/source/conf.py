@@ -80,7 +80,7 @@ templates_path = ['_templates']
 if sphinx.version_info[0:2] < (1, 8):
     source_parsers = {
         '.md': 'recommonmark.parser.CommonMarkParser',
-        '.Rmd': 'ipypublish.ipysphinx.parser.NBParser'
+        '.Rmd': 'ipypublish.ipysphinx.notebook.parser.NBParser'
     }
 else:
     source_parsers = {
@@ -204,10 +204,10 @@ texinfo_documents = [
 numfig = True
 math_numfig = True
 numfig_secnum_depth = 2
-numfig_format: {'section': 'Section %s',
-                'figure': 'Fig. %s',
-                'table': 'Table %s',
-                'code-block': 'Code Block %s'}
+numfig_format = {'section': 'Section %s',
+                 'figure': 'Fig. %s',
+                 'table': 'Table %s',
+                 'code-block': 'Code Block %s'}
 math_number_all = True
 math_eqref_format = "Eq. {number}"  # TODO this isn't working
 
@@ -243,6 +243,7 @@ intersphinx_mapping = {
     'tornado': ("https://www.tornadoweb.org/en/stable/", None),
     'traitlets': ("https://traitlets.readthedocs.io/en/stable/", None),
     'jinja': ('http://jinja.pocoo.org/docs/dev', None),
+    'bibtexparser': ('https://bibtexparser.readthedocs.io/en/master/', None),
     # 'docutils': ("https://docutils.readthedocs.io/en/sphinx-docs", None),
     # # TODO docutils intersphinx
     # 'sphinx': ('http://www.sphinx-doc.org/en/latest/', None)
@@ -298,11 +299,16 @@ nitpick_ignore = [('py:exc', 'ArithmeticError'), ('py:exc', 'AssertionError'),
                   ('py:class',
                    'traitlets.config.configurable.LoggingConfigurable'),
                   ('py:class', 'docutils.nodes.Element'),
+                  ('py:class', 'docutils.nodes.General'),
+                  ('py:class', 'docutils.nodes.document'),
                   ('py:class', 'docutils.parsers.rst.Directive'),
                   ('py:class', 'docutils.transforms.Transform'),
                   ('py:class', 'docutils.parsers.rst.Parser'),
                   ('py:class', 'sphinx.parsers.RSTParser'),
+                  ('py:class', 'sphinx.application.Sphinx'),
                   ('py:obj', 'sphinx.application.Sphinx'),
+                  ('py:class', 'sphinx.environment.BuildEnvironment'),
+                  ('py:class', 'sphinx.roles.XRefRole'),
                   ('py:exc', 'nbconvert.pandoc.PandocMissing')
                   ]
 

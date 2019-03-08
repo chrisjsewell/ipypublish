@@ -1,17 +1,25 @@
 import os
+import docutils
 from docutils.parsers import rst
 from six import string_types
 
 from ipypublish import __version__
-from ipypublish.ipysphinx.directives import (NbInfo, NbInput,
-                                             NbOutput, NbWarning,
-                                             AdmonitionNode, CodeAreaNode,
-                                             FancyOutputNode)
-from ipypublish.ipysphinx.docutils_transforms import (
+from ipypublish.ipysphinx.utils import import_sphinx
+from ipypublish.ipysphinx.notebook.directives import (
+    NbInfo, NbInput, NbOutput, NbWarning,
+    AdmonitionNode, CodeAreaNode, FancyOutputNode)
+from ipypublish.ipysphinx.notebook.transforms import (
     CreateDomainObjectLabels, CreateSectionLabels, RewriteLocalLinks
 )
-from ipypublish.ipysphinx.utils import import_sphinx
-from ipypublish.ipysphinx.parser import NBParser
+from ipypublish.ipysphinx.notebook.parser import NBParser
+
+
+from ipypublish.ipysphinx.bibgloss import processing as bibproc
+from ipypublish.ipysphinx.bibgloss.directives import BibGlossaryDirective
+from ipypublish.ipysphinx.bibgloss.roles import GLSRole
+from ipypublish.ipysphinx.bibgloss.nodes import BibGlossaryNode
+from ipypublish.ipysphinx.bibgloss.transforms import (
+    BibGlossaryTransform, OverrideCitationReferences)
 
 try:
     from sphinx.application import Sphinx  # noqa: F401
@@ -39,6 +47,8 @@ def setup(app):
     """
     # delayed import of sphinx
     sphinx = import_sphinx()
+
+    # Notebook Functionality
 
     try:
         # Available since Sphinx 1.8:
@@ -149,9 +159,40 @@ def setup(app):
     # see https://github.com/sphinx-doc/sphinx/issues/2155:
     rst.directives.register_directive('code', sphinx.directives.code.CodeBlock)
 
+    # BibGlossary functionality
+    app.connect("builder-inited", bibproc.init_bibgloss_cache)
+    app.connect("doctree-resolved", bibproc.process_citations)
+    app.connect("doctree-resolved", bibproc.process_citation_references)
+    app.connect("env-purge-doc", bibproc.purge_bibgloss_cache)
+    app.connect("env-updated", bibproc.check_duplicate_labels)
+    # docutils keeps state around during testing, so to avoid spurious
+    # warnings, we detect here whether the directives have already been
+    # registered... very ugly hack but no better solution so far
+    _directives = docutils.parsers.rst.directives._directives
+    if "bibglossary" not in _directives:
+        app.add_directive("bibglossary", BibGlossaryDirective)
+        app.add_role("gls", GLSRole())
+        app.add_node(BibGlossaryNode, override=True)
+    else:
+        assert _directives["bibglossary"] is BibGlossaryDirective
+    try:
+        transforms = app.registry.get_transforms()
+    except AttributeError:  # Sphinx < 1.7
+        from sphinx.io import SphinxStandaloneReader
+        transforms = SphinxStandaloneReader.transforms
+    if BibGlossaryTransform not in transforms:
+        app.add_transform(BibGlossaryTransform)
+    if OverrideCitationReferences not in transforms:
+        app.add_transform(OverrideCitationReferences)
+
+    # Parallel read is not safe at the moment: in the current design,
+    # the document that contains references must be read last for all
+    # references to be resolved.
+    parallel_read_safe = False
+
     return {
         'version': __version__,
-        'parallel_read_safe': True,
+        'parallel_read_safe': parallel_read_safe,
         'parallel_write_safe': True,
         'env_version': 1,
     }
