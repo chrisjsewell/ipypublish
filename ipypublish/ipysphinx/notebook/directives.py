@@ -6,10 +6,9 @@ from docutils.parsers import rst
 from docutils.statemachine import StringList
 
 from ipypublish.ipysphinx.utils import import_sphinx
-
-
-class AdmonitionNode(docutils.nodes.Element):
-    """A custom node for info and warning boxes."""
+from ipypublish.ipysphinx.notebook.nodes import (
+    AdmonitionNode, CodeAreaNode, FancyOutputNode
+)
 
 
 class NbAdmonition(rst.Directive):
@@ -80,14 +79,6 @@ class NbOutput(rst.Directive):
         """This is called by the reST parser."""
         self.state.document['nbsphinx_include_css'] = True
         return _create_nbcell_nodes(self)
-
-
-class CodeAreaNode(docutils.nodes.Element):
-    """Input area or output area of a Jupyter notebook code cell."""
-
-
-class FancyOutputNode(docutils.nodes.Element):
-    """A custom node for non-code output of code cells."""
 
 
 def _create_nbcell_nodes(directive):

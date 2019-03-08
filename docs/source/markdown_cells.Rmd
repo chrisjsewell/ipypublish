@@ -286,7 +286,7 @@ $$2x &=  8 \\ 3x + 9y &= -12$$ {#eqn:example2 env=align}
 
 ### References
 
-Pandoc references are start with @ and multiple references can be wrapped in square brackets:
+Pandoc references start with @ and multiple references can be wrapped in square brackets:
 
 ```md
 Citation [@zelenyak_molecular_2016; @kirkeminde_thermodynamic_2012]
