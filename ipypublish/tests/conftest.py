@@ -8,11 +8,13 @@ from nbconvert.utils.pandoc import get_pandoc_version
 from ipypublish.utils import pathlib
 from ipypublish.tests import TEST_FILES_DIR
 
+
 @pytest.fixture(autouse=True)
 def dont_open_webbrowser(monkeypatch):
     def nullfunc(*arg, **kwrgs):
         pass
     monkeypatch.setattr('webbrowser.open', nullfunc)
+
 
 @pytest.fixture
 def ipynb1():
@@ -22,6 +24,7 @@ def ipynb1():
 @pytest.fixture
 def ipynb2():
     return pathlib.Path(os.path.join(TEST_FILES_DIR, 'ipynb2.ipynb'))
+
 
 @pytest.fixture
 def nb_markdown_cells():

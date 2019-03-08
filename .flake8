@@ -1,0 +1,5 @@
+[flake8]
+exclude = 
+    setup.py,
+    ipypublish/scripts/ipynb_latex_setup.py,
+    ipypublish/tests/test_files/ipynb1_converted/python_with_meta.py

@@ -237,7 +237,7 @@ class MarkdownSlides(Preprocessor):
                             cells_in_slide += 1
                             final_cells.mkdcell(
                                 nonheader_lines, cell.metadata, 'normal')
-                        current_lines = []
+                        # current_lines = []
 
                     if self.header_slide:
                         final_cells.mkdcell(
@@ -262,7 +262,7 @@ class MarkdownSlides(Preprocessor):
                             cells_in_slide += 1
                             final_cells.mkdcell(
                                 nonheader_lines, cell.metadata, 'normal')
-                        current_lines = []
+                        # current_lines = []
 
                     final_cells.mkdcell(
                         [line], cell.metadata, 'verticalbreak_after')

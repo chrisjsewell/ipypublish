@@ -248,7 +248,7 @@ def setup_pandas(escape_latex=False, use_longtable=False):
     Parameters
     ----------
     escape_latex: bool
-        whether to excape special latex character, e.g. `_` -> `\_`
+        whether to escape special latex character, e.g. `_` -> `\\_`
 
     """
     import pandas as pd

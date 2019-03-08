@@ -4,7 +4,7 @@
 
 Then, for each Image, Math and Table found;
 
-2) Extract labels and attributes to the right of Math or Table captions, 
+2) Extract labels and attributes to the right of Math or Table captions,
 in the form; ``{#id .class-name a="an attribute"}``
 
 3) If attributes found, remove them from the document and wrap the associated
@@ -122,7 +122,7 @@ def resolve_equations_images(element, doc):
                 # "attributes": subel.attributes,
                 "elements": []
             }
-            
+
         else:
             attributes = find_attributes(subel)
             if attributes:

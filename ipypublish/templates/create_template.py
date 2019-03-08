@@ -11,7 +11,6 @@ http://nbconvert.readthedocs.io/en/latest/api/exporters.html#nbconvert.exporters
 from typing import List, Tuple, Union  # noqa: F401
 import re
 import io
-import os
 import logging
 import jsonschema
 

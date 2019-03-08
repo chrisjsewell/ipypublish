@@ -31,10 +31,13 @@ setup(
         "tests": {
             "pytest>=3.6",
             "pytest-cov",
+            "flake8",
             "coverage",
             "pillow",
             "nbsphinx",
-            "ipykernel"
+            "ipykernel",
+            "sphinx>=1.6",
+            "sphinxcontrib-bibtex"
         },
         "science": {
             "matplotlib",

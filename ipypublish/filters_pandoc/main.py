@@ -8,7 +8,7 @@ Other sources of information:
 - [reStructuredText Directives](http://docutils.sourceforge.net/docs/ref/rst/directives.html#figure)
 - [sphinxcontrib-bibtex](https://sphinxcontrib-bibtex.readthedocs.io/en/latest/usage.html)
 
-"""
+"""  # noqa: E501
 import panflute as pf
 
 from ipypublish.filters_pandoc.definitions import IPUB_META_ROUTE

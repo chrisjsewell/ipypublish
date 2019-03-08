@@ -341,7 +341,7 @@ ipysphinx_prolog = r"""
           with configuration: ``{{{{ env.config.ipysphinx_export_config }}}}``
         {{%- if docname.endswith('.ipynb') %}}
         | Interactive online version:
-          :raw-html:`<a href="https://mybinder.org/v2/gh/chrisjsewell/ipypublish/{binderpath}?filepath={{{{ docname }}}}"><img alt="Binder badge" src="https://mybinder.org/badge_logo.svg" style="vertical-align:text-bottom"></a>`
+          :raw-html:`<a href="https://mybinder.org/v2/gh/chrisjsewell/ipypublish/{binderpath}?filepath={{{{ docname }}}}"><img alt="Binder badge" src="https://mybinder.org/badge_logo.svg" style="vertical-align:text-bottom"></a>`  # noqa
         {{%- endif %}}
     __ https://github.com/chrisjsewell/ipypublish/{gitpath}/{{{{ docname }}}}
 
@@ -405,7 +405,7 @@ def add_intersphinx_aliases_to_inv(app):
 
 
 def run_apidoc(app):
-    """ generate apidoc 
+    """ generate apidoc
 
     See: https://github.com/rtfd/readthedocs.org/issues/1139
     """

@@ -141,7 +141,7 @@ def process_latex_raw(element, doc):
 
 def process_latex_str(block, doc):
     # type: (pf.Block, Doc) -> Union[pf.Block,None]
-    """see process_latex_raw 
+    """see process_latex_raw
 
     same but sometimes pandoc doesn't convert to a raw element
     """
