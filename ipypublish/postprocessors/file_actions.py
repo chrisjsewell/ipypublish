@@ -82,7 +82,7 @@ class WriteResourceFiles(IPyPostProcessor):
         return "write-resource-files"
 
     resource_keys = List(
-        Unicode,
+        Unicode(),
         ["outputs"],
         help="the key names in the resources dict that contain files"
     ).tag(config=True)
@@ -139,7 +139,7 @@ class CopyResourcePaths(IPyPostProcessor):
         return "copy-resource-paths"
 
     resource_keys = List(
-        Unicode,
+        Unicode(),
         ["external_file_paths"],
         help="the key names in the resources dict that contain filepaths"
     ).tag(config=True)

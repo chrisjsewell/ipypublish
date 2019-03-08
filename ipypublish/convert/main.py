@@ -173,7 +173,7 @@ class IpyPubMain(Configurable):
     ).tag(config=True)
 
     default_ppconfig_kwargs = T.Dict(
-        trait=T.Bool,
+        trait=T.Bool(),
         default_value=(
             ('pdf_in_temp', False),
             ('pdf_debug', False),
@@ -183,7 +183,7 @@ class IpyPubMain(Configurable):
     ).tag(config=True)
 
     default_pporder_kwargs = T.Dict(
-        trait=T.Bool,
+        trait=T.Bool(),
         default_value=(
             ('dry_run', False),
             ('clear_existing', False),
