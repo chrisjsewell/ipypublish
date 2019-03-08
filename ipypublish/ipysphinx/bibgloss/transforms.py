@@ -45,6 +45,29 @@ class OverrideCitationReferences(docutils.transforms.Transform):
             citation_ref.parent.replace(citation_ref, refnode)
 
 
+class HandleMissingCitesTransform(docutils.transforms.Transform):
+    """ before sphinx.transforms.post_transforms.ReferencesResolver
+    missing citations need to be handled (default_priority=10)
+    """
+    default_priority = 9
+
+    def apply(self):
+        # type: () -> None
+        app = self.document.settings.env.app
+        for node in self.document.traverse(addnodes.pending_xref):
+            if "bibglossary" not in node.attributes.get('classes', []):
+                continue
+            text = node[0].astext()
+            key = text[1:-1]
+            try:
+                app.env.bibgloss_cache.get_label_from_key(key)
+            except KeyError:
+                logger.warning(
+                    "could not relabel bibglossary reference [%s]" % key)
+                # strip class (otherwise ReferencesResolver fails)
+                node.attributes['classes'] = []
+
+
 def node_text_transform(node, transform):
     """Apply transformation to all Text nodes within node."""
     for child in node.children:

@@ -62,19 +62,16 @@ def process_citation_references(app, doctree, docname):
         if "bibglossary" not in node.attributes.get('classes', []):
             continue
         text = node[0].astext()
-        # TODO is there a better way to do this than relying on 
-        # searching for text with brackets?
-        if text.startswith('[') and text.endswith(']'):
-            key = text[1:-1]
-            try:
-                label = app.env.bibgloss_cache.get_label_from_key(key)
-            except KeyError:
-                pass
-                logger.warning(
-                    "could not relabel glossary reference [%s]" % key)
-            else:
-                # node[0] = docutils.nodes.Text('[' + label + ']')
-                node[0] = docutils.nodes.Text(label)
+        key = text[1:-1]
+        try:
+            label = app.env.bibgloss_cache.get_label_from_key(key)
+        except KeyError:
+            pass
+            logger.warning(
+                "could not relabel glossary reference [%s]" % key)
+        else:
+            # node[0] = docutils.nodes.Text('[' + label + ']')
+            node[0] = docutils.nodes.Text(label)
 
 
 def check_duplicate_labels(app, env):
