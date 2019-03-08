@@ -14,4 +14,4 @@ shutilwhich
 six>=1.11.0
 traitlets
 typing
-tornado<6
+tornado
