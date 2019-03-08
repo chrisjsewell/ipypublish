@@ -50,7 +50,7 @@ def test_reference_prefixes_latex():
 
     print(out_string)
     assert out_string == "\n".join([
-        "(\Cref{key1} \gls{key2} \eqref{key3})"
+        "(\\Cref{key1} \\gls{key2} \\eqref{key3})"
     ])
 
 
