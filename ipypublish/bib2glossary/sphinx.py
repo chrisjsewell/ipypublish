@@ -126,7 +126,7 @@ def docutils_citation_reference_node(
         refname=refname)
     label_text = docutils.nodes.Text(label)
     refnode += label_text
-    refnode.set_class('bibglossary')
+    refnode['classes'].append('bibglossary')
     # refnode.tagname = 'glossary_reference'
     document.note_citation_ref(refnode)
     return refnode
@@ -161,7 +161,7 @@ def docutils_citation_node(entry, document, use_key_as_label=True):
     citation['names'].append(name)
     citation += docutils.nodes.label('', label)
     citation += docutils_entry_paragraph(entry)
-    citation.set_class('bibglossary')
+    citation['classes'].append('bibglossary')
     document.note_citation(citation)
     document.note_explicit_target(citation, citation)
     return citation
