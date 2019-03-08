@@ -49,6 +49,20 @@ def setup(app):
     # delayed import of sphinx
     sphinx = import_sphinx()
 
+    try:
+        transforms = app.registry.get_transforms()
+    except AttributeError:  # Sphinx < 1.7
+        from sphinx.io import SphinxStandaloneReader
+        transforms = SphinxStandaloneReader.transforms
+    _directives = docutils.parsers.rst.directives._directives
+
+    def add_transform(transform, post=False):
+        if transform not in transforms:
+            if post:
+                app.add_post_transform(transform)
+            else:
+                app.add_transform(transform)
+
     # Notebook Functionality
 
     try:
@@ -139,9 +153,9 @@ def setup(app):
                  )
 
     # add transformations
-    app.add_transform(CreateSectionLabels)
-    app.add_transform(CreateDomainObjectLabels)
-    app.add_transform(RewriteLocalLinks)
+    add_transform(CreateSectionLabels)
+    add_transform(CreateDomainObjectLabels)
+    add_transform(RewriteLocalLinks)
 
     # Work-around until https://github.com/sphinx-doc/sphinx/pull/5504 is done:
     mathjax_config = app.config._raw_config.setdefault('mathjax_config', {})
@@ -166,27 +180,20 @@ def setup(app):
     app.connect("doctree-resolved", bibproc.process_citation_references)
     app.connect("env-purge-doc", bibproc.purge_bibgloss_cache)
     app.connect("env-updated", bibproc.check_duplicate_labels)
+
     # docutils keeps state around during testing, so to avoid spurious
     # warnings, we detect here whether the directives have already been
     # registered... very ugly hack but no better solution so far
-    _directives = docutils.parsers.rst.directives._directives
     if "bibglossary" not in _directives:
         app.add_directive("bibglossary", BibGlossaryDirective)
         app.add_role("gls", GLSRole())
         app.add_node(BibGlossaryNode, override=True)
     else:
         assert _directives["bibglossary"] is BibGlossaryDirective
-    try:
-        transforms = app.registry.get_transforms()
-    except AttributeError:  # Sphinx < 1.7
-        from sphinx.io import SphinxStandaloneReader
-        transforms = SphinxStandaloneReader.transforms
-    if BibGlossaryTransform not in transforms:
-        app.add_transform(BibGlossaryTransform)
-    if OverrideCitationReferences not in transforms:
-        app.add_transform(OverrideCitationReferences)
-    if HandleMissingCitesTransform not in transforms:
-        app.add_post_transform(HandleMissingCitesTransform)
+
+    add_transform(BibGlossaryTransform)
+    add_transform(OverrideCitationReferences)
+    add_transform(HandleMissingCitesTransform, post=True)
 
     # Parallel read is not safe at the moment: in the current design,
     # the document that contains references must be read last for all

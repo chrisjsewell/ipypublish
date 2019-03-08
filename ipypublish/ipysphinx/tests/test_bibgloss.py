@@ -8,12 +8,22 @@
 import re
 import pytest
 
+from ipypublish.ipysphinx.tests import (
+    get_test_source_dir)
 
-@pytest.mark.parametrize('sphinx_app', ['bibgloss'], indirect=True)
-def test_sphinx(sphinx_app):
-    sphinx_app.get_app().builder.build_all()
-    assert sphinx_app.run_warnings == ""
-    output = sphinx_app.output_text
+
+@pytest.mark.sphinx(
+    buildername='html',
+    srcdir=get_test_source_dir('bibgloss'))
+def test_basic(app, status, warning, get_app_output):
+
+    app.build()
+
+    assert 'build succeeded' in status.getvalue()  # Build succeeded
+    warnings = warning.getvalue().strip()
+    assert warnings == ""
+
+    output = get_app_output(app, buildername='html')
 
     assert re.search(
         ('<a class="bibglossary reference internal" '
