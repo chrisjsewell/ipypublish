@@ -292,7 +292,7 @@ def test_rst_directive_to_latex():
         '',
         '    xyz'
     ]
-    
+
     out_string = apply_filter(
         in_string,
         [prepare_raw.main, format_raw_spans.main], "latex")

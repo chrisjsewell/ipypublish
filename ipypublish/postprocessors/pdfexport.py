@@ -170,7 +170,7 @@ class PDFExport(IPyPostProcessor):
         return exitcode
 
 
-class change_dir:
+class change_dir:  # noqa: N801
     """Context manager for changing the current working directory"""
 
     def __init__(self, new_path):
@@ -240,4 +240,4 @@ VIEW_PDF = r"""
 </body>
 <script type="text/javascript">refresh();</script>
 </html>
-"""
+"""  # noqa: E501

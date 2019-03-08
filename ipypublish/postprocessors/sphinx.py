@@ -8,7 +8,6 @@ from six import u
 from traitlets import TraitError, validate, Bool, Dict, Unicode
 
 from ipypublish import __version__
-from ipypublish.utils import find_entry_point
 from ipypublish.postprocessors.base import IPyPostProcessor
 from ipypublish.ipysphinx.utils import import_sphinx
 from ipypublish.ipysphinx.create_setup import make_conf, make_index

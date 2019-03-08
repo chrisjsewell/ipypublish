@@ -1,7 +1,6 @@
 import io
 
 import bibtexparser
-import docutils
 
 DEFAULT_GLOSS_ETYPE = 'glossaryterm'
 

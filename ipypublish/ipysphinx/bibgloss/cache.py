@@ -36,16 +36,16 @@ class _FilterVisitor(ast.NodeVisitor):
         self.docname = docname
         self.cited_docnames = cited_docnames
 
-    def visit_Module(self, node):
+    def visit_Module(self, node):  # noqa: N802
         if len(node.body) != 1:
             raise ValueError(
                 "filter expression cannot contain multiple expressions")
         return self.visit(node.body[0])
 
-    def visit_Expr(self, node):
+    def visit_Expr(self, node):  # noqa: N802
         return self.visit(node.value)
 
-    def visit_BoolOp(self, node):
+    def visit_BoolOp(self, node):  # noqa: N802
         outcomes = (self.visit(value) for value in node.values)
         if isinstance(node.op, ast.And):
             return all(outcomes)
@@ -56,13 +56,13 @@ class _FilterVisitor(ast.NodeVisitor):
             # so this code should never execute
             assert False, "unexpected boolean operator %s" % node.op
 
-    def visit_UnaryOp(self, node):
+    def visit_UnaryOp(self, node):  # noqa: N802
         if isinstance(node.op, ast.Not):
             return not self.visit(node.operand)
         else:
             _raise_invalid_node(node)
 
-    def visit_BinOp(self, node):
+    def visit_BinOp(self, node):  # noqa: N802
         left = self.visit(node.left)
         op = node.op
         right = self.visit(node.right)
@@ -82,7 +82,7 @@ class _FilterVisitor(ast.NodeVisitor):
         else:
             _raise_invalid_node(node)
 
-    def visit_Compare(self, node):
+    def visit_Compare(self, node):  # noqa: N802
         # keep it simple: binary comparators only
         if len(node.ops) != 1:
             raise ValueError("syntax for multiple comparators not supported")
@@ -109,7 +109,7 @@ class _FilterVisitor(ast.NodeVisitor):
             # not used currently: ast.Is | ast.IsNot
             _raise_invalid_node(op)
 
-    def visit_Name(self, node):
+    def visit_Name(self, node):  # noqa: N802
         """Calculate the value of the given identifier."""
         id_ = node.id
         if id_ == 'type':
@@ -129,14 +129,14 @@ class _FilterVisitor(ast.NodeVisitor):
         else:
             return self.entry.fields.get(id_, "")
 
-    def visit_Set(self, node):
+    def visit_Set(self, node):  # noqa: N802
         return frozenset(self.visit(elt) for elt in node.elts)
 
-    def visit_Str(self, node):
+    def visit_Str(self, node):  # noqa: N802
         return node.s
 
     # NameConstant is Python 3.4 only so do not insist on coverage
-    def visit_NameConstant(self, node):  # pragma: no cover
+    def visit_NameConstant(self, node):  # noqa: N802
         return node.value
 
     def generic_visit(self, node):

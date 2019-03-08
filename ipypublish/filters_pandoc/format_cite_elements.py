@@ -112,7 +112,7 @@ def format_cites(cite, doc):
                 names.setdefault(prefix, set()).add(
                     '<a href="#{0}">{1}</a>'.format(citation.id, ref["number"])
                 )
-                
+
             elif citation.id in doc.bibdatabase:
                 cites.add(process_bib_entry(
                         citation.id, doc.bibdatabase, doc.bibnums))
@@ -153,7 +153,7 @@ def format_cites(cite, doc):
                 # 'No reference found for: {}</span>'.format(
                 '{}</span>'.format(
                     ", ".join([l for l in unknown]))))
-        
+
         return elements
 
 

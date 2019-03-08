@@ -25,8 +25,8 @@ def assess_syntax(path):
         elif isinstance(child, ast.ImportFrom):
             module = child.module
             for n in child.names:
-                importPath = module + "." + n.name
-                imported[n.name if n.asname is None else n.asname] = importPath
+                import_pth = module + "." + n.name
+                imported[n.name if n.asname is None else n.asname] = import_pth
         elif isinstance(child, ast.Assign):
             targets = child.targets
             if len(targets) > 1:
@@ -79,14 +79,14 @@ def ast_to_json(item, imported, assignments):
 def convert_dict(dct, imported, assignments):
     # type: (ast.Dict, Dict[str, str], dict) -> dict
     """recurse through and replace keys"""
-    outDict = {}
+    out_dict = {}
     for key, val in zip(dct.keys, dct.values):
         if not isinstance(key, ast.Str):
             raise ValueError(
                 "expected key to be a Str; {}".format(key))
-        outDict[key.s] = ast_to_json(val, imported, assignments)
+        out_dict[key.s] = ast_to_json(val, imported, assignments)
 
-    return outDict
+    return out_dict
 
 
 def convert_oformat(oformat):
@@ -141,8 +141,6 @@ def convert_config(config, exporter_class, allow_other):
                 if pname in ["LatexDocLinks", "LatexDocHTML"]:
                     preprocs[pname]["args"]["metapath"] = "${meta_path}"
                     preprocs[pname]["args"]["filesfolder"] = "${files_path}"
-
-
 
     # second parse
     for key, val in config.items():
@@ -245,27 +243,27 @@ def create_json(docstring, imported, assignments, allow_other=True):
             keywords = expr.keywords
             if len(args) != 1 or len(keywords) > 0:
                 raise ValueError("expected create_tpl(x) to have one argument")
-            segList = args[0]
-            if isinstance(segList, ast.ListComp):
-                segList = segList.generators[0].iter
-            if not isinstance(segList, ast.List):
+            seg_list = args[0]
+            if isinstance(seg_list, ast.ListComp):
+                seg_list = seg_list.generators[0].iter
+            if not isinstance(seg_list, ast.List):
                 raise ValueError(
                     "expected create_tpl(x) arg to be a List; {}".format(
-                        segList))
+                        seg_list))
             segments = []
-            for seg in segList.elts:
+            for seg in seg_list.elts:
                 if isinstance(seg, ast.Attribute):
-                    segName = seg.value.id
+                    seg_name = seg.value.id
                 elif isinstance(seg, ast.Name):
-                    segName = seg.id
+                    seg_name = seg.id
                 else:
                     raise ValueError(
                         "expected seg in template to be an Attribute; " +
                         "{1}".format(seg))
 
-                if segName not in imported:
-                    raise ValueError("segment '{}' not found".format(segName))
-                segments.append(imported[segName])
+                if seg_name not in imported:
+                    raise ValueError("segment '{}' not found".format(seg_name))
+                segments.append(imported[seg_name])
             template = segments
 
     if oformat is None:

@@ -21,7 +21,7 @@ def apply_filter(in_object, filter_func=None,
                  replace_api_version=True, dry_run=False,
                  **kwargs):
     # type: (list[str], FunctionType) -> str
-    """convenience function to apply a panflute filter(s) 
+    """convenience function to apply a panflute filter(s)
     to a string, list of string lines, pandoc AST or panflute.Doc
 
     Parameters
@@ -178,7 +178,7 @@ def strip_quotes(string):
 
 def find_attributes(element, allow_space=True,
                     search_left=False, include_element=False):
-    """find an attribute 'container' for an element, 
+    """find an attribute 'container' for an element,
     of the form <element><space>{#id .class1 .class2 a=1 b="a string"}
     and extract its content
 
@@ -265,7 +265,7 @@ def _search_attribute_right(element, include_element, allow_space):
         pf.Para(*attr_elements)).replace("\n", " ").strip()
 
     # split into the label and the rest
-    match = re.match("^\\{(#[^\s]+|)([^\\}]*)\\}", attribute_str)
+    match = re.match(r"^\{(#[^\s]+|)([^\}]*)\}", attribute_str)
     if not match:
         raise ValueError(attribute_str)
     classes, attributes = process_attributes(match.group(2))
@@ -339,7 +339,7 @@ def _search_attribute_left(element, include_element, allow_space):
         pf.Para(*attr_elements)).replace("\n", " ").strip()
 
     # split into the label and the rest
-    match = re.match("^\\{(#[^\s]+|)([^\\}]*)\\}$", attribute_str)
+    match = re.match("^\\{(#[^\\s]+|)([^\\}]*)\\}$", attribute_str)
     if not match:
         raise ValueError(attribute_str)
     classes, attributes = process_attributes(match.group(2))
@@ -354,7 +354,7 @@ def _search_attribute_left(element, include_element, allow_space):
 
 
 def process_attributes(attr_string):
-    """process a string of classes and attributes, 
+    """process a string of classes and attributes,
     e.g. '.class-name .other a=1 b="some text"' will be returned as:
     ["class-name", "other"], {"a": 1, "b": "some text"}
 
@@ -363,11 +363,11 @@ def process_attributes(attr_string):
     dict: attributes
     """
     # find classes, denoted by .class-name
-    classes = [c[1][1:] for c in re.findall('(^|\s)(\\.[\\-\\_a-zA-Z]+)',
+    classes = [c[1][1:] for c in re.findall('(^|\\s)(\\.[\\-\\_a-zA-Z]+)',
                                             attr_string)]
     # find attributes, denoted by a=b, respecting quotes
     attr = {c[1]: strip_quotes(c[2]) for c in re.findall(
-        '(^|\s)([\\-\\_a-zA-Z]+)\s*=\s*(\\".+\\"|\\\'.+\\\'|[^\s\\"\\\']+)',
+        '(^|\\s)([\\-\\_a-zA-Z]+)\\s*=\\s*(\\".+\\"|\\\'.+\\\'|[^\\s\\"\\\']+)',  # noqa: E501
         attr_string)}
     # TODO this generally works, but should be stricter against any weird
     # fringe cases

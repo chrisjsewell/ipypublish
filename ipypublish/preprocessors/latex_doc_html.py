@@ -50,9 +50,12 @@ class LatexDocHTML(Preprocessor):
 
         height = int(cell.metadata.ipub.embed_html.get('height', 0.5) * 100)
         width = int(cell.metadata.ipub.embed_html.get('width', 0.5) * 100)
-        embed_code = """
-        <iframe style="display:block; margin: 0 auto; height:{height}vh; width:{width}vw; overflow:auto; resize:both" {src}="{path}" frameborder="0" allowfullscreen></iframe>
-        """.format(src=self.src_name, path=path, height=height, width=width)
+        embed_code = (
+            '<iframe style="display:block; margin: 0 auto; height:{height}vh; '
+            'width:{width}vw; overflow:auto; resize:both" {src}="{path}" '
+            'frameborder="0" allowfullscreen>'
+            '</iframe>').format(
+                src=self.src_name, path=path, height=height, width=width)
 
         # add to the exising output or create a new one
         if cell.outputs:
@@ -83,7 +86,8 @@ class LatexDocHTML(Preprocessor):
                 if hasattr(cell.metadata.ipub, 'embed_html'):
                     if hasattr(cell.metadata.ipub.embed_html, 'filepath'):
                         paths = [cell.metadata.ipub.embed_html.filepath]
-                        if hasattr(cell.metadata.ipub.embed_html, 'other_files'):
+                        if hasattr(cell.metadata.ipub.embed_html,
+                                   'other_files'):
                             if not isinstance(
                                     cell.metadata.ipub.embed_html.other_files,
                                     list):
@@ -94,21 +98,24 @@ class LatexDocHTML(Preprocessor):
                             fpath = self.resolve_path(path, self.metapath)
                             if not os.path.exists(fpath):
                                 logging.warning(
-                                    'file in embed html metadata does not exist'
-                                    ': {}'.format(fpath))
+                                    "file in embed html metadata doesn't exist"
+                                    ": {}".format(fpath))
                             else:
                                 resources.setdefault("external_file_paths", [])
                                 resources['external_file_paths'].append(fpath)
                                 if j == 0:
-                                    self.embed_html(cell, os.path.join(
-                                        self.filesfolder, os.path.basename(fpath)))
+                                    self.embed_html(
+                                        cell, os.path.join(
+                                            self.filesfolder,
+                                            os.path.basename(fpath)))
 
                     elif hasattr(cell.metadata.ipub.embed_html, 'url'):
                         self.embed_html(
                             cell, cell.metadata.ipub.embed_html.url)
                     else:
                         logging.warning(
-                            'cell {} has no filepath or url key in its metadata.embed_html'.format(i))
+                            'cell {} has no filepath or url key in its '
+                            'metadata.embed_html'.format(i))
 
                 for floattype, floatabbr in [
                     ('figure', 'fig.'), ('table', 'tbl.'), ('code', 'code'),
@@ -119,12 +126,13 @@ class LatexDocHTML(Preprocessor):
                         float_count[floattype] += 1
                         if not isinstance(cell.metadata.ipub[floattype], dict):
                             continue
-                        cell.metadata.ipub[floattype]['caption_prefix'] = '<b>{0} {1}:</b> '.format(
+                        cell.metadata.ipub[floattype]['caption_prefix'] = '<b>{0} {1}:</b> '.format(  # noqa: E501
                             floattype.capitalize(), float_count[floattype])
                         if 'label' in cell.metadata.ipub[floattype]:
+                            label = '{0} {1}'.format(
+                                floatabbr, float_count[floattype])
                             resources.setdefault('refmap', {})[
-                                cell.metadata.ipub[floattype]['label']] = '{0} {1}'.format(floatabbr,
-                                                                                           float_count[floattype])
+                                cell.metadata.ipub[floattype]['label']] = label
 
             final_cells.append(cell)
         nb.cells = final_cells
