@@ -90,8 +90,8 @@ install:
 script:
 # - nosetests -v --nocapture --with-doctest --with-coverage --exe --cover-package=ipypublish
 - pytest -v --cov=ipypublish --cov-config .coveragerc --cov-report= ipypublish
-- nbpublish -pdf --pdf-debug -log debug example/notebooks/Example.ipynb
 - if [[ "$TRAVIS_PYTHON_VERSION" = "3.6" ]]; then flake8 . ; fi
+- nbpublish -pdf --pdf-debug -log debug example/notebooks/Example.ipynb
 after_success:
 - coveralls
 deploy:

@@ -43,3 +43,17 @@ def test_basic(app, status, warning, get_app_output):
          'href="\\#id1">\\[name\\]</a></td><td>the description</td></tr>'),
         output
     )
+
+
+@pytest.mark.sphinx(
+    buildername='html',
+    srcdir=get_test_source_dir('bibgloss_missingref'))
+def test_missingref(app, status, warning, get_app_output):
+
+    app.build()
+
+    assert 'build succeeded' in status.getvalue()  # Build succeeded
+    warnings = warning.getvalue().strip()
+    assert "could not relabel bibglossary reference [missingkey]" in warnings
+
+    # output = get_app_output(app, buildername='html')
