@@ -94,10 +94,10 @@ class TestApp(object):
 
     def __repr__(self):
         classname = self.__class__.__name__
-        return '<%s buildername=%r>' % (classname, self.builder.name)
+        return '<%s buildername=%r>' % (classname, self.buildername)
 
     def get_app(self, confoverrides=None,
-                freshenv=False, warningiserror=False, tags=None):
+                freshenv=True, warningiserror=False, tags=None):
 
         if confoverrides is None:
             confoverrides = {}
