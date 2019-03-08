@@ -29,7 +29,7 @@ def sphinx_app():
     exc = None
     try:
         app = TestApp(srcdir=srcdir, status=status, warning=warning,
-                        outdir=srcdir.parent.joinpath("_build")
+                      # outdir=srcdir.parent.joinpath("_build")
                       )
         yield app, status, warning
     except Exception as _exc:
