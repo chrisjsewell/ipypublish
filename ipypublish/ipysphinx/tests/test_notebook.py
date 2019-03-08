@@ -9,8 +9,7 @@ import re
 from textwrap import dedent
 import pytest
 
-from ipypublish.ipysphinx.tests import (
-    get_test_source_dir)
+from ipypublish.ipysphinx.tests import get_test_source_dir
 
 
 @pytest.mark.sphinx(
