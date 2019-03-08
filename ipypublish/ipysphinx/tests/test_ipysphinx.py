@@ -6,15 +6,14 @@
     General Sphinx test and check output.
 """
 import re
-import pytest
 
 
 def test_sphinx(sphinx_app):
-    app, status, warning = sphinx_app
+    app, status, warning, read_output = sphinx_app
     app.builder.build_all()
     warnings = warning.getvalue()
     assert warnings == ""
-    output = (app.outdir / "contents.html").read_text(encoding='utf-8')
+    output = read_output()
 
     assert re.search(
         ('<a class="bibglossary reference internal" '

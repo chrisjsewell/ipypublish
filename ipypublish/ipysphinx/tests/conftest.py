@@ -1,3 +1,4 @@
+import io
 import os
 import shutil
 import tempfile
@@ -31,7 +32,12 @@ def sphinx_app():
         app = TestApp(srcdir=srcdir, status=status, warning=warning,
                       #   outdir=srcdir.parent.joinpath("_build")
                       )
-        yield app, status, warning
+
+        def read_output():
+            with io.open(os.path.join(app.outdir, "contents.html"),
+                         encoding='utf-8') as fobj:
+                return fobj.read()
+        yield app, status, warning, read_output
     except Exception as _exc:
         exc = _exc
         raise
@@ -109,11 +115,13 @@ class TestApp(Sphinx):
         try:
             sphinx.application.abspath = lambda x: x
             if sphinx_version < '1.3':
-                Sphinx.__init__(self, str(srcdir), confdir, outdir, doctreedir,
+                Sphinx.__init__(self, str(srcdir), str(confdir), str(outdir),
+                                str(doctreedir),
                                 buildername, confoverrides, status,
                                 warning, freshenv, warningiserror, tags)
             else:
-                Sphinx.__init__(self, str(srcdir), confdir, outdir, doctreedir,
+                Sphinx.__init__(self, str(srcdir), str(confdir), str(outdir),
+                                str(doctreedir),
                                 buildername, confoverrides, status,
                                 warning, freshenv, warningiserror, tags,
                                 verbosity, parallel)
