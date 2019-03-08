@@ -6,14 +6,14 @@
     General Sphinx test and check output.
 """
 import re
+import pytest
 
 
+@pytest.mark.parametrize('sphinx_app', ['bibgloss'], indirect=True)
 def test_sphinx(sphinx_app):
-    app, status, warning, read_output = sphinx_app
-    app.builder.build_all()
-    warnings = warning.getvalue()
-    assert warnings == ""
-    output = read_output()
+    sphinx_app.get_app().builder.build_all()
+    assert sphinx_app.run_warnings == ""
+    output = sphinx_app.output_text
 
     assert re.search(
         ('<a class="bibglossary reference internal" '

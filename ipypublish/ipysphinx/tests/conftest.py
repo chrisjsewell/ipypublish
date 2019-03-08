@@ -10,7 +10,7 @@ import sphinx
 from sphinx.application import Sphinx
 from sphinx import __version__ as sphinx_version
 
-from ipypublish.ipysphinx.tests import TESTDIR
+from ipypublish.ipysphinx.tests import get_test_source_dir
 
 try:
     import pathlib
@@ -19,34 +19,10 @@ except ImportError:
 
 
 @pytest.fixture
-def sphinx_app():
-    srcdir = pathlib.Path(TESTDIR)
-    if srcdir.joinpath('_build').exists():
-        shutil.rmtree(str(srcdir.joinpath('_build')),
-                      ignore_errors=True, onerror=None)
-    status = StringIO()
-    warning = StringIO()
-    app = None
-    exc = None
-    try:
-        app = TestApp(srcdir=srcdir, status=status, warning=warning,
-                      #   outdir=srcdir.parent.joinpath("_build")
-                      )
-
-        def read_output():
-            with io.open(os.path.join(app.outdir, "contents.html"),
-                         encoding='utf-8') as fobj:
-                return fobj.read()
-        yield app, status, warning, read_output
-    except Exception as _exc:
-        exc = _exc
-        raise
-    finally:
-        if app:
-            if exc:
-                app.cleanup(error=exc)
-            else:
-                app.cleanup()
+def sphinx_app(request):
+    app = TestApp(request.param)
+    yield app
+    app.cleanup()
 
 
 def mkdtemp(suffix='', prefix='tmp', dir=None):
@@ -57,83 +33,116 @@ def mkdtemp(suffix='', prefix='tmp', dir=None):
     return pathlib.Path(tmpdir)
 
 
-class TestApp(Sphinx):
-    """
-    A subclass of :class:`sphinx.application.Sphinx`,
+class TestApp(object):
+    """ setup for `sphinx.application.Sphinx`,
     that runs on the test root,
     with some better default values for the initialization parameters.
     """
+    verbosity = 0
+    parallel = 0
+    buildername = 'html'
 
-    def __init__(self, srcdir=None, confdir=None, outdir=None, doctreedir=None,
-                 buildername='html', confoverrides=None, status=None,
-                 warning=None, freshenv=False, warningiserror=False, tags=None,
-                 copy_srcdir_to_tmpdir=False, create_new_srcdir=False,
-                 cleanup_on_errors=True, verbosity=0, parallel=0):
+    def __init__(self, srcdir=None, confdir=None, outdir=None,
+                 status=None, warning=None,
+                 copy_srcdir_to_tmpdir=False,
+                 cleanup_on_errors=True):
+
         self.cleanup_trees = []
         self.cleanup_on_errors = cleanup_on_errors
 
-        if create_new_srcdir:
-            assert srcdir is None, 'conflicted: create_new_srcdir, srcdir'
-            tmpdir = mkdtemp()
-            self.cleanup_trees.append(tmpdir)
-            tmproot = tmpdir.joinpath('root')
-            tmproot.mkdir()
-            (tmproot / 'conf.py').write_text('')
-            srcdir = tmproot
+        if status is None:
+            self._status = StringIO()
+        else:
+            self._status = status
+        if warning is None:
+            self._warnings = StringIO()
+        else:
+            self._warnings = warning
+        self.init_error = None
 
         assert srcdir is not None, 'srcdir not found'
-        srcdir = pathlib.Path(srcdir).absolute()
+        if not os.path.isabs(srcdir):
+            srcdir = get_test_source_dir(srcdir)
+        self.srcdir = pathlib.Path(srcdir).absolute()
 
         if copy_srcdir_to_tmpdir:
             tmpdir = mkdtemp()
             self.cleanup_trees.append(tmpdir)
-            tmproot = tmpdir / srcdir.basename()
-            srcdir.copytree(tmproot)
-            srcdir = tmproot
+            tmproot = tmpdir.joinpath(srcdir.basename())
+            self.srcdir.copytree(tmproot)
+            self.srcdir = tmproot
             self.builddir = srcdir.joinpath('_build')
         else:
             self.builddir = mkdtemp()
             self.cleanup_trees.append(self.builddir)
 
         if confdir is None:
-            confdir = srcdir
-        if outdir is None:
-            outdir = self.builddir.joinpath(buildername)
-            if not outdir.is_dir():
-                outdir.mkdir()
-        if doctreedir is None:
-            doctreedir = self.builddir.joinpath('doctrees')
-            if not doctreedir.is_dir():
-                doctreedir.mkdir()
-        if confoverrides is None:
-            confoverrides = {}
-        if status is None:
-            status = StringIO()
-        if warning is None:
-            warning = StringIO()
+            self.confdir = srcdir
+        else:
+            self.confdir = confdir
 
-        try:
-            sphinx.application.abspath = lambda x: x
-            if sphinx_version < '1.3':
-                Sphinx.__init__(self, str(srcdir), str(confdir), str(outdir),
-                                str(doctreedir),
-                                buildername, confoverrides, status,
-                                warning, freshenv, warningiserror, tags)
-            else:
-                Sphinx.__init__(self, str(srcdir), str(confdir), str(outdir),
-                                str(doctreedir),
-                                buildername, confoverrides, status,
-                                warning, freshenv, warningiserror, tags,
-                                verbosity, parallel)
-        finally:
-            sphinx.application.abspath = os.path.abspath
+        if outdir is None:
+            self.outdir = self.builddir.joinpath(self.buildername)
+            if not self.outdir.is_dir():
+                self.outdir.mkdir()
+        else:
+            self.outdir = outdir
+
+        self.doctreedir = self.builddir.joinpath('doctrees')
+        if not self.doctreedir.is_dir():
+            self.doctreedir.mkdir()
 
     def __repr__(self):
         classname = self.__class__.__name__
         return '<%s buildername=%r>' % (classname, self.builder.name)
 
-    def cleanup(self, error=None):
-        if error and self.cleanup_on_errors is False:
+    def get_app(self, confoverrides=None,
+                freshenv=False, warningiserror=False, tags=None):
+
+        if confoverrides is None:
+            confoverrides = {}
+        self.init_error = None
+        try:
+            sphinx.application.abspath = lambda x: x
+            if sphinx_version < '1.3':
+                app = Sphinx(
+                    str(self.srcdir), str(self.confdir), str(self.outdir),
+                    str(self.doctreedir), self.buildername,
+                    confoverrides, self._status, self._warnings,
+                    freshenv, warningiserror, tags)
+            else:
+                app = Sphinx(
+                    str(self.srcdir), str(self.confdir), str(self.outdir),
+                    str(self.doctreedir), self.buildername,
+                    confoverrides, self._status, self._warnings,
+                    freshenv, warningiserror, tags,
+                    self.verbosity, self.parallel)
+        except Exception as err:
+            self.init_error = err
+        finally:
+            sphinx.application.abspath = os.path.abspath
+
+        if not self.init_error:
+            return app
+
+    @property
+    def run_warnings(self):
+        return self._warnings.getvalue()
+
+    @property
+    def run_status(self):
+        return self._status.getvalue()
+
+    @property
+    def output_text(self):
+        outfile = os.path.join(self.outdir, "contents.html")
+        if not os.path.exists(outfile):
+            raise IOError("no output file exists: {}".format(outfile))
+        with io.open(outfile, encoding='utf-8') as fobj:
+            return fobj.read()
+
+    def cleanup(self):
+        if self.init_error and self.cleanup_on_errors is False:
             return
 
         if sphinx_version < '1.6':

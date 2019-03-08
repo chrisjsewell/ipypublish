@@ -41,7 +41,7 @@ class OverrideCitationReferences(docutils.transforms.Transform):
             refnode.line = citation_ref.line or citation_ref.parent.line
             refnode += docutils.nodes.Text('[' + cittext + ']')
             for class_name in citation_ref.attributes.get('classes', []):
-                refnode.set_class(class_name)
+                refnode['classes'].append(class_name)
             citation_ref.parent.replace(citation_ref, refnode)
 
 
