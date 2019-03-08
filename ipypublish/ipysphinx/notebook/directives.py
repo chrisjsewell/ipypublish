@@ -2,6 +2,7 @@
 adapted from nbsphinx
 """
 import docutils
+from docutils import nodes  # noqa E501
 from docutils.parsers import rst
 from docutils.statemachine import StringList
 
@@ -170,7 +171,6 @@ def _create_nbcell_nodes(directive):
 
 
 def container_wrapper(directive, literal_node, caption, classes):
-    # type: (SphinxDirective, nodes.Node, str) -> nodes.container
     """adapted from
     https://github.com/sphinx-doc/sphinx/blob/master/sphinx/directives/code.py
     """

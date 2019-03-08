@@ -64,7 +64,7 @@ def pandoc_filters():
 
     out_doc = doc
     for func in filters:
-        out_doc = func(out_doc)  # type: Doc
+        out_doc = func(out_doc)  # type: pf.Doc
     # TODO strip meta?
     pf.dump(doc)
 

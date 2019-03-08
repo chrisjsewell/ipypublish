@@ -2,6 +2,7 @@ import docutils.nodes
 import docutils.transforms
 import sphinx.util
 from sphinx import addnodes
+from typing import Any  # noqa: F401
 
 from ipypublish.bib2glossary.sphinx import (
     StyleEntries, docutils_entry_paragraph, docutils_citation_node)
