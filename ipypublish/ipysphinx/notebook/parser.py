@@ -1,6 +1,8 @@
 import os
 import logging
+from typing import Union  # noqa: F401
 
+from docutils import nodes  # noqa E501
 from docutils.parsers import rst
 from ipypublish.utils import handle_error
 from ipypublish.ipysphinx.utils import import_sphinx
@@ -43,7 +45,6 @@ class NBParser(rst.Parser):
         super(NBParser, self).__init__(*args, **kwargs)
 
     def set_application(self, app):
-        # type: (Sphinx) -> None
         """set_application will be called from Sphinx to set app
         and other instance variables
 
@@ -57,7 +58,7 @@ class NBParser(rst.Parser):
         self.env = app.env
 
     def parse(self, inputstring, document):
-        # type: (Union[str, StringList], nodes.document) -> None
+        # type: (Union[str, list[str]], nodes.document) -> None
         """Parse text and generate a document tree."""
 
         # fix for when calling on readthedocs

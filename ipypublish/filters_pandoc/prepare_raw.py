@@ -119,7 +119,7 @@ def process_html_cites(container, doc):
 
 
 def process_latex_raw(element, doc):
-    # type: (Union[RawInline, RawBlock], Doc) -> Element
+    # type: (Union[pf.RawInline, pf.RawBlock], pf.Doc) -> pf.Element
     """extract all latex adhering to \\tag{content} or \\tag[options]{content}
     to a Span element with class RAWSPAN_CLASS attributes:
 

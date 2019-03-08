@@ -117,7 +117,7 @@ def docutils_citation_reference_node(
         entry = EntryObj(entry)
     # see docutils.parsers.rst.states.Body.footnote_reference()
     if use_key_as_label:
-            label = entry.key
+        label = entry.key
     else:
         label = entry.label
     refname = docutils.nodes.fully_normalize_name(entry.key)

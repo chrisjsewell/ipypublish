@@ -31,7 +31,7 @@ setup(
         "tests": {
             "pytest>=3.6",
             "pytest-cov",
-            "flake8",
+            "flake8(>=3.7,<3.8)",
             "coverage",
             "pillow",
             "nbsphinx",
