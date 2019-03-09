@@ -343,8 +343,8 @@ class IpyPubMain(Configurable):
         if isinstance(ipynb_path, string_types):
             ipynb_path = pathlib.Path(ipynb_path)
         ipynb_name, ipynb_ext = os.path.splitext(ipynb_path.name)
-        outdir = os.path.join(
-            os.getcwd(), 'converted') if self.outpath is None else self.outpath
+        outdir = (os.path.join(os.getcwd(), 'converted')
+                  if self.outpath is None else str(self.outpath))
 
         self._setup_logger(ipynb_name, outdir)
 

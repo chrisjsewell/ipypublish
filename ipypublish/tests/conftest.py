@@ -135,7 +135,7 @@ class IpyTestApp(object):
     def run(self, ipub_config=None):
         if ipub_config is None:
             ipub_config = {}
-        ipub_config["outpath"] = self.converted_path
+        ipub_config["outpath"] = str(self.converted_path)
         app = IpyPubMain(
             config={"IpyPubMain": ipub_config})
         self._output_data = app(self.input_file if self.input_file is not None
