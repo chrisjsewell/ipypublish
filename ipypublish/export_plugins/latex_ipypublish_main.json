@@ -71,6 +71,10 @@
       {
         "module": "ipypublish.templates.segments",
         "file": "ipy-contents_framed_code-new.yaml.tex.j2"
+      },
+      {
+        "module": "ipypublish.templates.segments",
+        "file": "ipy-glossary.yaml.tex.j2"
       }
     ]
   }

@@ -5,51 +5,61 @@ from ipypublish.frontend import nbpresent
 from ipypublish.frontend import nbpublish
 
 
-def test_nbpresent_bad_exporter(temp_folder, ipynb1):
+@pytest.mark.ipynb('basic_nb')
+def test_nbpresent_bad_exporter(ipynb_app):
     # type: (str, pathlib.Path) -> None
-    assert 1 == nbpresent.run([str(ipynb1), "-f", "non-existent",
-                               "--outpath", temp_folder,
+    assert 1 == nbpresent.run([str(ipynb_app.input_file),
+                               "-f", "non-existent",
+                               "--outpath", str(ipynb_app.converted_path),
                                "--dry-run", "--log-level", "debug"])
 
 
-def test_nbpublish_bad_exporter(temp_folder, ipynb1):
+@pytest.mark.ipynb('basic_nb')
+def test_nbpublish_bad_exporter(ipynb_app):
     # type: (str, pathlib.Path) -> None
-    assert 1 == nbpublish.run([str(ipynb1),  "-f", "non-existent",
-                               "--outpath", temp_folder,
+    assert 1 == nbpublish.run([str(ipynb_app.input_file),
+                               "-f", "non-existent",
+                               "--outpath", str(ipynb_app.converted_path),
                                "--dry-run", "--log-level", "debug"])
 
 
-def test_nbpresent_dry_run(temp_folder, ipynb1):
+@pytest.mark.ipynb('basic_nb')
+def test_nbpresent_dry_run(ipynb_app):
     # type: (str, pathlib.Path) -> None
-    assert 0 == nbpresent.run([str(ipynb1), "--outpath", temp_folder,
+    assert 0 == nbpresent.run([str(ipynb_app.input_file),
+                               "--outpath", str(ipynb_app.converted_path),
                                "--dry-run", "--log-level", "debug", "-pt"])
 
 
-def test_nbpublish_dry_run(temp_folder, ipynb1):
+@pytest.mark.ipynb('basic_nb')
+def test_nbpublish_dry_run(ipynb_app):
     # type: (str, pathlib.Path) -> None
-    assert 0 == nbpublish.run([str(ipynb1), "--outpath", temp_folder,
+    assert 0 == nbpublish.run([str(ipynb_app.input_file),
+                               "--outpath", str(ipynb_app.converted_path),
                                "--dry-run", "--log-level", "debug", "-pt"])
 
 
+@pytest.mark.ipynb('basic_nb')
 def test_nbpublish_dry_run_with_external_plugin(
-        temp_folder, ipynb1, external_export_plugin):
+        ipynb_app, external_export_plugin):
     # type: (str, pathlib.Path) -> None
-    assert 0 == nbpublish.run([str(ipynb1),
+    assert 0 == nbpublish.run([str(ipynb_app.input_file),
                                "--outformat", str(external_export_plugin),
-                               "--outpath", temp_folder,
+                               "--outpath", str(ipynb_app.converted_path),
                                "--dry-run", "--log-level", "debug", "-pt"])
 
 
+@pytest.mark.ipynb('basic_nb')
 def test_nbpublish_dry_run_with_external_plugin_key(
-        temp_folder, ipynb1, external_export_plugin):
+        ipynb_app, external_export_plugin):
     # type: (str, pathlib.Path, pathlib.Path) -> None
-    assert 0 == nbpublish.run([str(ipynb1),
+    assert 0 == nbpublish.run([str(ipynb_app.input_file),
                                "--export-paths",
                                str(external_export_plugin.parent),
                                "--outformat",
                                os.path.splitext(
                                    str(external_export_plugin.name))[0],
-                               "--outpath", temp_folder,
+                               "--outpath", str(ipynb_app.converted_path),
                                "--dry-run", "--log-level", "debug", "-pt"])
 
 
@@ -67,21 +77,24 @@ def test_nbpublish_list_exports():
         assert out.value.code == 0
 
 
-def test_nbpublish_write(temp_folder, ipynb1):
+@pytest.mark.ipynb('basic_nb')
+def test_nbpublish_write(ipynb_app):
     # type: (str, pathlib.Path) -> None
-    assert 0 == nbpublish.run([str(ipynb1),
+    assert 0 == nbpublish.run([str(ipynb_app.input_file),
                                "--outformat", "latex_ipypublish_main",
-                               "--outpath", temp_folder, "-pt"])
-    assert os.path.exists(os.path.join(temp_folder,
-                                       ipynb1.name.replace(".ipynb", ".tex")))
+                               "--outpath", str(ipynb_app.converted_path),
+                               "-pt"])
+    assert ipynb_app.converted_path.joinpath(
+        ipynb_app.input_file.name.replace(".ipynb", ".tex")).exists()
 
 
 @pytest.mark.requires_latexmk
-def test_nbpublish_to_pdf(temp_folder, ipynb1):
+@pytest.mark.ipynb('basic_nb')
+def test_nbpublish_to_pdf(ipynb_app):
     # type: (str, pathlib.Path) -> None
-    assert 0 == nbpublish.run([str(ipynb1),
+    assert 0 == nbpublish.run([str(ipynb_app.input_file),
                                "--outformat", "latex_ipypublish_main",
-                               "--outpath", temp_folder,
+                               "--outpath", str(ipynb_app.converted_path),
                                "--create-pdf", "-pt"])
-    assert os.path.exists(os.path.join(temp_folder,
-                                       ipynb1.name.replace(".ipynb", ".pdf")))
+    assert ipynb_app.converted_path.joinpath(
+        ipynb_app.input_file.name.replace(".ipynb", ".pdf")).exists()

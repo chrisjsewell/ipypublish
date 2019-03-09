@@ -10,6 +10,7 @@
 % - ipypublish-biblio_natbib: with the main ipypublish bibliography
 % - ipypublish-contents_output: with the main ipypublish content
 % - ipypublish-contents_framed_code: with the input code wrapped and framed
+% - ipypublish-glossary: with the main ipypublish glossary
 %
 %%%%%%%%%%%% DOCCLASS
 
@@ -378,11 +379,6 @@ nohead,includefoot,footskip=25pt}
 \renewcommand\thefigure{\thesection.\arabic{figure}}
 \renewcommand\theequation{\thesection.\arabic{equation}}
 
-    % set global options for float placement
-    \makeatletter
-        \providecommand*\setfloatlocations[2]{\@namedef{fps@#1}{#2}}
-    \makeatother
-
 % align captions to left (indented)
 \captionsetup{justification=raggedright,
 singlelinecheck=false,format=hang,labelfont={it,bf}}
@@ -422,29 +418,10 @@ singlelinecheck=false,format=hang,labelfont={it,bf}}
 
 \begin{document}
 
-    \title{Notebook}
-  \date{\today}
-  \maketitle
-
-    \begingroup
-    \let\cleardoublepage\relax
-    \let\clearpage\relax\tableofcontents\listoffigures\listoftables\listof{codecell}{\GetTranslation{List of Codes}}
-    \endgroup
-
 \hypertarget{a-title}{%
 \section{a title}\label{a-title}}
 
 some text
-
-\begin{lstlisting}[language=Python,numbers=left,xleftmargin=20pt,xrightmargin=5pt,belowskip=5pt,aboveskip=5pt]
-a=1
-print(a)
-\end{lstlisting}
-
-\begin{lstlisting}[language={},postbreak={},numbers=none,xrightmargin=7pt,belowskip=5pt,aboveskip=5pt,breakindent=0pt]
-1
-
-\end{lstlisting}
 
 \end{document}
 

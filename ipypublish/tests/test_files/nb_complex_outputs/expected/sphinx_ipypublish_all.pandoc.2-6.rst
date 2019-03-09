@@ -94,7 +94,7 @@ Images and Figures
 
 .. nboutput:: rst
 
-    .. figure:: ipynb_complex_files/output_13_0.jpeg
+    .. figure:: main_files/output_13_0.jpeg
         :alt: output_13_0
         :align: center
         :height: 400
@@ -118,7 +118,7 @@ Displaying a plot with its code
 
 .. nboutput:: rst
 
-    .. figure:: ipynb_complex_files/output_17_0.svg
+    .. figure:: main_files/output_17_0.svg
         :alt: output_17_0
         :align: center
         :name: fig:example_mpl
@@ -196,4 +196,4 @@ Equations (with ipython or sympy)
 
 .. rubric:: My Bibliography
 
-.. bibliography:: ipynb_complex_files/example.bib
+.. bibliography:: main_files/example.bib

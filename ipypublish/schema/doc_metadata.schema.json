@@ -137,7 +137,49 @@
                         "filepath": {
                             "description": "path to the bibtex file (absolute or relative)",
                             "type": "string"
-                        }
+                        },
+                        "style_main": {
+                            "description": "style of the output (main) glossary",
+                            "type": "string",
+                            "enum": [
+                                "list",
+                                "long",
+                                "listgroup",
+                                "listhypergroup",
+                                "altlist",
+                                "altlistgroup",
+                                "altlisthypergroup"
+                            ],
+                            "default": "altlist"
+                        },
+                        "style_acronyms": {
+                            "description": "style of the output acronym glossary",
+                            "type": "string",
+                            "enum": [
+                                "list",
+                                "long",
+                                "listgroup",
+                                "listhypergroup",
+                                "altlist",
+                                "altlistgroup",
+                                "altlisthypergroup"
+                            ],
+                            "default": "list"
+                        },
+                        "style_symbols": {
+                            "description": "style of the output symbols glossary",
+                            "type": "string",
+                            "enum": [
+                                "list",
+                                "long",
+                                "listgroup",
+                                "listhypergroup",
+                                "altlist",
+                                "altlistgroup",
+                                "altlisthypergroup"
+                            ],
+                            "default": "list"
+                        }                        
                     }
                 },
                 "pandoc": {
@@ -177,8 +219,20 @@
                         }
                     }
                 },
+                "latex": {
+                    "description": "settings specific to outputting a latex document",
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                        "no_glossary": {
+                            "description": "suppress the `\\printglossary` command that will be output at the end of the file (if bibglossary set)",
+                            "type": "boolean",
+                            "default": false
+                        }
+                    }
+                },
                 "sphinx": {
-                    "description": "settings for outputting a sphinx document",
+                    "description": "settings specific to outputting a sphinx document",
                     "type": "object",
                     "additionalProperties": false,
                     "properties": {
