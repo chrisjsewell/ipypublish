@@ -10,7 +10,7 @@ Notebook to Test Markdown Cells
 Cell with Attached Image
 ------------------------
 
-.. figure:: nb_markdown_cells_files/attach_1_output_13_0.jpeg
+.. figure:: main_files/attach_1_output_13_0.jpeg
    :alt: output_13_0.jpeg
    :name: fig:id1
 
@@ -21,7 +21,7 @@ Cell with Attached Image
 Cell with Linked Image
 ----------------------
 
-.. figure:: nb_markdown_cells_files/logo_example.png
+.. figure:: main_files/logo_example.png
    :alt: this is a **caption**
    :name: fig:id2
    :width: 50.0%

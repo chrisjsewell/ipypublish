@@ -242,7 +242,7 @@ class LatexDocLinks(Preprocessor):
 
         if 'ipub' in nb.metadata:
 
-            if hasattr(nb.metadata.ipub, 'bibliography'):
+            if 'bibliography' in nb.metadata.ipub:
                 bib = nb.metadata.ipub.bibliography
                 bib = resolve_path(bib, self.metapath)
                 if not os.path.exists(bib):
@@ -255,18 +255,30 @@ class LatexDocLinks(Preprocessor):
                     nb.metadata.ipub.bibliography = os.path.join(
                         self.filesfolder, os.path.basename(bib))
 
-            if hasattr(nb.metadata.ipub, 'titlepage'):
-                if hasattr(nb.metadata.ipub.titlepage, 'logo'):
-                    logo = nb.metadata.ipub.titlepage.logo
-                    logo = resolve_path(logo, self.metapath)
-                    if not os.path.exists(logo):
-                        resources['unfound_file_paths'].append(logo)
-                    else:
-                        resources['external_file_paths'].append(logo)
+            if "filepath" in nb.metadata.ipub.get('bibglossary', {}):
+                gloss = nb.metadata.ipub.bibglossary.filepath
+                gloss = resolve_path(gloss, self.metapath)
+                if not os.path.exists(gloss):
+                    resources['unfound_file_paths'].append(gloss)
+                else:
+                    resources['external_file_paths'].append(gloss)
+                    resources['bibglosspath'] = gloss
 
-                    if self.redirect_external:
-                        nb.metadata.ipub.titlepage.logo = os.path.join(
-                            self.filesfolder, os.path.basename(logo))
+                if self.redirect_external:
+                    nb.metadata.ipub.bibglossary.filepath = os.path.join(
+                        self.filesfolder, os.path.basename(gloss))
+
+            if 'logo' in nb.metadata.ipub.get('titlepage', {}):
+                logo = nb.metadata.ipub.titlepage.logo
+                logo = resolve_path(logo, self.metapath)
+                if not os.path.exists(logo):
+                    resources['unfound_file_paths'].append(logo)
+                else:
+                    resources['external_file_paths'].append(logo)
+
+                if self.redirect_external:
+                    nb.metadata.ipub.titlepage.logo = os.path.join(
+                        self.filesfolder, os.path.basename(logo))
 
         for index, cell in enumerate(nb.cells):
             nb.cells[index], resources = self.preprocess_cell(
