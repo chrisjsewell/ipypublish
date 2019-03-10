@@ -32,7 +32,11 @@ PREFIX_MAP = (
     )),
     ("&", (
         ("classes", ()),
-        ("attributes", (("latex", "gls"), ("rst", "term")))
+        ("attributes", (("latex", "gls"), ("rst", "gls"))),
+    )),
+    ("§", (
+        ("classes", ("capital",)),
+        ("attributes", (("latex", "Gls"), ("rst", "glsc")))
     )),
 )
 
@@ -42,13 +46,17 @@ PREFIX_MAP_LATEX_R = (
     ('ref', '!'),
     ('eqref', '='),
     ("cite", ""),
-    ("gls", "&"))
+    ("gls", "&"),
+    ("Gls", "§")
+    )
 PREFIX_MAP_RST_R = (
     ('numref', '+'),
     ('ref', '!'),
     ('eq', '='),
     ("cite", ""),
-    ("term", "&"))
+    ("gls", "&"),
+    ("glsc", "§")
+    )
 
 CITE_HTML_NAMES = (
     ("Math", "eqn."),

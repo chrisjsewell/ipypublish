@@ -51,15 +51,18 @@ class BibGlossaryDirective(Directive):
         'cited': directives.flag,
         'notcited': directives.flag,
         'all': directives.flag,
+        'unsorted': directives.flag,
         'filter': directives.unchanged,
-        # 'style': directives.unchanged,
-        # 'list': directives.unchanged,
-        'enumtype': directives.unchanged,
-        'start': process_start_option,
+        'style': directives.unchanged,
         'encoding': directives.encoding,
         'labelprefix': directives.unchanged,
         'keyprefix': directives.unchanged,
     }
+
+    _allowed_styles = (
+        "list"
+    )
+    _default_style = "list"
 
     def run(self):
         """Process .bib files, set file dependencies, and create a
@@ -102,12 +105,18 @@ class BibGlossaryDirective(Directive):
             # the default filter: include only cited entries
             filter_ = ast.parse("cited")
 
+        style = self.options.get(
+                "style", env.app.config.bibgloss_default_style)
+        if style not in self._allowed_styles:
+            logger.warning(
+                "style '{}' not in allowed styles, defaulting to '{}'".format(
+                    style, self._default_style
+                ))
+            style = self._default_style
+
         bibcache = BibliographyCache(
-            list_="citation",  # self.options.get("list", "citation"),
-            enumtype=self.options.get("enumtype", "arabic"),
-            start=self.options.get("start", 1),
-            # style=self.options.get(
-            #     "style", env.app.config.bibgloss_default_style),
+            style=style,
+            unsorted=("unsorted" in self.options),
             filter_=filter_,
             encoding=self.options.get(
                 'encoding',
@@ -115,11 +124,10 @@ class BibGlossaryDirective(Directive):
             labelprefix=self.options.get("labelprefix", ""),
             keyprefix=self.options.get("keyprefix", ""),
             labels={},
+            plurals={},
             bibfiles=[],
         )
-        if (bibcache.list_ not in set(["bullet", "enumerated", "citation"])):
-            logger.warning(
-                "unknown bibliography list type '{0}'.".format(bibcache.list_))
+
         for bibfile in self.arguments[0].split():
             # convert to normalized absolute path to ensure that the same file
             # only occurs once in the cache

@@ -1,6 +1,7 @@
 import logging
 
 import docutils
+import panflute as pf
 
 from ipypublish.bib2glossary.common import (
     parse_bib, DEFAULT_ACRONYM_P2F, DEFAULT_GLOSS_P2F,
@@ -9,16 +10,14 @@ from ipypublish.bib2glossary.common import (
 
 logger = logging.getLogger(__name__)
 
-# TODO see https://github.com/sphinx-doc/sphinx/issues/4298
-# for possible acronym directive
-# TODO add better directive for glossary (that better mirrors latex glossaries)
+# TODO advertise extension at https://github.com/sphinx-doc/sphinx/issues/4298
 
 
 def bib_to_sphinx_glossary(text_str=None, bib=None,
                            sort_keys=True, filter_keys=None,
                            glossary_type=DEFAULT_GLOSS_ETYPE,
                            acronym_type=DEFAULT_ACRONYM_ETYPE):
-    """Set docstring here.
+    """create a standard sphinx glossary from a bib file
 
     Parameters
     ----------
@@ -106,8 +105,8 @@ def bib_to_sphinx_glossary(text_str=None, bib=None,
     return glossary_str
 
 
-def docutils_citation_reference_node(
-        entry, document, use_key_as_label=True):
+def docutils_citation_ref_node(
+        entry, document, use_key_as_label=True, classes=('bibglossary',)):
     # type: (dict, docutils.nodes.document, bool) -> docutils.nodes.citation_reference  # noqa
     """Return citation_reference node to the given citation. The
     citation_reference is expected to be inserted into *document*
@@ -126,60 +125,60 @@ def docutils_citation_reference_node(
         refname=refname)
     label_text = docutils.nodes.Text(label)
     refnode += label_text
-    refnode['classes'].append('bibglossary')
-    # refnode.tagname = 'glossary_reference'
+    refnode['classes'].extend(classes)
     document.note_citation_ref(refnode)
     return refnode
 
 
-def docutils_entry_paragraph(entry):
-    """Return a docutils.nodes.paragraph
-    containing the rendered text for *entry* (without label).
-
-    """
-    if not isinstance(entry, EntryObj):
-        entry = EntryObj(entry)
-    return docutils.nodes.paragraph(
-        '', '', docutils.nodes.Text(entry.text, entry.text))
-
-
 def docutils_citation_node(entry, document, use_key_as_label=True):
-    """Return citation node, with key as name, label as first
-    child, and paragraph with entry text as second child. The citation is
-    expected to be inserted into *document* prior to any docutils
-    transforms.
+    """Return citation node, with key as name, label as first child,
+    and nodes with entry text (converted from latex) as subsequent children.
+
+    The citation is expected to be inserted into the *document*
+    prior to any docutils transforms.
     """
     # see docutils.parsers.rst.states.Body.citation()
     if not isinstance(entry, EntryObj):
         entry = EntryObj(entry)
+
     if use_key_as_label:
         label = entry.key
     else:
         label = entry.label
     name = docutils.nodes.fully_normalize_name(entry.key)
+
     citation = docutils.nodes.citation()
     citation['names'].append(name)
     citation += docutils.nodes.label('', label)
-    citation += docutils_entry_paragraph(entry)
+    for child in latex_to_docutils(entry.text):
+        citation += child
+    # citation += docutils_entry_paragraph(entry)
     citation['classes'].append('bibglossary')
     document.note_citation(citation)
     document.note_explicit_target(citation, citation)
     return citation
 
 
-class StyleEntries(object):
+def format_entries(entries, style='list', sort=True):
+    # TODO apply styles consistent with latex glossaries
+    if sort:
+        entries = sorted(entries, key=lambda e: e.label.lower())
+    labels = [e.label for e in entries]
+    for label, entry in zip(labels, entries):
+        yield entry
 
-    def sort_entries(self, entries):
-        return sorted(entries, key=lambda e: e.label)
 
-    def format_labels(self, entries):
-        return [e.label for e in entries]
+def rst_to_docutils(source):
+    parser = docutils.parsers.rst.Parser()
+    settings = docutils.frontend.OptionParser(
+                    components=(docutils.parsers.rst.Parser,)
+                    ).get_default_values()
+    document = docutils.utils.new_document('dummy_source_path', settings)
+    parser.parse(source, document)
+    return document
 
-    def format_entry(self, label, entry, bib_data=None):
-        return entry
 
-    def format_entries(self, entries, bib_data=None):
-        sorted_entries = self.sort_entries(entries)
-        labels = self.format_labels(sorted_entries)
-        for label, entry in zip(labels, sorted_entries):
-            yield self.format_entry(label, entry, bib_data=bib_data)
+def latex_to_docutils(source):
+    rst_source = pf.convert_text(
+        source, input_format='latex', output_format='rst')
+    return rst_to_docutils(rst_source)

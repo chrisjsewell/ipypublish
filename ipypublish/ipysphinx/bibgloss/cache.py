@@ -233,6 +233,14 @@ class Cache:
         else:
             raise KeyError("%s not found" % key)
 
+    def get_plural_from_key(self, key):
+        """Return label for the given key."""
+        for bibcache in self.get_all_bibliography_caches():
+            if key in bibcache.plurals:
+                return bibcache.plurals[key]
+        else:
+            raise KeyError("%s not found" % key)
+
     def get_all_cited_keys(self):
         """Yield all citation keys, sorted first by document
         (alphabetical), then by citation order in the document.
@@ -338,9 +346,8 @@ class BibfileCache(collections.namedtuple('BibfileCache', 'mtime data')):
 
 class BibliographyCache(collections.namedtuple(
     'BibliographyCache',
-    """bibfiles encoding
-list_ enumtype start labels labelprefix
-filter_ keyprefix
+    """bibfiles encoding style unsorted labels plurals
+ labelprefix filter_ keyprefix
 """)):
 
     """Contains information about a bibliography directive.
@@ -351,29 +358,30 @@ filter_ keyprefix
         names (relative to the top source folder) that contain the
         references.
 
+    .. attribute:: encoding
+
+        The encoding of the glossary file.
+
     .. attribute:: style
 
         The glossary style.
 
-    .. attribute:: list_
+    .. attribute:: unsorted
 
-        The list type.
-
-    .. attribute:: enumtype
-
-        The sequence type (only used for enumerated lists).
-
-    .. attribute:: start
-
-        The first ordinal of the sequence (only used for enumerated lists).
+        If True the glossary terms will be sorted by order of use,
+        rather than alphabetically
 
     .. attribute:: labels
 
         Maps citation keys to their final labels.
 
+    .. attribute:: plurals
+
+        Maps citation keys to their final pluralised labels.
+
     .. attribute:: labelprefix
 
-        This bibliography's string prefix for pybtex generated labels.
+        This bibliography's string prefix for generated labels.
 
     .. attribute:: keyprefix
 

@@ -5,7 +5,7 @@ from sphinx import addnodes
 from typing import Any  # noqa: F401
 
 from ipypublish.bib2glossary.sphinx import (
-    StyleEntries, docutils_entry_paragraph, docutils_citation_node)
+    format_entries, docutils_citation_node)
 from ipypublish.ipysphinx.bibgloss.nodes import BibGlossaryNode
 
 logger = sphinx.util.logging.getLogger(__name__)
@@ -97,7 +97,6 @@ def transform_url_command(textnode):
 
 
 class BibGlossaryTransform(docutils.transforms.Transform):
-
     """A docutils transform to generate citation entries for
     bibglossary nodes.
     """
@@ -116,6 +115,7 @@ class BibGlossaryTransform(docutils.transforms.Transform):
         env = self.document.settings.env
         docname = env.docname
         for bibnode in self.document.traverse(BibGlossaryNode):
+
             id_ = bibnode['ids'][0]
             bibcache = env.bibgloss_cache.get_bibliography_cache(
                 docname=docname, id_=id_)
@@ -123,40 +123,25 @@ class BibGlossaryTransform(docutils.transforms.Transform):
                 docname=docname, id_=id_, warn=logger.warning)
 
             # create citation nodes for all references
-            if bibcache.list_ == "enumerated":
-                nodes = docutils.nodes.enumerated_list()
-                nodes['enumtype'] = bibcache.enumtype
-                if bibcache.start >= 1:
-                    nodes['start'] = bibcache.start
-                    env.bibgloss_cache.set_enum_count(
-                        env.docname, bibcache.start)
-                else:
-                    nodes['start'] = env.bibgloss_cache.get_enum_count(
-                        env.docname)
-            elif bibcache.list_ == "bullet":
-                nodes = docutils.nodes.bullet_list()
-            else:  # "citation"
-                nodes = docutils.nodes.paragraph()
+            nodes = docutils.nodes.paragraph()
 
-            for styled_entry in StyleEntries().format_entries(entries):
-                if bibcache.list_ in ["enumerated", "bullet"]:
-                    citation = docutils.nodes.list_item()
-                    citation += docutils_entry_paragraph(styled_entry)
-                else:  # "citation"
-                    citation = docutils_citation_node(
-                        styled_entry, self.document)
-                    # docutils_citation_node(...) uses entry.key
-                    # as citation label
-                    # we change it to entry.label later onwards
-                    # but we must note the entry.label now;
-                    # at this point, we also already prefix the label
-                    key = citation[0].astext()
-                    bibcache.labels[key] = (
-                        bibcache.labelprefix + styled_entry.label)
+            for styled_entry in format_entries(
+                    entries, style=bibcache.style, sort=not bibcache.unsorted):
+
+                citation = docutils_citation_node(
+                    styled_entry, self.document)
+                # docutils_citation_node(...) uses entry.key
+                # as citation label
+                # we change it to entry.label later onwards
+                # but we must note the entry.label now;
+                # at this point, we also already prefix the label
+                key = citation[0].astext()
+                bibcache.labels[key] = (
+                    bibcache.labelprefix + styled_entry.label)
+                bibcache.plurals[key] = (
+                    bibcache.labelprefix + styled_entry.plural)
+
                 node_text_transform(citation, transform_url_command)
                 nodes += citation
-
-                if bibcache.list_ == "enumerated":
-                    env.bibgloss_cache.inc_enum_count(env.docname)
 
             bibnode.replace_self(nodes)
