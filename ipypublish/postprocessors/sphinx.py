@@ -9,8 +9,8 @@ from traitlets import TraitError, validate, Bool, Dict, Unicode
 
 from ipypublish import __version__
 from ipypublish.postprocessors.base import IPyPostProcessor
-from ipypublish.ipysphinx.utils import import_sphinx
-from ipypublish.ipysphinx.create_setup import make_conf, make_index
+from ipypublish.sphinx.utils import import_sphinx
+from ipypublish.sphinx.create_setup import make_conf, make_index
 
 
 # NOTE Interesting note about adding a directive to actually run python code
