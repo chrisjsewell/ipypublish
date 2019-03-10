@@ -1,9 +1,7 @@
 import docutils
 import panflute as pf
 
-from ipypublish.bib2glossary.common import (  # noqa: F401
-    EntryObj, get_entry_objects,
-    get_empty_bib, get_fake_entry_obj, parse_bib)
+from ipypublish.bib2glossary import BibGlossEntry
 
 
 def docutils_citation_ref_node(
@@ -13,8 +11,8 @@ def docutils_citation_ref_node(
     citation_reference is expected to be inserted into *document*
     prior to any docutils transforms.
     """
-    if not isinstance(entry, EntryObj):
-        entry = EntryObj(entry)
+    if not isinstance(entry, BibGlossEntry):
+        raise TypeError
     # see docutils.parsers.rst.states.Body.footnote_reference()
     if use_key_as_label:
         label = entry.key
@@ -39,8 +37,8 @@ def docutils_citation_node(entry, document, use_key_as_label=True):
     prior to any docutils transforms.
     """
     # see docutils.parsers.rst.states.Body.citation()
-    if not isinstance(entry, EntryObj):
-        entry = EntryObj(entry)
+    if not isinstance(entry, BibGlossEntry):
+        raise TypeError
 
     if use_key_as_label:
         label = entry.key

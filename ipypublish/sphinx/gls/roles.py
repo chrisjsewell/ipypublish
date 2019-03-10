@@ -1,7 +1,7 @@
 from sphinx.roles import XRefRole
 
-from ipypublish.sphinx.gls.bibgloss import (
-    get_fake_entry_obj, docutils_citation_ref_node)
+from ipypublish.bib2glossary import BibGlossDB
+from ipypublish.sphinx.gls.bibgloss import docutils_citation_ref_node
 
 
 class GLSRole(XRefRole):
@@ -20,7 +20,8 @@ class GLSRole(XRefRole):
         # process_citation_references.
         refnodes = [
             docutils_citation_ref_node(
-                get_fake_entry_obj(key), document, classes=["bibglossary"])
+                BibGlossDB.get_fake_entry_obj(key),
+                document, classes=["bibglossary"])
             for key in keys]
         for key in keys:
             env.bibgloss_cache.add_cited(key, env.docname)
@@ -43,7 +44,7 @@ class GLSCapitalRole(XRefRole):
         # process_citation_references.
         refnodes = [
             docutils_citation_ref_node(
-                get_fake_entry_obj(key), document,
+                BibGlossDB.get_fake_entry_obj(key), document,
                 classes=["bibglossary", "bibgcapital"])
             for key in keys]
         for key in keys:
@@ -67,7 +68,7 @@ class GLSPluralRole(XRefRole):
         # process_citation_references.
         refnodes = [
             docutils_citation_ref_node(
-                get_fake_entry_obj(key), document,
+                BibGlossDB.get_fake_entry_obj(key), document,
                 classes=["bibglossary", "bibgplural"])
             for key in keys]
         for key in keys:
@@ -91,7 +92,7 @@ class GLSPluralCapitalRole(XRefRole):
         # process_citation_references.
         refnodes = [
             docutils_citation_ref_node(
-                get_fake_entry_obj(key), document,
+                BibGlossDB.get_fake_entry_obj(key), document,
                 classes=["bibglossary", "bibgplural", "bibgcapital"])
             for key in keys]
         for key in keys:
