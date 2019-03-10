@@ -56,7 +56,7 @@ def test_basic(app, status, warning, get_app_output):
          'href="\\#id4".*'
          'the description which '
          'contains latex <span class="math">'
-         '\\\\\\(\\\\frac\\{-23\\}\\{129\\}\\\\\\)'
+         '.*frac\\{-23\\}\\{129\\}.*'
          '</span></td></tr>'),
         output
     )
