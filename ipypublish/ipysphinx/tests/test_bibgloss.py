@@ -24,6 +24,8 @@ def test_basic(app, status, warning, get_app_output):
 
     output = get_app_output(app, buildername='html')
 
+    print(output)
+
     assert re.search(
         ('<a class="bibglossary bibgcapital reference internal" '
          'href="#term1" id="id1">Name</a>'),
