@@ -58,7 +58,7 @@ def test_reference_prefixes_rst():
     """
     """
     in_string = [
-       '(?@key1 &@key2 =@key3)'
+       '(?@key1 &@key2 §@key3 =@key4)'
     ]
 
     out_string = apply_filter(in_string,
@@ -67,5 +67,5 @@ def test_reference_prefixes_rst():
 
     print(out_string)
     assert out_string == "\n".join([
-        "(:ref:`key1` :term:`key2` :eq:`key3`)"
+        "(:ref:`key1` :gls:`key2` :glsc:`key3` :eq:`key4`)"
     ])

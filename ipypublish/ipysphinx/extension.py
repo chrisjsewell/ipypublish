@@ -1,5 +1,4 @@
 import os
-import docutils
 from docutils.parsers import rst
 from six import string_types
 
@@ -16,7 +15,8 @@ from ipypublish.ipysphinx.notebook.parser import NBParser
 
 from ipypublish.ipysphinx.bibgloss import processing as bibproc
 from ipypublish.ipysphinx.bibgloss.directives import BibGlossaryDirective
-from ipypublish.ipysphinx.bibgloss.roles import GLSRole
+from ipypublish.ipysphinx.bibgloss.roles import (
+    GLSRole, GLSCapitalRole, GLSPluralRole, GLSPluralCapitalRole)
 from ipypublish.ipysphinx.bibgloss.nodes import BibGlossaryNode
 from ipypublish.ipysphinx.bibgloss.transforms import (
     BibGlossaryTransform, OverrideCitationReferences,
@@ -54,7 +54,6 @@ def setup(app):
     except AttributeError:  # Sphinx < 1.7
         from sphinx.io import SphinxStandaloneReader
         transforms = SphinxStandaloneReader.transforms
-    _directives = docutils.parsers.rst.directives._directives
 
     def add_transform(transform, post=False):
         if transform not in transforms:
@@ -180,16 +179,16 @@ def setup(app):
     app.connect("doctree-resolved", bibproc.process_citation_references)
     app.connect("env-purge-doc", bibproc.purge_bibgloss_cache)
     app.connect("env-updated", bibproc.check_duplicate_labels)
+    app.add_config_value('bibgloss_default_style', 'list', rebuild='html')
 
-    # docutils keeps state around during testing, so to avoid spurious
-    # warnings, we detect here whether the directives have already been
-    # registered... very ugly hack but no better solution so far
-    if "bibglossary" not in _directives:
-        app.add_directive("bibglossary", BibGlossaryDirective)
-        app.add_role("gls", GLSRole())
-        app.add_node(BibGlossaryNode, override=True)
-    else:
-        assert _directives["bibglossary"] is BibGlossaryDirective
+    app.add_directive("bibglossary", BibGlossaryDirective)
+    # Note: because docutils.parsers.rst.roles.role(role_name)
+    #       applies role_name.lower(), you can't have unique gls and Gls roles
+    app.add_role("gls", GLSRole())
+    app.add_role("glsc", GLSCapitalRole())
+    app.add_role("glspl", GLSPluralRole())
+    app.add_role("glscpl", GLSPluralCapitalRole())
+    app.add_node(BibGlossaryNode, override=True)
 
     add_transform(BibGlossaryTransform)
     add_transform(OverrideCitationReferences)

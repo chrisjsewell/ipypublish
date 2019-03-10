@@ -51,6 +51,13 @@ class EntryObj(object):
             raise NotImplementedError
 
     @property
+    def plural(self):
+        if 'plural' in self._entry_dict:
+            return self._entry_dict['plural']
+        else:
+            return "{}s".format(self.label)
+
+    @property
     def text(self):
         if self.type == "acronym":
             return self._entry_dict['longname']

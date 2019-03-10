@@ -1,3 +1,41 @@
+"""in this pytest conftest file we define an ipypublish test app fixture
+
+This fixture supplies a configurable IpubTestApp, that can
+run IPyPubMain on a specified source folder,
+in a temporary folder (which will be deleted on teardown),
+and has methods to test the output.
+
+Usage:
+
+.. code-block:: python
+
+    @pytest.mark.ipynb('folder_name')
+    def test_example(ipynb_app):
+        ipynb_app.run({"conversion": "latex_ipypublish_main"})
+        ipynb_app.assert_converted_exists()
+        ipynb_app.assert_converted_contains(["regex1", "regex2"])
+        ipynb_app.assert_converted_equals_expected("file_name")
+
+@pytest.mark.ipynb accepts the key-word arguments:
+
+- root: the root folder containing the test folders
+  (default = ipypublish.tests.TEST_FILES_DIR))
+- source: the folder name within <root>/<folder_name>
+  that contains the source files (default = 'source')
+- main_file: the file within <root>/<folder_name>/<source> to be converted
+  (default = 'main.ipynb'). If None is given the source folder is used.
+- converted: the folder name to output converted files to,
+  either in the temporary folder (if out_to_temp=True) or
+  <root>/<folder_name>/<converted> (if out_to_temp=False)
+  (default = 'converted')
+- expected: the folder name within <root>/<folder_name>
+  that contains the expected output files (default = 'expected')
+- out_to_temp: if True, converted files output to a temporary folder,
+  that will be removed on teardown,
+  otherwise output to <root>/<folder_name>/<converted> (will not be removed)
+  (default=True)
+
+"""
 from collections import namedtuple
 import copy
 from difflib import context_diff
@@ -8,8 +46,8 @@ import shutil
 import re
 import tempfile
 
-import pytest
 from nbconvert.utils.pandoc import get_pandoc_version
+import pytest
 
 from ipypublish.utils import pathlib
 from ipypublish.tests import TEST_FILES_DIR
@@ -80,7 +118,9 @@ def ipynb_app(temp_folder, ipynb_params):
     input_file = kwargs.get('main_file', 'main.ipynb')
     test_files_dir = kwargs.get('root', TEST_FILES_DIR)
     source_folder = kwargs.get('source', 'source')
+    convert_folder = kwargs.get('converted', 'converted')
     expected_folder = kwargs.get('expected', 'expected')
+    use_temp = kwargs.get('out_to_temp', True)
 
     source_folder_path = os.path.join(
         test_files_dir, subfolder, source_folder)
@@ -88,14 +128,18 @@ def ipynb_app(temp_folder, ipynb_params):
         test_files_dir, subfolder, expected_folder)
 
     temp_source_path = os.path.join(temp_folder, source_folder)
-    temp_converted_path = os.path.join(temp_folder, 'converted')
-
     shutil.copytree(source_folder_path, temp_source_path)
+
+    if use_temp:
+        converted_path = os.path.join(temp_folder, convert_folder)
+    else:
+        converted_path = os.path.join(
+            test_files_dir, subfolder, convert_folder)
 
     yield IpyTestApp(
         temp_source_path,
         input_file,
-        temp_converted_path,
+        converted_path,
         expected_folder_path,
     )
 
@@ -177,7 +221,29 @@ class IpyTestApp(object):
         if not self.converted_path.joinpath(file_name + extension).exists():
             raise AssertionError("could not find: {}".format(converted_path))
 
-    def assert_converted_equals_expected(self, expected_file_name):
+    def assert_converted_contains(self, regexes, encoding='utf8'):
+
+        if self.input_file is None:
+            file_name = self.source_path.name
+        else:
+            file_name = os.path.splitext(self.input_file.name)[0]
+        extension = self.export_extension
+        converted_path = self.converted_path.joinpath(file_name + extension)
+
+        with io.open(str(converted_path), encoding=encoding) as fobj:
+            content = fobj.read()
+
+        if not isinstance(regexes, (list, tuple)):
+            regexes = [regexes]
+
+        for regex in regexes:
+
+            if not re.search(regex, content):
+                raise AssertionError(
+                    "content does not contain regex: {}".format(regex))
+
+    def assert_converted_equals_expected(self, expected_file_name,
+                                         encoding='utf8'):
 
         if self.input_file is None:
             file_name = self.source_path.name
@@ -191,11 +257,14 @@ class IpyTestApp(object):
 
         mime_type = self.export_mimetype
         if mime_type == 'text/latex':
-            compare_tex_files(converted_path, expected_path)
+            compare_tex_files(
+                converted_path, expected_path, encoding=encoding)
         elif mime_type == 'text/html':
-            compare_html_files(converted_path, expected_path)
+            compare_html_files(
+                converted_path, expected_path, encoding=encoding)
         elif mime_type == 'text/restructuredtext':
-            compare_rst_files(converted_path, expected_path)
+            compare_rst_files(
+                converted_path, expected_path, encoding=encoding)
         else:
             # TODO add comparison for nb (applicatio/json)
             # and python (application/x-python)
@@ -205,14 +274,14 @@ class IpyTestApp(object):
             logger.warn(message)
 
 
-def compare_rst_files(testpath, outpath):
+def compare_rst_files(testpath, outpath, encoding='utf8'):
     # only compare body of html, since styles differ by
     # nbconvert/pandoc version (e.g. different versions of font-awesome)
 
     output = []
     for path in [testpath, outpath]:
 
-        with io.open(str(path), encoding='utf8') as fobj:
+        with io.open(str(path), encoding=encoding) as fobj:
             content = fobj.read()
 
         # python 3.5 used .jpg instead of .jpeg
@@ -229,14 +298,14 @@ def compare_rst_files(testpath, outpath):
             fromfile=str(testpath), tofile=str(outpath))))
 
 
-def compare_html_files(testpath, outpath):
+def compare_html_files(testpath, outpath, encoding='utf8'):
     # only compare body of html, since styles differ by
     # nbconvert/pandoc version (e.g. different versions of font-awesome)
 
     output = []
     for path in [testpath, outpath]:
 
-        with io.open(str(path), encoding='utf8') as fobj:
+        with io.open(str(path), encoding=encoding) as fobj:
             content = fobj.read()
 
         # extract only the body
@@ -265,12 +334,12 @@ def compare_html_files(testpath, outpath):
             fromfile=str(testpath), tofile=str(outpath))))
 
 
-def compare_tex_files(testpath, outpath):
+def compare_tex_files(testpath, outpath, encoding='utf8'):
 
     output = []
     for path in [testpath, outpath]:
 
-        with io.open(str(path), encoding='utf8') as fobj:
+        with io.open(str(path), encoding=encoding) as fobj:
             content = fobj.read()
 
         # only certain versions of pandoc wrap sections with \hypertarget

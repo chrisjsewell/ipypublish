@@ -64,13 +64,17 @@ def process_citation_references(app, doctree, docname):
         text = node[0].astext()
         key = text[1:-1]
         try:
-            label = app.env.bibgloss_cache.get_label_from_key(key)
+            if "bibgplural" in node.attributes.get('classes', []):
+                label = app.env.bibgloss_cache.get_plural_from_key(key)
+            else:
+                label = app.env.bibgloss_cache.get_label_from_key(key)
         except KeyError:
             pass
             logger.warning(
                 "could not relabel glossary reference [%s]" % key)
         else:
-            # node[0] = docutils.nodes.Text('[' + label + ']')
+            if "bibgcapital" in node.attributes.get('classes', []):
+                label = label.capitalize()
             node[0] = docutils.nodes.Text(label)
 
 

@@ -30,6 +30,9 @@ def process_raw_spans(container, doc):
                 return pf.Str("\n\n.. {}:: {}\n\n".format(
                     container.attributes["tag"],
                     container.attributes["content"]))
+            if container.attributes["tag"] == "ensuremath":
+                return pf.RawInline(":math:`{}`".format(
+                    container.attributes["content"]), format='rst')
 
         return pf.RawInline(container.attributes.get("original"),
                             format=container.attributes["format"])
