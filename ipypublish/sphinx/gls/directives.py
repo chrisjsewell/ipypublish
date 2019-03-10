@@ -8,7 +8,7 @@ import sphinx.util
 from docutils.parsers.rst import Directive, directives
 from sphinx.util.console import bold, standout
 
-from ipypublish.sphinx.gls.bibgloss import parse_bib, get_empty_bib
+from ipypublish.bib2glossary import BibGlossDB
 from ipypublish.sphinx.gls.nodes import BibGlossaryNode
 from ipypublish.sphinx.gls.cache import BibliographyCache, BibfileCache
 
@@ -138,21 +138,6 @@ class BibGlossaryDirective(Directive):
         env.bibgloss_cache.set_bibliography_cache(env.docname, id_, bibcache)
         return [BibGlossaryNode('', ids=[id_])]
 
-    def parse_bibfile(self, bibfile, encoding):
-        """Parse *bibfile*, and return parsed data.
-
-        :param bibfile: The bib file name.
-        :type bibfile: ``str``
-        :return: The parsed bibliography data.
-        :rtype: :class:`bibtexparser.bibdatabase.BibDatabase`
-        """
-        logger.info(
-            bold("parsing bibtex file {0}... ".format(bibfile)), nonl=True)
-        bib = parse_bib(path=bibfile, encoding=encoding)
-        logger.info("parsed {0} entries"
-                    .format(len(bib.get_entry_dict())))
-        return bib
-
     def update_bibfile_cache(self, bibfile, mtime, encoding):
         """Parse *bibfile* (see :meth:`parse_bibfile`), and store the
         parsed data, along with modification time *mtime*, in the
@@ -162,15 +147,18 @@ class BibGlossaryDirective(Directive):
         :type bibfile: ``str``
         :param mtime: The bib file's modification time.
         :type mtime: ``float``
-        :return: The parsed bibliography data.
-        :rtype: :class:`bibtexparser.bibdatabase.BibDatabase`
+
         """
-        data = self.parse_bibfile(bibfile, encoding)
+        logger.info(
+            bold("parsing bibtex file {0}... ".format(bibfile)), nonl=True)
+        bibglossdb = BibGlossDB()
+        bibglossdb.load_bib(path=bibfile, encoding=encoding)
+        logger.info("parsed {0} entries"
+                    .format(len(bibglossdb)))
         env = self.state.document.settings.env
         env.bibgloss_cache.bibfiles[bibfile] = BibfileCache(
             mtime=mtime,
-            data=data)
-        return data
+            data=bibglossdb)
 
     def process_bibfile(self, bibfile, encoding):
         """Check if ``env.bibgloss_cache.bibfiles[bibfile]`` is still
@@ -180,8 +168,6 @@ class BibGlossaryDirective(Directive):
 
         :param bibfile: The bib file name.
         :type bibfile: ``str``
-        :return: The parsed bibliography data.
-        :rtype: :class:`bibtexparser.bibdatabase.BibDatabase`
         """
         env = self.state.document.settings.env
         cache = env.bibgloss_cache.bibfiles
@@ -192,8 +178,8 @@ class BibGlossaryDirective(Directive):
             logger.warning(
                 standout("could not open bibtex file {0}.".format(bibfile)))
             cache[bibfile] = BibfileCache(  # dummy cache
-                mtime=-float("inf"), data=get_empty_bib())
-            return cache[bibfile].data
+                mtime=-float("inf"), data=BibGlossDB())
+            return
         # get cache and check if it is still up to date
         # if it is not up to date, parse the bibtex file
         # and store it in the cache
@@ -211,4 +197,3 @@ class BibGlossaryDirective(Directive):
                 self.update_bibfile_cache(bibfile, mtime, encoding)
             else:
                 logger.info('up to date')
-        return cache[bibfile].data

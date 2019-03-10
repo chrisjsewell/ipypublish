@@ -11,8 +11,6 @@ import copy
 from oset import oset
 import re
 
-from ipypublish.sphinx.gls.bibgloss import get_entry_objects
-
 
 def _raise_invalid_node(node):
     """Helper method to raise an exception when an invalid node is
@@ -127,7 +125,7 @@ class _FilterVisitor(ast.NodeVisitor):
         elif id_ == 'False':
             return False
         else:
-            return self.entry.fields.get(id_, "")
+            return self.entry.get(id_, "")
 
     def visit_Set(self, node):  # noqa: N802
         return frozenset(self.visit(elt) for elt in node.elts)
@@ -276,8 +274,9 @@ class Cache:
         bibcache = self.get_bibliography_cache(docname=docname, id_=id_)
         # generate entries
         for bibfile in bibcache.bibfiles:
-            data = self.bibfiles[bibfile].data
-            for entry in get_entry_objects(data):
+            for entry in self.bibfiles[bibfile].data.values():
+                print("entry")
+                print(entry)
                 # beware: the prefix is not stored in the data
                 # to allow reusing the data for multiple bibliographies
                 cited_docnames = self.get_cited_docnames(
@@ -301,8 +300,6 @@ class Cache:
                     # entry.collection = None
                     entry2 = copy.deepcopy(entry)
                     entry2.key = bibcache.keyprefix + entry.key
-                    # entry2.collection = data
-                    # entry.collection = data
                     yield entry2
 
     def get_bibliography_entries(self, docname, id_, warn):
@@ -338,8 +335,7 @@ class BibfileCache(collections.namedtuple('BibfileCache', 'mtime data')):
 
     .. attribute:: data
 
-        A bibtexparser.bibdatabase.BibDatabase containing the
-        parsed .bib file.
+        A ipypublish.bib2glossary.BibGlossDB instance
 
     """
 
