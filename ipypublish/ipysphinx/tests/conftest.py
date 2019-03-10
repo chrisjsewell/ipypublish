@@ -10,7 +10,7 @@ usage:
     @pytest.mark.sphinx(
         buildername='html',
         srcdir=get_test_source_dir('notebook'))
-    def test_basic(app, status, warning, get_app_output):
+    def test_basic(app, status, warning, get_sphinx_app_output):
 
         app.build()
 
@@ -18,7 +18,7 @@ usage:
         warnings = warning.getvalue().strip()
         assert warnings == ""
 
-        output = get_app_output(app, buildername='html')
+        output = get_sphinx_app_output(app, buildername='html')
 
 parameters available to parse to ``@pytest.mark.sphinx``:
 
@@ -35,6 +35,7 @@ parameters available to parse to ``@pytest.mark.sphinx``:
 """
 import os
 import shutil
+import re
 
 import pytest
 from sphinx.testing.path import path
@@ -71,13 +72,30 @@ def remove_sphinx_builds():
 
 
 @pytest.fixture
-def get_app_output():
+def get_sphinx_app_output():
     def read(app, buildername='html',
-             filename="contents.html", encoding='utf-8'):
+             filename="contents.html", encoding='utf-8',
+             extract_body=False, remove_scripts=False):
 
         outpath = path(os.path.join(
             str(app.srcdir), '_build', buildername, filename))
         if not outpath.exists():
             raise IOError("no output file exists: {}".format(outpath))
-        return outpath.text(encoding=encoding)
+
+        content = outpath.text(encoding=encoding)
+
+        if extract_body:
+            body_rgx = re.compile("\\<body\\>(.*)\\</body\\>", re.DOTALL)
+            body_search = body_rgx.search(content)
+            if not body_search:
+                raise IOError("could not find body content of {}".format(path))
+            content = body_search.group(1)
+
+        if remove_scripts:
+            # remove script environments which can change
+            script_rgx = re.compile("\\<script\\>(.*)\\</script\\>", re.DOTALL)
+            content = script_rgx.sub("<script></script>", content)
+
+        return content
+
     return read

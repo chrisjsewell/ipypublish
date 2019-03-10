@@ -15,7 +15,7 @@ from ipypublish.ipysphinx.tests import get_test_source_dir
 @pytest.mark.sphinx(
     buildername='html',
     srcdir=get_test_source_dir('notebook'))
-def test_basic(app, status, warning, get_app_output):
+def test_basic(app, status, warning, get_sphinx_app_output):
 
     app.build()
 
@@ -23,7 +23,7 @@ def test_basic(app, status, warning, get_app_output):
     warnings = warning.getvalue().strip()
     assert warnings == ""
 
-    output = get_app_output(app, buildername='html')
+    output = get_sphinx_app_output(app, buildername='html')
 
     assert re.search(
         dedent("""\

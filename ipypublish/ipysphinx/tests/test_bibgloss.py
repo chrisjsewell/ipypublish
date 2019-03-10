@@ -14,7 +14,7 @@ from ipypublish.ipysphinx.tests import get_test_source_dir
 @pytest.mark.sphinx(
     buildername='html',
     srcdir=get_test_source_dir('bibgloss'))
-def test_basic(app, status, warning, get_app_output):
+def test_basic(app, status, warning, get_sphinx_app_output):
 
     app.build()
 
@@ -22,7 +22,7 @@ def test_basic(app, status, warning, get_app_output):
     warnings = warning.getvalue().strip()
     assert warnings == ""
 
-    output = get_app_output(app, buildername='html')
+    output = get_sphinx_app_output(app, buildername='html')
 
     assert re.search(
         ('<a class="bibglossary bibgcapital reference internal" '
@@ -54,20 +54,12 @@ def test_basic(app, status, warning, get_app_output):
         ('<tr><td class="label">\\[name\\].*'
          'href="\\#id1".*'
          'href="\\#id4".*'
-         'the description which contains latex <span class="math">'),
+         'the description which '
+         'contains latex <span class="[^\\"]*math[^\\"]*">'
+         '\\\\\\(\\\\frac\\{-23\\}\\{129\\}\\\\\\)'
+         '</span></td></tr>'),
         output
     )
-
-    # assert re.search(
-    #     ('<tr><td class="label">\\[name\\].*'
-    #      'href="\\#id1".*'
-    #      'href="\\#id4".*'
-    #      'the description which '
-    #      'contains latex <span class="math">'
-    #      '.*frac\\{-23\\}\\{129\\}.*'
-    #      '</span></td></tr>'),
-    #     output
-    # )
     assert re.search(
         ('<tr><td class="label">\\[name2\\].*'
          'href="\\#id2".*'
@@ -95,7 +87,7 @@ def test_basic(app, status, warning, get_app_output):
 @pytest.mark.sphinx(
     buildername='html',
     srcdir=get_test_source_dir('bibgloss_unsorted'))
-def test_unsorted(app, status, warning, get_app_output):
+def test_unsorted(app, status, warning, get_sphinx_app_output):
 
     app.build()
 
@@ -103,7 +95,7 @@ def test_unsorted(app, status, warning, get_app_output):
     warnings = warning.getvalue().strip()
     assert warnings == ""
 
-    output = get_app_output(app, buildername='html')
+    output = get_sphinx_app_output(app, buildername='html')
 
     assert re.search(
         (
@@ -119,7 +111,7 @@ def test_unsorted(app, status, warning, get_app_output):
 @pytest.mark.sphinx(
     buildername='html',
     srcdir=get_test_source_dir('bibgloss_missingref'))
-def test_missingref(app, status, warning, get_app_output):
+def test_missingref(app, status, warning, get_sphinx_app_output):
 
     app.build()
 
@@ -134,7 +126,7 @@ def test_missingref(app, status, warning, get_app_output):
 @pytest.mark.sphinx(
     buildername='html',
     srcdir=get_test_source_dir('bibgloss_duplicatekey'))
-def test_duplicatekey(app, status, warning, get_app_output):
+def test_duplicatekey(app, status, warning, get_sphinx_app_output):
 
     app.build()
 
