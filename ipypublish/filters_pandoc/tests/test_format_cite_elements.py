@@ -58,7 +58,7 @@ def test_reference_prefixes_rst():
     """
     """
     in_string = [
-       '(?@key1 &@key2 §@key3 =@key4)'
+       '(?@key1 &@key2 %@key3 =@key4)'
     ]
 
     out_string = apply_filter(in_string,
