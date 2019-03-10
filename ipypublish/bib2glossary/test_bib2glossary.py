@@ -1,7 +1,6 @@
 from textwrap import dedent
 from ipypublish.bib2glossary.latex import (
     bib_to_tex_glossterms, bib_to_tex_acronyms)
-from ipypublish.bib2glossary.sphinx import bib_to_sphinx_glossary
 
 
 def test_bib_to_tex_glossary():
@@ -70,35 +69,3 @@ def test_bib_to_tex_acronym_with_options():
         "\\newacronym[plural={OTHERs}]{otherkey}{OTHER}{Abbrev of other}",
         "\\newacronym[description={a description}]{thekey}{ABRV}{Abbreviation}"
     ]
-
-
-def test_bib_to_sphinx_glossary():
-
-    text_str = """\
-    @glossaryterm{thekey,
-    description = {the description},
-    name = {name}
-    }
-    @acronym{otherkey,
-    abbreviation = {OTHER},
-    longname = {Abbrev of other},
-    plural = {OTHERs}
-    }
-    """
-
-    glossary = bib_to_sphinx_glossary(dedent(text_str))
-
-    expected_str = """\
-    .. glossary::
-       :sorted:
-
-       otherkey
-          [OTHER]
-          Abbrev of other
-
-       thekey
-          [name]
-          the description
-    """
-
-    assert "\n".join(glossary) == dedent(expected_str)

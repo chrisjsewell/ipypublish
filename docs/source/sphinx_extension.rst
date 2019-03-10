@@ -3,7 +3,7 @@
 Sphinx Extension
 ================
 
-:py:mod:`ipypublish.ipysphinx` is adapted from
+:py:mod:`ipypublish.sphinx.notebook` is adapted from
 `nbshinx <https://nbsphinx.readthedocs.io>`_, to provide a
 `sphinx extension <https://www.sphinx-doc.org/en/master/usage/extensions/>`_
 for converting notebooks with :py:class:`ipypublish.convert.main.IpyPubMain`.
@@ -17,7 +17,7 @@ The key addition to the configuration file (conf.py) is:
 
     extensions = [
         'sphinx.ext.mathjax',
-        'ipypublish.ipysphinx',
+        'ipypublish.sphinx.notebook',
         'sphinxcontrib.bibtex'
     ]
 

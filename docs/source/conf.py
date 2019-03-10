@@ -59,7 +59,8 @@ extensions = [
     'sphinx.ext.autosummary',
     # 'sphinx.ext.imgconverter'  # converts svg to pdf in latex output
     # TODO imgconverter failing (I guess for process.svg),
-    'ipypublish.ipysphinx',
+    'ipypublish.sphinx.notebook',
+    'ipypublish.sphinx.gls',
     'sphinxcontrib.bibtex'
 ]
 
@@ -80,7 +81,7 @@ templates_path = ['_templates']
 if sphinx.version_info[0:2] < (1, 8):
     source_parsers = {
         '.md': 'recommonmark.parser.CommonMarkParser',
-        '.Rmd': 'ipypublish.ipysphinx.notebook.parser.NBParser'
+        '.Rmd': 'ipypublish.sphinx.notebook.parser.NBParser'
     }
 else:
     source_parsers = {
