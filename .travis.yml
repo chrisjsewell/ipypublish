@@ -21,6 +21,11 @@ matrix:
     python: 3.6
     dist: trusty
     env: TEST_TYPE="pytest" PYPI_DEPLOY=true
+  - os: linux
+    sudo: required
+    python: 3.6
+    dist: trusty
+    env: TEST_TYPE="flake8"
   - os: osx
     language: generic
     env: TEST_TYPE="pytest"
@@ -91,7 +96,7 @@ before_install:
   fi
 # LaTeX
 - |
-  if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+  if [[ "$TRAVIS_OS_NAME" == "linux" && "$TEST_TYPE" == "pytest" ]]; then
     sudo apt-get -qq update
     # sudo apt-get install -y pandoc is too old
     sudo apt-get install -y texlive
@@ -109,17 +114,17 @@ before_install:
 
 install:
 - pip install -U pip setuptools wheel
-- travis_wait pip install .[tests]
-- pip install --quiet coveralls
+- if [[ "$TEST_TYPE" == "pytest" ]]; then travis_wait pip install .[tests] ; fi
+- if [[ "$TEST_TYPE" == "pytest" ]]; then pip install --quiet coveralls ; fi
+- if [[ "$TEST_TYPE" == "flake8" ]]; then travis_wait pip install "flake8(>=3.7,<3.8)" ; fi
 
 script:
-# - nosetests -v --nocapture --with-doctest --with-coverage --exe --cover-package=ipypublish
-- pytest -v --cov=ipypublish --cov-config .coveragerc --cov-report= ipypublish
-- if [[ "$TRAVIS_PYTHON_VERSION" = "3.6" ]]; then flake8 . ; fi
-- nbpublish -pdf --pdf-debug -log debug example/notebooks/Example.ipynb
+- if [[ "$TEST_TYPE" == "pytest" ]]; then pytest -v --cov=ipypublish --cov-config .coveragerc --cov-report= ipypublish ; fi
+- if [[ "$TEST_TYPE" == "pytest" ]]; then nbpublish -pdf --pdf-debug -log debug example/notebooks/Example.ipynb ; fi
+- if [[ "$TEST_TYPE" == "flake8" ]]; then flake8 . ; fi
 
 after_success:
-- coveralls
+- if [[ "$TEST_TYPE" == "pytest" ]]; then coveralls ; fi
 
 deploy:
   - provider: pypi
