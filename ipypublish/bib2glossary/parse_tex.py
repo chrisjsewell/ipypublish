@@ -5,21 +5,26 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-# if sys.version_info < (3, 0):
-#     raise ImportError('TexSoup package is broken on python 2.7 ')
 
-try:
-    from TexSoup import TexSoup
-    from TexSoup.utils import TokenWithPosition
-    from TexSoup.data import RArg, OArg
-except ImportError:
-    logger.warning(
-        "to parse tex files, TexSoup must be installed: \n"
-        "pip install texsoup\n"
-        "conda install -c conda-forge texsoup")
-except SyntaxError:
-    logger.warning('TexSoup package is broken on python 2.7, '
-                   'so will not be imported')
+def import_texsoup():
+    try:
+        from TexSoup import TexSoup
+        from TexSoup.utils import TokenWithPosition
+        from TexSoup.data import RArg, OArg
+    except ImportError:
+        raise ImportError(
+            "to parse tex files, TexSoup must be installed: \n"
+            "pip install texsoup\n"
+            "conda install -c conda-forge texsoup")
+    except SyntaxError:
+        raise ImportError('TexSoup package is broken on python 2.7, '
+                          'so can not be imported for tex parsing')
+    return {
+        "TexSoup": TexSoup,
+        "RArg": RArg,
+        "OArg": OArg,
+        "TokenWithPosition": TokenWithPosition
+    }
 
 
 def _create_msg_error(msg, node=None, row=None):
@@ -34,6 +39,7 @@ def _create_msg_error(msg, node=None, row=None):
 
 def extract_required_val(rarg):
     """extract the value of a TexSoup RArg"""
+    RArg = import_texsoup()["RArg"]
     if not isinstance(rarg, RArg):
         raise ValueError(
             "expected {} to be a required argument".format(type(rarg)))
@@ -42,6 +48,8 @@ def extract_required_val(rarg):
 
 def _extract_parameters(texsoup_exprs):
     """extract the parameters from a TexSoup expression list"""
+    RArg = import_texsoup()["RArg"]
+    TokenWithPosition = import_texsoup()["TokenWithPosition"]
     expressions = deque(texsoup_exprs)
     param_name = None
     params = {}
@@ -79,7 +87,8 @@ def _extract_parameters(texsoup_exprs):
 
 def extract_parameters(argument):
     """extract parameters from a TexSoup OArg or Arg"""
-
+    RArg = import_texsoup()["RArg"]
+    OArg = import_texsoup()["OArg"]
     if not isinstance(argument, (OArg, RArg)):
         raise ValueError(
             "expected {} to be of type OArg or RArg".format(type(argument)))
@@ -125,6 +134,8 @@ def create_newgloss_dict(gterm, row=None):
 def create_newacronym_dict(acronym, row=None):
     """
     """
+    OArg = import_texsoup()["OArg"]
+
     arguments = list(acronym.args)
     fields = {}
 
@@ -196,6 +207,8 @@ def parse_tex(text_str=None, path=None, encoding='utf8',
         {key: fields}
 
     """
+    TexSoup = import_texsoup()["TexSoup"]
+
     if sum([e is not None for e in [text_str, path]]) != 1:
         raise ValueError("only one of text_str or path must be supplied")
     elif path is not None:
