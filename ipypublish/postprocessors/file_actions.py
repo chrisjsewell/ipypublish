@@ -61,7 +61,7 @@ class RemoveFolder(IPyPostProcessor):
         if remove_folder.exists() and remove_folder.is_dir():
             self.logger.info(
                 'removing folder: {0}'.format(remove_folder))
-            shutil.rmtree(remove_folder)
+            shutil.rmtree(str(remove_folder))
 
         return stream, filepath, resources
 
