@@ -55,6 +55,7 @@ matrix:
     - travis_retry sudo tlmgr install glossaries  # NB: for different languages glossaries-<language>
     - travis_retry sudo tlmgr install mfirstuc  # see https://tex.stackexchange.com/questions/268216/usepackageglossaries-wont-work-after-miktex-update-reinstallation
     - travis_retry sudo tlmgr install xfor
+    - travis_retry sudo tlmgr install datatool-base
   allow_failures:
     - os: linux
       sudo: required
