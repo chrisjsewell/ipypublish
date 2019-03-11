@@ -43,6 +43,7 @@ def setup(app):
     app.connect("doctree-resolved", bibproc.process_citation_references)
     app.connect("env-purge-doc", bibproc.purge_bibgloss_cache)
     app.connect("env-updated", bibproc.check_duplicate_labels)
+    app.add_config_value('bibgloss_convert_latex', True, rebuild='html')
     app.add_config_value('bibgloss_default_style', 'list', rebuild='html')
 
     app.add_directive("bibglossary", BibGlossaryDirective)

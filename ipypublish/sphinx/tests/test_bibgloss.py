@@ -6,6 +6,7 @@
     General Sphinx test and check output.
 """
 import re
+import sys
 import pytest
 
 from ipypublish.sphinx.tests import get_test_source_dir
@@ -133,3 +134,18 @@ def test_duplicatekey(app, status, warning, get_sphinx_app_output):
     assert 'build succeeded' in status.getvalue()  # Build succeeded
     warnings = warning.getvalue().strip()
     assert warnings != ""
+
+
+@pytest.mark.skipif(
+    sys.version_info < (3, 0),
+    reason="SyntaxError on import of texsoup/data.py line 135")
+@pytest.mark.sphinx(
+    buildername='html',
+    srcdir=get_test_source_dir('bibgloss_tex'))
+def test_load_tex(app, status, warning, get_sphinx_app_output):
+
+    app.build()
+
+    assert 'build succeeded' in status.getvalue()  # Build succeeded
+    warnings = warning.getvalue().strip()
+    assert warnings == ""

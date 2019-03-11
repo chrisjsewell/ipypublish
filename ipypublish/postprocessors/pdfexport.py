@@ -49,7 +49,7 @@ class PDFExport(IPyPostProcessor):
         False,
         help="launch a html page containing a pdf browser").tag(config=True)
 
-    def run_postprocess(self, stream, filepath, resources):
+    def run_postprocess(self, stream, mimetype, filepath, resources):
         """ should not be called directly
 
         Parameters

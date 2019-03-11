@@ -3,6 +3,7 @@ import six
 import sphinx.util
 
 from ipypublish.sphinx.gls.cache import Cache
+from ipypublish.sphinx.gls.bibgloss import latex_to_docutils
 
 logger = sphinx.util.logging.getLogger(__name__)
 
@@ -44,7 +45,14 @@ def process_citations(app, doctree, docname):
         except KeyError:
             logger.warning("could not relabel glossary item [%s]" % key)
         else:
-            node[0] = docutils.nodes.label('', label)
+            if app.config.bibgloss_convert_latex:
+                label = latex_to_docutils(label)
+                # TODO this doesn't work because the label turns
+                # all the elements into text
+                # e.g. \textbf{other} -> <strong>other</strong>
+                node[0] = docutils.nodes.label('', *label.children[0])
+            else:
+                node[0] = docutils.nodes.label('', label)
 
 
 def process_citation_references(app, doctree, docname):
@@ -75,7 +83,14 @@ def process_citation_references(app, doctree, docname):
         else:
             if "bibgcapital" in node.attributes.get('classes', []):
                 label = label.capitalize()
-            node[0] = docutils.nodes.Text(label)
+
+            if app.config.bibgloss_convert_latex:
+                # note we use only the first child of the document
+                # TODO is this the best way to do this
+                label = latex_to_docutils(label)
+                node[0] = label.children[0]
+            else:
+                node[0] = docutils.nodes.Text(label)
 
 
 def check_duplicate_labels(app, env):

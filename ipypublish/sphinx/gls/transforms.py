@@ -129,7 +129,8 @@ class BibGlossaryTransform(docutils.transforms.Transform):
                     entries, style=bibcache.style, sort=not bibcache.unsorted):
 
                 citation = docutils_citation_node(
-                    styled_entry, self.document)
+                    styled_entry, self.document,
+                    convert_latex=env.app.config.bibgloss_convert_latex)
                 # docutils_citation_node(...) uses entry.key
                 # as citation label
                 # we change it to entry.label later onwards

@@ -69,7 +69,7 @@ class RunSphinx(IPyPostProcessor):
         help="nit-picky mode, warn about all missing references"
     )
 
-    def run_postprocess(self, stream, filepath, resources):
+    def run_postprocess(self, stream, mimetype, filepath, resources):
 
         # check sphinx is available and the correct version
         try:

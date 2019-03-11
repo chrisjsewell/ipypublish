@@ -16,18 +16,6 @@ from ipypublish.sphinx.gls.cache import BibliographyCache, BibfileCache
 logger = sphinx.util.logging.getLogger(__name__)
 
 
-def process_start_option(value):
-    """Process and validate the start option value
-    of a ``bibglossary`` directive.
-    If *value* is ``continue`` then this function returns -1,
-    otherwise *value* is converted into a positive integer.
-    """
-    if value == "continue":
-        return -1
-    else:
-        return directives.positive_int(value)
-
-
 class BibGlossaryDirective(Directive):
 
     """Class for processing the ``bibglossary`` directive.
@@ -132,6 +120,8 @@ class BibGlossaryDirective(Directive):
             # convert to normalized absolute path to ensure that the same file
             # only occurs once in the cache
             bibfile = os.path.normpath(env.relfn2path(bibfile.strip())[1])
+            # if the bibfile has been supplied with no extension, guess path
+            bibfile = BibGlossDB().guess_path(bibfile) or bibfile
             self.process_bibfile(bibfile, bibcache.encoding)
             env.note_dependency(bibfile)
             bibcache.bibfiles.append(bibfile)
@@ -152,7 +142,7 @@ class BibGlossaryDirective(Directive):
         logger.info(
             bold("parsing bibtex file {0}... ".format(bibfile)), nonl=True)
         bibglossdb = BibGlossDB()
-        bibglossdb.load_bib(path=bibfile, encoding=encoding)
+        bibglossdb.load(path=bibfile, encoding=encoding)
         logger.info("parsed {0} entries"
                     .format(len(bibglossdb)))
         env = self.state.document.settings.env

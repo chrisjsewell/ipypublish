@@ -130,9 +130,9 @@ class IPyPostProcessor(Configurable):
         if resources is None:
             resources = {}
 
-        return self.run_postprocess(stream, filepath, resources)
+        return self.run_postprocess(stream, mimetype, filepath, resources)
 
-    def run_postprocess(self, stream, filepath, resources):
+    def run_postprocess(self, stream, mimetype, filepath, resources):
         """ should not be called directly
         override in sub-class
 
