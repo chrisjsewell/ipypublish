@@ -1,4 +1,5 @@
 import re
+import sys
 from textwrap import dedent
 import pytest
 from ipypublish.bib2glossary import BibGlossDB
@@ -64,6 +65,9 @@ def test_load_bib_type_ignore():
         'gtkey1', 'gtkey2', 'akey1', 'akey2', 'skey1'}
 
 
+@pytest.mark.skipif(
+    sys.version_info < (3, 0),
+    reason="SyntaxError on import of texsoup/data.py line 135")
 def test_load_tex():
 
     bibgloss = BibGlossDB()
@@ -76,14 +80,15 @@ def test_load_tex():
 
 def test_to_dict():
     bibgloss = BibGlossDB()
-    bibgloss.load_tex(text_str=dedent(tex_str))
+    bibgloss.load_bib(text_str=dedent(bib_str), ignore_nongloss_types=True)
     dct = bibgloss.to_dict()
-    assert set(dct.keys()) == {'gtkey1', 'akey1', 'skey1'}
+    assert set(dct.keys()) == {
+        'gtkey1', 'gtkey2', 'akey1', 'akey2', 'skey1'}
 
 
 def test_to_bib_string():
     bibgloss = BibGlossDB()
-    bibgloss.load_tex(text_str=dedent(tex_str))
+    bibgloss.load_bib(text_str=dedent(bib_str), ignore_nongloss_types=True)
     string = bibgloss.to_bib_string()
     assert re.search(
         "@glsacronym\\{akey1,.*@glsterm\\{gtkey1,.*@glssymbol\\{skey1.*",

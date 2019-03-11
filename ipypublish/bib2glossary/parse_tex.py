@@ -1,6 +1,10 @@
 from collections import deque
 import io
 import logging
+import sys
+
+if sys.version_info < (3, 0):
+    raise ImportError('TexSoup package is broken on python 2.7 ')
 
 try:
     from TexSoup import TexSoup
