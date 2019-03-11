@@ -26,7 +26,7 @@ setup(
     extras_require={
         "sphinx": {
             "sphinx>=1.6",
-            "sphinxcontrib-bibtex"
+            "sphinxcontrib-bibtex",
         },
         "tests": {
             "pytest>=3.6",
@@ -37,7 +37,8 @@ setup(
             "nbsphinx",
             "ipykernel",
             "sphinx>=1.6",
-            "sphinxcontrib-bibtex"
+            "sphinxcontrib-bibtex",
+            "texsoup"
         },
         "science": {
             "matplotlib",

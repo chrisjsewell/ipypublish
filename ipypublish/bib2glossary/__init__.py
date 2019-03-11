@@ -1,2 +1,2 @@
-from ipypublish.bib2glossary.common import (  # noqa: F401
+from ipypublish.bib2glossary.classes import (  # noqa: F401
     BibGlossEntry, BibGlossDB)
