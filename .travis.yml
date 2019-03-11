@@ -5,20 +5,35 @@ matrix:
     sudo: required
     python: 2.7
     dist: trusty
+    env: TEST_TYPE="pytest"
   - os: linux
     sudo: required
     python: 3.4
     dist: trusty
+    env: TEST_TYPE="pytest"
   - os: linux
     sudo: required
     python: 3.5
     dist: trusty
+    env: TEST_TYPE="pytest"
   - os: linux
     sudo: required
     python: 3.6
     dist: trusty
+    env: TEST_TYPE="pytest" PYPI_DEPLOY=true
+  - os: linux
+    sudo: required
+    python: 3.6
+    dist: trusty
+    env: TEST_TYPE="flake8"
+  - os: linux
+    sudo: required
+    python: 3.6
+    dist: trusty
+    env: TEST_TYPE="rtd"
   - os: osx
     language: generic
+    env: TEST_TYPE="pytest"
     before_install:
     - travis_wait brew update
     # TODO currently by default python 2.7 is already installed (see https://github.com/travis-ci/travis-ci/issues/9929)
@@ -62,47 +77,60 @@ matrix:
       sudo: required
       python: 3.4
       dist: trusty
+      env: TEST_TYPE="pytest"
     - os: linux
       sudo: required
       python: 3.5
       dist: trusty
+      env: TEST_TYPE="pytest"
     - os: osx
       language: generic
-
-# TODO add read the docs test `pip install .[docs] cd docs; make`
+      env: TEST_TYPE="pytest"
 
 before_install:
 # Pandoc
-- url="https://github.com/jgm/pandoc/releases/tag/2.6"
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then path=$(curl -L $url | grep -o '/jgm/pandoc/releases/download/.*-amd64\.deb') ; fi
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then downloadUrl="https://github.com$path" ; fi
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then file=${path##*/} ; fi
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then wget $downloadUrl && sudo dpkg -i $file ; fi
+- |
+  if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+    url="https://github.com/jgm/pandoc/releases/tag/2.6"
+    path=$(curl -L $url | grep -o '/jgm/pandoc/releases/download/.*-amd64\.deb')
+    downloadUrl="https://github.com$path"
+    file=${path##*/}
+    wget $downloadUrl && sudo dpkg -i $file
+  fi
 # LaTeX
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update ; fi
-# - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y pandoc ; fi
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y texlive ; fi
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y texlive-xetex ; fi
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y texlive-latex-extra ; fi
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y texlive-lang-portuguese ; fi
-# - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y texlive-glossaries ; fi
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo wget http://mirrors.ctan.org/install/macros/latex/contrib/glossaries.tds.zip ; fi
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo unzip glossaries.tds.zip -d ~/texmf/ ; fi
-# need up-to-date koma-script, which isn't supplied with this version of debian
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo wget http://mirrors.ctan.org/install/macros/latex/contrib/koma-script.tds.zip ; fi
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo unzip koma-script.tds.zip -d ~/texmf/ ; fi
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y latexmk ; fi
-- pip install -U pip setuptools wheel
+- |
+  if [[ "$TRAVIS_OS_NAME" == "linux" && "$TEST_TYPE" == "pytest" ]]; then
+    sudo apt-get -qq update
+    # sudo apt-get install -y pandoc is too old
+    sudo apt-get install -y texlive
+    sudo apt-get install -y texlive-xetex
+    sudo apt-get install -y texlive-latex-extra
+    sudo apt-get install -y texlive-lang-portuguese
+    # texlive-glossaries doesn't appear to be available
+    sudo wget http://mirrors.ctan.org/install/macros/latex/contrib/glossaries.tds.zip
+    sudo unzip glossaries.tds.zip -d ~/texmf/
+    # need up-to-date koma-script, which isn't supplied with this version of debian
+    sudo wget http://mirrors.ctan.org/install/macros/latex/contrib/koma-script.tds.zip
+    sudo unzip koma-script.tds.zip -d ~/texmf/
+    sudo apt-get install -y latexmk
+  fi
+
 install:
-- travis_wait pip install .[tests]
-- pip install --quiet coveralls
+- pip install -U pip setuptools wheel
+- if [[ "$TEST_TYPE" == "pytest" ]]; then travis_wait pip install .[tests] ; fi
+- if [[ "$TEST_TYPE" == "pytest" ]]; then pip install --quiet coveralls ; fi
+- if [[ "$TEST_TYPE" == "flake8" ]]; then travis_wait pip install "flake8(>=3.7,<3.8)" ; fi
+- if [[ "$TEST_TYPE" == "rtd" ]]; then travis_wait pip install .[rtd] ; fi
+
 script:
-# - nosetests -v --nocapture --with-doctest --with-coverage --exe --cover-package=ipypublish
-- pytest -v --cov=ipypublish --cov-config .coveragerc --cov-report= ipypublish
-- if [[ "$TRAVIS_PYTHON_VERSION" = "3.6" ]]; then flake8 . ; fi
-- nbpublish -pdf --pdf-debug -log debug example/notebooks/Example.ipynb
+- if [[ "$TEST_TYPE" == "pytest" ]]; then pytest -v --cov=ipypublish --cov-config .coveragerc --cov-report= ipypublish ; fi
+- if [[ "$TEST_TYPE" == "pytest" ]]; then nbpublish -pdf --pdf-debug -log debug example/notebooks/Example.ipynb ; fi
+- if [[ "$TEST_TYPE" == "flake8" ]]; then flake8 . ; fi
+- if [[ "$TEST_TYPE" == "rtd" ]]; then cd docs; make ; fi
+
 after_success:
-- coveralls
+- if [[ "$TEST_TYPE" == "pytest" ]]; then coveralls ; fi
+
 deploy:
   - provider: pypi
     distributions: "bdist_wheel sdist"
@@ -112,4 +140,4 @@ deploy:
     on:
       branch: master
       tags: true
-      condition: $TRAVIS_PYTHON_VERSION = "3.6"
+      condition: $PYPI_DEPLOY = true
