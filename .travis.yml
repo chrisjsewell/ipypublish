@@ -92,7 +92,7 @@ before_install:
 # LaTeX
 - |
   if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-    sudo apt-get -qq update ; fi
+    sudo apt-get -qq update
     # sudo apt-get install -y pandoc is too old
     sudo apt-get install -y texlive
     sudo apt-get install -y texlive-xetex
