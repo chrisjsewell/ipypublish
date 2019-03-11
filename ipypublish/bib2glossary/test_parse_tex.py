@@ -1,7 +1,13 @@
+import sys
 import pytest
-from ipypublish.bib2glossary.parse_tex import parse_tex
+
+if sys.version_info >= (3, 0):
+    from ipypublish.bib2glossary.parse_tex import parse_tex
 
 
+@pytest.mark.skipif(
+    sys.version_info < (3, 0),
+    reason="SyntaxError on import of texsoup/data.py line 135")
 def test_parse_acronyms():
 
     text_str = """
@@ -20,6 +26,9 @@ def test_parse_acronyms():
     }
 
 
+@pytest.mark.skipif(
+    sys.version_info < (3, 0),
+    reason="SyntaxError on import of texsoup/data.py line 135")
 def test_parse_acronyms_with_options():
 
     text_str = """
@@ -41,6 +50,9 @@ def test_parse_acronyms_with_options():
     }
 
 
+@pytest.mark.skipif(
+    sys.version_info < (3, 0),
+    reason="SyntaxError on import of texsoup/data.py line 135")
 def test_parse_gterms():
 
     text_str = """
@@ -67,6 +79,9 @@ def test_parse_gterms():
     }
 
 
+@pytest.mark.skipif(
+    sys.version_info < (3, 0),
+    reason="SyntaxError on import of texsoup/data.py line 135")
 def test_parse_mixed():
     text_str = """
     \\newacronym{otherkey}{OTHER}{Abbreviation of other}
@@ -90,6 +105,9 @@ def test_parse_mixed():
     }
 
 
+@pytest.mark.skipif(
+    sys.version_info < (3, 0),
+    reason="SyntaxError on import of texsoup/data.py line 135")
 def test_duplicate_key():
     text_str = """
     \\newacronym{thekey}{OTHER}{Abbreviation of other}
@@ -103,6 +121,9 @@ def test_duplicate_key():
         parse_tex(text_str=text_str)
 
 
+@pytest.mark.skipif(
+    sys.version_info < (3, 0),
+    reason="SyntaxError on import of texsoup/data.py line 135")
 def test_acronym_ioerror():
     text_str = """
     \\newacronym{thekey}{Abbreviation of other}
@@ -111,6 +132,9 @@ def test_acronym_ioerror():
         parse_tex(text_str=text_str)
 
 
+@pytest.mark.skipif(
+    sys.version_info < (3, 0),
+    reason="SyntaxError on import of texsoup/data.py line 135")
 def test_gterm_ioerror():
     text_str = """
     \\newglossaryentry{}
@@ -119,6 +143,9 @@ def test_gterm_ioerror():
         parse_tex(text_str=text_str)
 
 
+@pytest.mark.skipif(
+    sys.version_info < (3, 0),
+    reason="SyntaxError on import of texsoup/data.py line 135")
 def test_ioerror_skip():
     text_str = """
     \\newacronym{thekey}{Abbreviation of other}
