@@ -49,6 +49,7 @@ setup(
         "rtd": {
             "recommonmark",
             "pytest>=3.6",
+            "pillow",
             "numpy",
             "matplotlib",
             "pandas",
