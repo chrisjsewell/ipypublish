@@ -1,37 +1,21 @@
-from collections.abc import MutableMapping
+import copy
 import io
 import logging
 
 import bibtexparser
 
+from ipypublish.bib2glossary.definitions import (
+    ETYPE_GLOSS, ETYPE_ACRONYM, ETYPE_SYMBOL,
+    NEWGLOSS_FIELDS, NEWACRONYM_FIELDS
+)
+
+try:
+    from collections.abc import MutableMapping
+except ImportError:
+    from collections import MutableMapping
+
 logger = logging.getLogger(__name__)
 
-ETYPE_GLOSS = 'glsterm'
-ETYPE_ACRONYM = 'glsacronym'
-ETYPE_SYMBOL = 'glssymbol'
-
-NEWGLOSS_FIELDS = (
-    "name", "description", "plural", "symbol", "text", "sort"
-)
-
-NEWACRONYM_FIELDS = (
-    "description", "plural", "longplural", "firstplural"
-)
-
-# DEFAULT_GLOSS_P2F = (("name", "name"),
-#                      ("description", "description"),
-#                      ("plural", "plural"),
-#                      ("symbol", "symbol"),
-#                      ("text", "text"),
-#                      ("sort", "sort"))
-
-
-# DEFAULT_ACRONYM_P2F = (("abbreviation", "abbreviation"),
-#                        ("longname", "longname"),
-#                        ("description", "description"),
-#                        ("plural", "plural"),
-#                        ("longplural", "longplural"),
-#                        ("firstplural", "firstplural"))
 
 class BibGlossEntry(object):
     _allowed_types = (
@@ -107,6 +91,9 @@ class BibGlossEntry(object):
             return self.get('description')
         else:
             raise NotImplementedError
+
+    def to_dict(self):
+        return copy.deepcopy(self._entry_dict)
 
     def to_latex(self):
 
@@ -185,16 +172,12 @@ class BibGlossDB(MutableMapping):
         ignore_nongloss_types: bool
             if False, a KeyError will be raised for non-gloss types
 
-        Returns
-        -------
-        dict:
-            {(<type>, <key>): <latex string>}
-
         """
         bib = None
 
-        if bibdb is not None and text_str is not None and path is None:
-            raise ValueError("only one of text_str or bib must be supplied")
+        if sum([e is not None for e in [text_str, path, bibdb]]) != 1:
+            raise ValueError(
+                "only one of text_str, path or bib must be supplied")
         if bibdb is not None:
             if not isinstance(bibdb, bibtexparser.bibdatabase.BibDatabase):
                 raise ValueError("bib is not a BibDatabase instance")
@@ -228,10 +211,81 @@ class BibGlossDB(MutableMapping):
 
             entries[entry.key] = entry
 
-        self._bib = bib
+        # self._bib = bib
         self._entries = entries
 
         return True
+
+    def load_tex(self, text_str=None, path=None, encoding='utf8',
+                 skip_ioerrors=False, ignore_unknown_types=True):
+        """load a tex file
+
+        Parameters
+        ----------
+        text_str=None: str or None
+            string representing the bib file contents
+        path=None: str or None
+            path to bibfile
+        bibdb=None: bibtexparser.BibDatabase or None
+        encoding="utf8": str
+            bib file encoding
+        skip_ioerrors: bool
+            if False, an IOError will be raised if
+            newglossaryterm or newacronym is badly formatted
+        ignore_unknown_types: bool
+            if True, strip unknown types, otherwise raise a ValueError
+
+        Notes
+        -----
+        the texsoup package is required.
+
+        if a newglossaryterm has field 'type={symbols}', then
+        it will be loaded as a symbol
+
+        """
+        from ipypublish.bib2glossary.parse_tex import parse_tex
+        gterms, acronyms = parse_tex(
+            text_str=text_str, path=path, encoding=encoding,
+            skip_ioerrors=skip_ioerrors
+        )
+        entries = {}
+        for key, fields in gterms.items():
+
+            fields["ENTRYTYPE"] = ETYPE_GLOSS
+            if fields.get("type", None) == "symbols":
+                fields["ENTRYTYPE"] = ETYPE_SYMBOL
+                fields.pop("type")
+            elif "type" in fields:
+                if not ignore_unknown_types:
+                    raise ValueError("the 'type' is not recognised: "
+                                     "{}".format(fields['type']))
+                fields.pop("type")
+
+            fields["ID"] = key
+            entry = BibGlossEntry(fields)
+            entries[entry.key] = entry
+
+        for key, fields in acronyms.items():
+            fields["ENTRYTYPE"] = ETYPE_ACRONYM
+            fields["ID"] = key
+            entry = BibGlossEntry(fields)
+            entries[entry.key] = entry
+
+        self._entries = entries
+
+        return True
+
+    def to_dict(self):
+        return {k: e.to_dict() for k, e in self.items()}
+
+    def to_bib_string(self):
+        bibdb = bibtexparser.bibdatabase.BibDatabase()
+        bibdb.entries = [e.to_dict() for e in self.values()]
+        writer = bibtexparser.bwriter.BibTexWriter()
+        writer.contents = ['comments', 'entries']
+        writer.indent = '  '
+        # writer.order_entries_by = ('ENTRYTYPE', 'ID')
+        return writer.write(bibdb)
 
     def to_latex_dict(self, splitlines=True):
         """convert to dict of latex strings

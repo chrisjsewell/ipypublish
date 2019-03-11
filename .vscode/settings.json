@@ -35,6 +35,7 @@
         "jupytext",
         "nbconvert",
         "nbpresent",
+        "noqa",
         "placeholders",
         "plugins"
     ],
