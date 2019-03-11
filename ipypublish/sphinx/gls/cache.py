@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-
+"""
+caching of the bibglossaries
+
+Originally adapted from: https://github.com/mcmtroffaes/sphinxcontrib-bibtex
+"""
 
 import six
 try:                 # pragma: no cover

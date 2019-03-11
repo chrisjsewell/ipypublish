@@ -251,9 +251,15 @@ intersphinx_mapping = {
 }
 
 intersphinx_aliases = {
+    ('py:class', 'dictionary'):
+        ('py:class', 'dict'),
+    ('py:class', 'PIL.Image'):
+        ('py:class', 'PIL.Image.Image'),
     ('py:class', 'nbconvert.preprocessors.base.Preprocessor'):
         ('py:class', 'nbconvert.preprocessors.Preprocessor'),
     ('py:class', 'nbformat.notebooknode.NotebookNode'):
+        ('py:class', 'nbformat.NotebookNode'),
+    ('py:class', 'NotebookNode'):
         ('py:class', 'nbformat.NotebookNode'),
     ('py:class', 'traitlets.config.configurable.Configurable'):
         ('py:module', 'traitlets.config')
@@ -417,16 +423,22 @@ def run_apidoc(app):
     # module_path = ipypublish.utils.get_module_path(ipypublish)
     module_path = os.path.normpath(
         os.path.join(this_folder, "../../"))
-    ignore_setup = os.path.normpath(
-        os.path.join(this_folder, "../../setup.py"))
-    ignore_tests = os.path.normpath(
-        os.path.join(this_folder, "../../ipypublish/tests"))
+
+    ignore_paths = [
+        "../../setup.py",
+        "../../conftest.py",
+        "../../ipypublish/tests",
+        "../../ipypublish/sphinx/tests"
+    ]
+    ignore_paths = [
+        os.path.normpath(
+            os.path.join(this_folder, p)) for p in ignore_paths]
+
     if os.path.exists(api_folder):
         shutil.rmtree(api_folder)
     os.mkdir(api_folder)
 
-    argv = ["--separate", "-o", api_folder,
-            module_path, ignore_setup, ignore_tests]
+    argv = ["--separate", "-o", api_folder, module_path] + ignore_paths
 
     try:
         # Sphinx 1.7+

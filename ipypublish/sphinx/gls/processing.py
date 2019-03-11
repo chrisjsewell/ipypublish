@@ -1,3 +1,6 @@
+"""
+Originally adapted from: https://github.com/mcmtroffaes/sphinxcontrib-bibtex
+"""
 import docutils
 import six
 import sphinx.util

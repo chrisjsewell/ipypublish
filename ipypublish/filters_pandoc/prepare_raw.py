@@ -180,12 +180,16 @@ def process_latex_str(block, doc):
 
 def assess_latex(text, is_block):
     """ test if text is a latex command
-    \\tag{content} or \\tag[options]{content}
+    ``\\tag{content}`` or ``\\tag[options]{content}``
 
     if so return a panflute.Span, with attributes:
-    {"format": "latex",
-     "tag": tag, "options": options, "content": content, "original": text},
-    else return None
+
+    - format: "latex"
+    - tag: <tag>
+    - options: <options>
+    - content: <content>
+    - original: <full text>
+
     """
     # TODO these regexes do not match labels containing nested {} braces
     # use recursive regexes (https://stackoverflow.com/a/26386070/5033292)
