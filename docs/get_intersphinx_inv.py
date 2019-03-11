@@ -26,7 +26,8 @@ if __name__ == "__main__":
     # uri = "https://docutils.readthedocs.io/en/sphinx-docs/objects.inv"
     # uri = "https://traitlets.readthedocs.io/en/latest/objects.inv"
     # uri = "https://networkx.github.io/documentation/stable/objects.inv"
-    uri = "http://docs.scipy.org/doc/scipy/reference/objects.inv"
+    # uri = "http://docs.scipy.org/doc/scipy/reference/objects.inv"
+    uri = "http://pillow.readthedocs.org/en/latest/objects.inv"
 
     # Read inventory into a dictionary
     inv = fetch_inventory(uri)

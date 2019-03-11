@@ -1,4 +1,6 @@
 """ define the bibglossary directive
+
+Originally adapted from: https://github.com/mcmtroffaes/sphinxcontrib-bibtex
 """
 
 import ast  # parse(), used for filter
@@ -129,14 +131,16 @@ class BibGlossaryDirective(Directive):
         return [BibGlossaryNode('', ids=[id_])]
 
     def update_bibfile_cache(self, bibfile, mtime, encoding):
-        """Parse *bibfile* (see :meth:`parse_bibfile`), and store the
+        """Parse *bibfile*,  and store the
         parsed data, along with modification time *mtime*, in the
         bibtex cache.
 
-        :param bibfile: The bib file name.
-        :type bibfile: ``str``
-        :param mtime: The bib file's modification time.
-        :type mtime: ``float``
+        Parameters
+        ----------
+        bibfile: str
+            The bib file name.
+        mtime: float
+            The bib file's modification time.
 
         """
         logger.info(
@@ -152,12 +156,14 @@ class BibGlossaryDirective(Directive):
 
     def process_bibfile(self, bibfile, encoding):
         """Check if ``env.bibgloss_cache.bibfiles[bibfile]`` is still
-        up to date. If not, parse the *bibfile* (see
-        :meth:`update_bibfile_cache`), and store parsed data in the
+        up to date. If not, parse the *bibfile*, and store parsed data in the
         bibtex cache.
 
-        :param bibfile: The bib file name.
-        :type bibfile: ``str``
+        Parameters
+        ----------
+        bibfile: str
+            The bib file name.
+
         """
         env = self.state.document.settings.env
         cache = env.bibgloss_cache.bibfiles

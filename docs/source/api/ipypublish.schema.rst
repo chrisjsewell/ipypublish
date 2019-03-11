@@ -1,5 +1,5 @@
-ipypublish\.schema package
-==========================
+ipypublish.schema package
+=========================
 
 Module contents
 ---------------

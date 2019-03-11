@@ -39,18 +39,20 @@ def safe_str(obj):
 
 class LatexTagsToHTML(Preprocessor):
     r""" a preprocessor to find latex tags
-    (like \cite{abc} or \todo[color]{stuff}) and:
+    (like ``\cite{abc}`` or ``\todo[color]{stuff}``) and:
 
     1. attempt to process them into a html friendly format
     2. remove them entirely if this is not possible
 
-    for \ref or \cref,  attempts to use resources.refmap
-        to map labels to reference names
+    for ``\ref`` or ``\cref``,
+    attempts to use resources.refmap to map labels to reference names
     for labels not found in resources.refmap
-    the reference name is '<name> <number>', where;
+    the reference name is '<name> <number>', where:
+
     - <name> is either ref of, if labelbycolon is True and
-    the label has a colon, all text before the colon
+      the label has a colon, all text before the colon
     - <number> iterate by order of first appearance of a particular label
+
 
     NB: should be applied after LatexDocHTML,
     if you want resources.refmap to be available

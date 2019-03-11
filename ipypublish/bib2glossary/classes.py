@@ -167,7 +167,7 @@ class BibGlossDB(MutableMapping):
             string representing the bib file contents
         path=None: str or None
             path to bibfile
-        bibdb=None: bibtexparser.BibDatabase or None
+        bibdb=None: bibtexparser.bibdatabase.BibDatabase or None
         encoding="utf8": str
             bib file encoding
         ignore_nongloss_types: bool
@@ -227,7 +227,7 @@ class BibGlossDB(MutableMapping):
             string representing the bib file contents
         path=None: str or None
             path to bibfile
-        bibdb=None: bibtexparser.BibDatabase or None
+        bibdb=None: bibtexparser.bibdatabase.BibDatabase or None
         encoding="utf8": str
             bib file encoding
         skip_ioerrors: bool
