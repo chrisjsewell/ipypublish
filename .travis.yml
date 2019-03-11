@@ -26,6 +26,11 @@ matrix:
     python: 3.6
     dist: trusty
     env: TEST_TYPE="flake8"
+  - os: linux
+    sudo: required
+    python: 3.6
+    dist: trusty
+    env: TEST_TYPE="rtd"
   - os: osx
     language: generic
     env: TEST_TYPE="pytest"
@@ -82,8 +87,6 @@ matrix:
       language: generic
       env: TEST_TYPE="pytest"
 
-# TODO add read the docs test `pip install .[docs] cd docs; make`
-
 before_install:
 # Pandoc
 - |
@@ -117,11 +120,13 @@ install:
 - if [[ "$TEST_TYPE" == "pytest" ]]; then travis_wait pip install .[tests] ; fi
 - if [[ "$TEST_TYPE" == "pytest" ]]; then pip install --quiet coveralls ; fi
 - if [[ "$TEST_TYPE" == "flake8" ]]; then travis_wait pip install "flake8(>=3.7,<3.8)" ; fi
+- if [[ "$TEST_TYPE" == "rtd" ]]; then travis_wait pip install .[rtd] ; fi
 
 script:
 - if [[ "$TEST_TYPE" == "pytest" ]]; then pytest -v --cov=ipypublish --cov-config .coveragerc --cov-report= ipypublish ; fi
 - if [[ "$TEST_TYPE" == "pytest" ]]; then nbpublish -pdf --pdf-debug -log debug example/notebooks/Example.ipynb ; fi
 - if [[ "$TEST_TYPE" == "flake8" ]]; then flake8 . ; fi
+- if [[ "$TEST_TYPE" == "rtd" ]]; then cd docs; make ; fi
 
 after_success:
 - if [[ "$TEST_TYPE" == "pytest" ]]; then coveralls ; fi
