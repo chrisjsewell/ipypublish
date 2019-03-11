@@ -1,6 +1,7 @@
 import copy
 import io
 import logging
+import os
 
 import bibtexparser
 
@@ -274,6 +275,50 @@ class BibGlossDB(MutableMapping):
         self._entries = entries
 
         return True
+
+    @staticmethod
+    def guess_path(path):
+        """ guess the path of a bib file, with or without a file extension,
+        from the available files in the path folder
+        """
+        basepath, extension = os.path.splitext(str(path))
+        if extension in [".bib", ".biblatex", ".bibtex"]:
+            return path
+        elif extension in [".tex", ".latex"]:
+            return path
+        elif os.path.exists(basepath + ".bib"):
+            return basepath + ".bib"
+        elif os.path.exists(basepath + ".bibtex"):
+            return basepath + ".bibtex"
+        elif os.path.exists(basepath + ".biblatex"):
+            return basepath + ".biblatex"
+        elif os.path.exists(basepath + ".tex"):
+            return basepath + ".tex"
+        elif os.path.exists(basepath + ".latex"):
+            return basepath + ".latex"
+        else:
+            raise None
+
+    def load(self, path, encoding='utf8'):
+        """load a file, the type will be guessed from the extension,
+        or (if no extension is given), the available files in the path folder
+
+        Parameters
+        ----------
+        path: str
+        encoding='utf8': str
+            encoding of the file
+
+        """
+        path = self.guess_path(path)
+        if path is None:
+            raise IOError(
+                "no acceptable loader found for path: {}".format(path))
+        basepath, extension = os.path.splitext(str(path))
+        if extension in [".bib", ".biblatex", ".bibtex"]:
+            self.load_bib(path=path, encoding=encoding)
+        elif extension in [".tex", ".latex"]:
+            self.load_tex(path=path, encoding=encoding)
 
     def to_dict(self):
         return {k: e.to_dict() for k, e in self.items()}

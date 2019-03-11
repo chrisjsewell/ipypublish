@@ -105,7 +105,8 @@ setup(
             'write-resource-files = ipypublish.postprocessors.file_actions:WriteResourceFiles',
             'copy-resource-paths = ipypublish.postprocessors.file_actions:CopyResourcePaths',
             'reveal-server = ipypublish.postprocessors.reveal_serve:RevealServer',
-            'run-sphinx = ipypublish.postprocessors.sphinx:RunSphinx [sphinx]'
+            'run-sphinx = ipypublish.postprocessors.sphinx:RunSphinx [sphinx]',
+            'convert-bibgloss = ipypublish.postprocessors.convert_bibgloss:ConvertBibGloss'
         ]
     }
 )

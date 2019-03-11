@@ -21,7 +21,7 @@ class RemoveBlankLines(IPyPostProcessor):
     def logger_name(self):
         return "remove-blank-lines"
 
-    def run_postprocess(self, stream, filepath, resources):
+    def run_postprocess(self, stream, mimetype, filepath, resources):
         stream = re.sub(r'\n\s*\n', '\n\n', stream)
         return stream, filepath, resources
 
@@ -41,7 +41,7 @@ class RemoveTrailingSpace(IPyPostProcessor):
     def logger_name(self):
         return "remove-trailing-space"
 
-    def run_postprocess(self, stream, filepath, resources):
+    def run_postprocess(self, stream, mimetype, filepath, resources):
         stream = "\n".join([l.rstrip() for l in stream.splitlines()])
         return stream, filepath, resources
 
@@ -61,7 +61,7 @@ class FilterOutputFiles(IPyPostProcessor):
     def logger_name(self):
         return "filter-output-files"
 
-    def run_postprocess(self, stream, filepath, resources):
+    def run_postprocess(self, stream, mimetype, filepath, resources):
 
         if 'outputs' in resources:
             for path in list(resources['outputs'].keys()):
@@ -85,7 +85,7 @@ class FixSlideReferences(IPyPostProcessor):
     def logger_name(self):
         return "fix-slide-refs"
 
-    def run_postprocess(self, stream, filepath, resources):
+    def run_postprocess(self, stream, mimetype, filepath, resources):
         if resources and 'refslide' in resources:
             for k, (col, row) in resources['refslide'].items():
                 stream = stream.replace('{{id_home_prefix}}{0}'.format(

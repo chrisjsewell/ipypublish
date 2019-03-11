@@ -225,7 +225,7 @@
                     "additionalProperties": false,
                     "properties": {
                         "no_glossary": {
-                            "description": "suppress the `\\printglossary` command that will be output at the end of the file (if bibglossary set)",
+                            "description": "suppress the `\\printglossary` command(s) that will be output at the end of the file (if bibglossary set)",
                             "type": "boolean",
                             "default": false
                         }

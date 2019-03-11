@@ -226,6 +226,9 @@ class IpyPubMain(Configurable):
             },
             "CopyResourcePaths": {
                 "files_folder": "${files_path}"
+            },
+            "ConvertBibGloss": {
+                "files_folder": "${files_path}"
             }
         })
 
@@ -245,7 +248,10 @@ class IpyPubMain(Configurable):
             default_pprocs.append('write-text-file')
             if dump_files or create_pdf or serve_html:
                 default_pprocs.extend(
-                    ['write-resource-files', 'copy-resource-paths'])
+                    [
+                        'write-resource-files',
+                        'copy-resource-paths',
+                        'convert-bibgloss'])
             if create_pdf:
                 default_pprocs.append('pdf-export')
             elif serve_html:

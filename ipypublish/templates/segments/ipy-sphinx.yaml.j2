@@ -189,7 +189,7 @@
         {# output a bibglossary if there is one  #}
         {%- if nb.metadata.ipub and nb.metadata.ipub.bibglossary: -%}
         {%- if nb.metadata.ipub.bibglossary.filepath and output_gloss: -%}
-        {% set filename = nb.metadata.ipub.bibglossary.filepath | posix_path %}
+        {% set filename = nb.metadata.ipub.bibglossary.filepath | strip_ext | posix_path %}
         .. rubric:: {{ glossary_title }}
 
         .. bibglossary:: {{ filename }}

@@ -71,7 +71,7 @@ class RevealServer(IPyPostProcessor):
     port = Int(
         8000, help="port for the server to listen on.").tag(config=True)
 
-    def run_postprocess(self, stream, filepath, resources):
+    def run_postprocess(self, stream, mimetype, filepath, resources):
         """Serve the build directory with a webserver."""
 
         if not filepath.exists():
