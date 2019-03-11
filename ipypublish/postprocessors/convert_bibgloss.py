@@ -1,5 +1,5 @@
 import os
-import six
+import sys
 from traitlets import Unicode
 from ipypublish.postprocessors.base import IPyPostProcessor
 from ipypublish.bib2glossary import BibGlossDB
@@ -81,6 +81,9 @@ class ConvertBibGloss(IPyPostProcessor):
         if outstr is None:
             return stream, filepath, resources
 
+        if sys.version_info < (3, 0):
+            outstr = unicode(outstr, encoding=self.encoding)  # noqa: F821
+
         output_folder = filepath.parent.joinpath(self.files_folder)
         if not output_folder.exists():
             output_folder.mkdir(parents=True)
@@ -88,7 +91,7 @@ class ConvertBibGloss(IPyPostProcessor):
         outfile = output_folder.joinpath(bibname + outext)
         self.logger.info("writing bibglossary: {}".format(outfile))
         with outfile.open("w", encoding=self.encoding) as fh:
-            fh.write(six.u(outstr))
+            fh.write(outstr)
 
         self.logger.debug("finished")
 
