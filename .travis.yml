@@ -3,6 +3,21 @@ matrix:
   include:
   - os: linux
     sudo: required
+    python: 3.6
+    dist: trusty
+    env: TEST_TYPE="flake8"
+  - os: linux
+    sudo: required
+    python: 3.6
+    dist: trusty
+    env: TEST_TYPE="rtd"
+  - os: linux
+    sudo: required
+    python: 3.6
+    dist: trusty
+    env: TEST_TYPE="pytest" PYPI_DEPLOY=true
+  - os: linux
+    sudo: required
     python: 2.7
     dist: trusty
     env: TEST_TYPE="pytest"
@@ -16,21 +31,6 @@ matrix:
     python: 3.5
     dist: trusty
     env: TEST_TYPE="pytest"
-  - os: linux
-    sudo: required
-    python: 3.6
-    dist: trusty
-    env: TEST_TYPE="pytest" PYPI_DEPLOY=true
-  - os: linux
-    sudo: required
-    python: 3.6
-    dist: trusty
-    env: TEST_TYPE="flake8"
-  - os: linux
-    sudo: required
-    python: 3.6
-    dist: trusty
-    env: TEST_TYPE="rtd"
   - os: osx
     language: generic
     env: TEST_TYPE="pytest"

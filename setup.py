@@ -47,6 +47,7 @@ setup(
             "sympy"
         },
         "rtd": {
+            "recommonmark",
             "pytest>=3.6",
             "numpy",
             "matplotlib",
