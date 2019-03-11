@@ -73,7 +73,7 @@ def nbpresent(inpath,
         except Exception as err:
             logger.error("Run Failed: {}".format(err))
             if print_traceback:
-                raise err
+                raise
             return 1
     else:
         logging.basicConfig(stream=sys.stdout, level=logging.INFO)

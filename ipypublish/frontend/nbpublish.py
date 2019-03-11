@@ -76,7 +76,7 @@ def nbpublish(ipynb_path,
     except Exception as err:
         logger.error("Run Failed: {}".format(err))
         if print_traceback:
-            raise err
+            raise
         return 1
 
     return 0

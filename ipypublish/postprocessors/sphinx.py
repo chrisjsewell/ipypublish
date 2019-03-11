@@ -141,7 +141,7 @@ class RunSphinx(IPyPostProcessor):
         build_dir = filepath.parent.joinpath('build/html')
         if build_dir.exists():
             # >> rm -r build/html
-            shutil.rmtree(build_dir)
+            shutil.rmtree(str(build_dir))
         build_dir.mkdir(parents=True)
 
         # run sphinx
