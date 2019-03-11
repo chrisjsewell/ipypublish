@@ -1,22 +1,25 @@
 from collections import deque
 import io
 import logging
-import sys
+# import sys
 
-if sys.version_info < (3, 0):
-    raise ImportError('TexSoup package is broken on python 2.7 ')
+logger = logging.getLogger(__name__)
+
+# if sys.version_info < (3, 0):
+#     raise ImportError('TexSoup package is broken on python 2.7 ')
 
 try:
     from TexSoup import TexSoup
     from TexSoup.utils import TokenWithPosition
     from TexSoup.data import RArg, OArg
 except ImportError:
-    raise ImportError(
-        "to load a tex file TexSoup must be installed: \n"
+    logger.warning(
+        "to parse tex files, TexSoup must be installed: \n"
         "pip install texsoup\n"
         "conda install -c conda-forge texsoup")
-
-logger = logging.getLogger(__name__)
+except SyntaxError:
+    logger.warning('TexSoup package is broken on python 2.7, '
+                   'so will not be imported')
 
 
 def _create_msg_error(msg, node=None, row=None):
