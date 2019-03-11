@@ -1,4 +1,5 @@
 import os
+import six
 from traitlets import Unicode
 from ipypublish.postprocessors.base import IPyPostProcessor
 from ipypublish.bib2glossary import BibGlossDB
@@ -87,7 +88,7 @@ class ConvertBibGloss(IPyPostProcessor):
         outfile = output_folder.joinpath(bibname + outext)
         self.logger.info("writing bibglossary: {}".format(outfile))
         with outfile.open("w", encoding=self.encoding) as fh:
-            fh.write(outstr)
+            fh.write(six.u(outstr))
 
         self.logger.debug("finished")
 
