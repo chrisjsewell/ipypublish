@@ -14,7 +14,7 @@ from ipypublish.sphinx.tests import get_test_source_dir
 
 @pytest.mark.sphinx(
     buildername='html',
-    srcdir=get_test_source_dir('bibgloss'))
+    srcdir=get_test_source_dir('bibgloss_basic'))
 def test_basic(app, status, warning, get_sphinx_app_output):
 
     app.build()
@@ -79,6 +79,30 @@ def test_basic(app, status, warning, get_sphinx_app_output):
             '<tr><td class="label">.*\\[name\\].*'
             '<tr><td class="label">.*\\[name2\\].*'
             '<tr><td class="label">.*\\[OTHER\\].*'
+        ),
+        output,
+        re.DOTALL
+    )
+
+
+@pytest.mark.sphinx(
+    buildername='html',
+    srcdir=get_test_source_dir('bibgloss_sortkeys'))
+def test_sortkeys(app, status, warning, get_sphinx_app_output):
+
+    app.build()
+
+    assert 'build succeeded' in status.getvalue()  # Build succeeded
+    warnings = warning.getvalue().strip()
+    assert warnings == ""
+
+    output = get_sphinx_app_output(app, buildername='html')
+
+    assert re.search(
+        (
+            '<tr><td class="label">.*href="\\#id1">\\[name\\].*'
+            '<tr><td class="label">.*href="\\#id3">.*pi.*'
+            '<tr><td class="label">.*href="\\#id2">\\[MA\\].*'
         ),
         output,
         re.DOTALL

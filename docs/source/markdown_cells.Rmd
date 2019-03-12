@@ -25,6 +25,13 @@ jupyter:
       at_notation: true
       use_numref: true
     bibliography: _static/example.bib
+    bibglossary:
+      filepath: _static/other_glossary.bib
+    sphinx:
+      no_bib: false
+      no_glossary: false
+      bib_title: Bibliography
+      glossary_title: Glossary
   jupytext:
     metadata_filter:
       notebook: ipub
@@ -290,9 +297,13 @@ Pandoc references start with @ and multiple references can be wrapped in square 
 
 ```md
 Citation [@zelenyak_molecular_2016; @kirkeminde_thermodynamic_2012]
+
+Glossary Terms: %@gtkey2, &@akey2, &@symbol2
 ```
 
 Citation [@zelenyak_molecular_2016; @kirkeminde_thermodynamic_2012]
+
+Glossary Terms: %@gtkey2, &@akey2, &@symbol2
 
 .. note::
 

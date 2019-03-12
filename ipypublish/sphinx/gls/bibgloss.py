@@ -64,7 +64,7 @@ def docutils_citation_node(entry, document, use_key_as_label=True,
 def format_entries(entries, style='list', sort=True):
     # TODO apply styles consistent with latex glossaries
     if sort:
-        entries = sorted(entries, key=lambda e: e.label.lower())
+        entries = sorted(entries, key=lambda e: e.sortkey)
     labels = [e.label for e in entries]
     for label, entry in zip(labels, entries):
         yield entry
