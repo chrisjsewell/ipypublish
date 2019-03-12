@@ -64,7 +64,8 @@ class HandleMissingCitesTransform(docutils.transforms.Transform):
                 app.env.bibgloss_cache.get_label_from_key(key)
             except KeyError:
                 logger.warning(
-                    "could not relabel bibglossary reference [%s]" % key)
+                    "could not relabel bibglossary reference [%s]" % key,
+                    type="bibgloss", subtype="relabel")
                 # strip class (otherwise ReferencesResolver fails)
                 node.attributes['classes'] = []
 

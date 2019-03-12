@@ -18,6 +18,8 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
+import docutils
+import sphinxcontrib.bibtex
 import os
 import io
 import urllib
@@ -64,6 +66,35 @@ extensions = [
     'sphinxcontrib.bibtex',
     'recommonmark'
 ]
+
+
+logger = sphinx.util.logging.getLogger(__name__)
+
+
+# TODO this is a workaround until
+# https://github.com/mcmtroffaes/sphinxcontrib-bibtex/pull/162 is merged
+def process_citations(app, doctree, docname):
+    """Replace labels of citation nodes by actual labels.
+
+    :param app: The sphinx application.
+    :type app: :class:`sphinx.application.Sphinx`
+    :param doctree: The document tree.
+    :type doctree: :class:`docutils.nodes.document`
+    :param docname: The document name.
+    :type docname: :class:`str`
+    """
+    for node in doctree.traverse(docutils.nodes.citation):
+        key = node[0].astext()
+        try:
+            label = app.env.bibtex_cache.get_label_from_key(key)
+        except KeyError:
+            logger.warning("could not relabel citation [%s]" % key,
+                           type="bibtex", subtype="relabel")
+        else:
+            node[0] = docutils.nodes.label('', label)
+
+
+sphinxcontrib.bibtex.process_citations = process_citations
 
 suppress_warnings = ['bibtex.relabel']
 
@@ -408,6 +439,7 @@ def run_apidoc(app):
 
     See: https://github.com/rtfd/readthedocs.org/issues/1139
     """
+    logger.info("running apidoc")
     # get correct paths
     this_folder = os.path.abspath(
         os.path.dirname(os.path.realpath(__file__)))

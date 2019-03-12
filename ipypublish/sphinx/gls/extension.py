@@ -22,7 +22,7 @@ def setup(app):
 
     """
     # delayed import of sphinx
-    import_sphinx()
+    sphinx = import_sphinx()
 
     try:
         transforms = app.registry.get_transforms()
@@ -56,8 +56,10 @@ def setup(app):
     app.add_node(BibGlossaryNode, override=True)
 
     add_transform(BibGlossaryTransform)
-    add_transform(OverrideCitationReferences)
-    add_transform(HandleMissingCitesTransform, post=True)
+    # these patches have been fixed (by me!) upstream
+    if sphinx.version_info < (2,):
+        add_transform(OverrideCitationReferences)
+        add_transform(HandleMissingCitesTransform, post=True)
 
     # Parallel read is not safe at the moment: in the current design,
     # the document that contains references must be read last for all

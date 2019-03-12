@@ -168,7 +168,8 @@ class BibGlossDB(MutableMapping):
         })
 
     def load_bib(self, text_str=None, path=None, bibdb=None, encoding="utf8",
-                 ignore_nongloss_types=False):
+                 ignore_nongloss_types=False,
+                 ignore_duplicates=False):
         """load a bib file
 
         Parameters
@@ -182,6 +183,9 @@ class BibGlossDB(MutableMapping):
             bib file encoding
         ignore_nongloss_types: bool
             if False, a KeyError will be raised for non-gloss types
+        ignore_duplicates: bool
+            if False, a KeyError will be raised if multiple entries are found
+            with the same key, otherwise only the first entry will be used
 
         """
         bib = None
@@ -219,6 +223,15 @@ class BibGlossDB(MutableMapping):
                     continue
                 else:
                     raise
+
+            if entry.key in entries:
+                if ignore_duplicates:
+                    logger.warning('Skipping duplicate key entry')
+                    continue
+                else:
+                    raise KeyError(
+                        "the bib file contains "
+                        "multiple entries with the key: {}".format(entry.key))
 
             entries[entry.key] = entry
 
