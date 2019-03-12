@@ -280,8 +280,6 @@ class Cache:
         # generate entries
         for bibfile in bibcache.bibfiles:
             for entry in self.bibfiles[bibfile].data.values():
-                print("entry")
-                print(entry)
                 # beware: the prefix is not stored in the data
                 # to allow reusing the data for multiple bibliographies
                 cited_docnames = self.get_cited_docnames(
@@ -347,8 +345,7 @@ class BibfileCache(collections.namedtuple('BibfileCache', 'mtime data')):
 
 class BibliographyCache(collections.namedtuple(
     'BibliographyCache',
-    """bibfiles encoding style unsorted labels plurals
- labelprefix filter_ keyprefix
+    """bibfiles encoding style unsorted labels plurals filter_ keyprefix
 """)):
 
     """Contains information about a bibliography directive.
@@ -379,10 +376,6 @@ class BibliographyCache(collections.namedtuple(
     .. attribute:: plurals
 
         Maps citation keys to their final pluralised labels.
-
-    .. attribute:: labelprefix
-
-        This bibliography's string prefix for generated labels.
 
     .. attribute:: keyprefix
 

@@ -45,7 +45,6 @@ class BibGlossaryDirective(Directive):
         'filter': directives.unchanged,
         'style': directives.unchanged,
         'encoding': directives.encoding,
-        'labelprefix': directives.unchanged,
         'keyprefix': directives.unchanged,
     }
 
@@ -111,7 +110,6 @@ class BibGlossaryDirective(Directive):
             encoding=self.options.get(
                 'encoding',
                 self.state.document.settings.input_encoding),
-            labelprefix=self.options.get("labelprefix", ""),
             keyprefix=self.options.get("keyprefix", ""),
             labels={},
             plurals={},

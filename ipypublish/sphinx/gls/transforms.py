@@ -137,10 +137,8 @@ class BibGlossaryTransform(docutils.transforms.Transform):
                 # but we must note the entry.label now;
                 # at this point, we also already prefix the label
                 key = citation[0].astext()
-                bibcache.labels[key] = (
-                    bibcache.labelprefix + styled_entry.label)
-                bibcache.plurals[key] = (
-                    bibcache.labelprefix + styled_entry.plural)
+                bibcache.labels[key] = styled_entry.label
+                bibcache.plurals[key] = styled_entry.plural
 
                 node_text_transform(citation, transform_url_command)
                 nodes += citation

@@ -76,6 +76,13 @@ class BibGlossEntry(object):
             raise NotImplementedError
 
     @property
+    def sortkey(self):
+        if "sort" in self:
+            return self.get("sort")
+        else:
+            return self.label.lower()
+
+    @property
     def plural(self):
         if 'plural' in self:
             return self.get('plural')
@@ -92,6 +99,9 @@ class BibGlossEntry(object):
             return self.get('description')
         else:
             raise NotImplementedError
+
+    def __repr__(self):
+        return "BibGlossEntry(key={0},label={1})".format(self.key, self.label)
 
     def to_dict(self):
         return copy.deepcopy(self._entry_dict)
@@ -297,7 +307,7 @@ class BibGlossDB(MutableMapping):
         elif os.path.exists(basepath + ".latex"):
             return basepath + ".latex"
         else:
-            raise None
+            return None
 
     def load(self, path, encoding='utf8'):
         """load a file, the type will be guessed from the extension,

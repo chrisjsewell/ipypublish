@@ -2,7 +2,6 @@
 Originally adapted from: https://github.com/mcmtroffaes/sphinxcontrib-bibtex
 """
 import docutils
-import six
 import sphinx.util
 
 from ipypublish.sphinx.gls.cache import Cache
@@ -95,20 +94,3 @@ def process_citation_references(app, doctree, docname):
             else:
                 node[0] = docutils.nodes.Text(label)
 
-
-def check_duplicate_labels(app, env):
-    """Check and warn about duplicate glossary labels.
-    :param app: The sphinx application.
-    :type app: :class:`sphinx.application.Sphinx`
-    :param env: The sphinx build environment.
-    :type env: :class:`sphinx.environment.BuildEnvironment`
-    """
-    label_to_key = {}
-    for info in env.bibgloss_cache.get_all_bibliography_caches():
-        for key, label in six.iteritems(info.labels):
-            if label in label_to_key:
-                logger.warning(
-                    "duplicate glossary label for keys %s and %s"
-                    % (key, label_to_key[label]))
-            else:
-                label_to_key[label] = key

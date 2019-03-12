@@ -8,12 +8,13 @@ ipypublish.sphinx.notebook
 `sphinx extension <https://www.sphinx-doc.org/en/master/usage/extensions/>`_
 for converting notebooks with :py:class:`ipypublish.convert.main.IpyPubMain`.
 
-This entire website is built using it,
-and a good example of using it would be to look at its conf.py.
+This website is built using it,
+and a good example its use would be to look at the
+`ipypublish/docs/source/conf.py <https://github.com/chrisjsewell/ipypublish/blob/master/docs/source/conf.py>`_.
 
-The extension loads:
+This extension loads:
 
-- ``nbinput``, ``nboutput``, ``nbinfo`` and ``nbwarning``  directives,
+- ``nbinput``, ``nboutput``, ``nbinfo`` and ``nbwarning`` directives,
   that *wrap* input and output notebook cells
   (see :py:mod:`ipypublish.sphinx.notebook.directives`)
 - a source parser for files with the ``.ipynb`` extension
@@ -22,14 +23,12 @@ The extension loads:
 Usage
 -----
 
-The key addition to the configuration file (conf.py) is:
+The key addition to the sphinx configuration file (conf.py) is:
 
 .. code-block:: python
 
     extensions = [
-        'sphinx.ext.mathjax',
-        'ipypublish.sphinx.notebook',
-        'sphinxcontrib.bibtex'
+        'ipypublish.sphinx.notebook'
     ]
 
 The extension is also pre-configured to convert .Rmd files,
@@ -119,14 +118,14 @@ Examples
 
 .. code-block:: rst
 
-    .. nbinput::
+    .. nbinput:: python
        :execution-count: 2
        :caption: A caption for the code cell
        :name: ref_label
 
        print("hallo")
 
-.. nbinput::
+.. nbinput:: python
     :execution-count: 2
     :caption: A caption for the code cell
     :name: ref_label
