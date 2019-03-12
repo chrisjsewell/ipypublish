@@ -93,4 +93,3 @@ def process_citation_references(app, doctree, docname):
                 node[0] = label.children[0]
             else:
                 node[0] = docutils.nodes.Text(label)
-
