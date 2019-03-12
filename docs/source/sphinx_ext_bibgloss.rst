@@ -19,6 +19,12 @@ This extension loads:
 - ``gls``, ``glsc``, ``glspl``, ``glscpl`` roles, for referencing the terms
   (see :py:mod:`ipypublish.sphinx.gls.roles`)
 
+.. seealso::
+
+    :ref:`RMarkdown References <markdown_references>`,
+    for an example of using this extension
+    within the conversion of a Jupyter Notebook.
+
 Installation
 ------------
 
