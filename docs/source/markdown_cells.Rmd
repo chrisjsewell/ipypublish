@@ -317,6 +317,8 @@ prefix attribute
 "!"    {latex=ref rst=ref}
 "="    {latex=eqref rst=eq}
 "?"    {.capital latex=Cref rst=numref}
+"&"    {latex=gls rst=gls}
+"%"    {.capital latex=Gls rst=glsc}
 
 Table: Prefixes for reference attributes {#tbl:prefixes}
 
@@ -379,4 +381,5 @@ xyz
 </p>
 ```
 
-Formatter filters, then look for these parent spans, to provide identifiers, classes and attributes.
+Formatter filters, then look for these parent spans,
+to provide identifiers, classes and attributes.

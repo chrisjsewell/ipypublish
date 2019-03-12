@@ -47,7 +47,7 @@ setup(
             "sympy"
         },
         "rtd": {
-            "recommonmark",
+            "recommonmark>=0.5",
             "pytest>=3.6",
             "pillow",
             "numpy",

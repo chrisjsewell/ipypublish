@@ -43,7 +43,7 @@ v0.9.0
 - Refactored conversion process to
   :py:class:`ipypublish.convert.main.IpyPubMain` configurable class
 - Added postprocessors (see :ref:`post-processors`)
-- Added Sphinx extension (see :ref:`sphinx_extension`)
+- Added Sphinx notebook extension (see :ref:`sphinx_extensions`)
 - Added Binder examples to documentation (see :ref:`code_cells`)
 
 Version 0.8
