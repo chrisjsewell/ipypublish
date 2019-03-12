@@ -291,6 +291,8 @@ $$2x &=  8 \\ 3x + 9y &= -12$$ {#eqn:example2 env=align}
 
     Labelled math must be 'display math', rather than inline, i.e. wrapped in double dollars.
 
+.. _markdown_references:
+
 ### References
 
 Pandoc references start with @ and multiple references can be wrapped in square brackets:
@@ -307,8 +309,9 @@ Glossary Terms: %@gtkey2, &@akey2, &@symbol2
 
 .. note::
 
-    Citation in sphinx are provided by the excellent 
-    [sphinxcontrib-bibtex extension](https://sphinxcontrib-bibtex.readthedocs.io)
+    Citations in sphinx are provided by the excellent 
+    [sphinxcontrib-bibtex extension](https://sphinxcontrib-bibtex.readthedocs.io),
+    and glossary referencing is provided by the equally good :ref:`sphinx_ext_gls`
 
 References can have attributes; `latex` (defining the LaTeX tag to use),
 `rst` (defining the RST role to use) and class `.capital` (defining if HTML naming if capitalized)
