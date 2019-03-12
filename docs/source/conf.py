@@ -61,36 +61,30 @@ extensions = [
     # TODO imgconverter failing (I guess for process.svg),
     'ipypublish.sphinx.notebook',
     'ipypublish.sphinx.gls',
-    'sphinxcontrib.bibtex'
+    'sphinxcontrib.bibtex',
+    'recommonmark'
 ]
 
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
-# The suffix(es) of source filenames.
-# You can specify multiple suffix as a list of string:
-#
-# source_suffix = {
-#     '.rst': 'restructuredtext',
-#     '.md': 'markdown',
-#     '.ipynb': 'jupyter_notebook'
-# }
-# source_suffix = ['.rst', '.md', '.ipynb']
-
 if sphinx.version_info[0:2] < (1, 8):
     source_parsers = {
-        '.md': 'recommonmark.parser.CommonMarkParser',
+        # '.md': 'recommonmark.parser.CommonMarkParser',
         '.Rmd': 'ipypublish.sphinx.notebook.parser.NBParser'
     }
 else:
-    source_parsers = {
-        '.md': 'recommonmark.parser.CommonMarkParser'
+    source_suffix = {
+        '.rst': 'restructuredtext',
+        '.md': 'markdown',
+        '.ipynb': 'jupyter_notebook',
+        '.Rmd': 'jupyter_notebook'
     }
-    import jupytext
-    ipysphinx_preconverters = {
-        ".Rmd": jupytext.readf
-    }
+    # import jupytext
+    # ipysphinx_preconverters = {
+    #     ".Rmd": jupytext.readf
+    # }
 ipysphinx_show_prompts = True
 
 # List of patterns, relative to source directory, that match files and
@@ -247,7 +241,7 @@ intersphinx_mapping = {
     'bibtexparser': ('https://bibtexparser.readthedocs.io/en/master/', None),
     # 'docutils': ("https://docutils.readthedocs.io/en/sphinx-docs", None),
     # # TODO docutils intersphinx
-    # 'sphinx': ('http://www.sphinx-doc.org/en/latest/', None)
+    'sphinx': ('http://www.sphinx-doc.org/en/latest/', None)
 }
 
 intersphinx_aliases = {
@@ -312,9 +306,6 @@ nitpick_ignore = [('py:exc', 'ArithmeticError'), ('py:exc', 'AssertionError'),
                   ('py:class', 'docutils.transforms.Transform'),
                   ('py:class', 'docutils.parsers.rst.Parser'),
                   ('py:class', 'sphinx.parsers.RSTParser'),
-                  ('py:class', 'sphinx.application.Sphinx'),
-                  ('py:obj', 'sphinx.application.Sphinx'),
-                  ('py:class', 'sphinx.environment.BuildEnvironment'),
                   ('py:class', 'sphinx.roles.XRefRole'),
                   ('py:exc', 'nbconvert.pandoc.PandocMissing')
                   ]
