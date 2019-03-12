@@ -46,7 +46,8 @@ def process_citations(app, doctree, docname):
         try:
             label_str = app.env.bibgloss_cache.get_label_from_key(key)
         except KeyError:
-            logger.warning("could not relabel glossary item [%s]" % key)
+            logger.warning("could not relabel glossary item [%s]" % key,
+                           type="bibgloss", subtype="relabel")
         else:
             if app.config.bibgloss_convert_latex:
                 label = latex_to_docutils(label_str)
@@ -81,7 +82,8 @@ def process_citation_references(app, doctree, docname):
         except KeyError:
             pass
             logger.warning(
-                "could not relabel glossary reference [%s]" % key)
+                "could not relabel glossary reference [%s]" % key,
+                type="bibgloss", subtype="relabel")
         else:
             if "bibgcapital" in node.attributes.get('classes', []):
                 label = label.capitalize()

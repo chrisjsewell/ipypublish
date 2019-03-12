@@ -145,19 +145,13 @@ def test_missingref(app, status, warning, get_sphinx_app_output):
     assert "could not relabel bibglossary reference [missingkey]" in warnings
 
 
-@pytest.mark.skip(
-    reason=("awaiting answer to "
-            "https://github.com/sciunto-org/python-bibtexparser/issues/237"))
 @pytest.mark.sphinx(
     buildername='html',
     srcdir=get_test_source_dir('bibgloss_duplicatekey'))
 def test_duplicatekey(app, status, warning, get_sphinx_app_output):
 
-    app.build()
-
-    assert 'build succeeded' in status.getvalue()  # Build succeeded
-    warnings = warning.getvalue().strip()
-    assert warnings != ""
+    with pytest.raises(KeyError):
+        app.build()
 
 
 @pytest.mark.skipif(
