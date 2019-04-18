@@ -5,7 +5,7 @@ The :py:mod:`ipypublish.filters_pandoc.prepare_labels` filter should be run
 first to access the functionality below:
 
 If the parent of the element is a Span (or Div for Table), with a class
-labelled-Math/labelled-Image/labelled-Table, 
+labelled-Math/labelled-Image/labelled-Table,
 then the label of the element will be span.identifier, and
 the attributes and classes from this Span will be used to inform the format.
 
@@ -19,7 +19,7 @@ will be stripped from the document
 
 """
 # TODO format headers with section labels
-# (see ipysphinx.docutils_transforms.CreateNotebookSectionAnchors)
+# (see ipysphinx.transforms.CreateNotebookSectionAnchors)
 import json
 from panflute import Element, Doc, Span, Div, Math, Image, Table  # noqa: F401
 import panflute as pf

@@ -64,7 +64,7 @@ Some of note are:
     sphinx_ipypublish_main.run
         The same as sphinx_ipypublish_main, but also creates a conf.py
         file and runs `sphinx-build <https://www.sphinx-doc.org/en/master/man/sphinx-build.html>`_,
-        to create HTML documentation.
+        to create HTML documentation (see :ref:`sphinx_extensions`).
 
     html_ipypublish_main
         converts the entire notebook(s) to HTML and adds a table of contents
@@ -91,6 +91,8 @@ Variants ending **.exec** will additionally execute the entire notebook
     IPyPublish must be installed with the sphinx extras:
 
     ``pip install ipypublish[sphinx]``
+
+    These are already included in the conda install.
 
 A Note on PDF Conversion
 ~~~~~~~~~~~~~~~~~~~~~~~~

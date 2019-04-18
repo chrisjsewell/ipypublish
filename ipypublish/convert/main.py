@@ -173,7 +173,7 @@ class IpyPubMain(Configurable):
     ).tag(config=True)
 
     default_ppconfig_kwargs = T.Dict(
-        trait=T.Bool,
+        trait=T.Bool(),
         default_value=(
             ('pdf_in_temp', False),
             ('pdf_debug', False),
@@ -183,7 +183,7 @@ class IpyPubMain(Configurable):
     ).tag(config=True)
 
     default_pporder_kwargs = T.Dict(
-        trait=T.Bool,
+        trait=T.Bool(),
         default_value=(
             ('dry_run', False),
             ('clear_existing', False),
@@ -226,6 +226,9 @@ class IpyPubMain(Configurable):
             },
             "CopyResourcePaths": {
                 "files_folder": "${files_path}"
+            },
+            "ConvertBibGloss": {
+                "files_folder": "${files_path}"
             }
         })
 
@@ -245,7 +248,10 @@ class IpyPubMain(Configurable):
             default_pprocs.append('write-text-file')
             if dump_files or create_pdf or serve_html:
                 default_pprocs.extend(
-                    ['write-resource-files', 'copy-resource-paths'])
+                    [
+                        'write-resource-files',
+                        'copy-resource-paths',
+                        'convert-bibgloss'])
             if create_pdf:
                 default_pprocs.append('pdf-export')
             elif serve_html:
@@ -343,8 +349,8 @@ class IpyPubMain(Configurable):
         if isinstance(ipynb_path, string_types):
             ipynb_path = pathlib.Path(ipynb_path)
         ipynb_name, ipynb_ext = os.path.splitext(ipynb_path.name)
-        outdir = os.path.join(
-            os.getcwd(), 'converted') if self.outpath is None else self.outpath
+        outdir = (os.path.join(os.getcwd(), 'converted')
+                  if self.outpath is None else str(self.outpath))
 
         self._setup_logger(ipynb_name, outdir)
 

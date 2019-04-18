@@ -6,6 +6,7 @@ import logging
 from six import string_types
 from jinja2 import DictLoader
 import jsonschema
+import nbconvert  # noqa: F401
 
 from ipypublish.utils import (pathlib, handle_error, get_module_path,
                               read_file_from_directory, read_file_from_module)
@@ -100,10 +101,11 @@ def create_exporter_cls(class_str):
     class_name = export_class_path[-1]
     try:
         export_module = importlib.import_module(module_path)
-    except ModuleNotFoundError:
+    except ModuleNotFoundError:  # noqa: F821
         handle_error(
             "module {} containing exporter class {} not found".format(
-                module_path, class_name), ModuleNotFoundError, logger=logger)
+                module_path, class_name),
+                ModuleNotFoundError, logger=logger)   # noqa: F821
     if hasattr(export_module, class_name):
         export_class = getattr(export_module, class_name)
     else:

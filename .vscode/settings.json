@@ -29,11 +29,13 @@
     "latex-workshop.latex.autoBuild.onSave.enabled": false,
     "cSpell.words": [
         "Jupyter",
+        "docutils",
         "ipynb",
         "ipypublish",
         "jupytext",
         "nbconvert",
         "nbpresent",
+        "noqa",
         "placeholders",
         "plugins"
     ],

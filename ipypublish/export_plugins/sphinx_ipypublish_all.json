@@ -13,7 +13,8 @@
       "choose_output_type": "ipypublish.filters.rst_choose_output.choose_output_type",
       "ipypandoc": "ipypublish.filters_pandoc.main.jinja_filter",
       "is_equation": "ipypublish.filters.filters.is_equation",
-      "basename": "ipypublish.filters.filters.basename"
+      "basename": "ipypublish.filters.filters.basename",
+      "strip_ext": "ipypublish.filters.filters.strip_ext"
     },
     "preprocessors": [
       {

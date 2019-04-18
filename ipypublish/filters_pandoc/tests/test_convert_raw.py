@@ -102,7 +102,7 @@ def test_cite_in_table_caption():
         '- -',
         '1 2',
         '',
-        'Table: Caption \cite{a}'
+        'Table: Caption \\cite{a}'
     ]
 
     out_string = apply_filter(
@@ -181,8 +181,8 @@ def test_citations_latex():
         "",
         "\\begin{figure}",
         "\\centering",
-        "\includegraphics{path/to/image.png}",
-        "\\caption{a citation \cite{label}}",
+        "\\includegraphics{path/to/image.png}",
+        "\\caption{a citation \\cite{label}}",
         "\\end{figure}"
     ])
 
@@ -292,7 +292,7 @@ def test_rst_directive_to_latex():
         '',
         '    xyz'
     ]
-    
+
     out_string = apply_filter(
         in_string,
         [prepare_raw.main, format_raw_spans.main], "latex")

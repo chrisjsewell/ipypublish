@@ -38,19 +38,24 @@ def safe_str(obj):
 
 
 class LatexTagsToHTML(Preprocessor):
-    r""" a preprocessor to find latex tags 
-    (like \cite{abc} or \todo[color]{stuff}) and:
+    r""" a preprocessor to find latex tags
+    (like ``\cite{abc}`` or ``\todo[color]{stuff}``) and:
 
     1. attempt to process them into a html friendly format
     2. remove them entirely if this is not possible
 
-    for \ref or \cref,  attempts to use resources.refmap to map labels to reference names
+    for ``\ref`` or ``\cref``,
+    attempts to use resources.refmap to map labels to reference names
     for labels not found in resources.refmap
-    the reference name is '<name> <number>', where;
-    - <name> is either ref of, if labelbycolon is True and the label has a colon, all text before the colon
+    the reference name is '<name> <number>', where:
+
+    - <name> is either ref of, if labelbycolon is True and
+      the label has a colon, all text before the colon
     - <number> iterate by order of first appearance of a particular label
 
-    NB: should be applied after LatexDocHTML, if you want resources.refmap to be available
+
+    NB: should be applied after LatexDocHTML,
+    if you want resources.refmap to be available
 
     Examples
     --------
@@ -67,7 +72,8 @@ class LatexTagsToHTML(Preprocessor):
     ... date = {2016-09-01},
     ... }
     ... ''')
-    >>> resources = NotebookNode({'bibliopath':bibfile, 'refmap':{"label":"label_name"}})
+    >>> resources = NotebookNode(
+    ...    {'bibliopath':bibfile, 'refmap':{"label":"label_name"}})
 
     >>> cell = NotebookNode({
     ... "cell_type":"markdown",
@@ -104,18 +110,20 @@ class LatexTagsToHTML(Preprocessor):
     >>> print(nb.cells[0].source)
     \begin{equation}x=a+b\end{equation}
 
-    """
+    """  # noqa: E501
 
-    regex = traits.Unicode(r"\\(?:[^a-zA-Z]|[a-zA-Z]+[*=']?)(?:\[.*?\])?{.*?}",
-                           help="the regex to identify latex tags").tag(config=True)
+    regex = traits.Unicode(
+        r"\\(?:[^a-zA-Z]|[a-zA-Z]+[*=']?)(?:\[.*?\])?{.*?}",
+        help="the regex to identify latex tags").tag(config=True)
     bibformat = traits.Unicode(
         "{author}, {year}.",
         help="the format to output \\cite{} tags found in the bibliography"
-        ).tag(config=True)
+    ).tag(config=True)
     labelbycolon = traits.Bool(
         True,
-        help='create reference label based on text before colon, e.g. \\ref{fig:example} -> fig 1'
-        ).tag(config=True)
+        help=('create reference label based on text before colon, '
+              'e.g. \\ref{fig:example} -> fig 1')
+    ).tag(config=True)
 
     def __init__(self, *args, **kwargs):
         # a dictionary to keep track of references,
@@ -192,7 +200,8 @@ class LatexTagsToHTML(Preprocessor):
 
         the links are left with a format hook in them: {id_home_prefix},
         so that an nbconvert filter can later replace it
-        this is particularly useful for slides, which require a prefix #/<slide_number><label>
+        this is particularly useful for slides,
+        which require a prefix #/<slide_number><label>
         """
         if 'refmap' in resources:
             if name in resources['refmap']:
@@ -203,7 +212,7 @@ class LatexTagsToHTML(Preprocessor):
             ref_name = name.split(':')[0] if ':' in name else 'ref'
         else:
             ref_name = 'ref'
-        if not ref_name in self.refs:
+        if ref_name not in self.refs:
             self.refs[ref_name] = {}
         refs = self.refs[ref_name]
         if name in refs:
@@ -237,15 +246,14 @@ class LatexTagsToHTML(Preprocessor):
         An unknown latex tag.
         <BLANKLINE>
 
-        """
+        """  # noqa: E501
         new = source
         in_equation = False
         labels = []
         for tag in re.findall(self.regex, source):
 
             if tag.startswith('\\label'):
-                link = r'<a id="{label}" class="anchor-link" name="#{label}">&#182;</a>'.format(
-                    label=tag[7:-1])
+                link = r'<a id="{label}" class="anchor-link" name="#{label}">&#182;</a>'.format(label=tag[7:-1])  # noqa: E501
                 if in_equation:
                     labels.append(link)
                     new = new.replace(tag, '')
@@ -315,8 +323,8 @@ class LatexTagsToHTML(Preprocessor):
                         continue
                     if "caption" in cell['metadata']["ipub"][key]:
                         text = cell['metadata']["ipub"][key]["caption"]
-                        cell['metadata']["ipub"][key]["caption"] = self.convert(
-                            text, resources)
+                        key_dict = cell['metadata']["ipub"][key]
+                        key_dict["caption"] = self.convert(text, resources)
 
             if not cell['cell_type'] == "markdown":
                 continue

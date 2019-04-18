@@ -26,7 +26,7 @@ class WriteTextFile(IPyPostProcessor):
         help="the encoding of the output file"
     ).tag(config=True)
 
-    def run_postprocess(self, stream, filepath, resources):
+    def run_postprocess(self, stream, mimetype, filepath, resources):
 
         self.logger.info('writing stream to file: {}'.format(filepath))
         with filepath.open("w", encoding=self.encoding) as fh:
@@ -55,13 +55,13 @@ class RemoveFolder(IPyPostProcessor):
         help="the path (relative to the main file path) to remove"
     ).tag(config=True)
 
-    def run_postprocess(self, stream, filepath, resources):
+    def run_postprocess(self, stream, mimetype, filepath, resources):
 
         remove_folder = filepath.parent.joinpath(self.files_folder)
         if remove_folder.exists() and remove_folder.is_dir():
             self.logger.info(
                 'removing folder: {0}'.format(remove_folder))
-            shutil.rmtree(remove_folder)
+            shutil.rmtree(str(remove_folder))
 
         return stream, filepath, resources
 
@@ -82,7 +82,7 @@ class WriteResourceFiles(IPyPostProcessor):
         return "write-resource-files"
 
     resource_keys = List(
-        Unicode,
+        Unicode(),
         ["outputs"],
         help="the key names in the resources dict that contain files"
     ).tag(config=True)
@@ -93,7 +93,7 @@ class WriteResourceFiles(IPyPostProcessor):
     #     help="the path (relative to the main file path) to write to"
     # ).tag(config=True)
 
-    def run_postprocess(self, stream, filepath, resources):
+    def run_postprocess(self, stream, mimetype, filepath, resources):
 
         output_folder = filepath.parent
         if not output_folder.exists():
@@ -139,7 +139,7 @@ class CopyResourcePaths(IPyPostProcessor):
         return "copy-resource-paths"
 
     resource_keys = List(
-        Unicode,
+        Unicode(),
         ["external_file_paths"],
         help="the key names in the resources dict that contain filepaths"
     ).tag(config=True)
@@ -149,7 +149,7 @@ class CopyResourcePaths(IPyPostProcessor):
         help="the path (relative to the main file path) to copy to"
     ).tag(config=True)
 
-    def run_postprocess(self, stream, filepath, resources):
+    def run_postprocess(self, stream, mimetype, filepath, resources):
 
         output_folder = filepath.parent.joinpath(self.files_folder)
         if not output_folder.exists():

@@ -37,7 +37,7 @@ if __name__ == "__main__":
                 "{{{{ super() }}}}",
                 "{{% endblock codecell %}}",
                 "{{% block in_prompt %}}{{% endblock in_prompt %}}",
-                "{{% block input %}}{{{{ cell.metadata | meta2yaml('#~~ ') }}}}",
+                "{{% block input %}}{{{{ cell.metadata | meta2yaml('#~~ ') }}}}",  # noqa: E501
                 "{{{{ cell.source | ipython2python }}}}",
                 "{{% endblock input %}}",
                 "{{% block markdowncell scoped %}}#%% [markdown]",

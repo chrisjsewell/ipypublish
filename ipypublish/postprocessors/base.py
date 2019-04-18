@@ -115,8 +115,7 @@ class IPyPostProcessor(Configurable):
 
             if not filepath.is_absolute():
                 self.handle_error(
-                    "the post-processor requires a folder, "
-                    "but the filepath is not absolute",
+                    "the post-processor requires an absolute folder path",
                     IOError)
 
             if filepath.parent.exists() and not filepath.parent.is_dir():
@@ -131,9 +130,9 @@ class IPyPostProcessor(Configurable):
         if resources is None:
             resources = {}
 
-        return self.run_postprocess(stream, filepath, resources)
+        return self.run_postprocess(stream, mimetype, filepath, resources)
 
-    def run_postprocess(self, stream, filepath, resources):
+    def run_postprocess(self, stream, mimetype, filepath, resources):
         """ should not be called directly
         override in sub-class
 

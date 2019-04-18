@@ -25,6 +25,13 @@ jupyter:
       at_notation: true
       use_numref: true
     bibliography: _static/example.bib
+    bibglossary:
+      filepath: _static/other_glossary.bib
+    sphinx:
+      no_bib: false
+      no_glossary: false
+      bib_title: Bibliography
+      glossary_title: Glossary
   jupytext:
     metadata_filter:
       notebook: ipub
@@ -284,23 +291,30 @@ $$2x &=  8 \\ 3x + 9y &= -12$$ {#eqn:example2 env=align}
 
     Labelled math must be 'display math', rather than inline, i.e. wrapped in double dollars.
 
+.. _markdown_references:
+
 ### References
 
-Pandoc references are start with @ and multiple references can be wrapped in square brackets:
+Pandoc references are denoted by ``@``, with an optional prefix, and multiple references can be wrapped in square brackets:
 
 ```md
 Citation [@zelenyak_molecular_2016; @kirkeminde_thermodynamic_2012]
+
+Glossary Terms: %@gtkey2, &@akey2, &@symbol2
 ```
 
 Citation [@zelenyak_molecular_2016; @kirkeminde_thermodynamic_2012]
 
+Glossary Terms: %@gtkey2, &@akey2, &@symbol2
+
 .. note::
 
-    Citation in sphinx are provided by the excellent 
-    [sphinxcontrib-bibtex extension](https://sphinxcontrib-bibtex.readthedocs.io)
+    Citations in sphinx are provided by the excellent 
+    [sphinxcontrib-bibtex extension](https://sphinxcontrib-bibtex.readthedocs.io),
+    and glossary referencing is provided by the equally good :ref:`sphinx_ext_gls`
 
 References can have attributes; `latex` (defining the LaTeX tag to use),
-`rst` (defining the RST role to use) and class `.capital` (defining if HTML naming if capitalized)
+`rst` (defining the RST role to use) and class `.capital` (defining if HTML naming is capitalized)
 
 ```md
 @fig:example {.capital latex=cref rst=numref}, [@eqnlabel;@eqn:example2] {latex=eqref rst=eq}
@@ -317,6 +331,8 @@ prefix attribute
 "!"    {latex=ref rst=ref}
 "="    {latex=eqref rst=eq}
 "?"    {.capital latex=Cref rst=numref}
+"&"    {latex=gls rst=gls}
+"%"    {.capital latex=Gls rst=glsc}
 
 Table: Prefixes for reference attributes {#tbl:prefixes}
 
@@ -379,4 +395,5 @@ xyz
 </p>
 ```
 
-Formatter filters, then look for these parent spans, to provide identifiers, classes and attributes.
+Formatter filters, then look for these parent spans,
+to provide identifiers, classes and attributes.

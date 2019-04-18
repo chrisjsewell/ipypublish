@@ -64,7 +64,7 @@ Badges
    nb_conversion
    metadata_tags
    custom_export_config
-   sphinx_extension
+   sphinx_extensions
    examples
    applications
    additional_tools

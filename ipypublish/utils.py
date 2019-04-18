@@ -94,11 +94,11 @@ def read_file_from_module(module_path, file_name, jtype,
     """
     try:
         outline_module = importlib.import_module(module_path)
-    except ModuleNotFoundError:
+    except ModuleNotFoundError:  # noqa: F821
         handle_error(
             "module {} containing {} {} not found".format(
                 module_path, jtype, file_name),
-            ModuleNotFoundError, logger=logger)
+            ModuleNotFoundError, logger=logger)  # noqa: F821
 
     return read_file_from_directory(get_module_path(outline_module),
                                     file_name, jtype, logger,

@@ -36,7 +36,7 @@ def assess_syntax(path):
                         dtype, child.value))
             dct = child.value
             break
-    
+
     if dct is None:
         raise IOError("could not find tpl(x)_dict")
 
@@ -51,7 +51,7 @@ def assess_syntax(path):
                     "expected {} value be of type Str: {}".format(
                         dtype, value))
         output[key.s] = value.s
-    
+
     return {
         "identifier": os.path.splitext(os.path.basename(path))[0],
         "description": docstring,

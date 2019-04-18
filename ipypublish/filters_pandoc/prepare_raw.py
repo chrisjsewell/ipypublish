@@ -119,7 +119,7 @@ def process_html_cites(container, doc):
 
 
 def process_latex_raw(element, doc):
-    # type: (Union[RawInline, RawBlock], Doc) -> Element
+    # type: (Union[pf.RawInline, pf.RawBlock], pf.Doc) -> pf.Element
     """extract all latex adhering to \\tag{content} or \\tag[options]{content}
     to a Span element with class RAWSPAN_CLASS attributes:
 
@@ -141,14 +141,13 @@ def process_latex_raw(element, doc):
 
 def process_latex_str(block, doc):
     # type: (pf.Block, Doc) -> Union[pf.Block,None]
-    """see process_latex_raw 
+    """see process_latex_raw
 
     same but sometimes pandoc doesn't convert to a raw element
     """
-    # TODO in the tests '\cite{a}' -> RawInline,
-    # yet running a file with pandoc \cite{a}' -> Str?!
-    # if not (isinstance(block, get_panflute_containers(pf.Str))):
-    #     return None
+    # TODO why is pandoc sometimes converting latex tags to Str?
+    # >> echo "\cite{a}" | pandoc -f markdown -t json
+    # {"blocks":[{"t":"Para","c":[{"t":"RawInline","c":["tex","\\cite{a}"]}]}],"pandoc-api-version":[1,17,5,4],"meta":{}}
 
     content_attr = get_pf_content_attr(block, pf.Str)
     if not content_attr:
@@ -180,6 +179,21 @@ def process_latex_str(block, doc):
 
 
 def assess_latex(text, is_block):
+    """ test if text is a latex command
+    ``\\tag{content}`` or ``\\tag[options]{content}``
+
+    if so return a panflute.Span, with attributes:
+
+    - format: "latex"
+    - tag: <tag>
+    - options: <options>
+    - content: <content>
+    - original: <full text>
+
+    """
+    # TODO these regexes do not match labels containing nested {} braces
+    # use recursive regexes (https://stackoverflow.com/a/26386070/5033292)
+    # with https://pypi.org/project/regex/
 
     # find tags with no option, i.e \tag{label}
     match_latex_noopts = re.match(
@@ -214,8 +228,9 @@ def assess_latex(text, is_block):
         span = pf.Span(
             classes=[RAWSPAN_CLASS, CONVERTED_OTHER_CLASS],
             attributes={"format": "latex",
-                        "tag": tag, "content": content,
-                        options: "options",
+                        "tag": tag,
+                        "content": content,
+                        "options": options,
                         "original": text}
         )
         if is_block:

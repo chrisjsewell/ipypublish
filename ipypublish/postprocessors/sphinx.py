@@ -8,10 +8,9 @@ from six import u
 from traitlets import TraitError, validate, Bool, Dict, Unicode
 
 from ipypublish import __version__
-from ipypublish.utils import find_entry_point
 from ipypublish.postprocessors.base import IPyPostProcessor
-from ipypublish.ipysphinx.utils import import_sphinx
-from ipypublish.ipysphinx.create_setup import make_conf, make_index
+from ipypublish.sphinx.utils import import_sphinx
+from ipypublish.sphinx.create_setup import make_conf, make_index
 
 
 # NOTE Interesting note about adding a directive to actually run python code
@@ -70,7 +69,7 @@ class RunSphinx(IPyPostProcessor):
         help="nit-picky mode, warn about all missing references"
     )
 
-    def run_postprocess(self, stream, filepath, resources):
+    def run_postprocess(self, stream, mimetype, filepath, resources):
 
         # check sphinx is available and the correct version
         try:
@@ -142,7 +141,7 @@ class RunSphinx(IPyPostProcessor):
         build_dir = filepath.parent.joinpath('build/html')
         if build_dir.exists():
             # >> rm -r build/html
-            shutil.rmtree(build_dir)
+            shutil.rmtree(str(build_dir))
         build_dir.mkdir(parents=True)
 
         # run sphinx

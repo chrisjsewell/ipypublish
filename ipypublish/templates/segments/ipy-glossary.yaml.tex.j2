@@ -1,0 +1,51 @@
+identifier: ipypublish-glossary
+description: with the main ipypublish glossary
+segments:
+    globals: |
+      ((* set gloss_show = True *))
+      ((* set gloss_filename = False *))
+      ((* set gloss_style_main = "altlist" *))
+      ((* set gloss_style_acronyms = "list" *))
+      ((* set gloss_style_symbols = "list" *))
+
+      ((* if nb.metadata.ipub and nb.metadata.ipub.latex *))
+      ((* if nb.metadata.ipub.latex.no_glossary *))
+      ((* set gloss_show = False *))
+      ((* endif *))
+      ((* if nb.metadata.ipub.latex.style_main *))
+      ((* set gloss_style_main = nb.metadata.ipub.latex.style_main *))
+      ((* endif *))      
+      ((* if nb.metadata.ipub.latex.style_acronyms *))
+      ((* set gloss_style_acronyms = nb.metadata.ipub.latex.style_acronyms *))
+      ((* endif *))   
+      ((* if nb.metadata.ipub.latex.style_symbols *))
+      ((* set gloss_style_symbols = nb.metadata.ipub.latex.style_symbols *))
+      ((* endif *))
+      ((* endif *))
+      ((* if nb.metadata.ipub and nb.metadata.ipub.bibglossary and nb.metadata.ipub.bibglossary.filepath *))
+      ((* set gloss_filename = nb.metadata.ipub.bibglossary.filepath | strip_ext | posix_path *))
+      ((* endif *))
+
+    document_packages: |
+      ((* if gloss_filename *))
+      % see https://en.wikibooks.org/wiki/LaTeX/Glossary
+      % NB: glossaries must come after cref package
+      \usepackage[automake,toc,acronym,symbols,nowarn]{glossaries}    
+      ((* endif *))
+
+    document_commands: |
+      ((* if gloss_filename and not gloss_show *))
+      \glsdisablehyper{} % since we are not providing a glossary at the end of the document, we do not add hyperlinks
+      ((* endif *))
+      ((* if gloss_filename *))
+      \input{((( gloss_filename )))}
+      \makeglossaries{}
+      ((* endif *))
+
+    document_glossary: |
+      ((* if gloss_filename and gloss_show *))
+      \printglossary[type=main,style=((( gloss_style_main )))]
+      \printglossary[type=acronym,style=((( gloss_style_acronyms )))]   
+      \printglossary[type=symbols,style=((( gloss_style_symbols )))]
+      ((* endif *))
+

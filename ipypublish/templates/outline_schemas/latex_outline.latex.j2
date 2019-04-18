@@ -24,7 +24,7 @@
 
   ((*- block definitions *))
       ((* block date *))((* endblock date *))
-      ((* block author *))((* endblock author *))
+       ((* block author *))((* endblock author *))
     ((* block title *))((* endblock title *))
 
 %%%%%%%%%%%% DEFINITIONS
@@ -67,11 +67,14 @@
   ((( super() )))
 
   ((* block postdoc *))
-      ((* block bibliography *))
+    ((* block bibliography *))
       @ipubreplace{below}{document_bibliography}
     ((* endblock bibliography *))
+    ((* block glossary *))
+      @ipubreplace{below}{document_glossary}
+    ((* endblock glossary *))
     @ipubreplace{below}{document_postdoc}
-    ((* endblock postdoc *))
+  ((* endblock postdoc *))
 
 \end{document}
 

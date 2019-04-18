@@ -7,7 +7,6 @@ from six import u
 from panflute import Element, Doc  # noqa: F401
 from types import FunctionType  # noqa: F401
 
-from ipypublish.filters_pandoc.utils import apply_filter
 from ipypublish.filters_pandoc.prepare_labels import main
 
 

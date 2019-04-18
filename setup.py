@@ -25,16 +25,20 @@ setup(
     install_requires=requirements,
     extras_require={
         "sphinx": {
-            "sphinx>=1.6",
-            "sphinxcontrib-bibtex"
+            "sphinx(>=1.6,<2)",
+            "sphinxcontrib-bibtex",
         },
         "tests": {
             "pytest>=3.6",
             "pytest-cov",
+            "flake8(>=3.7,<3.8)",
             "coverage",
             "pillow",
             "nbsphinx",
-            "ipykernel"
+            "ipykernel",
+            "sphinx(>=1.6,<2)",
+            "sphinxcontrib-bibtex",
+            "texsoup<=0.1.4"
         },
         "science": {
             "matplotlib",
@@ -43,12 +47,14 @@ setup(
             "sympy"
         },
         "rtd": {
+            "recommonmark>=0.5",
             "pytest>=3.6",
+            "pillow",
             "numpy",
             "matplotlib",
             "pandas",
             "sympy<1.3",
-            "sphinx>=1.6",
+            "sphinx(>=1.6,<2)",
             "sphinxcontrib-bibtex",
             "ipykernel"
         }
@@ -101,7 +107,8 @@ setup(
             'write-resource-files = ipypublish.postprocessors.file_actions:WriteResourceFiles',
             'copy-resource-paths = ipypublish.postprocessors.file_actions:CopyResourcePaths',
             'reveal-server = ipypublish.postprocessors.reveal_serve:RevealServer',
-            'run-sphinx = ipypublish.postprocessors.sphinx:RunSphinx [sphinx]'
+            'run-sphinx = ipypublish.postprocessors.sphinx:RunSphinx [sphinx]',
+            'convert-bibgloss = ipypublish.postprocessors.convert_bibgloss:ConvertBibGloss'
         ]
     }
 )

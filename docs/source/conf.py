@@ -18,6 +18,8 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
+import docutils
+import sphinxcontrib.bibtex
 import os
 import io
 import urllib
@@ -59,37 +61,62 @@ extensions = [
     'sphinx.ext.autosummary',
     # 'sphinx.ext.imgconverter'  # converts svg to pdf in latex output
     # TODO imgconverter failing (I guess for process.svg),
-    'ipypublish.ipysphinx',
-    'sphinxcontrib.bibtex'
+    'ipypublish.sphinx.notebook',
+    'ipypublish.sphinx.gls',
+    'sphinxcontrib.bibtex',
+    'recommonmark'
 ]
 
+
+logger = sphinx.util.logging.getLogger(__name__)
+
+
+# TODO this is a workaround until
+# https://github.com/mcmtroffaes/sphinxcontrib-bibtex/pull/162 is merged
+def process_citations(app, doctree, docname):
+    """Replace labels of citation nodes by actual labels.
+
+    :param app: The sphinx application.
+    :type app: :class:`sphinx.application.Sphinx`
+    :param doctree: The document tree.
+    :type doctree: :class:`docutils.nodes.document`
+    :param docname: The document name.
+    :type docname: :class:`str`
+    """
+    for node in doctree.traverse(docutils.nodes.citation):
+        key = node[0].astext()
+        try:
+            label = app.env.bibtex_cache.get_label_from_key(key)
+        except KeyError:
+            logger.warning("could not relabel citation [%s]" % key,
+                           type="bibtex", subtype="relabel")
+        else:
+            node[0] = docutils.nodes.label('', label)
+
+
+sphinxcontrib.bibtex.process_citations = process_citations
+
+suppress_warnings = ['bibtex.relabel']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
-# The suffix(es) of source filenames.
-# You can specify multiple suffix as a list of string:
-#
-# source_suffix = {
-#     '.rst': 'restructuredtext',
-#     '.md': 'markdown',
-#     '.ipynb': 'jupyter_notebook'
-# }
-# source_suffix = ['.rst', '.md', '.ipynb']
-
 if sphinx.version_info[0:2] < (1, 8):
     source_parsers = {
-        '.md': 'recommonmark.parser.CommonMarkParser',
-        '.Rmd': 'ipypublish.ipysphinx.parser.NBParser'
+        # '.md': 'recommonmark.parser.CommonMarkParser',
+        '.Rmd': 'ipypublish.sphinx.notebook.parser.NBParser'
     }
 else:
-    source_parsers = {
-        '.md': 'recommonmark.parser.CommonMarkParser'
+    source_suffix = {
+        '.rst': 'restructuredtext',
+        '.md': 'markdown',
+        '.ipynb': 'jupyter_notebook',
+        '.Rmd': 'jupyter_notebook'
     }
-    import jupytext
-    ipysphinx_preconverters = {
-        ".Rmd": jupytext.readf
-    }
+    # import jupytext
+    # ipysphinx_preconverters = {
+    #     ".Rmd": jupytext.readf
+    # }
 ipysphinx_show_prompts = True
 
 # List of patterns, relative to source directory, that match files and
@@ -204,10 +231,10 @@ texinfo_documents = [
 numfig = True
 math_numfig = True
 numfig_secnum_depth = 2
-numfig_format: {'section': 'Section %s',
-                'figure': 'Fig. %s',
-                'table': 'Table %s',
-                'code-block': 'Code Block %s'}
+numfig_format = {'section': 'Section %s',
+                 'figure': 'Fig. %s',
+                 'table': 'Table %s',
+                 'code-block': 'Code Block %s'}
 math_number_all = True
 math_eqref_format = "Eq. {number}"  # TODO this isn't working
 
@@ -243,15 +270,22 @@ intersphinx_mapping = {
     'tornado': ("https://www.tornadoweb.org/en/stable/", None),
     'traitlets': ("https://traitlets.readthedocs.io/en/stable/", None),
     'jinja': ('http://jinja.pocoo.org/docs/dev', None),
+    'bibtexparser': ('https://bibtexparser.readthedocs.io/en/master/', None),
     # 'docutils': ("https://docutils.readthedocs.io/en/sphinx-docs", None),
     # # TODO docutils intersphinx
-    # 'sphinx': ('http://www.sphinx-doc.org/en/latest/', None)
+    'sphinx': ('http://www.sphinx-doc.org/en/latest/', None)
 }
 
 intersphinx_aliases = {
+    ('py:class', 'dictionary'):
+        ('py:class', 'dict'),
+    ('py:class', 'PIL.Image'):
+        ('py:class', 'PIL.Image.Image'),
     ('py:class', 'nbconvert.preprocessors.base.Preprocessor'):
         ('py:class', 'nbconvert.preprocessors.Preprocessor'),
     ('py:class', 'nbformat.notebooknode.NotebookNode'):
+        ('py:class', 'nbformat.NotebookNode'),
+    ('py:class', 'NotebookNode'):
         ('py:class', 'nbformat.NotebookNode'),
     ('py:class', 'traitlets.config.configurable.Configurable'):
         ('py:module', 'traitlets.config')
@@ -298,11 +332,13 @@ nitpick_ignore = [('py:exc', 'ArithmeticError'), ('py:exc', 'AssertionError'),
                   ('py:class',
                    'traitlets.config.configurable.LoggingConfigurable'),
                   ('py:class', 'docutils.nodes.Element'),
+                  ('py:class', 'docutils.nodes.General'),
+                  ('py:class', 'docutils.nodes.document'),
                   ('py:class', 'docutils.parsers.rst.Directive'),
                   ('py:class', 'docutils.transforms.Transform'),
                   ('py:class', 'docutils.parsers.rst.Parser'),
                   ('py:class', 'sphinx.parsers.RSTParser'),
-                  ('py:obj', 'sphinx.application.Sphinx'),
+                  ('py:class', 'sphinx.roles.XRefRole'),
                   ('py:exc', 'nbconvert.pandoc.PandocMissing')
                   ]
 
@@ -317,6 +353,9 @@ except subprocess.CalledProcessError:
 if gitbranch is not None and "develop" in gitbranch:
     gitpath = "blob/develop"
     binderpath = "develop"
+elif gitbranch is not None and "glossary" in gitbranch:
+    gitpath = "blob/glossary"
+    binderpath = "glossary"
 else:
     gitpath = "blob/v{}".format(ipypublish.__version__)
     binderpath = "v{}".format(ipypublish.__version__)
@@ -339,7 +378,7 @@ ipysphinx_prolog = r"""
         {{%- endif %}}
     __ https://github.com/chrisjsewell/ipypublish/{gitpath}/{{{{ docname }}}}
 
-""".format(gitpath=gitpath, binderpath=binderpath)
+""".format(gitpath=gitpath, binderpath=binderpath)  # noqa: E501
 
 
 def create_git_releases(app):
@@ -399,10 +438,11 @@ def add_intersphinx_aliases_to_inv(app):
 
 
 def run_apidoc(app):
-    """ generate apidoc 
+    """ generate apidoc
 
     See: https://github.com/rtfd/readthedocs.org/issues/1139
     """
+    logger.info("running apidoc")
     # get correct paths
     this_folder = os.path.abspath(
         os.path.dirname(os.path.realpath(__file__)))
@@ -410,16 +450,22 @@ def run_apidoc(app):
     # module_path = ipypublish.utils.get_module_path(ipypublish)
     module_path = os.path.normpath(
         os.path.join(this_folder, "../../"))
-    ignore_setup = os.path.normpath(
-        os.path.join(this_folder, "../../setup.py"))
-    ignore_tests = os.path.normpath(
-        os.path.join(this_folder, "../../ipypublish/tests"))
+
+    ignore_paths = [
+        "../../setup.py",
+        "../../conftest.py",
+        "../../ipypublish/tests",
+        "../../ipypublish/sphinx/tests"
+    ]
+    ignore_paths = [
+        os.path.normpath(
+            os.path.join(this_folder, p)) for p in ignore_paths]
+
     if os.path.exists(api_folder):
         shutil.rmtree(api_folder)
     os.mkdir(api_folder)
 
-    argv = ["--separate", "-o", api_folder,
-            module_path, ignore_setup, ignore_tests]
+    argv = ["--separate", "-o", api_folder, module_path] + ignore_paths
 
     try:
         # Sphinx 1.7+

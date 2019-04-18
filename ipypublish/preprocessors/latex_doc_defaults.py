@@ -6,7 +6,8 @@ from nbformat.notebooknode import NotebookNode
 
 
 def flatten(d, key_as_tuple=True, sep='.'):
-    """ get nested dict as {key:val,...}, where key is tuple/string of all nested keys
+    """ get nested dict as {key:val,...},
+    where key is tuple/string of all nested keys
 
     Parameters
     ----------
@@ -34,9 +35,11 @@ def flatten(d, key_as_tuple=True, sep='.'):
     def expand(key, value):
         if isinstance(value, dict):
             if key_as_tuple:
-                return [(key + k, v) for k, v in flatten(value, key_as_tuple).items()]
+                return [(key + k, v)
+                        for k, v in flatten(value, key_as_tuple).items()]
             else:
-                return [(str(key) + sep + k, v) for k, v in flatten(value, key_as_tuple).items()]
+                return [(str(key) + sep + k, v)
+                        for k, v in flatten(value, key_as_tuple).items()]
         else:
             return [(key, value)]
 

@@ -31,7 +31,7 @@ class WriteStream(IPyPostProcessor):
         help="where to write the output to"
     ).tag(config=True)
 
-    def run_postprocess(self, stream, filepath, resources):
+    def run_postprocess(self, stream, mimetype, filepath, resources):
 
         self.logger.info('writing stream to {}'.format(self.pipe))
         io_type = {"stdout": sys.stdout,
