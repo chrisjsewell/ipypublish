@@ -16,7 +16,7 @@ Version 0.10
 v0.10.0
 ~~~~~~~
 
-- Added Sphinx extension for glossary referencing: `ipypublish.sphinx.gls`.
+- Added Sphinx extension for glossary referencing: ``ipypublish.sphinx.gls``.
   See :ref:`sphinx_ext_gls`
 
 - Added ``ConvertBibGloss`` post-processor,
