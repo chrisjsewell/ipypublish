@@ -270,8 +270,8 @@
         {%- else %} rst
         {%- endif %}
         {#- add output directive options #}
-        {%- if output.output_type == 'execute_result' and cell.execution_count %}
-            :execution-count: {{ cell.execution_count }}
+        {%- if output.output_type == 'execute_result' and output.execution_count %}
+            :execution-count: {{ output.execution_count }}
         {%- endif %}
         {%- if output != cell.outputs[-1] %}
             :more-to-come:
