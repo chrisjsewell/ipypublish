@@ -38,7 +38,7 @@ setup(
             "ipykernel",
             "sphinx>=1.6",
             "sphinxcontrib-bibtex",
-            "texsoup"
+            "texsoup<=0.1.4"
         },
         "science": {
             "matplotlib",
