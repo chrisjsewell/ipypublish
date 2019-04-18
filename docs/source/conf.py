@@ -353,6 +353,9 @@ except subprocess.CalledProcessError:
 if gitbranch is not None and "develop" in gitbranch:
     gitpath = "blob/develop"
     binderpath = "develop"
+elif gitbranch is not None and "glossary" in gitbranch:
+    gitpath = "blob/glossary"
+    binderpath = "glossary"
 else:
     gitpath = "blob/v{}".format(ipypublish.__version__)
     binderpath = "v{}".format(ipypublish.__version__)

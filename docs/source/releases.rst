@@ -10,6 +10,50 @@ Releases
    but anyone using custom converter plugins will be required to update them
    (see :ref:`convert_from_old_api`)
 
+Version 0.10
+------------
+
+v0.10.0
+~~~~~~~
+
+- Added Sphinx extension for glossary referencing: `ipypublish.sphinx.gls`.
+  See :ref:`sphinx_ext_gls`
+
+- Added ``ConvertBibGloss`` post-processor,
+  to convert a bibglossary to the required format
+
+- Added notebook-level metadata options for ``bibglossary`` and ``sphinx``
+  (see :ref:`meta_doclevel_schema`)
+
+- Large refactoring and improvements for test suite, particularly for testing
+  of Sphinx extensions (using the Sphinx pytest fixtures) and creation of the
+  ``IpyTestApp`` fixture
+
+- fixed `tornado version restriction <https://github.com/chrisjsewell/ipypublish/issues/71>`_ 
+
+Back-compatibility breaking changes:
+
+- renamed Sphinx notebook extension from
+  ``ipypublish.ipysphinx`` to ``ipypublish.sphinx.notebook``
+  (see :ref:`sphinx_ext_notebook`)
+
+- :py:meth:`ipypublish.postprocessors.base.IPyPostProcessor.run_postprocess`
+  input signature changed (and consequently it has changes for all post-processors)
+
+v0.9
+
+.. code-block:: python
+
+   def run_postprocess(self, stream, filepath, resources):
+      output_folder = filepath.parent
+
+v0.10
+
+.. code-block:: python
+
+   def run_postprocess(self, stream, mimetype, filepath, resources):
+      output_folder = filepath.parent
+
 Version 0.9
 -----------
 
