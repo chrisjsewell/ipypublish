@@ -23,7 +23,8 @@ def test_basic_all_plugins(ipynb_app, plugin_name, plugin_path):
 
     # no output file to compare
     if plugin_name in [
-            "python_with_meta_stream", "sphinx_ipypublish_all.ext"]:
+            "python_with_meta_stream",
+            "sphinx_ipypublish_all.ext", "sphinx_ipypublish_all.ext.noexec"]:
         return
 
     # test build exists only
