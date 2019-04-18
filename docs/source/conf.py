@@ -374,11 +374,11 @@ ipysphinx_prolog = r"""
           with configuration: ``{{{{ env.config.ipysphinx_export_config }}}}``
         {{%- if docname.endswith('.ipynb') %}}
         | Interactive online version:
-          :raw-html:`<a href="https://mybinder.org/v2/gh/chrisjsewell/ipypublish/{binderpath}?filepath={{{{ docname }}}}"><img alt="Binder badge" src="https://mybinder.org/badge_logo.svg" style="vertical-align:text-bottom"></a>`  # noqa
+          :raw-html:`<a href="https://mybinder.org/v2/gh/chrisjsewell/ipypublish/{binderpath}?filepath={{{{ docname }}}}"><img alt="Binder badge" src="https://mybinder.org/badge_logo.svg" style="vertical-align:text-bottom"></a>`
         {{%- endif %}}
     __ https://github.com/chrisjsewell/ipypublish/{gitpath}/{{{{ docname }}}}
 
-""".format(gitpath=gitpath, binderpath=binderpath)
+""".format(gitpath=gitpath, binderpath=binderpath)  # noqa: E501
 
 
 def create_git_releases(app):
