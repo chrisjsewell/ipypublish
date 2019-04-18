@@ -25,7 +25,7 @@ setup(
     install_requires=requirements,
     extras_require={
         "sphinx": {
-            "sphinx>=1.6",
+            "sphinx(>=1.6,<2)",
             "sphinxcontrib-bibtex",
         },
         "tests": {
@@ -36,7 +36,7 @@ setup(
             "pillow",
             "nbsphinx",
             "ipykernel",
-            "sphinx>=1.6",
+            "sphinx(>=1.6,<2)",
             "sphinxcontrib-bibtex",
             "texsoup<=0.1.4"
         },
