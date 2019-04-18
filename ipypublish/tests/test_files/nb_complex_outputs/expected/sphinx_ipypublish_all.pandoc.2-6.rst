@@ -93,6 +93,7 @@ Images and Figures
     Image('example.jpg',height=400)
 
 .. nboutput:: rst
+    :execution-count: 3
 
     .. figure:: main_files/output_13_0.jpeg
         :alt: output_13_0
@@ -142,6 +143,7 @@ Tables (with pandas)
     df.round(3)
 
 .. nboutput:: rst
+    :execution-count: 8
 
     .. table:: An example of a table created with pandas dataframe.
         :name: tbl:example
@@ -164,6 +166,7 @@ Equations (with ipython or sympy)
     Latex('$$ a = b+c $$')
 
 .. nboutput:: rst
+    :execution-count: 9
 
     .. math::
         :nowrap:
@@ -185,6 +188,7 @@ Equations (with ipython or sympy)
     sym.rsolve(f,y(n),[1,4])
 
 .. nboutput:: rst
+    :execution-count: 10
 
     .. math::
         :nowrap:
