@@ -54,7 +54,7 @@ setup(
             "matplotlib",
             "pandas",
             "sympy<1.3",
-            "sphinx>=1.6",
+            "sphinx(>=1.6,<2)",
             "sphinxcontrib-bibtex",
             "ipykernel"
         }
