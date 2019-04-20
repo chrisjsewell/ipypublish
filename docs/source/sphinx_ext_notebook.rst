@@ -31,6 +31,16 @@ The key addition to the sphinx configuration file (conf.py) is:
         'ipypublish.sphinx.notebook'
     ]
 
+Each notebook will be converted according to an ipypublish configuration file,
+specified by the option ``ipysphinx_export_config``.
+The two recommended configurations to use are either:
+
+- ``sphinx_ipypublish_all.ext``
+  will execute all cells in the notebook before converting to an .rst file.
+- ``sphinx_ipypublish_all.ext.noexec``
+  will convert the notebook to an .rst file with no initial execution
+  (i.e. the notebook should be saved with outputs).
+
 The extension is also pre-configured to convert .Rmd files,
 using `jupytext <https://github.com/mwouts/jupytext>`_ (see :ref:`markdown_cells`).
 To turn this feature on (for sphinx>=1.8):
