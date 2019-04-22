@@ -77,8 +77,10 @@ def setup(app):
 
     # config for cell prompts
     app.add_config_value('ipysphinx_show_prompts', False, rebuild='env')
-    app.add_config_value('ipysphinx_input_prompt', '[%s]:', rebuild='env')
-    app.add_config_value('ipysphinx_output_prompt', '[%s]:', rebuild='env')
+    app.add_config_value(
+        'ipysphinx_input_prompt', '[{count}]:', rebuild='env')
+    app.add_config_value(
+        'ipysphinx_output_prompt', '[{count}]:', rebuild='env')
 
     # config for html css
     app.add_config_value('ipysphinx_responsive_width', '540px', rebuild='html')

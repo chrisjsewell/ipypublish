@@ -45,15 +45,16 @@ class RunSphinx(IPyPostProcessor):
         help="whether to include cell prompts").tag(config=True)
 
     prompt_style = Unicode(
-        '[%s]:',
+        '[{count}]:',
         help="the style of cell prompts").tag(config=True)
 
     @validate('prompt_style')
     def _valid_prompt_style(self, proposal):
         try:
-            proposal % 1
+            proposal.format(count=1)
         except TypeError:
-            raise TraitError("prompt_style should be formatable by a number")
+            raise TraitError("prompt_style should be formatable by "
+                             "`prompt_style.format(count=1)`")
         return proposal['value']
 
     conf_kwargs = Dict(
