@@ -1,4 +1,4 @@
-# iPyPublish
+# IPyPublish
 
 A program for creating and editing publication ready scientific reports and presentations,
 from one or more Jupyter Notebooks.
