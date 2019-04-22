@@ -118,8 +118,8 @@ setup by adding to the conf.py:
     ipysphinx_overwrite_existing  False                       raise error if nb_name.rst already exists
     ipysphinx_config_folders      ()                          additional folders containing ipypublish configuration files
     ipysphinx_show_prompts        False                       show cell prompts
-    ipysphinx_input_prompt        "[%s]"                      format of input prompts
-    ipysphinx_output_prompt       "[%s]"                      format of output prompts
+    ipysphinx_input_prompt        "[{count}]"                 format of input prompts
+    ipysphinx_output_prompt       "[{count}]"                 format of output prompts
     ipysphinx_preconverters       {}                          a mapping of additional file extensions to preconversion functions
     ============================= =========================== ==================================================================
 

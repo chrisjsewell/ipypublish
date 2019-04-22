@@ -120,7 +120,7 @@ def _create_nbcell_nodes(directive):
 
     # add prompts
     if config.ipysphinx_show_prompts and execution_count:
-        prompt = prompt_template % (execution_count,)
+        prompt = prompt_template.format(count=execution_count)
         prompt_node = docutils.nodes.literal_block(
             prompt, prompt, language='none', classes=['prompt'])
     elif config.ipysphinx_show_prompts:
