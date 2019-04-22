@@ -313,7 +313,7 @@
         {%- else %}
         {#- The figure must have a caption for the references to work #}
 
-                {{ output.metadata.filenames[datatype] | posix_path | basename }}
+        {{ "Code Cell Output" | indent | indent }}
         {% endif %}
         {#- output markdown type outputs #}
         {%- elif datatype in ['text/markdown'] and ipub.get('mkdown', False) %}
