@@ -13,7 +13,7 @@ except ImportError:  # pragma: no cover
 import ast
 import collections
 import copy
-from oset import oset
+from ordered_set import OrderedSet
 import re
 
 
@@ -182,7 +182,7 @@ class Cache:
 
         self.bibfiles = {}
         self._bibliographies = collections.defaultdict(dict)
-        self._cited = collections.defaultdict(oset)
+        self._cited = collections.defaultdict(OrderedSet)
         self._enum_count = {}
 
     def purge(self, docname):

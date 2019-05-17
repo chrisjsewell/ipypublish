@@ -6,12 +6,12 @@ jsonschema
 jupytext
 nbconvert
 nbformat
-oset
-pathlib2
+ordered-set
+pathlib2; python_version < '3.4'
 panflute
 ruamel.yaml
-shutilwhich
+shutilwhich; python_version < '3.3'
 six>=1.11.0
 traitlets
-typing
+typing; python_version < '3.5'
 tornado
