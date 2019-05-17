@@ -200,7 +200,11 @@ def setup_matplotlib(
     from IPython import get_ipython
     from IPython.display import set_matplotlib_formats
     import matplotlib as mpl
-    from shutilwhich import which
+
+    try:
+        from shutil import which
+    except ImportError:
+        from shutilwhich import which
 
     ipython = get_ipython()
     latex_available = which('latex') is not None
