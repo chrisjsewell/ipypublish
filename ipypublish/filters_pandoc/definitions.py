@@ -65,4 +65,6 @@ CITE_HTML_NAMES = (
 )
 
 RST_KNOWN_ROLES = (
-    "py:attr", "py:meth", "py:class", "py:func", "py:mod")
+    "py:attr", "py:meth", "py:class", "py:func", "py:mod",
+    "attr", "meth", "class", "func", "mod",
+    "download", "doc", "file", "program")
