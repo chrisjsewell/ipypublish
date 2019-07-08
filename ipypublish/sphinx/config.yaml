@@ -24,7 +24,6 @@ extensions: [
     'sphinx.ext.mathjax',  # convert latex math to html
     'sphinxcontrib.bibtex',  # allows for :cite: and .. bibligraphy::
     'sphinx.ext.todo',  # allows for .. todo:: directive
-    'sphinx.ext.imgconverter'  # converts svg to pdf in latex output
 ]
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos: false
