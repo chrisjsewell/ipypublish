@@ -158,6 +158,17 @@ def format_image(image, doc):
         return pf.RawInline(latex, format="tex")
 
     elif doc.format in ("rst",):
+        if not image.content.list:
+            # If the container is empty, then pandoc will assign an iterative
+            # reference identifier to it (image0, image1).
+            # However, this iterator restarts for each markdown cell,
+            # which can lead to reference clashes.
+            # Therefore we specifically assign the identifier here, as its url
+            # TODO does this identifier need to be sanitized?
+            # (it works fine in the tests)
+            identifier = image.url
+            image.content = pf.ListContainer(pf.Str(str(identifier)))
+
         return image
         # TODO formatting and span identifier (convert width/height to %)
 
