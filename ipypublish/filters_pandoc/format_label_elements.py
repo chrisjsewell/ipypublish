@@ -21,7 +21,6 @@ will be stripped from the document
 # TODO format headers with section labels
 # (see ipysphinx.transforms.CreateNotebookSectionAnchors)
 import json
-from uuid import uuid4 as uuid
 from panflute import Element, Doc, Span, Div, Math, Image, Table  # noqa: F401
 import panflute as pf
 
