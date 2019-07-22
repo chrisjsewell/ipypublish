@@ -26,7 +26,7 @@
     "python.linting.pylamaEnabled": false,
     "python.linting.enabled": true,
     "python.linting.flake8Enabled": true,
-    "latex-workshop.latex.autoBuild.onSave.enabled": false,
+    "python.formatting.provider": "yapf",
     "cSpell.words": [
         "Jupyter",
         "docutils",
