@@ -48,4 +48,4 @@ dependencies:
 - matplotlib
 - pandas
 - recommonmark
-- sympy <1.3
+- sympy
