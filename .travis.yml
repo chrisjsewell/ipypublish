@@ -115,7 +115,7 @@ before_install:
     sudo unzip koma-script.tds.zip -d ~/texmf/
     sudo apt-get install -y latexmk
     if [[ "$TRAVIS_DIST" == "xenial" ]]; then
-      sudo apt-get install -y texlive-ulem
+      sudo apt-get install -y texlive-generic-recommended
     fi
   fi
 
