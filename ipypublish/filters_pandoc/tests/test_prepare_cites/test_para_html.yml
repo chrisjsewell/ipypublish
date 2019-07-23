@@ -1,0 +1,43 @@
+4_children:
+- 1_tag: p
+  2_data:
+  - ' xyz'
+  4_children:
+  - 1_tag: span
+    3_attributes:
+      class:
+      - attribute-Cite
+      - class
+      data-a: '1'
+      data-latex: cref
+      data-rst: numref
+    4_children:
+    - 1_tag: span
+      2_data:
+      - '@label'
+      3_attributes:
+        class:
+        - citation
+        data-cites: label
+  - 1_tag: em
+    4_children:
+    - 1_tag: span
+      2_data:
+      - '@label2'
+      3_attributes:
+        class:
+        - citation
+        data-cites: label2
+  - 1_tag: span
+    3_attributes:
+      class:
+      - attribute-Cite
+      - b
+    4_children:
+    - 1_tag: span
+      2_data:
+      - '@label3'
+      3_attributes:
+        class:
+        - citation
+        data-cites: label3

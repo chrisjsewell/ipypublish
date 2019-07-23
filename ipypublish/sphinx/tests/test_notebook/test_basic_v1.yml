@@ -1,0 +1,262 @@
+4_children:
+- 1_tag: html
+  3_attributes:
+    xmlns: http://www.w3.org/1999/xhtml
+  4_children:
+  - 1_tag: body
+    4_children:
+    - 1_tag: div
+      3_attributes:
+        class:
+        - document
+      4_children:
+      - 1_tag: div
+        3_attributes:
+          class:
+          - documentwrapper
+        4_children:
+        - 1_tag: div
+          3_attributes:
+            class:
+            - bodywrapper
+          4_children:
+          - 1_tag: div
+            3_attributes:
+              class:
+              - body
+              role: main
+            4_children:
+            - 1_tag: div
+              3_attributes:
+                class:
+                - container
+                - docutils
+                - nbinput
+                - nblast
+              4_children:
+              - 1_tag: div
+                3_attributes:
+                  class:
+                  - highlight-ipython3
+                  - input_area
+                  - notranslate
+                4_children:
+                - 1_tag: div
+                  3_attributes:
+                    class:
+                    - highlight
+                  4_children:
+                  - 1_tag: pre
+                    4_children:
+                    - 1_tag: span
+                    - 1_tag: span
+                      2_data:
+                      - Image
+                      3_attributes:
+                        class:
+                        - n
+                    - 1_tag: span
+                      2_data:
+                      - (
+                      3_attributes:
+                        class:
+                        - p
+                    - 1_tag: span
+                      2_data:
+                      - example.jpg
+                      3_attributes:
+                        class:
+                        - s1
+                    - 1_tag: span
+                      2_data:
+                      - ','
+                      3_attributes:
+                        class:
+                        - p
+                    - 1_tag: span
+                      2_data:
+                      - height
+                      3_attributes:
+                        class:
+                        - n
+                    - 1_tag: span
+                      2_data:
+                      - '='
+                      3_attributes:
+                        class:
+                        - o
+                    - 1_tag: span
+                      2_data:
+                      - '400'
+                      3_attributes:
+                        class:
+                        - mi
+                    - 1_tag: span
+                      2_data:
+                      - )
+                      3_attributes:
+                        class:
+                        - p
+            - 1_tag: div
+              3_attributes:
+                class:
+                - container
+                - docutils
+                - nblast
+                - nboutput
+              4_children:
+              - 1_tag: div
+                3_attributes:
+                  class:
+                  - container
+                  - docutils
+                  - output_area
+                4_children:
+                - 1_tag: table
+                  3_attributes:
+                    border: '1'
+                    class:
+                    - docutils
+                    id: tbl-example
+                  4_children:
+                  - 1_tag: caption
+                    4_children:
+                    - 1_tag: span
+                      2_data:
+                      - An example of a table created with pandas dataframe.
+                      3_attributes:
+                        class:
+                        - caption-text
+                    - 1_tag: a
+                      2_data:
+                      - ¶
+                      3_attributes:
+                        class:
+                        - headerlink
+                        href: '#tbl-example'
+                        title: Permalink to this table
+                  - 1_tag: colgroup
+                    4_children:
+                    - 1_tag: col
+                      3_attributes:
+                        width: 7%
+                    - 1_tag: col
+                      3_attributes:
+                        width: 52%
+                    - 1_tag: col
+                      3_attributes:
+                        width: 4%
+                    - 1_tag: col
+                      3_attributes:
+                        width: 19%
+                    - 1_tag: col
+                      3_attributes:
+                        width: 19%
+                  - 1_tag: thead
+                    3_attributes:
+                      valign: bottom
+                    4_children:
+                    - 1_tag: tr
+                      3_attributes:
+                        class:
+                        - row-odd
+                      4_children:
+                      - 1_tag: th
+                        3_attributes:
+                          class:
+                          - head
+                      - 1_tag: th
+                        2_data:
+                        - a
+                        3_attributes:
+                          class:
+                          - head
+                      - 1_tag: th
+                        2_data:
+                        - b
+                        3_attributes:
+                          class:
+                          - head
+                      - 1_tag: th
+                        2_data:
+                        - c
+                        3_attributes:
+                          class:
+                          - head
+                      - 1_tag: th
+                        2_data:
+                        - d
+                        3_attributes:
+                          class:
+                          - head
+                  - 1_tag: tbody
+                    3_attributes:
+                      valign: top
+                    4_children:
+                    - 1_tag: tr
+                      3_attributes:
+                        class:
+                        - row-even
+                      4_children:
+                      - 1_tag: td
+                        2_data:
+                        - '1'
+                      - 1_tag: td
+                        2_data:
+                        - x
+                      - 1_tag: td
+                        2_data:
+                        - m
+                      - 1_tag: td
+                        2_data:
+                        - '0.914'
+                      - 1_tag: td
+                        2_data:
+                        - '0.021'
+                    - 1_tag: tr
+                      3_attributes:
+                        class:
+                        - row-odd
+                      4_children:
+                      - 1_tag: td
+                        2_data:
+                        - '2'
+                      - 1_tag: td
+                        2_data:
+                        - y
+                      - 1_tag: td
+                        2_data:
+                        - n
+                      - 1_tag: td
+                        2_data:
+                        - '0.333'
+                      - 1_tag: td
+                        2_data:
+                        - '0.116'
+            - 1_tag: div
+              3_attributes:
+                class:
+                - container
+                - docutils
+                - nblast
+                - nboutput
+              4_children:
+              - 1_tag: div
+                3_attributes:
+                  class:
+                  - container
+                  - docutils
+                  - output_area
+                4_children:
+                - 1_tag: div
+                  3_attributes:
+                    class:
+                    - highlight
+                  4_children:
+                  - 1_tag: pre
+                    2_data:
+                    - ''
+                    - ''
+                    - This is some printed text,
+                    - with a nicely formatted output.
+                    - ''

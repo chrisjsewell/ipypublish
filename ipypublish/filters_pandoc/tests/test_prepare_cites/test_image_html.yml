@@ -1,0 +1,34 @@
+4_children:
+- 1_tag: figure
+  4_children:
+  - 1_tag: img
+    3_attributes:
+      alt: a title with a @label1 @label2
+      src: path/to/image.png
+  - 1_tag: figcaption
+    2_data:
+    - a title with a
+    4_children:
+    - 1_tag: span
+      2_data:
+      - '@label1'
+      3_attributes:
+        class:
+        - citation
+        data-cites: label1
+    - 1_tag: span
+      3_attributes:
+        class:
+        - attribute-Cite
+        - nclass
+        data-latex: cref
+        data-rst: numref
+        data-x: '3'
+      4_children:
+      - 1_tag: span
+        2_data:
+        - '@label2'
+        3_attributes:
+          class:
+          - citation
+          data-cites: label2
