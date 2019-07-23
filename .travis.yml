@@ -114,6 +114,9 @@ before_install:
     sudo wget http://mirrors.ctan.org/install/macros/latex/contrib/koma-script.tds.zip
     sudo unzip koma-script.tds.zip -d ~/texmf/
     sudo apt-get install -y latexmk
+    if [[ "$TRAVIS_DIST" == "xenial" ]]; then
+      sudo apt-get install -y texlive-ulem
+    fi
   fi
 
 install:
