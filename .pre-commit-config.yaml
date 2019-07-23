@@ -20,6 +20,10 @@
     language: system
     types: [python]
     args: ["-i", "-vv"]
+    exclude: >
+            (?x)^(
+                setup.py
+            )$
 
   # - id: travis-linter
   #   name: Travis Lint

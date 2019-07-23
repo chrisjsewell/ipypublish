@@ -1,4 +1,4 @@
-# Usage: 
+# Usage:
 # $ conda env create -n ipypublish_dev -f conda_dev_env.yaml
 # $ conda activate ipypublish_dev
 # $ pip install --no-deps -e .
@@ -24,7 +24,7 @@ dependencies:
 - ruamel.yaml
 - setuptools
 - six
-- sphinx <2
+- sphinx >=1.6
 - sphinxcontrib-bibtex
 - texsoup <0.2
 - tornado
