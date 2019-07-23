@@ -25,6 +25,12 @@
                 setup.py
             )$
 
+  - id: doc8
+    name: RST Linting
+    entry: doc8
+    language: system
+    types: [rst]
+
   # - id: travis-linter
   #   name: Travis Lint
   #   entry: travis lint
