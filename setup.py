@@ -30,6 +30,7 @@ setup(
         },
         "tests": {
             "pytest>=3.6",
+            "pytest-regressions",
             "pytest-cov",
             "flake8(>=3.7,<3.8)",
             "coverage",

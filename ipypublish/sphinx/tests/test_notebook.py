@@ -5,17 +5,17 @@
 
     General Sphinx test and check output.
 """
-import re
-from textwrap import dedent
 import pytest
 
 from ipypublish.sphinx.tests import get_test_source_dir
+
+from ipypublish.tests.utils import HTML2JSONParser
 
 
 @pytest.mark.sphinx(
     buildername='html',
     srcdir=get_test_source_dir('notebook'))
-def test_basic(app, status, warning, get_sphinx_app_output):
+def test_basic(app, status, warning, get_sphinx_app_output, data_regression):
 
     app.build()
 
@@ -25,13 +25,6 @@ def test_basic(app, status, warning, get_sphinx_app_output):
 
     output = get_sphinx_app_output(app, buildername='html')
 
-    assert re.search(
-        dedent("""\
-        <pre>
-
-        This is some printed text,
-        with a nicely formatted output\\.
-
-        </pre>"""),
-        output
-    )
+    parser = HTML2JSONParser()
+    parser.feed(output)
+    data_regression.check(parser.parsed)

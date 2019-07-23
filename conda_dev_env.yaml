@@ -19,12 +19,12 @@ dependencies:
 - nbconvert
 - nbformat
 - ordered-set
-- pandoc
+- pandoc =2.6
 - panflute
 - ruamel.yaml
 - setuptools
 - six
-- sphinx
+- sphinx < 2
 - sphinxcontrib-bibtex
 - texsoup <0.2
 - tornado
@@ -37,6 +37,7 @@ dependencies:
 - ipykernel
 # style
 - autopep8
+- doc8
 - flake8 <3.8.0,>=3.7.0
 - rope
 - pre_commit =1.14.4
