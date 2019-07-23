@@ -13,11 +13,11 @@ Releases
 Version 0.10
 ------------
 
-v0.10.6
-~~~~~~~
+v0.10.6 & v0.10.7
+~~~~~~~~~~~~~~~~~
 
-Added sphinx option for toggling code cells;
-see :ref:`sphinx_ext_notebook_toggle_in` example.
+Added sphinx option for toggling notebook input and output cells.
+For examples see :ref:`sphinx_ext_notebook_toggle_in` and :ref:`code_cells`.
 
 v0.10.5
 ~~~~~~~

@@ -47,4 +47,5 @@ dependencies:
 - jupyter
 - matplotlib
 - pandas
+- recommonmark
 - sympy <1.3

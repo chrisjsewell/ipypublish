@@ -18,6 +18,11 @@
         {% if "sphinx" in nb.metadata.ipub %}
         {% set output_bib = not nb.metadata.ipub.sphinx.no_bib %}
         {% set output_gloss = not nb.metadata.ipub.sphinx.no_glossary %}
+        {% set orphan = nb.metadata.ipub.sphinx.orphan %}
+        {% set toggle_input = nb.metadata.ipub.sphinx.toggle_input %}
+        {% set toggle_input_all = nb.metadata.ipub.sphinx.toggle_input_all %}
+        {% set toggle_output = nb.metadata.ipub.sphinx.toggle_output %}
+        {% set toggle_output_all = nb.metadata.ipub.sphinx.toggle_output_all %}
 
         {% if nb.metadata.ipub.sphinx.bib_title %}
         {% set bib_title = nb.metadata.ipub.sphinx.bib_title %}
@@ -35,6 +40,11 @@
 
         {% set output_bib = True %}
         {% set output_gloss = True %}
+        {% set orphan = False %}
+        {% set toggle_input = False %}
+        {% set toggle_input_all = False %}
+        {% set toggle_output = False %}
+        {% set toggle_output_all = False %}
         {% set bib_title = "Bibliography" %}
         {% set glossary_title = "Glossary" %}
 
@@ -42,8 +52,17 @@
         {% endif %}
 
     "header": |
-        {% if sphinx_opts and sphinx_opts.orphan %}
+        {% if orphan %}
         {{':orphan:'}}
+
+        {% endif %}
+        {% if toggle_input_all %}
+        {{'.. nbinput-toggle-all::'}}
+
+        {% endif %}
+        {% if toggle_input_all %}
+        {{'.. nboutput-toggle-all::'}}
+
         {% endif %}
 
     "notebook_input_all": |
@@ -73,6 +92,9 @@
         {%- if cell.execution_count %}
             :execution-count: {{ cell.execution_count }}
         {%- endif %}
+        {%- if toggle_input %}
+            :add-toggle:
+        {%- endif -%}
         {%- if not cell.outputs %}
             :no-output:
         {%- endif -%}
@@ -160,7 +182,7 @@
 
         {{ insert_nboutput(latex_datatype, output, cell) | indent }}
         {% endif %}
-        {% endblock nboutput %}  
+        {% endblock nboutput %}
 
     "notebook_output_error": |
         {%- if "ipub" in cell.metadata and cell.metadata.ipub.error -%}
@@ -184,7 +206,7 @@
 
     "notebook_output_data_all": |
         {{ self.nboutput() }}
-    
+
     "footer": |
         {# output a bibglossary if there is one  #}
         {%- if nb.metadata.ipub and nb.metadata.ipub.bibglossary: -%}
@@ -196,7 +218,7 @@
         {%- endif -%}
         {%- endif %}
 
-        {# output a bibligraphy if there is one 
+        {# output a bibligraphy if there is one
         (see https://sphinxcontrib-bibtex.readthedocs.io/en/latest/usage.html) #}
         {%- if nb.metadata.ipub: -%}
         {%- if nb.metadata.ipub.bibliography and output_bib: -%}
@@ -257,11 +279,11 @@
         {# find captions #}
         {%- set ipubfigcaption = "figure" | get_caption(cell.metadata, resources) %}
         {% if ipubfigcaption %}
-        {%- set ipubfigcaption = ipubfigcaption | ipypandoc('rst', nb.metadata, cell.metadata) %}        
+        {%- set ipubfigcaption = ipubfigcaption | ipypandoc('rst', nb.metadata, cell.metadata) %}
         {% endif %}
         {%- set ipubtblcaption = "table" | get_caption(cell.metadata, resources)  %}
         {% if ipubtblcaption %}
-        {%- set ipubtblcaption = ipubtblcaption | ipypandoc('rst', nb.metadata, cell.metadata) %}        
+        {%- set ipubtblcaption = ipubtblcaption | ipypandoc('rst', nb.metadata, cell.metadata) %}
         {% endif %}
         {# create the output directive and supply it with the type of data #}
         .. nboutput::
@@ -272,6 +294,9 @@
         {#- add output directive options #}
         {%- if output.output_type == 'execute_result' and output.execution_count %}
             :execution-count: {{ output.execution_count }}
+        {%- endif %}
+        {%- if toggle_output %}
+            :add-toggle:
         {%- endif %}
         {%- if output != cell.outputs[-1] %}
             :more-to-come:
@@ -287,7 +312,7 @@
         {{ output.data[datatype].strip('\n') | indent }}
         {# output figure type outputs # TODO set width of figures from ipub metadata (need to convert fraction -> percentage) #}
         {%- elif datatype in ['image/svg+xml', 'image/png', 'image/jpeg', 'application/pdf'] and ipub.get('figure', False) %}
-        
+
             .. figure:: {{ output.metadata.filenames[datatype] | posix_path }}
                 :alt: {{ output.metadata.filenames[datatype] | posix_path | basename }}
                 :align: center

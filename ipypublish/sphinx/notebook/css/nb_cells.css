@@ -202,21 +202,50 @@ div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
 
-.toggle-nbinput {
+div.toggle-nbinput,
+div.toggle-nboutput {
+    cursor: pointer;
     min-width: 2ex;
     padding-top: 0.4em;
     padding-left: 0.1em;
     text-align: right;
     flex: 0;
-    margin-left:auto;
-    margin-right:0;
+    margin-left: auto;
+    margin-right: 0;
 }
-.toggle-nbinput p {
+div.toggle-nbinput p,
+div.toggle-nboutput p {
     overflow: hidden;
 }
-.toggle-nbinput:after {
+div.toggle-nbinput:after,
+div.toggle-nboutput:after,
+div.nbinput-toggle-all :after,
+div.nboutput-toggle-all :after {
     content: " ▼";
 }
-.toggle-nbinput.open:after {
+div.toggle-nbinput.open:after,
+div.toggle-nboutput.open:after,
+div.nbinput-toggle-all.open :after,
+div.nboutput-toggle-all.open :after {
     content: " ▲";
+}
+
+div.nbinput-toggle-all,
+div.nboutput-toggle-all {
+    display: inline-block;
+    cursor: pointer;
+    min-width: 7ex;
+    padding: 0.2em 0.4em 0.2em 0.4em;
+    margin-bottom: 2ex;
+    border: 1px solid #000;
+    border-radius: 15px;
+}
+div.nbinput-toggle-all p,
+div.nboutput-toggle-all p {
+    overflow: hidden;
+    margin: 0 auto;
+}
+div.nbinput-toggle-all:hover,
+div.nboutput-toggle-all:hover{
+    background: rgb(158, 210, 230);
 }
