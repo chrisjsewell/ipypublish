@@ -1,5 +1,5 @@
 # Usage: 
-# $ conda env create -f conda_dev_env.yaml
+# $ conda env create -n ipypublish_dev -f conda_dev_env.yaml
 # $ conda activate ipypublish_dev
 # $ pip install --no-deps -e .
 ---
@@ -7,8 +7,8 @@ name: ipypublish_dev
 channels:
 - conda-forge
 dependencies:
-- python =3.6
 - pip
+- python =3.6
 
 - bibtexparser
 - docutils
@@ -24,7 +24,7 @@ dependencies:
 - ruamel.yaml
 - setuptools
 - six
-- sphinx < 2
+- sphinx <2
 - sphinxcontrib-bibtex
 - texsoup <0.2
 - tornado

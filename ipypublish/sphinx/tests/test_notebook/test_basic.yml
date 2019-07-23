@@ -63,7 +63,7 @@
                         - p
                     - 1_tag: span
                       2_data:
-                      - '''example.jpg'''
+                      - example.jpg
                       3_attributes:
                         class:
                         - s1
@@ -255,6 +255,8 @@
                   4_children:
                   - 1_tag: pre
                     2_data:
-                    - 'This is some printed text,
-
-                      with a nicely formatted output.'
+                    - ''
+                    - ''
+                    - This is some printed text,
+                    - with a nicely formatted output.
+                    - ''

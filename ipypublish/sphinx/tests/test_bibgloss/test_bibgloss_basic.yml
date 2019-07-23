@@ -148,7 +148,7 @@
                           - label
                       - 1_tag: td
                         2_data:
-                        - the description which contains latex
+                        - ' the description which contains latex'
                         4_children:
                         - 1_tag: em
                           2_data:

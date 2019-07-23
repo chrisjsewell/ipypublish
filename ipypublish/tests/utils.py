@@ -1,4 +1,5 @@
 from copy import deepcopy
+import six
 try:
     from html.parser import HTMLParser
 except ImportError:
@@ -21,9 +22,10 @@ class HTML2JSONParser(HTMLParser, object):
     def __init__(self,
                  ignore_tags=("head", "script", "style"),
                  ignore_classes=("footer", "sphinxsidebar", "clearer"),
-                 strip_data=True,
+                 rstrip_data=True,
                  sort_class_attr=True,
-                 **kwargs):
+                 replace_data_lines=None,
+                 convert_charrefs=False):
         """parses html content to a JSON object,
         of the form::
 
@@ -35,21 +37,30 @@ class HTML2JSONParser(HTMLParser, object):
             HTML tags that will be ignored (and all their children)
         ignore_classes : list[str]
             HTML tags with one or more of these classes will be ignored (and all their children)
-        strip_data : bool
-            apply `strip()` to data text, and don't add if data == ''
+        rstrip_data : bool
+            apply `rstrip()` to data text, and don't add if data == ''
         sort_class_attr : bool
             if an attribute is named 'class', its contents will be split and sorted
+        replace_data_lines: None or dict
+            mapping of data lines to replace (useful for mapping across different environment versions)
+        convert_charrefs: bool
+            If True, all character references (except the ones in script/style elements)
+            are automatically converted to the corresponding Unicode characters.
 
         """
-        super(HTML2JSONParser, self).__init__(**kwargs)
+        if six.PY2:
+            super(HTML2JSONParser, self).__init__()
+        else:
+            super(HTML2JSONParser, self).__init__(convert_charrefs=convert_charrefs)
         self._content = {}
         self._curr_tags = []
         self._curr_depth = 0
         self._ignore_depth = None
-        self._strip_data = strip_data
+        self._rstrip_data = rstrip_data
         self._sort_class_attr = sort_class_attr
         self._ignore_tags = ignore_tags
         self._ignore_classes = set(ignore_classes)
+        self._replace_data_lines = replace_data_lines or {}
 
     @property
     def parsed(self):
@@ -105,12 +116,21 @@ class HTML2JSONParser(HTMLParser, object):
     def handle_data(self, data):
         if self._ignore_depth is not None:
             return
-        if self._strip_data:
-            data = data.strip()
-            if not data:
-                return
+        if not data.strip():
+            return
+        data = data.splitlines()
+        if self._rstrip_data:
+            data = [d.rstrip() for d in data]
+        if self._replace_data_lines:
+            data = [self._replace_data_lines.get(d, d) for d in data]
         sub_content = self._get_subcontent()
-        sub_content.setdefault(self._data_key, []).append(data)
+        sub_content.setdefault(self._data_key, []).extend(data)
+
+    def handle_entityref(self, name):
+        pass
+
+    def handle_charref(self, name):
+        pass
 
     def handle_comment(self, data):
         pass
