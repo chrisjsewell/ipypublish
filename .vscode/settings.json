@@ -12,7 +12,7 @@
         "**/*.pyc": true,
         "**/__pycache__": true
     },
-    "python.pythonPath": "/anaconda/envs/lsr/bin/python",
+    "python.pythonPath": "/anaconda/envs/ipypublish_dev/bin/python",
     "restructuredtext.confPath": "${workspaceFolder}/docs/source",
     "restructuredtext.builtDocumentationPath": "${workspaceFolder}/docs/build/html",
     "restructuredtext.preview.scrollEditorWithPreview": false,
@@ -26,7 +26,7 @@
     "python.linting.pylamaEnabled": false,
     "python.linting.enabled": true,
     "python.linting.flake8Enabled": true,
-    "latex-workshop.latex.autoBuild.onSave.enabled": false,
+    "python.formatting.provider": "yapf",
     "cSpell.words": [
         "Jupyter",
         "docutils",
@@ -65,7 +65,7 @@
     "yaml.format.enable": true,
 
     "markdown-preview-enhanced.usePandocParser": true,
-    "markdown-preview-enhanced.pandocPath": "/anaconda/envs/lsr/bin/pandoc",
-    "markdown-preview-enhanced.pandocArguments": "--filter=/anaconda/envs/lsr/bin/ipubpandoc",
+    "markdown-preview-enhanced.pandocPath": "/anaconda/envs/ipypublish_dev/bin/pandoc",
+    "markdown-preview-enhanced.pandocArguments": "--filter=/anaconda/envs/ipypublish_dev/bin/ipubpandoc",
     "markdown-preview-enhanced.enableScriptExecution": true
 }

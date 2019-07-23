@@ -24,39 +24,41 @@ setup(
     long_description_content_type='text/markdown',
     install_requires=requirements,
     extras_require={
-        "sphinx": {
-            "sphinx(>=1.6,<2)",
-            "sphinxcontrib-bibtex",
+        'sphinx': {
+            'sphinx>=1.6',
+            'sphinxcontrib-bibtex',
         },
-        "tests": {
-            "pytest>=3.6",
-            "pytest-cov",
-            "flake8(>=3.7,<3.8)",
-            "coverage",
-            "pillow",
-            "nbsphinx",
-            "ipykernel",
-            "sphinx(>=1.6,<2)",
-            "sphinxcontrib-bibtex",
-            "texsoup<=0.1.4"
+        'tests': {
+            'pytest>=3.6',
+            'pytest-regressions',
+            'pytest-cov',
+            'flake8(>=3.7,<3.8)',
+            'coverage',
+            'pillow',
+            'nbsphinx',
+            'ipykernel',
+            'sphinx>=1.6',
+            'sphinxcontrib-bibtex',
+            'texsoup<=0.1.4',
+            'doc8'
         },
-        "science": {
-            "matplotlib",
-            "numpy",
-            "pandas",
-            "sympy"
+        'science': {
+            'matplotlib',
+            'numpy',
+            'pandas',
+            'sympy'
         },
-        "rtd": {
-            "recommonmark>=0.5",
-            "pytest>=3.6",
-            "pillow",
-            "numpy",
-            "matplotlib",
-            "pandas",
-            "sympy<1.3",
-            "sphinx(>=1.6,<2)",
-            "sphinxcontrib-bibtex",
-            "ipykernel"
+        'rtd': {
+            'recommonmark>=0.5',
+            'pytest>=3.6',
+            'pillow',
+            'numpy',
+            'matplotlib',
+            'pandas',
+            'sympy<1.3',
+            'sphinx>=1.6',
+            'sphinxcontrib-bibtex',
+            'ipykernel'
         }
     },
     license='MIT',

@@ -2,8 +2,5 @@ channels:
   - conda-forge
 dependencies:
   - python =3.6
-  # TODO pip>=10 fails du to this issue https://github.com/pypa/pip/issues/5247
-  # raises error `Cannot uninstall 'docutils'. It is a distutils installed project`
-  # even though docutils appear to already be at the correct version (0.14)!?
-  - pip <10.0
-  - pandoc
+  - pandoc =2.6
+  - docutils =0.15

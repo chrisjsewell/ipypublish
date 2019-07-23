@@ -1,0 +1,50 @@
+# Usage:
+# $ conda env create -n ipypublish_dev -f conda_dev_env.yaml
+# $ conda activate ipypublish_dev
+# $ pip install --no-deps -e .
+---
+name: ipypublish_dev
+channels:
+- conda-forge
+dependencies:
+- pip
+- python =3.6
+
+- bibtexparser
+- docutils
+- jinja2
+- jsonextended >=0.7
+- jsonschema
+- jupytext
+- nbconvert
+- nbformat
+- ordered-set
+- pandoc =2.6
+- panflute
+- ruamel.yaml
+- setuptools
+- six
+- sphinx >=1.6
+- sphinxcontrib-bibtex
+- texsoup <0.2
+- tornado
+- traitlets
+# testing
+- pytest >=3.6
+- pytest-regressions
+- nbsphinx
+- pillow
+- ipykernel
+# style
+- autopep8
+- doc8
+- flake8 <3.8.0,>=3.7.0
+- rope
+- pre_commit =1.14.4
+- yapf =0.26.0
+# docs
+- sphinx_rtd_theme
+- jupyter
+- matplotlib
+- pandas
+- sympy <1.3

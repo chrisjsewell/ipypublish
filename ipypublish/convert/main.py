@@ -43,7 +43,7 @@ class IpyPubMain(Configurable):
     ).tag(config=True)
 
     plugin_folder_paths = T.Set(
-        T.Unicode,
+        T.Unicode(),
         default_value=(),
         help="a list of folders containing conversion configurations"
     ).tag(config=True)

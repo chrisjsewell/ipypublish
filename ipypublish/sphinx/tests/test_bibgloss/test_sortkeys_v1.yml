@@ -1,0 +1,227 @@
+4_children:
+- 1_tag: html
+  3_attributes:
+    xmlns: http://www.w3.org/1999/xhtml
+  4_children:
+  - 1_tag: body
+    4_children:
+    - 1_tag: div
+      3_attributes:
+        class:
+        - document
+      4_children:
+      - 1_tag: div
+        3_attributes:
+          class:
+          - documentwrapper
+        4_children:
+        - 1_tag: div
+          3_attributes:
+            class:
+            - bodywrapper
+          4_children:
+          - 1_tag: div
+            3_attributes:
+              class:
+              - body
+              role: main
+            4_children:
+            - 1_tag: div
+              3_attributes:
+                class:
+                - section
+                id: welcome-to-ipysphinx-extension-tests-documentation
+              4_children:
+              - 1_tag: h1
+                2_data:
+                - Welcome to IpySphinx extension tests documentation!
+                4_children:
+                - 1_tag: a
+                  2_data:
+                  - ¶
+                  3_attributes:
+                    class:
+                    - headerlink
+                    href: '#welcome-to-ipysphinx-extension-tests-documentation'
+                    title: Permalink to this headline
+              - 1_tag: p
+                2_data:
+                - ','
+                - ','
+                4_children:
+                - 1_tag: a
+                  2_data:
+                  - Name
+                  3_attributes:
+                    class:
+                    - bibgcapital
+                    - bibglossary
+                    - internal
+                    - reference
+                    href: '#gtkey1'
+                    id: id1
+                - 1_tag: a
+                  2_data:
+                  - MA
+                  3_attributes:
+                    class:
+                    - bibglossary
+                    - internal
+                    - reference
+                    href: '#akey1'
+                    id: id2
+                - 1_tag: a
+                  3_attributes:
+                    class:
+                    - bibglossary
+                    - internal
+                    - reference
+                    href: '#symbol1'
+                    id: id3
+                  4_children:
+                  - 1_tag: span
+                    2_data:
+                    - \(\pi\)
+                    3_attributes:
+                      class:
+                      - math
+                      - nohighlight
+                      - notranslate
+              - 1_tag: p
+                2_data:
+                - Glossary
+                3_attributes:
+                  class:
+                  - rubric
+              - 1_tag: p
+                3_attributes:
+                  id: bibtex-bibglossary-contents-0
+                4_children:
+                - 1_tag: table
+                  3_attributes:
+                    class:
+                    - bibglossary
+                    - citation
+                    - docutils
+                    frame: void
+                    id: gtkey1
+                    rules: none
+                  4_children:
+                  - 1_tag: colgroup
+                    4_children:
+                    - 1_tag: col
+                      3_attributes:
+                        class:
+                        - label
+                    - 1_tag: col
+                  - 1_tag: tbody
+                    3_attributes:
+                      valign: top
+                    4_children:
+                    - 1_tag: tr
+                      4_children:
+                      - 1_tag: td
+                        3_attributes:
+                          class:
+                          - label
+                        4_children:
+                        - 1_tag: a
+                          2_data:
+                          - '[name]'
+                          3_attributes:
+                            class:
+                            - fn-backref
+                            href: '#id1'
+                      - 1_tag: td
+                        2_data:
+                        - full description
+                        4_children:
+                        - 1_tag: strong
+                          2_data:
+                          - with latex
+                - 1_tag: table
+                  3_attributes:
+                    class:
+                    - bibglossary
+                    - citation
+                    - docutils
+                    frame: void
+                    id: symbol1
+                    rules: none
+                  4_children:
+                  - 1_tag: colgroup
+                    4_children:
+                    - 1_tag: col
+                      3_attributes:
+                        class:
+                        - label
+                    - 1_tag: col
+                  - 1_tag: tbody
+                    3_attributes:
+                      valign: top
+                    4_children:
+                    - 1_tag: tr
+                      4_children:
+                      - 1_tag: td
+                        3_attributes:
+                          class:
+                          - label
+                        4_children:
+                        - 1_tag: a
+                          2_data:
+                          - '['
+                          - ']'
+                          3_attributes:
+                            class:
+                            - fn-backref
+                            href: '#id3'
+                          4_children:
+                          - 1_tag: span
+                            2_data:
+                            - \(\pi\)
+                            3_attributes:
+                              class:
+                              - math
+                              - nohighlight
+                              - notranslate
+                      - 1_tag: td
+                        2_data:
+                        - full description
+                - 1_tag: table
+                  3_attributes:
+                    class:
+                    - bibglossary
+                    - citation
+                    - docutils
+                    frame: void
+                    id: akey1
+                    rules: none
+                  4_children:
+                  - 1_tag: colgroup
+                    4_children:
+                    - 1_tag: col
+                      3_attributes:
+                        class:
+                        - label
+                    - 1_tag: col
+                  - 1_tag: tbody
+                    3_attributes:
+                      valign: top
+                    4_children:
+                    - 1_tag: tr
+                      4_children:
+                      - 1_tag: td
+                        3_attributes:
+                          class:
+                          - label
+                        4_children:
+                        - 1_tag: a
+                          2_data:
+                          - '[MA]'
+                          3_attributes:
+                            class:
+                            - fn-backref
+                            href: '#id2'
+                      - 1_tag: td
+                        2_data:
+                        - My Abbreviation

@@ -1,4 +1,5 @@
 [flake8]
+max-line-length = 120
 exclude = 
     setup.py,
     ipypublish/scripts/ipynb_latex_setup.py,

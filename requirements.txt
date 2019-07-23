@@ -1,5 +1,6 @@
 bibtexparser
-docutils
+docutils; python_version >= '3'
+docutils <0.15; python_version < '3'
 jinja2
 jsonextended>=0.7
 jsonschema
