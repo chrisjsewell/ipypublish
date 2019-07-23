@@ -31,6 +31,16 @@
                 class:
                 - container
                 - docutils
+                - nbinput-toggle-all
+              4_children:
+              - 1_tag: p
+                2_data:
+                - NbInput Toggle All
+            - 1_tag: div
+              3_attributes:
+                class:
+                - container
+                - docutils
                 - nbinput
                 - nblast
               4_children:

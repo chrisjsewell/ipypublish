@@ -226,10 +226,7 @@ div.nbinput-toggle-all {
     display: inline-block;
     cursor: pointer;
     min-width: 7ex;
-    padding-left: 0.4em;
-    padding-right: 0.4em;
-    padding-top: 0.2em;
-    padding-bottom: 0.2em;
+    padding: 0.2em 0.4em 0.2em 0.4em;
     margin-bottom: 2ex;
     border: 1px solid #000;
     border-radius: 15px;

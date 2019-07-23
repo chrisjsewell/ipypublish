@@ -18,7 +18,7 @@ $(function () {
         } else {
             $(".toggle-nbinput").removeClass("open");
             $(".input_area").hide("400");
-        };
+        }
     });
 
 });

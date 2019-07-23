@@ -27,6 +27,15 @@
               role: main
             4_children:
             - 1_tag: div
+              2_data:
+              - ''
+              - NbInput Toggle All
+              3_attributes:
+                class:
+                - container
+                - docutils
+                - nbinput-toggle-all
+            - 1_tag: div
               3_attributes:
                 class:
                 - container
