@@ -5,7 +5,7 @@ except ImportError:
     from HTMLParser import HTMLParser
 
 
-class HTML2JSONParser(HTMLParser):
+class HTML2JSONParser(HTMLParser, object):
     """parses html content to a JSON object,
     of the form::
 

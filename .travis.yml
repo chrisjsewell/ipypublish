@@ -23,12 +23,12 @@ matrix:
     env: TEST_TYPE="pytest"
   - os: linux
     sudo: required
-    python: 3.4
+    python: 3.5
     dist: trusty
     env: TEST_TYPE="pytest"
   - os: linux
     sudo: required
-    python: 3.5
+    python: 3.7
     dist: trusty
     env: TEST_TYPE="pytest"
   # TODO this takes too long to install
@@ -76,12 +76,12 @@ matrix:
   allow_failures:
     - os: linux
       sudo: required
-      python: 3.4
+      python: 3.5
       dist: trusty
       env: TEST_TYPE="pytest"
     - os: linux
       sudo: required
-      python: 3.5
+      python: 3.7
       dist: trusty
       env: TEST_TYPE="pytest"
     - os: osx
