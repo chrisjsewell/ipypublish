@@ -7,9 +7,7 @@ from docutils.parsers import rst
 from docutils.statemachine import StringList
 
 from ipypublish.sphinx.utils import import_sphinx
-from ipypublish.sphinx.notebook.nodes import (
-    AdmonitionNode, CodeAreaNode, FancyOutputNode
-)
+from ipypublish.sphinx.notebook.nodes import (AdmonitionNode, CodeAreaNode, FancyOutputNode)
 
 
 class NbAdmonition(rst.Directive):
@@ -51,13 +49,14 @@ class NbInput(rst.Directive):
         'empty-lines-after': rst.directives.nonnegative_int,
         'no-output': rst.directives.flag,
         'caption': rst.directives.unchanged,
-        'name': rst.directives.unchanged
+        'name': rst.directives.unchanged,
+        'add-toggle': rst.directives.flag
     }
     has_content = True
 
     def run(self):
         """This is called by the reST parser."""
-        self.state.document['nbsphinx_include_css'] = True
+        self.state.document['ipysphinx_include_css'] = True
         return _create_nbcell_nodes(self)
 
 
@@ -78,7 +77,7 @@ class NbOutput(rst.Directive):
 
     def run(self):
         """This is called by the reST parser."""
-        self.state.document['nbsphinx_include_css'] = True
+        self.state.document['ipysphinx_include_css'] = True
         return _create_nbcell_nodes(self)
 
 
@@ -114,15 +113,14 @@ def _create_nbcell_nodes(directive):
         if directive.arguments and directive.arguments[0] in ['rst', 'ansi']:
             fancy_output = True
     else:
-        raise AssertionError("directive should be NbInput or NbOutput")
+        raise AssertionError('directive should be NbInput or NbOutput')
 
     outer_node = docutils.nodes.container(classes=outer_classes)
 
     # add prompts
     if config.ipysphinx_show_prompts and execution_count:
         prompt = prompt_template.format(count=execution_count)
-        prompt_node = docutils.nodes.literal_block(
-            prompt, prompt, language='none', classes=['prompt'])
+        prompt_node = docutils.nodes.literal_block(prompt, prompt, language='none', classes=['prompt'])
     elif config.ipysphinx_show_prompts:
         prompt = ''
         prompt_node = docutils.nodes.container(classes=['prompt', 'empty'])
@@ -132,21 +130,17 @@ def _create_nbcell_nodes(directive):
 
     if fancy_output:
         inner_node = docutils.nodes.container(classes=inner_classes)
-        sphinx.util.nodes.nested_parse_with_titles(
-            directive.state, directive.content, inner_node)
+        sphinx.util.nodes.nested_parse_with_titles(directive.state, directive.content, inner_node)
         outtype = directive.arguments[0]
         if outtype == 'rst':
             outer_node += FancyOutputNode('', inner_node, prompt=prompt)
         elif outtype == 'ansi':
             outer_node += inner_node
         else:
-            raise AssertionError(
-                "`.. nboutput:: type` should be 'rst' or 'ansi', "
-                "not: {}".format(outtype))
+            raise AssertionError("`.. nboutput:: type` should be 'rst' or 'ansi', " 'not: {}'.format(outtype))
     else:
         text = '\n'.join(directive.content.data)
-        inner_node = docutils.nodes.literal_block(
-            text, text, language=language, classes=inner_classes)
+        inner_node = docutils.nodes.literal_block(text, text, language=language, classes=inner_classes)
         codearea_node = CodeAreaNode('', inner_node, prompt=prompt)
         # create a literal text block (e.g. with the code-block directive),
         # that starts or ends with a blank line
@@ -157,15 +151,18 @@ def _create_nbcell_nodes(directive):
                 codearea_node[attr] = value
 
         # add caption and label, see:
-        if directive.options.get("caption", False):
-            caption = directive.options.get("caption")
-            wrapper = container_wrapper(
-                directive, inner_node, caption, inner_classes)
+        if directive.options.get('caption', False):
+            caption = directive.options.get('caption')
+            wrapper = container_wrapper(directive, inner_node, caption, inner_classes)
             # add label
             directive.add_name(wrapper)
             outer_node += wrapper
         else:
             outer_node += codearea_node
+
+    if isinstance(directive, NbInput) and (config.ipysphinx_code_toggle or 'add-toggle' in directive.options):
+        outer_node += sphinx.addnodes.only(
+            '', docutils.nodes.container(classes=['toggle-nbinput', 'empty']), expr='html')
 
     return [outer_node]
 
@@ -174,17 +171,14 @@ def container_wrapper(directive, literal_node, caption, classes):
     """adapted from
     https://github.com/sphinx-doc/sphinx/blob/master/sphinx/directives/code.py
     """
-    container_node = docutils.nodes.container(
-        '', literal_block=True, classes=classes)  # ['literal-block-wrapper']
+    container_node = docutils.nodes.container('', literal_block=True, classes=classes)  # ['literal-block-wrapper']
     parsed = docutils.nodes.Element()
-    directive.state.nested_parse(StringList([caption], source=''),
-                                 directive.content_offset, parsed)
+    directive.state.nested_parse(StringList([caption], source=''), directive.content_offset, parsed)
     if isinstance(parsed[0], docutils.nodes.system_message):
         msg = 'Invalid caption: %s' % parsed[0].astext()
         raise ValueError(msg)
     elif isinstance(parsed[0], docutils.nodes.Element):
-        caption_node = docutils.nodes.caption(parsed[0].rawsource, '',
-                                              *parsed[0].children)
+        caption_node = docutils.nodes.caption(parsed[0].rawsource, '', *parsed[0].children)
         caption_node.source = literal_node.source
         caption_node.line = literal_node.line
         container_node += caption_node

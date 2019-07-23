@@ -5,4 +5,5 @@ recursive-include ipypublish *.json
 recursive-include ipypublish *.j2
 recursive-include ipypublish *.yaml
 recursive-include ipypublish/sphinx/notebook/css *.css
+recursive-include ipypublish/sphinx/notebook/js *.js
 include ipypublish/tests/test_files/example.jpg
