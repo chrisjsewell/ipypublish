@@ -231,8 +231,9 @@ div.nbinput-toggle-all {
     border: 1px solid #000;
     border-radius: 15px;
 }
-div.toggle-nbinput p {
+div.nbinput-toggle-all p {
     overflow: hidden;
+    margin: 0 auto;
 }
 div.nbinput-toggle-all:hover{
     background: rgb(158, 210, 230);
