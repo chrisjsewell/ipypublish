@@ -202,4 +202,21 @@ div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
 
-
+.toggle-nbinput {
+    min-width: 2ex;
+    padding-top: 0.4em;
+    padding-left: 0.1em;
+    text-align: right;
+    flex: 0;
+    margin-left:auto;
+    margin-right:0;
+}
+.toggle-nbinput p {
+    overflow: hidden;
+}
+.toggle-nbinput:after {
+    content: " ▼";
+}
+.toggle-nbinput.open:after {
+    content: " ▲";
+}
