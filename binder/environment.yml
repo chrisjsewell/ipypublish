@@ -2,7 +2,7 @@ name: ipypublish-environment
 channels:
   - conda-forge
 dependencies:
-  - python==3.6
+  - python =3.7
   - numpy
   - matplotlib
   - pandas
