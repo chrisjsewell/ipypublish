@@ -78,6 +78,7 @@ def setup(app):
 
     # config for input cell toggling
     app.add_config_value('ipysphinx_code_toggle', False, rebuild='env')
+    app.add_config_value('ipysphinx_code_hide', False, rebuild='env')
 
     # config for html css
     app.add_config_value('ipysphinx_responsive_width', '540px', rebuild='html')
@@ -289,5 +290,8 @@ def copy_javascript(name):
 def html_add_javascript(app, pagename, templatename, context, doctree):
     """Add JavaScript string to HTML pages that contain code cells."""
     if doctree and doctree.get('ipysphinx_include_css'):
-        code = copy_javascript('toggle_code')
+        if app.config.ipysphinx_code_hide:
+            code = copy_javascript('toggle_code_hide')
+        else:
+            code = copy_javascript('toggle_code_show')
         context['body'] = '\n<script>' + code + '</script>\n' + context['body']

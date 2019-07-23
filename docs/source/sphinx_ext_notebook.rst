@@ -110,9 +110,9 @@ setup by adding to the conf.py:
 .. table:: Configuration values to use in conf.py
     :name: tbl:sphinx_config
 
-    ============================= =========================== ==================================================================
+    ============================= =========================== ===================================================================
     Name                          Default                     Description
-    ============================= =========================== ==================================================================
+    ============================= =========================== ===================================================================
     ipysphinx_export_config       "sphinx_ipypublish_all.ext" ipypublish configuration file to use for conversion to .rst
     ipysphinx_folder_suffix       "_nbfiles"                  <fname><suffix> for dumping internal images, etc
     ipysphinx_overwrite_existing  False                       raise error if nb_name.rst already exists
@@ -121,8 +121,9 @@ setup by adding to the conf.py:
     ipysphinx_input_prompt        "[{count}]:"                format of input prompts
     ipysphinx_output_prompt       "[{count}]:"                format of output prompts
     ipysphinx_code_toggle         False                       add a button at the right side of input cells, to toggle show/hide
+    ipysphinx_code_hide           False                       for input cells with a toggle, whether to initialise them as hidden
     ipysphinx_preconverters       {}                          a mapping of additional file extensions to preconversion functions
-    ============================= =========================== ==================================================================
+    ============================= =========================== ===================================================================
 
 Examples
 --------
@@ -145,6 +146,7 @@ Basic input
     :name: ref_label
 
     print("hallo")
+
 
 Basic output
 ~~~~~~~~~~~~
@@ -181,6 +183,7 @@ Toggle input
 .. nbinput:: python
     :add-toggle:
     :execution-count: 3
+
     j = 0
     for i in range(3):
         print(i)
