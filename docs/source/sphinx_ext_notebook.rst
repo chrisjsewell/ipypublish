@@ -127,6 +127,9 @@ setup by adding to the conf.py:
 Examples
 --------
 
+Basic input
+~~~~~~~~~~~
+
 .. code-block:: rst
 
     .. nbinput:: python
@@ -143,6 +146,9 @@ Examples
 
     print("hallo")
 
+Basic output
+~~~~~~~~~~~~
+
 .. code-block:: rst
 
     .. nboutput::
@@ -155,6 +161,35 @@ Examples
 
     hallo
 
+.. _sphinx_ext_notebook_toggle_in:
+
+Toggle input
+~~~~~~~~~~~~
+
+.. code-block:: rst
+
+    .. nbinput:: python
+        :add-toggle:
+        :execution-count: 3
+
+        j = 0
+        for i in range(3):
+            print(i)
+            j += i
+        print(j)
+
+.. nbinput:: python
+    :add-toggle:
+    :execution-count: 3
+    j = 0
+    for i in range(3):
+        print(i)
+        j += i
+    print(j)
+
+Information and Warnings
+~~~~~~~~~~~~~~~~~~~~~~~~
+
 .. code-block:: rst
 
     .. nbinfo:: Some information
@@ -166,23 +201,3 @@ Examples
     .. nbwarning:: This is a warning
 
 .. nbwarning:: This is a warning
-
-.. code-block:: rst
-
-    .. nbinput:: python
-        :add-toggle:
-
-        j = 0
-        for i in range(3):
-            print(i)
-            j += i
-        print(j)
-
-.. nbinput:: python
-    :add-toggle:
-
-    j = 0
-    for i in range(3):
-        print(i)
-        j += i
-    print(j)
