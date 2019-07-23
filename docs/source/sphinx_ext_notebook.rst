@@ -110,21 +110,26 @@ setup by adding to the conf.py:
 .. table:: Configuration values to use in conf.py
     :name: tbl:sphinx_config
 
-    ============================= =========================== ==================================================================
+    ============================= =========================== ===================================================================
     Name                          Default                     Description
-    ============================= =========================== ==================================================================
+    ============================= =========================== ===================================================================
     ipysphinx_export_config       "sphinx_ipypublish_all.ext" ipypublish configuration file to use for conversion to .rst
     ipysphinx_folder_suffix       "_nbfiles"                  <fname><suffix> for dumping internal images, etc
     ipysphinx_overwrite_existing  False                       raise error if nb_name.rst already exists
     ipysphinx_config_folders      ()                          additional folders containing ipypublish configuration files
     ipysphinx_show_prompts        False                       show cell prompts
-    ipysphinx_input_prompt        "[{count}]:"                 format of input prompts
-    ipysphinx_output_prompt       "[{count}]:"                 format of output prompts
+    ipysphinx_input_prompt        "[{count}]:"                format of input prompts
+    ipysphinx_output_prompt       "[{count}]:"                format of output prompts
+    ipysphinx_code_toggle         False                       add a button at the right side of input cells, to toggle show/hide
+    ipysphinx_code_hide           False                       for input cells with a toggle, whether to initialise them as hidden
     ipysphinx_preconverters       {}                          a mapping of additional file extensions to preconversion functions
-    ============================= =========================== ==================================================================
+    ============================= =========================== ===================================================================
 
 Examples
 --------
+
+Basic input
+~~~~~~~~~~~
 
 .. code-block:: rst
 
@@ -142,6 +147,10 @@ Examples
 
     print("hallo")
 
+
+Basic output
+~~~~~~~~~~~~
+
 .. code-block:: rst
 
     .. nboutput::
@@ -154,6 +163,36 @@ Examples
 
     hallo
 
+.. _sphinx_ext_notebook_toggle_in:
+
+Toggle input
+~~~~~~~~~~~~
+
+.. code-block:: rst
+
+    .. nbinput:: python
+        :add-toggle:
+        :execution-count: 3
+
+        j = 0
+        for i in range(3):
+            print(i)
+            j += i
+        print(j)
+
+.. nbinput:: python
+    :add-toggle:
+    :execution-count: 3
+
+    j = 0
+    for i in range(3):
+        print(i)
+        j += i
+    print(j)
+
+Information and Warnings
+~~~~~~~~~~~~~~~~~~~~~~~~
+
 .. code-block:: rst
 
     .. nbinfo:: Some information
@@ -165,4 +204,3 @@ Examples
     .. nbwarning:: This is a warning
 
 .. nbwarning:: This is a warning
-

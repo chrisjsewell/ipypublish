@@ -13,6 +13,12 @@ Releases
 Version 0.10
 ------------
 
+v0.10.6
+~~~~~~~
+
+Added sphinx option for toggling code cells;
+see :ref:`sphinx_ext_notebook_toggle_in` example.
+
 v0.10.5
 ~~~~~~~
 
