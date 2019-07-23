@@ -202,21 +202,47 @@ div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
 
-.toggle-nbinput {
+div.toggle-nbinput {
+    cursor: pointer;
     min-width: 2ex;
     padding-top: 0.4em;
     padding-left: 0.1em;
     text-align: right;
     flex: 0;
-    margin-left:auto;
-    margin-right:0;
+    margin-left: auto;
+    margin-right: 0;
 }
-.toggle-nbinput p {
+div.toggle-nbinput p {
     overflow: hidden;
 }
-.toggle-nbinput:after {
+div.toggle-nbinput:after {
     content: " ▼";
 }
-.toggle-nbinput.open:after {
+div.toggle-nbinput.open:after {
+    content: " ▲";
+}
+
+div.nbinput-toggle-all {
+    display: inline-block;
+    cursor: pointer;
+    min-width: 7ex;
+    padding-left: 0.4em;
+    padding-right: 0.4em;
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
+    margin-bottom: 2ex;
+    border: 1px solid #000;
+    border-radius: 15px;
+}
+div.toggle-nbinput p {
+    overflow: hidden;
+}
+div.nbinput-toggle-all:hover{
+    background: rgb(158, 210, 230);
+}
+div.nbinput-toggle-all :after {
+    content: " ▼";
+}
+div.nbinput-toggle-all.open :after {
     content: " ▲";
 }

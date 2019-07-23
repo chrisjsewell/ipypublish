@@ -120,8 +120,7 @@ setup by adding to the conf.py:
     ipysphinx_show_prompts        False                       show cell prompts
     ipysphinx_input_prompt        "[{count}]:"                format of input prompts
     ipysphinx_output_prompt       "[{count}]:"                format of output prompts
-    ipysphinx_code_toggle         False                       add a button at the right side of input cells, to toggle show/hide
-    ipysphinx_code_hide           False                       for input cells with a toggle, whether to initialise them as hidden
+    ipysphinx_input_toggle        False                       add a button at the right side of input cells, to toggle show/hide
     ipysphinx_preconverters       {}                          a mapping of additional file extensions to preconversion functions
     ============================= =========================== ===================================================================
 

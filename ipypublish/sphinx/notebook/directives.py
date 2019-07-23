@@ -37,6 +37,25 @@ class NbInfo(NbAdmonition):
     _class = 'note'
 
 
+class NBInputToggle(rst.Directive):
+    """ a toggle button """
+
+    required_arguments = 0
+    optional_arguments = 1  # button text
+    option_spec = {}
+    has_content = False
+
+    def run(self):
+        """This is called by the reST parser."""
+        node = nodes.container()
+        node['classes'].append('nbinput-toggle-all')
+        text = self.arguments[0] if self.arguments and self.arguments[0] else 'Toggle Input Cells'
+        paragraph = nodes.paragraph(text=text)
+        node += paragraph
+
+        return [node]
+
+
 class NbInput(rst.Directive):
     """A notebook input cell with prompt and code area."""
 
@@ -160,7 +179,7 @@ def _create_nbcell_nodes(directive):
         else:
             outer_node += codearea_node
 
-    if isinstance(directive, NbInput) and (config.ipysphinx_code_toggle or 'add-toggle' in directive.options):
+    if isinstance(directive, NbInput) and (config.ipysphinx_input_toggle or 'add-toggle' in directive.options):
         outer_node += sphinx.addnodes.only(
             '', docutils.nodes.container(classes=['toggle-nbinput', 'empty']), expr='html')
 
