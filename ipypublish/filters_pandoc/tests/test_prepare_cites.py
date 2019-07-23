@@ -2,6 +2,7 @@ import sys
 import pytest
 from ipypublish.filters_pandoc.utils import apply_filter
 from ipypublish.filters_pandoc.prepare_cites import main
+from ipypublish.tests.utils import HTML2JSONParser
 
 
 def test_para_rst():
@@ -25,9 +26,7 @@ def test_para_rst():
     ])
 
 
-@pytest.mark.skipif(sys.version_info < (3, 6),
-                    reason="html attributes not in same order")
-def test_para_html():
+def test_para_html(data_regression):
     """
     """
     in_string = [
@@ -35,24 +34,26 @@ def test_para_html():
     ]
     out_string = apply_filter(in_string, main, "html")
 
-    assert out_string.strip() == "\n".join([
-        '<p>'
-        '<span class="attribute-Cite class" '
-        'data-latex="cref" data-rst="numref" data-a="1">'
-        '<span class="citation" data-cites="label">@label</span>'
-        '</span> '
-        'xyz '
-        '<em><span class="citation" data-cites="label2">@label2</span></em> '
-        '<span class="attribute-Cite b">'
-        '<span class="citation" data-cites="label3">@label3</span>'
-        '</span>'
-        '</p>',
-    ])
+    parser = HTML2JSONParser()
+    parser.feed(out_string)
+    data_regression.check(parser.parsed)
+
+    # assert out_string.strip() == "\n".join([
+    #     '<p>'
+    #     '<span class="attribute-Cite class" '
+    #     'data-latex="cref" data-rst="numref" data-a="1">'
+    #     '<span class="citation" data-cites="label">@label</span>'
+    #     '</span> '
+    #     'xyz '
+    #     '<em><span class="citation" data-cites="label2">@label2</span></em> '
+    #     '<span class="attribute-Cite b">'
+    #     '<span class="citation" data-cites="label3">@label3</span>'
+    #     '</span>'
+    #     '</p>',
+    # ])
 
 
-@pytest.mark.skipif(sys.version_info < (3, 6),
-                    reason="html attributes not in same order")
-def test_table_html():
+def test_table_html(data_regression):
     """
     """
     in_string = [
@@ -64,45 +65,51 @@ def test_table_html():
     ]
     out_string = apply_filter(in_string, main, "html")
 
-    assert out_string.strip() == "\n".join([
-         '<table>',
-         '<caption>Caption '
-         '<span class="attribute-Cite" data-latex="cref" data-rst="numref">'
-         '<span class="citation" data-cites="label">@label</span>'
-         '</span></caption>',
-         '<thead>',
-         '<tr class="header">',
-         '<th>a</th>',
-         '<th>b</th>',
-         '</tr>',
-         '</thead>',
-         '<tbody>',
-         '<tr class="odd">',
-         '<td>x</td>',
-         '<td>y</td>',
-         '</tr>',
-         '</tbody>',
-         '</table>'
-    ])
+    parser = HTML2JSONParser()
+    parser.feed(out_string)
+    data_regression.check(parser.parsed)
+
+    # assert out_string.strip() == "\n".join([
+    #      '<table>',
+    #      '<caption>Caption '
+    #      '<span class="attribute-Cite" data-latex="cref" data-rst="numref">'
+    #      '<span class="citation" data-cites="label">@label</span>'
+    #      '</span></caption>',
+    #      '<thead>',
+    #      '<tr class="header">',
+    #      '<th>a</th>',
+    #      '<th>b</th>',
+    #      '</tr>',
+    #      '</thead>',
+    #      '<tbody>',
+    #      '<tr class="odd">',
+    #      '<td>x</td>',
+    #      '<td>y</td>',
+    #      '</tr>',
+    #      '</tbody>',
+    #      '</table>'
+    # ])
 
 
-@pytest.mark.skipif(sys.version_info < (3, 6),
-                    reason="html attributes not in same order")
-def test_image_html():
+def test_image_html(data_regression):
 
     in_string = [
         "![a title with a @label1 +@label2 {.nclass x=3}](path/to/image.png)"
     ]
     out_string = apply_filter(in_string, main, "html")
 
-    assert out_string.strip() == "\n".join([
-        '<figure>',
-        '<img src="path/to/image.png" alt="a title with a @label1 @label2" />'
-        '<figcaption>a title with a '
-        '<span class="citation" data-cites="label1">@label1</span> '
-        '<span class="attribute-Cite nclass" '
-        'data-latex="cref" data-rst="numref" data-x="3">'
-        '<span class="citation" data-cites="label2">@label2</span>'
-        '</span></figcaption>',
-        '</figure>'
-        ])
+    parser = HTML2JSONParser()
+    parser.feed(out_string)
+    data_regression.check(parser.parsed)
+
+    # assert out_string.strip() == "\n".join([
+    #     '<figure>',
+    #     '<img src="path/to/image.png" alt="a title with a @label1 @label2" />'
+    #     '<figcaption>a title with a '
+    #     '<span class="citation" data-cites="label1">@label1</span> '
+    #     '<span class="attribute-Cite nclass" '
+    #     'data-latex="cref" data-rst="numref" data-x="3">'
+    #     '<span class="citation" data-cites="label2">@label2</span>'
+    #     '</span></figcaption>',
+    #     '</figure>'
+    #     ])

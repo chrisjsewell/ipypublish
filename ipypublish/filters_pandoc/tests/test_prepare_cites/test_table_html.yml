@@ -1,0 +1,47 @@
+4_children:
+- 1_tag: table
+  4_children:
+  - 1_tag: caption
+    2_data:
+    - Caption
+    4_children:
+    - 1_tag: span
+      3_attributes:
+        class:
+        - attribute-Cite
+        data-latex: cref
+        data-rst: numref
+      4_children:
+      - 1_tag: span
+        2_data:
+        - '@label'
+        3_attributes:
+          class:
+          - citation
+          data-cites: label
+  - 1_tag: thead
+    4_children:
+    - 1_tag: tr
+      3_attributes:
+        class:
+        - header
+      4_children:
+      - 1_tag: th
+        2_data:
+        - a
+      - 1_tag: th
+        2_data:
+        - b
+  - 1_tag: tbody
+    4_children:
+    - 1_tag: tr
+      3_attributes:
+        class:
+        - odd
+      4_children:
+      - 1_tag: td
+        2_data:
+        - x
+      - 1_tag: td
+        2_data:
+        - y
