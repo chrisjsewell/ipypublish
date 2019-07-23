@@ -36,6 +36,15 @@
                 - docutils
                 - nbinput-toggle-all
             - 1_tag: div
+              2_data:
+              - ''
+              - NbOutput Toggle All
+              3_attributes:
+                class:
+                - container
+                - docutils
+                - nboutput-toggle-all
+            - 1_tag: div
               3_attributes:
                 class:
                 - container
@@ -273,6 +282,13 @@
                       - 1_tag: td
                         2_data:
                         - '0.116'
+              - 1_tag: div
+                3_attributes:
+                  class:
+                  - container
+                  - docutils
+                  - empty
+                  - toggle-nboutput
             - 1_tag: div
               3_attributes:
                 class:
@@ -307,3 +323,10 @@
                     - This is some printed text,
                     - with a nicely formatted output.
                     - ''
+              - 1_tag: div
+                3_attributes:
+                  class:
+                  - container
+                  - docutils
+                  - empty
+                  - toggle-nboutput

@@ -1,5 +1,7 @@
 .. nbinput-toggle-all:: NbInput Toggle All
 
+.. nboutput-toggle-all:: NbOutput Toggle All
+
 .. nbinput:: ipython3
     :execution-count: 3
     :no-output:

@@ -38,7 +38,9 @@ class NbInfo(NbAdmonition):
 
 
 class NBInputToggle(rst.Directive):
-    """ a toggle button """
+    """ a toggle button for nbinput cells """
+    _class = 'nbinput-toggle-all'
+    _default_text = 'Toggle Input Cells'
 
     required_arguments = 0
     optional_arguments = 0
@@ -48,15 +50,21 @@ class NBInputToggle(rst.Directive):
     def run(self):
         """This is called by the reST parser."""
         node = nodes.container()
-        node['classes'].append('nbinput-toggle-all')
+        node['classes'].append(self._class)
         if self.content:
             self.state.nested_parse(self.content, self.content_offset, node)
         else:
-            text = self.arguments[0] if self.arguments and self.arguments[0] else 'Toggle Input Cells'
+            text = self.arguments[0] if self.arguments and self.arguments[0] else self._default_text
             paragraph = nodes.paragraph(text=text)
             node += paragraph
 
         return [node]
+
+
+class NBOutputToggle(NBInputToggle):
+    """ a toggle button for nboutput cells """
+    _class = 'nboutput-toggle-all'
+    _default_text = 'Toggle Output Cells'
 
 
 class NbInput(rst.Directive):
@@ -94,6 +102,7 @@ class NbOutput(rst.Directive):
         'empty-lines-before': rst.directives.nonnegative_int,
         'empty-lines-after': rst.directives.nonnegative_int,
         'class': rst.directives.unchanged,
+        'add-toggle': rst.directives.flag
     }
     has_content = True
 
@@ -183,8 +192,14 @@ def _create_nbcell_nodes(directive):
             outer_node += codearea_node
 
     if isinstance(directive, NbInput) and (config.ipysphinx_input_toggle or 'add-toggle' in directive.options):
+        directive.state.document['ipysphinx_include_js'] = True
         outer_node += sphinx.addnodes.only(
             '', docutils.nodes.container(classes=['toggle-nbinput', 'empty']), expr='html')
+
+    if isinstance(directive, NbOutput) and (config.ipysphinx_output_toggle or 'add-toggle' in directive.options):
+        directive.state.document['ipysphinx_include_js'] = True
+        outer_node += sphinx.addnodes.only(
+            '', docutils.nodes.container(classes=['toggle-nboutput', 'empty']), expr='html')
 
     return [outer_node]
 

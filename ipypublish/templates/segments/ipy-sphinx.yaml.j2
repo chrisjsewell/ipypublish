@@ -16,11 +16,13 @@
         {% set x = resources.__setitem__("ipub", nb.metadata.ipub) %}
 
         {% if "sphinx" in nb.metadata.ipub %}
-        {% set orphan = nb.metadata.ipub.sphinx.orphan %}
         {% set output_bib = not nb.metadata.ipub.sphinx.no_bib %}
         {% set output_gloss = not nb.metadata.ipub.sphinx.no_glossary %}
+        {% set orphan = nb.metadata.ipub.sphinx.orphan %}
         {% set toggle_input = nb.metadata.ipub.sphinx.toggle_input %}
         {% set toggle_input_all = nb.metadata.ipub.sphinx.toggle_input_all %}
+        {% set toggle_output = nb.metadata.ipub.sphinx.toggle_output %}
+        {% set toggle_output_all = nb.metadata.ipub.sphinx.toggle_output_all %}
 
         {% if nb.metadata.ipub.sphinx.bib_title %}
         {% set bib_title = nb.metadata.ipub.sphinx.bib_title %}
@@ -36,11 +38,13 @@
 
         {% else %}
 
-        {% set orphan = False %}
         {% set output_bib = True %}
         {% set output_gloss = True %}
+        {% set orphan = False %}
         {% set toggle_input = False %}
         {% set toggle_input_all = False %}
+        {% set toggle_output = False %}
+        {% set toggle_output_all = False %}
         {% set bib_title = "Bibliography" %}
         {% set glossary_title = "Glossary" %}
 
@@ -50,9 +54,15 @@
     "header": |
         {% if orphan %}
         {{':orphan:'}}
+
         {% endif %}
         {% if toggle_input_all %}
         {{'.. nbinput-toggle-all::'}}
+
+        {% endif %}
+        {% if toggle_input_all %}
+        {{'.. nboutput-toggle-all::'}}
+
         {% endif %}
 
     "notebook_input_all": |
@@ -284,6 +294,9 @@
         {#- add output directive options #}
         {%- if output.output_type == 'execute_result' and output.execution_count %}
             :execution-count: {{ output.execution_count }}
+        {%- endif %}
+        {%- if toggle_output %}
+            :add-toggle:
         {%- endif %}
         {%- if output != cell.outputs[-1] %}
             :more-to-come:

@@ -270,6 +270,16 @@
                             "description": "add a toggle button at the top of the top of the document (using `:toggle-input-all:`), which will show/hide all nbinput cell's content",
                             "type": "boolean",
                             "default": false
+                        },
+                        "toggle_output": {
+                            "description": "add toggle buttons to the right of all nboutput cells, to hide/show their content",
+                            "type": "boolean",
+                            "default": false
+                        },
+                        "toggle_output_all": {
+                            "description": "add a toggle button at the top of the top of the document (using `:toggle-output-all:`), which will show/hide all nboutput cell's content",
+                            "type": "boolean",
+                            "default": false
                         }
                     }
                 }

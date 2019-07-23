@@ -7,7 +7,7 @@ from ipypublish import __version__
 from ipypublish.sphinx.utils import import_sphinx
 
 from ipypublish.sphinx.notebook.directives import (NbInfo, NbInput, NbOutput, NbWarning, AdmonitionNode, NBInputToggle,
-                                                   CodeAreaNode, FancyOutputNode)
+                                                   NBOutputToggle, CodeAreaNode, FancyOutputNode)
 from ipypublish.sphinx.notebook.transforms import (CreateDomainObjectLabels, CreateSectionLabels, RewriteLocalLinks)
 from ipypublish.sphinx.notebook.parser import NBParser
 
@@ -76,8 +76,9 @@ def setup(app):
     app.add_config_value('ipysphinx_input_prompt', '[{count}]:', rebuild='env')
     app.add_config_value('ipysphinx_output_prompt', '[{count}]:', rebuild='env')
 
-    # config for input cell toggling
+    # config for cell toggling
     app.add_config_value('ipysphinx_input_toggle', False, rebuild='env')
+    app.add_config_value('ipysphinx_output_toggle', False, rebuild='env')
 
     # config for html css
     app.add_config_value('ipysphinx_responsive_width', '540px', rebuild='html')
@@ -104,6 +105,7 @@ def setup(app):
     app.add_directive('nbinfo', NbInfo)
     app.add_directive('nbwarning', NbWarning)
     app.add_directive('nbinput-toggle-all', NBInputToggle)
+    app.add_directive('nboutput-toggle-all', NBOutputToggle)
 
     # add docutils nodes and visit/depart wraps
     app.add_node(
@@ -289,6 +291,8 @@ def copy_javascript(name):
 
 def html_add_javascript(app, pagename, templatename, context, doctree):
     """Add JavaScript string to HTML pages that contain code cells."""
-    if doctree and doctree.get('ipysphinx_include_css'):
+    if doctree and doctree.get('ipysphinx_include_js'):
         code = copy_javascript('toggle_code')
+        context['body'] = '\n<script>' + code + '</script>\n' + context['body']
+        code = copy_javascript('toggle_output')
         context['body'] = '\n<script>' + code + '</script>\n' + context['body']
