@@ -41,17 +41,20 @@ class NBInputToggle(rst.Directive):
     """ a toggle button """
 
     required_arguments = 0
-    optional_arguments = 1  # button text
+    optional_arguments = 0
     option_spec = {}
-    has_content = False
+    has_content = True  # button text
 
     def run(self):
         """This is called by the reST parser."""
         node = nodes.container()
         node['classes'].append('nbinput-toggle-all')
-        text = self.arguments[0] if self.arguments and self.arguments[0] else 'Toggle Input Cells'
-        paragraph = nodes.paragraph(text=text)
-        node += paragraph
+        if self.content:
+            self.state.nested_parse(self.content, self.content_offset, node)
+        else:
+            text = self.arguments[0] if self.arguments and self.arguments[0] else 'Toggle Input Cells'
+            paragraph = nodes.paragraph(text=text)
+            node += paragraph
 
         return [node]
 

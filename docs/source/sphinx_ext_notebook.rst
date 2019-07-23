@@ -169,6 +169,8 @@ Toggle input
 
 .. code-block:: rst
 
+    .. nbinput-toggle-all:: NbInput Toggle All
+
     .. nbinput:: python
         :add-toggle:
         :execution-count: 3
@@ -178,6 +180,8 @@ Toggle input
             print(i)
             j += i
         print(j)
+
+.. nbinput-toggle-all:: NbInput Toggle All
 
 .. nbinput:: python
     :add-toggle:
