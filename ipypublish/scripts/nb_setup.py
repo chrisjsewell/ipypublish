@@ -61,8 +61,7 @@ MPL_OPTIONS = (
     ('font.size', 16),
     ('text.usetex', True),
     # ('text.latex.unicode', False),
-    ('text.latex.preamble', (
-     '\\usepackage{subdepth}', '\\usepackage{type1cm}')),
+    ('text.latex.preamble', ('\\usepackage{subdepth}', '\\usepackage{type1cm}')),
     ('text.latex.preview', False),
     ('text.hinting_factor', 8),
     ('text.antialiased', True),
@@ -156,7 +155,6 @@ MPL_OPTIONS = (
     ('figure.constrained_layout.wspace', 0.02),
     ('figure.constrained_layout.h_pad', 0.04167),
     ('figure.constrained_layout.w_pad', 0.04167),
-    ('savefig.frameon', True),
     ('savefig.jpeg_quality', 95),
     ('savefig.pad_inches', 0.1),
     ('savefig.transparent', False),
@@ -172,16 +170,10 @@ MPL_OPTIONS = (
     ('animation.html_args', ()),
     ('animation.ffmpeg_args', ()),
     ('animation.avconv_args', ()),
-    ('animation.convert_args', ())
-)
+    ('animation.convert_args', ()))
 
 
-def setup_matplotlib(
-    output=('pdf', 'svg'),
-    rcparams=None,
-    usetex=True,
-    print_errors=False
-):
+def setup_matplotlib(output=('pdf', 'svg'), rcparams=None, usetex=True, print_errors=False):
     """ import and setup matplotlib in the jupyter notebook
 
     Parameters
@@ -212,7 +204,7 @@ def setup_matplotlib(
     #     output = [o for o in output if o != "pdf"]
 
     set_matplotlib_formats(*output)
-    ipython.magic("matplotlib inline")
+    ipython.magic('matplotlib inline')
     if 'svg' in output:
         ipython.magic("config InlineBackend.figure_format = 'svg'")
 
@@ -236,11 +228,11 @@ def setup_matplotlib(
 
     if print_errors:
         if keyerrors:
-            print("KeyErrors:")
+            print('KeyErrors:')
             for key in keyerrors:
-                print("- key")
+                print('- key')
         if valerrors:
-            print("ValueError:")
+            print('ValueError:')
             print(json.dumps(valerrors, indent=2))
 
     return mpl.pyplot
@@ -272,7 +264,7 @@ def get_pimage():
     try:
         from PIL import Image
     except ImportError:
-        raise ImportError("to use this function; pip install pillow")
+        raise ImportError('to use this function; pip install pillow')
     return Image
 
 
@@ -287,11 +279,10 @@ def create_test_image(size=(50, 50)):
 
 def images_read(paths):
     """read a list of image paths to a list of PIL.IMAGE instances """
-    return [get_pimage().open(i).convert("RGBA") for i in paths]
+    return [get_pimage().open(i).convert('RGBA') for i in paths]
 
 
-def images_hconcat(images, width=700, height=700,
-                   gap=0, aspaths=True):
+def images_hconcat(images, width=700, height=700, gap=0, aspaths=True):
     """concatenate multiple images horizontally
 
     Parameters
@@ -359,8 +350,7 @@ def images_hconcat(images, width=700, height=700,
     return new_im
 
 
-def images_vconcat(images, width=700, height=700,
-                   gap=0, aspaths=True):
+def images_vconcat(images, width=700, height=700, gap=0, aspaths=True):
     """concatenate multiple images vertically
 
     Parameters
@@ -429,8 +419,7 @@ def images_vconcat(images, width=700, height=700,
     return new_im
 
 
-def images_gridconcat(pathslist, width=700, height=700,
-                      aspaths=True, hgap=0, vgap=0):
+def images_gridconcat(pathslist, width=700, height=700, aspaths=True, hgap=0, vgap=0):
     """concatenate multiple images in a grid
 
     Parameters
@@ -453,16 +442,15 @@ def images_gridconcat(pathslist, width=700, height=700,
 
     """
     pimage = get_pimage()
-    himages = [images_hconcat(paths, gap=hgap, aspaths=aspaths)
-               for paths in pathslist]
+    himages = [images_hconcat(paths, gap=hgap, aspaths=aspaths) for paths in pathslist]
     new_im = images_vconcat(himages, gap=vgap, aspaths=False)
     new_im.thumbnail((width, height), pimage.ANTIALIAS)
     return new_im
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     import matplotlib as mpl
-    print(json.dumps({
-        k: v[0]
-        for k, v in mpl.rcsetup.defaultParams.items()
-        if isinstance(v[0], (int, float, list, tuple, set))}, indent=2))
+    print(
+        json.dumps(
+            {k: v[0] for k, v in mpl.rcsetup.defaultParams.items() if isinstance(v[0], (int, float, list, tuple, set))},
+            indent=2))
