@@ -5,17 +5,21 @@ import sys
 from ipypublish.frontend.shared import parse_options
 from ipypublish.convert.main import IpyPubMain
 
-logger = logging.getLogger("nbpublish")
+logger = logging.getLogger('nbpublish')
 
 
 def nbpublish(ipynb_path,
               outformat='latex_ipypublish_main',
-              outpath=None, dump_files=True,
-              ignore_prefix='_', clear_files=False,
+              outpath=None,
+              dump_files=True,
+              ignore_prefix='_',
+              clear_files=False,
               create_pdf=False,
-              pdf_in_temp=False, pdf_debug=False,
+              pdf_in_temp=False,
+              pdf_debug=False,
               launch_browser=False,
-              log_level='INFO', dry_run=False,
+              log_level='INFO',
+              dry_run=False,
               print_traceback=False,
               export_paths=()):
     """ convert one or more Jupyter notebooks to a published format
@@ -49,32 +53,40 @@ def nbpublish(ipynb_path,
 
     """
     # run
-    config = {"IpyPubMain": {
-        "conversion": outformat,
-        "plugin_folder_paths": export_paths,
-        "outpath": outpath,
-        "ignore_prefix": ignore_prefix,
-        "log_to_stdout": True,
-        "log_level_stdout": log_level,
-        "log_to_file": True,
-        "log_level_file": log_level,
-        "default_pporder_kwargs": dict(
-            dry_run=dry_run,
-            clear_existing=clear_files,
-            dump_files=dump_files,
-            create_pdf=create_pdf,
-        ),
-        "default_ppconfig_kwargs": dict(
-            pdf_in_temp=pdf_in_temp,
-            pdf_debug=pdf_debug,
-            launch_browser=launch_browser
-        )
-    }}
+    config = {
+        'IpyPubMain': {
+            'conversion':
+            outformat,
+            'plugin_folder_paths':
+            export_paths,
+            'outpath':
+            outpath,
+            'ignore_prefix':
+            ignore_prefix,
+            'log_to_stdout':
+            True,
+            'log_level_stdout':
+            log_level,
+            'log_to_file':
+            True,
+            'log_level_file':
+            log_level,
+            'default_pporder_kwargs':
+            dict(
+                dry_run=dry_run,
+                clear_existing=clear_files,
+                dump_files=dump_files,
+                create_pdf=create_pdf,
+            ),
+            'default_ppconfig_kwargs':
+            dict(pdf_in_temp=pdf_in_temp, pdf_debug=pdf_debug, launch_browser=launch_browser)
+        }
+    }
     publish = IpyPubMain(config=config)
     try:
         publish(ipynb_path)
     except Exception as err:
-        logger.error("Run Failed: {}".format(err))
+        logger.error('Run Failed: {}'.format(err))
         if print_traceback:
             raise
         return 1
@@ -87,7 +99,7 @@ def run(sys_args=None):
     if sys_args is None:
         sys_args = sys.argv[1:]
 
-    filepath, options = parse_options(sys_args, "nbpublish")
+    filepath, options = parse_options(sys_args, 'nbpublish')
 
     outcode = nbpublish(filepath, **options)
 

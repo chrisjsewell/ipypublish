@@ -93,8 +93,8 @@ setup(
     include_package_data=True,
     entry_points={
         'console_scripts': [
-            'nbpublish = ipypublish.frontend.nbpublish:run',
-            'nbpresent = ipypublish.frontend.nbpresent:run',
+            'nbpublish = ipypublish.cmdline.nbpublish:run',
+            'nbpresent = ipypublish.cmdline.nbpresent:run',
             'ipubpandoc = ipypublish.filters_pandoc.main:pandoc_filters'
         ],
         'ipypublish.postprocessors': [
