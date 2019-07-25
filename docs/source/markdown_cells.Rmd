@@ -10,7 +10,7 @@ jupyter:
       author: Chris Sewell
       email: chrisj\_sewell@hotmail.com
       logo: _static/logo_example.png
-      title: Example of Converted Jupyter Notebook 
+      title: Example of Converted Jupyter Notebook
       subtitle: Formatting Markdown Cells
       tagline: Converted using IPyPublish ('latex\_ipypublish\_all.exec').
       supervisors:
@@ -20,7 +20,7 @@ jupyter:
       - Institution1
       - Institution2
     pandoc:
-      convert_raw: true 
+      convert_raw: true
       hide_raw: false
       at_notation: true
       use_numref: true
@@ -61,7 +61,7 @@ This filter extends the common markdown syntax to:
 - Correctly translate pieces of documentation written in other formats
   (such as using LaTeX commands like `\cite` or RST roles like `:cite:`)
 - Handle labelling and referencing of figures, tables and equations, and
-  add additional formatting options. 
+  add additional formatting options.
 
 `ipubpandoc` is detached from the rest of the
 notebook conversion process, and so can be used as a standalone process on any markdown content:
@@ -73,6 +73,8 @@ $ pandoc -f markdown -t html --filter ipubpandoc path/to/file.md
 .. seealso::
 
     [The PDF representation of this notebook](_static/markdown_cells.pdf)
+
+    :ref:`pandoc_doc_metadata`, for the notebook document level metadata options.
 
 .. _jupytext_rmarkdown:
 
@@ -309,7 +311,7 @@ Glossary Terms: %@gtkey2, &@akey2, &@symbol2
 
 .. note::
 
-    Citations in sphinx are provided by the excellent 
+    Citations in sphinx are provided by the excellent
     [sphinxcontrib-bibtex extension](https://sphinxcontrib-bibtex.readthedocs.io),
     and glossary referencing is provided by the equally good :ref:`sphinx_ext_gls`
 
@@ -384,10 +386,10 @@ data-latex="cref" data-rst="numref" data-a="1">
 <span class="citation" data-cites="label">
 @label
 </span></span>
-xyz 
+xyz
 <em><span class="citation" data-cites="label2">
 @label2
-</span></em> 
+</span></em>
 <span class="attribute-Cite b">
 <span class="citation" data-cites="label3">
 @label3
