@@ -54,9 +54,10 @@ Badges
 |Build Status| |Coverage Status| |PyPI| |Conda|
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :numbered:
-   :caption: Contents:
+   :caption: Using IPyPublish
+   :hidden:
 
    getting_started
    code_cells
@@ -64,23 +65,37 @@ Badges
    nb_conversion
    metadata_tags
    custom_export_config
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Sphinx Extensions
+   :hidden:
+
    sphinx_extensions
+   sphinx_ext_notebook
+   sphinx_ext_bibgloss
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Additional Information
+   :hidden:
+
+   releases
    examples
    applications
+   dev_guide
    additional_tools
    acknowledgements
    package_api
-   releases
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Included Files:
+   :maxdepth: 1
+   :caption: Validation Schemas
+   :hidden:
 
-   latex_ipypublish_all
-   export_schema
-   outline_schema
-   segment_example
    metadata_doc_schema
+   metadata_cell_schema
+   export_schema
 
 
 .. todo:: how to use with vs-code

@@ -81,6 +81,10 @@ or for sphinx<1.8:
     (including the ipypublish extensions), and
     call `sphinx-build <https://www.sphinx-doc.org/en/master/man/sphinx-build.html>`_.
 
+.. seealso::
+
+    :ref:`sphinx_doc_metadata`, for the notebook document level metadata options.
+
 Configuration
 -------------
 

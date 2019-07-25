@@ -1,0 +1,222 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema",
+    "description": "validation of the Jupyter Notebook cell/output level metadata for ipypublish",
+    "type": "object",
+    "properties": {
+        "ipub": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "ignore": {
+                    "description": "do not output this cell",
+                    "type": "boolean",
+                    "default": false
+                },
+                "slideonly": {
+                    "description": "only output this cell in slides",
+                    "type": "boolean",
+                    "default": false
+                },
+                "slide": {
+                    "type": [
+                        "string",
+                        "boolean"
+                    ],
+                    "enum": [
+                        "new",
+                        "notes"
+                    ]
+                },
+                "code": {
+                    "description": "output a code block",
+                    "type": [
+                        "boolean",
+                        "object"
+                    ],
+                    "properties": {
+                        "asfloat": {
+                            "description": "whether the code is wrapped in a codecell (float) environment or is inline",
+                            "type": "boolean",
+                            "default": false
+                        },
+                        "caption": {
+                            "description": "the caption of the code cell",
+                            "type": "string"
+                        },
+                        "label": {
+                            "description": "the label of the code cell, e.g. code:example_sym",
+                            "type": "string"
+                        },
+                        "widefigure": {
+                            "description": "whether to expand the figure to the page width (placement arguments will then be ignored)",
+                            "type": "boolean",
+                            "default": false
+                        },
+                        "placement": {
+                            "description": "the placement of the code cell, e.g. 'H'",
+                            "type": "string"
+                        },
+                        "format": {
+                            "description": "can contain any keywords related to the latex Listings package (such as syntax highlighting colors)",
+                            "type": "object"
+                        }
+                    }
+                },
+                "text": {
+                    "description": "output a text block",
+                    "type": [
+                        "boolean",
+                        "object"
+                    ],
+                    "properties": {
+                        "asfloat": {
+                            "description": "whether the text is wrapped in a textcell (float) environment or is inline",
+                            "type": "boolean",
+                            "default": false
+                        },
+                        "caption": {
+                            "description": "the caption of the text cell",
+                            "type": "string"
+                        },
+                        "label": {
+                            "description": "the label of the text cell, e.g. text:example_sym",
+                            "type": "string"
+                        },
+                        "widefigure": {
+                            "description": "whether to expand the text to the page width (placement arguments will then be ignored)",
+                            "type": "boolean",
+                            "default": false
+                        },
+                        "placement": {
+                            "description": "the placement of the text cell, e.g. 'H'",
+                            "type": "string"
+                        },
+                        "format": {
+                            "description": "can contain any keywords related to the latex Listings package (such as syntax highlighting colors)",
+                            "type": "object"
+                        },
+                        "use_ansi": {
+                            "description": "if true then, instead of stripping ansi colors in latex output, they will be converted to latex, wrapped in % characters and the listings option escapechar=% set",
+                            "type": "boolean",
+                            "default": false
+                        }
+                    }
+                },
+                "figure": {
+                    "description": "output a figure",
+                    "type": [
+                        "boolean",
+                        "object"
+                    ],
+                    "properties": {
+                        "caption": {
+                            "description": "the caption of the figure",
+                            "type": "string"
+                        },
+                        "label": {
+                            "description": "the label of the figure, e.g. fig:example_sym",
+                            "type": "string"
+                        },
+                        "widefigure": {
+                            "description": "whether to expand the figure to the page width (placement arguments will then be ignored)",
+                            "type": "boolean",
+                            "default": false
+                        },
+                        "placement": {
+                            "description": "the placement of the figure, e.g. 'H'",
+                            "type": "string"
+                        },
+                        "width": {
+                            "description": "the width of the figure, as a fraction of the page",
+                            "type": "number",
+                            "minimum": 0,
+                            "exclusiveMinimum": true
+                        },
+                        "height": {
+                            "description": "the height of the figure, as a fraction of the page",
+                            "type": "number",
+                            "minimum": 0,
+                            "exclusiveMinimum": true
+                        }
+                    }
+                },
+                "table": {
+                    "description": "output a table",
+                    "type": [
+                        "boolean",
+                        "object"
+                    ],
+                    "properties": {
+                        "caption": {
+                            "description": "the caption of the table",
+                            "type": "string"
+                        },
+                        "label": {
+                            "description": "the label of the table, e.g. fig:example_sym",
+                            "type": "string"
+                        },
+                        "placement": {
+                            "description": "the placement of the table, e.g. 'H'",
+                            "type": "string"
+                        },
+                        "alternate": {
+                            "description": "using alternating colors for the table rows (see https://tex.stackexchange.com/a/5365/107738)",
+                            "type": "string"
+                        }
+                    }
+                },
+                "equations": {
+                    "description": "output an equation",
+                    "type": [
+                        "boolean",
+                        "object"
+                    ],
+                    "properties": {
+                        "label": {
+                            "description": "the label of the figure, e.g. eqn:example_sym",
+                            "type": "string"
+                        },
+                        "environment": {
+                            "description": "an environment from amsmath: https://www.sharelatex.com/learn/Aligning_equations_with_amsmath or breqn: https://ctan.org/pkg/breqn",
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        }
+                    }
+                },
+                "embed_html": {
+                    "description": "embed a html file (html only), use either filepath or url",
+                    "type": "object",
+                    "properties": {
+                        "filepath": {
+                            "type": "string"
+                        },
+                        "url": {
+                            "type": "string"
+                        },
+                        "other_files": {
+                            "description": " files required by the html file (e.g. javascript libraries). These files will be copied to the the same folder as the html",
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "width": {
+                            "description": "the width of the embedded object, as a fraction of the viewspace",
+                            "type": "number",
+                            "minimum": 0,
+                            "exclusiveMinimum": true
+                        },
+                        "height": {
+                            "description": "the height of the embedded object, as a fraction of the viewspace",
+                            "type": "number",
+                            "minimum": 0,
+                            "exclusiveMinimum": true
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
