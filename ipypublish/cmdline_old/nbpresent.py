@@ -4,7 +4,7 @@ import os
 import sys
 from mimetypes import guess_type
 
-from ipypublish.frontend.shared import parse_options
+from ipypublish.cmdline_old.shared import parse_options
 from ipypublish.convert.main import IpyPubMain
 from ipypublish.postprocessors.reveal_serve import RevealServer
 

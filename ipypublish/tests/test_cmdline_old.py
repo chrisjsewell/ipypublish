@@ -1,8 +1,8 @@
 import os
 import pytest
 from ipypublish.utils import pathlib  # noqa: F401
-from ipypublish.cmdline import nbpresent
-from ipypublish.cmdline import nbpublish
+from ipypublish.cmdline_old import nbpresent
+from ipypublish.cmdline_old import nbpublish
 
 
 @pytest.mark.ipynb('basic_nb')

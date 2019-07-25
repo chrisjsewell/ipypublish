@@ -2,7 +2,7 @@
 import logging
 import sys
 
-from ipypublish.frontend.shared import parse_options
+from ipypublish.cmdline_old.shared import parse_options
 from ipypublish.convert.main import IpyPubMain
 
 logger = logging.getLogger('nbpublish')
