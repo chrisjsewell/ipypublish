@@ -30,7 +30,7 @@ def ipub_default_traits():
 @options.FILTER_REGEX()
 @options.CONFIG_PATHS()
 @options.VERBOSE()
-def ipub_list_configs(regex, config_paths, verbose):
+def ipub_list_configs(regex, config_paths, verbosity):
     """ List available export configurations. """
-    from ipypublish.convert.config_manager import get_plugin_str
-    click.echo(get_plugin_str(plugin_folder_paths=config_paths, regex=regex, verbose=verbose))
+    from ipypublish.convert.config_manager import get_exports_info_str
+    click.echo(get_exports_info_str(plugin_folder_paths=config_paths, regex=regex, verbosity=verbosity))

@@ -210,4 +210,4 @@ PDF_DEBUG = OverridableOption(
     help=('Run pdf conversion in a temporary folder'
           ' and only copy back the .pdf file.'))
 
-VERBOSE = OverridableOption('-v', '--verbose', is_flag=True, default=False, help='Be more verbose in printing output.')
+VERBOSE = OverridableOption('-v', '--verbosity', count=True, help='Verbosity level of output (-v=1, -vv=2, ...).')

@@ -119,34 +119,35 @@ def iter_all_export_infos(config_folder_paths=(), regex='*.json', get_mime=False
         yield info
 
 
-def get_plugin_str(plugin_folder_paths=(), regex=None, verbose=False):
+def get_exports_info_str(plugin_folder_paths=(), regex=None, verbosity=0):
     """return string listing all available export configurations """
     outstrs = []
     # outstrs.append('Available Export Configurations')
     # outstrs.append('-------------------------------')
     configs = [
-        e for e in iter_all_export_infos(plugin_folder_paths, get_mime=verbose)
+        e for e in iter_all_export_infos(plugin_folder_paths, get_mime=verbosity > 0)
         if regex is None or fnmatch.fnmatch(e['key'], '*{}*'.format(regex))
     ]
 
     for item in sorted(configs, key=lambda i: (i['class'], i['key'])):
-        outstrs.append('- Key:   {}'.format(item['key']))
-        outstrs.append('  Class: {}'.format(item['class']))
-        path = item['path'].split(os.path.sep)
-        if verbose:
-            outstrs.append('  Type:  {}'.format(item['mime_type']))
-        if verbose or len(path) < 3:
-            path = os.path.join(*path)
-        else:
-            path = os.path.join('...', *path[-3:])
+        if verbosity <= 0:
+            outstrs.append('- {}'.format(item['key']))
+            continue
 
-        if len(path) < 4:
-            outstrs.append('  Path:  {}'.format(item['path']))
-        else:
+        outstrs.append('- Key:   {}'.format(item['key']))
+        outstrs.append('  Type:  {}'.format(item['mime_type']))
+        if verbosity > 1:
+            outstrs.append('  Class: {}'.format(item['class']))
+
+            path = item['path'].split(os.path.sep)
+            if verbosity > 1 or len(path) < 3:
+                path = os.path.join(*path)
+            else:
+                path = os.path.join('...', *path[-3:])
             outstrs.append('  Path:  {}'.format(path))
 
         outstrs.append('  About: {}'.format(item['description'][0].strip()))
-        if verbose:
+        if verbosity > 1:
             for descript in item['description'][1:]:
                 outstrs.append('         {}'.format(descript.strip()))
         # note could wrap description (less than x characters)

@@ -4,7 +4,7 @@ import argparse
 import warnings
 
 from ipypublish import __version__
-from ipypublish.convert.config_manager import get_plugin_str
+from ipypublish.convert.config_manager import get_exports_info_str
 
 
 def deprecation_warning(message):
@@ -154,7 +154,7 @@ def parse_options(sys_args, program):
     list_verbose = options.pop('list_verbose')
 
     if filepath is None and list_plugins:
-        parser.exit(message=get_plugin_str(options['export_paths'], list_plugins, list_verbose))
+        parser.exit(message=get_exports_info_str(options['export_paths'], list_plugins, 2 if list_verbose else 0))
     elif filepath is None:
         parser.error('no filepath specified')
 
