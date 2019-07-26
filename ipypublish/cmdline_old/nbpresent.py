@@ -94,7 +94,7 @@ def nbpresent(inpath,
 
 def run(sys_args=None):
 
-    deprecation_warning("'This command has been deprecated in ipypublish 0.11, please use 'ipub present' instead.")
+    deprecation_warning("'This command has been deprecated in ipypublish 0.11, please use 'ipypub present' instead.")
 
     if sys_args is None:
         sys_args = sys.argv[1:]
