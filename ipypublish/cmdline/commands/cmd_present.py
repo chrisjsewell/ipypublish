@@ -18,7 +18,7 @@ from ipypublish.postprocessors.reveal_serve import RevealServer
 @options.OUTPUT_CONFIG(help_group='Conversion', default='slides_ipypublish_main')
 @options.CONFIG_PATHS(help_group='Conversion')
 # nb merge
-@options.IGNORE_PREFIX(help_group='NB Merge')
+@options.IGNORE_PREFIX(help_group='Conversion')
 # output
 @options.OUTPUT_PATH(help_group='Output')
 @options.CLEAR_FILES(help_group='Output')

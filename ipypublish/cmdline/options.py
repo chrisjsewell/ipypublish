@@ -130,7 +130,7 @@ IGNORE_PREFIX = OverridableOption(
     'ignore_prefix',
     default='_',
     show_default=True,
-    help='Ignore ipynb files with this prefix.')
+    help='When merging notebooks, ignore ipynb files with this prefix.')
 
 INPUT_PATH = click.argument('input_path', type=click.Path(exists=True, file_okay=True, dir_okay=True, allow_dash=False))
 
@@ -174,7 +174,7 @@ OUTPUT_CONFIG = OverridableOption(
     '-f',
     '--outformat',
     'output_config',
-    metavar='key|filepath',
+    metavar='KEY|PATH',
     default='latex_ipypublish_main',
     show_default=True,
     help=('Export format configuration to use, '
