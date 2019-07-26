@@ -244,7 +244,7 @@ class IpyPubMain(Configurable):
 
         Parameters
         ----------
-        config: traitlets.config.Config
+        config: traitlets.config.Config or dict
             User configuration instance.
 
         """
@@ -350,7 +350,7 @@ class IpyPubMain(Configurable):
         self.logger.debug('notebooks meta path: {}'.format(meta_path))
 
         # load configuration file
-        (exporter_cls, jinja_template, econfig, pprocs, pconfig) = self._load_config_file(replacements)
+        (exporter_cls, jinja_template, econfig, pprocs, pconfig) = self.load_config_file(replacements)
 
         # run nbconvert
         self.logger.info('running nbconvert')
@@ -375,20 +375,15 @@ class IpyPubMain(Configurable):
             'resources': resources
         }
 
-    def _load_config_file(self, replacements):
+    def load_config_file(self, replacements):
         # find conversion configuration
         self.logger.info('finding conversion configuration: {}'.format(self.conversion))
-        export_config_file = get_export_config_file(self.conversion, self.plugin_folder_paths)
-
-        if export_config_file is None:
-            # if close_match:
-            #     handle_error(
-            #         msg="could not find conversion configuration: '{}', did you mean '{}'?".format(
-            #             self.conversion, close_match[0]), klass=IOError, logger=self.logger)
-            # else:
+        try:
+            export_config_file = get_export_config_file(self.conversion, self.plugin_folder_paths)
+        except Exception as err:
             handle_error(
                 msg="could not find conversion configuration: '{}'".format(self.conversion),
-                klass=IOError,
+                exception=err,
                 logger=self.logger)
 
         # read conversion configuration and create

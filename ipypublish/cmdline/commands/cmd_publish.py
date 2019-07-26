@@ -30,7 +30,14 @@ def ipub_publish(input_path, output_path, output_config, config_paths, ignore_pr
 
     INPUT_PATH can be a directory or a filepath
     """
+    from ipypublish.convert.config_manager import get_export_config_file
     from ipypublish.convert.main import IpyPubMain
+
+    get_export_config_file(
+        output_config,
+        config_paths,
+        exc_class=click.BadParameter,
+        exc_kwargs={'param_hint': options.OUTPUT_CONFIG.args[1]})
 
     config = {
         'IpyPubMain': {

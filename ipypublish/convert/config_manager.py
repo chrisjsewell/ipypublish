@@ -1,4 +1,4 @@
-# import difflib  # TODO
+import difflib
 import fnmatch
 import glob
 import importlib
@@ -22,9 +22,34 @@ _EXPORT_SCHEMA = None
 logger = logging.getLogger('configuration')
 
 
-def get_export_config_file(export_key, config_folder_paths=(), find_closest_matches=1, match_cutoff=0.5):
-    # type (string, Tuple[str]) -> (Union[string, None], Union[string, None])
-    """we search for a plugin name, which matches the supplied plugin name
+def get_export_config_file(export_key,
+                           config_folder_paths=(),
+                           get_closest=3,
+                           match_cutoff=0.5,
+                           exc_class=ValueError,
+                           exc_kwargs=None):
+    # type (string, Tuple[str], int, float, Exception) -> ResourceFile
+    """Search for a plugin name, which matches the supplied plugin name
+
+    Parameters
+    ----------
+    export_key : str
+        key or path to configuration file
+    config_folder_paths : tuple[str]
+        additional folders to search for configuration files in
+    get_closest : int or None
+        If the key is not found, include n closest matches in the error message
+    match_cutoff : float
+        [0, 1], possibilities that don't score at least that similar to word are ignored
+    exc_class : object
+        class to raise if the key can't be found
+    exc_kwargs: None or dict
+        keywords to pass to the exc_class
+
+    Returns
+    -------
+    ipypublish.utils.ResourceFile
+
     """
     if os.path.exists(export_key):
         return ResourceFile(export_key, description='export plugin')
@@ -33,12 +58,14 @@ def get_export_config_file(export_key, config_folder_paths=(), find_closest_matc
     for config in iter_all_export_files(config_folder_paths):
         if config.name == export_key:
             return config
-        if find_closest_matches is not None:
-            names.append(config.name)
+        names.append(config.name)
 
-    # if find_closest_matches is not None:
-    #     difflib.get_close_matches(export_key, names, n=find_closest_matches, cutoff=match_cutoff)
-    return None
+    msg = "export configuration not found: '{}'".format(export_key)
+    if get_closest:
+        matches = difflib.get_close_matches(export_key, names, n=get_closest, cutoff=match_cutoff)
+        if matches:
+            msg += ', closest matches: {}'.format(matches)
+    raise exc_class(msg, **(exc_kwargs or {}))
 
 
 def iter_all_export_files(config_folder_paths=(), regex='*.json'):
@@ -46,6 +73,8 @@ def iter_all_export_files(config_folder_paths=(), regex='*.json'):
     supplied plugin_folder_paths, and then in the `export_plugins` folder
     """
     for entry in importlib_resources.contents(export_plugins):
+        if not importlib_resources.is_resource(export_plugins, entry):
+            continue
         if fnmatch.fnmatch(entry, regex):
             yield ResourceFile(entry, export_plugins, description='export plugin')
 

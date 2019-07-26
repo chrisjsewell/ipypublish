@@ -170,6 +170,7 @@ OUTPUT_PATH = OverridableOption(
     show_default=True,
     type=click.Path(exists=False, file_okay=False, dir_okay=True))
 
+# TODO add dynamic autocompletion (with cache), when https://github.com/click-contrib/click-completion/pull/27 is merged
 OUTPUT_CONFIG = OverridableOption(
     '-f',
     '--outformat',

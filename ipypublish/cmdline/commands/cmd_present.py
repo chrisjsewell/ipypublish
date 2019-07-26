@@ -10,7 +10,6 @@ from ipypublish.cmdline.commands.cmd_ipypub import ipypub
 from ipypublish.cmdline import options, utils
 
 
-# TODO replicate argparse add_argument_group https://github.com/pallets/click/issues/373
 @ipypub.command('present', cls=options.CustomCommand)
 @options.INPUT_PATH
 @options.OUTPUT_CONFIG(help_group='Conversion', default='slides_ipypublish_main')
@@ -32,8 +31,15 @@ def ipub_present(input_path, output_path, output_config, config_paths, ignore_pr
     If path extension is ``.ipynb`` the notebook will be converted first.
 
     """
+    from ipypublish.convert.config_manager import get_export_config_file
     from ipypublish.convert.main import IpyPubMain
     from ipypublish.postprocessors.reveal_serve import RevealServer
+
+    get_export_config_file(
+        output_config,
+        config_paths,
+        exc_class=click.BadParameter,
+        exc_kwargs={'param_hint': options.OUTPUT_CONFIG.args[1]})
 
     inpath_name, inpath_ext = os.path.splitext(os.path.basename(input_path))
 
