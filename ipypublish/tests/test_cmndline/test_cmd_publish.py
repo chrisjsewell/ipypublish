@@ -1,0 +1,88 @@
+import os
+import pytest
+from click.testing import CliRunner
+
+from ipypublish.cmdline.commands.cmd_publish import ipub_publish
+
+
+@pytest.mark.ipynb('basic_nb')
+def test_bad_exporter(ipynb_app):
+
+    options = [
+        str(ipynb_app.input_file), '-f', 'non-existent', '--outpath',
+        str(ipynb_app.converted_path), '--dry-run', '--log-level', 'debug'
+    ]
+    runner = CliRunner()
+    result = runner.invoke(ipub_publish, options)
+    assert result.exception is not None, result.output
+
+
+@pytest.mark.ipynb('basic_nb')
+def test_nbpublish_dry_run(ipynb_app):
+
+    options = [
+        str(ipynb_app.input_file), '--outpath',
+        str(ipynb_app.converted_path), '--dry-run', '--log-level', 'debug', '-pt'
+    ]
+    runner = CliRunner()
+    result = runner.invoke(ipub_publish, options)
+    assert result.exception is None, result.output
+    assert 'SUCCESS' in result.output
+
+
+@pytest.mark.ipynb('basic_nb')
+def test_nbpublish_dry_run_with_external_plugin(ipynb_app, external_export_plugin):
+
+    options = [
+        str(ipynb_app.input_file), '--outformat',
+        str(external_export_plugin), '--outpath',
+        str(ipynb_app.converted_path), '--dry-run', '--log-level', 'debug', '-pt'
+    ]
+    runner = CliRunner()
+    result = runner.invoke(ipub_publish, options)
+    assert result.exception is None, result.output
+    assert 'SUCCESS' in result.output
+
+
+@pytest.mark.ipynb('basic_nb')
+def test_nbpublish_dry_run_with_external_plugin_key(ipynb_app, external_export_plugin):
+
+    options = [
+        str(ipynb_app.input_file), '--export-paths',
+        str(external_export_plugin.parent), '--outformat',
+        os.path.splitext(str(external_export_plugin.name))[0], '--outpath',
+        str(ipynb_app.converted_path), '--dry-run', '--log-level', 'debug', '-pt'
+    ]
+    runner = CliRunner()
+    result = runner.invoke(ipub_publish, options)
+    assert result.exception is None, result.output
+    assert 'SUCCESS' in result.output
+
+
+@pytest.mark.ipynb('basic_nb')
+def test_nbpublish_write(ipynb_app):
+
+    options = [
+        str(ipynb_app.input_file), '--outformat', 'latex_ipypublish_main', '--outpath',
+        str(ipynb_app.converted_path), '-pt'
+    ]
+    runner = CliRunner()
+    result = runner.invoke(ipub_publish, options)
+    assert result.exception is None, result.output
+    assert 'SUCCESS' in result.output
+    assert ipynb_app.converted_path.joinpath(ipynb_app.input_file.name.replace('.ipynb', '.tex')).exists()
+
+
+@pytest.mark.requires_latexmk
+@pytest.mark.ipynb('basic_nb')
+def test_nbpublish_to_pdf(ipynb_app):
+
+    options = [
+        str(ipynb_app.input_file), '--outformat', 'latex_ipypublish_main', '--outpath',
+        str(ipynb_app.converted_path), '--create-pdf', '-pt'
+    ]
+    runner = CliRunner()
+    result = runner.invoke(ipub_publish, options)
+    assert result.exception is None, result.output
+    assert 'SUCCESS' in result.output
+    assert ipynb_app.converted_path.joinpath(ipynb_app.input_file.name.replace('.ipynb', '.pdf')).exists()
