@@ -6,6 +6,8 @@ from ipypublish.convert.main import IpyPubMain
 from ipypublish.convert.config_manager import get_plugin_str
 from ipypublish.cmdline import options
 
+AUTOCOMPLETE_COMMAND = 'eval "$(_IPYPUB_COMPLETE=source ipypub)"'
+
 
 @click.group(context_settings={'help_option_names': ['-h', '--help']})
 @click.version_option(None, '-v', '--version', message='IpyPublish version %(version)s')
@@ -13,7 +15,10 @@ def ipypub():
     """The command line interface of IPyPublish."""
 
 
-# TODO add option to print autocompletion 'eval "$(_IPYPUB_COMPLETE=source ipypub)"'
+@ipypub.command('autocomplete')
+def autocomplete():
+    """ Print the terminal autocompletion command. """
+    click.echo(AUTOCOMPLETE_COMMAND)
 
 
 @ipypub.command('default_traits')
