@@ -18,6 +18,7 @@ dependencies:
 - jsonextended >=0.7
 - jsonschema
 - jupytext
+- importlib_resources
 - nbconvert
 - nbformat
 - ordered-set

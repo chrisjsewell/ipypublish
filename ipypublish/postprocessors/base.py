@@ -47,16 +47,15 @@ class IPyPostProcessor(Configurable):
     def logger_name(self):
         """ override in subclass
         """
-        return "post-processor"
+        return 'post-processor'
 
     @property
     def logger(self):
         return logging.getLogger(self.logger_name)
 
     skip_mime = Bool(
-        True,
-        help="if False, raise a TypeError if the mimetype is not allowed, "
-        "else return without processing").tag(config=True)
+        True, help='if False, raise a TypeError if the mimetype is not allowed, '
+        'else return without processing').tag(config=True)
 
     def __init__(self, config=None):
         super(IPyPostProcessor, self).__init__(config=config)
@@ -67,8 +66,7 @@ class IPyPostProcessor(Configurable):
         """
         self.postprocess(stream, mimetype, filepath, resources)
 
-    def postprocess(self, stream, mimetype, filepath,
-                    resources=None):
+    def postprocess(self, stream, mimetype, filepath, resources=None):
         """ Post-process output.
 
         Parameters
@@ -90,23 +88,17 @@ class IPyPostProcessor(Configurable):
 
         """
 
-        if (self.allowed_mimetypes is not None
-                and mimetype not in self.allowed_mimetypes):
+        if (self.allowed_mimetypes is not None and mimetype not in self.allowed_mimetypes):
             if not self.skip_mime:
                 self.handle_error(
-                    "the mimetype {0} is not in the allowed list: {1}".format(
-                        mimetype, self.allowed_mimetypes),
-                    TypeError)
+                    msg='the mimetype {0} is not in the allowed list: {1}'.format(mimetype, self.allowed_mimetypes),
+                    klass=TypeError)
             else:
-                self.logger.debug(
-                    "skipping incorrect mime type: {}".format(mimetype))
+                self.logger.debug('skipping incorrect mime type: {}'.format(mimetype))
                 return stream, filepath, resources
 
         if self.requires_path and filepath is None:
-            self.handle_error(
-                "the filepath is None, "
-                "but the post-processor requires a folder",
-                IOError)
+            self.handle_error(msg='the filepath is None, ' 'but the post-processor requires a folder', klass=IOError)
 
         if filepath is not None and isinstance(filepath, string_types):
             filepath = pathlib.Path(filepath)
@@ -114,15 +106,10 @@ class IPyPostProcessor(Configurable):
         if self.requires_path:
 
             if not filepath.is_absolute():
-                self.handle_error(
-                    "the post-processor requires an absolute folder path",
-                    IOError)
+                self.handle_error(msg='the post-processor requires an absolute folder path', klass=IOError)
 
             if filepath.parent.exists() and not filepath.parent.is_dir():
-                self.handle_error(
-                    "the filepath's parent is not a folder: {}".format(
-                        filepath),
-                    TypeError)
+                self.handle_error(msg="the filepath's parent is not a folder: {}".format(filepath), klass=TypeError)
 
             if not filepath.parent.exists():
                 filepath.parent.mkdir(parents=True)
@@ -154,22 +141,20 @@ class IPyPostProcessor(Configurable):
         """
         raise NotImplementedError('run_postprocess')
 
-    def handle_error(self, msg, err_type,
-                     raise_msg=None, log_msg=None):
+    def handle_error(self, msg='', klass=Exception, exception=None):
         """ handle error by logging it then raising
         """
-        handle_error(msg, err_type, self.logger,
-                     raise_msg=raise_msg, log_msg=log_msg)
+        handle_error(msg=msg, klass=klass, exception=exception, logger=self.logger)
 
     def check_exe_exists(self, name, error_msg):
         """ test if an executable exists
         """
         if not exe_exists(name):
-            self.handle_error(error_msg, RuntimeError)
+            self.handle_error(msg=error_msg, klass=RuntimeError)
         return True
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 
     print(IPyPostProcessor.allowed_mimetypes)
-    IPyPostProcessor()("stream", "a")
+    IPyPostProcessor()('stream', 'a')

@@ -1,109 +1,95 @@
 import os
 import json
-import inspect
-import importlib
+import io
+import logging
 import re
 import pkg_resources
 
-from six import string_types
+import importlib_resources
 import ruamel.yaml as yaml
+from six import string_types
 
 # python 2/3 compatibility
 try:
     import pathlib
 except ImportError:
-    import pathlib2 as pathlib
+    import pathlib2 as pathlib  # noqa: F401
 
 
-def handle_error(msg, err_type, logger, raise_msg=None, log_msg=None):
+def handle_error(msg='', klass=None, exception=None, logger=None):
     """handle an error, by logging it, then raising an exception"""
-    if raise_msg is None:
-        raise_msg = msg
-    if log_msg is None:
-        log_msg = msg
-
-    logger.error(log_msg)
-    raise err_type(raise_msg)
-
-
-def read_file_from_directory(dir_path, file_name, jtype,
-                             logger, interp_ext=False,
-                             ext_types=(
-                                 ("json", (".json",)),
-                                 ("yaml", (".yaml", ".yaml.j2")))):
-    """load a file situated in a directory
-
-    if ``interp_ext=True``:
-    interpret the file extension *via* ``ext_types``
-    and load file in a suitable manner
-
-    """
-    if isinstance(dir_path, string_types):
-        dir_path = pathlib.Path(dir_path)
-
-    file_path = dir_path.joinpath(file_name)
-
-    if not file_path.exists():
-        handle_error(
-            "the {} does not exist: {}".format(jtype, file_path),
-            IOError, logger=logger)
-
-    ext_type = None
-    ext_map = {ext: ftype for ftype, exts in ext_types for ext in exts}
-    # Place longer extensions first to keep shorter ones from matching first
-    for ext in sorted(ext_map.keys(), key=len, reverse=True):
-        if file_name.endswith(ext):
-            ext_type = ext_map[ext]
-
-    if ext_type is not None and interp_ext:
-        with file_path.open() as fobj:
-            try:
-                if ext_type == "json":
-                    data = json.load(fobj)
-                elif ext_type == "yaml":
-                    data = yaml.safe_load(fobj)
-                else:
-                    raise ValueError("extension type not recognised")
-            except Exception as err:
-                handle_error("failed to read {} ({}): {}".format(
-                    jtype, file_path, err), IOError, logger=logger)
+    if logger is None:
+        logger = logging.getLogger(__name__)
+    logger.error(msg)
+    if exception is not None:
+        raise
     else:
-        with file_path.open() as fobj:
-            data = fobj.read()
-
-    return data
+        raise klass(msg)
 
 
-def get_module_path(module):
-    """return a directory path to a module"""
-    return pathlib.Path(os.path.dirname(
-        os.path.abspath(inspect.getfile(module))))
-
-
-def read_file_from_module(module_path, file_name, jtype,
-                          logger, interp_ext=False,
-                          ext_types=(
-                              ("json", (".json")),
-                              ("yaml", (".yaml", ".yaml.j2", "yaml.tex.j2")))):
-    """load a file situated in a python module
-
-    if ``interp_ext=True``:
-    interpret the file extension *via* ``ext_type``
-    and load file in a suitable manner
+class ResourceFile(object):
+    """A resource file object that can live on the file system or in a package
 
     """
-    try:
-        outline_module = importlib.import_module(module_path)
-    except ModuleNotFoundError:  # noqa: F821
-        handle_error(
-            "module {} containing {} {} not found".format(
-                module_path, jtype, file_name),
-            ModuleNotFoundError, logger=logger)  # noqa: F821
+    __slots__ = ['path', 'resource_module', 'description']
 
-    return read_file_from_directory(get_module_path(outline_module),
-                                    file_name, jtype, logger,
-                                    interp_ext=interp_ext,
-                                    ext_types=ext_types)
+    def __init__(self, path, resource_module=None, description=''):
+        self.path = path
+        self.resource_module = resource_module
+        self.description = ''
+
+    @property
+    def is_resource(self):
+        return self.resource_module is not None
+
+    @property
+    def name(self):
+        return os.path.splitext(os.path.basename(self.path))[0]
+
+    @property
+    def extension(self):
+        return os.path.splitext(os.path.basename(self.path))[1]
+
+    def __str__(self):
+        if self.is_resource:
+            if isinstance(self.resource_module, string_types):
+                module_str = self.resource_module
+            else:
+                module_str = self.resource_module.__name__
+            return '{}@{}'.format(self.path, module_str)
+        return str(self.path)
+
+    def get_text(self, logger):
+        try:
+            if self.resource_module is not None:
+                text = importlib_resources.read_text(self.resource_module, self.path)
+            else:
+                with io.open(self.path) as handle:
+                    text = handle.read()
+            return text
+        except Exception as err:
+            handle_error('extension type not recognised: {}'.format(self), err, logger=logger)
+
+    def get_data(self,
+                 logger,
+                 ext_types=(('.json', 'json'), ('.yaml', 'yaml'), ('.yaml.j2', 'yaml'), ('yaml.tex.j2', 'yaml'))):
+        text = self.get_text(logger)
+        ext_type = None
+        ext_types = dict(ext_types)
+        # Place longer extensions first to keep shorter ones from matching first
+        for ext in sorted(ext_types.keys(), key=len, reverse=True):
+            if self.path.endswith(ext):
+                ext_type = ext_types[ext]
+        if ext_type is None:
+            handle_error(
+                "the path's extension could not be interpreted: {}".format(self), klass=ValueError, logger=logger)
+        if ext_type == 'json':
+            data = json.loads(text)
+        elif ext_type == 'yaml':
+            data = yaml.safe_load(text)
+        else:
+            handle_error('extension type not recognised: {}'.format(self), klass=ValueError, logger=logger)
+        return data
 
 
 def get_valid_filename(s):
@@ -132,27 +118,26 @@ def find_entry_point(name, group, logger, preferred=None):
         if multiple matches are found, prefer one from this module
 
     """
-    entry_points = list(pkg_resources.iter_entry_points(
-        group, name))
+    entry_points = list(pkg_resources.iter_entry_points(group, name))
     if len(entry_points) == 0:
         handle_error(
-            "The {0} entry point "
-            "{1} could not be found".format(group, name),
-            pkg_resources.ResolutionError, logger)
+            'The {0} entry point '
+            '{1} could not be found'.format(group, name),
+            klass=pkg_resources.ResolutionError,
+            logger=logger)
     elif len(entry_points) != 1:
         # default to the preferred package
         oentry_points = []
         if preferred:
-            oentry_points = [ep for ep in entry_points
-                             if ep.module_name.startswith(preferred)]
+            oentry_points = [ep for ep in entry_points if ep.module_name.startswith(preferred)]
         if len(oentry_points) != 1:
             handle_error(
-                "Multiple {0} plugins found for "
-                "{1}: {2}".format(group, name, entry_points),
-                pkg_resources.ResolutionError, logger)
-        logger.info(
-            "Multiple {0} plugins found for {1}, "
-            "defaulting to the {2} version".format(group, name, preferred))
+                'Multiple {0} plugins found for '
+                '{1}: {2}'.format(group, name, entry_points),
+                klass=pkg_resources.ResolutionError,
+                logger=logger)
+        logger.info('Multiple {0} plugins found for {1}, '
+                    'defaulting to the {2} version'.format(group, name, preferred))
         entry_point = oentry_points[0]
     else:
         entry_point = entry_points[0]

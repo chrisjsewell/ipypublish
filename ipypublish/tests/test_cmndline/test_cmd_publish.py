@@ -6,7 +6,7 @@ from ipypublish.cmdline.commands.cmd_publish import ipub_publish
 
 
 @pytest.mark.ipynb('basic_nb')
-def test_bad_exporter(ipynb_app):
+def test_non_existent_config(ipynb_app):
 
     options = [
         str(ipynb_app.input_file), '-f', 'non-existent', '--outpath',
@@ -15,6 +15,21 @@ def test_bad_exporter(ipynb_app):
     runner = CliRunner()
     result = runner.invoke(ipub_publish, options)
     assert result.exception is not None, result.output
+
+
+@pytest.mark.ipynb('basic_nb')
+def test_bad_config(ipynb_app):
+    options = [
+        str(ipynb_app.input_file), '-f', 'bad.json', '--outpath',
+        str(ipynb_app.converted_path), '--dry-run', '--log-level', 'debug'
+    ]
+    runner = CliRunner()
+    with runner.isolated_filesystem():
+        with open('bad.json', 'w') as f:
+            f.write('{"a": 1}')
+        result = runner.invoke(ipub_publish, options)
+        assert result.exception is not None, result.output
+        # assert "jsonschema.exceptions.ValidationError" in result.output
 
 
 @pytest.mark.ipynb('basic_nb')

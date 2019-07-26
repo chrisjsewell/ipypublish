@@ -25,5 +25,5 @@ def test_nbpresent_dry_run(ipynb_app):
     ]
     runner = CliRunner()
     result = runner.invoke(ipub_present, options)
-    assert result.exception is None, result.output
+    assert result.exception is None, ipynb_app.input_file
     assert 'SUCCESS' in result.output

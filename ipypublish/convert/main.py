@@ -17,11 +17,10 @@ from six import string_types
 import jsonschema
 
 import ipypublish
-from ipypublish.utils import (pathlib, handle_error, read_file_from_directory, get_module_path, get_valid_filename,
-                              find_entry_point)
+from ipypublish.utils import (pathlib, handle_error, get_valid_filename, find_entry_point)
 from ipypublish import schema
 from ipypublish.convert.nbmerge import merge_notebooks
-from ipypublish.convert.config_manager import (get_export_config_path, load_export_config, load_template,
+from ipypublish.convert.config_manager import (ResourceFile, get_export_config_file, load_export_config, load_template,
                                                create_exporter_cls)
 
 
@@ -295,7 +294,8 @@ class IpyPubMain(Configurable):
         self._setup_logger(ipynb_name, outdir)
 
         if not ipynb_path.exists() and not nb_node:
-            handle_error('the notebook path does not exist: {}'.format(ipynb_path), IOError, self.logger)
+            handle_error(
+                msg='the notebook path does not exist: {}'.format(ipynb_path), klass=IOError, logger=self.logger)
 
         # log start of conversion
         self.logger.info('started ipypublish v{0} at {1}'.format(ipypublish.__version__, time.strftime('%c')))
@@ -309,14 +309,14 @@ class IpyPubMain(Configurable):
             try:
                 nb_node = func(ipynb_path)
             except Exception as err:
-                handle_error('pre-conversion failed for {}: {}'.format(ipynb_path, err), err, self.logger)
+                handle_error(msg='pre-conversion failed for {}'.format(ipynb_path), exception=err, logger=self.logger)
 
         # doesn't work with folders
         # if (ipynb_ext != ".ipynb" and nb_node is None):
         #     handle_error(
-        #         'the file extension is not associated with any '
+        #         msg='the file extension is not associated with any '
         #         'pre-converter: {}'.format(ipynb_ext),
-        # TypeError, self.logger)
+        # klass=TypeError, logger=self.logger)
 
         if nb_node is None:
             # merge all notebooks
@@ -330,19 +330,15 @@ class IpyPubMain(Configurable):
 
         # valdate the notebook metadata against the schema
         if self.validate_nb_metadata:
-            nb_metadata_schema = read_file_from_directory(
-                get_module_path(schema),
-                'doc_metadata.schema.json',
-                'doc_metadata.schema',
-                self.logger,
-                interp_ext=True)
+            resource = ResourceFile(
+                'doc_metadata.schema.json', resource_module=schema, description='doc_metadata schema')
+            nb_metadata_schema = resource.get_data(self.logger)
             try:
                 jsonschema.validate(final_nb.metadata, nb_metadata_schema)
             except jsonschema.ValidationError as err:
                 handle_error(
-                    'validation of notebook level metadata failed: {}\n'
-                    'see the doc_metadata.schema.json for full spec'.format(err.message),
-                    jsonschema.ValidationError,
+                    msg='validation of notebook level metadata failed, see the doc_metadata.schema.json for full spec',
+                    exception=err,
                     logger=self.logger)
 
         # set text replacements for export configuration
@@ -382,24 +378,22 @@ class IpyPubMain(Configurable):
     def _load_config_file(self, replacements):
         # find conversion configuration
         self.logger.info('finding conversion configuration: {}'.format(self.conversion))
-        export_config_path = None
-        if isinstance(self.conversion, string_types):
-            outformat_path = pathlib.Path(self.conversion)
-        else:
-            outformat_path = self.conversion
-        if outformat_path.exists():  # TODO use pathlib approach
-            # if is outformat is a path that exists, use that
-            export_config_path = outformat_path
-        else:
-            # else search internally
-            export_config_path = get_export_config_path(self.conversion, self.plugin_folder_paths)
+        export_config_file = get_export_config_file(self.conversion, self.plugin_folder_paths)
 
-        if export_config_path is None:
-            handle_error('could not find conversion configuration: {}'.format(self.conversion), IOError, self.logger)
+        if export_config_file is None:
+            # if close_match:
+            #     handle_error(
+            #         msg="could not find conversion configuration: '{}', did you mean '{}'?".format(
+            #             self.conversion, close_match[0]), klass=IOError, logger=self.logger)
+            # else:
+            handle_error(
+                msg="could not find conversion configuration: '{}'".format(self.conversion),
+                klass=IOError,
+                logger=self.logger)
 
         # read conversion configuration and create
         self.logger.info('loading conversion configuration')
-        data = load_export_config(export_config_path)
+        data = load_export_config(export_config_file)
         self.logger.info('creating exporter')
         exporter_cls = create_exporter_cls(data['exporter']['class'])
         self.logger.info('creating template and loading filters')

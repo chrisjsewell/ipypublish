@@ -1,10 +1,10 @@
-
 import os
 import logging
 from six import string_types
-from ipypublish.utils import read_file_from_directory
 
-logger = logging.getLogger("make-conf")
+from ipypublish.utils import ResourceFile
+
+logger = logging.getLogger('make-conf')
 
 
 def make_conf(overwrite=False, **kwargs):
@@ -25,19 +25,17 @@ def make_conf(overwrite=False, **kwargs):
 
     """
 
-    # load local config.yaml
-    path = os.path.join(os.path.dirname(os.path.realpath(__file__)))
-    data = read_file_from_directory(
-        path, 'config.yaml', 'sphinx config', logger, interp_ext=True)
+    resource = ResourceFile('config.yaml', __package__, description='sphinx config')
+    data = resource.get_data(logger)
 
     conf_str = []
 
     docstring = None
-    if "docstring" in data:
-        docstring = data.pop("docstring")
+    if 'docstring' in data:
+        docstring = data.pop('docstring')
 
-    if "docstring" in kwargs:
-        kwdocstring = data.pop("docstring")
+    if 'docstring' in kwargs:
+        kwdocstring = data.pop('docstring')
         if overwrite or not docstring:
             docstring = kwdocstring
 
@@ -62,13 +60,17 @@ def make_conf(overwrite=False, **kwargs):
             val = '"{}"'.format(val)
         conf_str.append('{0} = {1}'.format(key, val))
 
-    return "\n".join(conf_str) + "\n"
+    return '\n'.join(conf_str) + '\n'
 
 
-def make_index(toc_files, toc_depth=3, toc_title="Table of Contents",
-               toc_numbered=True, toc_glob=False,
+def make_index(toc_files,
+               toc_depth=3,
+               toc_title='Table of Contents',
+               toc_numbered=True,
+               toc_glob=False,
                header=None,
-               prolog=None, epilog=None):
+               prolog=None,
+               epilog=None):
     """ make an index file, containing a toc tree
 
     Parameters
@@ -92,46 +94,46 @@ def make_index(toc_files, toc_depth=3, toc_title="Table of Contents",
 
     """
     if not toc_files:
-        raise AssertionError("there must be at lease on toc file")
+        raise AssertionError('there must be at lease on toc file')
 
     index_str = []
 
     if header:
         index_str.append(str(header))
-        index_str.append('='*len(str(header)))
+        index_str.append('=' * len(str(header)))
         index_str.append('')
 
     if prolog:
         index_str.append(str(prolog))
         index_str.append('')
 
-    index_str.append(".. toctree::")
-    index_str.append("   :includehidden:")
-    index_str.append("   :maxdepth: {}".format(toc_depth))
+    index_str.append('.. toctree::')
+    index_str.append('   :includehidden:')
+    index_str.append('   :maxdepth: {}'.format(toc_depth))
     if toc_numbered:
-        index_str.append("   :numbered:")
+        index_str.append('   :numbered:')
     if toc_glob:
-        index_str.append("   :glob:")
-    index_str.append("   :caption: {}:".format(toc_title))
+        index_str.append('   :glob:')
+    index_str.append('   :caption: {}:'.format(toc_title))
     index_str.append('')
 
     for toc_file in toc_files:
-        index_str.append("   " + os.path.splitext(toc_file)[0].lstrip())
+        index_str.append('   ' + os.path.splitext(toc_file)[0].lstrip())
 
     if epilog:
         index_str.append('')
         index_str.append(str(epilog))
 
-    return "\n".join(index_str) + "\n"
+    return '\n'.join(index_str) + '\n'
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 
-    print(make_conf(
-        project='ipypublish',
-        author='Chris Sewell',
-        description=('Create quality publication and presentation'
-                     'directly from Jupyter Notebook(s)')
-    ))
+    print(
+        make_conf(
+            project='ipypublish',
+            author='Chris Sewell',
+            description=('Create quality publication and presentation'
+                         'directly from Jupyter Notebook(s)')))
 
-    print(make_index(['path/to/file.rst'], header="Header"))
+    print(make_index(['path/to/file.rst'], header='Header'))

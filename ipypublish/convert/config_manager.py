@@ -1,15 +1,16 @@
+# import difflib  # TODO
 import fnmatch
 import glob
 import importlib
 import logging
 import os
 
-from six import string_types
 from jinja2 import DictLoader
 import jsonschema
 import nbconvert  # noqa: F401
+import importlib_resources
 
-from ipypublish.utils import (pathlib, handle_error, get_module_path, read_file_from_directory, read_file_from_module)
+from ipypublish.utils import (handle_error, ResourceFile)
 from ipypublish import export_plugins
 from ipypublish import schema
 from ipypublish.templates.create_template import create_template
@@ -21,52 +22,55 @@ _EXPORT_SCHEMA = None
 logger = logging.getLogger('configuration')
 
 
-def get_export_config_path(export_key, config_folder_paths=()):
-    # type (string, Tuple[str]) -> Union[string, None]
+def get_export_config_file(export_key, config_folder_paths=(), find_closest_matches=1, match_cutoff=0.5):
+    # type (string, Tuple[str]) -> (Union[string, None], Union[string, None])
     """we search for a plugin name, which matches the supplied plugin name
     """
-    for name, jsonpath in iter_all_export_paths(config_folder_paths):
-        if name == export_key:
-            return pathlib.Path(jsonpath)
+    if os.path.exists(export_key):
+        return ResourceFile(export_key, description='export plugin')
+
+    names = []
+    for config in iter_all_export_files(config_folder_paths):
+        if config.name == export_key:
+            return config
+        if find_closest_matches is not None:
+            names.append(config.name)
+
+    # if find_closest_matches is not None:
+    #     difflib.get_close_matches(export_key, names, n=find_closest_matches, cutoff=match_cutoff)
     return None
 
 
-def iter_all_export_paths(config_folder_paths=(), regex='*.json'):
+def iter_all_export_files(config_folder_paths=(), regex='*.json'):
     """we iterate through all json files in the
     supplied plugin_folder_paths, and then in the `export_plugins` folder
     """
+    for entry in importlib_resources.contents(export_plugins):
+        if fnmatch.fnmatch(entry, regex):
+            yield ResourceFile(entry, export_plugins, description='export plugin')
+
     for plugin_folder_path in config_folder_paths:
         for jsonpath in glob.glob(os.path.join(plugin_folder_path, regex)):
-            name = os.path.splitext(os.path.basename(jsonpath))[0]
-            yield name, pathlib.Path(jsonpath)
-
-    module_path = get_module_path(export_plugins)
-    for jsonpath in glob.glob(os.path.join(str(module_path), regex)):
-        name = os.path.splitext(os.path.basename(jsonpath))[0]
-        yield name, pathlib.Path(jsonpath)
+            yield ResourceFile(jsonpath, description='export plugin')
 
 
-def load_export_config(export_config_path):
+def load_export_config(export_config_file):
     """load the export configuration"""
-    if isinstance(export_config_path, string_types):
-        export_config_path = pathlib.Path(export_config_path)
-
-    data = read_file_from_directory(
-        export_config_path.parent, export_config_path.name, 'export configuration', logger, interp_ext=True)
+    data = export_config_file.get_data(logger)
 
     # validate against schema
     global _EXPORT_SCHEMA
     if _EXPORT_SCHEMA is None:
         # lazy load schema once
-        _EXPORT_SCHEMA = read_file_from_directory(
-            get_module_path(schema), _EXPORT_SCHEMA_FILE, 'export configuration schema', logger, interp_ext=True)
+        resource = ResourceFile(_EXPORT_SCHEMA_FILE, resource_module=schema, description='export configuration schema')
+        _EXPORT_SCHEMA = resource.get_data(logger)
+
     try:
         jsonschema.validate(data, _EXPORT_SCHEMA)
     except jsonschema.ValidationError as err:
         handle_error(
-            'validation of export config {} failed against {}: {}'.format(export_config_path, _EXPORT_SCHEMA_FILE,
-                                                                          err.message),
-            jsonschema.ValidationError,
+            msg='validation of export config {} failed against {}'.format(export_config_file, _EXPORT_SCHEMA_FILE),
+            exception=err,
             logger=logger)
 
     return data
@@ -74,10 +78,10 @@ def load_export_config(export_config_path):
 
 def iter_all_export_infos(config_folder_paths=(), regex='*.json', get_mime=False):
     """iterate through all export configuration and yield a dict of info"""
-    for name, path in iter_all_export_paths(config_folder_paths, regex):
-        data = load_export_config(path)
+    for export_file in iter_all_export_files(config_folder_paths, regex):
+        data = load_export_config(export_file)
 
-        info = dict([('key', str(name)), ('class', data['exporter']['class']), ('path', str(path)),
+        info = dict([('key', export_file.name), ('class', data['exporter']['class']), ('path', str(export_file)),
                      ('description', data['description'])])
 
         if get_mime:
@@ -102,6 +106,7 @@ def get_plugin_str(plugin_folder_paths=(), regex=None, verbose=False):
         path = item['path'].split(os.path.sep)
         if verbose:
             outstrs.append('  Type:  {}'.format(item['mime_type']))
+        if verbose or len(path) < 3:
             path = os.path.join(*path)
         else:
             path = os.path.join('...', *path[-3:])
@@ -129,15 +134,16 @@ def create_exporter_cls(class_str):
     class_name = export_class_path[-1]
     try:
         export_module = importlib.import_module(module_path)
-    except ModuleNotFoundError:  # noqa: F821
+    except ModuleNotFoundError as err:
         handle_error(
-            'module {} containing exporter class {} not found'.format(module_path, class_name),
-            ModuleNotFoundError,
-            logger=logger)  # noqa: F821
+            msg='module {} containing exporter class {} not found'.format(module_path, class_name),
+            exception=err,
+            logger=logger)
     if hasattr(export_module, class_name):
         export_class = getattr(export_module, class_name)
     else:
-        handle_error('module {} does not contain class {}'.format(module_path, class_name), ImportError, logger=logger)
+        handle_error(
+            msg='module {} does not contain class {}'.format(module_path, class_name), klass=ImportError, logger=logger)
 
     return export_class
 
@@ -159,36 +165,34 @@ def load_template(template_key, template_dict):
         return None
 
     if 'directory' in template_dict['outline']:
-        outline_template = read_file_from_directory(
-            template_dict['outline']['directory'],
-            template_dict['outline']['file'],
-            'template outline',
-            logger,
-            interp_ext=False)
+        resource = ResourceFile(
+            os.path.join(template_dict['outline']['directory'], template_dict['outline']['file']),
+            description='template outline')
+        outline_template = resource.get_text(logger)
         outline_name = os.path.join(template_dict['outline']['directory'], template_dict['outline']['file'])
     else:
-        outline_template = read_file_from_module(
-            template_dict['outline']['module'],
+        resource = ResourceFile(
             template_dict['outline']['file'],
-            'template outline',
-            logger,
-            interp_ext=False)
+            resource_module=template_dict['outline']['module'],
+            description='template outline')
+        outline_template = resource.get_text(logger)
         outline_name = os.path.join(template_dict['outline']['module'], template_dict['outline']['file'])
 
     segments = []
     for snum, segment in enumerate(template_dict.get('segments', [])):
 
         if 'file' not in segment:
-            handle_error("'file' expected in segment {}".format(snum), KeyError, logger)
+            handle_error(masg="'file' expected in segment {}".format(snum), klass=KeyError, logger=logger)
 
         if 'directory' in segment:
-            seg_data = read_file_from_directory(
-                segment['directory'], segment['file'], 'template segment', logger, interp_ext=True)
+            resource = ResourceFile(os.path.join(segment['directory'], segment['file']), description='template segment')
+            outline_template = resource.get_data(logger)
         elif 'module' in segment:
-            seg_data = read_file_from_module(
-                segment['module'], segment['file'], 'template segment', logger, interp_ext=True)
+            resource = ResourceFile(segment['file'], resource_module=segment['module'], description='template segment')
+            seg_data = resource.get_data(logger)
         else:
-            handle_error("'directory' or 'module' expected in segment {}".format(snum), KeyError, logger)
+            handle_error(
+                msg="'directory' or 'module' expected in segment {}".format(snum), klass=KeyError, logger=logger)
 
         segments.append(seg_data)
 

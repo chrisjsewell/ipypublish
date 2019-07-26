@@ -74,9 +74,11 @@ def ipub_present(input_path, output_path, output_config, config_paths, ignore_pr
         except Exception:
             if log_traceback:
                 # TODO this doesn't add color in stdout
-                publish.logger.exception('exception raised during execution')
-            click.secho('FAILURE', fg='red', bold=True)
-            raise click.ClickException('exception raised during execution')
+                logging.getLogger(__name__).exception('exception raised during execution')
+            else:
+                logging.getLogger(__name__).error('exception raised during execution')
+            # click.secho('FAILURE', fg='red', bold=True)
+            raise click.ClickException('terminating command')
 
     else:
         logging.basicConfig(stream=sys.stdout, level=logging.INFO)
