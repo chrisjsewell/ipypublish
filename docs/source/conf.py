@@ -67,7 +67,6 @@ extensions = [
     'recommonmark'
 ]
 
-
 logger = sphinx.util.logging.getLogger(__name__)
 
 
@@ -88,8 +87,7 @@ def process_citations(app, doctree, docname):
         try:
             label = app.env.bibtex_cache.get_label_from_key(key)
         except KeyError:
-            logger.warning("could not relabel citation [%s]" % key,
-                           type="bibtex", subtype="relabel")
+            logger.warning('could not relabel citation [%s]' % key, type='bibtex', subtype='relabel')
         else:
             node[0] = docutils.nodes.label('', label)
 
@@ -122,15 +120,13 @@ ipysphinx_show_prompts = True
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This patterns also effect to html_static_path and html_extra_path
-exclude_patterns = ["_build", "build", "**.ipynb_checkpoints", "converted"]
-
+exclude_patterns = ['_build', 'build', '**.ipynb_checkpoints', 'converted']
 
 # General information about the project.
 project = u'ipypublish'
 copyright = u'2017, Chris Sewell'
 author = u'Chris Sewell'
-description = ('Create quality publication and presentation'
-               'directly from Jupyter Notebook(s)')
+description = ('Create quality publication and presentation' 'directly from Jupyter Notebook(s)')
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -203,18 +199,14 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'ipypublish.tex', u'ipypublish Documentation',
-     u'Chris Sewell', 'manual'),
+    (master_doc, 'ipypublish.tex', u'ipypublish Documentation', u'Chris Sewell', 'manual'),
 ]
 
 # -- Options for manual page output ---------------------------------------
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [
-    (master_doc, 'ipypublish', u'ipypublish Documentation',
-     [author], 1)
-]
+man_pages = [(master_doc, 'ipypublish', u'ipypublish Documentation', [author], 1)]
 
 # -- Options for Texinfo output -------------------------------------------
 
@@ -222,24 +214,24 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'ipypublish', u'IPyPublish',
-     author, 'ipypublish', description,
-     'Miscellaneous'),
+    (master_doc, 'ipypublish', u'IPyPublish', author, 'ipypublish', description, 'Miscellaneous'),
 ]
 
 # Numbered Elements
 numfig = True
 math_numfig = True
 numfig_secnum_depth = 2
-numfig_format = {'section': 'Section %s',
-                 'figure': 'Fig. %s',
-                 'table': 'Table %s',
-                 'code-block': 'Code Block %s'}
+numfig_format = {'section': 'Section %s', 'figure': 'Fig. %s', 'table': 'Table %s', 'code-block': 'Code Block %s'}
 math_number_all = True
-math_eqref_format = "Eq. {number}"  # TODO this isn't working
+math_eqref_format = 'Eq. {number}'  # TODO this isn't working
 
 mathjax_config = {
-    'TeX': {'equationNumbers': {'autoNumber': 'AMS', 'useLabelIds': True}},
+    'TeX': {
+        'equationNumbers': {
+            'autoNumber': 'AMS',
+            'useLabelIds': True
+        }
+    },
 }
 
 # Napoleon Docstring settings
@@ -253,7 +245,6 @@ napoleon_use_ivar = True
 napoleon_use_param = True
 napoleon_use_rtype = True
 
-
 # INTERSPHINX
 
 # Example configuration for intersphinx: refer to the Python standard library.
@@ -265,100 +256,73 @@ intersphinx_mapping = {
     # 'pandas': ('http://pandas.pydata.org/pandas-docs/stable/', None),
     # 'IPython': ('http://ipython.org/ipython-doc/stable/', None),
     'PIL': ('http://pillow.readthedocs.org/en/latest/', None),
-    'nbconvert': ("http://nbconvert.readthedocs.io/en/latest/", None),
-    'nbformat': ("http://nbformat.readthedocs.io/en/latest/", None),
-    'tornado': ("https://www.tornadoweb.org/en/stable/", None),
-    'traitlets': ("https://traitlets.readthedocs.io/en/stable/", None),
+    'nbconvert': ('http://nbconvert.readthedocs.io/en/latest/', None),
+    'nbformat': ('http://nbformat.readthedocs.io/en/latest/', None),
+    'tornado': ('https://www.tornadoweb.org/en/stable/', None),
+    'traitlets': ('https://traitlets.readthedocs.io/en/stable/', None),
     'jinja': ('http://jinja.pocoo.org/docs/dev', None),
     'bibtexparser': ('https://bibtexparser.readthedocs.io/en/master/', None),
     # 'docutils': ("https://docutils.readthedocs.io/en/sphinx-docs", None),
     # # TODO docutils intersphinx
-    'sphinx': ('http://www.sphinx-doc.org/en/latest/', None)
+    'sphinx': ('http://www.sphinx-doc.org/en/latest/', None),
+    # 'click': ('https://click.palletsprojects.com/en/7.x/', None)
 }
 
 intersphinx_aliases = {
-    ('py:class', 'dictionary'):
-        ('py:class', 'dict'),
-    ('py:class', 'PIL.Image'):
-        ('py:class', 'PIL.Image.Image'),
-    ('py:class', 'nbconvert.preprocessors.base.Preprocessor'):
-        ('py:class', 'nbconvert.preprocessors.Preprocessor'),
-    ('py:class', 'nbformat.notebooknode.NotebookNode'):
-        ('py:class', 'nbformat.NotebookNode'),
-    ('py:class', 'NotebookNode'):
-        ('py:class', 'nbformat.NotebookNode'),
-    ('py:class', 'traitlets.config.configurable.Configurable'):
-        ('py:module', 'traitlets.config')
+    ('py:class', 'dictionary'): ('py:class', 'dict'),
+    ('py:class', 'PIL.Image'): ('py:class', 'PIL.Image.Image'),
+    ('py:class', 'nbconvert.preprocessors.base.Preprocessor'): ('py:class', 'nbconvert.preprocessors.Preprocessor'),
+    ('py:class', 'nbformat.notebooknode.NotebookNode'): ('py:class', 'nbformat.NotebookNode'),
+    ('py:class', 'NotebookNode'): ('py:class', 'nbformat.NotebookNode'),
+    ('py:class', 'traitlets.config.configurable.Configurable'): ('py:module', 'traitlets.config')
 }
 
 # Warnings to ignore when using the -n (nitpicky) option
 # We should ignore any python built-in exception, for instance
-nitpick_ignore = [('py:exc', 'ArithmeticError'), ('py:exc', 'AssertionError'),
-                  ('py:exc', 'AttributeError'), ('py:exc', 'BaseException'),
-                  ('py:exc', 'BufferError'), ('py:exc', 'DeprecationWarning'),
-                  ('py:exc', 'EOFError'), ('py:exc', 'EnvironmentError'),
-                  ('py:exc', 'Exception'), ('py:exc', 'FloatingPointError'),
-                  ('py:exc', 'FutureWarning'), ('py:exc', 'GeneratorExit'),
-                  ('py:exc', 'IOError'), ('py:exc', 'ImportError'),
-                  ('py:exc', 'ImportWarning'), ('py:exc', 'IndentationError'),
-                  ('py:exc', 'IndexError'), ('py:exc', 'KeyError'),
-                  ('py:exc', 'KeyboardInterrupt'), ('py:exc', 'LookupError'),
-                  ('py:exc', 'MemoryError'), ('py:exc', 'NameError'),
-                  ('py:exc', 'NotImplementedError'), ('py:exc', 'OSError'),
-                  ('py:exc', 'OverflowError'),
-                  ('py:exc', 'PendingDeprecationWarning'),
-                  ('py:exc', 'ReferenceError'), ('py:exc', 'RuntimeError'),
-                  ('py:exc', 'RuntimeWarning'), ('py:exc', 'StandardError'),
-                  ('py:exc', 'StopIteration'), ('py:exc', 'SyntaxError'),
-                  ('py:exc', 'SyntaxWarning'), ('py:exc', 'SystemError'),
-                  ('py:exc', 'SystemExit'), ('py:exc', 'TabError'),
-                  ('py:exc', 'TypeError'), ('py:exc', 'UnboundLocalError'),
-                  ('py:exc', 'UnicodeDecodeError'),
-                  ('py:exc', 'UnicodeEncodeError'), ('py:exc', 'UnicodeError'),
-                  ('py:exc', 'UnicodeTranslateError'),
-                  ('py:exc', 'UnicodeWarning'), ('py:exc', 'UserWarning'),
-                  ('py:exc', 'VMSError'), ('py:exc', 'ValueError'),
-                  ('py:exc', 'Warning'), ('py:exc', 'WindowsError'),
-                  ('py:exc', 'ZeroDivisionError'), ('py:obj', 'str'),
-                  ('py:obj', 'list'),
-                  ('py:obj', 'tuple'),
-                  ('py:obj', 'int'),
-                  ('py:obj', 'float'),
-                  ('py:obj', 'bool'),
-                  ('py:obj', 'Mapping'),
-                  ('py:obj', 'MutableMapping'),
-                  ('py:func', 'str.format'),
-                  ('py:class', '_abcoll.MutableMapping'),
-                  ('py:class',
-                   'traitlets.config.configurable.LoggingConfigurable'),
-                  ('py:class', 'docutils.nodes.Element'),
-                  ('py:class', 'docutils.nodes.General'),
-                  ('py:class', 'docutils.nodes.document'),
-                  ('py:class', 'docutils.parsers.rst.Directive'),
-                  ('py:class', 'docutils.transforms.Transform'),
-                  ('py:class', 'docutils.parsers.rst.Parser'),
-                  ('py:class', 'sphinx.parsers.RSTParser'),
-                  ('py:class', 'sphinx.roles.XRefRole'),
-                  ('py:exc', 'nbconvert.pandoc.PandocMissing')
-                  ]
+nitpick_ignore = [('py:exc', 'ArithmeticError'), ('py:exc', 'AssertionError'), ('py:exc', 'AttributeError'),
+                  ('py:exc', 'BaseException'), ('py:exc', 'BufferError'), ('py:exc', 'DeprecationWarning'),
+                  ('py:exc', 'EOFError'), ('py:exc', 'EnvironmentError'), ('py:exc', 'Exception'),
+                  ('py:exc', 'FloatingPointError'), ('py:exc', 'FutureWarning'), ('py:exc', 'GeneratorExit'),
+                  ('py:exc', 'IOError'), ('py:exc', 'ImportError'), ('py:exc', 'ImportWarning'),
+                  ('py:exc', 'IndentationError'), ('py:exc', 'IndexError'), ('py:exc', 'KeyError'),
+                  ('py:exc', 'KeyboardInterrupt'), ('py:exc', 'LookupError'), ('py:exc', 'MemoryError'),
+                  ('py:exc', 'NameError'), ('py:exc', 'NotImplementedError'), ('py:exc', 'OSError'),
+                  ('py:exc', 'OverflowError'), ('py:exc', 'PendingDeprecationWarning'), ('py:exc', 'ReferenceError'),
+                  ('py:exc', 'RuntimeError'), ('py:exc', 'RuntimeWarning'), ('py:exc', 'StandardError'),
+                  ('py:exc', 'StopIteration'), ('py:exc', 'SyntaxError'), ('py:exc', 'SyntaxWarning'),
+                  ('py:exc', 'SystemError'), ('py:exc', 'SystemExit'), ('py:exc', 'TabError'), ('py:exc', 'TypeError'),
+                  ('py:exc', 'UnboundLocalError'), ('py:exc', 'UnicodeDecodeError'), ('py:exc', 'UnicodeEncodeError'),
+                  ('py:exc', 'UnicodeError'), ('py:exc', 'UnicodeTranslateError'), ('py:exc', 'UnicodeWarning'),
+                  ('py:exc', 'UserWarning'), ('py:exc', 'VMSError'), ('py:exc', 'ValueError'), ('py:exc', 'Warning'),
+                  ('py:exc', 'WindowsError'), ('py:exc', 'ZeroDivisionError'), ('py:obj', 'str'), ('py:obj', 'list'),
+                  ('py:obj', 'tuple'), ('py:obj', 'int'), ('py:obj', 'float'), ('py:obj', 'bool'), ('py:obj',
+                                                                                                    'Mapping'),
+                  ('py:obj', 'MutableMapping'), ('py:func', 'str.format'), ('py:class', '_abcoll.MutableMapping'),
+                  ('py:class', 'traitlets.config.configurable.LoggingConfigurable'),
+                  ('py:class', 'docutils.nodes.Element'), ('py:class', 'docutils.nodes.General'),
+                  ('py:class', 'docutils.nodes.document'), ('py:class', 'docutils.parsers.rst.Directive'),
+                  ('py:class', 'docutils.transforms.Transform'), ('py:class', 'docutils.parsers.rst.Parser'),
+                  ('py:class', 'sphinx.parsers.RSTParser'), ('py:class', 'sphinx.roles.XRefRole'),
+                  ('py:exc', 'nbconvert.pandoc.PandocMissing'), ('py:class', 'click.core.Command'),
+                  ('py:class', 'click.core.Option')]
 
 try:
-    out = subprocess.check_output(["git", "branch"]).decode("utf8")
-    current = next(line for line in out.split("\n") if line.startswith("*"))
-    gitbranch = current.strip("*").strip()
+    out = subprocess.check_output(['git', 'branch']).decode('utf8')
+    current = next(line for line in out.split('\n') if line.startswith('*'))
+    gitbranch = current.strip('*').strip()
 except subprocess.CalledProcessError:
     gitbranch = None
 
 # on rtd, returns e.g. (HEAD detached at origin/develop)
-if gitbranch is not None and "develop" in gitbranch:
-    gitpath = "blob/develop"
-    binderpath = "develop"
-elif gitbranch is not None and "glossary" in gitbranch:
-    gitpath = "blob/glossary"
-    binderpath = "glossary"
+if gitbranch is not None and 'develop' in gitbranch:
+    gitpath = 'blob/develop'
+    binderpath = 'develop'
+elif gitbranch is not None and 'glossary' in gitbranch:
+    gitpath = 'blob/glossary'
+    binderpath = 'glossary'
 else:
-    gitpath = "blob/v{}".format(ipypublish.__version__)
-    binderpath = "v{}".format(ipypublish.__version__)
+    gitpath = 'blob/v{}'.format(ipypublish.__version__)
+    binderpath = 'v{}'.format(ipypublish.__version__)
 
 ipysphinx_prolog = r"""
 {{% set docname = env.doc2path(env.docname, base='docs/source') %}}
@@ -378,42 +342,40 @@ ipysphinx_prolog = r"""
         {{%- endif %}}
     __ https://github.com/chrisjsewell/ipypublish/{gitpath}/{{{{ docname }}}}
 
-""".format(gitpath=gitpath, binderpath=binderpath)  # noqa: E501
+""".format(  # noqa: E501
+    gitpath=gitpath, binderpath=binderpath)
 
 
 def create_git_releases(app):
 
-    this_folder = os.path.abspath(
-        os.path.dirname(os.path.realpath(__file__)))
+    this_folder = os.path.abspath(os.path.dirname(os.path.realpath(__file__)))
 
-    git_history = urllib.request.urlopen(
-        'https://api.github.com/repos/chrisjsewell/ipypublish/releases'
-    ).read().decode('utf-8')
+    git_history = urllib.request.urlopen('https://api.github.com/repos/chrisjsewell/ipypublish/releases').read().decode(
+        'utf-8')
     # NOTE on vscode this could fail with urllib.error.HTTPError
     git_history_json = json.loads(git_history)
     # NOTE on vscode this was failing unless encoding='utf8' was present
-    with io.open(os.path.join(this_folder, 'releases.rst'),
-                 'w', encoding="utf8") as f:
+    with io.open(os.path.join(this_folder, 'releases.rst'), 'w', encoding='utf8') as f:
         f.write('.. _releases:\n\n')
         f.write('Releases\n')
         f.write('========\n\n')
         for i, r in enumerate(git_history_json):
-            if r['tag_name'].split(".")[-1] == "0":
+            if r['tag_name'].split('.')[-1] == '0':
                 level = 2
             elif i == 0:
-                f.write("Current Version\n")
-                f.write("---------------\n\n")
+                f.write('Current Version\n')
+                f.write('---------------\n\n')
                 level = 3
             else:
                 level = 3
             subtitle = ' '.join([r['tag_name'], '-', r['name'].rstrip(), '\n'])
             f.write(subtitle)
             if level == 2:
-                f.write("-" * (len(subtitle)-1)+"\n")
+                f.write('-' * (len(subtitle) - 1) + '\n')
             else:
-                f.write("~" * (len(subtitle)-1)+"\n")
+                f.write('~' * (len(subtitle) - 1) + '\n')
             f.write('\n')
-            source = jinja_filter(r['body'], "rst", {}, {})
+            source = jinja_filter(r['body'], 'rst', {}, {})
             for line in source.split('\n'):
                 f.write(' '.join([line.rstrip(), '\n']))
             f.write('\n')
@@ -442,30 +404,21 @@ def run_apidoc(app):
 
     See: https://github.com/rtfd/readthedocs.org/issues/1139
     """
-    logger.info("running apidoc")
+    logger.info('running apidoc')
     # get correct paths
-    this_folder = os.path.abspath(
-        os.path.dirname(os.path.realpath(__file__)))
-    api_folder = os.path.join(this_folder, "api")
+    this_folder = os.path.abspath(os.path.dirname(os.path.realpath(__file__)))
+    api_folder = os.path.join(this_folder, 'api')
     # module_path = ipypublish.utils.get_module_path(ipypublish)
-    module_path = os.path.normpath(
-        os.path.join(this_folder, "../../"))
+    module_path = os.path.normpath(os.path.join(this_folder, '../../'))
 
-    ignore_paths = [
-        "../../setup.py",
-        "../../conftest.py",
-        "../../ipypublish/tests",
-        "../../ipypublish/sphinx/tests"
-    ]
-    ignore_paths = [
-        os.path.normpath(
-            os.path.join(this_folder, p)) for p in ignore_paths]
+    ignore_paths = ['../../setup.py', '../../conftest.py', '../../ipypublish/tests', '../../ipypublish/sphinx/tests']
+    ignore_paths = [os.path.normpath(os.path.join(this_folder, p)) for p in ignore_paths]
 
     if os.path.exists(api_folder):
         shutil.rmtree(api_folder)
     os.mkdir(api_folder)
 
-    argv = ["--separate", "-o", api_folder, module_path] + ignore_paths
+    argv = ['--separate', '-o', api_folder, module_path] + ignore_paths
 
     try:
         # Sphinx 1.7+
@@ -478,20 +431,19 @@ def run_apidoc(app):
     apidoc.main(argv)
 
     # we don't use this
-    if os.path.exists(os.path.join(api_folder, "modules.rst")):
-        os.remove(os.path.join(api_folder, "modules.rst"))
+    if os.path.exists(os.path.join(api_folder, 'modules.rst')):
+        os.remove(os.path.join(api_folder, 'modules.rst'))
 
 
 def get_version():
     """alternative to getting directly"""
     import re
     this_folder = os.path.join(os.path.dirname(os.path.realpath(__file__)))
-    init_file = os.path.join(this_folder, "../../ipypublish/__init__.py")
+    init_file = os.path.join(this_folder, '../../ipypublish/__init__.py')
     with open(init_file) as fobj:
         content = fobj.read()
 
-    match = re.match(
-        "\\_\\_version\\_\\_\\s*\\=\\s*[\\'\\\"]([0-9\\.]+)", content)
+    match = re.match("\\_\\_version\\_\\_\\s*\\=\\s*[\\'\\\"]([0-9\\.]+)", content)
     if not match:
         raise IOError("couldn't find __version__ in: {}".format(init_file))
     return match.group(1)
