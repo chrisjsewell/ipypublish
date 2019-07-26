@@ -9,6 +9,7 @@ def test_autocomplete():
     runner = CliRunner()
     result = runner.invoke(autocomplete)
     assert result.exception is None, result.output
+    assert result.exit_code == 0, result.output
     assert result.output.strip() == AUTOCOMPLETE_COMMAND, result.output
 
 
@@ -17,6 +18,7 @@ def test_default_traits():
     runner = CliRunner()
     result = runner.invoke(ipub_default_traits)
     assert result.exception is None, result.output
+    assert result.exit_code == 0, result.output
     assert result.output, result.output
 
 
@@ -26,4 +28,5 @@ def test_list_configs(options):
     runner = CliRunner()
     result = runner.invoke(ipub_list_configs, options)
     assert result.exception is None, result.output
+    assert result.exit_code == 0, result.output
     assert result.output, result.output

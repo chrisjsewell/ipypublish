@@ -2,8 +2,6 @@
 
 import click
 
-from ipypublish.convert.main import IpyPubMain
-from ipypublish.convert.config_manager import get_plugin_str
 from ipypublish.cmdline import options
 
 AUTOCOMPLETE_COMMAND = 'eval "$(_IPYPUB_COMPLETE=source ipypub)"'
@@ -24,6 +22,7 @@ def autocomplete():
 @ipypub.command('default_traits')
 def ipub_default_traits():
     """ Print the default trait configuration for IpyPubMain. """
+    from ipypublish.convert.main import IpyPubMain
     click.echo(IpyPubMain.class_get_help())
 
 
@@ -33,4 +32,5 @@ def ipub_default_traits():
 @options.VERBOSE()
 def ipub_list_configs(regex, config_paths, verbose):
     """ List available export configurations. """
+    from ipypublish.convert.config_manager import get_plugin_str
     click.echo(get_plugin_str(plugin_folder_paths=config_paths, regex=regex, verbose=verbose))

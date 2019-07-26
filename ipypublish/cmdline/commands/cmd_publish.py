@@ -3,7 +3,6 @@ import click
 
 from ipypublish.cmdline.commands.cmd_ipypub import ipypub
 from ipypublish.cmdline import options, utils
-from ipypublish.convert.main import IpyPubMain
 
 
 @ipypub.command('publish', cls=options.CustomCommand)
@@ -30,6 +29,8 @@ def ipub_publish(input_path, output_path, output_config, config_paths, ignore_pr
 
     INPUT_PATH can be a directory or a filepath
     """
+    from ipypublish.convert.main import IpyPubMain
+
     config = {
         'IpyPubMain': {
             'conversion':

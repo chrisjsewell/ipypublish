@@ -8,8 +8,6 @@ import click
 
 from ipypublish.cmdline.commands.cmd_ipypub import ipypub
 from ipypublish.cmdline import options, utils
-from ipypublish.convert.main import IpyPubMain
-from ipypublish.postprocessors.reveal_serve import RevealServer
 
 
 # TODO replicate argparse add_argument_group https://github.com/pallets/click/issues/373
@@ -34,6 +32,9 @@ def ipub_present(input_path, output_path, output_config, config_paths, ignore_pr
     If path extension is ``.ipynb`` the notebook will be converted first.
 
     """
+    from ipypublish.convert.main import IpyPubMain
+    from ipypublish.postprocessors.reveal_serve import RevealServer
+
     inpath_name, inpath_ext = os.path.splitext(os.path.basename(input_path))
 
     output_mimetype = guess_type(input_path, strict=False)[0]
