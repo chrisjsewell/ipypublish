@@ -7,7 +7,7 @@ jinja2
 jsonextended>=0.7
 jsonschema
 jupytext
-importlib_resources; python_version < '3.7'
+importlib_resources
 nbconvert
 nbformat
 ordered-set
