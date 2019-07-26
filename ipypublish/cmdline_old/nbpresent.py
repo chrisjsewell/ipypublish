@@ -4,7 +4,7 @@ import os
 import sys
 from mimetypes import guess_type
 
-from ipypublish.cmdline_old.shared import parse_options
+from ipypublish.cmdline_old.shared import parse_options, deprecation_warning
 from ipypublish.convert.main import IpyPubMain
 from ipypublish.postprocessors.reveal_serve import RevealServer
 
@@ -93,6 +93,8 @@ def nbpresent(inpath,
 
 
 def run(sys_args=None):
+
+    deprecation_warning("'This command has been deprecated in ipypublish 0.11, please use 'ipub present' instead.")
 
     if sys_args is None:
         sys_args = sys.argv[1:]

@@ -95,7 +95,8 @@ setup(
         'console_scripts': [
             'nbpublish = ipypublish.cmdline_old.nbpublish:run',
             'nbpresent = ipypublish.cmdline_old.nbpresent:run',
-            'ipubpandoc = ipypublish.filters_pandoc.main:pandoc_filters'
+            'ipubpandoc = ipypublish.filters_pandoc.main:pandoc_filters',
+            'ipypub = ipypublish.cmdline.commands.cmd_ipypub:ipypub'
         ],
         'ipypublish.postprocessors': [
             'remove-blank-lines = ipypublish.postprocessors.stream_modify:RemoveBlankLines',

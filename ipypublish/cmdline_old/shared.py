@@ -1,10 +1,22 @@
 import sys
 import os
 import argparse
-import fnmatch
+import warnings
 
 from ipypublish import __version__
-from ipypublish.convert.config_manager import iter_all_export_infos
+from ipypublish.convert.config_manager import get_plugin_str
+
+
+def deprecation_warning(message):
+    """ raise a deprecation warning """
+    with warnings.catch_warnings():
+        warnings.simplefilter('always', DeprecationWarning)
+
+        def warning_on_one_line(message, category, filename, lineno, file=None, line=None):
+            return '{}: {}\n\n'.format(category.__name__, message)
+
+        warnings.formatwarning = warning_on_one_line
+        warnings.warn(message, DeprecationWarning, stacklevel=1)
 
 
 class CustomFormatter(
@@ -24,41 +36,6 @@ class CustomParser(argparse.ArgumentParser):
 
 def get_parser(**kwargs):
     return CustomParser(formatter_class=CustomFormatter, **kwargs)
-
-
-def get_plugin_str(plugin_folder_paths, regex, verbose):
-    """return string listing all available export configurations """
-    outstrs = []
-    # outstrs.append('Available Export Configurations')
-    # outstrs.append('-------------------------------')
-    configs = [
-        e for e in iter_all_export_infos(plugin_folder_paths, get_mime=verbose)
-        if fnmatch.fnmatch(e['key'], '*{}*'.format(regex))
-    ]
-
-    for item in sorted(configs, key=lambda i: (i['class'], i['key'])):
-        outstrs.append('- Key:   {}'.format(item['key']))
-        outstrs.append('  Class: {}'.format(item['class']))
-        path = item['path'].split(os.path.sep)
-        if verbose:
-            outstrs.append('  Type:  {}'.format(item['mime_type']))
-            path = os.path.join(*path)
-        else:
-            path = os.path.join('...', *path[-3:])
-
-        if len(path) < 4:
-            outstrs.append('  Path:  {}'.format(item['path']))
-        else:
-            outstrs.append('  Path:  {}'.format(path))
-
-        outstrs.append('  About: {}'.format(item['description'][0].strip()))
-        if verbose:
-            for descript in item['description'][1:]:
-                outstrs.append('         {}'.format(descript.strip()))
-        # note could wrap description (less than x characters)
-        outstrs.append(' ')
-
-    return '\n'.join(outstrs)
 
 
 def parse_options(sys_args, program):

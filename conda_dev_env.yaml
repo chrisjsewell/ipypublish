@@ -11,6 +11,8 @@ dependencies:
 - python =3.6
 
 - bibtexparser
+- click >=7.0,<8.0
+- click-completion
 - docutils
 - jinja2
 - jsonextended >=0.7

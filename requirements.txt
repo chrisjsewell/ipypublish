@@ -1,4 +1,6 @@
 bibtexparser
+click >=7.0,<8.0
+click-completion
 docutils; python_version >= '3'
 docutils <0.15; python_version < '3'
 jinja2

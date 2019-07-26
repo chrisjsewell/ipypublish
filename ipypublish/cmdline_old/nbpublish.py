@@ -2,7 +2,7 @@
 import logging
 import sys
 
-from ipypublish.cmdline_old.shared import parse_options
+from ipypublish.cmdline_old.shared import parse_options, deprecation_warning
 from ipypublish.convert.main import IpyPubMain
 
 logger = logging.getLogger('nbpublish')
@@ -95,6 +95,8 @@ def nbpublish(ipynb_path,
 
 
 def run(sys_args=None):
+
+    deprecation_warning("'This command has been deprecated in ipypublish 0.11, please use 'ipub publish' instead.")
 
     if sys_args is None:
         sys_args = sys.argv[1:]

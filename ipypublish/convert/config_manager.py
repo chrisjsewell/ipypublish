@@ -1,24 +1,24 @@
-import os
+import fnmatch
 import glob
 import importlib
 import logging
+import os
 
 from six import string_types
 from jinja2 import DictLoader
 import jsonschema
 import nbconvert  # noqa: F401
 
-from ipypublish.utils import (pathlib, handle_error, get_module_path,
-                              read_file_from_directory, read_file_from_module)
+from ipypublish.utils import (pathlib, handle_error, get_module_path, read_file_from_directory, read_file_from_module)
 from ipypublish import export_plugins
 from ipypublish import schema
 from ipypublish.templates.create_template import create_template
 
 _TEMPLATE_KEY = 'new_template'
-_EXPORT_SCHEMA_FILE = "export_config.schema.json"
+_EXPORT_SCHEMA_FILE = 'export_config.schema.json'
 _EXPORT_SCHEMA = None
 
-logger = logging.getLogger("configuration")
+logger = logging.getLogger('configuration')
 
 
 def get_export_config_path(export_key, config_folder_paths=()):
@@ -31,7 +31,7 @@ def get_export_config_path(export_key, config_folder_paths=()):
     return None
 
 
-def iter_all_export_paths(config_folder_paths=(), regex="*.json"):
+def iter_all_export_paths(config_folder_paths=(), regex='*.json'):
     """we iterate through all json files in the
     supplied plugin_folder_paths, and then in the `export_plugins` folder
     """
@@ -52,66 +52,92 @@ def load_export_config(export_config_path):
         export_config_path = pathlib.Path(export_config_path)
 
     data = read_file_from_directory(
-        export_config_path.parent, export_config_path.name,
-        "export configuration", logger, interp_ext=True)
+        export_config_path.parent, export_config_path.name, 'export configuration', logger, interp_ext=True)
 
     # validate against schema
     global _EXPORT_SCHEMA
     if _EXPORT_SCHEMA is None:
         # lazy load schema once
         _EXPORT_SCHEMA = read_file_from_directory(
-            get_module_path(schema), _EXPORT_SCHEMA_FILE,
-            "export configuration schema", logger, interp_ext=True)
+            get_module_path(schema), _EXPORT_SCHEMA_FILE, 'export configuration schema', logger, interp_ext=True)
     try:
         jsonschema.validate(data, _EXPORT_SCHEMA)
     except jsonschema.ValidationError as err:
         handle_error(
-            "validation of export config {} failed against {}: {}".format(
-                export_config_path, _EXPORT_SCHEMA_FILE, err.message),
-            jsonschema.ValidationError, logger=logger)
+            'validation of export config {} failed against {}: {}'.format(export_config_path, _EXPORT_SCHEMA_FILE,
+                                                                          err.message),
+            jsonschema.ValidationError,
+            logger=logger)
 
     return data
 
 
-def iter_all_export_infos(config_folder_paths=(),
-                          regex="*.json", get_mime=False):
+def iter_all_export_infos(config_folder_paths=(), regex='*.json', get_mime=False):
     """iterate through all export configuration and yield a dict of info"""
     for name, path in iter_all_export_paths(config_folder_paths, regex):
         data = load_export_config(path)
 
-        info = dict([
-            ("key", str(name)),
-            ("class", data["exporter"]["class"]),
-            ("path", str(path)),
-            ("description", data["description"])
-        ])
+        info = dict([('key', str(name)), ('class', data['exporter']['class']), ('path', str(path)),
+                     ('description', data['description'])])
 
         if get_mime:
-            info["mime_type"] = create_exporter_cls(
-                data["exporter"]["class"]).output_mimetype
+            info['mime_type'] = create_exporter_cls(data['exporter']['class']).output_mimetype
 
         yield info
+
+
+def get_plugin_str(plugin_folder_paths=(), regex=None, verbose=False):
+    """return string listing all available export configurations """
+    outstrs = []
+    # outstrs.append('Available Export Configurations')
+    # outstrs.append('-------------------------------')
+    configs = [
+        e for e in iter_all_export_infos(plugin_folder_paths, get_mime=verbose)
+        if regex is None or fnmatch.fnmatch(e['key'], '*{}*'.format(regex))
+    ]
+
+    for item in sorted(configs, key=lambda i: (i['class'], i['key'])):
+        outstrs.append('- Key:   {}'.format(item['key']))
+        outstrs.append('  Class: {}'.format(item['class']))
+        path = item['path'].split(os.path.sep)
+        if verbose:
+            outstrs.append('  Type:  {}'.format(item['mime_type']))
+            path = os.path.join(*path)
+        else:
+            path = os.path.join('...', *path[-3:])
+
+        if len(path) < 4:
+            outstrs.append('  Path:  {}'.format(item['path']))
+        else:
+            outstrs.append('  Path:  {}'.format(path))
+
+        outstrs.append('  About: {}'.format(item['description'][0].strip()))
+        if verbose:
+            for descript in item['description'][1:]:
+                outstrs.append('         {}'.format(descript.strip()))
+        # note could wrap description (less than x characters)
+        outstrs.append(' ')
+
+    return '\n'.join(outstrs)
 
 
 def create_exporter_cls(class_str):
     # type: (str) -> nbconvert.exporters.Exporter
     """dynamically load export class"""
-    export_class_path = class_str.split(".")
-    module_path = ".".join(export_class_path[0:-1])
+    export_class_path = class_str.split('.')
+    module_path = '.'.join(export_class_path[0:-1])
     class_name = export_class_path[-1]
     try:
         export_module = importlib.import_module(module_path)
     except ModuleNotFoundError:  # noqa: F821
         handle_error(
-            "module {} containing exporter class {} not found".format(
-                module_path, class_name),
-                ModuleNotFoundError, logger=logger)   # noqa: F821
+            'module {} containing exporter class {} not found'.format(module_path, class_name),
+            ModuleNotFoundError,
+            logger=logger)  # noqa: F821
     if hasattr(export_module, class_name):
         export_class = getattr(export_module, class_name)
     else:
-        handle_error(
-            "module {} does not contain class {}".format(
-                module_path, class_name), ImportError, logger=logger)
+        handle_error('module {} does not contain class {}'.format(module_path, class_name), ImportError, logger=logger)
 
     return export_class
 
@@ -119,11 +145,11 @@ def create_exporter_cls(class_str):
 def get_export_extension(export_config_path):
     """return the file extension of the exporter class"""
     data = load_export_config(export_config_path)
-    exporter_cls = create_exporter_cls(data["exporter"]["class"])
+    exporter_cls = create_exporter_cls(data['exporter']['class'])
     return exporter_cls.file_extension
 
 
-def str_to_jinja(template_str, template_key="jinja_template"):
+def str_to_jinja(template_str, template_key='jinja_template'):
     return DictLoader({template_key: template_str})
 
 
@@ -132,41 +158,37 @@ def load_template(template_key, template_dict):
     if template_dict is None:
         return None
 
-    if "directory" in template_dict["outline"]:
+    if 'directory' in template_dict['outline']:
         outline_template = read_file_from_directory(
-            template_dict["outline"]["directory"],
-            template_dict["outline"]["file"],
-            "template outline", logger, interp_ext=False)
-        outline_name = os.path.join(template_dict["outline"]["directory"],
-                                    template_dict["outline"]["file"])
+            template_dict['outline']['directory'],
+            template_dict['outline']['file'],
+            'template outline',
+            logger,
+            interp_ext=False)
+        outline_name = os.path.join(template_dict['outline']['directory'], template_dict['outline']['file'])
     else:
         outline_template = read_file_from_module(
-            template_dict["outline"]["module"],
-            template_dict["outline"]["file"],
-            "template outline", logger, interp_ext=False)
-        outline_name = os.path.join(template_dict["outline"]["module"],
-                                    template_dict["outline"]["file"])
+            template_dict['outline']['module'],
+            template_dict['outline']['file'],
+            'template outline',
+            logger,
+            interp_ext=False)
+        outline_name = os.path.join(template_dict['outline']['module'], template_dict['outline']['file'])
 
     segments = []
-    for snum, segment in enumerate(template_dict.get("segments", [])):
+    for snum, segment in enumerate(template_dict.get('segments', [])):
 
-        if "file" not in segment:
-            handle_error(
-                "'file' expected in segment {}".format(snum),
-                KeyError, logger)
+        if 'file' not in segment:
+            handle_error("'file' expected in segment {}".format(snum), KeyError, logger)
 
-        if "directory" in segment:
+        if 'directory' in segment:
             seg_data = read_file_from_directory(
-                segment["directory"],
-                segment["file"], "template segment", logger, interp_ext=True)
-        elif "module" in segment:
+                segment['directory'], segment['file'], 'template segment', logger, interp_ext=True)
+        elif 'module' in segment:
             seg_data = read_file_from_module(
-                segment["module"],
-                segment["file"], "template segment", logger, interp_ext=True)
+                segment['module'], segment['file'], 'template segment', logger, interp_ext=True)
         else:
-            handle_error(
-                "'directory' or 'module' expected in segment {}".format(snum),
-                KeyError, logger)
+            handle_error("'directory' or 'module' expected in segment {}".format(snum), KeyError, logger)
 
         segments.append(seg_data)
 
