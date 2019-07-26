@@ -1,6 +1,34 @@
 """Module with pre-defined reusable commandline options that can be used as `click` decorators."""
+from collections import OrderedDict
 import os
 import click
+
+
+class CustomOption(click.Option):
+    """ a ``click.Option`` subclass that includes a ``help_group`` attribute"""
+
+    def __init__(self, *args, **kwargs):
+        self.help_group = kwargs.pop('help_group', None)
+        super(CustomOption, self).__init__(*args, **kwargs)
+
+
+class CustomCommand(click.Command):
+    """ a ``click.Command`` subclass that allows help options to be grouped by a ``help_group`` attribute"""
+
+    def format_options(self, ctx, formatter):
+        """Writes all the options into the formatter if they exist."""
+        opts = OrderedDict()
+        for param in self.get_params(ctx):
+            rv = param.get_help_record(ctx)
+            if rv is not None:
+                if hasattr(param, 'help_group') and param.help_group:
+                    opts.setdefault(str(param.help_group), []).append(rv)
+                else:
+                    opts.setdefault('Options', []).append(rv)
+
+        for name, opts_group in opts.items():
+            with formatter.section(name):
+                formatter.write_dl(opts_group)
 
 
 class OverridableOption(object):  # pylint: disable=useless-object-inheritance
@@ -38,6 +66,8 @@ class OverridableOption(object):  # pylint: disable=useless-object-inheritance
         """
         self.args = args
         self.kwargs = kwargs
+        if 'cls' not in self.kwargs:
+            self.kwargs['cls'] = CustomOption
 
     def __call__(self, **kwargs):
         """
