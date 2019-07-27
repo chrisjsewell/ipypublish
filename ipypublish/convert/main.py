@@ -83,10 +83,17 @@ class IpyPubMain(Configurable):
     @default('pre_conversion_funcs')
     def _default_pre_conversion_funcs(self):
         try:
-            import jupytext
-            return {'.Rmd': jupytext.readf}
+            import jupytext  # noqa: F401
         except ImportError:
             return {}
+
+        try:
+            from jupytext import read
+        except ImportError:
+            # this is deprecated in newer versions
+            from jupytext import readf as read  # noqa: F401
+
+        return {'.Rmd': read}
 
     @validate('pre_conversion_funcs')
     def _validate_pre_conversion_funcs(self, proposal):
