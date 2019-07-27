@@ -13,7 +13,7 @@ from ipypublish.cmdline import arguments, options, utils
 
 @ipypub.command('present', cls=options.CustomCommand)
 @arguments.INPUT_PATH()
-@options.OUTPUT_CONFIG(help_group='Conversion', default='slides_ipypublish_main')
+@options.OUTPUT_CONFIG(help_group='Conversion', default='slides_ipypublish_main', context_default=None)
 # nb merge
 @options.IGNORE_PREFIX(help_group='Conversion')
 # output

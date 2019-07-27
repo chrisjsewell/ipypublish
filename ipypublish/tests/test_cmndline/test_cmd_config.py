@@ -2,7 +2,7 @@ import os
 import pytest
 from click.testing import CliRunner
 from ipypublish.cmdline.commands import cmd_config
-from ipypublish.cmdline.config import IpubClickConfig, CONFIG_FILENAME
+from ipypublish.cmdline.config import IpubClickConfig, CONFIG_FILENAME, CONFIG_DEFAULTS, KEY_EXPORT_PATHS
 
 
 @pytest.mark.parametrize('options', (('-f',), ('--file-path',)))
@@ -34,7 +34,7 @@ def test_reset(temp_folder):
     result = runner.invoke(cmd_config.reset, obj=config, input='y')
     assert result.exception is None, result.output
     assert result.exit_code == 0, result.output
-    assert config.dict == {}
+    assert config.dict == CONFIG_DEFAULTS
 
 
 @pytest.mark.parametrize('argument', ('', 'does/not/exist'))
@@ -53,7 +53,7 @@ def test_add_export_path(temp_folder):
     result = runner.invoke(cmd_config.add_export_path, [temp_folder], obj=config)
     assert result.exception is None, result.output
     assert result.exit_code == 0, result.output
-    assert config.dict == {'export_paths': [os.path.normpath(os.path.realpath(temp_folder))]}
+    assert config[KEY_EXPORT_PATHS] == [os.path.normpath(os.path.realpath(temp_folder))]
 
 
 @pytest.mark.parametrize('options', ((), ('-v',), ('--verbosity',), ('-r', ''), ('--filter-regex', 'sphinx')))

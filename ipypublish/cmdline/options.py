@@ -3,22 +3,50 @@ from collections import OrderedDict
 import os
 import click
 
+from ipypublish.cmdline import config as ipub_config
 
-class CustomOption(click.Option):
-    """ a ``click.Option`` subclass that includes a ``help_group`` attribute"""
+
+class IpubOption(click.Option):
+    """ This extends ``click.Option`` by:
+
+    - including a ``help_group`` attribute, to group options in the help text,
+      see: https://github.com/pallets/click/issues/373
+    - including a ``context_default`` attribute, to set the default *via* the ``ctx.obj``
+      Note: this takes priority over ``default``
+
+    """
 
     def __init__(self, *args, **kwargs):
         self.help_group = kwargs.pop('help_group', None)
-        super(CustomOption, self).__init__(*args, **kwargs)
+        self.context_default = kwargs.pop('context_default', None)
+        super(IpubOption, self).__init__(*args, **kwargs)
+
+    def get_default(self, ctx):
+        if self.context_default is not None:
+            try:
+                self.default = ctx.obj[self.context_default]
+            except (TypeError, KeyError):
+                pass
+        return super(IpubOption, self).get_default(ctx)
 
 
 class CustomCommand(click.Command):
-    """ a ``click.Command`` subclass that allows help options to be grouped by a ``help_group`` attribute"""
+    """ This extends the ``click.Command`` by:
+
+    - allowing Options to be grouped in the help text by a ``help_group`` attribute,
+      see: https://github.com/pallets/click/issues/373
+    - call ``Option.default = Option.get_default()`` before creating the parameter help
+
+    """
 
     def format_options(self, ctx, formatter):
         """Writes all the options into the formatter if they exist."""
         opts = OrderedDict()
         for param in self.get_params(ctx):
+            try:
+                param.default = param.get_default(ctx)
+            except (TypeError, KeyError):
+                pass
             rv = param.get_help_record(ctx)
             if rv is not None:
                 if hasattr(param, 'help_group') and param.help_group:
@@ -67,7 +95,7 @@ class OverridableOption(object):  # pylint: disable=useless-object-inheritance
         self.args = args
         self.kwargs = kwargs
         if 'cls' not in self.kwargs:
-            self.kwargs['cls'] = CustomOption
+            self.kwargs['cls'] = IpubOption
 
     def __call__(self, **kwargs):
         """
@@ -207,14 +235,28 @@ OUTPUT_PATH = OverridableOption(
     show_default=True,
     type=click.Path(exists=False, file_okay=False, dir_okay=True))
 
-# TODO add dynamic autocompletion (with cache), when https://github.com/click-contrib/click-completion/pull/27 is merged
+
+def autocompletion_export_config(ctx, args, incomplete):
+    from ipypublish.convert.config_manager import iter_all_export_files
+    # TODO ctx.obj is not getting passed (so completions do not contain those in export_paths)
+    try:
+        export_paths = ctx.obj[ipub_config.KEY_EXPORT_PATHS]
+    except (TypeError, KeyError):
+        export_paths = ()
+    possibilities = [f.name for f in iter_all_export_files(export_paths) if f.name.startswith(incomplete)]
+
+    return list(possibilities)
+
+
 OUTPUT_CONFIG = OverridableOption(
     '-f',
     '--outformat',
     'output_config',
     metavar='KEY|PATH',
     default='latex_ipypublish_main',
+    context_default=ipub_config.KEY_DEFAULT_EXPORT_CONFIG,
     show_default=True,
+    autocompletion=autocompletion_export_config,
     help=('Export format configuration to use, '
           'can be a key name or path to the file.'))
 

@@ -1,4 +1,6 @@
 import os
+import traceback
+
 import pytest
 from click.testing import CliRunner
 
@@ -34,7 +36,7 @@ def test_bad_config(ipynb_app):
 
 
 @pytest.mark.ipynb('basic_nb')
-def test_nbpublish_dry_run(ipynb_app):
+def test_nbpublish_dry_run_std(ipynb_app):
 
     options = [
         str(ipynb_app.input_file), '--outpath',
@@ -42,12 +44,12 @@ def test_nbpublish_dry_run(ipynb_app):
     ]
     runner = CliRunner()
     result = runner.invoke(ipub_publish, options)
-    assert result.exception is None, result.output
+    assert result.exception is None, traceback.print_tb(result.exc_info[2])
     assert 'SUCCESS' in result.output
 
 
 @pytest.mark.ipynb('basic_nb')
-def test_nbpublish_dry_runwith_external_plugin_path(ipynb_app, external_export_plugin):
+def test_nbpublish_dry_run_with_external_plugin_path(ipynb_app, external_export_plugin):
 
     options = [
         str(ipynb_app.input_file), '--outformat',
