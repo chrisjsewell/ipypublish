@@ -6,5 +6,6 @@ import click_completion
 click_completion.init()
 
 # Import to populate the `ipypub` sub commands
+from .cmd_config import *  # noqa: F401,F403
 from .cmd_publish import *  # noqa: F401,F403
 from .cmd_present import *  # noqa: F401,F403

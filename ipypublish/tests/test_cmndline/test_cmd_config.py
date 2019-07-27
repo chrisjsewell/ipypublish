@@ -1,7 +1,7 @@
 import pytest
 from click.testing import CliRunner
-from ipypublish.cmdline.commands.cmd_ipypub import (ipub_default_traits, ipub_list_configs, autocomplete,
-                                                    AUTOCOMPLETE_COMMAND)
+from ipypublish.cmdline.commands.cmd_config import (list_default_traits, list_export_configs)
+from ipypublish.cmdline.commands.cmd_ipypub import (autocomplete, AUTOCOMPLETE_COMMAND)
 
 
 def test_autocomplete():
@@ -16,17 +16,17 @@ def test_autocomplete():
 def test_default_traits():
 
     runner = CliRunner()
-    result = runner.invoke(ipub_default_traits)
+    result = runner.invoke(list_default_traits)
     assert result.exception is None, result.output
     assert result.exit_code == 0, result.output
     assert result.output, result.output
 
 
-@pytest.mark.parametrize('options', ((), ('-v',), ('--verbose',), ('-r', ''), ('--filter-regex', 'sphinx')))
+@pytest.mark.parametrize('options', ((), ('-v',), ('--verbosity',), ('-r', ''), ('--filter-regex', 'sphinx')))
 def test_list_configs(options):
 
     runner = CliRunner()
-    result = runner.invoke(ipub_list_configs, options)
+    result = runner.invoke(list_export_configs, options)
     assert result.exception is None, result.output
     assert result.exit_code == 0, result.output
     assert result.output, result.output
