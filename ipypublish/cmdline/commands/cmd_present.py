@@ -14,6 +14,7 @@ from ipypublish.cmdline import arguments, options, utils
 @ipypub.command('present', cls=options.CustomCommand)
 @arguments.INPUT_PATH()
 @options.OUTPUT_CONFIG(help_group='Conversion', default='slides_ipypublish_main', context_default=None)
+@options.CONFIG_PATHS(help_group='Conversion')
 # nb merge
 @options.IGNORE_PREFIX(help_group='Conversion')
 # output
@@ -25,8 +26,8 @@ from ipypublish.cmdline import arguments, options, utils
 @options.LOG_TRACEBACK(help_group='Debugging')
 @options.DRY_RUN(help_group='Debugging')
 @pass_config
-def ipub_present(config, input_path, output_path, output_config, ignore_prefix, clear_files, launch_browser, log_level,
-                 log_traceback, dry_run):
+def ipub_present(config, input_path, output_path, output_config, config_paths, ignore_prefix, clear_files,
+                 launch_browser, log_level, log_traceback, dry_run):
     """Load reveal.js slides as a web server.
 
     If path extension is ``.ipynb`` the notebook will be converted first.
@@ -38,7 +39,7 @@ def ipub_present(config, input_path, output_path, output_config, ignore_prefix, 
 
     get_export_config_file(
         output_config,
-        config.export_paths,
+        list(config.export_paths) + list(config_paths),
         exc_class=click.BadParameter,
         exc_kwargs={'param_hint': options.OUTPUT_CONFIG.args[1]})
 

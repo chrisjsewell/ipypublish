@@ -160,15 +160,15 @@ CONFIG_PATH = OverridableOption(
     is_eager=True,
     callback=callback_config_path)
 
-# CONFIG_PATHS = OverridableOption(
-#     '-ep',
-#     '--export-paths',
-#     'config_paths',
-#     metavar='PATH',
-#     multiple=True,
-#     type=click.Path(exists=True, file_okay=False, dir_okay=True),
-#     help=('Add additional folder paths, '
-#           'containing export configurations.'))
+CONFIG_PATHS = OverridableOption(
+    '-ep',
+    '--export-path',
+    'config_paths',
+    metavar='PATH',
+    multiple=True,
+    type=click.Path(exists=True, file_okay=False, dir_okay=True),
+    help=('Add additional folder paths, '
+          'containing export configurations.'))
 
 CLEAR_FILES = OverridableOption(
     '-c',

@@ -79,6 +79,21 @@ def test_nbpublish_dry_run_with_external_plugin_key(ipynb_app, external_export_p
 
 
 @pytest.mark.ipynb('basic_nb')
+def test_nbpublish_dry_run_with_external_plugin_key2(ipynb_app, external_export_plugin, temp_folder):
+
+    options = [
+        str(ipynb_app.input_file), '--export-path',
+        str(external_export_plugin.parent), '--outformat',
+        os.path.splitext(str(external_export_plugin.name))[0], '--outpath',
+        str(ipynb_app.converted_path), '--dry-run', '--log-level', 'debug', '-pt'
+    ]
+    runner = CliRunner()
+    result = runner.invoke(ipub_publish, options)
+    assert result.exception is None, result.output
+    assert 'SUCCESS' in result.output
+
+
+@pytest.mark.ipynb('basic_nb')
 def test_nbpublish_write(ipynb_app):
 
     options = [
