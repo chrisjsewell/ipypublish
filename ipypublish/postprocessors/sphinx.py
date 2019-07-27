@@ -155,7 +155,7 @@ class RunSphinx(IPyPostProcessor):
         exitcode = process.wait()  # 0 means success
 
         if exitcode:
-            self.logger.warn('sphinx-build exited with code: {}'.format(exitcode))
+            self.logger.warning('sphinx-build exited with code: {}'.format(exitcode))
 
         if self.open_in_browser and not exitcode:
             # get entry path
