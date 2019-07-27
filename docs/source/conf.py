@@ -304,7 +304,7 @@ nitpick_ignore = [('py:exc', 'ArithmeticError'), ('py:exc', 'AssertionError'), (
                   ('py:class', 'docutils.transforms.Transform'), ('py:class', 'docutils.parsers.rst.Parser'),
                   ('py:class', 'sphinx.parsers.RSTParser'), ('py:class', 'sphinx.roles.XRefRole'),
                   ('py:exc', 'nbconvert.pandoc.PandocMissing'), ('py:class', 'click.core.Command'),
-                  ('py:class', 'click.core.Option')]
+                  ('py:class', 'click.core.Option'), ('py:class', 'click.Command'), ('py:class', 'click.core.Context')]
 
 try:
     out = subprocess.check_output(['git', 'branch']).decode('utf8')
