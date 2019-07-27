@@ -3,6 +3,7 @@ import pytest
 from click.testing import CliRunner
 
 from ipypublish.cmdline.commands.cmd_publish import ipub_publish
+from ipypublish.cmdline.config import IpubClickConfig
 
 
 @pytest.mark.ipynb('basic_nb')
@@ -46,7 +47,7 @@ def test_nbpublish_dry_run(ipynb_app):
 
 
 @pytest.mark.ipynb('basic_nb')
-def test_nbpublish_dry_run_with_external_plugin(ipynb_app, external_export_plugin):
+def test_nbpublish_dry_runwith_external_plugin_path(ipynb_app, external_export_plugin):
 
     options = [
         str(ipynb_app.input_file), '--outformat',
@@ -60,16 +61,17 @@ def test_nbpublish_dry_run_with_external_plugin(ipynb_app, external_export_plugi
 
 
 @pytest.mark.ipynb('basic_nb')
-def test_nbpublish_dry_run_with_external_plugin_key(ipynb_app, external_export_plugin):
+def test_nbpublish_dry_run_with_external_plugin_key(ipynb_app, external_export_plugin, temp_folder):
 
     options = [
-        str(ipynb_app.input_file), '--export-paths',
-        str(external_export_plugin.parent), '--outformat',
+        str(ipynb_app.input_file), '--outformat',
         os.path.splitext(str(external_export_plugin.name))[0], '--outpath',
         str(ipynb_app.converted_path), '--dry-run', '--log-level', 'debug', '-pt'
     ]
+    config = IpubClickConfig(temp_folder)
+    config.add_export_path(str(external_export_plugin.parent))
     runner = CliRunner()
-    result = runner.invoke(ipub_publish, options)
+    result = runner.invoke(ipub_publish, options, obj=config)
     assert result.exception is None, result.output
     assert 'SUCCESS' in result.output
 

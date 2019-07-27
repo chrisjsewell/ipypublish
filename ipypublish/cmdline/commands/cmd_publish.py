@@ -3,13 +3,13 @@ import logging
 import click
 
 from ipypublish.cmdline.commands.cmd_ipypub import ipypub
-from ipypublish.cmdline import options, utils
+from ipypublish.cmdline.config import pass_config
+from ipypublish.cmdline import arguments, options, utils
 
 
 @ipypub.command('publish', cls=options.CustomCommand)
-@options.INPUT_PATH
+@arguments.INPUT_PATH()
 @options.OUTPUT_CONFIG(help_group='Conversion')
-@options.CONFIG_PATHS(help_group='Conversion')
 # nb merge
 @options.IGNORE_PREFIX(help_group='Conversion')
 # output
@@ -24,8 +24,9 @@ from ipypublish.cmdline import options, utils
 @options.LOG_LEVEL(help_group='Debugging')
 @options.LOG_TRACEBACK(help_group='Debugging')
 @options.DRY_RUN(help_group='Debugging')
-def ipub_publish(input_path, output_path, output_config, config_paths, ignore_prefix, clear_files, create_pdf,
-                 pdf_in_temp, pdf_debug, launch_browser, log_level, log_traceback, dry_run):
+@pass_config
+def ipub_publish(config, input_path, output_path, output_config, ignore_prefix, clear_files, create_pdf, pdf_in_temp,
+                 pdf_debug, launch_browser, log_level, log_traceback, dry_run):
     """Convert Jupyter notebooks to a published format.
 
     INPUT_PATH can be a directory or a filepath
@@ -35,7 +36,7 @@ def ipub_publish(input_path, output_path, output_config, config_paths, ignore_pr
 
     get_export_config_file(
         output_config,
-        config_paths,
+        config.export_paths,
         exc_class=click.BadParameter,
         exc_kwargs={'param_hint': options.OUTPUT_CONFIG.args[1]})
 
@@ -44,7 +45,7 @@ def ipub_publish(input_path, output_path, output_config, config_paths, ignore_pr
             'conversion':
             output_config,
             'plugin_folder_paths':
-            config_paths,
+            config.export_paths,
             'outpath':
             output_path,
             'ignore_prefix':

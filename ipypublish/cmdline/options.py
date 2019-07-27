@@ -93,15 +93,54 @@ class OverridableOption(object):  # pylint: disable=useless-object-inheritance
         return clone
 
 
-CONFIG_PATHS = OverridableOption(
-    '-ep',
-    '--export-paths',
-    'config_paths',
-    metavar='PATH',
-    multiple=True,
-    type=click.Path(exists=True, file_okay=False, dir_okay=True),
-    help=('Add additional folder paths, '
-          'containing export configurations.'))
+_AUTOCOMPLETE_COMMAND = 'eval "$(_IPYPUB_COMPLETE=source ipypub)"'
+
+
+def callback_autocomplete(ctx, param, value):
+    if value and not ctx.resilient_parsing:
+        click.echo(_AUTOCOMPLETE_COMMAND)
+        ctx.exit()
+
+
+AUTOCOMPLETE = OverridableOption(
+    '-a',
+    '--autocomplete',
+    help='Print the terminal autocompletion command and exit.',
+    is_flag=True,
+    expose_value=True,
+    is_eager=True,
+    callback=callback_autocomplete)
+
+
+def callback_config_path(ctx, param, value):
+    if value and not ctx.resilient_parsing:
+        try:
+            click.echo(ctx.obj.file_path)
+        except AttributeError:
+            raise click.BadOptionUsage(
+                param, 'The IpubClickConfig object has not been passed to the command: {}'.format(ctx.__dict__))
+        ctx.exit()
+
+
+CONFIG_PATH = OverridableOption(
+    '-f',
+    '--file-path',
+    'config_path',
+    help='Print the configuration file path and exit.',
+    is_flag=True,
+    expose_value=True,
+    is_eager=True,
+    callback=callback_config_path)
+
+# CONFIG_PATHS = OverridableOption(
+#     '-ep',
+#     '--export-paths',
+#     'config_paths',
+#     metavar='PATH',
+#     multiple=True,
+#     type=click.Path(exists=True, file_okay=False, dir_okay=True),
+#     help=('Add additional folder paths, '
+#           'containing export configurations.'))
 
 CLEAR_FILES = OverridableOption(
     '-c',
@@ -131,8 +170,6 @@ IGNORE_PREFIX = OverridableOption(
     default='_',
     show_default=True,
     help='When merging notebooks, ignore ipynb files with this prefix.')
-
-INPUT_PATH = click.argument('input_path', type=click.Path(exists=True, file_okay=True, dir_okay=True, allow_dash=False))
 
 LAUNCH_BROWSER = OverridableOption(
     '-lb',

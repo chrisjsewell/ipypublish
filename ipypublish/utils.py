@@ -1,3 +1,4 @@
+import errno
 import os
 import json
 import io
@@ -7,13 +8,12 @@ import pkg_resources
 
 import importlib_resources
 import ruamel.yaml as yaml
-from six import string_types
+from six import string_types, PY2
 
-# python 2/3 compatibility
-try:
-    import pathlib
-except ImportError:
+if PY2:
     import pathlib2 as pathlib  # noqa: F401
+else:
+    import pathlib  # noqa: F401
 
 
 def handle_error(msg='', klass=None, exception=None, logger=None):
@@ -142,3 +142,15 @@ def find_entry_point(name, group, logger, preferred=None):
     else:
         entry_point = entry_points[0]
     return entry_point.load()
+
+
+def create_directory(path):
+    """Attempt to create the configuration folder at the given path skipping if it already exists
+
+    :param path: an absolute path to create a directory at
+    """
+    try:
+        os.makedirs(path)
+    except OSError as exception:
+        if exception.errno != errno.EEXIST:
+            raise OSError("could not create the '{}' configuration directory".format(path))
