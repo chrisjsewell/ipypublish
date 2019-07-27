@@ -25,7 +25,7 @@ class ProxyHandler(web.RequestHandler):
         """proxy a request to a CDN"""
         proxy_url = '/'.join([self.settings['cdn'], url])
         client = self.settings['client']
-        client.fetch(proxy_url, callback=self.finish_get)
+        client.fetch(proxy_url)
         response = yield client.fetch(proxy_url)
 
         for header in ['Content-Type', 'Cache-Control', 'Date', 'Last-Modified', 'Expires']:
