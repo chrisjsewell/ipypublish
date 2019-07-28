@@ -35,9 +35,11 @@ def ipub_publish(config, input_path, output_path, output_config, config_paths, i
     from ipypublish.convert.config_manager import get_export_config_file
     from ipypublish.convert.main import IpyPubMain
 
+    config_paths = list(config.export_paths) + list(config_paths)
+
     get_export_config_file(
         output_config,
-        list(config.export_paths) + list(config_paths),
+        config_paths,
         exc_class=click.BadParameter,
         exc_kwargs={'param_hint': options.OUTPUT_CONFIG.args[1]})
 
@@ -46,7 +48,7 @@ def ipub_publish(config, input_path, output_path, output_config, config_paths, i
             'conversion':
             output_config,
             'plugin_folder_paths':
-            config.export_paths,
+            config_paths,
             'outpath':
             output_path,
             'ignore_prefix':
