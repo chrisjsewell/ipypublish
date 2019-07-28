@@ -71,9 +71,9 @@ Badges
    :caption: Sphinx Extensions
    :hidden:
 
-   sphinx_extensions
-   sphinx_ext_notebook
-   sphinx_ext_bibgloss
+   sphinx/sphinx_extensions
+   sphinx/sphinx_ext_notebook
+   sphinx/sphinx_ext_bibgloss
 
 .. toctree::
    :maxdepth: 1
@@ -81,11 +81,11 @@ Badges
    :hidden:
 
    releases
-   examples
-   applications
-   dev_guide
-   additional_tools
-   acknowledgements
+   additional/examples
+   additional/applications
+   additional/dev_guide
+   additional/additional_tools
+   additional/acknowledgements
    package_api
 
 .. toctree::
@@ -93,9 +93,9 @@ Badges
    :caption: Validation Schemas
    :hidden:
 
-   metadata_doc_schema
-   metadata_cell_schema
-   export_schema
+   literal_include/metadata_doc_schema
+   literal_include/metadata_cell_schema
+   literal_include/export_schema
 
 
 .. todo:: how to use with vs-code

@@ -3,5 +3,5 @@
 Export Configuration Schema
 ----------------------------
 
-.. literalinclude:: ../../ipypublish/schema/export_config.schema.json
+.. literalinclude:: ../../../ipypublish/schema/export_config.schema.json
   :language: JSON

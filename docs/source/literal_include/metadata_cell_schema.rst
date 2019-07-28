@@ -3,5 +3,5 @@
 Cell/Output Level Metadata Schema
 ---------------------------------
 
-.. literalinclude:: ../../ipypublish/schema/cell_metadata.schema.json
+.. literalinclude:: ../../../ipypublish/schema/cell_metadata.schema.json
   :language: JSON

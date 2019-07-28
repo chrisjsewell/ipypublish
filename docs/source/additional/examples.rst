@@ -6,7 +6,7 @@ Examples
 For an example of the potential input/output,
 see :ref:`code_cells` and also:
 
-- :download:`Example.ipynb <../../example/notebooks/Example.ipynb>`
+- :download:`Example.ipynb <../../../example/notebooks/Example.ipynb>`
 - `Example.pdf <https://chrisjsewell.github.io/ipypublish/Example.view_pdf.html>`__
 - `Example.html <https://chrisjsewell.github.io/ipypublish/Example.html>`__
 - `Example.slides.html <https://chrisjsewell.github.io/ipypublish/Example.slides.html#/>`__
