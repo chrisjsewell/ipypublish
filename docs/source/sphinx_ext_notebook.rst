@@ -148,6 +148,7 @@ Basic input
     :execution-count: 2
     :caption: A caption for the code cell
     :name: ref_label
+    :no-output:
 
     print("hallo")
 
