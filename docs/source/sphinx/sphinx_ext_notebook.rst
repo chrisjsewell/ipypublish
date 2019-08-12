@@ -9,7 +9,7 @@ ipypublish.sphinx.notebook
 for converting notebooks with :py:class:`ipypublish.convert.main.IpyPubMain`.
 
 This website is built using it,
-and a good example its use would be to look at the
+so a good example of its use would be to look at the
 `ipypublish/docs/source/conf.py <https://github.com/chrisjsewell/ipypublish/blob/master/docs/source/conf.py>`_.
 
 This extension loads:
