@@ -269,6 +269,9 @@ def compare_rst_files(testpath, outpath, encoding='utf8'):
         # python 3.5 used .jpg instead of .jpeg
         content = content.replace('.jpg', '.jpeg')
 
+        # a recent dependency change is inserting new lines at the top of the file
+        content = content.lstrip()
+
         output.append(content)
 
     test_content, out_content = output
