@@ -13,9 +13,11 @@ and presentations, from Jupyter Notebooks.
 
 .. attention::
 
-    IPyPublish has evolved!
-
+    IPyPublish is evolving!
     Please see :ref:`releases` for all the exciting new feature.
+
+    Also see `pytest-notebook <https://pytest-notebook.readthedocs.io>`_,
+    for a new tool to test and regenerate notebooks.
 
 
 IPyPublish: Features
