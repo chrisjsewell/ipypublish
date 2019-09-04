@@ -13,6 +13,15 @@ Releases
 Version 0.10
 ------------
 
+v0.10.9
+~~~~~~~
+
+Improve ipubpandoc filter conversion of equations:
+
+- Ensure equations that are already wrapped in a math environment
+  are not wrapped twice.
+- For RST output, ensure multi-line equations are correctly indented
+
 v0.10.6 & v0.10.7
 ~~~~~~~~~~~~~~~~~
 
