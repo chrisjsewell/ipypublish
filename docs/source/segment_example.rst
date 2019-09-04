@@ -1,3 +1,5 @@
+:orphan:
+
 .. _segment_config:
 
 Example of a Template Segment

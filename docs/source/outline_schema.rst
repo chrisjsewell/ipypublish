@@ -1,3 +1,5 @@
+:orphan:
+
 .. _outline_schema:
 
 Template Outline Example

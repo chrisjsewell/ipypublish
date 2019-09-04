@@ -9,7 +9,7 @@ ipypublish.sphinx.notebook
 for converting notebooks with :py:class:`ipypublish.convert.main.IpyPubMain`.
 
 This website is built using it,
-and a good example its use would be to look at the
+so a good example of its use would be to look at the
 `ipypublish/docs/source/conf.py <https://github.com/chrisjsewell/ipypublish/blob/master/docs/source/conf.py>`_.
 
 This extension loads:
@@ -81,6 +81,10 @@ or for sphinx<1.8:
     (including the ipypublish extensions), and
     call `sphinx-build <https://www.sphinx-doc.org/en/master/man/sphinx-build.html>`_.
 
+.. seealso::
+
+    :ref:`sphinx_doc_metadata`, for the notebook document level metadata options.
+
 Configuration
 -------------
 
@@ -144,6 +148,7 @@ Basic input
     :execution-count: 2
     :caption: A caption for the code cell
     :name: ref_label
+    :no-output:
 
     print("hallo")
 

@@ -196,8 +196,100 @@ See
 `Positioning_images_and_tables <https://www.sharelatex.com/learn/Positioning_images_and_tables>`__
 for placement options.
 
+.. _pandoc_doc_metadata:
+
+Pandoc Markdown Conversion
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To control how the ipypandoc filters convert markdown cells,
+the following options are available:
+
+.. code:: json
+
+   {
+   "ipub": {
+       "sphinx": {
+          "apply_filters": true,
+          "convert_raw": true,
+          "hide_raw": false,
+          "at_notation": true,
+          "use_numref": true,
+          "reftag": "cite"
+         }
+     }
+   }
+
+.. seealso::
+
+    :ref:`markdown_cells`
+
+.. _sphinx_doc_metadata:
+
+Sphinx Output Control
+~~~~~~~~~~~~~~~~~~~~~
+
+.. seealso::
+
+    :ref:`sphinx_ext_notebook`, for documentation on the Sphinx extension.
+
+To suppress the output of a bibliography or glossary:
+
+.. code:: json
+
+   {
+   "ipub": {
+       "sphinx": {
+          "no_bib": true,
+          "no_glossary": true
+         }
+     }
+   }
+
+To change the title text of the bibliography and glossary:
+
+.. code:: json
+
+   {
+   "ipub": {
+       "sphinx": {
+          "bib_title": "My Title",
+          "glossary_title": "My Title"
+         }
+     }
+   }
+
+
+To control the addition of toggle buttons for code/output cells:
+
+.. code:: json
+
+   {
+   "ipub": {
+       "sphinx": {
+          "toggle_input": true,
+          "toggle_output": true,
+          "toggle_input_all": true,
+          "toggle_output_all": true
+         }
+     }
+   }
+
+To denote the notebook as an orphan (i.e. not required in an index):
+
+.. code:: json
+
+   {
+   "ipub": {
+       "sphinx": {
+          "orphan": true
+         }
+     }
+   }
+
 Cell/Output Level
 -----------------
+
+The full schema can be viewed at :ref:`meta_celllevel_schema`.
 
 Ignore
 ~~~~~~
@@ -232,7 +324,7 @@ To **output a code block**:
    {
    "ipub": {
      "code": {
-     "format" : {},
+       "format" : {},
        "asfloat": true,
        "caption": "",
        "label": "code:example_sym",
@@ -262,15 +354,15 @@ command):
    {
    "ipub": {
      "text": {
-         "format": {
+        "format": {
           "basicstyle": "\\small"
-         },
-       "asfloat": true,
-       "caption": "",
-       "label": "code:example_sym",
-       "widefigure": false,
-       "placement": "H",
-     "use_ansi": false
+        },
+        "asfloat": true,
+        "caption": "",
+        "label": "code:example_sym",
+        "widefigure": false,
+        "placement": "H",
+        "use_ansi": false
        }
      }
    }
@@ -302,7 +394,7 @@ metadata:
        "caption": "Figure caption.",
        "label": "fig:flabel",
        "placement": "H",
-     "height":0.4,
+       "height":0.4,
        "widefigure": false
        }
      }
@@ -336,14 +428,14 @@ metadata:
 .. code:: json
 
    {
-   "ipub": {
+    "ipub": {
         "table": {
          "caption": "Table caption.",
          "label": "tbl:tlabel",
          "placement": "H",
-               "alternate": "gray!20"
+         "alternate": "gray!20"
        }
-      }
+     }
    }
 
 -  ``caption`` and ``label`` are optional
@@ -376,7 +468,7 @@ metadata:
      "ipub": {
        "equation": {
            "environment": "equation",
-         "label": "eqn:elabel"
+           "label": "eqn:elabel"
        }
      }
    }
@@ -421,7 +513,7 @@ metadata tag:
 
    {
     "ipub": {
-     "caption": "fig:example_mpl"
+      "caption": "fig:example_mpl"
      }
    }
 
@@ -439,11 +531,11 @@ label matching any stored caption name, for example:
 .. code:: json
 
    {
-   "ipub": {
-     "figure": {
-       "caption": "",
-       "label": "fig:example_mpl"
-     }
+     "ipub": {
+       "figure": {
+         "caption": "",
+         "label": "fig:example_mpl"
+       }
      }
    }
 

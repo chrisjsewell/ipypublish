@@ -1,3 +1,5 @@
+:orphan:
+
 .. _latex_ipypublish_all:
 
 Example Export Configuration
