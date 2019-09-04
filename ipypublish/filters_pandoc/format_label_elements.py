@@ -22,13 +22,20 @@ will be stripped from the document
 # (see ipysphinx.transforms.CreateNotebookSectionAnchors)
 import json
 import re
-import textwrap
 
 from panflute import Element, Doc, Span, Div, Math, Image, Table  # noqa: F401
 import panflute as pf
 
 from ipypublish.filters_pandoc.utils import convert_units, convert_attributes
 from ipypublish.filters_pandoc.prepare_labels import (LABELLED_IMAGE_CLASS, LABELLED_MATH_CLASS, LABELLED_TABLE_CLASS)
+
+try:
+    from textwrap import indent
+except ImportError:  # added in python 3.3
+
+    def indent(text, prefix):
+        return ''.join(prefix + line for line in text.splitlines(True))
+
 
 LATEX_FIG_LABELLED = """\\begin{{figure}}[{options}]
 \\hypertarget{{{label}}}{{%
@@ -83,9 +90,9 @@ def format_math(math, doc):
 
     elif doc.format in ('rst'):
         if env:
-            tex = textwrap.indent('\\begin{{{0}}}{1}\\end{{{0}}}'.format(env, math.text), '   ')
+            tex = indent('\\begin{{{0}}}{1}\\end{{{0}}}'.format(env, math.text), '   ')
         else:
-            tex = textwrap.indent(math.text.strip(), '   ')
+            tex = indent(math.text.strip(), '   ')
         rst = '\n\n.. math::\n'
         if wrap_match or env:
             rst += '   :nowrap:\n'
