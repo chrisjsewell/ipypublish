@@ -49,3 +49,19 @@ def test_cell_decoration(app, status, warning, get_sphinx_app_output, data_regre
         data_regression.check(parser.parsed, basename='test_cell_decoration_v2')
     else:
         data_regression.check(parser.parsed, basename='test_cell_decoration_v1')
+
+
+@pytest.mark.sphinx(buildername='html', srcdir=get_test_source_dir('notebook_ipywidget'))
+def test_ipywidget(app, status, warning, get_sphinx_app_output, data_regression):
+    """ test which contains an ipywidgets and the widget state has been saved."""
+    app.build()
+
+    assert 'build succeeded' in status.getvalue()  # Build succeeded
+    warnings = warning.getvalue().strip()
+    assert warnings == ''
+
+    output = get_sphinx_app_output(app, buildername='html')
+
+    parser = HTML2JSONParser()
+    parser.feed(output)
+    data_regression.check(parser.parsed, basename='test_ipywidget')

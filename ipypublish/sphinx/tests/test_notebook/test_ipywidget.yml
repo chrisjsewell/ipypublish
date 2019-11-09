@@ -1,0 +1,377 @@
+4_children:
+- 1_tag: html
+  3_attributes:
+    xmlns: http://www.w3.org/1999/xhtml
+  4_children:
+  - 1_tag: body
+    4_children:
+    - 1_tag: div
+      3_attributes:
+        class:
+        - document
+      4_children:
+      - 1_tag: div
+        3_attributes:
+          class:
+          - documentwrapper
+        4_children:
+        - 1_tag: div
+          3_attributes:
+            class:
+            - bodywrapper
+          4_children:
+          - 1_tag: div
+            3_attributes:
+              class:
+              - body
+              role: main
+            4_children:
+            - 1_tag: div
+              3_attributes:
+                class:
+                - container
+                - docutils
+                - nbinput
+                - nblast
+              4_children:
+              - 1_tag: div
+                3_attributes:
+                  class:
+                  - highlight-ipython3
+                  - input_area
+                  - notranslate
+                4_children:
+                - 1_tag: div
+                  3_attributes:
+                    class:
+                    - highlight
+                  4_children:
+                  - 1_tag: pre
+                    4_children:
+                    - 1_tag: span
+                    - 1_tag: span
+                      2_data:
+                      - import
+                      3_attributes:
+                        class:
+                        - kn
+                    - 1_tag: span
+                      2_data:
+                      - ipywidgets
+                      3_attributes:
+                        class:
+                        - nn
+                    - 1_tag: span
+                      2_data:
+                      - label
+                      3_attributes:
+                        class:
+                        - n
+                    - 1_tag: span
+                      2_data:
+                      - '='
+                      3_attributes:
+                        class:
+                        - o
+                    - 1_tag: span
+                      2_data:
+                      - ipywidgets
+                      3_attributes:
+                        class:
+                        - n
+                    - 1_tag: span
+                      2_data:
+                      - .
+                      3_attributes:
+                        class:
+                        - o
+                    - 1_tag: span
+                      2_data:
+                      - HTML
+                      3_attributes:
+                        class:
+                        - n
+                    - 1_tag: span
+                      2_data:
+                      - ()
+                      3_attributes:
+                        class:
+                        - p
+                    - 1_tag: span
+                      2_data:
+                      - label
+                      3_attributes:
+                        class:
+                        - n
+                    - 1_tag: span
+                      2_data:
+                      - .
+                      3_attributes:
+                        class:
+                        - o
+                    - 1_tag: span
+                      2_data:
+                      - value
+                      3_attributes:
+                        class:
+                        - n
+                    - 1_tag: span
+                      2_data:
+                      - '='
+                      3_attributes:
+                        class:
+                        - o
+                    - 1_tag: span
+                      2_data:
+                      - Hello
+                      3_attributes:
+                        class:
+                        - s2
+                    - 1_tag: span
+                      2_data:
+                      - label
+                      3_attributes:
+                        class:
+                        - n
+            - 1_tag: div
+              3_attributes:
+                class:
+                - container
+                - docutils
+                - nblast
+                - nboutput
+              4_children:
+              - 1_tag: div
+                3_attributes:
+                  class:
+                  - container
+                  - docutils
+                  - output_area
+            - 1_tag: div
+              3_attributes:
+                class:
+                - container
+                - docutils
+                - nbinput
+                - nblast
+              4_children:
+              - 1_tag: div
+                3_attributes:
+                  class:
+                  - highlight-ipython3
+                  - input_area
+                  - notranslate
+                4_children:
+                - 1_tag: div
+                  3_attributes:
+                    class:
+                    - highlight
+                  4_children:
+                  - 1_tag: pre
+                    4_children:
+                    - 1_tag: span
+                    - 1_tag: span
+                      2_data:
+                      - input_text
+                      3_attributes:
+                        class:
+                        - n
+                    - 1_tag: span
+                      2_data:
+                      - '='
+                      3_attributes:
+                        class:
+                        - o
+                    - 1_tag: span
+                      2_data:
+                      - ipywidgets
+                      3_attributes:
+                        class:
+                        - n
+                    - 1_tag: span
+                      2_data:
+                      - .
+                      3_attributes:
+                        class:
+                        - o
+                    - 1_tag: span
+                      2_data:
+                      - Textarea
+                      3_attributes:
+                        class:
+                        - n
+                    - 1_tag: span
+                      2_data:
+                      - ()
+                      3_attributes:
+                        class:
+                        - p
+                    - 1_tag: span
+                      2_data:
+                      - input_text
+                      3_attributes:
+                        class:
+                        - n
+                    - 1_tag: span
+                      2_data:
+                      - .
+                      3_attributes:
+                        class:
+                        - o
+                    - 1_tag: span
+                      2_data:
+                      - value
+                      3_attributes:
+                        class:
+                        - n
+                    - 1_tag: span
+                      2_data:
+                      - '='
+                      3_attributes:
+                        class:
+                        - o
+                    - 1_tag: span
+                      2_data:
+                      - Hello
+                      3_attributes:
+                        class:
+                        - s2
+                    - 1_tag: span
+                      2_data:
+                      - input_text
+                      3_attributes:
+                        class:
+                        - n
+            - 1_tag: div
+              3_attributes:
+                class:
+                - container
+                - docutils
+                - nblast
+                - nboutput
+              4_children:
+              - 1_tag: div
+                3_attributes:
+                  class:
+                  - container
+                  - docutils
+                  - output_area
+            - 1_tag: div
+              3_attributes:
+                class:
+                - container
+                - docutils
+                - nbinput
+                - nblast
+              4_children:
+              - 1_tag: div
+                3_attributes:
+                  class:
+                  - highlight-ipython3
+                  - input_area
+                  - notranslate
+                4_children:
+                - 1_tag: div
+                  3_attributes:
+                    class:
+                    - highlight
+                  4_children:
+                  - 1_tag: pre
+                    4_children:
+                    - 1_tag: span
+                    - 1_tag: span
+                      2_data:
+                      - link
+                      3_attributes:
+                        class:
+                        - n
+                    - 1_tag: span
+                      2_data:
+                      - '='
+                      3_attributes:
+                        class:
+                        - o
+                    - 1_tag: span
+                      2_data:
+                      - ipywidgets
+                      3_attributes:
+                        class:
+                        - n
+                    - 1_tag: span
+                      2_data:
+                      - .
+                      3_attributes:
+                        class:
+                        - o
+                    - 1_tag: span
+                      2_data:
+                      - jslink
+                      3_attributes:
+                        class:
+                        - n
+                    - 1_tag: span
+                      2_data:
+                      - (
+                      3_attributes:
+                        class:
+                        - p
+                    - 1_tag: span
+                      2_data:
+                      - (
+                      3_attributes:
+                        class:
+                        - p
+                    - 1_tag: span
+                      2_data:
+                      - label
+                      3_attributes:
+                        class:
+                        - n
+                    - 1_tag: span
+                      2_data:
+                      - ','
+                      3_attributes:
+                        class:
+                        - p
+                    - 1_tag: span
+                      2_data:
+                      - value
+                      3_attributes:
+                        class:
+                        - s1
+                    - 1_tag: span
+                      2_data:
+                      - ),
+                      3_attributes:
+                        class:
+                        - p
+                    - 1_tag: span
+                      2_data:
+                      - (
+                      3_attributes:
+                        class:
+                        - p
+                    - 1_tag: span
+                      2_data:
+                      - input_text
+                      3_attributes:
+                        class:
+                        - n
+                    - 1_tag: span
+                      2_data:
+                      - ','
+                      3_attributes:
+                        class:
+                        - p
+                    - 1_tag: span
+                      2_data:
+                      - value
+                      3_attributes:
+                        class:
+                        - s1
+                    - 1_tag: span
+                      2_data:
+                      - ))
+                      3_attributes:
+                        class:
+                        - p
