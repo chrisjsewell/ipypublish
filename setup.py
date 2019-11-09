@@ -25,7 +25,7 @@ setup(
     install_requires=requirements,
     extras_require={
         'sphinx': {
-            'sphinx>=1.6',
+            'sphinx>=1.8',
             'sphinxcontrib-bibtex',
         },
         'tests': {
@@ -56,7 +56,7 @@ setup(
             'matplotlib',
             'pandas',
             'sympy<1.3',
-            'sphinx>=1.6',
+            'sphinx>=1.8',
             'sphinxcontrib-bibtex',
             'ipykernel'
         }
@@ -66,7 +66,7 @@ setup(
     author_email='chrisj_sewell@hotmail.com',
     url='https://github.com/chrisjsewell/ipypublish',
     classifiers=[
-            'Development Status :: 3 - Alpha',
+            'Development Status :: 5 - Production/Stable',
             'Environment :: Console',
             'Environment :: Web Environment',
             'Intended Audience :: End Users/Desktop',
@@ -75,17 +75,14 @@ setup(
             'License :: OSI Approved :: MIT License',
             'Operating System :: OS Independent',
             'Programming Language :: Python',
-            'Programming Language :: Python :: 2',
-            'Programming Language :: Python :: 2.7',
             'Programming Language :: Python :: 3',
-            'Programming Language :: Python :: 3.2',
-            'Programming Language :: Python :: 3.3',
-            'Programming Language :: Python :: 3.4',
             'Programming Language :: Python :: 3.5',
-            'Topic :: Scientific/Engineering :: Chemistry',
-            'Topic :: Scientific/Engineering :: Physics',
+            'Programming Language :: Python :: 3.6',
+            'Programming Language :: Python :: 3.7',
+            'Topic :: Scientific/Engineering',
             'Topic :: Software Development :: Libraries :: Python Modules',
             'Topic :: Utilities',
+            'Framework :: Sphinx :: Extension'
     ],
     keywords='python, jupyter-notebook, nbconvert, pandoc, latex, pdf',
     zip_safe=True,

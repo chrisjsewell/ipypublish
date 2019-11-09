@@ -77,7 +77,7 @@ matrix:
     - os: linux
       sudo: required
       python: 2.7
-      dist: xenial
+      dist: trusty
       env: TEST_TYPE="pytest"
     - os: linux
       sudo: required

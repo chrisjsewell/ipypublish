@@ -38,11 +38,7 @@ def setup(app):
     # delayed import of sphinx
     sphinx = import_sphinx()
 
-    try:
-        transforms = app.registry.get_transforms()
-    except AttributeError:  # Sphinx < 1.7
-        from sphinx.io import SphinxStandaloneReader
-        transforms = SphinxStandaloneReader.transforms
+    transforms = app.registry.get_transforms()
 
     def add_transform(transform, post=False):
         if transform not in transforms:
@@ -51,14 +47,9 @@ def setup(app):
             else:
                 app.add_transform(transform)
 
-    try:
-        # Available since Sphinx 1.8:
-        app.add_source_parser(NBParser)
-    except TypeError:
-        # Available since Sphinx 1.4:
-        app.add_source_parser('jupyter_notebook', NBParser)
+    app.add_source_parser(NBParser)
 
-    associate_single_extension(app, '.ipynb', called_from_setup=True)
+    associate_single_extension(app, '.ipynb')
 
     # config for export config
     app.add_config_value('ipysphinx_export_config', 'sphinx_ipypublish_all.ext', rebuild='env')
@@ -84,10 +75,14 @@ def setup(app):
     app.add_config_value('ipysphinx_responsive_width', '540px', rebuild='html')
     app.add_config_value('ipysphinx_prompt_width', None, rebuild='html')
     # setup html style
-    app.connect('builder-inited', set_css_prompts)
+    app.connect('config-inited', set_css_prompts)
     app.connect('html-page-context', html_add_css)
     # add javascript
     app.connect('html-page-context', html_add_javascript)
+    # config for displaying ipywidgets
+    app.add_config_value('ipysphinx_requirejs_path', None, rebuild='html')
+    app.add_config_value('ipysphinx_requirejs_options', None, rebuild='html')
+    app.connect('config-inited', add_require_js_path)
 
     # config for additions to the output rst (per file)
     # these strings are processed by the exporters jinja template
@@ -97,7 +92,7 @@ def setup(app):
     # map additional file extensions to pre-converters
     # NB: jupytext is already a default for .Rmd
     app.add_config_value('ipysphinx_preconverters', {}, rebuild='env')
-    app.connect('builder-inited', associate_extensions)
+    app.connect('config-inited', associate_extensions)
 
     # add the main directives
     app.add_directive('nbinput', NbInput)
@@ -168,23 +163,14 @@ def setup(app):
     }
 
 
-def associate_extensions(app):
-    for suffix in app.config.ipysphinx_preconverters:
+def associate_extensions(app, config):
+    for suffix in config.ipysphinx_preconverters:
         associate_single_extension(app, suffix, config_value='ipysphinx_preconverters')
 
 
-def associate_single_extension(app, extension, suffix='jupyter_notebook', called_from_setup=False, config_value=None):
+def associate_single_extension(app, extension, suffix='jupyter_notebook'):
     # type: (Sphinx, str) -> None
-    """ associate a file extension with the NBParser
-
-    Notes
-    -----
-    The Ugly hack to modify source_suffix and source_parsers.
-    Once https://github.com/sphinx-doc/sphinx/pull/2209
-    is merged it won't be necessary.
-    See also https://github.com/sphinx-doc/sphinx/issues/2162.
-
-    """
+    """Associate a file extension with the NBParser."""
     if not isinstance(extension, six.string_types):
         raise AssertionError('extension is not a string: {}'.format(extension))
     if not extension.startswith('.'):
@@ -192,32 +178,7 @@ def associate_single_extension(app, extension, suffix='jupyter_notebook', called
 
     sphinx = import_sphinx()
 
-    try:
-        # Available since Sphinx 1.8:
-        app.add_source_suffix(extension, suffix)
-    except AttributeError:
-
-        if not called_from_setup:
-            # too late to set up, see
-            # https://github.com/sphinx-doc/sphinx/issues/2162#issuecomment-169193107
-            raise sphinx.errors.ExtensionError('Using sphinx<1.8, {0} cannot be used.\n'
-                                               'Instead use: source_parsers = '
-                                               "{{'{1}': 'ipypublish.ipysphinx.parser.NBParser'}} "
-                                               'in conf.py'.format(config_value, extension))
-
-        source_suffix = app.config._raw_config.get('source_suffix', ['.rst'])
-
-        if isinstance(source_suffix, sphinx.config.string_types):
-            source_suffix = [source_suffix]
-        if extension not in source_suffix:
-            source_suffix.append(extension)
-            app.config._raw_config['source_suffix'] = source_suffix
-        source_parsers = app.config._raw_config.get('source_parsers', {})
-
-        if (extension not in source_parsers and extension[1:] not in source_parsers):
-            source_parsers[extension] = NBParser
-            app.config._raw_config['source_parsers'] = source_parsers
-
+    app.add_source_suffix(extension, suffix)
     sphinx.util.logging.getLogger('nbparser').info('ipypublish: associated {} with NBParser'.format(extension))
 
 
@@ -247,25 +208,31 @@ def read_css(name):
     return content
 
 
-def set_css_prompts(app):
-    """ Set default value for CSS prompt width """
-    if app.config.ipysphinx_prompt_width is None:
-        app.config.ipysphinx_prompt_width = {
+def set_css_prompts(app, config):
+    """Set default value for CSS prompt width (optimized for two-digit numbers)."""
+    if config.ipysphinx_prompt_width is None:
+        config.ipysphinx_prompt_width = {
             'agogo': '4ex',
             'alabaster': '5ex',
             'better': '5ex',
             'classic': '4ex',
             'cloud': '5ex',
             'dotted': '5ex',
+            'guzzle_sphinx_theme': '6ex',
             'haiku': '4ex',
             'julia': '5ex',
+            'maisie_sphinx_theme': '6ex',
             'nature': '5ex',
+            'pangeo': '5ex',
             'pyramid': '5ex',
             'redcloud': '5ex',
+            'sizzle': '5.5ex',
             'sphinx_py3doc_enhanced_theme': '6ex',
+            'sphinx_pyviz_theme': '5.5ex',
             'sphinx_rtd_theme': '5ex',
+            'sphinx_typlog_theme': '5.5ex',
             'traditional': '4ex',
-        }.get(app.config.html_theme, '7ex')
+        }.get(config.html_theme, '7ex')
 
 
 def html_add_css(app, pagename, templatename, context, doctree):
@@ -296,3 +263,17 @@ def html_add_javascript(app, pagename, templatename, context, doctree):
         context['body'] = '\n<script>' + code + '</script>\n' + context['body']
         code = copy_javascript('toggle_output')
         context['body'] = '\n<script>' + code + '</script>\n' + context['body']
+
+
+def add_require_js_path(app, config):
+    """ """
+    if config.ipysphinx_requirejs_path is None:
+        config.ipysphinx_requirejs_path = 'https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js'
+    if config.ipysphinx_requirejs_options is None:
+        config.ipysphinx_requirejs_options = {
+            'integrity': 'sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=',
+            'crossorigin': 'anonymous',
+        }
+    if config.ipysphinx_requirejs_path:
+        # TODO Add only on pages created from notebooks?
+        app.add_js_file(config.ipysphinx_requirejs_path, **config.ipysphinx_requirejs_options)
