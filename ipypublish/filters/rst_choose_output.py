@@ -23,7 +23,7 @@ DISPLAY_DATA_PRIORITY_LATEX = (
 )
 
 
-def choose_output_type(output):
+def choose_output_type(output, metadata):
     """Choose appropriate output data types for HTML and LaTeX."""
     if output.output_type == 'stream':
         html_datatype = latex_datatype = 'ansi'
@@ -45,4 +45,18 @@ def choose_output_type(output):
                 break
         else:
             latex_datatype = ', '.join(output.data.keys())
+
+    if html_datatype in [
+            'application/vnd.jupyter.widget-state+json',
+            'application/vnd.jupyter.widget-view+json',
+            'application/javascript',
+    ]:
+        return html_datatype, latex_datatype
+
+    # Numbering in sphinx fails if splitting outputs into
+    # ``.. only:: html`` and ``.. only:: latex``
+    # therefore, if possible we should use the same data type for both
+    if metadata.ipub.table:
+        html_datatype = latex_datatype
+
     return html_datatype, latex_datatype

@@ -253,7 +253,7 @@ class IpyTestApp(object):
             # and python (application/x-python)
             message = ('no comparison function exists for ' 'mimetype: {}'.format(mime_type))
             # raise ValueError(message)
-            logger.warn(message)
+            logger.warning(message)
 
 
 def compare_rst_files(testpath, outpath, encoding='utf8'):

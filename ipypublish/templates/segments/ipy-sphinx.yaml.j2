@@ -168,12 +168,9 @@
 
     "new_blocks": |
         {% block nboutput -%}
-        {%- set html_datatype, latex_datatype = output | choose_output_type %}
+        {%- set html_datatype, latex_datatype = output | choose_output_type(cell.metadata) %}
         {%- if html_datatype == latex_datatype %}
         {{ insert_nboutput(html_datatype, output, cell) }}
-        {% elif cell.metadata.ipub and cell.metadata.ipub.table %}
-        {# only use the latex output (since we convert both to rst) #}
-        {{ insert_nboutput(latex_datatype, output, cell) }}
         {% else %}
         .. only:: html
 
