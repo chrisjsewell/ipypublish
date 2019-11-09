@@ -18,6 +18,11 @@ matrix:
     env: TEST_TYPE="pytest" PYPI_DEPLOY=true
   - os: linux
     sudo: required
+    python: 3.7
+    dist: xenial
+    env: TEST_TYPE="pytest"
+  - os: linux
+    sudo: required
     python: 2.7
     dist: trusty
     env: TEST_TYPE="pytest"
@@ -25,11 +30,6 @@ matrix:
     sudo: required
     python: 3.5
     dist: trusty
-    env: TEST_TYPE="pytest"
-  - os: linux
-    sudo: required
-    python: 3.7
-    dist: xenial
     env: TEST_TYPE="pytest"
   # TODO this takes too long to install
   # - os: osx
@@ -76,13 +76,13 @@ matrix:
   allow_failures:
     - os: linux
       sudo: required
-      python: 3.5
-      dist: trusty
+      python: 2.7
+      dist: xenial
       env: TEST_TYPE="pytest"
     - os: linux
       sudo: required
-      python: 3.7
-      dist: xenial
+      python: 3.5
+      dist: trusty
       env: TEST_TYPE="pytest"
     - os: osx
       language: generic
