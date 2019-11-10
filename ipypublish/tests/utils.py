@@ -1,5 +1,6 @@
 from copy import deepcopy
 import six
+
 try:
     from html.parser import HTMLParser
 except ImportError:
@@ -14,18 +15,20 @@ class HTML2JSONParser(HTMLParser, object):
 
     """
 
-    _tag_key = '1_tag'
-    _data_key = '2_data'
-    _tag_attrs_key = '3_attributes'
-    _children_key = '4_children'
+    _tag_key = "1_tag"
+    _data_key = "2_data"
+    _tag_attrs_key = "3_attributes"
+    _children_key = "4_children"
 
-    def __init__(self,
-                 ignore_tags=('head', 'script', 'style'),
-                 ignore_classes=('footer', 'sphinxsidebar', 'clearer'),
-                 rstrip_data=True,
-                 sort_class_attr=True,
-                 replace_data_lines=None,
-                 convert_charrefs=False):
+    def __init__(
+        self,
+        ignore_tags=("head", "script", "style"),
+        ignore_classes=("footer", "sphinxsidebar", "clearer"),
+        rstrip_data=True,
+        sort_class_attr=True,
+        replace_data_lines=None,
+        convert_charrefs=False,
+    ):
         """parses html content to a JSON object,
         of the form::
 
@@ -82,7 +85,7 @@ class HTML2JSONParser(HTMLParser, object):
     def handle_starttag(self, tag, attrs):
         self._curr_depth += 1
         attr_dict = dict(attrs)
-        classes = attr_dict.get('class', '').split()
+        classes = attr_dict.get("class", "").split()
         if self._ignore_depth is not None:
             return
         elif tag in self._ignore_tags or self._ignore_classes.intersection(classes):
@@ -90,8 +93,8 @@ class HTML2JSONParser(HTMLParser, object):
             self._ignore_depth = self._curr_depth
             return
         sub_content = self._get_subcontent()
-        if self._sort_class_attr and 'class' in attr_dict:
-            attr_dict['class'] = sorted(classes)
+        if self._sort_class_attr and "class" in attr_dict:
+            attr_dict["class"] = sorted(classes)
         tag_dict = {self._tag_key: tag}
         if attr_dict:
             tag_dict[self._tag_attrs_key] = attr_dict
@@ -108,9 +111,11 @@ class HTML2JSONParser(HTMLParser, object):
             return
 
         if tag != self._get_subcontent()[self._tag_key]:
-            raise AssertionError('{} != {} (current path: {})'.format(tag,
-                                                                      self._get_subcontent()[self._tag_key],
-                                                                      self._curr_tags))
+            raise AssertionError(
+                "{} != {} (current path: {})".format(
+                    tag, self._get_subcontent()[self._tag_key], self._curr_tags
+                )
+            )
         self._curr_tags = self._curr_tags[:-1]
 
     def handle_data(self, data):

@@ -12,14 +12,14 @@ hallo world
 \\end{document}
 """
 
-    tex_path = os.path.join(temp_folder, 'test.tex')
-    pdf_path = os.path.join(temp_folder, 'test.pdf')
+    tex_path = os.path.join(temp_folder, "test.tex")
+    pdf_path = os.path.join(temp_folder, "test.pdf")
 
-    with open(tex_path, 'w') as f:
+    with open(tex_path, "w") as f:
         f.write(tex_content)
 
     pdfexport = PDFExport()
-    pdfexport.postprocess(tex_content, 'text/latex', tex_path)
+    pdfexport.postprocess(tex_content, "text/latex", tex_path)
 
     assert os.path.exists(pdf_path)
 

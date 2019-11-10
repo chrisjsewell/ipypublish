@@ -68,7 +68,7 @@
 
     "notebook_input_unknown": |
         .. unknown type  {{cell.type}}
-    
+
     "notebook_output_all": |
         {{ super() }}
 
@@ -85,8 +85,8 @@
 
         {{ insert_nboutput(latex_datatype, output, cell) | indent }}
         {% endif %}
-        {% endblock nboutput %}    
-    
+        {% endblock nboutput %}
+
     "notebook_output_error": |
         {{ self.nboutput() }}
 
@@ -95,7 +95,7 @@
 
     "notebook_output_data_all": |
         {{ self.nboutput() }}
-    
+
     "jinja_macros": |
         {% macro insert_empty_lines(text) %}
         {%- set before, after = text | get_empty_lines %}

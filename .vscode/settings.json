@@ -26,12 +26,13 @@
     "python.linting.pylamaEnabled": false,
     "python.linting.enabled": true,
     "python.linting.flake8Enabled": true,
-    "python.formatting.provider": "yapf",
+    "python.formatting.provider": "black",
     "cSpell.words": [
         "Jupyter",
         "docutils",
         "ipynb",
         "ipypublish",
+        "ipywidgets",
         "jupytext",
         "nbconvert",
         "nbpresent",
@@ -57,7 +58,7 @@
     "todo-tree.highlights.defaultHighlight": {
         "icon": "alert",
         "type": "tag",
-        "foreground": "orange",
+        "foreground": "#FFA500",
         "background": "white",
         "opacity": 10
     },

@@ -4,6 +4,7 @@ pandoc filters for the ipypublish format
 # import sys
 from six import string_types
 import panflute as pf
+
 pf.elements.RAW_FORMATS.add("latex")
 pf.elements.RAW_FORMATS.add("tex")
 pf.elements.RAW_FORMATS.add("rst")
@@ -28,9 +29,18 @@ def builtin2meta(val):
         return pf.MetaBlocks(val)
     elif isinstance(val, pf.Inline):
         return pf.MetaInlines(val)
-    elif isinstance(val, (pf.MetaBool, pf.MetaString, pf.MetaValue,
-                          pf.MetaList, pf.MetaMap, pf.MetaBlocks,
-                          pf.MetaInlines)):
+    elif isinstance(
+        val,
+        (
+            pf.MetaBool,
+            pf.MetaString,
+            pf.MetaValue,
+            pf.MetaList,
+            pf.MetaMap,
+            pf.MetaBlocks,
+            pf.MetaInlines,
+        ),
+    ):
         return val
 
     raise TypeError("unknown type: {} (type: {})".format(val, type(val)))

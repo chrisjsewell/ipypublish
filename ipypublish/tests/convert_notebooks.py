@@ -13,11 +13,8 @@ def convert_all(inpath, outpath):
 
         out_folder = tempfile.mkdtemp()
         publish = IpyPubMain(
-            config={
-                "IpyPubMain": {
-                    "conversion": plugin_name,
-                    "outpath": out_folder
-                }})
+            config={"IpyPubMain": {"conversion": plugin_name, "outpath": out_folder}}
+        )
         try:
             outdata = publish(str(inpath))
 
@@ -25,16 +22,15 @@ def convert_all(inpath, outpath):
             outpath = outdata["outpath"]
 
             extension = exporter.file_extension
-            out_name = os.path.splitext(
-                os.path.basename(str(inpath)))[0] + extension
+            out_name = os.path.splitext(os.path.basename(str(inpath)))[0] + extension
             outfile = os.path.join(out_folder, out_name)
 
             if not os.path.exists(outfile):
-                raise IOError("could not find: {} for {}".format(
-                    outfile, plugin_name))
+                raise IOError("could not find: {} for {}".format(outfile, plugin_name))
 
-            shutil.copyfile(outfile, os.path.join(
-                str(outpath), plugin_name + extension))
+            shutil.copyfile(
+                outfile, os.path.join(str(outpath), plugin_name + extension)
+            )
 
         finally:
             shutil.rmtree(out_folder)

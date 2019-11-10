@@ -7,20 +7,23 @@ from panflute import Element, Doc, Cite, RawInline, Link  # noqa: F401
 import panflute as pf
 
 from ipypublish.filters_pandoc.definitions import (
-    ATTRIBUTE_CITE_CLASS, PREFIX_MAP, PREFIX_MAP_LATEX_R, PREFIX_MAP_RST_R,
-    RST_KNOWN_ROLES, RAWSPAN_CLASS, RAWDIV_CLASS,
-    CONVERTED_CITE_CLASS, CONVERTED_OTHER_CLASS, CONVERTED_DIRECTIVE_CLASS
+    ATTRIBUTE_CITE_CLASS,
+    PREFIX_MAP,
+    PREFIX_MAP_LATEX_R,
+    PREFIX_MAP_RST_R,
+    RST_KNOWN_ROLES,
+    RAWSPAN_CLASS,
+    RAWDIV_CLASS,
+    CONVERTED_CITE_CLASS,
+    CONVERTED_OTHER_CLASS,
+    CONVERTED_DIRECTIVE_CLASS,
 )
-from ipypublish.filters_pandoc.utils import (
-    get_panflute_containers, get_pf_content_attr)
+from ipypublish.filters_pandoc.utils import get_panflute_containers, get_pf_content_attr
 
 
-def create_cite_span(identifiers, rawformat, is_block,
-                     prefix="", alt=None):
+def create_cite_span(identifiers, rawformat, is_block, prefix="", alt=None):
     """create a cite element from an identifier """
-    citations = [pf.Citation(
-        identifier
-    ) for identifier in identifiers]
+    citations = [pf.Citation(identifier) for identifier in identifiers]
     pmapping = dict(dict(PREFIX_MAP)[prefix])
     classes = list(pmapping["classes"])
     classes += [RAWSPAN_CLASS, CONVERTED_CITE_CLASS, ATTRIBUTE_CITE_CLASS]
@@ -29,11 +32,7 @@ def create_cite_span(identifiers, rawformat, is_block,
     if alt is not None:
         attributes["alt"] = str(alt)
     cite = Cite(citations=citations)
-    span = pf.Span(
-        cite,
-        classes=classes,
-        attributes=attributes
-    )
+    span = pf.Span(cite, classes=classes, attributes=attributes)
     if is_block:
         return pf.Plain(span)
     else:
@@ -45,14 +44,17 @@ def process_internal_links(link, doc):
     """extract links that point to internal items, e.g. [text](#label)"""
     if not isinstance(link, pf.Link):
         return None
-    match = re.match(r'#(.+)$', link.url)
+    match = re.match(r"#(.+)$", link.url)
     if not match:
         return None
 
     return create_cite_span(
-        [match.group(1)], "markdown", False,
+        [match.group(1)],
+        "markdown",
+        False,
         prefix=dict(PREFIX_MAP_LATEX_R).get("cref"),
-        alt=pf.stringify(pf.Plain(*list(link.content))).strip())
+        alt=pf.stringify(pf.Plain(*list(link.content))).strip(),
+    )
 
 
 def process_html_cites(container, doc):
@@ -81,13 +83,14 @@ def process_html_cites(container, doc):
             skip = skip - 1
             continue
 
-        if not (isinstance(element, (pf.RawInline, pf.RawBlock)) and
-                element.format in ("html", "html4", "html5")):
+        if not (
+            isinstance(element, (pf.RawInline, pf.RawBlock))
+            and element.format in ("html", "html4", "html5")
+        ):
             new_content.append(element)
             continue
 
-        match = re.match(
-            r"<cite\s*data-cite\s*=\"?([^>\"]*)\"?>", element.text)
+        match = re.match(r"<cite\s*data-cite\s*=\"?([^>\"]*)\"?>", element.text)
         if not match:
             new_content.append(element)
             continue
@@ -97,8 +100,10 @@ def process_html_cites(container, doc):
         closing = element.next
 
         while closing:
-            if (isinstance(closing, pf.RawInline) and
-                    closing.format in ("html", "html5")):
+            if isinstance(closing, pf.RawInline) and closing.format in (
+                "html",
+                "html5",
+            ):
                 endmatch = re.match(r"^\s*</cite>\s*$", closing.text)
                 if endmatch:
                     break
@@ -110,8 +115,9 @@ def process_html_cites(container, doc):
             continue
 
         # TODO include original content
-        new_content.append(create_cite_span([match.group(1)], "html",
-                                            isinstance(element, pf.RawBlock)))
+        new_content.append(
+            create_cite_span([match.group(1)], "html", isinstance(element, pf.RawBlock))
+        )
         skip = len(span_content) + 1
 
     setattr(container, content_attr, new_content)
@@ -132,8 +138,10 @@ def process_latex_raw(element, doc):
     - everything else will also have class CONVERTED_OTHER_CLASS
 
     """
-    if not (isinstance(element, (pf.RawInline, pf.RawBlock)) and
-            element.format in ("tex", "latex")):
+    if not (
+        isinstance(element, (pf.RawInline, pf.RawBlock))
+        and element.format in ("tex", "latex")
+    ):
         return None
 
     return assess_latex(element.text, isinstance(element, pf.RawBlock))
@@ -164,8 +172,8 @@ def process_latex_str(block, doc):
             new_content.append(element)
             continue
         for string in re.split(
-            r"(\\[^\{\[]+\{[^\}]+\}|\\[^\{\[]+\[[^\]]*\]\{[^\}]+\})",
-                element.text):
+            r"(\\[^\{\[]+\{[^\}]+\}|\\[^\{\[]+\[[^\]]*\]\{[^\}]+\})", element.text
+        ):
             if not string:
                 continue
             new_element = assess_latex(string, False)
@@ -196,21 +204,27 @@ def assess_latex(text, is_block):
     # with https://pypi.org/project/regex/
 
     # find tags with no option, i.e \tag{label}
-    match_latex_noopts = re.match(
-        r"^\s*\\([^\{\[]+)\{([^\}]+)\}\s*$", text)
+    match_latex_noopts = re.match(r"^\s*\\([^\{\[]+)\{([^\}]+)\}\s*$", text)
     if match_latex_noopts:
         tag = match_latex_noopts.group(1)
         content = match_latex_noopts.group(2)
         if tag in dict(PREFIX_MAP_LATEX_R):
             new_element = create_cite_span(
-                content.split(","), "latex", is_block,
-                prefix=dict(PREFIX_MAP_LATEX_R).get(tag, ""))
+                content.split(","),
+                "latex",
+                is_block,
+                prefix=dict(PREFIX_MAP_LATEX_R).get(tag, ""),
+            )
             return new_element
 
         span = pf.Span(
             classes=[RAWSPAN_CLASS, CONVERTED_OTHER_CLASS],
-            attributes={"format": "latex", "tag": tag,
-                        "content": content, "original": text}
+            attributes={
+                "format": "latex",
+                "tag": tag,
+                "content": content,
+                "original": text,
+            },
         )
         if is_block:
             return pf.Plain(span)
@@ -218,8 +232,7 @@ def assess_latex(text, is_block):
             return span
 
     # find tags with option, i.e \tag[options]{label}
-    match_latex_wopts = re.match(
-        r"^\s*\\([^\{\[]+)\[([^\]]*)\]\{([^\}]+)\}\s*$", text)
+    match_latex_wopts = re.match(r"^\s*\\([^\{\[]+)\[([^\]]*)\]\{([^\}]+)\}\s*$", text)
     if match_latex_wopts:
         tag = match_latex_wopts.group(1)
         options = match_latex_wopts.group(2)
@@ -227,11 +240,13 @@ def assess_latex(text, is_block):
 
         span = pf.Span(
             classes=[RAWSPAN_CLASS, CONVERTED_OTHER_CLASS],
-            attributes={"format": "latex",
-                        "tag": tag,
-                        "content": content,
-                        "options": options,
-                        "original": text}
+            attributes={
+                "format": "latex",
+                "tag": tag,
+                "content": content,
+                "options": options,
+                "original": text,
+            },
         )
         if is_block:
             return pf.Plain(span)
@@ -277,14 +292,15 @@ def process_rst_roles(block, doc):
             skip_next = False
             continue
 
-        if not (isinstance(element, pf.Str)
-                and isinstance(element.next, pf.Code)):
+        if not (isinstance(element, pf.Str) and isinstance(element.next, pf.Code)):
             new_content.append(element)
             continue
 
-        if not (len(element.text) > 2 and
-                element.text.startswith(":") and
-                element.text.endswith(":")):
+        if not (
+            len(element.text) > 2
+            and element.text.startswith(":")
+            and element.text.endswith(":")
+        ):
             new_content.append(element)
             continue
 
@@ -293,18 +309,23 @@ def process_rst_roles(block, doc):
 
         if role in dict(PREFIX_MAP_RST_R):
             new_element = create_cite_span(
-                content.split(","), "rst", False,
-                prefix=dict(PREFIX_MAP_RST_R).get(role, ""))
+                content.split(","),
+                "rst",
+                False,
+                prefix=dict(PREFIX_MAP_RST_R).get(role, ""),
+            )
             new_content.append(new_element)
             skip_next = True
         elif role in RST_KNOWN_ROLES:
             new_element = pf.Span(
                 classes=[RAWSPAN_CLASS, CONVERTED_OTHER_CLASS],
-                attributes={"format": "rst", "role": role,
-                            "content": content,
-                            "original": "{0}`{1}`".format(
-                                element.text, element.next.text)
-                            })
+                attributes={
+                    "format": "rst",
+                    "role": role,
+                    "content": content,
+                    "original": "{0}`{1}`".format(element.text, element.next.text),
+                },
+            )
             new_content.append(new_element)
             skip_next = True
         else:
@@ -334,8 +355,9 @@ def gather_processors(element, doc):
 
     # apply processors that change multiple inline elements in a block
 
-    if (isinstance(element, get_panflute_containers(pf.Inline))
-            or isinstance(pf.Table, pf.DefinitionItem)):
+    if isinstance(element, get_panflute_containers(pf.Inline)) or isinstance(
+        pf.Table, pf.DefinitionItem
+    ):
 
         new_element = process_html_cites(element, doc)
         if new_element is not None:
@@ -380,31 +402,36 @@ def wrap_rst_directives(doc):
             final_blocks.append(block)
             continue
 
-        if (isinstance(block.content[0], pf.Str)
+        if (
+            isinstance(block.content[0], pf.Str)
             and block.content[0].text == ".."
-                and isinstance(block.content[1], pf.Space)
-                and isinstance(block.content[2], pf.Str)):
+            and isinstance(block.content[1], pf.Space)
+            and isinstance(block.content[2], pf.Str)
+        ):
 
-            if (len(block.content) == 3
+            if (
+                len(block.content) == 3
                 and block.content[2].text.startswith("_")
-                    and block.content[2].text.endswith(":")):
+                and block.content[2].text.endswith(":")
+            ):
                 # the block is an rst label
                 new_block = pf.Div(
                     block,
                     classes=[RAWDIV_CLASS, CONVERTED_OTHER_CLASS],
-                    attributes={"format": "rst"}
+                    attributes={"format": "rst"},
                 )
                 final_blocks.append(new_block)
                 continue
 
-            if (block.content[2].text.endswith("::")
-                    and isinstance(block.next, pf.CodeBlock)):
+            if block.content[2].text.endswith("::") and isinstance(
+                block.next, pf.CodeBlock
+            ):
                 # the block is a directive with body content
                 # TODO at present we allow any directive name
                 # the block may contain option directives, e.g. :width:
                 skip_next = True
 
-                inline_arg = ''
+                inline_arg = ""
                 if len(block.content) > 3:
                     inline_content = []
                     for el in block.content[3:]:
@@ -412,27 +439,32 @@ def wrap_rst_directives(doc):
                             break
                         inline_content.append(el)
                     if inline_content:
-                        inline_arg = pf.stringify(
-                            pf.Para(*inline_content)).replace("\n", "").strip()
+                        inline_arg = (
+                            pf.stringify(pf.Para(*inline_content))
+                            .replace("\n", "")
+                            .strip()
+                        )
 
                 new_block = pf.Div(
                     block,
                     *pf.convert_text(block.next.text),
                     classes=[RAWDIV_CLASS, CONVERTED_DIRECTIVE_CLASS],
-                    attributes={"format": "rst",
-                                "directive": block.content[2].text[:-2],
-                                "inline": inline_arg,
-                                "has_body": True}
+                    attributes={
+                        "format": "rst",
+                        "directive": block.content[2].text[:-2],
+                        "inline": inline_arg,
+                        "has_body": True,
+                    }
                 )
                 final_blocks.append(new_block)
                 continue
 
-            if (block.content[2].text.endswith("::")):
+            if block.content[2].text.endswith("::"):
                 # the block is a directive without body content
                 # TODO at present we allow any directive name
                 # the block may contain option directives, e.g. :width:
 
-                inline_arg = ''
+                inline_arg = ""
                 if len(block.content) > 3:
                     inline_content = []
                     for el in block.content[3:]:
@@ -440,16 +472,21 @@ def wrap_rst_directives(doc):
                             break
                         inline_content.append(el)
                     if inline_content:
-                        inline_arg = pf.stringify(
-                            pf.Para(*inline_content)).replace("\n", "").strip()
+                        inline_arg = (
+                            pf.stringify(pf.Para(*inline_content))
+                            .replace("\n", "")
+                            .strip()
+                        )
 
                 new_block = pf.Div(
                     block,
                     classes=[RAWDIV_CLASS, CONVERTED_DIRECTIVE_CLASS],
-                    attributes={"format": "rst",
-                                "directive": block.content[2].text[:-2],
-                                "inline": inline_arg,
-                                "has_body": False}
+                    attributes={
+                        "format": "rst",
+                        "directive": block.content[2].text[:-2],
+                        "inline": inline_arg,
+                        "has_body": False,
+                    },
                 )
                 final_blocks.append(new_block)
                 continue
@@ -474,9 +511,8 @@ def main(doc=None, extract_formats=True):
     """if extract_formats then convert citations defined in
     latex, rst or html formats to special Span elements
     """
-    return pf.run_filter(gather_processors,
-                         prepare, finalize, doc=doc)
+    return pf.run_filter(gather_processors, prepare, finalize, doc=doc)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

@@ -6,7 +6,8 @@ Originally adapted from: https://github.com/mcmtroffaes/sphinxcontrib-bibtex
 """
 
 import six
-try:                 # pragma: no cover
+
+try:  # pragma: no cover
     from collections import OrderedDict
 except ImportError:  # pragma: no cover
     from ordereddict import OrderedDict
@@ -41,8 +42,7 @@ class _FilterVisitor(ast.NodeVisitor):
 
     def visit_Module(self, node):  # noqa: N802
         if len(node.body) != 1:
-            raise ValueError(
-                "filter expression cannot contain multiple expressions")
+            raise ValueError("filter expression cannot contain multiple expressions")
         return self.visit(node.body[0])
 
     def visit_Expr(self, node):  # noqa: N802
@@ -72,11 +72,9 @@ class _FilterVisitor(ast.NodeVisitor):
         if isinstance(op, ast.Mod):
             # modulo operator is used for regular expression matching
             if not isinstance(left, six.string_types):
-                raise ValueError(
-                    "expected a string on left side of %s" % node.op)
+                raise ValueError("expected a string on left side of %s" % node.op)
             if not isinstance(right, six.string_types):
-                raise ValueError(
-                    "expected a string on right side of %s" % node.op)
+                raise ValueError("expected a string on right side of %s" % node.op)
             return re.search(right, left, re.IGNORECASE)
         elif isinstance(op, ast.BitOr):
             return left | right
@@ -115,19 +113,19 @@ class _FilterVisitor(ast.NodeVisitor):
     def visit_Name(self, node):  # noqa: N802
         """Calculate the value of the given identifier."""
         id_ = node.id
-        if id_ == 'type':
+        if id_ == "type":
             return self.entry.type.lower()
-        elif id_ == 'key':
+        elif id_ == "key":
             return self.entry.key.lower()
-        elif id_ == 'cited':
+        elif id_ == "cited":
             return bool(self.cited_docnames)
-        elif id_ == 'docname':
+        elif id_ == "docname":
             return self.docname
-        elif id_ == 'docnames':
+        elif id_ == "docnames":
             return self.cited_docnames
-        elif id_ == 'True':
+        elif id_ == "True":
             return True
-        elif id_ == 'False':
+        elif id_ == "False":
             return False
         else:
             return self.entry.get(id_, "")
@@ -224,9 +222,9 @@ class Cache:
         :param key: The citation key.
         :type key: :class:`str`
         """
-        return frozenset([
-            docname for docname, keys in six.iteritems(self._cited)
-            if key in keys])
+        return frozenset(
+            [docname for docname, keys in six.iteritems(self._cited) if key in keys]
+        )
 
     def get_label_from_key(self, key):
         """Return label for the given key."""
@@ -282,12 +280,10 @@ class Cache:
             for entry in self.bibfiles[bibfile].data.values():
                 # beware: the prefix is not stored in the data
                 # to allow reusing the data for multiple bibliographies
-                cited_docnames = self.get_cited_docnames(
-                    bibcache.keyprefix + entry.key)
+                cited_docnames = self.get_cited_docnames(bibcache.keyprefix + entry.key)
                 visitor = _FilterVisitor(
-                    entry=entry,
-                    docname=docname,
-                    cited_docnames=cited_docnames)
+                    entry=entry, docname=docname, cited_docnames=cited_docnames
+                )
                 try:
                     success = visitor.visit(bibcache.filter_)
                 except ValueError as err:
@@ -309,9 +305,11 @@ class Cache:
         """Return filtered bibliography entries, sorted by citation order."""
         # get entries, ordered by bib file occurrence
         entries = OrderedDict(
-            (entry.key, entry) for entry in
-            self._get_bibliography_entries(
-                docname=docname, id_=id_, warn=warn))
+            (entry.key, entry)
+            for entry in self._get_bibliography_entries(
+                docname=docname, id_=id_, warn=warn
+            )
+        )
         # order entries according to which were cited first
         # first, we add all keys that were cited
         # then, we add all remaining keys
@@ -327,7 +325,7 @@ class Cache:
         return sorted_entries
 
 
-class BibfileCache(collections.namedtuple('BibfileCache', 'mtime data')):
+class BibfileCache(collections.namedtuple("BibfileCache", "mtime data")):
 
     """Contains information about a parsed .bib file.
 
@@ -343,10 +341,13 @@ class BibfileCache(collections.namedtuple('BibfileCache', 'mtime data')):
     """
 
 
-class BibliographyCache(collections.namedtuple(
-    'BibliographyCache',
-    """bibfiles encoding style unsorted labels plurals filter_ keyprefix
-""")):
+class BibliographyCache(
+    collections.namedtuple(
+        "BibliographyCache",
+        """bibfiles encoding style unsorted labels plurals filter_ keyprefix
+""",
+    )
+):
 
     """Contains information about a bibliography directive.
 

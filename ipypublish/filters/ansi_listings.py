@@ -7,33 +7,31 @@ import re
 
 from nbconvert.filters.latex import escape_latex
 
-__all__ = [
-    'ansi2listings',
-]
+__all__ = ["ansi2listings"]
 
-_ANSI_RE = re.compile('\x1b\\[(.*?)([@-~])')
+_ANSI_RE = re.compile("\x1b\\[(.*?)([@-~])")
 
 _ANSI_COLORS = (
-    'ansi-black',
-    'ansi-red',
-    'ansi-green',
-    'ansi-yellow',
-    'ansi-blue',
-    'ansi-magenta',
-    'ansi-cyan',
-    'ansi-white',
-    'ansi-black-intense',
-    'ansi-red-intense',
-    'ansi-green-intense',
-    'ansi-yellow-intense',
-    'ansi-blue-intense',
-    'ansi-magenta-intense',
-    'ansi-cyan-intense',
-    'ansi-white-intense',
+    "ansi-black",
+    "ansi-red",
+    "ansi-green",
+    "ansi-yellow",
+    "ansi-blue",
+    "ansi-magenta",
+    "ansi-cyan",
+    "ansi-white",
+    "ansi-black-intense",
+    "ansi-red-intense",
+    "ansi-green-intense",
+    "ansi-yellow-intense",
+    "ansi-blue-intense",
+    "ansi-magenta-intense",
+    "ansi-cyan-intense",
+    "ansi-white-intense",
 )
 
 
-def ansi2listings(text, escapechar='%'):
+def ansi2listings(text, escapechar="%"):
     """
     Convert ANSI colors to LaTeX colors.
 
@@ -65,33 +63,33 @@ def _latexconverter(fg, bg, bold, escapechar):
 
     """
     if (fg, bg, bold) == (None, None, False):
-        return '', ''
+        return "", ""
 
-    starttag, endtag = '', ''
+    starttag, endtag = "", ""
 
     if isinstance(fg, int):
-        starttag += r'\textcolor{' + _ANSI_COLORS[fg] + '}{'
-        endtag = '}' + endtag
+        starttag += r"\textcolor{" + _ANSI_COLORS[fg] + "}{"
+        endtag = "}" + endtag
     elif fg:
         # See http://tex.stackexchange.com/a/291102/13684
-        starttag += r'\def\tcRGB{\textcolor[RGB]}\expandafter'
-        starttag += r'\tcRGB\expandafter{\detokenize{%s,%s,%s}}{' % fg
-        endtag = '}' + endtag
+        starttag += r"\def\tcRGB{\textcolor[RGB]}\expandafter"
+        starttag += r"\tcRGB\expandafter{\detokenize{%s,%s,%s}}{" % fg
+        endtag = "}" + endtag
 
     if isinstance(bg, int):
-        starttag += r'\setlength{\fboxsep}{0pt}\colorbox{'
-        starttag += _ANSI_COLORS[bg] + '}{'
-        endtag = r'\strut}' + endtag
+        starttag += r"\setlength{\fboxsep}{0pt}\colorbox{"
+        starttag += _ANSI_COLORS[bg] + "}{"
+        endtag = r"\strut}" + endtag
     elif bg:
-        starttag += r'\setlength{\fboxsep}{0pt}'
+        starttag += r"\setlength{\fboxsep}{0pt}"
         # See http://tex.stackexchange.com/a/291102/13684
-        starttag += r'\def\cbRGB{\colorbox[RGB]}\expandafter'
-        starttag += r'\cbRGB\expandafter{\detokenize{%s,%s,%s}}{' % bg
-        endtag = r'\strut}' + endtag
+        starttag += r"\def\cbRGB{\colorbox[RGB]}\expandafter"
+        starttag += r"\cbRGB\expandafter{\detokenize{%s,%s,%s}}{" % bg
+        endtag = r"\strut}" + endtag
 
     if bold:
-        starttag += r'\textbf{'
-        endtag = '}' + endtag
+        starttag += r"\textbf{"
+        endtag = "}" + endtag
 
     starttag = escapechar + starttag
     endtag += escapechar
@@ -128,17 +126,16 @@ def _ansi2anything(text, converter, escapechar):
     while text:
         m = _ANSI_RE.search(text)
         if m:
-            if m.group(2) == 'm':
+            if m.group(2) == "m":
                 try:
-                    numbers = [int(n) if n else 0
-                               for n in m.group(1).split(';')]
+                    numbers = [int(n) if n else 0 for n in m.group(1).split(";")]
                 except ValueError:
                     pass  # Invalid color specification
             else:
                 pass  # Not a color code
-            chunk, text = text[:m.start()], text[m.end():]
+            chunk, text = text[: m.start()], text[m.end() :]
         else:
-            chunk, text = text, ''
+            chunk, text = text, ""
 
         if chunk:
             if bold and fg in range(8):
@@ -183,7 +180,7 @@ def _ansi2anything(text, converter, escapechar):
                 bg = n - 100 + 8
             else:
                 pass  # Unknown codes are ignored
-    return ''.join(out)
+    return "".join(out)
 
 
 def _get_extended_color(numbers):

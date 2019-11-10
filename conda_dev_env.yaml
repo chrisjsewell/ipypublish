@@ -24,7 +24,7 @@ dependencies:
 - ruamel.yaml
 - setuptools
 - six
-- sphinx >=1.6
+- sphinx >=1.8
 - sphinxcontrib-bibtex
 - texsoup <0.2
 - tornado
@@ -41,7 +41,7 @@ dependencies:
 - flake8 <3.8.0,>=3.7.0
 - rope
 - pre_commit =1.14.4
-- yapf =0.26.0
+- black =19.3b0
 # docs
 - sphinx_rtd_theme
 - jupyter

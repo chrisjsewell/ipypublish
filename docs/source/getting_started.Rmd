@@ -139,7 +139,7 @@ For a more detailed explanation see the
 
 .. important::
 
-    The default conversion (``latex_ipypublish_main``) will **NOT** 
+    The default conversion (``latex_ipypublish_main``) will **NOT**
     output any cells that are not tagged with metadata.
     To output all notebook content by default, use ``_ipypublish_all``.
 

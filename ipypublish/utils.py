@@ -26,11 +26,14 @@ def handle_error(msg, err_type, logger, raise_msg=None, log_msg=None):
     raise err_type(raise_msg)
 
 
-def read_file_from_directory(dir_path, file_name, jtype,
-                             logger, interp_ext=False,
-                             ext_types=(
-                                 ("json", (".json",)),
-                                 ("yaml", (".yaml", ".yaml.j2")))):
+def read_file_from_directory(
+    dir_path,
+    file_name,
+    jtype,
+    logger,
+    interp_ext=False,
+    ext_types=(("json", (".json",)), ("yaml", (".yaml", ".yaml.j2"))),
+):
     """load a file situated in a directory
 
     if ``interp_ext=True``:
@@ -45,8 +48,8 @@ def read_file_from_directory(dir_path, file_name, jtype,
 
     if not file_path.exists():
         handle_error(
-            "the {} does not exist: {}".format(jtype, file_path),
-            IOError, logger=logger)
+            "the {} does not exist: {}".format(jtype, file_path), IOError, logger=logger
+        )
 
     ext_type = None
     ext_map = {ext: ftype for ftype, exts in ext_types for ext in exts}
@@ -65,8 +68,11 @@ def read_file_from_directory(dir_path, file_name, jtype,
                 else:
                     raise ValueError("extension type not recognised")
             except Exception as err:
-                handle_error("failed to read {} ({}): {}".format(
-                    jtype, file_path, err), IOError, logger=logger)
+                handle_error(
+                    "failed to read {} ({}): {}".format(jtype, file_path, err),
+                    IOError,
+                    logger=logger,
+                )
     else:
         with file_path.open() as fobj:
             data = fobj.read()
@@ -76,15 +82,17 @@ def read_file_from_directory(dir_path, file_name, jtype,
 
 def get_module_path(module):
     """return a directory path to a module"""
-    return pathlib.Path(os.path.dirname(
-        os.path.abspath(inspect.getfile(module))))
+    return pathlib.Path(os.path.dirname(os.path.abspath(inspect.getfile(module))))
 
 
-def read_file_from_module(module_path, file_name, jtype,
-                          logger, interp_ext=False,
-                          ext_types=(
-                              ("json", (".json")),
-                              ("yaml", (".yaml", ".yaml.j2", "yaml.tex.j2")))):
+def read_file_from_module(
+    module_path,
+    file_name,
+    jtype,
+    logger,
+    interp_ext=False,
+    ext_types=(("json", (".json")), ("yaml", (".yaml", ".yaml.j2", "yaml.tex.j2"))),
+):
     """load a file situated in a python module
 
     if ``interp_ext=True``:
@@ -97,13 +105,20 @@ def read_file_from_module(module_path, file_name, jtype,
     except ModuleNotFoundError:  # noqa: F821
         handle_error(
             "module {} containing {} {} not found".format(
-                module_path, jtype, file_name),
-            ModuleNotFoundError, logger=logger)  # noqa: F821
+                module_path, jtype, file_name
+            ),
+            ModuleNotFoundError,
+            logger=logger,
+        )  # noqa: F821
 
-    return read_file_from_directory(get_module_path(outline_module),
-                                    file_name, jtype, logger,
-                                    interp_ext=interp_ext,
-                                    ext_types=ext_types)
+    return read_file_from_directory(
+        get_module_path(outline_module),
+        file_name,
+        jtype,
+        logger,
+        interp_ext=interp_ext,
+        ext_types=ext_types,
+    )
 
 
 def get_valid_filename(s):
@@ -115,8 +130,8 @@ def get_valid_filename(s):
     >>> get_valid_filename("john's portrait in 2004.jpg")
     'johns_portrait_in_2004.jpg'
     """
-    s = str(s).strip().replace(' ', '_')
-    return re.sub(r'(?u)[^-\w.]', '', s)
+    s = str(s).strip().replace(" ", "_")
+    return re.sub(r"(?u)[^-\w.]", "", s)
 
 
 def find_entry_point(name, group, logger, preferred=None):
@@ -132,27 +147,31 @@ def find_entry_point(name, group, logger, preferred=None):
         if multiple matches are found, prefer one from this module
 
     """
-    entry_points = list(pkg_resources.iter_entry_points(
-        group, name))
+    entry_points = list(pkg_resources.iter_entry_points(group, name))
     if len(entry_points) == 0:
         handle_error(
-            "The {0} entry point "
-            "{1} could not be found".format(group, name),
-            pkg_resources.ResolutionError, logger)
+            "The {0} entry point " "{1} could not be found".format(group, name),
+            pkg_resources.ResolutionError,
+            logger,
+        )
     elif len(entry_points) != 1:
         # default to the preferred package
         oentry_points = []
         if preferred:
-            oentry_points = [ep for ep in entry_points
-                             if ep.module_name.startswith(preferred)]
+            oentry_points = [
+                ep for ep in entry_points if ep.module_name.startswith(preferred)
+            ]
         if len(oentry_points) != 1:
             handle_error(
                 "Multiple {0} plugins found for "
                 "{1}: {2}".format(group, name, entry_points),
-                pkg_resources.ResolutionError, logger)
+                pkg_resources.ResolutionError,
+                logger,
+            )
         logger.info(
             "Multiple {0} plugins found for {1}, "
-            "defaulting to the {2} version".format(group, name, preferred))
+            "defaulting to the {2} version".format(group, name, preferred)
+        )
         entry_point = oentry_points[0]
     else:
         entry_point = entry_points[0]

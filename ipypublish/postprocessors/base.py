@@ -28,7 +28,7 @@ class IPyPostProcessor(Configurable):
         text/markdown, text/asciidoc, text/yaml
 
         """
-        raise NotImplementedError('allowed_mimetypes')
+        raise NotImplementedError("allowed_mimetypes")
 
     @property
     def requires_path(self):
@@ -41,7 +41,7 @@ class IPyPostProcessor(Configurable):
         will try to make the directory if it doesn't exist
 
         """
-        raise NotImplementedError('requires_path')
+        raise NotImplementedError("requires_path")
 
     @property
     def logger_name(self):
@@ -56,7 +56,8 @@ class IPyPostProcessor(Configurable):
     skip_mime = Bool(
         True,
         help="if False, raise a TypeError if the mimetype is not allowed, "
-        "else return without processing").tag(config=True)
+        "else return without processing",
+    ).tag(config=True)
 
     def __init__(self, config=None):
         super(IPyPostProcessor, self).__init__(config=config)
@@ -67,8 +68,7 @@ class IPyPostProcessor(Configurable):
         """
         self.postprocess(stream, mimetype, filepath, resources)
 
-    def postprocess(self, stream, mimetype, filepath,
-                    resources=None):
+    def postprocess(self, stream, mimetype, filepath, resources=None):
         """ Post-process output.
 
         Parameters
@@ -90,23 +90,26 @@ class IPyPostProcessor(Configurable):
 
         """
 
-        if (self.allowed_mimetypes is not None
-                and mimetype not in self.allowed_mimetypes):
+        if (
+            self.allowed_mimetypes is not None
+            and mimetype not in self.allowed_mimetypes
+        ):
             if not self.skip_mime:
                 self.handle_error(
                     "the mimetype {0} is not in the allowed list: {1}".format(
-                        mimetype, self.allowed_mimetypes),
-                    TypeError)
+                        mimetype, self.allowed_mimetypes
+                    ),
+                    TypeError,
+                )
             else:
-                self.logger.debug(
-                    "skipping incorrect mime type: {}".format(mimetype))
+                self.logger.debug("skipping incorrect mime type: {}".format(mimetype))
                 return stream, filepath, resources
 
         if self.requires_path and filepath is None:
             self.handle_error(
-                "the filepath is None, "
-                "but the post-processor requires a folder",
-                IOError)
+                "the filepath is None, " "but the post-processor requires a folder",
+                IOError,
+            )
 
         if filepath is not None and isinstance(filepath, string_types):
             filepath = pathlib.Path(filepath)
@@ -115,14 +118,14 @@ class IPyPostProcessor(Configurable):
 
             if not filepath.is_absolute():
                 self.handle_error(
-                    "the post-processor requires an absolute folder path",
-                    IOError)
+                    "the post-processor requires an absolute folder path", IOError
+                )
 
             if filepath.parent.exists() and not filepath.parent.is_dir():
                 self.handle_error(
-                    "the filepath's parent is not a folder: {}".format(
-                        filepath),
-                    TypeError)
+                    "the filepath's parent is not a folder: {}".format(filepath),
+                    TypeError,
+                )
 
             if not filepath.parent.exists():
                 filepath.parent.mkdir(parents=True)
@@ -152,14 +155,12 @@ class IPyPostProcessor(Configurable):
         resources: dict
 
         """
-        raise NotImplementedError('run_postprocess')
+        raise NotImplementedError("run_postprocess")
 
-    def handle_error(self, msg, err_type,
-                     raise_msg=None, log_msg=None):
+    def handle_error(self, msg, err_type, raise_msg=None, log_msg=None):
         """ handle error by logging it then raising
         """
-        handle_error(msg, err_type, self.logger,
-                     raise_msg=raise_msg, log_msg=log_msg)
+        handle_error(msg, err_type, self.logger, raise_msg=raise_msg, log_msg=log_msg)
 
     def check_exe_exists(self, name, error_msg):
         """ test if an executable exists

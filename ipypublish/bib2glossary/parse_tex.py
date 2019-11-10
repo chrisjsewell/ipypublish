@@ -14,15 +14,18 @@ def import_texsoup():
         raise ImportError(
             "to parse tex files, TexSoup must be installed: \n"
             "pip install texsoup\n"
-            "conda install -c conda-forge texsoup")
+            "conda install -c conda-forge texsoup"
+        )
     except SyntaxError:
-        raise ImportError('TexSoup package is broken on python 2.7, '
-                          'so can not be imported for tex parsing')
+        raise ImportError(
+            "TexSoup package is broken on python 2.7, "
+            "so can not be imported for tex parsing"
+        )
     return {
         "TexSoup": TexSoup,
         "RArg": RArg,
         "OArg": OArg,
-        "TokenWithPosition": TokenWithPosition
+        "TokenWithPosition": TokenWithPosition,
     }
 
 
@@ -40,8 +43,7 @@ def extract_required_val(rarg):
     """extract the value of a TexSoup RArg"""
     RArg = import_texsoup()["RArg"]
     if not isinstance(rarg, RArg):
-        raise ValueError(
-            "expected {} to be a required argument".format(type(rarg)))
+        raise ValueError("expected {} to be a required argument".format(type(rarg)))
     return rarg.value
 
 
@@ -62,18 +64,19 @@ def _extract_parameters(texsoup_exprs):
             if param_name is None:
                 errors.append(
                     "expected expression "
-                    "'{}' to precede a parameter name".format(expr))
+                    "'{}' to precede a parameter name".format(expr)
+                )
                 break
             if param_name in params:
-                errors.append(
-                    "parameter '{}' already defined".format(param_name))
+                errors.append("parameter '{}' already defined".format(param_name))
             else:
                 params[param_name] = expr.value
             param_name = None
         else:
             errors.append(
-                "expected expression '{}' ".format(expr) +
-                "to be a parameter name or required argument")
+                "expected expression '{}' ".format(expr)
+                + "to be a parameter name or required argument"
+            )
             break
 
     if param_name is not None:
@@ -90,7 +93,8 @@ def extract_parameters(argument):
     OArg = import_texsoup()["OArg"]
     if not isinstance(argument, (OArg, RArg)):
         raise ValueError(
-            "expected {} to be of type OArg or RArg".format(type(argument)))
+            "expected {} to be of type OArg or RArg".format(type(argument))
+        )
 
     opt_params, errors = _extract_parameters(argument.exprs)
 
@@ -105,7 +109,8 @@ def create_newgloss_dict(gterm, row=None):
 
     if len(arguments) != 2:
         msg = _create_msg_error(
-            "could not parse newglossaryterm (arguments != 2)", gterm, row)
+            "could not parse newglossaryterm (arguments != 2)", gterm, row
+        )
         raise IOError(msg)
 
     key = extract_required_val(arguments[0])
@@ -114,16 +119,16 @@ def create_newgloss_dict(gterm, row=None):
 
     for error in errors:
         msg = _create_msg_error(
-            "error reading 'parameter' block: {}".format(error),
-            gterm, row)
+            "error reading 'parameter' block: {}".format(error), gterm, row
+        )
         raise IOError(msg)
 
     for param_name, param_value in params.items():
 
         if param_name in fields:
             raise IOError(
-                "duplicate parameter '{0}' in key '{1}'".format(
-                    param_name, key))
+                "duplicate parameter '{0}' in key '{1}'".format(param_name, key)
+            )
 
         fields[param_name] = param_value
 
@@ -140,11 +145,13 @@ def create_newacronym_dict(acronym, row=None):
 
     if len(arguments) < 3:
         msg = _create_msg_error(
-            "could not parse newacronym (too few arguments)", acronym, row)
+            "could not parse newacronym (too few arguments)", acronym, row
+        )
         raise IOError(msg)
     if len(arguments) > 4:
         msg = _create_msg_error(
-            "could not parse newacronym (too many arguments)", acronym, row)
+            "could not parse newacronym (too many arguments)", acronym, row
+        )
         raise IOError(msg)
 
     key = extract_required_val(arguments[-3])
@@ -156,8 +163,8 @@ def create_newacronym_dict(acronym, row=None):
 
         if not isinstance(options, OArg):
             msg = _create_msg_error(
-                "expected first argument of newacronym to be 'optional",
-                acronym, row)
+                "expected first argument of newacronym to be 'optional", acronym, row
+            )
             raise IOError(msg)
 
         opt_params, errors = extract_parameters(options)
@@ -165,22 +172,29 @@ def create_newacronym_dict(acronym, row=None):
         for error in errors:
             msg = _create_msg_error(
                 "error reading newacronym 'optional' block: {}".format(error),
-                acronym, row)
+                acronym,
+                row,
+            )
             raise IOError(msg)
 
         for opt_name, opt_value in opt_params.items():
             if opt_name in fields:
                 raise IOError(
-                    "duplicate parameter '{0}' in key '{1}'".format(
-                        opt_name, key))
+                    "duplicate parameter '{0}' in key '{1}'".format(opt_name, key)
+                )
             fields[opt_name] = opt_value
 
     return key, abbreviation, name, fields
 
 
-def parse_tex(text_str=None, path=None, encoding='utf8',
-              abbrev_field="abbreviation", fname_field="longname",
-              skip_ioerrors=False):
+def parse_tex(
+    text_str=None,
+    path=None,
+    encoding="utf8",
+    abbrev_field="abbreviation",
+    fname_field="longname",
+    skip_ioerrors=False,
+):
     """parse a tex file containing newglossaryentry and/or newacronym to dict
 
     Parameters
@@ -212,8 +226,7 @@ def parse_tex(text_str=None, path=None, encoding='utf8',
         raise ValueError("only one of text_str or path must be supplied")
     elif path is not None:
         if text_str is not None:
-            raise ValueError(
-                'text_str and path cannot be set at the same time')
+            raise ValueError("text_str and path cannot be set at the same time")
         with io.open(path, encoding=encoding) as fobj:
             text_str = fobj.read()
 

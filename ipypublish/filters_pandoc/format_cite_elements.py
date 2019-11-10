@@ -8,12 +8,12 @@ from panflute import Element, Doc, Span, Cite  # noqa: F401
 import panflute as pf
 
 from ipypublish.filters_pandoc.definitions import (
-    ATTRIBUTE_CITE_CLASS, CONVERTED_CITE_CLASS,
-    IPUB_META_ROUTE, CITE_HTML_NAMES
+    ATTRIBUTE_CITE_CLASS,
+    CONVERTED_CITE_CLASS,
+    IPUB_META_ROUTE,
+    CITE_HTML_NAMES,
 )
-from ipypublish.filters_pandoc.html_bib import (
-    read_bibliography, process_bib_entry
-)
+from ipypublish.filters_pandoc.html_bib import read_bibliography, process_bib_entry
 
 
 def format_cites(cite, doc):
@@ -32,48 +32,54 @@ def format_cites(cite, doc):
 
     # check is the Cite has a surrounding Span to supply attributed
     span = None
-    if (isinstance(cite.parent, pf.Span)
-            and ATTRIBUTE_CITE_CLASS in cite.parent.classes):
+    if isinstance(cite.parent, pf.Span) and ATTRIBUTE_CITE_CLASS in cite.parent.classes:
         span = cite.parent
 
         cite_tag = span.attributes.get("latex", cite_tag)
         cite_role = span.attributes.get("rst", cite_role)
         html_capitalize = "capital" in span.classes
 
-    if (cite_role == "numref" and
-            (not doc.get_metadata(IPUB_META_ROUTE + ".use_numref", False))):
+    if cite_role == "numref" and (
+        not doc.get_metadata(IPUB_META_ROUTE + ".use_numref", False)
+    ):
         cite_role = "ref"
 
     if doc.format in ("latex", "tex"):
 
-        if cite_tag in ['cite', 'cref', 'Cref'] or len(cite.citations) == 1:
+        if cite_tag in ["cite", "cref", "Cref"] or len(cite.citations) == 1:
             # multiple labels are allowed
-            return pf.RawInline("\\{0}{{{1}}}".format(
-                cite_tag,
-                ",".join([c.id for c in cite.citations])), format="tex")
+            return pf.RawInline(
+                "\\{0}{{{1}}}".format(
+                    cite_tag, ",".join([c.id for c in cite.citations])
+                ),
+                format="tex",
+            )
         else:
-            tex = (
-                ", ".join(['\\{0}{{{1}}}'.format(cite_tag, c.id)
-                           for c in cite.citations[:-1]]) +
-                ' and \\{0}{{{1}}}'.format(cite_tag, cite.citations[-1].id))
-            return pf.RawInline(tex, format='tex')
+            tex = ", ".join(
+                ["\\{0}{{{1}}}".format(cite_tag, c.id) for c in cite.citations[:-1]]
+            ) + " and \\{0}{{{1}}}".format(cite_tag, cite.citations[-1].id)
+            return pf.RawInline(tex, format="tex")
 
     if doc.format == "rst":
         if len(cite.citations) == 1:
             raw = pf.RawInline(
-                ":{0}:`{1}`".format(cite_role, cite.citations[0].id),
-                format='rst')
+                ":{0}:`{1}`".format(cite_role, cite.citations[0].id), format="rst"
+            )
         elif cite_role == "cite":
             raw = pf.RawInline(
-                ":{0}:`{1}`".format(cite_role, ",".join(
-                    [c.id for c in cite.citations])),
-                format='rst')
+                ":{0}:`{1}`".format(
+                    cite_role, ",".join([c.id for c in cite.citations])
+                ),
+                format="rst",
+            )
         else:
             raw = pf.RawInline(
-                ", ".join([':{0}:`{1}`'.format(cite_role, c.id)
-                           for c in cite.citations[:-1]]) +
-                ' and :{0}:`{1}`'.format(cite_role, cite.citations[-1].id),
-                format="rst")
+                ", ".join(
+                    [":{0}:`{1}`".format(cite_role, c.id) for c in cite.citations[:-1]]
+                )
+                + " and :{0}:`{1}`".format(cite_role, cite.citations[-1].id),
+                format="rst",
+            )
 
         # in testing, rst cite roles required space either side
         # to render correctly
@@ -96,8 +102,7 @@ def format_cites(cite, doc):
         unknown = set()
 
         for citation in cite.citations:
-            ref = doc.get_metadata(
-                "$$references.{}".format(citation.id), False)
+            ref = doc.get_metadata("$$references.{}".format(citation.id), False)
             if ref:
                 # ref -> e.g. {"type": "Math", "number": 1}
                 prefix = dict(CITE_HTML_NAMES).get(ref["type"], ref["type"])
@@ -114,8 +119,7 @@ def format_cites(cite, doc):
                 )
 
             elif citation.id in doc.bibdatabase:
-                cites.add(process_bib_entry(
-                        citation.id, doc.bibdatabase, doc.bibnums))
+                cites.add(process_bib_entry(citation.id, doc.bibdatabase, doc.bibnums))
                 # elements.append(pf.RawInline(
                 #     process_bib_entry(
                 #         citation.id, doc.bibdatabase, doc.bibnums),
@@ -128,31 +132,40 @@ def format_cites(cite, doc):
         # if found_ref:
         #     return elements
         # else:
-            # return pf.RawInline(
-            #     '<span style="background-color:rgba(225, 0, 0, .5)">'
-            #     # 'No reference found for: {}</span>'.format(
-            #     '{}</span>'.format(
-            #         ", ".join([c.id for c in cite.citations])))
+        # return pf.RawInline(
+        #     '<span style="background-color:rgba(225, 0, 0, .5)">'
+        #     # 'No reference found for: {}</span>'.format(
+        #     '{}</span>'.format(
+        #         ", ".join([c.id for c in cite.citations])))
 
         elements = []
         if cites:
             # TODO sort
-            elements.append(pf.RawInline(
-                '<span>[{}]</span>'.format(",".join(c for c in cites)),
-                format=doc.format))
+            elements.append(
+                pf.RawInline(
+                    "<span>[{}]</span>".format(",".join(c for c in cites)),
+                    format=doc.format,
+                )
+            )
         if names:
             # TODO sort
             for prefix, labels in names.items():
-                elements.append(pf.RawInline(
-                    '<span>{} {}</span>'.format(
-                        prefix, ",".join(l for l in labels)),
-                    format=doc.format))
+                elements.append(
+                    pf.RawInline(
+                        "<span>{} {}</span>".format(
+                            prefix, ",".join(l for l in labels)
+                        ),
+                        format=doc.format,
+                    )
+                )
         if unknown:
-            elements.append(pf.RawInline(
-                '<span style="background-color:rgba(225, 0, 0, .5)">'
-                # 'No reference found for: {}</span>'.format(
-                '{}</span>'.format(
-                    ", ".join([l for l in unknown]))))
+            elements.append(
+                pf.RawInline(
+                    '<span style="background-color:rgba(225, 0, 0, .5)">'
+                    # 'No reference found for: {}</span>'.format(
+                    "{}</span>".format(", ".join([l for l in unknown]))
+                )
+            )
 
         return elements
 
@@ -170,8 +183,9 @@ def format_span_cites(span, doc):
         if span.attributes["format"] == "latex":
             cite_tag = span.attributes["tag"]
         # TODO use cref for rst ref/numref
-        return pf.RawInline("\\{0}{{{1}}}".format(
-            cite_tag, span.identifier, format="tex"))
+        return pf.RawInline(
+            "\\{0}{{{1}}}".format(cite_tag, span.identifier, format="tex")
+        )
 
     if doc.format == "rst":
         cite_role = "cite"
@@ -179,18 +193,20 @@ def format_span_cites(span, doc):
             cite_role = span.attributes["role"]
         # TODO use ref for latex ref/cref/Cref
         return [
-            pf.RawInline(
-                ":{0}:`{1}`".format(cite_role, span.identifier),
-                format='rst')
+            pf.RawInline(":{0}:`{1}`".format(cite_role, span.identifier), format="rst")
         ]
 
     if doc.format in ("html", "html5"):
         # <cite data-cite="cite_key">text</cite>
-        return ([pf.RawInline(
-                '<cite data-cite="{}">'.format(span.identifier),
-                format="html")] +
-                list(span.content) +
-                [pf.RawInline('</cite>', format="html")])
+        return (
+            [
+                pf.RawInline(
+                    '<cite data-cite="{}">'.format(span.identifier), format="html"
+                )
+            ]
+            + list(span.content)
+            + [pf.RawInline("</cite>", format="html")]
+        )
 
 
 def prepare(doc):
@@ -220,9 +236,8 @@ def main(doc=None, strip_spans=True):
     to_run = [format_cites]
     if strip_spans:
         to_run.append(strip_cite_spans)
-    return pf.run_filters(to_run,
-                          prepare, finalize, doc=doc)
+    return pf.run_filters(to_run, prepare, finalize, doc=doc)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

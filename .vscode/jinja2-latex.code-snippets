@@ -10,13 +10,13 @@
         "scope": "jinja-latex",
         "body": "((* set ${1:name} = ${2:value} *))",
         "description": "set variable"
-    },   
+    },
     "print": {
         "prefix": "print",
         "scope": "inja-latex",
         "body": "((( ${1:variable} )))",
         "description": "print variable"
-    },   
+    },
     "block": {
         "prefix": "block",
         "scope": "jinja-latex",

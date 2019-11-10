@@ -6,8 +6,11 @@ import os
 import bibtexparser
 
 from ipypublish.bib2glossary.definitions import (
-    ETYPE_GLOSS, ETYPE_ACRONYM, ETYPE_SYMBOL,
-    NEWGLOSS_FIELDS, NEWACRONYM_FIELDS
+    ETYPE_GLOSS,
+    ETYPE_ACRONYM,
+    ETYPE_SYMBOL,
+    NEWGLOSS_FIELDS,
+    NEWACRONYM_FIELDS,
 )
 
 try:
@@ -19,9 +22,7 @@ logger = logging.getLogger(__name__)
 
 
 class BibGlossEntry(object):
-    _allowed_types = (
-        ETYPE_GLOSS, ETYPE_ACRONYM, ETYPE_SYMBOL
-    )
+    _allowed_types = (ETYPE_GLOSS, ETYPE_ACRONYM, ETYPE_SYMBOL)
 
     def __init__(self, entry_dict):
 
@@ -29,34 +30,32 @@ class BibGlossEntry(object):
         self._entry_dict = entry_dict
 
     def _validate_dict(self, dct):
-        if 'ID' not in dct:
+        if "ID" not in dct:
             raise KeyError
-        if 'ENTRYTYPE' not in dct:
+        if "ENTRYTYPE" not in dct:
             raise KeyError
 
-        if dct['ENTRYTYPE'] not in self._allowed_types:
-            raise TypeError(
-                'ENTRYTYPE must be one of: {}'.format(self._allowed_types))
+        if dct["ENTRYTYPE"] not in self._allowed_types:
+            raise TypeError("ENTRYTYPE must be one of: {}".format(self._allowed_types))
 
-        if dct['ENTRYTYPE'] == ETYPE_ACRONYM:
-            if 'abbreviation' not in dct or 'longname' not in dct:
+        if dct["ENTRYTYPE"] == ETYPE_ACRONYM:
+            if "abbreviation" not in dct or "longname" not in dct:
                 raise KeyError
-        elif (dct['ENTRYTYPE'] == ETYPE_GLOSS
-              or dct['ENTRYTYPE'] == ETYPE_SYMBOL):
-            if 'name' not in dct or 'description' not in dct:
+        elif dct["ENTRYTYPE"] == ETYPE_GLOSS or dct["ENTRYTYPE"] == ETYPE_SYMBOL:
+            if "name" not in dct or "description" not in dct:
                 raise KeyError
 
     def _get_key(self):
-        return self._entry_dict['ID']
+        return self._entry_dict["ID"]
 
     def _set_key(self, key):
-        self._entry_dict['ID'] = key
+        self._entry_dict["ID"] = key
 
     key = property(_get_key, _set_key)
 
     @property
     def type(self):
-        return self._entry_dict['ENTRYTYPE']
+        return self._entry_dict["ENTRYTYPE"]
 
     def __contains__(self, key):
         return key in self._entry_dict
@@ -67,11 +66,11 @@ class BibGlossEntry(object):
     @property
     def label(self):
         if self.type == ETYPE_ACRONYM:
-            return self.get('abbreviation')
+            return self.get("abbreviation")
         elif self.type == ETYPE_GLOSS:
-            return self.get('name')
+            return self.get("name")
         elif self.type == ETYPE_SYMBOL:
-            return self.get('name')
+            return self.get("name")
         else:
             raise NotImplementedError
 
@@ -84,19 +83,19 @@ class BibGlossEntry(object):
 
     @property
     def plural(self):
-        if 'plural' in self:
-            return self.get('plural')
+        if "plural" in self:
+            return self.get("plural")
         else:
             return "{}s".format(self.label)
 
     @property
     def text(self):
         if self.type == ETYPE_ACRONYM:
-            return self.get('longname')
+            return self.get("longname")
         elif self.type == ETYPE_GLOSS:
-            return self.get('description')
+            return self.get("description")
         elif self.type == ETYPE_SYMBOL:
-            return self.get('description')
+            return self.get("description")
         else:
             raise NotImplementedError
 
@@ -112,22 +111,22 @@ class BibGlossEntry(object):
             options = []
             for field in sorted(NEWGLOSS_FIELDS):
                 if field in self:
-                    options.append("{0}={{{1}}}".format(
-                        field, self.get(field)))
+                    options.append("{0}={{{1}}}".format(field, self.get(field)))
             if self.type == ETYPE_SYMBOL:
                 options.append("type={symbols}")
             body = "{{{key}}}{{\n    {options}\n}}".format(
-                key=self.key, options=",\n    ".join(options))
+                key=self.key, options=",\n    ".join(options)
+            )
             return "\\newglossaryentry" + body
 
         elif self.type == ETYPE_ACRONYM:
             body = "{{{key}}}{{{abbrev}}}{{{long}}}".format(
-                key=self.key, abbrev=self.label, long=self.text)
+                key=self.key, abbrev=self.label, long=self.text
+            )
             options = []
             for field in sorted(NEWACRONYM_FIELDS):
                 if field in self:
-                    options.append("{0}={{{1}}}".format(
-                        field, self.get(field)))
+                    options.append("{0}={{{1}}}".format(field, self.get(field)))
             if options:
                 body = "[" + ",".join(options) + "]" + body
 
@@ -135,7 +134,6 @@ class BibGlossEntry(object):
 
 
 class BibGlossDB(MutableMapping):
-
     def __init__(self):
         self._entries = {}
 
@@ -144,9 +142,9 @@ class BibGlossDB(MutableMapping):
 
     def __setitem__(self, key, entry):
         if not isinstance(entry, BibGlossEntry):
-            raise ValueError('value must be a BibGlossEntry')
+            raise ValueError("value must be a BibGlossEntry")
         if key != entry.key:
-            raise ValueError('key must equal entry.key')
+            raise ValueError("key must equal entry.key")
         self._entries[key] = entry
 
     def __delitem__(self, key):
@@ -160,16 +158,19 @@ class BibGlossDB(MutableMapping):
 
     @staticmethod
     def get_fake_entry_obj(key):
-        return BibGlossEntry({
-            'ENTRYTYPE': ETYPE_GLOSS,
-            'ID': key,
-            'name': key,
-            'description': ''
-        })
+        return BibGlossEntry(
+            {"ENTRYTYPE": ETYPE_GLOSS, "ID": key, "name": key, "description": ""}
+        )
 
-    def load_bib(self, text_str=None, path=None, bibdb=None, encoding="utf8",
-                 ignore_nongloss_types=False,
-                 ignore_duplicates=False):
+    def load_bib(
+        self,
+        text_str=None,
+        path=None,
+        bibdb=None,
+        encoding="utf8",
+        ignore_nongloss_types=False,
+        ignore_duplicates=False,
+    ):
         """load a bib file
 
         Parameters
@@ -191,16 +192,14 @@ class BibGlossDB(MutableMapping):
         bib = None
 
         if sum([e is not None for e in [text_str, path, bibdb]]) != 1:
-            raise ValueError(
-                "only one of text_str, path or bib must be supplied")
+            raise ValueError("only one of text_str, path or bib must be supplied")
         if bibdb is not None:
             if not isinstance(bibdb, bibtexparser.bibdatabase.BibDatabase):
                 raise ValueError("bib is not a BibDatabase instance")
             bib = bibdb
         elif path is not None:
             if text_str is not None:
-                raise ValueError(
-                    'text_str and path cannot be set at the same time')
+                raise ValueError("text_str and path cannot be set at the same time")
             with io.open(path, encoding=encoding) as fobj:
                 text_str = fobj.read()
 
@@ -219,19 +218,20 @@ class BibGlossDB(MutableMapping):
                 entry = BibGlossEntry(entry_dict)
             except TypeError:
                 if ignore_nongloss_types:
-                    logger.warning('Skipping non-glossary entry')
+                    logger.warning("Skipping non-glossary entry")
                     continue
                 else:
                     raise
 
             if entry.key in entries:
                 if ignore_duplicates:
-                    logger.warning('Skipping duplicate key entry')
+                    logger.warning("Skipping duplicate key entry")
                     continue
                 else:
                     raise KeyError(
                         "the bib file contains "
-                        "multiple entries with the key: {}".format(entry.key))
+                        "multiple entries with the key: {}".format(entry.key)
+                    )
 
             entries[entry.key] = entry
 
@@ -240,8 +240,14 @@ class BibGlossDB(MutableMapping):
 
         return True
 
-    def load_tex(self, text_str=None, path=None, encoding='utf8',
-                 skip_ioerrors=False, ignore_unknown_types=True):
+    def load_tex(
+        self,
+        text_str=None,
+        path=None,
+        encoding="utf8",
+        skip_ioerrors=False,
+        ignore_unknown_types=True,
+    ):
         """load a tex file
 
         Parameters
@@ -268,9 +274,9 @@ class BibGlossDB(MutableMapping):
 
         """
         from ipypublish.bib2glossary.parse_tex import parse_tex
+
         gterms, acronyms = parse_tex(
-            text_str=text_str, path=path, encoding=encoding,
-            skip_ioerrors=skip_ioerrors
+            text_str=text_str, path=path, encoding=encoding, skip_ioerrors=skip_ioerrors
         )
         entries = {}
         for key, fields in gterms.items():
@@ -281,8 +287,9 @@ class BibGlossDB(MutableMapping):
                 fields.pop("type")
             elif "type" in fields:
                 if not ignore_unknown_types:
-                    raise ValueError("the 'type' is not recognised: "
-                                     "{}".format(fields['type']))
+                    raise ValueError(
+                        "the 'type' is not recognised: " "{}".format(fields["type"])
+                    )
                 fields.pop("type")
 
             fields["ID"] = key
@@ -322,7 +329,7 @@ class BibGlossDB(MutableMapping):
         else:
             return None
 
-    def load(self, path, encoding='utf8'):
+    def load(self, path, encoding="utf8"):
         """load a file, the type will be guessed from the extension,
         or (if no extension is given), the available files in the path folder
 
@@ -335,8 +342,7 @@ class BibGlossDB(MutableMapping):
         """
         path = self.guess_path(path)
         if path is None:
-            raise IOError(
-                "no acceptable loader found for path: {}".format(path))
+            raise IOError("no acceptable loader found for path: {}".format(path))
         basepath, extension = os.path.splitext(str(path))
         if extension in [".bib", ".biblatex", ".bibtex"]:
             self.load_bib(path=path, encoding=encoding)
@@ -350,8 +356,8 @@ class BibGlossDB(MutableMapping):
         bibdb = bibtexparser.bibdatabase.BibDatabase()
         bibdb.entries = [e.to_dict() for e in self.values()]
         writer = bibtexparser.bwriter.BibTexWriter()
-        writer.contents = ['comments', 'entries']
-        writer.indent = '  '
+        writer.contents = ["comments", "entries"]
+        writer.indent = "  "
         # writer.order_entries_by = ('ENTRYTYPE', 'ID')
         return writer.write(bibdb)
 
@@ -369,8 +375,7 @@ class BibGlossDB(MutableMapping):
             string = entry.to_latex()
             if splitlines:
                 string = string.splitlines()
-            latex_stings[
-                (entry.type, entry.key)] = string
+            latex_stings[(entry.type, entry.key)] = string
         return latex_stings
 
     def to_latex_string(self):

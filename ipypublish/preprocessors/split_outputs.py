@@ -27,7 +27,7 @@ def merge(a, b, path=None, overwrite=True):
             elif overwrite:
                 a[key] = b[key]  # overwrite leaf value
             else:
-                raise Exception('Conflict at %s' % '.'.join(path + [str(key)]))
+                raise Exception("Conflict at %s" % ".".join(path + [str(key)]))
         else:
             a[key] = b[key]
     return a
@@ -46,7 +46,7 @@ class SplitOutputs(Preprocessor):
         if not self.split:
             return nb, resources
 
-        logging.info('splitting outputs into separate cells')
+        logging.info("splitting outputs into separate cells")
 
         final_cells = []
         for cell in nb.cells:
@@ -60,21 +60,24 @@ class SplitOutputs(Preprocessor):
             for output in outputs:
                 meta = copy.deepcopy(cell.metadata)
                 # don't need the code to output
-                meta.get('ipub', NotebookNode({})).code = False
+                meta.get("ipub", NotebookNode({})).code = False
                 # don't create a new slide for each output,
                 # unless specified in output level metadata
-                if 'slide' in meta.get('ipub', NotebookNode({})):
-                    if meta.ipub.slide == 'new':
+                if "slide" in meta.get("ipub", NotebookNode({})):
+                    if meta.ipub.slide == "new":
                         meta.ipub.slide = True
                     else:
                         meta.ipub.slide = meta.ipub.slide
-                meta = merge(meta, output.get('metadata', {}))
-                new = NotebookNode({
-                    "cell_type": "code",
-                    "source": '',
-                    "execution_count": None,
-                    "metadata": meta,
-                    "outputs": [output]})
+                meta = merge(meta, output.get("metadata", {}))
+                new = NotebookNode(
+                    {
+                        "cell_type": "code",
+                        "source": "",
+                        "execution_count": None,
+                        "metadata": meta,
+                        "outputs": [output],
+                    }
+                )
                 final_cells.append(new)
 
         nb.cells = final_cells

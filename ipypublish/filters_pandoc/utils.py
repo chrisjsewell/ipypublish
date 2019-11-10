@@ -15,11 +15,17 @@ from types import FunctionType  # noqa: F401
 from ipypublish.filters_pandoc.definitions import IPUB_META_ROUTE
 
 
-def apply_filter(in_object, filter_func=None,
-                 out_format="panflute", in_format="markdown",
-                 strip_meta=False, strip_blank_lines=False,
-                 replace_api_version=True, dry_run=False,
-                 **kwargs):
+def apply_filter(
+    in_object,
+    filter_func=None,
+    out_format="panflute",
+    in_format="markdown",
+    strip_meta=False,
+    strip_blank_lines=False,
+    replace_api_version=True,
+    dry_run=False,
+    **kwargs
+):
     # type: (list[str], FunctionType) -> str
     """convenience function to apply a panflute filter(s)
     to a string, list of string lines, pandoc AST or panflute.Doc
@@ -56,17 +62,15 @@ def apply_filter(in_object, filter_func=None,
         pass
     elif isinstance(in_object, dict):
         if not in_format == "json":
-            raise AssertionError("the in_format for a dict should be json, "
-                                 "not {}".format(in_format))
+            raise AssertionError(
+                "the in_format for a dict should be json, " "not {}".format(in_format)
+            )
         if "meta" not in in_object:
-            raise ValueError(
-                "the in_object does contain a 'meta' key")
+            raise ValueError("the in_object does contain a 'meta' key")
         if "blocks" not in in_object:
-            raise ValueError(
-                "the in_object does contain a 'blocks' key")
+            raise ValueError("the in_object does contain a 'blocks' key")
         if "pandoc-api-version" not in in_object:
-            raise ValueError(
-                "the in_object does contain a 'pandoc-api-version' key")
+            raise ValueError("the in_object does contain a 'pandoc-api-version' key")
         if replace_api_version:
             # run pandoc on a null object, to get the correct api version
             null_raw = pf.run_pandoc("", args=["-t", "json"])
@@ -75,13 +79,12 @@ def apply_filter(in_object, filter_func=None,
 
             # see panflute.load, w.r.t to legacy version
             if api_version is None:
-                in_object = [{'unMeta': in_object["meta"]},
-                             in_object["blocks"]]
+                in_object = [{"unMeta": in_object["meta"]}, in_object["blocks"]]
             else:
                 ans = OrderedDict()
-                ans['pandoc-api-version'] = api_version
-                ans['meta'] = in_object["meta"]
-                ans['blocks'] = in_object["blocks"]
+                ans["pandoc-api-version"] = api_version
+                ans["meta"] = in_object["meta"]
+                ans["blocks"] = in_object["blocks"]
                 in_object = ans
         in_str = json.dumps(in_object)
     elif isinstance(in_object, (list, tuple)):
@@ -92,8 +95,7 @@ def apply_filter(in_object, filter_func=None,
         raise TypeError("object not accepted: {}".format(in_object))
 
     if not isinstance(in_object, pf.Doc):
-        doc = pf.convert_text(
-            in_str, input_format=in_format, standalone=True)
+        doc = pf.convert_text(in_str, input_format=in_format, standalone=True)
         # f = io.StringIO(in_json)
         # doc = pf.load(f)
     else:
@@ -122,9 +124,9 @@ def apply_filter(in_object, filter_func=None,
     #     pf.dump(doc, f)
     #     jsonstr = f.getvalue()
     # jsonstr = json.dumps(out_doc.to_json()
-    out_str = pf.convert_text(out_doc,
-                              input_format="panflute",
-                              output_format=out_format)
+    out_str = pf.convert_text(
+        out_doc, input_format="panflute", output_format=out_format
+    )
 
     # post-process final str
     if strip_blank_lines:
@@ -176,8 +178,9 @@ def strip_quotes(string):
     return string
 
 
-def find_attributes(element, allow_space=True,
-                    search_left=False, include_element=False):
+def find_attributes(
+    element, allow_space=True, search_left=False, include_element=False
+):
     """find an attribute 'container' for an element,
     of the form <element><space>{#id .class1 .class2 a=1 b="a string"}
     and extract its content
@@ -221,22 +224,26 @@ def _search_attribute_right(element, include_element, allow_space):
     found_start = False
     found_end = False
     while adjacent:
-        if (isinstance(adjacent, pf.Space) and allow_space):
+        if isinstance(adjacent, pf.Space) and allow_space:
             attr_elements.append(adjacent)
             adjacent = adjacent.next
             continue
-        elif (isinstance(adjacent, pf.Str)
-              #   and adjacent.text.startswith("{")
-              #   and adjacent.text.endswith("}")):
-              and re.search(r'^\{[^}]*\}', adjacent.text)):
+        elif (
+            isinstance(adjacent, pf.Str)
+            #   and adjacent.text.startswith("{")
+            #   and adjacent.text.endswith("}")):
+            and re.search(r"^\{[^}]*\}", adjacent.text)
+        ):
             # TODO this won't handle } in strings, e.g. {a="} "}
             found_start = True
             found_end = True
             attr_elements.append(adjacent)
             break
-        elif (isinstance(adjacent, pf.Str)
-              #   and adjacent.text.startswith("{")):
-              and re.search(r'^[^\}]*\{', adjacent.text)):
+        elif (
+            isinstance(adjacent, pf.Str)
+            #   and adjacent.text.startswith("{")):
+            and re.search(r"^[^\}]*\{", adjacent.text)
+        ):
             found_start = True
             found_end = False
             attr_elements.append(adjacent)
@@ -247,9 +254,11 @@ def _search_attribute_right(element, include_element, allow_space):
     if found_start and not found_end:
         adjacent = adjacent.next
         while adjacent:
-            if (isinstance(adjacent, pf.Str)
-                    # and adjacent.text.endswith("}")):
-                    and re.search(r'^[^\{]*\}', adjacent.text)):
+            if (
+                isinstance(adjacent, pf.Str)
+                # and adjacent.text.endswith("}")):
+                and re.search(r"^[^\{]*\}", adjacent.text)
+            ):
                 # TODO this won't handle } in strings, e.g. {a="} "}
                 found_end = True
                 attr_elements.append(adjacent)
@@ -261,8 +270,7 @@ def _search_attribute_right(element, include_element, allow_space):
     if not (found_start and found_end):
         return None
 
-    attribute_str = pf.stringify(
-        pf.Para(*attr_elements)).replace("\n", " ").strip()
+    attribute_str = pf.stringify(pf.Para(*attr_elements)).replace("\n", " ").strip()
 
     # split into the label and the rest
     match = re.match(r"^\{(#[^\s]+|)([^\}]*)\}", attribute_str)
@@ -270,14 +278,14 @@ def _search_attribute_right(element, include_element, allow_space):
         raise ValueError(attribute_str)
     classes, attributes = process_attributes(match.group(2))
 
-    new_str = attribute_str[len(match.group(0)):]
+    new_str = attribute_str[len(match.group(0)) :]
 
     return {
         "id": match.group(1)[1:],
         "classes": classes,
         "attributes": attributes,
         "elements": attr_elements,
-        "append": pf.Str(new_str) if new_str else None
+        "append": pf.Str(new_str) if new_str else None,
     }
 
 
@@ -294,21 +302,22 @@ def _search_attribute_left(element, include_element, allow_space):
     found_start = False
     found_end = False
     while adjacent:
-        if (isinstance(adjacent, pf.Space) and allow_space):
+        if isinstance(adjacent, pf.Space) and allow_space:
             attr_elements.append(adjacent)
             adjacent = adjacent.prev
             continue
-        elif (isinstance(adjacent, pf.Str)
-              and adjacent.text.endswith("}")
-              and adjacent.text.startswith("{")):
+        elif (
+            isinstance(adjacent, pf.Str)
+            and adjacent.text.endswith("}")
+            and adjacent.text.startswith("{")
+        ):
             # TODO this won't handle } in strings, e.g. {a="} "}
             # TODO this won't handle characters after } e.g. {a=1})
             found_start = True
             found_end = True
             attr_elements.append(adjacent)
             break
-        elif (isinstance(adjacent, pf.Str)
-              and adjacent.text.endswith("}")):
+        elif isinstance(adjacent, pf.Str) and adjacent.text.endswith("}"):
             found_start = False
             found_end = True
             attr_elements.append(adjacent)
@@ -319,8 +328,7 @@ def _search_attribute_left(element, include_element, allow_space):
     if found_end and not found_start:
         adjacent = adjacent.prev
         while adjacent:
-            if (isinstance(adjacent, pf.Str)
-                    and adjacent.text.startswith("{")):
+            if isinstance(adjacent, pf.Str) and adjacent.text.startswith("{"):
                 # TODO this won't handle { in strings, e.g. {a="{ "}
                 # TODO this won't handle characters before { e.g. ({a=1}
                 found_start = True
@@ -335,8 +343,7 @@ def _search_attribute_left(element, include_element, allow_space):
 
     attr_elements = list(reversed(attr_elements))
 
-    attribute_str = pf.stringify(
-        pf.Para(*attr_elements)).replace("\n", " ").strip()
+    attribute_str = pf.stringify(pf.Para(*attr_elements)).replace("\n", " ").strip()
 
     # split into the label and the rest
     match = re.match("^\\{(#[^\\s]+|)([^\\}]*)\\}$", attribute_str)
@@ -349,7 +356,7 @@ def _search_attribute_left(element, include_element, allow_space):
         "classes": classes,
         "attributes": attributes,
         "elements": attr_elements,
-        "append": None
+        "append": None,
     }
 
 
@@ -363,12 +370,15 @@ def process_attributes(attr_string):
     dict: attributes
     """
     # find classes, denoted by .class-name
-    classes = [c[1][1:] for c in re.findall('(^|\\s)(\\.[\\-\\_a-zA-Z]+)',
-                                            attr_string)]
+    classes = [c[1][1:] for c in re.findall("(^|\\s)(\\.[\\-\\_a-zA-Z]+)", attr_string)]
     # find attributes, denoted by a=b, respecting quotes
-    attr = {c[1]: strip_quotes(c[2]) for c in re.findall(
-        '(^|\\s)([\\-\\_a-zA-Z]+)\\s*=\\s*(\\".+\\"|\\\'.+\\\'|[^\\s\\"\\\']+)',  # noqa: E501
-        attr_string)}
+    attr = {
+        c[1]: strip_quotes(c[2])
+        for c in re.findall(
+            "(^|\\s)([\\-\\_a-zA-Z]+)\\s*=\\s*(\\\".+\\\"|\\'.+\\'|[^\\s\\\"\\']+)",  # noqa: E501
+            attr_string,
+        )
+    }
     # TODO this generally works, but should be stricter against any weird
     # fringe cases
 
@@ -389,11 +399,9 @@ def convert_attributes(attr):
 
 
 def convert_units(string, out_units):
-    match = re.compile(
-        "^\\s*([0-9]+\\.?[0-9]*)([a-z\\%]*)\\s*$").match(str(string))
+    match = re.compile("^\\s*([0-9]+\\.?[0-9]*)([a-z\\%]*)\\s*$").match(str(string))
     if match is None:
-        raise ValueError(
-            "string could not be resolved as a value: {}".format(string))
+        raise ValueError("string could not be resolved as a value: {}".format(string))
     value = float(match.group(1))
     in_units = match.group(2)
     in_units = "fraction" if not in_units else in_units
@@ -402,19 +410,20 @@ def convert_units(string, out_units):
         return value
 
     convert = {
-        ("%", "fraction"): lambda x: x / 100.,
-        ("fraction", "%"): lambda x: x*100.
+        ("%", "fraction"): lambda x: x / 100.0,
+        ("fraction", "%"): lambda x: x * 100.0,
     }.get((in_units, out_units), None)
 
     if convert is None:
-        raise ValueError("could not find a conversion for "
-                         "{0} to {1}: {2}".format(in_units, out_units, string))
+        raise ValueError(
+            "could not find a conversion for "
+            "{0} to {1}: {2}".format(in_units, out_units, string)
+        )
 
     return convert(value)
 
 
-def get_option(locations, keypath, default=None,
-               delimiter=".", error_on_missing=False):
+def get_option(locations, keypath, default=None, delimiter=".", error_on_missing=False):
     """ fetch an option variable from a hierarchy of preferred locations
 
     The value returned will be from the first available location or the default
@@ -471,8 +480,7 @@ def get_option(locations, keypath, default=None,
     if found_var:
         return variable
     elif error_on_missing:
-        raise ValueError(
-            "could not retrieve the option keypath: {}".format(keypath))
+        raise ValueError("could not retrieve the option keypath: {}".format(keypath))
 
     return default
 
@@ -504,7 +512,7 @@ def get_panflute_containers(element):
         pf.Strikeout,
         pf.Strong,
         pf.Subscript,
-        pf.Superscript
+        pf.Superscript,
     )
 
     panflute_block_containers = (
@@ -514,7 +522,7 @@ def get_panflute_containers(element):
         pf.Doc,
         pf.ListItem,
         pf.Note,
-        pf.TableCell
+        pf.TableCell,
     )
 
     if issubclass(element, pf.Inline):
@@ -545,7 +553,7 @@ def get_pf_content_attr(container, target):
         pf.Subscript,
         pf.Superscript,
         pf.Table,
-        pf.DefinitionItem
+        pf.DefinitionItem,
     ]
 
     panflute_block_containers = (
@@ -555,7 +563,7 @@ def get_pf_content_attr(container, target):
         pf.Doc,
         pf.ListItem,
         pf.Note,
-        pf.TableCell
+        pf.TableCell,
     )
 
     if issubclass(target, pf.Cite):

@@ -11,7 +11,7 @@ from six import string_types
 
 
 class DefaultFormatter(string.Formatter):
-    def __init__(self, default=''):
+    def __init__(self, default=""):
         self.default = default
 
     def get_value(self, key, args, kwds):
@@ -31,9 +31,9 @@ def safe_str(obj):
         return str(obj)
     except UnicodeEncodeError:
         # python 2.7
-        obj = re.sub(u"\u2013", "-", obj)   # en dash
+        obj = re.sub(u"\u2013", "-", obj)  # en dash
         obj = re.sub(u"\u2014", "--", obj)  # em dash
-        return obj.encode('ascii', 'ignore').decode('ascii')
+        return obj.encode("ascii", "ignore").decode("ascii")
     return ""
 
 
@@ -114,15 +114,18 @@ class LatexTagsToHTML(Preprocessor):
 
     regex = traits.Unicode(
         r"\\(?:[^a-zA-Z]|[a-zA-Z]+[*=']?)(?:\[.*?\])?{.*?}",
-        help="the regex to identify latex tags").tag(config=True)
+        help="the regex to identify latex tags",
+    ).tag(config=True)
     bibformat = traits.Unicode(
         "{author}, {year}.",
-        help="the format to output \\cite{} tags found in the bibliography"
+        help="the format to output \\cite{} tags found in the bibliography",
     ).tag(config=True)
     labelbycolon = traits.Bool(
         True,
-        help=('create reference label based on text before colon, '
-              'e.g. \\ref{fig:example} -> fig 1')
+        help=(
+            "create reference label based on text before colon, "
+            "e.g. \\ref{fig:example} -> fig 1"
+        ),
     ).tag(config=True)
 
     def __init__(self, *args, **kwargs):
@@ -138,11 +141,11 @@ class LatexTagsToHTML(Preprocessor):
         """ read a bibliography
 
         """
-        logging.info('reading bibliopath: {}'.format(path))
+        logging.info("reading bibliopath: {}".format(path))
         bibdatabase = {}
         bibparser = bibtexparser.bparser.BibTexParser()
         try:
-            if hasattr(path, 'open'):
+            if hasattr(path, "open"):
                 with path.open(encoding="utf8") as bibtex_file:
                     bibtex_data = bibtex_file.read()
             else:
@@ -151,7 +154,7 @@ class LatexTagsToHTML(Preprocessor):
             bibtex_data = safe_str(bibtex_data)
             bibdatabase = bibparser.parse(bibtex_data).entries_dict
         except Exception as err:
-            logging.error('could not read bibliopath {}: {}'.format(path, err))
+            logging.error("could not read bibliopath {}: {}".format(path, err))
 
         return bibdatabase
 
@@ -163,35 +166,34 @@ class LatexTagsToHTML(Preprocessor):
         """work out the best way to represent the bib entry """
 
         # abbreviate a list of authors
-        if 'author' in entry:
-            authors = re.split(", | and ", entry['author'])
+        if "author" in entry:
+            authors = re.split(", | and ", entry["author"])
             if len(authors) > 1:
-                author = authors[0] + ' <em>et al</em>'
+                author = authors[0] + " <em>et al</em>"
             else:
                 author = authors[0]
-            entry['author'] = author
+            entry["author"] = author
 
             # split up date into year, month, day
-        if 'date' in entry:
-            date = entry['date'].split('-')
+        if "date" in entry:
+            date = entry["date"].split("-")
             if len(date) == 3:
-                entry['year'] = date[0]
-                entry['month'] = date[1]
-                entry['day'] = date[2]
+                entry["year"] = date[0]
+                entry["month"] = date[1]
+                entry["day"] = date[2]
             else:
-                entry['year'] = date[0]
+                entry["year"] = date[0]
 
         text = DefaultFormatter().format(self.bibformat, **entry)
 
-        if 'doi' in entry:
+        if "doi" in entry:
             return r'<a href="https://doi.org/{doi}">{text}</a>'.format(
-                doi=entry['doi'], text=text)
-        elif 'url' in entry:
-            return r'<a href="{url}">{text}</a>'.format(
-                url=entry['url'], text=text)
-        elif 'link' in entry:
-            return r'<a href="{url}">{text}</a>'.format(
-                url=entry['link'], text=text)
+                doi=entry["doi"], text=text
+            )
+        elif "url" in entry:
+            return r'<a href="{url}">{text}</a>'.format(url=entry["url"], text=text)
+        elif "link" in entry:
+            return r'<a href="{url}">{text}</a>'.format(url=entry["link"], text=text)
         else:
             return text
 
@@ -203,15 +205,16 @@ class LatexTagsToHTML(Preprocessor):
         this is particularly useful for slides,
         which require a prefix #/<slide_number><label>
         """
-        if 'refmap' in resources:
-            if name in resources['refmap']:
+        if "refmap" in resources:
+            if name in resources["refmap"]:
                 return r'<a href="{{id_home_prefix}}{0}">{1}</a>'.format(
-                    name, resources['refmap'][name])
+                    name, resources["refmap"][name]
+                )
 
         if self.labelbycolon:
-            ref_name = name.split(':')[0] if ':' in name else 'ref'
+            ref_name = name.split(":")[0] if ":" in name else "ref"
         else:
-            ref_name = 'ref'
+            ref_name = "ref"
         if ref_name not in self.refs:
             self.refs[ref_name] = {}
         refs = self.refs[ref_name]
@@ -221,7 +224,8 @@ class LatexTagsToHTML(Preprocessor):
             id = len(refs) + 1
             refs[name] = id
         return r'<a href="{{id_home_prefix}}{0}">{1}. {2}</a>'.format(
-            name, ref_name, id)
+            name, ref_name, id
+        )
 
     def convert(self, source, resources):
         """ convert a a string with tags in
@@ -252,83 +256,106 @@ class LatexTagsToHTML(Preprocessor):
         labels = []
         for tag in re.findall(self.regex, source):
 
-            if tag.startswith('\\label'):
-                link = r'<a id="{label}" class="anchor-link" name="#{label}">&#182;</a>'.format(label=tag[7:-1])  # noqa: E501
+            if tag.startswith("\\label"):
+                link = r'<a id="{label}" class="anchor-link" name="#{label}">&#182;</a>'.format(
+                    label=tag[7:-1]
+                )  # noqa: E501
                 if in_equation:
                     labels.append(link)
-                    new = new.replace(tag, '')
+                    new = new.replace(tag, "")
                 else:
                     new = new.replace(tag, link)
 
-            elif tag.startswith('\\ref'):
-                names = tag[5:-1].split(',')
+            elif tag.startswith("\\ref"):
+                names = tag[5:-1].split(",")
                 html = []
                 for name in names:
                     html.append(self.replace_reflabel(name, resources))
-                new = new.replace(tag, self.rreplace(
-                    ', '.join(html), ',', ' and'))
+                new = new.replace(tag, self.rreplace(", ".join(html), ",", " and"))
 
-            elif tag.startswith('\\cref'):
-                names = tag[6:-1].split(',')
+            elif tag.startswith("\\cref"):
+                names = tag[6:-1].split(",")
                 html = []
                 for name in names:
                     html.append(self.replace_reflabel(name, resources))
-                new = new.replace(tag, self.rreplace(
-                    ', '.join(html), ',', ' and'))
+                new = new.replace(tag, self.rreplace(", ".join(html), ",", " and"))
 
-            elif tag.startswith('\\cite'):
-                names = tag[6:-1].split(',')
+            elif tag.startswith("\\cite"):
+                names = tag[6:-1].split(",")
                 html = []
                 for name in names:
                     if name in self.bibdatabase:
-                        html.append(self.process_bib_entry(
-                            self.bibdatabase[name]))
+                        html.append(self.process_bib_entry(self.bibdatabase[name]))
                     else:
-                        html.append('Unresolved citation: {}.'.format(name))
-                new = new.replace(tag, '[' + ', '.join(html) + ']')
+                        html.append("Unresolved citation: {}.".format(name))
+                new = new.replace(tag, "[" + ", ".join(html) + "]")
 
-            elif any([tag.startswith('\\begin{{{0}}}'.format(env)) for env in
-                      ['equation', 'equation*', 'align', 'align*',
-                       'multline', 'multline*', 'gather', 'gather*']]):
+            elif any(
+                [
+                    tag.startswith("\\begin{{{0}}}".format(env))
+                    for env in [
+                        "equation",
+                        "equation*",
+                        "align",
+                        "align*",
+                        "multline",
+                        "multline*",
+                        "gather",
+                        "gather*",
+                    ]
+                ]
+            ):
                 in_equation = True
-            elif any([tag.startswith('\\end{{{0}}}'.format(env)) for env in
-                      ['equation', 'equation*', 'align', 'align*', 'multline',
-                       'multline*', 'gather', 'gather*']]):
-                new += ' '.join(labels)
+            elif any(
+                [
+                    tag.startswith("\\end{{{0}}}".format(env))
+                    for env in [
+                        "equation",
+                        "equation*",
+                        "align",
+                        "align*",
+                        "multline",
+                        "multline*",
+                        "gather",
+                        "gather*",
+                    ]
+                ]
+            ):
+                new += " ".join(labels)
                 labels = []
                 in_equation = False
-            elif any([tag.startswith('\\begin{{{0}}}'.format(env)) for env in
-                      ['split']]):
+            elif any(
+                [tag.startswith("\\begin{{{0}}}".format(env)) for env in ["split"]]
+            ):
                 pass
-            elif any([tag.startswith('\\end{{{0}}}'.format(env)) for env in
-                      ['split']]):
+            elif any([tag.startswith("\\end{{{0}}}".format(env)) for env in ["split"]]):
                 pass
             else:
-                new = new.replace(tag, '')
+                new = new.replace(tag, "")
         return new
 
     def preprocess(self, nb, resources):
 
-        logging.info('converting latex tags to html')
-        if 'bibliopath' in resources:
-            self.bibdatabase = self.read_bibliography(resources['bibliopath'])
+        logging.info("converting latex tags to html")
+        if "bibliopath" in resources:
+            self.bibdatabase = self.read_bibliography(resources["bibliopath"])
         else:
             self.bibdatabase = {}
 
         for cell in nb.cells:
 
-            if "ipub" in cell['metadata']:
-                for key in cell['metadata']["ipub"]:
-                    if not isinstance(cell['metadata']["ipub"][key], dict):
+            if "ipub" in cell["metadata"]:
+                for key in cell["metadata"]["ipub"]:
+                    if not isinstance(cell["metadata"]["ipub"][key], dict):
                         continue
-                    if "caption" in cell['metadata']["ipub"][key]:
-                        text = cell['metadata']["ipub"][key]["caption"]
-                        key_dict = cell['metadata']["ipub"][key]
+                    if "caption" in cell["metadata"]["ipub"][key]:
+                        text = cell["metadata"]["ipub"][key]["caption"]
+                        key_dict = cell["metadata"]["ipub"][key]
                         key_dict["caption"] = self.convert(text, resources)
 
-            if not cell['cell_type'] == "markdown":
+            if not cell["cell_type"] == "markdown":
                 continue
-            cell['source'] = self.convert(cell['source'], resources)
+            cell["source"] = self.convert(cell["source"], resources)
 
-        resources['refslide'] = {}
+        resources["refslide"] = {}
         return nb, resources

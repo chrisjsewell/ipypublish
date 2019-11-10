@@ -29,9 +29,9 @@
 
   "notebook_input_raw": |2
 
-    ((*- if cell.metadata.raw_mimetype: -*))  
-    ((*- if cell.metadata.raw_mimetype == "text/latex" -*))  
-    ((( super() )))    
+    ((*- if cell.metadata.raw_mimetype: -*))
+    ((*- if cell.metadata.raw_mimetype == "text/latex" -*))
+    ((( super() )))
     ((*- endif *))
     ((*- endif *))
 
@@ -187,5 +187,3 @@
 
     ((*- endblock table -*))
     ((*- endmacro *))
-
-  

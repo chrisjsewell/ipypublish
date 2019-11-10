@@ -15,7 +15,7 @@ def init_bibgloss_cache(app):
     :param app: The sphinx application.
     :type app: :class:`sphinx.application.Sphinx`
     """
-    if not hasattr(app.env, 'bibgloss_cache'):
+    if not hasattr(app.env, "bibgloss_cache"):
         app.env.bibgloss_cache = Cache()
 
 
@@ -40,20 +40,24 @@ def process_citations(app, doctree, docname):
     """
     # citation(rawsource='', *children, **attributes)
     for node in doctree.traverse(docutils.nodes.citation):
-        if 'bibglossary' not in node.attributes.get('classes', []):
+        if "bibglossary" not in node.attributes.get("classes", []):
             continue
         key = node[0].astext()
         try:
             label_str = app.env.bibgloss_cache.get_label_from_key(key)
         except KeyError:
-            logger.warning('could not relabel glossary item [%s]' % key, type='bibgloss', subtype='relabel')
+            logger.warning(
+                "could not relabel glossary item [%s]" % key,
+                type="bibgloss",
+                subtype="relabel",
+            )
         else:
             if app.config.bibgloss_convert_latex:
                 label = latex_to_docutils(label_str)
                 # label(rawsource='', text='', *children, **attributes)
-                node[0] = docutils.nodes.label('', '', *label.children[0])
+                node[0] = docutils.nodes.label("", "", *label.children[0])
             else:
-                node[0] = docutils.nodes.label('', label_str)
+                node[0] = docutils.nodes.label("", label_str)
 
             if sphinx.version_info >= (2,):
                 # this creates a line break between the label and the definition
@@ -73,20 +77,24 @@ def process_citation_references(app, doctree, docname):
     # into reference nodes, so iterate over reference nodes
     # reference(rawsource='', text='', *children, **attributes)
     for node in doctree.traverse(docutils.nodes.reference):
-        if 'bibglossary' not in node.attributes.get('classes', []):
+        if "bibglossary" not in node.attributes.get("classes", []):
             continue
         text = node[0].astext()
         key = text[1:-1]
         try:
-            if 'bibgplural' in node.attributes.get('classes', []):
+            if "bibgplural" in node.attributes.get("classes", []):
                 label = app.env.bibgloss_cache.get_plural_from_key(key)
             else:
                 label = app.env.bibgloss_cache.get_label_from_key(key)
         except KeyError:
             pass
-            logger.warning('could not relabel glossary reference [%s]' % key, type='bibgloss', subtype='relabel')
+            logger.warning(
+                "could not relabel glossary reference [%s]" % key,
+                type="bibgloss",
+                subtype="relabel",
+            )
         else:
-            if 'bibgcapital' in node.attributes.get('classes', []):
+            if "bibgcapital" in node.attributes.get("classes", []):
                 label = label.capitalize()
 
             if app.config.bibgloss_convert_latex:

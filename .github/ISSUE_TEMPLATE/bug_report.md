@@ -18,7 +18,7 @@ Steps to reproduce the behavior:
 
 1. step 1
 2. step 2
- 
+
 (for extended explanation, use the additional context section)
 
 ## Minimal Notebook Example
