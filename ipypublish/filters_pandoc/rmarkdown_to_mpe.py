@@ -28,13 +28,12 @@ import panflute as pf
 
 def format_code_html(code, doc):
     # type: (CodeBlock, Doc) -> None
-    if not (isinstance(code, CodeBlock)
-            and doc.format in ("html", "html5")):
+    if not (isinstance(code, CodeBlock) and doc.format in ("html", "html5")):
         return None
 
-    if 'python' in code.attributes.get('data-info', ''):
+    if "python" in code.attributes.get("data-info", ""):
 
-        attr = code.attributes.get('data-info', '')
+        attr = code.attributes.get("data-info", "")
 
         parsed = "cmd='{}'".format(sys.executable)
         normed = '{{"cmd":"{}"'.format(sys.executable)
@@ -58,11 +57,13 @@ def format_code_html(code, doc):
 
         normed = normed + "}"
 
-        code.attributes['data-info'] = 'python {{{0}}}'.format(parsed)
-        code.attributes['data-parsed-info'] = (
-            '{{"language":"python","attributes":{0}}}'.format(normed))
-        code.attributes['data-normalized-info'] = (
-            '{{"language":"python","attributes":{0}}}'.format(normed))
+        code.attributes["data-info"] = "python {{{0}}}".format(parsed)
+        code.attributes[
+            "data-parsed-info"
+        ] = '{{"language":"python","attributes":{0}}}'.format(normed)
+        code.attributes[
+            "data-normalized-info"
+        ] = '{{"language":"python","attributes":{0}}}'.format(normed)
 
         doc.last_id = this_id
 
@@ -81,9 +82,8 @@ def finalize(doc):
 
 def main(doc=None):
     # type: (Doc) -> None
-    return pf.run_filter(format_code_html,
-                         prepare, finalize, doc=doc)
+    return pf.run_filter(format_code_html, prepare, finalize, doc=doc)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

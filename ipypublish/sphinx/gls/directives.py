@@ -38,19 +38,17 @@ class BibGlossaryDirective(Directive):
     final_argument_whitespace = True
     has_content = False
     option_spec = {
-        'cited': directives.flag,
-        'notcited': directives.flag,
-        'all': directives.flag,
-        'unsorted': directives.flag,
-        'filter': directives.unchanged,
-        'style': directives.unchanged,
-        'encoding': directives.encoding,
-        'keyprefix': directives.unchanged,
+        "cited": directives.flag,
+        "notcited": directives.flag,
+        "all": directives.flag,
+        "unsorted": directives.flag,
+        "filter": directives.unchanged,
+        "style": directives.unchanged,
+        "encoding": directives.encoding,
+        "keyprefix": directives.unchanged,
     }
 
-    _allowed_styles = (
-        "list"
-    )
+    _allowed_styles = "list"
     _default_style = "list"
 
     def run(self):
@@ -66,8 +64,7 @@ class BibGlossaryDirective(Directive):
         # ids within a single document, but we need the id to be
         # unique across all documents, so we also include the docname
         # in the id)
-        id_ = 'bibtex-bibglossary-%s-%s' % (
-            env.docname, env.new_serialno('bibgloss'))
+        id_ = "bibtex-bibglossary-%s-%s" % (env.docname, env.new_serialno("bibgloss"))
 
         # set filter option
         if "filter" in self.options:
@@ -81,8 +78,10 @@ class BibGlossaryDirective(Directive):
                 filter_ = ast.parse(self.options["filter"])
             except SyntaxError:
                 logger.warning(
-                    standout("syntax error in :filter: expression") +
-                    " (" + self.options["filter"] + "); "
+                    standout("syntax error in :filter: expression")
+                    + " ("
+                    + self.options["filter"]
+                    + "); "
                     "the option will be ignored"
                 )
                 filter_ = ast.parse("cited")
@@ -94,13 +93,13 @@ class BibGlossaryDirective(Directive):
             # the default filter: include only cited entries
             filter_ = ast.parse("cited")
 
-        style = self.options.get(
-                "style", env.app.config.bibgloss_default_style)
+        style = self.options.get("style", env.app.config.bibgloss_default_style)
         if style not in self._allowed_styles:
             logger.warning(
                 "style '{}' not in allowed styles, defaulting to '{}'".format(
                     style, self._default_style
-                ))
+                )
+            )
             style = self._default_style
 
         bibcache = BibliographyCache(
@@ -108,8 +107,8 @@ class BibGlossaryDirective(Directive):
             unsorted=("unsorted" in self.options),
             filter_=filter_,
             encoding=self.options.get(
-                'encoding',
-                self.state.document.settings.input_encoding),
+                "encoding", self.state.document.settings.input_encoding
+            ),
             keyprefix=self.options.get("keyprefix", ""),
             labels={},
             plurals={},
@@ -126,7 +125,7 @@ class BibGlossaryDirective(Directive):
             env.note_dependency(bibfile)
             bibcache.bibfiles.append(bibfile)
         env.bibgloss_cache.set_bibliography_cache(env.docname, id_, bibcache)
-        return [BibGlossaryNode('', ids=[id_])]
+        return [BibGlossaryNode("", ids=[id_])]
 
     def update_bibfile_cache(self, bibfile, mtime, encoding):
         """Parse *bibfile*,  and store the
@@ -141,16 +140,14 @@ class BibGlossaryDirective(Directive):
             The bib file's modification time.
 
         """
-        logger.info(
-            bold("parsing bibtex file {0}... ".format(bibfile)), nonl=True)
+        logger.info(bold("parsing bibtex file {0}... ".format(bibfile)), nonl=True)
         bibglossdb = BibGlossDB()
         bibglossdb.load(path=bibfile, encoding=encoding)
-        logger.info("parsed {0} entries"
-                    .format(len(bibglossdb)))
+        logger.info("parsed {0} entries".format(len(bibglossdb)))
         env = self.state.document.settings.env
         env.bibgloss_cache.bibfiles[bibfile] = BibfileCache(
-            mtime=mtime,
-            data=bibglossdb)
+            mtime=mtime, data=bibglossdb
+        )
 
     def process_bibfile(self, bibfile, encoding):
         """Check if ``env.bibgloss_cache.bibfiles[bibfile]`` is still
@@ -169,17 +166,17 @@ class BibGlossaryDirective(Directive):
         try:
             mtime = os.path.getmtime(bibfile)
         except OSError:
-            logger.warning(
-                standout("could not open bibtex file {0}.".format(bibfile)))
+            logger.warning(standout("could not open bibtex file {0}.".format(bibfile)))
             cache[bibfile] = BibfileCache(  # dummy cache
-                mtime=-float("inf"), data=BibGlossDB())
+                mtime=-float("inf"), data=BibGlossDB()
+            )
             return
         # get cache and check if it is still up to date
         # if it is not up to date, parse the bibtex file
         # and store it in the cache
         logger.info(
-            bold("checking for {0} in bibtex cache... ".format(bibfile)),
-            nonl=True)
+            bold("checking for {0} in bibtex cache... ".format(bibfile)), nonl=True
+        )
         try:
             bibfile_cache = cache[bibfile]
         except KeyError:
@@ -190,4 +187,4 @@ class BibGlossaryDirective(Directive):
                 logger.info("out of date")
                 self.update_bibfile_cache(bibfile, mtime, encoding)
             else:
-                logger.info('up to date')
+                logger.info("up to date")

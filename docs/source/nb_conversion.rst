@@ -171,14 +171,17 @@ Simple Customisation of Outputs
 
 To customise the output of the above defaults, simply download one of:
 
-- :download:`latex_ipypublish_all.json <../../ipypublish/export_plugins/latex_ipypublish_all.json>`.
-- :download:`sphinx_ipypublish_all.json <../../ipypublish/export_plugins/html_ipypublish_all.json>`.
-- :download:`html_ipypublish_all.json <../../ipypublish/export_plugins/html_ipypublish_all.json>`.
-- :download:`slides_ipypublish_all.json <../../ipypublish/export_plugins/slides_ipypublish_all.json>`.
+- :download:`latex_ipypublish_all.json
+  <../../ipypublish/export_plugins/latex_ipypublish_all.json>`.
+- :download:`sphinx_ipypublish_all.json
+  <../../ipypublish/export_plugins/html_ipypublish_all.json>`.
+- :download:`html_ipypublish_all.json
+  <../../ipypublish/export_plugins/html_ipypublish_all.json>`.
+- :download:`slides_ipypublish_all.json
+  <../../ipypublish/export_plugins/slides_ipypublish_all.json>`.
 
 Then alter the ``cell_defaults`` and ``nb_defaults`` sections, and run:
 
 .. code-block:: console
 
     nbpublish -f path/to/new_config.json input.ipynb
-

@@ -6,14 +6,14 @@
 	captions=tableheading,numbers=noendperiod]{scrartcl}
 %\usepackage{polyglossia}
 %\setmainlanguage{british}
-%\DeclareTextCommandDefault{\nobreakspace}{\leavevmode\nobreak\ } 
+%\DeclareTextCommandDefault{\nobreakspace}{\leavevmode\nobreak\ }
 \usepackage[british]{babel}
 
     \usepackage[T1]{fontenc} % Nicer default font (+ math font) than Computer Modern for most use cases
     \usepackage{mathpazo}
     \usepackage{graphicx}
-    \usepackage[skip=3pt]{caption}    
-    \usepackage{adjustbox} % Used to constrain images to a maximum size 
+    \usepackage[skip=3pt]{caption}
+    \usepackage{adjustbox} % Used to constrain images to a maximum size
     \usepackage[table]{xcolor} % Allow colors to be defined
     \usepackage{enumerate} % Needed for markdown enumerations to work
     \usepackage{amsmath} % Equations
@@ -28,8 +28,8 @@
     \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
     \usepackage[utf8x]{inputenc} % Allow utf-8 characters in the tex document
     \usepackage{fancyvrb} % verbatim replacement that allows latex
-    \usepackage{grffile} % extends the file name processing of package graphics 
-                         % to support a larger range 
+    \usepackage{grffile} % extends the file name processing of package graphics
+                         % to support a larger range
     % The hyperref package gives us a pdf with properly built
     % internal navigation ('pdf bookmarks' for the table of contents,
     % internal cross-reference links, web links for URLs, etc.)
@@ -57,7 +57,7 @@
 	% bibliography formatting
 	\usepackage[numbers, square, super, sort&compress]{natbib}
 	% hyperlink doi's
-	\usepackage{doi}	
+	\usepackage{doi}
 
     % define a code float
     \usepackage{newfloat} % to define a new float types
@@ -259,7 +259,7 @@
 \DeclareTranslation{French}{List of Codes}{Liste des Codes}
 \DeclareTranslation{Italian}{List of Codes}{Elenco dei Codici}
 \DeclareTranslation{Dutch}{List of Codes}{Lijst van Codes}
-\DeclareTranslation{Portuges}{List of Codes}{Lista de C\'{o}digos} 
+\DeclareTranslation{Portuges}{List of Codes}{Lista de C\'{o}digos}
 
 \DeclareTranslationFallback{Supervisors}{Supervisors}
 \DeclareTranslation{Catalan}{Supervisors}{Supervisors}
@@ -269,7 +269,7 @@
 \DeclareTranslation{French}{Supervisors}{Superviseurs}
 \DeclareTranslation{Italian}{Supervisors}{Le autorit\`{a} di vigilanza}
 \DeclareTranslation{Dutch}{Supervisors}{supervisors}
-\DeclareTranslation{Portuguese}{Supervisors}{Supervisores} 
+\DeclareTranslation{Portuguese}{Supervisors}{Supervisores}
 
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
@@ -282,20 +282,20 @@
     numberstyle=\tiny\color{codegray},
     stringstyle=\color{codepurple},
     basicstyle=\ttfamily,
-    breakatwhitespace=false,         
-    keepspaces=true,                 
-    numbers=left,                    
-    numbersep=10pt,                  
-    showspaces=false,                
+    breakatwhitespace=false,
+    keepspaces=true,
+    numbers=left,
+    numbersep=10pt,
+    showspaces=false,
     showstringspaces=false,
-    showtabs=false,                  
+    showtabs=false,
     tabsize=2,
     breaklines=true,
     literate={\-}{}{0\discretionary{-}{}{-}},
   postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
 }
 
-\lstset{style=mystyle} 
+\lstset{style=mystyle}
 
 \surroundwithmdframed[
   hidealllines=true,
@@ -309,13 +309,13 @@
 \usepackage{geometry}
 \geometry{tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in,
 nohead,includefoot,footskip=25pt}
-% you can use showframe option to check the margins visually 
+% you can use showframe option to check the margins visually
 
 	% ensure new section starts on new page
 	\addtokomafont{section}{\clearpage}
 
     % Prevent overflowing lines due to hard-to-break entities
-    \sloppy 
+    \sloppy
 
     % Setup hyperref package
     \hypersetup{
@@ -358,7 +358,7 @@ nohead,includefoot,footskip=25pt}
 
     % align captions to left (indented)
 	\captionsetup{justification=raggedright,
-	singlelinecheck=false,format=hang,labelfont={it,bf}} 
+	singlelinecheck=false,format=hang,labelfont={it,bf}}
 
 	% shift footer down so space between separation line
 	\ModifyLayer[addvoffset=.6ex]{scrheadings.foot.odd}
@@ -405,8 +405,8 @@ nohead,includefoot,footskip=25pt}
 
 	\vspace{1.5cm}
 
-	\begin{minipage}{0.8\textwidth}   
-		\begin{center}  
+	\begin{minipage}{0.8\textwidth}
+		\begin{center}
 		\begin{minipage}{0.39\textwidth}
 		\begin{flushleft} \Large
 		\emph{\GetTranslation{Author}:}\\Authors Name\\\href{mailto:authors@email.com}{authors@email.com}
@@ -419,14 +419,14 @@ nohead,includefoot,footskip=25pt}
 			  Second Supervisor
 		\end{flushright}
 		\end{minipage}
-		\end{center}   
+		\end{center}
 	\end{minipage}
 
 	\vfill
 
 	\begin{minipage}{0.8\textwidth}
 	\begin{center}\LARGE{A tagline for the report.}
-	\end{center} 
+	\end{center}
 	\end{minipage}
 
 	\vspace{0.8cm}
@@ -524,7 +524,7 @@ code}\label{displaying-a-plot-with-its-code}
 \begin{codecell}
 
     \caption{The plotting code for a matplotlib figure (\cref{fig:example_mpl}).}\label{code:example_mpl}\begin{lstlisting}[language=Python,numbers=left,xleftmargin=20pt,xrightmargin=5pt,belowskip=5pt,aboveskip=5pt]
-plt.scatter(np.random.rand(10), np.random.rand(10), 
+plt.scatter(np.random.rand(10), np.random.rand(10),
             label='data label')
 plt.ylabel(r'a y label with latex $\alpha$')
 plt.legend();
@@ -565,8 +565,8 @@ df.round(3)
 \section{Equations (with ipython or
 sympy)}\label{equations-with-ipython-or-sympy}
 
-    \begin{equation}\label{eqn:example_ipy}	
-    	 a = b+c 
+    \begin{equation}\label{eqn:example_ipy}
+    	 a = b+c
         \end{equation}
 
 \begin{codecell}[H]
@@ -578,7 +578,7 @@ f = y(n)-2*y(n-1/sym.pi)-5*y(n-2)
 sym.rsolve(f,y(n),[1,4])
 \end{lstlisting}\end{codecell}
 
-    \begin{equation}\label{eqn:example_sympy}	
+    \begin{equation}\label{eqn:example_sympy}
     	\left(\sqrt{5} i\right)^{\alpha} \left(\frac{1}{2} - \frac{2 i}{5} \sqrt{5}\right) + \left(- \sqrt{5} i\right)^{\alpha} \left(\frac{1}{2} + \frac{2 i}{5} \sqrt{5}\right)
         \end{equation}
 
@@ -593,4 +593,3 @@ Interactive HTML was created using ipyvolume and will render below in
 \bibliography{Example_files/example.bib}
 
 	\end{document}
-

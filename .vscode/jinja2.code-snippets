@@ -10,13 +10,13 @@
         "scope": "jinja,jinja-yaml,jinja-html",
         "body": "{% set ${1:name} = ${2:value} %}",
         "description": "set variable"
-    },   
+    },
     "print": {
         "prefix": "print",
         "scope": "jinja,jinja-yaml,jinja-html",
         "body": "{{ ${1:variable} }}",
         "description": "print variable"
-    },   
+    },
     "block": {
         "prefix": "block",
         "scope": "jinja,jinja-yaml,jinja-html",

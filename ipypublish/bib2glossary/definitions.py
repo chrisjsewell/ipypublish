@@ -1,14 +1,10 @@
-ETYPE_GLOSS = 'glsterm'
-ETYPE_ACRONYM = 'glsacronym'
-ETYPE_SYMBOL = 'glssymbol'
+ETYPE_GLOSS = "glsterm"
+ETYPE_ACRONYM = "glsacronym"
+ETYPE_SYMBOL = "glssymbol"
 
-NEWGLOSS_FIELDS = (
-    "name", "description", "plural", "symbol", "text", "sort"
-)
+NEWGLOSS_FIELDS = ("name", "description", "plural", "symbol", "text", "sort")
 
-NEWACRONYM_FIELDS = (
-    "description", "plural", "longplural", "firstplural"
-)
+NEWACRONYM_FIELDS = ("description", "plural", "longplural", "firstplural")
 
 
 # TODO allow mapping

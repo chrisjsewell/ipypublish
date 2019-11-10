@@ -11,7 +11,7 @@ class GLSRole(XRefRole):
         """Transform reference node into a citation reference,
         and note that the reference was cited.
         """
-        keys = node['reftarget'].split(',')
+        keys = node["reftarget"].split(",")
         # Note that at this point, usually, env.bibgloss_cache.bibfiles
         # is still empty because the bibliography directive may not
         # have been processed yet, so we cannot get the actual entry.
@@ -20,9 +20,10 @@ class GLSRole(XRefRole):
         # process_citation_references.
         refnodes = [
             docutils_citation_ref_node(
-                BibGlossDB.get_fake_entry_obj(key),
-                document, classes=["bibglossary"])
-            for key in keys]
+                BibGlossDB.get_fake_entry_obj(key), document, classes=["bibglossary"]
+            )
+            for key in keys
+        ]
         for key in keys:
             env.bibgloss_cache.add_cited(key, env.docname)
         return refnodes, []
@@ -35,7 +36,7 @@ class GLSCapitalRole(XRefRole):
         """Transform reference node into a citation reference,
         and note that the reference was cited.
         """
-        keys = node['reftarget'].split(',')
+        keys = node["reftarget"].split(",")
         # Note that at this point, usually, env.bibgloss_cache.bibfiles
         # is still empty because the bibliography directive may not
         # have been processed yet, so we cannot get the actual entry.
@@ -44,9 +45,12 @@ class GLSCapitalRole(XRefRole):
         # process_citation_references.
         refnodes = [
             docutils_citation_ref_node(
-                BibGlossDB.get_fake_entry_obj(key), document,
-                classes=["bibglossary", "bibgcapital"])
-            for key in keys]
+                BibGlossDB.get_fake_entry_obj(key),
+                document,
+                classes=["bibglossary", "bibgcapital"],
+            )
+            for key in keys
+        ]
         for key in keys:
             env.bibgloss_cache.add_cited(key, env.docname)
         return refnodes, []
@@ -59,7 +63,7 @@ class GLSPluralRole(XRefRole):
         """Transform reference node into a citation reference,
         and note that the reference was cited.
         """
-        keys = node['reftarget'].split(',')
+        keys = node["reftarget"].split(",")
         # Note that at this point, usually, env.bibgloss_cache.bibfiles
         # is still empty because the bibliography directive may not
         # have been processed yet, so we cannot get the actual entry.
@@ -68,9 +72,12 @@ class GLSPluralRole(XRefRole):
         # process_citation_references.
         refnodes = [
             docutils_citation_ref_node(
-                BibGlossDB.get_fake_entry_obj(key), document,
-                classes=["bibglossary", "bibgplural"])
-            for key in keys]
+                BibGlossDB.get_fake_entry_obj(key),
+                document,
+                classes=["bibglossary", "bibgplural"],
+            )
+            for key in keys
+        ]
         for key in keys:
             env.bibgloss_cache.add_cited(key, env.docname)
         return refnodes, []
@@ -83,7 +90,7 @@ class GLSPluralCapitalRole(XRefRole):
         """Transform reference node into a citation reference,
         and note that the reference was cited.
         """
-        keys = node['reftarget'].split(',')
+        keys = node["reftarget"].split(",")
         # Note that at this point, usually, env.bibgloss_cache.bibfiles
         # is still empty because the bibliography directive may not
         # have been processed yet, so we cannot get the actual entry.
@@ -92,9 +99,12 @@ class GLSPluralCapitalRole(XRefRole):
         # process_citation_references.
         refnodes = [
             docutils_citation_ref_node(
-                BibGlossDB.get_fake_entry_obj(key), document,
-                classes=["bibglossary", "bibgplural", "bibgcapital"])
-            for key in keys]
+                BibGlossDB.get_fake_entry_obj(key),
+                document,
+                classes=["bibglossary", "bibgplural", "bibgcapital"],
+            )
+            for key in keys
+        ]
         for key in keys:
             env.bibgloss_cache.add_cited(key, env.docname)
         return refnodes, []

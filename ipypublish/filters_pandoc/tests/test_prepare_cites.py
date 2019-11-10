@@ -6,17 +6,25 @@ from ipypublish.tests.utils import HTML2JSONParser
 def test_para_rst():
     """
     """
-    in_string = ['+@label{.class a=1} xyz *@label2* @label3{.b}', '', '(@label4{})', '', '(@label5{.b} x)']
-    out_string = apply_filter(in_string, main, 'rst')
+    in_string = [
+        "+@label{.class a=1} xyz *@label2* @label3{.b}",
+        "",
+        "(@label4{})",
+        "",
+        "(@label5{.b} x)",
+    ]
+    out_string = apply_filter(in_string, main, "rst")
 
-    assert out_string.strip() == '\n'.join(['@label xyz *@label2* @label3', '', '(@label4)', '', '(@label5 x)'])
+    assert out_string.strip() == "\n".join(
+        ["@label xyz *@label2* @label3", "", "(@label4)", "", "(@label5 x)"]
+    )
 
 
 def test_para_html(data_regression):
     """
     """
-    in_string = ['+@label{ .class a=1} xyz *@label2* @label3{ .b}']
-    out_string = apply_filter(in_string, main, 'html')
+    in_string = ["+@label{ .class a=1} xyz *@label2* @label3{ .b}"]
+    out_string = apply_filter(in_string, main, "html")
 
     parser = HTML2JSONParser()
     parser.feed(out_string)
@@ -40,8 +48,8 @@ def test_para_html(data_regression):
 def test_table_html(data_regression):
     """
     """
-    in_string = ['a b', '- -', 'x y', '', 'Table: Caption +@label']
-    out_string = apply_filter(in_string, main, 'html')
+    in_string = ["a b", "- -", "x y", "", "Table: Caption +@label"]
+    out_string = apply_filter(in_string, main, "html")
 
     parser = HTML2JSONParser()
     parser.feed(out_string)
@@ -71,8 +79,8 @@ def test_table_html(data_regression):
 
 def test_image_html(data_regression):
 
-    in_string = ['![a title with a @label1 +@label2 {.nclass x=3}](path/to/image.png)']
-    out_string = apply_filter(in_string, main, 'html')
+    in_string = ["![a title with a @label1 +@label2 {.nclass x=3}](path/to/image.png)"]
+    out_string = apply_filter(in_string, main, "html")
 
     parser = HTML2JSONParser()
     parser.feed(out_string)

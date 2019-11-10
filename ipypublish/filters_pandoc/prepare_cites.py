@@ -36,10 +36,12 @@ from panflute import Element, Doc, Cite, RawInline, Link  # noqa: F401
 import panflute as pf
 
 
-from ipypublish.filters_pandoc.utils import (
-    find_attributes, get_pf_content_attr)
+from ipypublish.filters_pandoc.utils import find_attributes, get_pf_content_attr
 from ipypublish.filters_pandoc.definitions import (
-    ATTRIBUTE_CITE_CLASS, IPUB_META_ROUTE, PREFIX_MAP)
+    ATTRIBUTE_CITE_CLASS,
+    IPUB_META_ROUTE,
+    PREFIX_MAP,
+)
 
 
 def process_citations(element, doc):
@@ -72,8 +74,11 @@ def process_citations(element, doc):
         append = None
 
         # check if the cite has a valid prefix, if so extract it
-        if (isinstance(subel.prev, pf.Str) and subel.prev.text
-                and (subel.prev.text[-1] in dict(PREFIX_MAP))):
+        if (
+            isinstance(subel.prev, pf.Str)
+            and subel.prev.text
+            and (subel.prev.text[-1] in dict(PREFIX_MAP))
+        ):
 
             prefix = subel.prev.text[-1]
             mapping = dict(dict(PREFIX_MAP)[prefix])
@@ -95,9 +100,9 @@ def process_citations(element, doc):
 
         if classes or attributes:
             classes.append(ATTRIBUTE_CITE_CLASS)
-            final_content.append(pf.Span(subel,
-                                         classes=sorted(set(classes)),
-                                         attributes=attributes))
+            final_content.append(
+                pf.Span(subel, classes=sorted(set(classes)), attributes=attributes)
+            )
         else:
             final_content.append(subel)
 
@@ -123,9 +128,8 @@ def main(doc=None, extract_formats=True):
     """if extract_formats then convert citations defined in
     latex, rst or html formats to special Span elements
     """
-    return pf.run_filter(process_citations,
-                         prepare, finalize, doc=doc)
+    return pf.run_filter(process_citations, prepare, finalize, doc=doc)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

@@ -12,12 +12,15 @@ Other sources of information:
 import panflute as pf
 
 from ipypublish.filters_pandoc.definitions import IPUB_META_ROUTE
-from ipypublish.filters_pandoc.utils import (
-    apply_filter, get_option, create_ipub_meta)
+from ipypublish.filters_pandoc.utils import apply_filter, get_option, create_ipub_meta
 from ipypublish.filters_pandoc import (
-    prepare_cites, prepare_labels, prepare_raw,
-    format_cite_elements, format_label_elements, format_raw_spans,
-    rmarkdown_to_mpe
+    prepare_cites,
+    prepare_labels,
+    prepare_raw,
+    format_cite_elements,
+    format_label_elements,
+    format_raw_spans,
+    rmarkdown_to_mpe,
 )
 
 
@@ -28,17 +31,15 @@ def pandoc_filters():
     doc = pf.load()
 
     # in an rmarkdown file, the metadata will be under a root `jupyter` key
-    jmeta = doc.get_metadata('jupyter', {})
+    jmeta = doc.get_metadata("jupyter", {})
     meta = pf.tools.meta2builtin(doc.metadata)
-    if 'jupyter' in meta and hasattr(meta["jupyter"], 'items'):
+    if "jupyter" in meta and hasattr(meta["jupyter"], "items"):
         jmeta = meta.pop("jupyter")
         meta.update(jmeta)
         doc.metadata = meta  # builtin2meta(meta)
 
-    apply_filters = doc.get_metadata(IPUB_META_ROUTE + ".apply_filters",
-                                     default=True)
-    convert_raw = doc.get_metadata(IPUB_META_ROUTE + ".convert_raw",
-                                   default=True)
+    apply_filters = doc.get_metadata(IPUB_META_ROUTE + ".apply_filters", default=True)
+    convert_raw = doc.get_metadata(IPUB_META_ROUTE + ".convert_raw", default=True)
 
     if apply_filters:
         if convert_raw:
@@ -49,7 +50,7 @@ def pandoc_filters():
                 format_cite_elements.main,
                 format_raw_spans.main,
                 format_label_elements.main,
-                rmarkdown_to_mpe.main
+                rmarkdown_to_mpe.main,
             ]
         else:
             filters = [
@@ -57,7 +58,7 @@ def pandoc_filters():
                 prepare_labels.main,
                 format_cite_elements.main,
                 format_label_elements.main,
-                rmarkdown_to_mpe.main
+                rmarkdown_to_mpe.main,
             ]
     else:
         filters = []
@@ -69,8 +70,9 @@ def pandoc_filters():
     pf.dump(doc)
 
 
-def jinja_filter(source, to_format, nb_metadata, cell_metadata,
-                 from_format="markdown", strip=True):
+def jinja_filter(
+    source, to_format, nb_metadata, cell_metadata, from_format="markdown", strip=True
+):
     """run a set of ipypublish pandoc filters as a Jinja2 filter
 
     We convert the source to an intermediary pandoc-json AST format,
@@ -140,25 +142,27 @@ def jinja_filter(source, to_format, nb_metadata, cell_metadata,
     # find the preferential versions of the metadata values
     # TODO a make this autopopulate (possibly from schema)
     option_preference = [doc.metadata, cell_metadata, nb_metadata]
-    apply_filters = get_option(option_preference,
-                               keypath=IPUB_META_ROUTE + ".apply_filters",
-                               default=True)
-    convert_raw = get_option(option_preference,
-                             keypath=IPUB_META_ROUTE + ".convert_raw",
-                             default=True)
-    hide_raw = get_option(option_preference,
-                          keypath=IPUB_META_ROUTE + ".hide_raw",
-                          default=False)
-    numref = get_option(option_preference,
-                        keypath=IPUB_META_ROUTE + ".use_numref", default=True)
-    at_notation = get_option(option_preference,
-                             keypath=IPUB_META_ROUTE + ".at_notation",
-                             default=True)
-    reftag = get_option(option_preference,
-                        keypath=IPUB_META_ROUTE + ".reftag", default="cite")
-    strip_meta = get_option(option_preference,
-                            keypath=IPUB_META_ROUTE + ".strip_meta",
-                            default=True)
+    apply_filters = get_option(
+        option_preference, keypath=IPUB_META_ROUTE + ".apply_filters", default=True
+    )
+    convert_raw = get_option(
+        option_preference, keypath=IPUB_META_ROUTE + ".convert_raw", default=True
+    )
+    hide_raw = get_option(
+        option_preference, keypath=IPUB_META_ROUTE + ".hide_raw", default=False
+    )
+    numref = get_option(
+        option_preference, keypath=IPUB_META_ROUTE + ".use_numref", default=True
+    )
+    at_notation = get_option(
+        option_preference, keypath=IPUB_META_ROUTE + ".at_notation", default=True
+    )
+    reftag = get_option(
+        option_preference, keypath=IPUB_META_ROUTE + ".reftag", default="cite"
+    )
+    strip_meta = get_option(
+        option_preference, keypath=IPUB_META_ROUTE + ".strip_meta", default=True
+    )
 
     if apply_filters:
         # TODO store the original metadata and replace it at end?
@@ -166,12 +170,16 @@ def jinja_filter(source, to_format, nb_metadata, cell_metadata,
 
         # set metadata with preferential values
         meta = pf.tools.meta2builtin(doc.metadata)
-        meta.update(create_ipub_meta({
-            "use_numref": numref,
-            "at_notation": at_notation,
-            "reftag": reftag,
-            "hide_raw": hide_raw
-        }))
+        meta.update(
+            create_ipub_meta(
+                {
+                    "use_numref": numref,
+                    "at_notation": at_notation,
+                    "reftag": reftag,
+                    "hide_raw": hide_raw,
+                }
+            )
+        )
         doc.metadata = meta  # builtin2meta(meta)
 
         # doc.metadata["ipub"]["use_numref"] = builtin2meta(numref)
@@ -186,24 +194,25 @@ def jinja_filter(source, to_format, nb_metadata, cell_metadata,
                 prepare_labels.main,
                 format_cite_elements.main,
                 format_raw_spans.main,
-                format_label_elements.main
+                format_label_elements.main,
             ]
         else:
             filters = [
                 prepare_cites.main,
                 prepare_labels.main,
                 format_cite_elements.main,
-                format_label_elements.main
+                format_label_elements.main,
             ]
     else:
         filters = []
 
-    out_str = apply_filter(doc,
-                           filters,
-                           in_format=from_format,
-                           out_format=to_format,
-                           strip_meta=bool(strip_meta)
-                           )
+    out_str = apply_filter(
+        doc,
+        filters,
+        in_format=from_format,
+        out_format=to_format,
+        strip_meta=bool(strip_meta),
+    )
     if strip:
         out_str = out_str.strip()
 

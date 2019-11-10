@@ -33,7 +33,7 @@
           {
             "class": "ipypublish.preprocessors.latex_doc_captions.LatexCaptions",
             "args": {}
-          }          
+          }
       ],
       "other_args": {}
     },

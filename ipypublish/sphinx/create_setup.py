@@ -1,4 +1,3 @@
-
 import os
 import logging
 from six import string_types
@@ -28,7 +27,8 @@ def make_conf(overwrite=False, **kwargs):
     # load local config.yaml
     path = os.path.join(os.path.dirname(os.path.realpath(__file__)))
     data = read_file_from_directory(
-        path, 'config.yaml', 'sphinx config', logger, interp_ext=True)
+        path, "config.yaml", "sphinx config", logger, interp_ext=True
+    )
 
     conf_str = []
 
@@ -49,26 +49,32 @@ def make_conf(overwrite=False, **kwargs):
     for key, val in data.items():
         if key in kwargs and overwrite:
             continue
-        conf_str.append('')
+        conf_str.append("")
         if isinstance(val, string_types):
             val = '"{}"'.format(val)
-        conf_str.append('{0} = {1}'.format(key, val))
+        conf_str.append("{0} = {1}".format(key, val))
 
     for key, val in kwargs.items():
         if key in data and not overwrite:
             continue
-        conf_str.append('')
+        conf_str.append("")
         if isinstance(val, string_types):
             val = '"{}"'.format(val)
-        conf_str.append('{0} = {1}'.format(key, val))
+        conf_str.append("{0} = {1}".format(key, val))
 
     return "\n".join(conf_str) + "\n"
 
 
-def make_index(toc_files, toc_depth=3, toc_title="Table of Contents",
-               toc_numbered=True, toc_glob=False,
-               header=None,
-               prolog=None, epilog=None):
+def make_index(
+    toc_files,
+    toc_depth=3,
+    toc_title="Table of Contents",
+    toc_numbered=True,
+    toc_glob=False,
+    header=None,
+    prolog=None,
+    epilog=None,
+):
     """ make an index file, containing a toc tree
 
     Parameters
@@ -98,12 +104,12 @@ def make_index(toc_files, toc_depth=3, toc_title="Table of Contents",
 
     if header:
         index_str.append(str(header))
-        index_str.append('='*len(str(header)))
-        index_str.append('')
+        index_str.append("=" * len(str(header)))
+        index_str.append("")
 
     if prolog:
         index_str.append(str(prolog))
-        index_str.append('')
+        index_str.append("")
 
     index_str.append(".. toctree::")
     index_str.append("   :includehidden:")
@@ -113,13 +119,13 @@ def make_index(toc_files, toc_depth=3, toc_title="Table of Contents",
     if toc_glob:
         index_str.append("   :glob:")
     index_str.append("   :caption: {}:".format(toc_title))
-    index_str.append('')
+    index_str.append("")
 
     for toc_file in toc_files:
         index_str.append("   " + os.path.splitext(toc_file)[0].lstrip())
 
     if epilog:
-        index_str.append('')
+        index_str.append("")
         index_str.append(str(epilog))
 
     return "\n".join(index_str) + "\n"
@@ -127,11 +133,15 @@ def make_index(toc_files, toc_depth=3, toc_title="Table of Contents",
 
 if __name__ == "__main__":
 
-    print(make_conf(
-        project='ipypublish',
-        author='Chris Sewell',
-        description=('Create quality publication and presentation'
-                     'directly from Jupyter Notebook(s)')
-    ))
+    print(
+        make_conf(
+            project="ipypublish",
+            author="Chris Sewell",
+            description=(
+                "Create quality publication and presentation"
+                "directly from Jupyter Notebook(s)"
+            ),
+        )
+    )
 
-    print(make_index(['path/to/file.rst'], header="Header"))
+    print(make_index(["path/to/file.rst"], header="Header"))

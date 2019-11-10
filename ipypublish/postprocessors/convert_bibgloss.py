@@ -8,6 +8,7 @@ from ipypublish.bib2glossary import BibGlossDB
 class ConvertBibGloss(IPyPostProcessor):
     """ convert a bibglossary to the required format
     """
+
     @property
     def allowed_mimetypes(self):
         return None
@@ -20,19 +21,15 @@ class ConvertBibGloss(IPyPostProcessor):
     def logger_name(self):
         return "convert-bibgloss"
 
-    encoding = Unicode(
-        "utf8",
-        help="the encoding of the input file"
-    ).tag(config=True)
+    encoding = Unicode("utf8", help="the encoding of the input file").tag(config=True)
 
     resource_key = Unicode(
         "bibglosspath",
-        help="the key in the resources dict containing the path to the file"
+        help="the key in the resources dict containing the path to the file",
     ).tag(config=True)
 
     files_folder = Unicode(
-        "_static",
-        help="the path (relative to the main file path) to dump to"
+        "_static", help="the path (relative to the main file path) to dump to"
     ).tag(config=True)
 
     def run_postprocess(self, stream, mimetype, filepath, resources):
@@ -45,7 +42,8 @@ class ConvertBibGloss(IPyPostProcessor):
         if not os.path.exists(str(bibpath)):
             self.logger.warning(
                 "the bibglossary could not be converted, "
-                "since its path does not exist: {}".format(bibpath))
+                "since its path does not exist: {}".format(bibpath)
+            )
             return stream, filepath, resources
 
         bibname, extension = os.path.splitext(os.path.basename(bibpath))
@@ -76,7 +74,8 @@ class ConvertBibGloss(IPyPostProcessor):
             self.logger.warning(
                 "the bibglossary could not be converted, "
                 "since its file extension was not one of: "
-                "bib, tex")
+                "bib, tex"
+            )
 
         if outstr is None:
             return stream, filepath, resources

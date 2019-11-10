@@ -1,3 +1,1 @@
-"""
-container for CSS settings relevant to sphinx themes
-"""
+"""Container for CSS settings relevant to sphinx themes"""

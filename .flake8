@@ -1,6 +1,9 @@
 [flake8]
 max-line-length = 120
-exclude = 
+ignore =
+    E203,  # not compatible with black
+    W503   # not compatible with black
+exclude =
     setup.py,
     ipypublish/scripts/ipynb_latex_setup.py,
     ipypublish/tests/test_files/basic_nb/expected/python_with_meta.py

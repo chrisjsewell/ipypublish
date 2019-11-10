@@ -28,84 +28,95 @@ def test_basic():
         "meta": {},
         "pandoc-api-version": [1, 17, 5, 1],
         "blocks": [
-            {"t": "Para",
-                "c": [{"t": "Math", "c": [{"t": "InlineMath"}, "a=1"]},
-                      {"t": "Space"},
-                      {"t": "Str", "c": "{#a"},
-                      {"t": "Space"},
-                      {"t": "Str", "c": ".a"},
-                      {"t": "Space"},
-                      {"t": "Str", "c": "b="},
-                      {"t": "Math", "c": [
-                          {"t": "InlineMath"}, "2"]}, {"t": "Str", "c": "}"}]},
-            {"t": "Para", "c": [
-                {"t": "Image",
-                    "c": [["b", ["x"], [["a", "$1$"], ["b", "2"]]],
-                          [{"t": "Str", "c": "a"}], ["a/b.jpg", "fig:"]]
-                 }]}]
-    }
-
-    out_json = apply_to_json(in_json, main)
-
-    assert edict.diff(out_json, {
-        "pandoc-api-version": [1, 17, 5,  1],
-        "meta": {
-            "$$references": {
-                "t": "MetaMap",
-                "c": {
-                    "a": {
-                        "t": "MetaMap",
-                        "c": {
-                            "type": {
-                                "t": "MetaString",
-                                "c": "Math"
-                            },
-                            "number": {
-                                "t": "MetaString",
-                                "c": "1"
-                            }
-                        }
-                    },
-                    "b": {
-                        "t": "MetaMap",
-                        "c": {
-                            "type": {
-                                "t": "MetaString",
-                                "c": "Image"
-                            },
-                            "number": {
-                                "t": "MetaString",
-                                "c": "1"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "blocks": [
-            {"t": "Para",
-             "c": [
-                 {"t": "Span",
-                  "c": [
-                      ["a", ["labelled-Math", "a"], [["b",  "2"]]],
-                      [{"t": "Math",
-                          "c": [{"t": "InlineMath"},  "a=1"]}]]
-                  }]
-             },
+            {
+                "t": "Para",
+                "c": [
+                    {"t": "Math", "c": [{"t": "InlineMath"}, "a=1"]},
+                    {"t": "Space"},
+                    {"t": "Str", "c": "{#a"},
+                    {"t": "Space"},
+                    {"t": "Str", "c": ".a"},
+                    {"t": "Space"},
+                    {"t": "Str", "c": "b="},
+                    {"t": "Math", "c": [{"t": "InlineMath"}, "2"]},
+                    {"t": "Str", "c": "}"},
+                ],
+            },
             {
                 "t": "Para",
                 "c": [
                     {
                         "t": "Image",
-                        "c": [["b", ["x"],  [["a",   "$1$"],  ["b",   "2"]]],
-                              [{"t": "Str",  "c": "a"}],
-                              ["a/b.jpg",  "fig:"]]
+                        "c": [
+                            ["b", ["x"], [["a", "$1$"], ["b", "2"]]],
+                            [{"t": "Str", "c": "a"}],
+                            ["a/b.jpg", "fig:"],
+                        ],
                     }
-                ]
-            }
-        ]
+                ],
+            },
+        ],
     }
-    ) == {}
+
+    out_json = apply_to_json(in_json, main)
+
+    assert (
+        edict.diff(
+            out_json,
+            {
+                "pandoc-api-version": [1, 17, 5, 1],
+                "meta": {
+                    "$$references": {
+                        "t": "MetaMap",
+                        "c": {
+                            "a": {
+                                "t": "MetaMap",
+                                "c": {
+                                    "type": {"t": "MetaString", "c": "Math"},
+                                    "number": {"t": "MetaString", "c": "1"},
+                                },
+                            },
+                            "b": {
+                                "t": "MetaMap",
+                                "c": {
+                                    "type": {"t": "MetaString", "c": "Image"},
+                                    "number": {"t": "MetaString", "c": "1"},
+                                },
+                            },
+                        },
+                    }
+                },
+                "blocks": [
+                    {
+                        "t": "Para",
+                        "c": [
+                            {
+                                "t": "Span",
+                                "c": [
+                                    ["a", ["labelled-Math", "a"], [["b", "2"]]],
+                                    [{"t": "Math", "c": [{"t": "InlineMath"}, "a=1"]}],
+                                ],
+                            }
+                        ],
+                    },
+                    {
+                        "t": "Para",
+                        "c": [
+                            {
+                                "t": "Image",
+                                "c": [
+                                    ["b", ["x"], [["a", "$1$"], ["b", "2"]]],
+                                    [{"t": "Str", "c": "a"}],
+                                    ["a/b.jpg", "fig:"],
+                                ],
+                            }
+                        ],
+                    },
+                ],
+            },
+        )
+        == {}
+    )
 
 
 def test_multiple_on_line():
@@ -115,90 +126,108 @@ def test_multiple_on_line():
     ![a](a/b.jpg)
     """
     in_json = {
-        "pandoc-api-version": [1, 17, 5, 1], "meta": {},
+        "pandoc-api-version": [1, 17, 5, 1],
+        "meta": {},
         "blocks": [
-            {"t": "Para", "c": [
-                {"t": "Math", "c": [{"t": "InlineMath"}, "a=1"]},
-                {"t": "Space"},
-                {"t": "Str", "c": "{#a"},
-                {"t": "Space"},
-                {"t": "Str", "c": "b="},
-                {"t": "Math", "c": [
-                    {"t": "InlineMath"}, "2"]},
-                {"t": "Str", "c": "}"},
-                {"t": "Space"},
-                {"t": "Math", "c": [
-                    {"t": "InlineMath"}, "g=3"]},
-                {"t": "Space"},
-                {"t": "Str", "c": "{#gid}"}]
-             },
-            {"t": "Para", "c": [
-                {"t": "Image", "c": [
-                    ["", [], []], [{"t": "Str", "c": "a"}],
-                    ["a/b.jpg", "fig:"]]}]
-             }]
+            {
+                "t": "Para",
+                "c": [
+                    {"t": "Math", "c": [{"t": "InlineMath"}, "a=1"]},
+                    {"t": "Space"},
+                    {"t": "Str", "c": "{#a"},
+                    {"t": "Space"},
+                    {"t": "Str", "c": "b="},
+                    {"t": "Math", "c": [{"t": "InlineMath"}, "2"]},
+                    {"t": "Str", "c": "}"},
+                    {"t": "Space"},
+                    {"t": "Math", "c": [{"t": "InlineMath"}, "g=3"]},
+                    {"t": "Space"},
+                    {"t": "Str", "c": "{#gid}"},
+                ],
+            },
+            {
+                "t": "Para",
+                "c": [
+                    {
+                        "t": "Image",
+                        "c": [
+                            ["", [], []],
+                            [{"t": "Str", "c": "a"}],
+                            ["a/b.jpg", "fig:"],
+                        ],
+                    }
+                ],
+            },
+        ],
     }
 
     out_json = apply_to_json(in_json, main)
 
-    assert edict.diff(out_json, {
-        "pandoc-api-version": [
-            1, 17,  5, 1
-        ],
-        "meta": {
-            "$$references": {
-                "t": "MetaMap",
-                "c": {
-                    "a": {
+    assert (
+        edict.diff(
+            out_json,
+            {
+                "pandoc-api-version": [1, 17, 5, 1],
+                "meta": {
+                    "$$references": {
                         "t": "MetaMap",
                         "c": {
-                            "type": {
-                                "t": "MetaString",
-                                "c": "Math"},
-                            "number": {
-                                "t": "MetaString",
-                                "c": "1"
-                            }
-                        }
-                    },
-                    "gid": {
-                        "t": "MetaMap",
-                        "c": {
-                            "type": {
-                                "t": "MetaString",
-                                "c": "Math"},
-                            "number": {
-                                "t": "MetaString",
-                                "c": "2"
-                            }}}}}
-        },
-        "blocks": [
-            {"t": "Para",
-                "c": [
-                    {"t": "Span",
-                        "c": [
-                            ["a", ["labelled-Math"], [["b",  "2"]]],
-                            [{"t": "Math",
-                                "c": [{"t": "InlineMath"},  "a=1"]}]]
-                     },
-                    {"t": "Space"},
+                            "a": {
+                                "t": "MetaMap",
+                                "c": {
+                                    "type": {"t": "MetaString", "c": "Math"},
+                                    "number": {"t": "MetaString", "c": "1"},
+                                },
+                            },
+                            "gid": {
+                                "t": "MetaMap",
+                                "c": {
+                                    "type": {"t": "MetaString", "c": "Math"},
+                                    "number": {"t": "MetaString", "c": "2"},
+                                },
+                            },
+                        },
+                    }
+                },
+                "blocks": [
                     {
-                        "t": "Span",
-                        "c": [["gid", ["labelled-Math"], []],
-                              [{"t": "Math",
-                                "c": [{"t": "InlineMath"},  "g=3"]}]]
-                    }]
-             },
-            {"t": "Para",
-                "c": [
-                    {"t": "Image",
-                        "c": [["", [], []],
-                              [{"t": "Str",  "c": "a"}],
-                              ["a/b.jpg",  "fig:"]]
-                     }
-                ]
-             }]
-    }) == {}
+                        "t": "Para",
+                        "c": [
+                            {
+                                "t": "Span",
+                                "c": [
+                                    ["a", ["labelled-Math"], [["b", "2"]]],
+                                    [{"t": "Math", "c": [{"t": "InlineMath"}, "a=1"]}],
+                                ],
+                            },
+                            {"t": "Space"},
+                            {
+                                "t": "Span",
+                                "c": [
+                                    ["gid", ["labelled-Math"], []],
+                                    [{"t": "Math", "c": [{"t": "InlineMath"}, "g=3"]}],
+                                ],
+                            },
+                        ],
+                    },
+                    {
+                        "t": "Para",
+                        "c": [
+                            {
+                                "t": "Image",
+                                "c": [
+                                    ["", [], []],
+                                    [{"t": "Str", "c": "a"}],
+                                    ["a/b.jpg", "fig:"],
+                                ],
+                            }
+                        ],
+                    },
+                ],
+            },
+        )
+        == {}
+    )
 
 
 def test_with_tables():
@@ -213,96 +242,167 @@ def test_with_tables():
     Table: Caption. {#tbl:id}
     """
     in_json = {
-        "pandoc-api-version": [1, 17, 5, 1], "meta": {},
+        "pandoc-api-version": [1, 17, 5, 1],
+        "meta": {},
         "blocks": [
-            {"t": "Para", "c": [
-                {"t": "Str", "c": "Some"},
-                {"t": "Space"},
-                {"t": "Str", "c": "text"}]},
-            {"t": "Table", "c": [
-                [{"t": "Str", "c": "Caption."},
-                 {"t": "Space"},
-                 {"t": "Str", "c": "{#tbl:id}"}],
-                [{"t": "AlignDefault"},
-                 {"t": "AlignDefault"},
-                 {"t": "AlignDefault"}],
-                [0, 0, 0],
-                [[{"t": "Plain", "c": [{"t": "Str", "c": "a"}]}],
-                 [{"t": "Plain", "c": [{"t": "Str", "c": "b"}]}],
-                 [{"t": "Plain", "c": [{"t": "Str", "c": "c"}]}]],
-                [[[{"t": "Plain", "c": [{"t": "Str", "c": "1"}]}],
-                  [{"t": "Plain", "c": [{"t": "Str", "c": "2"}]}],
-                  [{"t": "Plain", "c": [{"t": "Str", "c": "3"}]}]],
-                    [[{"t": "Plain", "c": [{"t": "Str", "c": "4"}]}],
-                     [{"t": "Plain", "c": [{"t": "Str", "c": "5"}]}],
-                     [{"t": "Plain", "c": [{"t": "Str", "c": "6"}]}]]]]}],
+            {
+                "t": "Para",
+                "c": [
+                    {"t": "Str", "c": "Some"},
+                    {"t": "Space"},
+                    {"t": "Str", "c": "text"},
+                ],
+            },
+            {
+                "t": "Table",
+                "c": [
+                    [
+                        {"t": "Str", "c": "Caption."},
+                        {"t": "Space"},
+                        {"t": "Str", "c": "{#tbl:id}"},
+                    ],
+                    [
+                        {"t": "AlignDefault"},
+                        {"t": "AlignDefault"},
+                        {"t": "AlignDefault"},
+                    ],
+                    [0, 0, 0],
+                    [
+                        [{"t": "Plain", "c": [{"t": "Str", "c": "a"}]}],
+                        [{"t": "Plain", "c": [{"t": "Str", "c": "b"}]}],
+                        [{"t": "Plain", "c": [{"t": "Str", "c": "c"}]}],
+                    ],
+                    [
+                        [
+                            [{"t": "Plain", "c": [{"t": "Str", "c": "1"}]}],
+                            [{"t": "Plain", "c": [{"t": "Str", "c": "2"}]}],
+                            [{"t": "Plain", "c": [{"t": "Str", "c": "3"}]}],
+                        ],
+                        [
+                            [{"t": "Plain", "c": [{"t": "Str", "c": "4"}]}],
+                            [{"t": "Plain", "c": [{"t": "Str", "c": "5"}]}],
+                            [{"t": "Plain", "c": [{"t": "Str", "c": "6"}]}],
+                        ],
+                    ],
+                ],
+            },
+        ],
     }
 
     out_json = apply_to_json(in_json, main)
 
-    assert edict.diff(
-        out_json,
-        {
-            "pandoc-api-version": [1, 17, 5, 1],
-            "meta": {
-                "$$references": {
-                    "t": "MetaMap",
-                    "c": {
-                        "tbl:id": {
-                            "t": "MetaMap",
-                            "c": {
-                                "type": {
-                                    "t": "MetaString",
-                                    "c": "Table"
+    assert (
+        edict.diff(
+            out_json,
+            {
+                "pandoc-api-version": [1, 17, 5, 1],
+                "meta": {
+                    "$$references": {
+                        "t": "MetaMap",
+                        "c": {
+                            "tbl:id": {
+                                "t": "MetaMap",
+                                "c": {
+                                    "type": {"t": "MetaString", "c": "Table"},
+                                    "number": {"t": "MetaString", "c": "1"},
                                 },
-                                "number": {
-                                    "t": "MetaString",
-                                    "c": "1"
-                                }
                             }
-                        }}
-                }
-            },
-            "blocks":
-            [
-                {"t": "Para", "c": [
-                    {"t": "Str", "c": "Some"},
-                    {"t": "Space"},
-                    {"t": "Str", "c": "text"}
-                ]
+                        },
+                    }
                 },
-                {"t": "Div", "c":
-                 [
-                     ["tbl:id", ["labelled-Table"], []],
-                     [{"t": "Table",
-                       "c": [
-                           [{"t": "Str", "c": "Caption."},
-                            {"t": "Space"}
+                "blocks": [
+                    {
+                        "t": "Para",
+                        "c": [
+                            {"t": "Str", "c": "Some"},
+                            {"t": "Space"},
+                            {"t": "Str", "c": "text"},
+                        ],
+                    },
+                    {
+                        "t": "Div",
+                        "c": [
+                            ["tbl:id", ["labelled-Table"], []],
+                            [
+                                {
+                                    "t": "Table",
+                                    "c": [
+                                        [{"t": "Str", "c": "Caption."}, {"t": "Space"}],
+                                        [
+                                            {"t": "AlignDefault"},
+                                            {"t": "AlignDefault"},
+                                            {"t": "AlignDefault"},
+                                        ],
+                                        [0, 0, 0],
+                                        [
+                                            [
+                                                {
+                                                    "t": "Plain",
+                                                    "c": [{"t": "Str", "c": "a"}],
+                                                }
+                                            ],
+                                            [
+                                                {
+                                                    "t": "Plain",
+                                                    "c": [{"t": "Str", "c": "b"}],
+                                                }
+                                            ],
+                                            [
+                                                {
+                                                    "t": "Plain",
+                                                    "c": [{"t": "Str", "c": "c"}],
+                                                }
+                                            ],
+                                        ],
+                                        [
+                                            [
+                                                [
+                                                    {
+                                                        "t": "Plain",
+                                                        "c": [{"t": "Str", "c": "1"}],
+                                                    }
+                                                ],
+                                                [
+                                                    {
+                                                        "t": "Plain",
+                                                        "c": [{"t": "Str", "c": "2"}],
+                                                    }
+                                                ],
+                                                [
+                                                    {
+                                                        "t": "Plain",
+                                                        "c": [{"t": "Str", "c": "3"}],
+                                                    }
+                                                ],
+                                            ],
+                                            [
+                                                [
+                                                    {
+                                                        "t": "Plain",
+                                                        "c": [{"t": "Str", "c": "4"}],
+                                                    }
+                                                ],
+                                                [
+                                                    {
+                                                        "t": "Plain",
+                                                        "c": [{"t": "Str", "c": "5"}],
+                                                    }
+                                                ],
+                                                [
+                                                    {
+                                                        "t": "Plain",
+                                                        "c": [{"t": "Str", "c": "6"}],
+                                                    }
+                                                ],
+                                            ],
+                                        ],
+                                    ],
+                                }
                             ],
-                           [
-                               {"t": "AlignDefault"},
-                               {"t": "AlignDefault"},
-                               {"t": "AlignDefault"}
-                           ],
-                           [0, 0, 0],
-                           [[{"t": "Plain", "c": [{"t": "Str", "c": "a"}]}],
-                            [{"t": "Plain", "c": [{"t": "Str", "c": "b"}]}],
-                            [{"t": "Plain", "c": [{"t": "Str", "c": "c"}]}]],
-                           [[[{"t": "Plain",
-                               "c": [{"t": "Str", "c": "1"}]}],
-                             [{"t": "Plain",
-                               "c": [{"t": "Str", "c": "2"}]}],
-                             [{"t": "Plain",
-                               "c": [{"t": "Str", "c": "3"}]}]],
-                            [[{"t": "Plain",
-                               "c": [{"t": "Str",  "c": "4"}]}],
-                             [{"t": "Plain",
-                               "c": [{"t": "Str", "c": "5"}]}],
-                             [{"t": "Plain",
-                               "c": [{"t": "Str",  "c": "6"}]}]]
-                            ]
-                       ]
-                       }
-                      ]]
-                 }
-            ]}) == {}
+                        ],
+                    },
+                ],
+            },
+        )
+        == {}
+    )

@@ -51,8 +51,7 @@ def resolve_path(fpath, filepath):
     return os.path.normpath(fpath)
 
 
-def extract_file_links(source, parent_path, redirect_path,
-                       replace_nonexistent=False):
+def extract_file_links(source, parent_path, redirect_path, replace_nonexistent=False):
     """ extract local linked files
 
     Examples
@@ -75,7 +74,7 @@ def extract_file_links(source, parent_path, redirect_path,
 
     """
     # TODO is this robust enough
-    regex = re.compile('\\[([^\\]]*)\\]\\(([^\\)^\\#]*)([^\\)]*)\\)')
+    regex = re.compile("\\[([^\\]]*)\\]\\(([^\\)^\\#]*)([^\\)]*)\\)")
     new_source = source
     redirected_paths = []
     nonexistent_paths = []
@@ -91,11 +90,13 @@ def extract_file_links(source, parent_path, redirect_path,
             nonexistent_paths.append(respath)
         if os.path.exists(respath) or replace_nonexistent:
             redirected_paths.append(respath)
-            new_path = os.path.normpath(os.path.join(
-                redirect_path, os.path.basename(path)))
+            new_path = os.path.normpath(
+                os.path.join(redirect_path, os.path.basename(path))
+            )
             new_source = new_source.replace(
                 "[{0}]({1}{2})".format(text, path, label),
-                "[{0}]({1}{2})".format(text, new_path, label))
+                "[{0}]({1}{2})".format(text, new_path, label),
+            )
 
     return new_source, redirected_paths, nonexistent_paths
 
@@ -120,19 +121,20 @@ class LatexDocLinks(Preprocessor):
 
     """
 
-    metapath = traits.Unicode(
-        '', help="the file path to the notebook").tag(config=True)
+    metapath = traits.Unicode("", help="the file path to the notebook").tag(config=True)
     filesfolder = traits.Unicode(
-        '', help=("the folder path to dump dump internal content to "
-                  "(e.g. images, etc)")).tag(config=True)
+        "",
+        help=("the folder path to dump dump internal content to " "(e.g. images, etc)"),
+    ).tag(config=True)
     redirect_external = traits.Bool(
-        True,
-        help="if True, redirect relatively linked paths to filesfolder"
+        True, help="if True, redirect relatively linked paths to filesfolder"
     ).tag(config=True)
     extract_attachments = traits.Bool(
         True,
-        help=("extract attachments stored in the notebook"
-              "(created by dragging and dropping files into markdown cells)")
+        help=(
+            "extract attachments stored in the notebook"
+            "(created by dragging and dropping files into markdown cells)"
+        ),
     ).tag(config=True)
     output_attachment_template = traits.Unicode(
         "{unique_key}_{cell_index}_{key}{extension}"
@@ -157,16 +159,17 @@ class LatexDocLinks(Preprocessor):
 
         # extract local linked files
         source, rpaths, npaths = extract_file_links(
-            cell.source, self.metapath, self.filesfolder)
+            cell.source, self.metapath, self.filesfolder
+        )
         if self.redirect_external:
             cell.source = source
-        resources['external_file_paths'].extend(rpaths)
-        resources['unfound_file_paths'].extend(npaths)
+        resources["external_file_paths"].extend(rpaths)
+        resources["unfound_file_paths"].extend(npaths)
 
         # extract attachments
-        unique_key = resources.get('unique_key', 'attach')
-        if 'attachments' in cell and self.extract_attachments:
-            attachments = cell.pop('attachments')
+        unique_key = resources.get("unique_key", "attach")
+        if "attachments" in cell and self.extract_attachments:
+            attachments = cell.pop("attachments")
 
             for key, attachment in attachments.items():
                 # TODO this only works if there is a single MIME bundle
@@ -174,25 +177,29 @@ class LatexDocLinks(Preprocessor):
 
                 ext = guess_extension_without_jpe(mime_type)
                 if ext is None:
-                    ext = '.' + mime_type.rsplit('/')[-1]
+                    ext = "." + mime_type.rsplit("/")[-1]
 
                 # replace the pointer to the attachment
                 filepath = os.path.normpath(
-                    os.path.join(self.filesfolder,
-                                 self.output_attachment_template.format(
-                                     unique_key=unique_key,
-                                     cell_index=cell_index,
-                                     key=os.path.splitext(key)[0],
-                                     extension=ext))
+                    os.path.join(
+                        self.filesfolder,
+                        self.output_attachment_template.format(
+                            unique_key=unique_key,
+                            cell_index=cell_index,
+                            key=os.path.splitext(key)[0],
+                            extension=ext,
+                        ),
+                    )
                 )
                 if "source" in cell:
                     cell["source"] = cell["source"].replace(
-                        'attachment:{}'.format(key), filepath)
+                        "attachment:{}".format(key), filepath
+                    )
 
                 # code taken from nbconvert.ExtractOutputPreprocessor
                 if (
                     not isinstance(data, string_types)
-                    or mime_type == 'application/json'
+                    or mime_type == "application/json"
                 ):
                     # Data is either JSON-like and was parsed into a Python
                     # object according to the spec, or data is for sure
@@ -203,17 +210,16 @@ class LatexDocLinks(Preprocessor):
                     data = json.dumps(data)
 
                 # Binary files are base64-encoded, SVG is already XML
-                if mime_type in {
-                        'image/png', 'image/jpeg', 'application/pdf'}:
+                if mime_type in {"image/png", "image/jpeg", "application/pdf"}:
                     # data is b64-encoded as text (str, unicode),
                     # we want the original bytes
                     data = a2b_base64(data)
-                elif sys.platform == 'win32':
-                    data = data.replace('\n', '\r\n').encode("UTF-8")
+                elif sys.platform == "win32":
+                    data = data.replace("\n", "\r\n").encode("UTF-8")
                 else:
                     data = data.encode("UTF-8")
 
-                if filepath in resources['outputs']:
+                if filepath in resources["outputs"]:
                     raise ValueError(
                         "Your outputs have filename metadata associated "
                         "with them. Nbconvert saves these outputs to "
@@ -225,7 +231,7 @@ class LatexDocLinks(Preprocessor):
                         "{}.".format(filepath, cell_index)
                     )
                 # In the resources, make the figure available
-                resources['outputs'][filepath] = data
+                resources["outputs"][filepath] = data
 
         return cell, resources
 
@@ -234,63 +240,67 @@ class LatexDocLinks(Preprocessor):
         Preprocessing to apply on each notebook.
         """
 
-        logger.info('resolving external file paths' +
-                    ' in ipub metadata to: {}'.format(self.metapath))
+        logger.info(
+            "resolving external file paths"
+            + " in ipub metadata to: {}".format(self.metapath)
+        )
 
         resources.setdefault("external_file_paths", [])
         resources.setdefault("unfound_file_paths", [])
 
-        if 'ipub' in nb.metadata:
+        if "ipub" in nb.metadata:
 
-            if 'bibliography' in nb.metadata.ipub:
+            if "bibliography" in nb.metadata.ipub:
                 bib = nb.metadata.ipub.bibliography
                 bib = resolve_path(bib, self.metapath)
                 if not os.path.exists(bib):
-                    resources['unfound_file_paths'].append(bib)
+                    resources["unfound_file_paths"].append(bib)
                 else:
-                    resources['external_file_paths'].append(bib)
-                    resources['bibliopath'] = bib
+                    resources["external_file_paths"].append(bib)
+                    resources["bibliopath"] = bib
 
                 if self.redirect_external:
                     nb.metadata.ipub.bibliography = os.path.join(
-                        self.filesfolder, os.path.basename(bib))
+                        self.filesfolder, os.path.basename(bib)
+                    )
 
-            if "filepath" in nb.metadata.ipub.get('bibglossary', {}):
+            if "filepath" in nb.metadata.ipub.get("bibglossary", {}):
                 gloss = nb.metadata.ipub.bibglossary.filepath
                 gloss = resolve_path(gloss, self.metapath)
                 if not os.path.exists(gloss):
-                    resources['unfound_file_paths'].append(gloss)
+                    resources["unfound_file_paths"].append(gloss)
                 else:
-                    resources['external_file_paths'].append(gloss)
-                    resources['bibglosspath'] = gloss
+                    resources["external_file_paths"].append(gloss)
+                    resources["bibglosspath"] = gloss
 
                 if self.redirect_external:
                     nb.metadata.ipub.bibglossary.filepath = os.path.join(
-                        self.filesfolder, os.path.basename(gloss))
+                        self.filesfolder, os.path.basename(gloss)
+                    )
 
-            if 'logo' in nb.metadata.ipub.get('titlepage', {}):
+            if "logo" in nb.metadata.ipub.get("titlepage", {}):
                 logo = nb.metadata.ipub.titlepage.logo
                 logo = resolve_path(logo, self.metapath)
                 if not os.path.exists(logo):
-                    resources['unfound_file_paths'].append(logo)
+                    resources["unfound_file_paths"].append(logo)
                 else:
-                    resources['external_file_paths'].append(logo)
+                    resources["external_file_paths"].append(logo)
 
                 if self.redirect_external:
                     nb.metadata.ipub.titlepage.logo = os.path.join(
-                        self.filesfolder, os.path.basename(logo))
+                        self.filesfolder, os.path.basename(logo)
+                    )
 
         for index, cell in enumerate(nb.cells):
-            nb.cells[index], resources = self.preprocess_cell(
-                cell, resources, index)
+            nb.cells[index], resources = self.preprocess_cell(cell, resources, index)
 
         # filter unique
-        resources['external_file_paths'] = list(
-            set(resources['external_file_paths']))
+        resources["external_file_paths"] = list(set(resources["external_file_paths"]))
 
         upaths = set(resources.pop("unfound_file_paths"))
         if upaths:
-            logger.warning('referenced file(s) do not exist'
-                           ': {}'.format(list(upaths)))
+            logger.warning(
+                "referenced file(s) do not exist" ": {}".format(list(upaths))
+            )
 
         return nb, resources
