@@ -57,6 +57,7 @@ setup(
             "sphinx>=1.8",
             "sphinxcontrib-bibtex",
             "ipykernel",
+            "ipywidgets>=7.5,<8",
         },
     },
     license="MIT",

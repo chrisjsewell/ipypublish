@@ -199,7 +199,7 @@ def associate_single_extension(app, extension, suffix="jupyter_notebook"):
 
     app.add_source_suffix(extension, suffix)
     sphinx.util.logging.getLogger("nbparser").info(
-        "ipypublish: associated {} with NBParser".format(extension)
+        "ipypublish: associated {} with NBParser".format(extension), color="green"
     )
 
 
