@@ -5,7 +5,7 @@ matrix:
     sudo: required
     python: 3.6
     dist: trusty
-    env: TEST_TYPE="flake8"
+    env: TEST_TYPE="pre-commit"
   - os: linux
     sudo: required
     python: 3.6
@@ -18,6 +18,11 @@ matrix:
     env: TEST_TYPE="pytest" PYPI_DEPLOY=true
   - os: linux
     sudo: required
+    python: 3.7
+    dist: xenial
+    env: TEST_TYPE="pytest"
+  - os: linux
+    sudo: required
     python: 2.7
     dist: trusty
     env: TEST_TYPE="pytest"
@@ -25,11 +30,6 @@ matrix:
     sudo: required
     python: 3.5
     dist: trusty
-    env: TEST_TYPE="pytest"
-  - os: linux
-    sudo: required
-    python: 3.7
-    dist: xenial
     env: TEST_TYPE="pytest"
   # TODO this takes too long to install
   # - os: osx
@@ -76,13 +76,13 @@ matrix:
   allow_failures:
     - os: linux
       sudo: required
-      python: 3.5
+      python: 2.7
       dist: trusty
       env: TEST_TYPE="pytest"
     - os: linux
       sudo: required
-      python: 3.7
-      dist: xenial
+      python: 3.5
+      dist: trusty
       env: TEST_TYPE="pytest"
     - os: osx
       language: generic
@@ -123,13 +123,16 @@ install:
 - pip install -U pip setuptools wheel
 - if [[ "$TEST_TYPE" == "pytest" ]]; then travis_wait pip install .[tests] ; fi
 - if [[ "$TEST_TYPE" == "pytest" ]]; then pip install --quiet coveralls ; fi
-- if [[ "$TEST_TYPE" == "flake8" ]]; then travis_wait pip install "flake8(>=3.7,<3.8)" ; fi
+- if [[ "$TEST_TYPE" == "pre-commit" ]]; then pip install -e .[code_style]; fi
 - if [[ "$TEST_TYPE" == "rtd" ]]; then travis_wait pip install .[rtd] ; fi
 
 script:
 - if [[ "$TEST_TYPE" == "pytest" ]]; then pytest -v --cov=ipypublish --cov-config .coveragerc --cov-report= ipypublish ; fi
 - if [[ "$TEST_TYPE" == "pytest" ]]; then nbpublish -pdf --pdf-debug -log debug example/notebooks/Example.ipynb ; fi
-- if [[ "$TEST_TYPE" == "flake8" ]]; then flake8 . ; fi
+- |
+  if [[ "$TEST_TYPE" == "pre-commit" ]]; then
+    pre-commit run --all-files || ( git status --short ; git diff ; exit 1 )
+  fi
 - if [[ "$TEST_TYPE" == "rtd" ]]; then cd docs; make ; fi
 
 after_success:

@@ -142,7 +142,7 @@ stroke-miterlimit: 7;
 <path d="M0,0
 L0,606
 L822,606
-L822,0 Z " 
+L822,0 Z "
 fill="#FFFFFF" stroke="none" />
 <g clip-path="url(#c0_1)">
 <path fill-rule="evenodd" d="M0,0H822.8V606.3H0V0Z" class="g0_1" />

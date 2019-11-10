@@ -18,9 +18,7 @@ def assess_syntax(path):
     dct = None
     dtype = None
     for i, child in enumerate(ast.iter_child_nodes(syntax_tree)):
-        if (i == 0
-            and isinstance(child, ast.Expr)
-                and isinstance(child.value, ast.Str)):
+        if i == 0 and isinstance(child, ast.Expr) and isinstance(child.value, ast.Str):
             docstring = child.value.s
         elif isinstance(child, ast.Assign):
             targets = child.targets
@@ -32,8 +30,8 @@ def assess_syntax(path):
                 continue
             if not isinstance(child.value, ast.Dict):
                 raise ValueError(
-                    "expected {} to be of type Dict: {}".format(
-                        dtype, child.value))
+                    "expected {} to be of type Dict: {}".format(dtype, child.value)
+                )
             dct = child.value
             break
 
@@ -43,21 +41,19 @@ def assess_syntax(path):
     output = {}
     for key, value in zip(dct.keys, dct.values):
         if not isinstance(key, ast.Str):
-            raise ValueError(
-                    "expected {} key to be of type Str: {}".format(
-                        dtype, key))
+            raise ValueError("expected {} key to be of type Str: {}".format(dtype, key))
         if not isinstance(value, ast.Str):
             raise ValueError(
-                    "expected {} value be of type Str: {}".format(
-                        dtype, value))
+                "expected {} value be of type Str: {}".format(dtype, value)
+            )
         output[key.s] = value.s
 
     return {
         "identifier": os.path.splitext(os.path.basename(path))[0],
         "description": docstring,
         "segments": output,
-        "$schema": "../../schema/segment.schema.json"
-     }
+        "$schema": "../../schema/segment.schema.json",
+    }
 
 
 def py_to_json(path, outpath=None):
@@ -83,6 +79,6 @@ if __name__ == "__main__":
         else:
             _prefix = "std-"
 
-        _outpath = os.path.join(os.path.dirname(_path), _prefix+_name+_ext)
+        _outpath = os.path.join(os.path.dirname(_path), _prefix + _name + _ext)
 
         py_to_json(_path, _outpath)

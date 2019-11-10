@@ -299,9 +299,3 @@ Entries have attributes for the main fields, and can output to latex.
         symbol={\ensuremath{n}},
         text={alternative text}
     }
-
-
-
-
-
-

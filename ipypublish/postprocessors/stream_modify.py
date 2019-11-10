@@ -8,10 +8,17 @@ from ipypublish.postprocessors.base import IPyPostProcessor
 
 class RemoveBlankLines(IPyPostProcessor):
     """ remove multiple lines of blank space """
+
     @property
     def allowed_mimetypes(self):
-        return ("text/latex", "text/restructuredtext", "text/html",
-                "text/x-python", "application/json", "text/markdown")
+        return (
+            "text/latex",
+            "text/restructuredtext",
+            "text/html",
+            "text/x-python",
+            "application/json",
+            "text/markdown",
+        )
 
     @property
     def requires_path(self):
@@ -22,16 +29,22 @@ class RemoveBlankLines(IPyPostProcessor):
         return "remove-blank-lines"
 
     def run_postprocess(self, stream, mimetype, filepath, resources):
-        stream = re.sub(r'\n\s*\n', '\n\n', stream)
+        stream = re.sub(r"\n\s*\n", "\n\n", stream)
         return stream, filepath, resources
 
 
 class RemoveTrailingSpace(IPyPostProcessor):
     """ remove trailing whitespace on each line """
+
     @property
     def allowed_mimetypes(self):
-        return ("text/latex", "text/restructuredtext",
-                "text/x-python", "application/json", "text/markdown")
+        return (
+            "text/latex",
+            "text/restructuredtext",
+            "text/x-python",
+            "application/json",
+            "text/markdown",
+        )
 
     @property
     def requires_path(self):
@@ -49,6 +62,7 @@ class RemoveTrailingSpace(IPyPostProcessor):
 class FilterOutputFiles(IPyPostProcessor):
     """ filter internal files in resources['outputs'],
     by those that are referenced in the stream """
+
     @property
     def allowed_mimetypes(self):
         return None
@@ -63,19 +77,20 @@ class FilterOutputFiles(IPyPostProcessor):
 
     def run_postprocess(self, stream, mimetype, filepath, resources):
 
-        if 'outputs' in resources:
-            for path in list(resources['outputs'].keys()):
+        if "outputs" in resources:
+            for path in list(resources["outputs"].keys()):
                 if path not in stream:
-                    resources['outputs'].pop(path)
+                    resources["outputs"].pop(path)
 
         return stream, filepath, resources
 
 
 class FixSlideReferences(IPyPostProcessor):
     """ make sure references refer to correct slides """
+
     @property
     def allowed_mimetypes(self):
-        return ("text/html")
+        return "text/html"
 
     @property
     def requires_path(self):
@@ -86,8 +101,10 @@ class FixSlideReferences(IPyPostProcessor):
         return "fix-slide-refs"
 
     def run_postprocess(self, stream, mimetype, filepath, resources):
-        if resources and 'refslide' in resources:
-            for k, (col, row) in resources['refslide'].items():
-                stream = stream.replace('{{id_home_prefix}}{0}'.format(
-                    k), '#/{0}/{1}{2}'.format(col, row, k))
+        if resources and "refslide" in resources:
+            for k, (col, row) in resources["refslide"].items():
+                stream = stream.replace(
+                    "{{id_home_prefix}}{0}".format(k),
+                    "#/{0}/{1}{2}".format(col, row, k),
+                )
         return stream, filepath, resources

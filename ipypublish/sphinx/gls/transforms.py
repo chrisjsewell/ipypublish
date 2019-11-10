@@ -4,8 +4,7 @@ import sphinx.util
 from sphinx import addnodes
 from typing import Any  # noqa: F401
 
-from ipypublish.sphinx.gls.bibgloss import (
-    format_entries, docutils_citation_node)
+from ipypublish.sphinx.gls.bibgloss import format_entries, docutils_citation_node
 from ipypublish.sphinx.gls.nodes import BibGlossaryNode
 
 logger = sphinx.util.logging.getLogger(__name__)
@@ -20,6 +19,7 @@ class OverrideCitationReferences(docutils.transforms.Transform):
     in order to propogate the classes of the citation_reference node
     to the pending_xref node
     """
+
     # the default priority of sphinx.transforms.CitationReferences is 619
     default_priority = 618
 
@@ -30,19 +30,22 @@ class OverrideCitationReferences(docutils.transforms.Transform):
         #     label = cast(nodes.label, citation[0])
         #     label['support_smartquotes'] = False
 
-        for citation_ref in self.document.traverse(
-                docutils.nodes.citation_reference):
+        for citation_ref in self.document.traverse(docutils.nodes.citation_reference):
             cittext = citation_ref.astext()
             refnode = addnodes.pending_xref(
-                cittext, refdomain='std', reftype='citation',
-                reftarget=cittext, refwarn=True,
+                cittext,
+                refdomain="std",
+                reftype="citation",
+                reftarget=cittext,
+                refwarn=True,
                 support_smartquotes=False,
-                ids=citation_ref["ids"])
+                ids=citation_ref["ids"],
+            )
             refnode.source = citation_ref.source or citation_ref.parent.source
             refnode.line = citation_ref.line or citation_ref.parent.line
-            refnode += docutils.nodes.Text('[' + cittext + ']')
-            for class_name in citation_ref.attributes.get('classes', []):
-                refnode['classes'].append(class_name)
+            refnode += docutils.nodes.Text("[" + cittext + "]")
+            for class_name in citation_ref.attributes.get("classes", []):
+                refnode["classes"].append(class_name)
             citation_ref.parent.replace(citation_ref, refnode)
 
 
@@ -50,13 +53,14 @@ class HandleMissingCitesTransform(docutils.transforms.Transform):
     """ before sphinx.transforms.post_transforms.ReferencesResolver
     missing citations need to be handled (default_priority=10)
     """
+
     default_priority = 9
 
     def apply(self):
         # type: () -> None
         app = self.document.settings.env.app
         for node in self.document.traverse(addnodes.pending_xref):
-            if "bibglossary" not in node.attributes.get('classes', []):
+            if "bibglossary" not in node.attributes.get("classes", []):
                 continue
             text = node[0].astext()
             key = text[1:-1]
@@ -65,9 +69,11 @@ class HandleMissingCitesTransform(docutils.transforms.Transform):
             except KeyError:
                 logger.warning(
                     "could not relabel bibglossary reference [%s]" % key,
-                    type="bibgloss", subtype="relabel")
+                    type="bibgloss",
+                    subtype="relabel",
+                )
                 # strip class (otherwise ReferencesResolver fails)
-                node.attributes['classes'] = []
+                node.attributes["classes"] = []
 
 
 def node_text_transform(node, transform):
@@ -82,10 +88,10 @@ def node_text_transform(node, transform):
 def transform_url_command(textnode):
     """Convert '\\\\url{...}' into a proper docutils hyperlink."""
     text = textnode.astext()
-    if '\\url' in text:
-        text1, _, text = text.partition('\\url')
-        text2, _, text3 = text.partition('}')
-        text2 = text2.lstrip(' {')
+    if "\\url" in text:
+        text1, _, text = text.partition("\\url")
+        text2, _, text3 = text.partition("}")
+        text2 = text2.lstrip(" {")
         ref = docutils.nodes.reference(refuri=text2)
         ref += docutils.nodes.Text(text2)
         node = docutils.nodes.inline()
@@ -117,21 +123,26 @@ class BibGlossaryTransform(docutils.transforms.Transform):
         docname = env.docname
         for bibnode in self.document.traverse(BibGlossaryNode):
 
-            id_ = bibnode['ids'][0]
+            id_ = bibnode["ids"][0]
             bibcache = env.bibgloss_cache.get_bibliography_cache(
-                docname=docname, id_=id_)
+                docname=docname, id_=id_
+            )
             entries = env.bibgloss_cache.get_bibliography_entries(
-                docname=docname, id_=id_, warn=logger.warning)
+                docname=docname, id_=id_, warn=logger.warning
+            )
 
             # create citation nodes for all references
             nodes = docutils.nodes.paragraph()
 
             for styled_entry in format_entries(
-                    entries, style=bibcache.style, sort=not bibcache.unsorted):
+                entries, style=bibcache.style, sort=not bibcache.unsorted
+            ):
 
                 citation = docutils_citation_node(
-                    styled_entry, self.document,
-                    convert_latex=env.app.config.bibgloss_convert_latex)
+                    styled_entry,
+                    self.document,
+                    convert_latex=env.app.config.bibgloss_convert_latex,
+                )
                 # docutils_citation_node(...) uses entry.key
                 # as citation label
                 # we change it to entry.label later onwards

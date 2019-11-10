@@ -36,24 +36,23 @@ Coding Style Requirements
 
 The code style is tested using `flake8 <http://flake8.pycqa.org>`__,
 with the configuration set in ``.flake8``, and code should be formatted
-with `yapf <https://github.com/google/yapf>`__ (configuration set in
-``.style.yapf``).
+with `black <https://github.com/ambv/black>`__.
 
-Installing with ``ipypublish[tests]`` makes the
+Installing with ``ipypublish[code_style]`` makes the
 `pre-commit <https://pre-commit.com/>`__ package available, which will
 ensure these tests are passed by reformatting the code and testing for
-lint errors before submitting a commit. It can be setup by:
+lint errors before submitting a commit. It can be set-up by:
 
 .. code:: shell
 
    >> cd ipypublish
    >> pre-commit install
 
-Optionally you can run ``yapf`` and ``flake8`` separately:
+Optionally you can run ``black`` and ``flake8`` separately:
 
 .. code:: shell
 
-   >> yapf -i path/to/file  # format file in-place
+   >> black path/to/file
    >> flake8
 
 Editors like VS Code also have automatic code reformat utilities, which

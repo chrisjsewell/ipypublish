@@ -11,13 +11,18 @@ from ipypublish.postprocessors.reveal_serve import RevealServer
 logger = logging.getLogger("nbpresent")
 
 
-def nbpresent(inpath,
-              outformat='slides_standard',
-              outpath=None, dump_files=True,
-              ignore_prefix='_', clear_files=False,
-              log_level='INFO', dry_run=False,
-              print_traceback=False,
-              export_paths=()):
+def nbpresent(
+    inpath,
+    outformat="slides_standard",
+    outpath=None,
+    dump_files=True,
+    ignore_prefix="_",
+    clear_files=False,
+    log_level="INFO",
+    dry_run=False,
+    print_traceback=False,
+    export_paths=(),
+):
     """ load reveal.js slides as a web server,
     converting from ipynb first if path extension is .ipynb
 
@@ -42,27 +47,29 @@ def nbpresent(inpath,
     inpath_name, inpath_ext = os.path.splitext(os.path.basename(inpath))
 
     output_mimetype = guess_type(inpath, strict=False)[0]
-    output_mimetype = 'unknown' if output_mimetype is None else output_mimetype
+    output_mimetype = "unknown" if output_mimetype is None else output_mimetype
 
     if output_mimetype != "text/html":
 
-        config = {"IpyPubMain": {
-            "conversion": outformat,
-            "plugin_folder_paths": export_paths,
-            "outpath": outpath,
-            "ignore_prefix": ignore_prefix,
-            "log_to_stdout": True,
-            "log_level_stdout": log_level,
-            "log_to_file": True,
-            "log_level_file": log_level,
-            "default_pporder_kwargs": dict(
-                dry_run=dry_run,
-                clear_existing=clear_files,
-                dump_files=dump_files,
-                serve_html=True,
-                slides=True
-            )
-        }}
+        config = {
+            "IpyPubMain": {
+                "conversion": outformat,
+                "plugin_folder_paths": export_paths,
+                "outpath": outpath,
+                "ignore_prefix": ignore_prefix,
+                "log_to_stdout": True,
+                "log_level_stdout": log_level,
+                "log_to_file": True,
+                "log_level_file": log_level,
+                "default_pporder_kwargs": dict(
+                    dry_run=dry_run,
+                    clear_existing=clear_files,
+                    dump_files=dump_files,
+                    serve_html=True,
+                    slides=True,
+                ),
+            }
+        }
         publish = IpyPubMain(config=config)
         try:
             outdata = publish(inpath)

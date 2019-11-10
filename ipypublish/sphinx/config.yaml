@@ -8,7 +8,7 @@ docstring: |4
     This file is execfile()d by Sphinx,
     with the current directory set to its containing dir
 
-    .. seealso::  
+    .. seealso::
 
         http://www.sphinx-doc.org/en/master/usage/configuration.html
 
@@ -18,7 +18,7 @@ source_suffix: [".rst"]
 # Exclude build directory and Jupyter backup files:
 exclude_patterns: ["_build", "build", "**.ipynb_checkpoints"]
 
-extensions: [ 
+extensions: [
     'ipypublish.sphinx.notebook',  # includes nboutput and nbinput directives
     'ipypublish.sphinx.gls',  # includes gls role
     'sphinx.ext.mathjax',  # convert latex math to html
@@ -42,7 +42,7 @@ math_eqref_format: "eq.{number}"   # TODO this isn't working
 linkcheck_ignore: [r'http://localhost:\d+/']
 
 # # List of arguments to be passed to the kernel that executes the notebooks:
-# nbsphinx_execute_arguments: [  
+# nbsphinx_execute_arguments: [
 #     "--InlineBackend.figure_formats={'svg', 'pdf'}",
 #     "--InlineBackend.rc={'figure.dpi': 96}",
 # ]

@@ -4,11 +4,17 @@ from ipypublish.sphinx.utils import import_sphinx
 from ipypublish.sphinx.gls import processing as bibproc
 from ipypublish.sphinx.gls.directives import BibGlossaryDirective
 from ipypublish.sphinx.gls.roles import (
-    GLSRole, GLSCapitalRole, GLSPluralRole, GLSPluralCapitalRole)
+    GLSRole,
+    GLSCapitalRole,
+    GLSPluralRole,
+    GLSPluralCapitalRole,
+)
 from ipypublish.sphinx.gls.nodes import BibGlossaryNode
 from ipypublish.sphinx.gls.transforms import (
-    BibGlossaryTransform, OverrideCitationReferences,
-    HandleMissingCitesTransform)
+    BibGlossaryTransform,
+    OverrideCitationReferences,
+    HandleMissingCitesTransform,
+)
 
 try:
     from sphinx.application import Sphinx  # noqa: F401
@@ -28,6 +34,7 @@ def setup(app):
         transforms = app.registry.get_transforms()
     except AttributeError:  # Sphinx < 1.7
         from sphinx.io import SphinxStandaloneReader
+
         transforms = SphinxStandaloneReader.transforms
 
     def add_transform(transform, post=False):
@@ -43,8 +50,8 @@ def setup(app):
     app.connect("doctree-resolved", bibproc.process_citation_references)
     app.connect("env-purge-doc", bibproc.purge_bibgloss_cache)
     # app.connect("env-updated", bibproc.check_duplicate_labels)
-    app.add_config_value('bibgloss_convert_latex', True, rebuild='html')
-    app.add_config_value('bibgloss_default_style', 'list', rebuild='html')
+    app.add_config_value("bibgloss_convert_latex", True, rebuild="html")
+    app.add_config_value("bibgloss_default_style", "list", rebuild="html")
 
     app.add_directive("bibglossary", BibGlossaryDirective)
     # Note: because docutils.parsers.rst.roles.role(role_name)
@@ -67,8 +74,8 @@ def setup(app):
     parallel_read_safe = False
 
     return {
-        'version': __version__,
-        'parallel_read_safe': parallel_read_safe,
-        'parallel_write_safe': True,
-        'env_version': 1,
+        "version": __version__,
+        "parallel_read_safe": parallel_read_safe,
+        "parallel_write_safe": True,
+        "env_version": 1,
     }

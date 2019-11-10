@@ -7,7 +7,8 @@ if sys.version_info >= (3, 0):
 
 @pytest.mark.skipif(
     sys.version_info < (3, 0),
-    reason="SyntaxError on import of texsoup/data.py line 135")
+    reason="SyntaxError on import of texsoup/data.py line 135",
+)
 def test_parse_acronyms():
 
     text_str = """
@@ -17,18 +18,15 @@ def test_parse_acronyms():
     gterms, acronyms = parse_tex(text_str=text_str)
     assert gterms == {}
     assert acronyms == {
-        'otherkey': {
-            'abbreviation': 'OTHER',
-            'longname': 'Abbreviation of other'},
-        'thekey': {
-            'abbreviation': 'ABRV',
-            'longname': 'Abbreviation'}
+        "otherkey": {"abbreviation": "OTHER", "longname": "Abbreviation of other"},
+        "thekey": {"abbreviation": "ABRV", "longname": "Abbreviation"},
     }
 
 
 @pytest.mark.skipif(
     sys.version_info < (3, 0),
-    reason="SyntaxError on import of texsoup/data.py line 135")
+    reason="SyntaxError on import of texsoup/data.py line 135",
+)
 def test_parse_acronyms_with_options():
 
     text_str = """
@@ -38,21 +36,24 @@ def test_parse_acronyms_with_options():
     gterms, acronyms = parse_tex(text_str=text_str)
     assert gterms == {}
     assert acronyms == {
-        'otherkey': {
-            'abbreviation': 'OTHER',
-            'longname': 'Abbreviation of other',
-            'description': 'a description'},
-        'thekey': {
-            'abbreviation': 'ABRV',
-            'longname': 'Abbreviation',
-            'longplural': 'Abbreviations',
-            'plural': 'ABRVs'}
+        "otherkey": {
+            "abbreviation": "OTHER",
+            "longname": "Abbreviation of other",
+            "description": "a description",
+        },
+        "thekey": {
+            "abbreviation": "ABRV",
+            "longname": "Abbreviation",
+            "longplural": "Abbreviations",
+            "plural": "ABRVs",
+        },
     }
 
 
 @pytest.mark.skipif(
     sys.version_info < (3, 0),
-    reason="SyntaxError on import of texsoup/data.py line 135")
+    reason="SyntaxError on import of texsoup/data.py line 135",
+)
 def test_parse_gterms():
 
     text_str = """
@@ -69,19 +70,15 @@ def test_parse_gterms():
     gterms, acronyms = parse_tex(text_str=text_str)
     assert acronyms == {}
     assert gterms == {
-        'otherkey': {
-            'description': 'the description of other',
-            'name': 'other name'},
-        'thekey': {
-            'description': 'the description',
-            'name': 'name',
-            'type': 'symbols'}
+        "otherkey": {"description": "the description of other", "name": "other name"},
+        "thekey": {"description": "the description", "name": "name", "type": "symbols"},
     }
 
 
 @pytest.mark.skipif(
     sys.version_info < (3, 0),
-    reason="SyntaxError on import of texsoup/data.py line 135")
+    reason="SyntaxError on import of texsoup/data.py line 135",
+)
 def test_parse_mixed():
     text_str = """
     \\newacronym{otherkey}{OTHER}{Abbreviation of other}
@@ -93,21 +90,17 @@ def test_parse_mixed():
     """
     gterms, acronyms = parse_tex(text_str=text_str)
     assert acronyms == {
-        'otherkey': {
-            'abbreviation': 'OTHER',
-            'longname': 'Abbreviation of other'}
+        "otherkey": {"abbreviation": "OTHER", "longname": "Abbreviation of other"}
     }
     assert gterms == {
-        'thekey': {
-            'description': 'the description',
-            'name': 'name',
-            'type': 'symbols'}
+        "thekey": {"description": "the description", "name": "name", "type": "symbols"}
     }
 
 
 @pytest.mark.skipif(
     sys.version_info < (3, 0),
-    reason="SyntaxError on import of texsoup/data.py line 135")
+    reason="SyntaxError on import of texsoup/data.py line 135",
+)
 def test_duplicate_key():
     text_str = """
     \\newacronym{thekey}{OTHER}{Abbreviation of other}
@@ -123,7 +116,8 @@ def test_duplicate_key():
 
 @pytest.mark.skipif(
     sys.version_info < (3, 0),
-    reason="SyntaxError on import of texsoup/data.py line 135")
+    reason="SyntaxError on import of texsoup/data.py line 135",
+)
 def test_acronym_ioerror():
     text_str = """
     \\newacronym{thekey}{Abbreviation of other}
@@ -134,7 +128,8 @@ def test_acronym_ioerror():
 
 @pytest.mark.skipif(
     sys.version_info < (3, 0),
-    reason="SyntaxError on import of texsoup/data.py line 135")
+    reason="SyntaxError on import of texsoup/data.py line 135",
+)
 def test_gterm_ioerror():
     text_str = """
     \\newglossaryentry{}
@@ -145,7 +140,8 @@ def test_gterm_ioerror():
 
 @pytest.mark.skipif(
     sys.version_info < (3, 0),
-    reason="SyntaxError on import of texsoup/data.py line 135")
+    reason="SyntaxError on import of texsoup/data.py line 135",
+)
 def test_ioerror_skip():
     text_str = """
     \\newacronym{thekey}{Abbreviation of other}
@@ -154,8 +150,5 @@ def test_ioerror_skip():
     gterms, acronyms = parse_tex(text_str=text_str, skip_ioerrors=True)
     assert gterms == {}
     assert acronyms == {
-        "thekey2": {
-            'abbreviation': 'ABBR',
-            'longname': 'Abbreviation of other'
-        }
+        "thekey2": {"abbreviation": "ABBR", "longname": "Abbreviation of other"}
     }

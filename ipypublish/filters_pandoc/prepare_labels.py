@@ -35,7 +35,10 @@ from panflute import Element, Doc, Table, Inline  # noqa: F401
 import panflute as pf
 
 from ipypublish.filters_pandoc.utils import (
-    compare_version, get_panflute_containers, find_attributes)
+    compare_version,
+    get_panflute_containers,
+    find_attributes,
+)
 
 LABELLED_IMAGE_CLASS = "labelled-Image"
 LABELLED_MATH_CLASS = "labelled-Math"
@@ -58,7 +61,8 @@ def resolve_tables(element, doc):
         # attributes = _find_attribute(element.caption[0],
         #                              allow_any=True, delete_preceding=False)
         attributes = find_attributes(
-            element.caption[-1], search_left=True, include_element=True)
+            element.caption[-1], search_left=True, include_element=True
+        )
 
     if not attributes:
         return None
@@ -66,21 +70,19 @@ def resolve_tables(element, doc):
     # update count
     doc.refcount[ref_type] += 1
     # add to metadata
-    doc.metadata[
-        "$$references"][attributes["id"]] = pf.MetaMap(**{
-            "type": pf.MetaString(ref_type),
-            "number": doc.refcount[ref_type]
-        })
+    doc.metadata["$$references"][attributes["id"]] = pf.MetaMap(
+        **{"type": pf.MetaString(ref_type), "number": doc.refcount[ref_type]}
+    )
     # remove attribute from caption
-    element.caption = [el for el in element.caption
-                       if el not in attributes["elements"]]
+    element.caption = [el for el in element.caption if el not in attributes["elements"]]
 
     # wrap in a div
-    return pf.Div(element,
-                  classes=[
-                      "labelled-{}".format(ref_type)] + attributes["classes"],
-                  attributes=attributes["attributes"],
-                  identifier=attributes["id"])
+    return pf.Div(
+        element,
+        classes=["labelled-{}".format(ref_type)] + attributes["classes"],
+        attributes=attributes["attributes"],
+        identifier=attributes["id"],
+    )
 
 
 def resolve_equations_images(element, doc):
@@ -111,7 +113,7 @@ def resolve_equations_images(element, doc):
             subel = subel.next
             continue
 
-        if isinstance(subel, pf.Image) and compare_version('1.16', '>='):
+        if isinstance(subel, pf.Image) and compare_version("1.16", ">="):
             # pandoc >= 1.16 already supports this
             # TODO for pandoc < 1.16 also look for attributes attached,
             # to the image path, as occurs with image references
@@ -120,7 +122,7 @@ def resolve_equations_images(element, doc):
                 "id": subel.identifier,
                 # "classes": subel.classes,
                 # "attributes": subel.attributes,
-                "elements": []
+                "elements": [],
             }
 
         else:
@@ -134,26 +136,26 @@ def resolve_equations_images(element, doc):
             # update count
             doc.refcount[ref_type] += 1
             # add to metadata
-            doc.metadata[
-                "$$references"][attributes["id"]] = pf.MetaMap(**{
-                    "type": pf.MetaString(ref_type),
-                    "number": doc.refcount[ref_type]
-                })
+            doc.metadata["$$references"][attributes["id"]] = pf.MetaMap(
+                **{"type": pf.MetaString(ref_type), "number": doc.refcount[ref_type]}
+            )
 
             to_delete.update(attributes["elements"])
 
         subel = subel.next
 
     new_content = [
-        pf.Span(el,
-                classes=[
-                    "labelled-{}".format(ref_type)] + to_wrap[el]["classes"],
-                attributes=to_wrap[el]["attributes"],
-                identifier=to_wrap[el]["id"]
-                )
-        if el in to_wrap else el
+        pf.Span(
+            el,
+            classes=["labelled-{}".format(ref_type)] + to_wrap[el]["classes"],
+            attributes=to_wrap[el]["attributes"],
+            identifier=to_wrap[el]["id"],
+        )
+        if el in to_wrap
+        else el
         for el in element.content
-        if el not in to_delete]
+        if el not in to_delete
+    ]
 
     # if isinstance(element, pf.Plain):
     #     return pf.Plain(*new_content)
@@ -165,11 +167,7 @@ def resolve_equations_images(element, doc):
 
 def prepare(doc):
     # type: (Doc) -> None
-    doc.refcount = {
-        "Table": 0,
-        "Image": 0,
-        "Math": 0
-    }
+    doc.refcount = {"Table": 0, "Image": 0, "Math": 0}
     doc.metadata["$$references"] = pf.MetaMap()
 
 
@@ -180,9 +178,10 @@ def finalize(doc):
 
 def main(doc=None):
     # type: (Doc) -> None
-    return pf.run_filters([resolve_tables, resolve_equations_images],
-                          prepare, finalize, doc=doc)
+    return pf.run_filters(
+        [resolve_tables, resolve_equations_images], prepare, finalize, doc=doc
+    )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

@@ -7,7 +7,11 @@ from docutils.parsers import rst
 from docutils.statemachine import StringList
 
 from ipypublish.sphinx.utils import import_sphinx
-from ipypublish.sphinx.notebook.nodes import (AdmonitionNode, CodeAreaNode, FancyOutputNode)
+from ipypublish.sphinx.notebook.nodes import (
+    AdmonitionNode,
+    CodeAreaNode,
+    FancyOutputNode,
+)
 
 
 class NbAdmonition(rst.Directive):
@@ -20,7 +24,7 @@ class NbAdmonition(rst.Directive):
 
     def run(self):
         """This is called by the reST parser."""
-        node = AdmonitionNode(classes=['admonition', self._class])
+        node = AdmonitionNode(classes=["admonition", self._class])
         self.state.nested_parse(self.content, self.content_offset, node)
         return [node]
 
@@ -28,19 +32,20 @@ class NbAdmonition(rst.Directive):
 class NbWarning(NbAdmonition):
     """A warning box."""
 
-    _class = 'warning'
+    _class = "warning"
 
 
 class NbInfo(NbAdmonition):
     """An information box."""
 
-    _class = 'note'
+    _class = "note"
 
 
 class NBInputToggle(rst.Directive):
     """ a toggle button for nbinput cells """
-    _class = 'nbinput-toggle-all'
-    _default_text = 'Toggle Input Cells'
+
+    _class = "nbinput-toggle-all"
+    _default_text = "Toggle Input Cells"
 
     required_arguments = 0
     optional_arguments = 0
@@ -50,11 +55,15 @@ class NBInputToggle(rst.Directive):
     def run(self):
         """This is called by the reST parser."""
         node = nodes.container()
-        node['classes'].append(self._class)
+        node["classes"].append(self._class)
         if self.content:
             self.state.nested_parse(self.content, self.content_offset, node)
         else:
-            text = self.arguments[0] if self.arguments and self.arguments[0] else self._default_text
+            text = (
+                self.arguments[0]
+                if self.arguments and self.arguments[0]
+                else self._default_text
+            )
             paragraph = nodes.paragraph(text=text)
             node += paragraph
 
@@ -63,8 +72,9 @@ class NBInputToggle(rst.Directive):
 
 class NBOutputToggle(NBInputToggle):
     """ a toggle button for nboutput cells """
-    _class = 'nboutput-toggle-all'
-    _default_text = 'Toggle Output Cells'
+
+    _class = "nboutput-toggle-all"
+    _default_text = "Toggle Output Cells"
 
 
 class NbInput(rst.Directive):
@@ -74,19 +84,19 @@ class NbInput(rst.Directive):
     optional_arguments = 1  # lexer name
     final_argument_whitespace = False
     option_spec = {
-        'execution-count': rst.directives.positive_int,
-        'empty-lines-before': rst.directives.nonnegative_int,
-        'empty-lines-after': rst.directives.nonnegative_int,
-        'no-output': rst.directives.flag,
-        'caption': rst.directives.unchanged,
-        'name': rst.directives.unchanged,
-        'add-toggle': rst.directives.flag
+        "execution-count": rst.directives.positive_int,
+        "empty-lines-before": rst.directives.nonnegative_int,
+        "empty-lines-after": rst.directives.nonnegative_int,
+        "no-output": rst.directives.flag,
+        "caption": rst.directives.unchanged,
+        "name": rst.directives.unchanged,
+        "add-toggle": rst.directives.flag,
     }
     has_content = True
 
     def run(self):
         """This is called by the reST parser."""
-        self.state.document['ipysphinx_include_css'] = True
+        self.state.document["ipysphinx_include_css"] = True
         return _create_nbcell_nodes(self)
 
 
@@ -97,18 +107,18 @@ class NbOutput(rst.Directive):
     optional_arguments = 1  # 'rst' or nothing (which means literal text)
     final_argument_whitespace = False
     option_spec = {
-        'execution-count': rst.directives.positive_int,
-        'more-to-come': rst.directives.flag,
-        'empty-lines-before': rst.directives.nonnegative_int,
-        'empty-lines-after': rst.directives.nonnegative_int,
-        'class': rst.directives.unchanged,
-        'add-toggle': rst.directives.flag
+        "execution-count": rst.directives.positive_int,
+        "more-to-come": rst.directives.flag,
+        "empty-lines-before": rst.directives.nonnegative_int,
+        "empty-lines-after": rst.directives.nonnegative_int,
+        "class": rst.directives.unchanged,
+        "add-toggle": rst.directives.flag,
     }
     has_content = True
 
     def run(self):
         """This is called by the reST parser."""
-        self.state.document['ipysphinx_include_css'] = True
+        self.state.document["ipysphinx_include_css"] = True
         return _create_nbcell_nodes(self)
 
 
@@ -117,73 +127,82 @@ def _create_nbcell_nodes(directive):
 
     sphinx = import_sphinx()
 
-    language = 'none'
-    prompt = ''
+    language = "none"
+    prompt = ""
     fancy_output = False
-    execution_count = directive.options.get('execution-count')
+    execution_count = directive.options.get("execution-count")
     config = directive.state.document.settings.env.config
 
     if isinstance(directive, NbInput):
-        outer_classes = ['nbinput']
-        if 'no-output' in directive.options:
-            outer_classes.append('nblast')
-        inner_classes = ['input_area']
+        outer_classes = ["nbinput"]
+        if "no-output" in directive.options:
+            outer_classes.append("nblast")
+        inner_classes = ["input_area"]
         if directive.arguments:
             language = directive.arguments[0]
         prompt_template = config.ipysphinx_input_prompt
         if not execution_count:
-            execution_count = ' '
+            execution_count = " "
     elif isinstance(directive, NbOutput):
-        outer_classes = ['nboutput']
-        if 'more-to-come' not in directive.options:
-            outer_classes.append('nblast')
-        inner_classes = ['output_area']
+        outer_classes = ["nboutput"]
+        if "more-to-come" not in directive.options:
+            outer_classes.append("nblast")
+        inner_classes = ["output_area"]
         # 'class' can be 'stderr'
-        inner_classes.append(directive.options.get('class', ''))
+        inner_classes.append(directive.options.get("class", ""))
         prompt_template = config.ipysphinx_output_prompt
-        if directive.arguments and directive.arguments[0] in ['rst', 'ansi']:
+        if directive.arguments and directive.arguments[0] in ["rst", "ansi"]:
             fancy_output = True
     else:
-        raise AssertionError('directive should be NbInput or NbOutput')
+        raise AssertionError("directive should be NbInput or NbOutput")
 
     outer_node = docutils.nodes.container(classes=outer_classes)
 
     # add prompts
     if config.ipysphinx_show_prompts and execution_count:
         prompt = prompt_template.format(count=execution_count)
-        prompt_node = docutils.nodes.literal_block(prompt, prompt, language='none', classes=['prompt'])
+        prompt_node = docutils.nodes.literal_block(
+            prompt, prompt, language="none", classes=["prompt"]
+        )
     elif config.ipysphinx_show_prompts:
-        prompt = ''
-        prompt_node = docutils.nodes.container(classes=['prompt', 'empty'])
+        prompt = ""
+        prompt_node = docutils.nodes.container(classes=["prompt", "empty"])
     if config.ipysphinx_show_prompts:
         # NB: Prompts are added manually in LaTeX output
-        outer_node += sphinx.addnodes.only('', prompt_node, expr='html')
+        outer_node += sphinx.addnodes.only("", prompt_node, expr="html")
 
     if fancy_output:
         inner_node = docutils.nodes.container(classes=inner_classes)
-        sphinx.util.nodes.nested_parse_with_titles(directive.state, directive.content, inner_node)
+        sphinx.util.nodes.nested_parse_with_titles(
+            directive.state, directive.content, inner_node
+        )
         outtype = directive.arguments[0]
-        if outtype == 'rst':
-            outer_node += FancyOutputNode('', inner_node, prompt=prompt)
-        elif outtype == 'ansi':
+        if outtype == "rst":
+            outer_node += FancyOutputNode("", inner_node, prompt=prompt)
+        elif outtype == "ansi":
             outer_node += inner_node
         else:
-            raise AssertionError("`.. nboutput:: type` should be 'rst' or 'ansi', " 'not: {}'.format(outtype))
+            raise AssertionError(
+                "`.. nboutput:: type` should be 'rst' or 'ansi', "
+                "not: {}".format(outtype)
+            )
     else:
-        text = '\n'.join(directive.content.data)
-        inner_node = docutils.nodes.literal_block(text, text, language=language, classes=inner_classes)
-        codearea_node = CodeAreaNode('', inner_node, prompt=prompt)
+        text = "\n".join(directive.content.data)
+        inner_node = docutils.nodes.literal_block(
+            text, text, language=language, classes=inner_classes
+        )
+        codearea_node = CodeAreaNode("", inner_node, prompt=prompt)
         # create a literal text block (e.g. with the code-block directive),
         # that starts or ends with a blank line
         # (see http://stackoverflow.com/q/34050044/)
-        for attr in 'empty-lines-before', 'empty-lines-after':
+        for attr in "empty-lines-before", "empty-lines-after":
             value = directive.options.get(attr, 0)
             if value:
                 codearea_node[attr] = value
 
         # add caption and label, see:
-        if directive.options.get('caption', False):
-            caption = directive.options.get('caption')
+        if directive.options.get("caption", False):
+            caption = directive.options.get("caption")
             wrapper = container_wrapper(directive, inner_node, caption, inner_classes)
             # add label
             directive.add_name(wrapper)
@@ -191,15 +210,25 @@ def _create_nbcell_nodes(directive):
         else:
             outer_node += codearea_node
 
-    if isinstance(directive, NbInput) and (config.ipysphinx_input_toggle or 'add-toggle' in directive.options):
-        directive.state.document['ipysphinx_include_js'] = True
+    if isinstance(directive, NbInput) and (
+        config.ipysphinx_input_toggle or "add-toggle" in directive.options
+    ):
+        directive.state.document["ipysphinx_include_js"] = True
         outer_node += sphinx.addnodes.only(
-            '', docutils.nodes.container(classes=['toggle-nbinput', 'empty']), expr='html')
+            "",
+            docutils.nodes.container(classes=["toggle-nbinput", "empty"]),
+            expr="html",
+        )
 
-    if isinstance(directive, NbOutput) and (config.ipysphinx_output_toggle or 'add-toggle' in directive.options):
-        directive.state.document['ipysphinx_include_js'] = True
+    if isinstance(directive, NbOutput) and (
+        config.ipysphinx_output_toggle or "add-toggle" in directive.options
+    ):
+        directive.state.document["ipysphinx_include_js"] = True
         outer_node += sphinx.addnodes.only(
-            '', docutils.nodes.container(classes=['toggle-nboutput', 'empty']), expr='html')
+            "",
+            docutils.nodes.container(classes=["toggle-nboutput", "empty"]),
+            expr="html",
+        )
 
     return [outer_node]
 
@@ -208,14 +237,20 @@ def container_wrapper(directive, literal_node, caption, classes):
     """adapted from
     https://github.com/sphinx-doc/sphinx/blob/master/sphinx/directives/code.py
     """
-    container_node = docutils.nodes.container('', literal_block=True, classes=classes)  # ['literal-block-wrapper']
+    container_node = docutils.nodes.container(
+        "", literal_block=True, classes=classes
+    )  # ['literal-block-wrapper']
     parsed = docutils.nodes.Element()
-    directive.state.nested_parse(StringList([caption], source=''), directive.content_offset, parsed)
+    directive.state.nested_parse(
+        StringList([caption], source=""), directive.content_offset, parsed
+    )
     if isinstance(parsed[0], docutils.nodes.system_message):
-        msg = 'Invalid caption: %s' % parsed[0].astext()
+        msg = "Invalid caption: %s" % parsed[0].astext()
         raise ValueError(msg)
     elif isinstance(parsed[0], docutils.nodes.Element):
-        caption_node = docutils.nodes.caption(parsed[0].rawsource, '', *parsed[0].children)
+        caption_node = docutils.nodes.caption(
+            parsed[0].rawsource, "", *parsed[0].children
+        )
         caption_node.source = literal_node.source
         caption_node.line = literal_node.line
         container_node += caption_node

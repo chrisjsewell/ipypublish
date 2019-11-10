@@ -48,7 +48,7 @@ except ImportError:
 from ipypublish.sphinx.tests import get_test_source_dir
 
 
-@pytest.fixture(scope='session', autouse=True)
+@pytest.fixture(scope="session", autouse=True)
 def remove_sphinx_builds():
     """ remove all build directories from the test folder
     """
@@ -60,12 +60,16 @@ def remove_sphinx_builds():
 
 @pytest.fixture
 def get_sphinx_app_output():
-    def read(app, buildername='html',
-             filename="contents.html", encoding='utf-8',
-             extract_body=False, remove_scripts=False):
+    def read(
+        app,
+        buildername="html",
+        filename="contents.html",
+        encoding="utf-8",
+        extract_body=False,
+        remove_scripts=False,
+    ):
 
-        outpath = path(os.path.join(
-            str(app.srcdir), '_build', buildername, filename))
+        outpath = path(os.path.join(str(app.srcdir), "_build", buildername, filename))
         if not outpath.exists():
             raise IOError("no output file exists: {}".format(outpath))
 

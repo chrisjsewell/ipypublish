@@ -16,9 +16,11 @@ from ipypublish.sphinx.create_setup import make_conf, make_index
 # NOTE Interesting note about adding a directive to actually run python code
 # https://stackoverflow.com/questions/7250659/how-to-use-python-to-programmatically-generate-part-of-sphinx-documentation
 
+
 class RunSphinx(IPyPostProcessor):
     """ run sphinx to create an html output
     """
+
     @property
     def allowed_mimetypes(self):
         return ("text/restructuredtext",)
@@ -32,43 +34,41 @@ class RunSphinx(IPyPostProcessor):
         return "run-sphinx"
 
     open_in_browser = Bool(
-        True,
-        help="launch a html page containing a pdf browser").tag(config=True)
-
-    numbered = Bool(
-        True,
-        help="set :numbered: in toc, which numbers sections, etc"
+        True, help="launch a html page containing a pdf browser"
     ).tag(config=True)
 
-    show_prompts = Bool(
-        True,
-        help="whether to include cell prompts").tag(config=True)
+    numbered = Bool(
+        True, help="set :numbered: in toc, which numbers sections, etc"
+    ).tag(config=True)
 
-    prompt_style = Unicode(
-        '[{count}]:',
-        help="the style of cell prompts").tag(config=True)
+    show_prompts = Bool(True, help="whether to include cell prompts").tag(config=True)
 
-    @validate('prompt_style')
+    prompt_style = Unicode("[{count}]:", help="the style of cell prompts").tag(
+        config=True
+    )
+
+    @validate("prompt_style")
     def _valid_prompt_style(self, proposal):
         try:
             proposal.format(count=1)
         except TypeError:
-            raise TraitError("prompt_style should be formatable by "
-                             "`prompt_style.format(count=1)`")
-        return proposal['value']
+            raise TraitError(
+                "prompt_style should be formatable by " "`prompt_style.format(count=1)`"
+            )
+        return proposal["value"]
 
     conf_kwargs = Dict(
-        help=("additional key-word arguments to be included in the conf.py "
-              "as <key> = <val>")).tag(config=True)
+        help=(
+            "additional key-word arguments to be included in the conf.py "
+            "as <key> = <val>"
+        )
+    ).tag(config=True)
 
     override_defaults = Bool(
-        True,
-        help="if True, conf_kwargs override default values").tag(config=True)
+        True, help="if True, conf_kwargs override default values"
+    ).tag(config=True)
 
-    nitpick = Bool(
-        False,
-        help="nit-picky mode, warn about all missing references"
-    )
+    nitpick = Bool(False, help="nit-picky mode, warn about all missing references")
 
     def run_postprocess(self, stream, mimetype, filepath, resources):
 
@@ -122,36 +122,38 @@ class RunSphinx(IPyPostProcessor):
                 epilog.append("| " + inst)
 
         epilog.append("")
-        epilog.append('Created by IPyPublish (version {})'.format(__version__))
+        epilog.append("Created by IPyPublish (version {})".format(__version__))
 
         toc = resources.get("ipub", {}).get("toc", {})
         if hasattr(toc, "get") and "depth" in toc:
             toc_depth = toc["depth"]
 
-        index_str = make_index(toc_files,
-                               toc_depth=toc_depth, header=title,
-                               toc_numbered=self.numbered,
-                               prolog="\n".join(prolog),
-                               epilog="\n".join(epilog))
+        index_str = make_index(
+            toc_files,
+            toc_depth=toc_depth,
+            header=title,
+            toc_numbered=self.numbered,
+            prolog="\n".join(prolog),
+            epilog="\n".join(epilog),
+        )
 
         index_path = filepath.parent.joinpath("index.rst")
         with index_path.open("w", encoding="utf8") as f:
             f.write(u(index_str))
 
         # clear any existing build
-        build_dir = filepath.parent.joinpath('build/html')
+        build_dir = filepath.parent.joinpath("build/html")
         if build_dir.exists():
             # >> rm -r build/html
             shutil.rmtree(str(build_dir))
         build_dir.mkdir(parents=True)
 
         # run sphinx
-        exec_path = find_executable('sphinx-build')
+        exec_path = find_executable("sphinx-build")
         args = [exec_path, "-b", "html"]
         if self.nitpick:
             args.append("-n")
-        args.extend([str(filepath.parent.absolute()),
-                     str(build_dir.absolute())])
+        args.extend([str(filepath.parent.absolute()), str(build_dir.absolute())])
 
         self.logger.info("running: " + " ".join(args))
 
@@ -160,9 +162,8 @@ class RunSphinx(IPyPostProcessor):
         #                                 self.logger, "sphinx")
 
         def log_process_output(pipe):
-            for line in iter(pipe.readline, b''):
-                self.logger.info('{}'.format(
-                    line.decode("utf-8").strip()))
+            for line in iter(pipe.readline, b""):
+                self.logger.info("{}".format(line.decode("utf-8").strip()))
 
         process = Popen(args, stdout=PIPE, stderr=STDOUT)
         with process.stdout:
@@ -170,19 +171,18 @@ class RunSphinx(IPyPostProcessor):
         exitcode = process.wait()  # 0 means success
 
         if exitcode:
-            self.logger.warn(
-                "sphinx-build exited with code: {}".format(exitcode))
+            self.logger.warning("sphinx-build exited with code: {}".format(exitcode))
 
         if self.open_in_browser and not exitcode:
             # get entry path
-            entry_path = filepath.parent.joinpath('build/html')
+            entry_path = filepath.parent.joinpath("build/html")
             entry_path = entry_path.joinpath(
-                os.path.splitext(filepath.name)[0] + '.html')
+                os.path.splitext(filepath.name)[0] + ".html"
+            )
             if entry_path.exists():
                 #  2 opens the url in a new tab
                 webbrowser.open(entry_path.as_uri(), new=2)
             else:
-                self.handle_error(
-                    "can't find {0} to open".format(entry_path), IOError)
+                self.handle_error("can't find {0} to open".format(entry_path), IOError)
 
         return stream, filepath, resources

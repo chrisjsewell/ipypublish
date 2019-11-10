@@ -1,39 +1,49 @@
 # Install pre-commit hooks via
 # pre-commit install
 
-- repo: git://github.com/pre-commit/pre-commit-hooks
-  sha: v2.2.3
-  hooks:
-  - id: check-json
-  - id: check-yaml
-  - id: end-of-file-fixer
-  - id: trailing-whitespace
-  - id: double-quote-string-fixer
-  - id: flake8
+exclude: >-
+  (?x)^(
+    .vscode/settings.json|
+    docs/build/.*|
+    example/.*|
+    ipypublish/tests/test_files/.*|
+    ipypublish/sphinx/tests/sourcedirs/.*|
+    ipypublish/sphinx/config.yaml|
+    docs/source/custom_export_config.rst
+  )$
 
-- repo: local
-  hooks:
+  # TODO docs/source/custom_export_config.rst is excleded because doc8
+  # complains about :linenos: in code-block
 
-  - id: yapf
-    name: Yet Another Python Formatter
-    entry: yapf
-    language: system
-    types: [python]
-    args: ["-i", "-vv"]
-    exclude: >
-            (?x)^(
-                setup.py
-            )$
+repos:
 
-  - id: doc8
-    name: RST Linting
-    entry: doc8
-    language: system
-    types: [rst]
+  - repo: git://github.com/pre-commit/pre-commit-hooks
+    sha: v2.2.3
+    hooks:
+    - id: check-json
+    - id: check-yaml
+    - id: end-of-file-fixer
+    - id: trailing-whitespace
+    - id: flake8
 
-  # - id: travis-linter
-  #   name: Travis Lint
-  #   entry: travis lint
-  #   files: .travis.yml
-  #   language: ruby
-  #   additional_dependencies: ['travis']
+  - repo: https://github.com/psf/black
+    rev: 19.3b0
+    hooks:
+    - id: black
+
+  - repo: local
+    hooks:
+
+    - id: doc8
+      name: RST Linting
+      entry: doc8
+      language: system
+      exclude: docs/build/*
+      types: [rst]
+
+    # - id: travis-linter
+    #   name: Travis Lint
+    #   entry: travis lint
+    #   files: .travis.yml
+    #   language: ruby
+    #   additional_dependencies: ['travis']

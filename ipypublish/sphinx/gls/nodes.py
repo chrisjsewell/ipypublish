@@ -7,4 +7,5 @@ class BibGlossaryNode(nodes.General, nodes.Element):
     glossary terms by
     :class:`~ipypublish.sphinx.gls.transforms.BibGlossaryTransform`.
     """
+
     pass

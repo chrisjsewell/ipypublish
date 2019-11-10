@@ -17,7 +17,7 @@ class NBParser(rst.Parser):
     adapted from nbsphinx
     """
 
-    supported = 'jupyter_notebook',
+    supported = ("jupyter_notebook",)
 
     def __init__(self, *args, **kwargs):
 
@@ -31,16 +31,16 @@ class NBParser(rst.Parser):
             class NotebookError(sphinx.errors.SphinxError):
                 """Error during notebook parsing."""
 
-                category = 'Notebook error'
+                category = "Notebook error"
 
             self.error_nb = NotebookError
             self.error_config = sphinx.errors.ConfigError
-            self.logger = sphinx.util.logging.getLogger('nbparser')
+            self.logger = sphinx.util.logging.getLogger("nbparser")
 
         except (ImportError, AttributeError):
             self.error_nb = IOError
             self.error_config = TypeError
-            self.logger = logging.getLogger('nbparser')
+            self.logger = logging.getLogger("nbparser")
 
         super(NBParser, self).__init__(*args, **kwargs)
 
@@ -70,21 +70,22 @@ class NBParser(rst.Parser):
         filedir = os.path.dirname(filepath)
         self.logger.info("ipypublish: converting {}".format(filepath))
 
-        config = {"IpyPubMain": {
-            "conversion": self.config.ipysphinx_export_config,
-            "plugin_folder_paths": self.config.ipysphinx_config_folders,
-            "outpath": filedir,
-            "folder_suffix": self.config.ipysphinx_folder_suffix,
-            "log_to_stdout": False,
-            "log_to_file": False,
-            "default_pporder_kwargs": dict(
-                clear_existing=False,
-                dump_files=True)
-        }}
+        config = {
+            "IpyPubMain": {
+                "conversion": self.config.ipysphinx_export_config,
+                "plugin_folder_paths": self.config.ipysphinx_config_folders,
+                "outpath": filedir,
+                "folder_suffix": self.config.ipysphinx_folder_suffix,
+                "log_to_stdout": False,
+                "log_to_file": False,
+                "default_pporder_kwargs": dict(clear_existing=False, dump_files=True),
+            }
+        }
         if self.config.ipysphinx_preconverters:
             # NB: jupytext is already a default for .Rmd
-            config["IpyPubMain"]["pre_conversion_funcs"] = (
-                self.config.ipysphinx_preconverters)
+            config["IpyPubMain"][
+                "pre_conversion_funcs"
+            ] = self.config.ipysphinx_preconverters
         publish = IpyPubMain(config=config)
         outdata = publish(filepath)
 
@@ -92,21 +93,23 @@ class NBParser(rst.Parser):
 
         # check we got back restructuredtext
         exporter = outdata["exporter"]
-        if not exporter.output_mimetype == 'text/restructuredtext':
+        if not exporter.output_mimetype == "text/restructuredtext":
             handle_error(
                 "ipypublish: the output content is not of type "
                 "text/restructuredtext: {}".format(exporter.output_mimetype),
-                TypeError, self.logger
+                TypeError,
+                self.logger,
             )
 
         # TODO document use of orphan
         if outdata["resources"].get("ipub", {}).get("orphan", False):
-            rst.Parser.parse(self, ':orphan:', document)
+            rst.Parser.parse(self, ":orphan:", document)
 
         # parse a prolog
         if self.env.config.ipysphinx_prolog:
             prolog = exporter.environment.from_string(
-                self.env.config.ipysphinx_prolog).render(env=self.env)
+                self.env.config.ipysphinx_prolog
+            ).render(env=self.env)
             rst.Parser.parse(self, prolog, document)
 
         # parse the main body of the file
@@ -115,5 +118,19 @@ class NBParser(rst.Parser):
         # parse an epilog
         if self.env.config.ipysphinx_epilog:
             prolog = exporter.environment.from_string(
-                self.env.config.ipysphinx_epilog).render(env=self.env)
+                self.env.config.ipysphinx_epilog
+            ).render(env=self.env)
             rst.Parser.parse(self, prolog, document)
+
+        # TODO is there a better way to parse data back from the parser?
+
+        # record if the notebook contains ipywidgets
+        if outdata["resources"].get("contains_ipywidgets", False):
+            if not hasattr(self.env, "ipysphinx_widgets"):
+                self.env.ipysphinx_widgets = set()
+            self.env.ipysphinx_widgets.add(self.env.docname)
+
+        # record that the document was created from a notebook
+        if not hasattr(self.env, "ipysphinx_created_from_nb"):
+            self.env.ipysphinx_created_from_nb = set()
+        self.env.ipysphinx_created_from_nb.add(self.env.docname)
