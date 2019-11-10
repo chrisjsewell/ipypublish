@@ -68,52 +68,60 @@ class NBParser(rst.Parser):
         # get file for conversion
         filepath = self.env.doc2path(self.env.docname)
         filedir = os.path.dirname(filepath)
-        self.logger.info("ipypublish: converting {}".format(filepath))
+        self.logger.info('ipypublish: converting {}'.format(filepath))
 
-        config = {"IpyPubMain": {
-            "conversion": self.config.ipysphinx_export_config,
-            "plugin_folder_paths": self.config.ipysphinx_config_folders,
-            "outpath": filedir,
-            "folder_suffix": self.config.ipysphinx_folder_suffix,
-            "log_to_stdout": False,
-            "log_to_file": False,
-            "default_pporder_kwargs": dict(
-                clear_existing=False,
-                dump_files=True)
-        }}
+        config = {
+            'IpyPubMain': {
+                'conversion': self.config.ipysphinx_export_config,
+                'plugin_folder_paths': self.config.ipysphinx_config_folders,
+                'outpath': filedir,
+                'folder_suffix': self.config.ipysphinx_folder_suffix,
+                'log_to_stdout': False,
+                'log_to_file': False,
+                'default_pporder_kwargs': dict(clear_existing=False, dump_files=True)
+            }
+        }
         if self.config.ipysphinx_preconverters:
             # NB: jupytext is already a default for .Rmd
-            config["IpyPubMain"]["pre_conversion_funcs"] = (
-                self.config.ipysphinx_preconverters)
+            config['IpyPubMain']['pre_conversion_funcs'] = (self.config.ipysphinx_preconverters)
         publish = IpyPubMain(config=config)
         outdata = publish(filepath)
 
-        self.logger.info("ipypublish: successful conversion")
+        self.logger.info('ipypublish: successful conversion')
 
         # check we got back restructuredtext
-        exporter = outdata["exporter"]
+        exporter = outdata['exporter']
         if not exporter.output_mimetype == 'text/restructuredtext':
             handle_error(
-                "ipypublish: the output content is not of type "
-                "text/restructuredtext: {}".format(exporter.output_mimetype),
-                TypeError, self.logger
-            )
+                'ipypublish: the output content is not of type '
+                'text/restructuredtext: {}'.format(exporter.output_mimetype), TypeError, self.logger)
 
         # TODO document use of orphan
-        if outdata["resources"].get("ipub", {}).get("orphan", False):
+        if outdata['resources'].get('ipub', {}).get('orphan', False):
             rst.Parser.parse(self, ':orphan:', document)
 
         # parse a prolog
         if self.env.config.ipysphinx_prolog:
-            prolog = exporter.environment.from_string(
-                self.env.config.ipysphinx_prolog).render(env=self.env)
+            prolog = exporter.environment.from_string(self.env.config.ipysphinx_prolog).render(env=self.env)
             rst.Parser.parse(self, prolog, document)
 
         # parse the main body of the file
-        rst.Parser.parse(self, outdata["stream"], document)
+        rst.Parser.parse(self, outdata['stream'], document)
 
         # parse an epilog
         if self.env.config.ipysphinx_epilog:
-            prolog = exporter.environment.from_string(
-                self.env.config.ipysphinx_epilog).render(env=self.env)
+            prolog = exporter.environment.from_string(self.env.config.ipysphinx_epilog).render(env=self.env)
             rst.Parser.parse(self, prolog, document)
+
+        # TODO is there a better way to parse data back from the parser?
+
+        # record if the notebook contains ipywidgets
+        if outdata['resources'].get('contains_ipywidgets', False):
+            if not hasattr(self.env, 'ipysphinx_widgets'):
+                self.env.ipysphinx_widgets = set()
+            self.env.ipysphinx_widgets.add(self.env.docname)
+
+        # record that the document was created from a notebook
+        if not hasattr(self.env, 'ipysphinx_created_from_nb'):
+            self.env.ipysphinx_created_from_nb = set()
+        self.env.ipysphinx_created_from_nb.add(self.env.docname)

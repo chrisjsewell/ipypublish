@@ -80,9 +80,14 @@ def setup(app):
     # add javascript
     app.connect('html-page-context', html_add_javascript)
     # config for displaying ipywidgets
-    app.add_config_value('ipysphinx_requirejs_path', None, rebuild='html')
+    app.add_config_value('ipysphinx_always_add_jsurls', False, rebuild='html')
+    app.add_config_value('ipysphinx_require_jsurl', None, rebuild='html')
     app.add_config_value('ipysphinx_requirejs_options', None, rebuild='html')
-    app.connect('config-inited', add_require_js_path)
+    app.connect('env-updated', add_require_js_path)
+    app.add_config_value('ipysphinx_widgets_jsurl', None, rebuild='html')
+    app.add_config_value('ipysphinx_widgetsjs_options', {}, rebuild='html')
+    app.connect('env-updated', add_ipywidgets_js_path)
+    app.connect('env-purge-doc', discard_document_variables)
 
     # config for additions to the output rst (per file)
     # these strings are processed by the exporters jinja template
@@ -201,6 +206,8 @@ def depart_codearea_html(self, node):
 
 
 def read_css(name):
+    """Return the contents of a CSS file resource."""
+    # TODO use importlib_resources to access CSS file content
     folder = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'css')
     with io.open(os.path.join(folder, name + '.css')) as fobj:
         content = fobj.read()
@@ -249,6 +256,8 @@ def html_add_css(app, pagename, templatename, context, doctree):
 
 
 def copy_javascript(name):
+    """Return the contents of javascript resource file."""
+    # TODO use importlib_resources to access javascript file content
     folder = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'js')
     with open(os.path.join(folder, name + '.js')) as fobj:
         content = fobj.read()
@@ -265,15 +274,54 @@ def html_add_javascript(app, pagename, templatename, context, doctree):
         context['body'] = '\n<script>' + code + '</script>\n' + context['body']
 
 
-def add_require_js_path(app, config):
-    """ """
-    if config.ipysphinx_requirejs_path is None:
-        config.ipysphinx_requirejs_path = 'https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js'
+def add_require_js_path(app, env):
+    """Insert the require javascript package url, to pages created from notebooks."""
+    config = app.config
+    if not (getattr(env, 'ipysphinx_created_from_nb', set()) or config.ipysphinx_always_add_jsurls):
+        return
+    if config.ipysphinx_require_jsurl is None:
+        requirejs_path = 'https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js'
+    else:
+        requirejs_path = config.ipysphinx_require_jsurl
     if config.ipysphinx_requirejs_options is None:
-        config.ipysphinx_requirejs_options = {
+        requirejs_options = {
             'integrity': 'sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=',
             'crossorigin': 'anonymous',
         }
-    if config.ipysphinx_requirejs_path:
-        # TODO Add only on pages created from notebooks?
-        app.add_js_file(config.ipysphinx_requirejs_path, **config.ipysphinx_requirejs_options)
+    else:
+        requirejs_options = config.ipysphinx_requirejs_options
+
+    app.add_js_file(requirejs_path, **requirejs_options)
+
+
+def add_ipywidgets_js_path(app, env):
+    """Insert the ipywidgets javascript url, to pages created from notebooks containing widgets."""
+    if not (getattr(env, 'ipysphinx_widgets', set()) or app.config.ipysphinx_always_add_jsurls):
+        return
+    sphinx = import_sphinx()
+    widgets_path = None
+    if app.config.ipysphinx_widgets_jsurl is None:
+        try:
+            from ipywidgets.embed import DEFAULT_EMBED_REQUIREJS_URL
+        except ImportError:
+            logger = sphinx.util.logging.getLogger(__name__)
+            logger.warning('ipysphinx_widgets_jsurl not given and ipywidgets module unavailable')
+        else:
+            widgets_path = DEFAULT_EMBED_REQUIREJS_URL
+    else:
+        widgets_path = app.config.ipysphinx_widgets_jsurl
+    if widgets_path is not None:
+        app.add_js_file(widgets_path, **app.config.ipysphinx_widgetsjs_options)
+
+
+def discard_document_variables(app, env, docname):
+    """Discard any document specific variables."""
+    # Discard any ipywidgets gathered from the current notebook.
+    try:
+        env.ipysphinx_widgets.discard(docname)
+    except AttributeError:
+        pass
+    try:
+        env.ipysphinx_created_from_nb.discard(docname)
+    except AttributeError:
+        pass

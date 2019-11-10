@@ -32,6 +32,7 @@
         "docutils",
         "ipynb",
         "ipypublish",
+        "ipywidgets",
         "jupytext",
         "nbconvert",
         "nbpresent",
@@ -57,7 +58,7 @@
     "todo-tree.highlights.defaultHighlight": {
         "icon": "alert",
         "type": "tag",
-        "foreground": "orange",
+        "foreground": "#FFA500",
         "background": "white",
         "opacity": 10
     },
