@@ -13,6 +13,19 @@ Releases
 Version 0.10
 ------------
 
+v0.10.10
+~~~~~~~~
+
+Add compatibility of sphinx conversion with
+`ipywidgets <https://ipywidgets.readthedocs.io/en/stable/>`_.
+For examples see the section in :ref:`code_cells`, and for sphinx extension
+configuration see :ref:`sphinx_ext_notebook`.
+Note, the sphinx version dependency is now ``>=1.8``.
+
+Additionally the code base has been formatted by
+`black <https://github.com/ambv/black>`__,
+and some minor bugs/warnings have been fixed.
+
 v0.10.9
 ~~~~~~~
 
