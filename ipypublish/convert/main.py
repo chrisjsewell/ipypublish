@@ -17,229 +17,174 @@ from six import string_types
 import jsonschema
 
 import ipypublish
-from ipypublish.utils import (pathlib, handle_error,
-                              read_file_from_directory,
-                              get_module_path,
-                              get_valid_filename, find_entry_point)
+from ipypublish.utils import (pathlib, handle_error, read_file_from_directory, get_module_path, get_valid_filename,
+                              find_entry_point)
 from ipypublish import schema
 from ipypublish.convert.nbmerge import merge_notebooks
-from ipypublish.convert.config_manager import (get_export_config_path,
-                                               load_export_config,
-                                               load_template,
+from ipypublish.convert.config_manager import (get_export_config_path, load_export_config, load_template,
                                                create_exporter_cls)
 
 
 def dict_to_config(config, unflatten=True, key_as_tuple=False):
     if unflatten:
-        config = edict.unflatten(config, key_as_tuple=key_as_tuple, delim=".")
+        config = edict.unflatten(config, key_as_tuple=key_as_tuple, delim='.')
     return Config(config)
 
 
 class IpyPubMain(Configurable):
 
-    conversion = T.Unicode(
-        'latex_ipypublish_main',
-        help='key or path to conversion configuration'
-    ).tag(config=True)
+    conversion = T.Unicode('latex_ipypublish_main', help='key or path to conversion configuration').tag(config=True)
 
-    plugin_folder_paths = T.Set(
-        T.Unicode(),
-        default_value=(),
-        help="a list of folders containing conversion configurations"
-    ).tag(config=True)
+    plugin_folder_paths = T.Set(T.Unicode(),
+                                default_value=(),
+                                help='a list of folders containing conversion configurations').tag(config=True)
 
-    @validate("plugin_folder_paths")
+    @validate('plugin_folder_paths')
     def _validate_plugin_folder_paths(self, proposal):
         folder_paths = proposal['value']
         for path in folder_paths:
             if not os.path.exists(path):
-                raise TraitError(
-                    "the configuration folder path does not exist: "
-                    "{}".format(path))
+                raise TraitError('the configuration folder path does not exist: ' '{}'.format(path))
         return proposal['value']
 
-    outpath = T.Union(
-        [T.Unicode(), T.Instance(pathlib.Path)],
-        allow_none=True, default_value=None,
-        help="path to output converted files"
-    ).tag(config=True)
+    outpath = T.Union([T.Unicode(), T.Instance(pathlib.Path)],
+                      allow_none=True,
+                      default_value=None,
+                      help='path to output converted files').tag(config=True)
 
-    folder_suffix = T.Unicode(
-        "_files",
-        help=("suffix for the folder name where content will be dumped "
-              "(e.g. internal images). "
-              "It will be a sanitized version of the input filename, "
-              "followed by the suffix"
-              )
-    ).tag(config=True)
+    folder_suffix = T.Unicode('_files',
+                              help=('suffix for the folder name where content will be dumped '
+                                    '(e.g. internal images). '
+                                    'It will be a sanitized version of the input filename, '
+                                    'followed by the suffix')).tag(config=True)
 
-    ignore_prefix = T.Unicode(
-        '_',
-        help=("prefixes to ignore, "
-              "when finding notebooks to merge")).tag(config=True)
+    ignore_prefix = T.Unicode('_', help=('prefixes to ignore, ' 'when finding notebooks to merge')).tag(config=True)
 
-    meta_path_placeholder = T.Unicode(
-        "${meta_path}",
-        help=("all string values in the export configuration containing "
-              "this placeholder will be be replaced with the path to the "
-              "notebook from which the metadata was obtained")
-    ).tag(config=True)
+    meta_path_placeholder = T.Unicode('${meta_path}',
+                                      help=('all string values in the export configuration containing '
+                                            'this placeholder will be be replaced with the path to the '
+                                            'notebook from which the metadata was obtained')).tag(config=True)
 
     files_folder_placeholder = T.Unicode(
-        "${files_path}",
-        help=("all string values in the export configuration containing "
-              "this placeholder will be be replaced with the path "
-              "(relative to outpath) to the folder where files will be dumped")
-    ).tag(config=True)
+        '${files_path}',
+        help=('all string values in the export configuration containing '
+              'this placeholder will be be replaced with the path '
+              '(relative to outpath) to the folder where files will be dumped')).tag(config=True)
 
-    validate_nb_metadata = T.Bool(
-        True,
-        help=("before running the exporter, validate that "
-              "the notebook level metadata is valid again the schema")
-    ).tag(config=True)
+    validate_nb_metadata = T.Bool(True,
+                                  help=('before running the exporter, validate that '
+                                        'the notebook level metadata is valid again the schema')).tag(config=True)
 
-    pre_conversion_funcs = T.Dict(
-        help=("a mapping of file extensions to functions that can convert"
-              "that file type Instance(nbformat.NotebookNode) = func(pathstr)")
-    ).tag(config=True)
+    pre_conversion_funcs = T.Dict(help=('a mapping of file extensions to functions that can convert'
+                                        'that file type Instance(nbformat.NotebookNode) = func(pathstr)')).tag(
+                                            config=True)
 
-    @default("pre_conversion_funcs")
+    @default('pre_conversion_funcs')
     def _default_pre_conversion_funcs(self):
         try:
-            import jupytext
-            return {
-                ".Rmd": jupytext.readf
-            }
+            import jupytext  # noqa: F401
         except ImportError:
             return {}
 
-    @validate("pre_conversion_funcs")
+        try:
+            from jupytext import read
+        except ImportError:
+            # this is deprecated in newer versions
+            from jupytext import readf as read  # noqa: F401
+
+        return {'.Rmd': read}
+
+    @validate('pre_conversion_funcs')
     def _validate_pre_conversion_funcs(self, proposal):
         for ext, func in proposal['value'].items():
-            if not ext.startswith("."):
-                raise TraitError(
-                    "the extension key should start with a '.': "
-                    "{}".format(ext))
+            if not ext.startswith('.'):
+                raise TraitError("the extension key should start with a '.': " '{}'.format(ext))
             try:
-                func("string")
+                func('string')
                 # TODO should do this safely with inspect,
                 # but no obvious solution
                 # to check if it only requires one string argument
             except TypeError:
-                raise TraitError(
-                    "the function for {} can not be "
-                    "called with a single string arg: "
-                    "{}".format(ext, func))
+                raise TraitError('the function for {} can not be '
+                                 'called with a single string arg: '
+                                 '{}'.format(ext, func))
             except Exception:
                 pass
         return proposal['value']
 
-    log_to_stdout = T.Bool(
-        True,
-        help="whether to log to sys.stdout"
-    ).tag(config=True)
+    log_to_stdout = T.Bool(True, help='whether to log to sys.stdout').tag(config=True)
 
-    log_level_stdout = T.Enum(
-        ['debug', 'info', 'warning', 'error',
-         'DEBUG', 'INFO', 'WARNING', 'ERROR'],
-        default_value='INFO',
-        help='the logging level to output to stdout'
-    ).tag(config=True)
+    log_level_stdout = T.Enum(['debug', 'info', 'warning', 'error', 'DEBUG', 'INFO', 'WARNING', 'ERROR'],
+                              default_value='INFO',
+                              help='the logging level to output to stdout').tag(config=True)
 
-    log_stdout_formatstr = T.Unicode(
-        '%(levelname)s:%(name)s:%(message)s'
-    ).tag(config=True)
+    log_stdout_formatstr = T.Unicode('%(levelname)s:%(name)s:%(message)s').tag(config=True)
 
-    log_to_file = T.Bool(
-        False,
-        help="whether to log to file"
-    ).tag(config=True)
+    log_to_file = T.Bool(False, help='whether to log to file').tag(config=True)
 
-    log_level_file = T.Enum(
-        ['debug', 'info', 'warning', 'error',
-         'DEBUG', 'INFO', 'WARNING', 'ERROR'],
-        default_value='INFO',
-        help='the logging level to output to file'
-    ).tag(config=True)
+    log_level_file = T.Enum(['debug', 'info', 'warning', 'error', 'DEBUG', 'INFO', 'WARNING', 'ERROR'],
+                            default_value='INFO',
+                            help='the logging level to output to file').tag(config=True)
 
-    log_file_path = T.Unicode(
-        None,
-        allow_none=True,
-        help="if None, will output to {outdir}/{ipynb_name}.nbpub.log"
-    ).tag(config=True)
+    log_file_path = T.Unicode(None, allow_none=True,
+                              help='if None, will output to {outdir}/{ipynb_name}.nbpub.log').tag(config=True)
 
-    log_file_formatstr = T.Unicode(
-        '%(levelname)s:%(name)s:%(message)s'
-    ).tag(config=True)
+    log_file_formatstr = T.Unicode('%(levelname)s:%(name)s:%(message)s').tag(config=True)
 
-    default_ppconfig_kwargs = T.Dict(
-        trait=T.Bool(),
-        default_value=(
-            ('pdf_in_temp', False),
-            ('pdf_debug', False),
-            ('launch_browser', False)),
-        help=("convenience arguments for constructing the post-processors "
-              "default configuration")
-    ).tag(config=True)
+    default_ppconfig_kwargs = T.Dict(trait=T.Bool(),
+                                     default_value=(('pdf_in_temp', False), ('pdf_debug', False), ('launch_browser',
+                                                                                                   False)),
+                                     help=('convenience arguments for constructing the post-processors '
+                                           'default configuration')).tag(config=True)
 
-    default_pporder_kwargs = T.Dict(
-        trait=T.Bool(),
-        default_value=(
-            ('dry_run', False),
-            ('clear_existing', False),
-            ('dump_files', False),
-            ('create_pdf', False),
-            ('serve_html', False),
-            ('slides', False)),
-        help=("convenience arguments for constructing the post-processors "
-              "default list")
-    ).tag(config=True)
+    default_pporder_kwargs = T.Dict(trait=T.Bool(),
+                                    default_value=(('dry_run', False), ('clear_existing', False), ('dump_files', False),
+                                                   ('create_pdf', False), ('serve_html', False), ('slides', False)),
+                                    help=('convenience arguments for constructing the post-processors '
+                                          'default list')).tag(config=True)
 
     # TODO validate that default_ppconfig/pporder_kwargs can be parsed to funcs
 
-    default_exporter_config = T.Dict(
-        help="default configuration for exporters"
-    ).tag(config=True)
+    default_exporter_config = T.Dict(help='default configuration for exporters').tag(config=True)
 
     @default('default_exporter_config')
     def _default_exporter_config(self):
         temp = '${files_path}/{unique_key}_{cell_index}_{index}{extension}'
-        return {'ExtractOutputPreprocessor': {
-            'output_filename_template': temp}}
+        return {'ExtractOutputPreprocessor': {'output_filename_template': temp}}
 
-    def _create_default_ppconfig(self, pdf_in_temp=False, pdf_debug=False,
-                                 launch_browser=False):
+    def _create_default_ppconfig(self, pdf_in_temp=False, pdf_debug=False, launch_browser=False):
         """create a default config for postprocessors"""
         return Config({
-            "PDFExport": {
-                "files_folder": "${files_path}",
-                "convert_in_temp": pdf_in_temp,
-                "debug_mode": pdf_debug,
-                "open_in_browser": launch_browser,
-                "skip_mime": False
+            'PDFExport': {
+                'files_folder': '${files_path}',
+                'convert_in_temp': pdf_in_temp,
+                'debug_mode': pdf_debug,
+                'open_in_browser': launch_browser,
+                'skip_mime': False
             },
-            "RunSphinx": {
-                "open_in_browser": launch_browser,
+            'RunSphinx': {
+                'open_in_browser': launch_browser,
             },
-            "RemoveFolder": {
-                "files_folder": "${files_path}"
+            'RemoveFolder': {
+                'files_folder': '${files_path}'
             },
-            "CopyResourcePaths": {
-                "files_folder": "${files_path}"
+            'CopyResourcePaths': {
+                'files_folder': '${files_path}'
             },
-            "ConvertBibGloss": {
-                "files_folder": "${files_path}"
+            'ConvertBibGloss': {
+                'files_folder': '${files_path}'
             }
         })
 
-    def _create_default_pporder(self, dry_run=False, clear_existing=False,
-                                dump_files=False, create_pdf=False,
-                                serve_html=False, slides=False):
+    def _create_default_pporder(self,
+                                dry_run=False,
+                                clear_existing=False,
+                                dump_files=False,
+                                create_pdf=False,
+                                serve_html=False,
+                                slides=False):
         """create a default list of postprocessors to run"""
-        default_pprocs = [
-            'remove-blank-lines',
-            'remove-trailing-space',
-            'filter-output-files']
+        default_pprocs = ['remove-blank-lines', 'remove-trailing-space', 'filter-output-files']
         if slides:
             default_pprocs.append('fix-slide-refs')
         if not dry_run:
@@ -247,11 +192,7 @@ class IpyPubMain(Configurable):
                 default_pprocs.append('remove-folder')
             default_pprocs.append('write-text-file')
             if dump_files or create_pdf or serve_html:
-                default_pprocs.extend(
-                    [
-                        'write-resource-files',
-                        'copy-resource-paths',
-                        'convert-bibgloss'])
+                default_pprocs.extend(['write-resource-files', 'copy-resource-paths', 'convert-bibgloss'])
             if create_pdf:
                 default_pprocs.append('pdf-export')
             elif serve_html:
@@ -261,7 +202,7 @@ class IpyPubMain(Configurable):
 
     @property
     def logger(self):
-        return logging.getLogger("ipypublish")
+        return logging.getLogger('ipypublish')
 
     def _setup_logger(self, ipynb_name, outdir):
 
@@ -349,35 +290,26 @@ class IpyPubMain(Configurable):
         if isinstance(ipynb_path, string_types):
             ipynb_path = pathlib.Path(ipynb_path)
         ipynb_name, ipynb_ext = os.path.splitext(ipynb_path.name)
-        outdir = (os.path.join(os.getcwd(), 'converted')
-                  if self.outpath is None else str(self.outpath))
+        outdir = (os.path.join(os.getcwd(), 'converted') if self.outpath is None else str(self.outpath))
 
         self._setup_logger(ipynb_name, outdir)
 
         if not ipynb_path.exists() and not nb_node:
-            handle_error('the notebook path does not exist: {}'.format(
-                ipynb_path), IOError, self.logger)
+            handle_error('the notebook path does not exist: {}'.format(ipynb_path), IOError, self.logger)
 
         # log start of conversion
-        self.logger.info('started ipypublish v{0} at {1}'.format(
-            ipypublish.__version__, time.strftime("%c")))
-        self.logger.info('logging to: {}'.format(
-            os.path.join(outdir, ipynb_name + '.nbpub.log')))
+        self.logger.info('started ipypublish v{0} at {1}'.format(ipypublish.__version__, time.strftime('%c')))
+        self.logger.info('logging to: {}'.format(os.path.join(outdir, ipynb_name + '.nbpub.log')))
         self.logger.info('running for ipynb(s) at: {0}'.format(ipynb_path))
-        self.logger.info(
-            'with conversion configuration: {0}'.format(self.conversion))
+        self.logger.info('with conversion configuration: {0}'.format(self.conversion))
 
         if nb_node is None and ipynb_ext in self.pre_conversion_funcs:
             func = self.pre_conversion_funcs[ipynb_ext]
-            self.logger.info(
-                "running pre-conversion with: {}".format(
-                    inspect.getmodule(func)))
+            self.logger.info('running pre-conversion with: {}'.format(inspect.getmodule(func)))
             try:
                 nb_node = func(ipynb_path)
             except Exception as err:
-                handle_error(
-                    "pre-conversion failed for {}: {}".format(ipynb_path, err),
-                    err, self.logger)
+                handle_error('pre-conversion failed for {}: {}'.format(ipynb_path, err), err, self.logger)
 
         # doesn't work with folders
         # if (ipynb_ext != ".ipynb" and nb_node is None):
@@ -392,70 +324,66 @@ class IpyPubMain(Configurable):
             # (would require creating a main.tex with the preamble in etc )
             # Could make everything a 'PyProcess',
             # with support for multiple streams
-            final_nb, meta_path = merge_notebooks(
-                ipynb_path, ignore_prefix=self.ignore_prefix)
+            final_nb, meta_path = merge_notebooks(ipynb_path, ignore_prefix=self.ignore_prefix)
         else:
             final_nb, meta_path = (nb_node, ipynb_path)
 
         # valdate the notebook metadata against the schema
         if self.validate_nb_metadata:
-            nb_metadata_schema = read_file_from_directory(
-                get_module_path(schema), "doc_metadata.schema.json",
-                "doc_metadata.schema", self.logger, interp_ext=True)
+            nb_metadata_schema = read_file_from_directory(get_module_path(schema),
+                                                          'doc_metadata.schema.json',
+                                                          'doc_metadata.schema',
+                                                          self.logger,
+                                                          interp_ext=True)
             try:
                 jsonschema.validate(final_nb.metadata, nb_metadata_schema)
             except jsonschema.ValidationError as err:
-                handle_error(
-                    "validation of notebook level metadata failed: {}\n"
-                    "see the doc_metadata.schema.json for full spec".format(
-                        err.message),
-                    jsonschema.ValidationError, logger=self.logger)
+                handle_error('validation of notebook level metadata failed: {}\n'
+                             'see the doc_metadata.schema.json for full spec'.format(err.message),
+                             jsonschema.ValidationError,
+                             logger=self.logger)
 
         # set text replacements for export configuration
         replacements = {
             self.meta_path_placeholder: str(meta_path),
-            self.files_folder_placeholder: "{}{}".format(
-                get_valid_filename(ipynb_name), self.folder_suffix)
+            self.files_folder_placeholder: '{}{}'.format(get_valid_filename(ipynb_name), self.folder_suffix)
         }
 
         self.logger.debug('notebooks meta path: {}'.format(meta_path))
 
         # load configuration file
-        (exporter_cls, jinja_template,
-         econfig, pprocs, pconfig) = self._load_config_file(replacements)
+        (exporter_cls, jinja_template, econfig, pprocs, pconfig) = self._load_config_file(replacements)
 
         # run nbconvert
         self.logger.info('running nbconvert')
-        exporter, stream, resources = self.export_notebook(
-            final_nb, exporter_cls, econfig, jinja_template)
+        exporter, stream, resources = self.export_notebook(final_nb, exporter_cls, econfig, jinja_template)
+
+        # record if the notebook contains widgets (for use by sphinx)
+        if 'application/vnd.jupyter.widget-state+json' in final_nb.metadata.get('widgets', {}):
+            resources['contains_ipywidgets'] = True
 
         # postprocess results
-        main_filepath = os.path.join(
-            outdir, ipynb_name + exporter.file_extension)
+        main_filepath = os.path.join(outdir, ipynb_name + exporter.file_extension)
 
         for post_proc_name in pprocs:
-            proc_class = find_entry_point(
-                post_proc_name, "ipypublish.postprocessors",
-                self.logger, "ipypublish")
+            proc_class = find_entry_point(post_proc_name, 'ipypublish.postprocessors', self.logger, 'ipypublish')
             proc = proc_class(pconfig)
-            stream, main_filepath, resources = proc.postprocess(
-                stream, exporter.output_mimetype, main_filepath,
-                resources)
+            stream, main_filepath, resources = proc.postprocess(stream, exporter.output_mimetype, main_filepath,
+                                                                resources)
 
         self.logger.info('process finished successfully')
 
         return {
-            "outpath": outdir,
-            "exporter": exporter,
-            "stream": stream,
-            "main_filepath": main_filepath,
-            "resources": resources
+            'outpath': outdir,
+            'exporter': exporter,
+            'stream': stream,
+            'main_filepath': main_filepath,
+            'resources': resources
         }
 
     def _load_config_file(self, replacements):
         # find conversion configuration
-        self.logger.info(
-            'finding conversion configuration: {}'.format(self.conversion))
+        self.logger.info('finding conversion configuration: {}'.format(self.conversion))
         export_config_path = None
         if isinstance(self.conversion, string_types):
             outformat_path = pathlib.Path(self.conversion)
@@ -466,51 +394,43 @@ class IpyPubMain(Configurable):
             export_config_path = outformat_path
         else:
             # else search internally
-            export_config_path = get_export_config_path(
-                self.conversion, self.plugin_folder_paths)
+            export_config_path = get_export_config_path(self.conversion, self.plugin_folder_paths)
 
         if export_config_path is None:
-            handle_error(
-                "could not find conversion configuration: {}".format(
-                    self.conversion),
-                IOError, self.logger)
+            handle_error('could not find conversion configuration: {}'.format(self.conversion), IOError, self.logger)
 
         # read conversion configuration and create
         self.logger.info('loading conversion configuration')
         data = load_export_config(export_config_path)
         self.logger.info('creating exporter')
-        exporter_cls = create_exporter_cls(data["exporter"]["class"])
+        exporter_cls = create_exporter_cls(data['exporter']['class'])
         self.logger.info('creating template and loading filters')
-        template_name = "template_file"
-        jinja_template = load_template(template_name, data["template"])
+        template_name = 'template_file'
+        jinja_template = load_template(template_name, data['template'])
         self.logger.info('creating process configuration')
-        export_config = self._create_export_config(
-            data["exporter"], template_name, replacements)
-        pprocs, pproc_config = self._create_pproc_config(
-            data.get("postprocessors", {}), replacements)
+        export_config = self._create_export_config(data['exporter'], template_name, replacements)
+        pprocs, pproc_config = self._create_pproc_config(data.get('postprocessors', {}), replacements)
 
-        return (exporter_cls, jinja_template,
-                export_config, pprocs, pproc_config)
+        return (exporter_cls, jinja_template, export_config, pprocs, pproc_config)
 
-    def _create_export_config(self, exporter_data,
-                              template_name, replacements):
+    def _create_export_config(self, exporter_data, template_name, replacements):
         # type: (dict, Dict[str, str]) -> Config
         config = {}
-        exporter_name = exporter_data["class"].split(".")[-1]
+        exporter_name = exporter_data['class'].split('.')[-1]
 
-        config[exporter_name + ".template_file"] = template_name
-        config[exporter_name + ".filters"] = exporter_data.get("filters", [])
+        config[exporter_name + '.template_file'] = template_name
+        config[exporter_name + '.filters'] = exporter_data.get('filters', [])
 
         preprocessors = []
-        for preproc in exporter_data.get("preprocessors", []):
-            preprocessors.append(preproc["class"])
-            preproc_name = preproc["class"].split(".")[-1]
-            for name, val in preproc.get("args", {}).items():
-                config[preproc_name + "." + name] = val
+        for preproc in exporter_data.get('preprocessors', []):
+            preprocessors.append(preproc['class'])
+            preproc_name = preproc['class'].split('.')[-1]
+            for name, val in preproc.get('args', {}).items():
+                config[preproc_name + '.' + name] = val
 
-        config[exporter_name + ".preprocessors"] = preprocessors
+        config[exporter_name + '.preprocessors'] = preprocessors
 
-        for name, val in exporter_data.get("other_args", {}).items():
+        for name, val in exporter_data.get('other_args', {}).items():
             config[name] = val
 
         final_config = self.default_exporter_config
@@ -522,17 +442,15 @@ class IpyPubMain(Configurable):
 
     def _create_pproc_config(self, pproc_data, replacements):
 
-        if "order" in pproc_data:
-            pprocs_list = pproc_data["order"]
+        if 'order' in pproc_data:
+            pprocs_list = pproc_data['order']
         else:
-            pprocs_list = self._create_default_pporder(
-                **self.default_pporder_kwargs)
+            pprocs_list = self._create_default_pporder(**self.default_pporder_kwargs)
 
-        pproc_config = self._create_default_ppconfig(
-            **self.default_ppconfig_kwargs)
+        pproc_config = self._create_default_ppconfig(**self.default_ppconfig_kwargs)
 
-        if "config" in pproc_data:
-            override_config = pproc_data["config"]
+        if 'config' in pproc_data:
+            override_config = pproc_data['config']
             pproc_config.update(override_config)
 
         replace_placeholders(pproc_config, replacements)
@@ -541,15 +459,13 @@ class IpyPubMain(Configurable):
 
     def export_notebook(self, final_nb, exporter_cls, config, jinja_template):
 
-        kwargs = {"config": config}
+        kwargs = {'config': config}
         if jinja_template is not None:
-            kwargs["extra_loaders"] = [jinja_template]
+            kwargs['extra_loaders'] = [jinja_template]
         try:
             exporter = exporter_cls(**kwargs)
         except TypeError:
-            self.logger.warning(
-                "the exporter class can not be parsed "
-                "the arguments: {}".format(list(kwargs.keys())))
+            self.logger.warning('the exporter class can not be parsed ' 'the arguments: {}'.format(list(kwargs.keys())))
             exporter = exporter_cls()
 
         body, resources = exporter.from_notebook_node(final_nb)
@@ -572,5 +488,5 @@ def replace_placeholders(mapping, replacements):
             for instr, outstr in replacements.items():
                 val = val.replace(instr, outstr)
             mapping[key] = val
-        elif hasattr(val, "items"):
+        elif hasattr(val, 'items'):
             replace_placeholders(val, replacements)
