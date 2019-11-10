@@ -237,6 +237,7 @@
             <script type="application/vnd.jupyter.widget-state+json">
             {{ nb.metadata.widgets['application/vnd.jupyter.widget-state+json'] | json_dumps }}
             </script>
+        {% set x = resources.__setitem__("contains_ipywidgets", True) %}
         {% endif %}
 
     "jinja_macros": |

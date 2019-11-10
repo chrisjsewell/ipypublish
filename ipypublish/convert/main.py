@@ -426,7 +426,7 @@ class IpyPubMain(Configurable):
         else:
             final_nb, meta_path = (nb_node, ipynb_path)
 
-        # valdate the notebook metadata against the schema
+        # validate the notebook metadata against the schema
         if self.validate_nb_metadata:
             nb_metadata_schema = read_file_from_directory(
                 get_module_path(schema),
@@ -471,12 +471,6 @@ class IpyPubMain(Configurable):
         exporter, stream, resources = self.export_notebook(
             final_nb, exporter_cls, econfig, jinja_template
         )
-
-        # record if the notebook contains widgets (for use by sphinx)
-        if "application/vnd.jupyter.widget-state+json" in final_nb.metadata.get(
-            "widgets", {}
-        ):
-            resources["contains_ipywidgets"] = True
 
         # postprocess results
         main_filepath = os.path.join(outdir, ipynb_name + exporter.file_extension)
