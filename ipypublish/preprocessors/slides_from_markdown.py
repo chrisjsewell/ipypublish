@@ -151,8 +151,6 @@ class MarkdownSlides(Preprocessor):
 
     """
 
-    #header_levels = [4]
-
     column_level = traits.Integer(
         1, min=0, help="maximum header level for new columns (0 indicates no maximum)"
     ).tag(config=True)
