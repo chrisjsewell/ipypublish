@@ -151,6 +151,8 @@ class MarkdownSlides(Preprocessor):
 
     """
 
+    #header_levels = [4]
+
     column_level = traits.Integer(
         1, min=0, help="maximum header level for new columns (0 indicates no maximum)"
     ).tag(config=True)
@@ -174,8 +176,14 @@ class MarkdownSlides(Preprocessor):
         latexdoc_tags = ["code", "error", "table", "equation", "figure", "text"]
         # break up titles
         cells_in_slide = 0
-        header_levels = []
         final_cells = FinalCells(self.header_slide)
+
+        base_numbering = nb.metadata.toc.base_numbering
+        if base_numbering is not None:
+            header_levels = list(map(lambda x: int(x) - 1, base_numbering.split(".")))
+        else:
+            header_levels = []
+
         for i, cell in enumerate(nb.cells):
 
             # Make sure every cell has an ipub meta tag
