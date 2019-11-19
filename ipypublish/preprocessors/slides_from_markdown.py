@@ -177,16 +177,16 @@ class MarkdownSlides(Preprocessor):
         final_cells = FinalCells(self.header_slide)
 
         header_levels = []
-        if nb.metadata.toc is not None:
+        try:
             base_numbering = nb.metadata.toc.base_numbering
-            if base_numbering is not None:
-                try:
-                    header_levels = list(map(lambda x: int(x), base_numbering.split(".")))
-                    header_levels[0] -= 1
-                    logging.debug("base_numbering = " + base_numbering)
-                    logging.debug("header_levels = " + str(header_levels))
-                except ValueError:
-                    logger.warn("Invalid toc.base_numbering in notebook metadata")
+            header_levels = list(map(lambda x: int(x), base_numbering.split(".")))
+            header_levels[0] -= 1
+            logging.debug("base_numbering = " + base_numbering)
+            logging.debug("header_levels = " + str(header_levels))
+        except ValueError:
+            logging.warning("Invalid toc.base_numbering in notebook metadata")
+        except AttributeError:
+            logging.debug("No toc.base_numbering in notebook metadata; starting at 1")
 
         for i, cell in enumerate(nb.cells):
 
