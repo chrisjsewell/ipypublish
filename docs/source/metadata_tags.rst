@@ -499,6 +499,25 @@ For **slide output**:
 -  the value of slide can be true, “new” (to indicate the start of a new
    slide) or “notes”
 
+Specifying the start section number in slide-shows
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+For **slide output**:
+
+.. code:: json
+
+    {
+        "toc": {
+            "base_numbering": "3",
+        }
+    }
+
+-   the above will set the first section number to 3 rather than 1
+
+-   note that the top-level key is "toc", and *not* "ipub"; this allows
+    the starting section number to be configured using the
+    `toc2 notebook extension <https://github.com/ipython-contrib/jupyter_contrib_nbextensions/tree/master/src/jupyter_contrib_nbextensions/nbextensions/toc2>`__
+
 Captions in a Markdown cell
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
