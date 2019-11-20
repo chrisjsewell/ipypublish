@@ -116,11 +116,6 @@ class IPyPostProcessor(Configurable):
 
         if self.requires_path:
 
-            if not filepath.is_absolute():
-                self.handle_error(
-                    "the post-processor requires an absolute folder path", IOError
-                )
-
             if filepath.parent.exists() and not filepath.parent.is_dir():
                 self.handle_error(
                     "the filepath's parent is not a folder: {}".format(filepath),
