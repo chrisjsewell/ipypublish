@@ -12,6 +12,9 @@
                     "type": "string",
                     "default": "english"
                 },
+                "customcss": {
+                    "description": "additional custom stylesheet to link"
+                },
                 "titlepage": {
                     "description": "options for creating the title page",
                     "type": [
