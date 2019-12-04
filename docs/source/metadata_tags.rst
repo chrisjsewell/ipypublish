@@ -198,6 +198,22 @@ for placement options.
 
 .. _pandoc_doc_metadata:
 
+
+Adding a stylesheet to slides
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+For **slide output**, the following notebook-level metadata:
+
+.. code:: json
+
+   {
+     "ipub": {
+       "customcss": "mystylesheet.css"
+     }
+   }
+
+will link the additional stylesheet `mystylesheet` in the resulting html.  This can be used, for example, to display a log on each slide.
+
 Pandoc Markdown Conversion
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -498,6 +514,8 @@ For **slide output**:
 
 -  the value of slide can be true, “new” (to indicate the start of a new
    slide) or “notes”
+
+
 
 Captions in a Markdown cell
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
