@@ -14,7 +14,7 @@
       "dict_to_kwds": "ipypublish.filters.filters.dict_to_kwds"
     },
     "preprocessors": [
-      {
+     {
         "class": "ipypublish.preprocessors.latex_doc_defaults.MetaDefaults",
         "args": {
           "cell_defaults": {
@@ -43,6 +43,10 @@
             }
           }
         }
+      },
+      {
+        "class": "ipypublish.preprocessors.skip_ignored.SkipIgnored",
+        "args": {}
       }
     ],
     "other_args": {}
