@@ -3,6 +3,9 @@ from nbformat import NotebookNode
 
 
 class SkipIgnored(Preprocessor):
+    """
+    A Preprocessor which omits any cell with the metadata ipub.ignore set to True.
+    """
 
     def preprocess(self, nb, resources):
 
