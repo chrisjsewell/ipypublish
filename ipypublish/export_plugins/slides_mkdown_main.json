@@ -11,6 +11,10 @@
     },
     "preprocessors": [
       {
+        "class": "ipypublish.preprocessors.skip_ignored.SkipIgnored",
+        "args": {}
+      },
+      {
         "class": "ipypublish.preprocessors.latex_doc_links.LatexDocLinks",
         "args": {
           "metapath": "${meta_path}",
