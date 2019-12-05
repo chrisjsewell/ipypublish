@@ -9,9 +9,9 @@ class SkipIgnored(Preprocessor):
 
     def preprocess(self, nb, resources):
 
-        def included(cell):
+        def ignored(cell):
             cell.metadata.ipub = cell.metadata.get("ipub", NotebookNode())
-            return not cell.metadata.ipub.get("ignore", False)
+            return cell.metadata.ipub.get("ignore", False)
 
-        nb.cells = list(filter(included, nb.cells))
+        nb.cells = [cell for cell in nb.cells if not ignored(cell)]
         return nb, resources
