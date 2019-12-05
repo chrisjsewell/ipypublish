@@ -399,7 +399,7 @@ all extra tags are optional:
 Output Figures
 ~~~~~~~~~~~~~~
 
-For **figures** (i.e. any graphics output by the code), enter in cell
+For **figures** (i.e. any graphics output by the code), enter in cell
 metadata:
 
 .. code:: json
@@ -438,7 +438,7 @@ metadata:
 Output Tables
 ~~~~~~~~~~~~~
 
-For **tables** (e.g. those output by ``pandas``), enter in cell
+For **tables** (e.g. those output by ``pandas``), enter in cell
 metadata:
 
 .. code:: json
@@ -475,7 +475,7 @@ metadata:
 Output Equations
 ~~~~~~~~~~~~~~~~
 
-For **equations** (e.g. those output by ``sympy``), enter in cell
+For **equations** (e.g. those output by ``sympy``), enter in cell
 metadata:
 
 .. code:: json
@@ -539,7 +539,7 @@ Then, during the the postprocessor stage, this cell will be removed from
 the notebook object, and its text stored as a *resource*;
 
 -  the cell’s text is the first paragraph of the markdown string,
-   i.e. nothing after a newline (:code:`\n`)
+   i.e. nothing after a newline (:code:`\n`)
 -  if there are multiple instance of the same cation name, then only the
    last instance will be stored
 
@@ -604,10 +604,10 @@ latex/pdf, you get the static image or b) if you export to html/reveal
 slides, you get the html.
 
 -  use either filepath or url
--  other_files are files required by the html file (e.g. javascript
+-  other_files are files required by the html file (e.g. javascript
    libraries). These files will be copied to the the same folder as the
    html
--  width/height refers to the fraction of the viewspace used (e.g. 0.5
+-  width/height refers to the fraction of the viewspace used (e.g. 0.5
    width -> 50vw and 0.5 height -> 50vh)
 
 An example of how this works is in the
