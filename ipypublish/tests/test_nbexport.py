@@ -38,7 +38,7 @@ test123
     assert body.strip() == "test123"
 
 
-@pytest.mark.ipynb("basic_nb")
+@pytest.mark.ipynb("basic_nb_export")
 def test_nbexport_latex_mkdown2(ipynb_app):
     template = str_to_jinja(
         """
@@ -95,7 +95,7 @@ test123
     assert body.strip() == "test123"
 
 
-@pytest.mark.ipynb("basic_nb")
+@pytest.mark.ipynb("basic_nb_export")
 def test_nbexport_html_mkdown2(ipynb_app):
     template = str_to_jinja(
         """

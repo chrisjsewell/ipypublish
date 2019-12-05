@@ -2,7 +2,7 @@ import pytest
 from ipypublish.convert import nbmerge
 
 
-@pytest.mark.ipynb("basic_nb")
+@pytest.mark.ipynb("basic_nb_export")
 def test_nbmerge_one_notebook(ipynb_app):
     nb, path = nbmerge.merge_notebooks(ipynb_app.source_path)
     assert nb.metadata.test_name == "notebook1"
