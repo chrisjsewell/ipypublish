@@ -32,7 +32,7 @@ setup(
             "pytest-cov",
             "coverage",
             "pillow",
-            "nbsphinx",
+            "nbsphinx>=0.5,<0.6",
             "ipykernel",
             "sphinx>=1.6",
             "sphinxcontrib-bibtex",
