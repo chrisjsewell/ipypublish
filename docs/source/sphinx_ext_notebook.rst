@@ -4,7 +4,7 @@ ipypublish.sphinx.notebook
 ==========================
 
 :py:mod:`ipypublish.sphinx.notebook` is adapted from
-`nbshinx <https://nbsphinx.readthedocs.io>`_, to provide a
+`nbsphinx <https://nbsphinx.readthedocs.io>`_, to provide a
 `sphinx extension <https://www.sphinx-doc.org/en/master/usage/extensions/>`_
 for converting notebooks with :py:class:`ipypublish.convert.main.IpyPubMain`.
 
