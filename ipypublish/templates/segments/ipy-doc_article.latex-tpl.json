@@ -8,14 +8,19 @@
       "\\documentclass[10pt,parskip=half,",
       "toc=sectionentrywithdots,",
       "bibliography=totocnumbered,",
-      "captions=tableheading,numbers=noendperiod]{scrartcl}",
-      "",
+      "captions=tableheading,numbers=noendperiod,",
+      "((*- if nb.metadata.ipub: *))",
+      "((*- if nb.metadata.ipub.language: *))",
+      "((( nb.metadata.ipub.language ))),",
+      "((*- endif *))",
+      "((*- endif *))",
+      "]{scrartcl}",
       "((*- if nb.metadata.ipub: *))",
       "((*- if nb.metadata.ipub.language: *))",
       "%\\usepackage{polyglossia}",
       "%\\setmainlanguage{((( nb.metadata.ipub.language )))}",
       "%\\DeclareTextCommandDefault{\\nobreakspace}{\\leavevmode\\nobreak\\ }",
-      "\\usepackage[((( nb.metadata.ipub.language )))]{babel}",
+      "\\usepackage{babel}",
       "((*- endif *))",
       "((*- endif *))",
       ""
@@ -143,7 +148,7 @@
     "document_header_end": [
       "",
       "% clereref must be loaded after anything that changes the referencing system",
-      "\\usepackage[((( nb.metadata.ipub.language )))]{cleveref}",
+      "\\usepackage{cleveref}",
       "\\creflabelformat{equation}{#2#1#3}"
     ]
   }
