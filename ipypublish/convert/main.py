@@ -131,7 +131,7 @@ class IpyPubMain(Configurable):
             # this is deprecated in newer versions
             from jupytext import readf as read  # noqa: F401
 
-        return {".Rmd": read}
+        return {".Rmd": read, ".md": read, }
 
     @validate("pre_conversion_funcs")
     def _validate_pre_conversion_funcs(self, proposal):
