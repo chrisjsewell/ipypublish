@@ -48,7 +48,7 @@ setup(
         "science": {"matplotlib", "numpy", "pandas", "sympy"},
         "rtd": {
             "recommonmark>=0.5",
-            "pytest>=3.6",
+            "pytest>=4.4",
             "pillow",
             "numpy",
             "matplotlib",
