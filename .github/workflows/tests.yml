@@ -49,10 +49,26 @@ jobs:
       with:
         pandoc-version: '2.6'
 
-    - name: Run pytest
+    - name: Install latex dependencies
+      if: matrix.os == 'ubuntu-latest'
       run: |
-        pytest --cov=ipypublish --cov-report=xml --cov-report=term-missing -k 'not requires_latexmk'
+        sudo apt-get -qq update
+        sudo apt-get install -y   \
+          texlive                 \
+          texlive-xetex           \
+          texlive-latex-extra     \
+          texlive-lang-portuguese \
+          latexmk                 \
+
+    - name: Run pytest with latexmk
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        pytest --cov=ipypublish --cov-report=xml --cov-report=term-missing
         coverage xml
+
+    - name: Run pytest without latexmk
+      if: matrix.os != 'ubuntu-latest'
+      run: pytest --cov=ipypublish --cov-report=term-missing -k 'not requires_latexmk'
 
     - name: Upload to Codecov
       if: matrix.python-version == 3.8 && matrix.os == 'ubuntu-latest' && github.repository == 'chrisjsewell/ipypublish'
