@@ -57,18 +57,18 @@ def extract_file_links(source, parent_path, redirect_path, replace_nonexistent=F
     Examples
     --------
     >>> source = '''## Cell with Linked Image
-    ... ![test_image](subdir/logo_example.png)
-    ... a [test_link](other_doc#a-link)'''
+    ... ![test_image](subdir{0}logo_example.png)
+    ... a [test_link](other_doc#a-link)'''.format(os.path.sep)
     >>> src, rpaths, npaths = extract_file_links(
-    ...                             source, '/root/nb.ipynb', 'redirect', True)
-    >>> print(src)
+    ...   source, '{0}root{0}nb.ipynb'.format(os.path.sep), 'redirect', True)
+    >>> print(src.replace(os.path.sep, '/'))
     ## Cell with Linked Image
     ![test_image](redirect/logo_example.png)
     a [test_link](redirect/other_doc#a-link)
 
-    >>> print(rpaths[0])
+    >>> print(rpaths[0].replace(os.path.sep, '/'))
     /root/subdir/logo_example.png
-    >>> print(rpaths[1])
+    >>> print(rpaths[1].replace(os.path.sep, '/'))
     /root/other_doc
 
 
