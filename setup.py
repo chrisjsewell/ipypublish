@@ -34,7 +34,7 @@ setup(
             "pillow",
             "nbsphinx>=0.5,<0.6",
             "ipykernel",
-            "sphinx>=1.6",
+            "sphinx>=1.6,<3",
             "sphinxcontrib-bibtex",
             "texsoup<=0.1.4",
         },
