@@ -283,6 +283,7 @@ class IpyPubMain(Configurable):
     def _setup_logger(self, ipynb_name, outdir):
 
         root = logging.getLogger()
+        log_handlers = []
 
         if self.log_to_stdout or self.log_to_file:
             # remove any existing handlers
@@ -297,6 +298,7 @@ class IpyPubMain(Configurable):
             slogger.setFormatter(formatter)
             slogger.propogate = False
             root.addHandler(slogger)
+            log_handlers.append(slogger)
 
         if self.log_to_file:
             # setup logging to file
@@ -314,6 +316,9 @@ class IpyPubMain(Configurable):
             flogger.setFormatter(formatter)
             flogger.propogate = False
             root.addHandler(flogger)
+            log_handlers.append(flogger)
+
+        return log_handlers
 
     def __init__(self, config=None):
         """
@@ -372,7 +377,7 @@ class IpyPubMain(Configurable):
             else str(self.outpath)
         )
 
-        self._setup_logger(ipynb_name, outdir)
+        log_handlers = self._setup_logger(ipynb_name, outdir)
 
         if not ipynb_path.exists() and not nb_node:
             handle_error(
@@ -485,6 +490,12 @@ class IpyPubMain(Configurable):
             )
 
         self.logger.info("process finished successfully")
+
+        # release log handlers
+        root_logger = logging.getLogger()
+        for handler in log_handlers:
+            handler.close()
+            root_logger.removeHandler(handler)
 
         return {
             "outpath": outdir,
