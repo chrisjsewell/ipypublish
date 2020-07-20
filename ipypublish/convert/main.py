@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # import base64
+from contextlib import contextmanager
 from typing import List, Tuple, Union, Dict  # noqa: F401
 import logging
 import os
@@ -280,45 +281,52 @@ class IpyPubMain(Configurable):
     def logger(self):
         return logging.getLogger("ipypublish")
 
-    def _setup_logger(self, ipynb_name, outdir):
+    @contextmanager
+    def _log_handlers(self, ipynb_name, outdir):
 
         root = logging.getLogger()
+        root_level = root.level
         log_handlers = []
 
-        if self.log_to_stdout or self.log_to_file:
-            # remove any existing handlers
-            root.handlers = []
+        try:
             root.setLevel(logging.DEBUG)
 
-        if self.log_to_stdout:
-            # setup logging to terminal
-            slogger = logging.StreamHandler(sys.stdout)
-            slogger.setLevel(getattr(logging, self.log_level_stdout.upper()))
-            formatter = logging.Formatter(self.log_stdout_formatstr)
-            slogger.setFormatter(formatter)
-            slogger.propogate = False
-            root.addHandler(slogger)
-            log_handlers.append(slogger)
+            if self.log_to_stdout:
+                # setup logging to terminal
+                slogger = logging.StreamHandler(sys.stdout)
+                slogger.setLevel(getattr(logging, self.log_level_stdout.upper()))
+                formatter = logging.Formatter(self.log_stdout_formatstr)
+                slogger.setFormatter(formatter)
+                slogger.propogate = False
+                root.addHandler(slogger)
+                log_handlers.append(slogger)
 
-        if self.log_to_file:
-            # setup logging to file
-            if self.log_file_path:
-                path = self.log_file_path
-            else:
-                path = os.path.join(outdir, ipynb_name + ".nbpub.log")
+            if self.log_to_file:
+                # setup logging to file
+                if self.log_file_path:
+                    path = self.log_file_path
+                else:
+                    path = os.path.join(outdir, ipynb_name + ".nbpub.log")
 
-            if not os.path.exists(os.path.dirname(path)):
-                os.makedirs(os.path.dirname(path))
+                if not os.path.exists(os.path.dirname(path)):
+                    os.makedirs(os.path.dirname(path))
 
-            flogger = logging.FileHandler(path, "w")
-            flogger.setLevel(getattr(logging, self.log_level_file.upper()))
-            formatter = logging.Formatter(self.log_file_formatstr)
-            flogger.setFormatter(formatter)
-            flogger.propogate = False
-            root.addHandler(flogger)
-            log_handlers.append(flogger)
+                flogger = logging.FileHandler(path, "w")
+                flogger.setLevel(getattr(logging, self.log_level_file.upper()))
+                formatter = logging.Formatter(self.log_file_formatstr)
+                flogger.setFormatter(formatter)
+                flogger.propogate = False
+                root.addHandler(flogger)
+                log_handlers.append(flogger)
 
-        return log_handlers
+            yield
+
+        finally:
+
+            root.setLevel(root_level)
+            for handler in log_handlers:
+                handler.close()
+                root.removeHandler(handler)
 
     def __init__(self, config=None):
         """
@@ -377,125 +385,124 @@ class IpyPubMain(Configurable):
             else str(self.outpath)
         )
 
-        log_handlers = self._setup_logger(ipynb_name, outdir)
+        with self._log_handlers(ipynb_name, outdir):
 
-        if not ipynb_path.exists() and not nb_node:
-            handle_error(
-                "the notebook path does not exist: {}".format(ipynb_path),
-                IOError,
-                self.logger,
-            )
-
-        # log start of conversion
-        self.logger.info(
-            "started ipypublish v{0} at {1}".format(
-                ipypublish.__version__, time.strftime("%c")
-            )
-        )
-        self.logger.info(
-            "logging to: {}".format(os.path.join(outdir, ipynb_name + ".nbpub.log"))
-        )
-        self.logger.info("running for ipynb(s) at: {0}".format(ipynb_path))
-        self.logger.info("with conversion configuration: {0}".format(self.conversion))
-
-        if nb_node is None and ipynb_ext in self.pre_conversion_funcs:
-            func = self.pre_conversion_funcs[ipynb_ext]
-            self.logger.info(
-                "running pre-conversion with: {}".format(inspect.getmodule(func))
-            )
-            try:
-                nb_node = func(ipynb_path)
-            except Exception as err:
+            if not ipynb_path.exists() and not nb_node:
                 handle_error(
-                    "pre-conversion failed for {}: {}".format(ipynb_path, err),
-                    err,
+                    "the notebook path does not exist: {}".format(ipynb_path),
+                    IOError,
                     self.logger,
                 )
 
-        # doesn't work with folders
-        # if (ipynb_ext != ".ipynb" and nb_node is None):
-        #     handle_error(
-        #         'the file extension is not associated with any '
-        #         'pre-converter: {}'.format(ipynb_ext),
-        # TypeError, self.logger)
-
-        if nb_node is None:
-            # merge all notebooks
-            # TODO allow notebooks to remain separate
-            # (would require creating a main.tex with the preamble in etc )
-            # Could make everything a 'PyProcess',
-            # with support for multiple streams
-            final_nb, meta_path = merge_notebooks(
-                ipynb_path, ignore_prefix=self.ignore_prefix
+            # log start of conversion
+            self.logger.info(
+                "started ipypublish v{0} at {1}".format(
+                    ipypublish.__version__, time.strftime("%c")
+                )
             )
-        else:
-            final_nb, meta_path = (nb_node, ipynb_path)
-
-        # validate the notebook metadata against the schema
-        if self.validate_nb_metadata:
-            nb_metadata_schema = read_file_from_directory(
-                get_module_path(schema),
-                "doc_metadata.schema.json",
-                "doc_metadata.schema",
-                self.logger,
-                interp_ext=True,
+            self.logger.info(
+                "logging to: {}".format(os.path.join(outdir, ipynb_name + ".nbpub.log"))
             )
-            try:
-                jsonschema.validate(final_nb.metadata, nb_metadata_schema)
-            except jsonschema.ValidationError as err:
-                handle_error(
-                    "validation of notebook level metadata failed: {}\n"
-                    "see the doc_metadata.schema.json for full spec".format(
-                        err.message
-                    ),
-                    jsonschema.ValidationError,
-                    logger=self.logger,
+            self.logger.info("running for ipynb(s) at: {0}".format(ipynb_path))
+            self.logger.info(
+                "with conversion configuration: {0}".format(self.conversion)
+            )
+
+            if nb_node is None and ipynb_ext in self.pre_conversion_funcs:
+                func = self.pre_conversion_funcs[ipynb_ext]
+                self.logger.info(
+                    "running pre-conversion with: {}".format(inspect.getmodule(func))
+                )
+                try:
+                    nb_node = func(ipynb_path)
+                except Exception as err:
+                    handle_error(
+                        "pre-conversion failed for {}: {}".format(ipynb_path, err),
+                        err,
+                        self.logger,
+                    )
+
+            # doesn't work with folders
+            # if (ipynb_ext != ".ipynb" and nb_node is None):
+            #     handle_error(
+            #         'the file extension is not associated with any '
+            #         'pre-converter: {}'.format(ipynb_ext),
+            # TypeError, self.logger)
+
+            if nb_node is None:
+                # merge all notebooks
+                # TODO allow notebooks to remain separate
+                # (would require creating a main.tex with the preamble in etc )
+                # Could make everything a 'PyProcess',
+                # with support for multiple streams
+                final_nb, meta_path = merge_notebooks(
+                    ipynb_path, ignore_prefix=self.ignore_prefix
+                )
+            else:
+                final_nb, meta_path = (nb_node, ipynb_path)
+
+            # validate the notebook metadata against the schema
+            if self.validate_nb_metadata:
+                nb_metadata_schema = read_file_from_directory(
+                    get_module_path(schema),
+                    "doc_metadata.schema.json",
+                    "doc_metadata.schema",
+                    self.logger,
+                    interp_ext=True,
+                )
+                try:
+                    jsonschema.validate(final_nb.metadata, nb_metadata_schema)
+                except jsonschema.ValidationError as err:
+                    handle_error(
+                        "validation of notebook level metadata failed: {}\n"
+                        "see the doc_metadata.schema.json for full spec".format(
+                            err.message
+                        ),
+                        jsonschema.ValidationError,
+                        logger=self.logger,
+                    )
+
+            # set text replacements for export configuration
+            replacements = {
+                self.meta_path_placeholder: str(meta_path),
+                self.files_folder_placeholder: "{}{}".format(
+                    get_valid_filename(ipynb_name), self.folder_suffix
+                ),
+            }
+
+            self.logger.debug("notebooks meta path: {}".format(meta_path))
+
+            # load configuration file
+            (
+                exporter_cls,
+                jinja_template,
+                econfig,
+                pprocs,
+                pconfig,
+            ) = self._load_config_file(replacements)
+
+            # run nbconvert
+            self.logger.info("running nbconvert")
+            exporter, stream, resources = self.export_notebook(
+                final_nb, exporter_cls, econfig, jinja_template
+            )
+
+            # postprocess results
+            main_filepath = os.path.join(outdir, ipynb_name + exporter.file_extension)
+
+            for post_proc_name in pprocs:
+                proc_class = find_entry_point(
+                    post_proc_name,
+                    "ipypublish.postprocessors",
+                    self.logger,
+                    "ipypublish",
+                )
+                proc = proc_class(pconfig)
+                stream, main_filepath, resources = proc.postprocess(
+                    stream, exporter.output_mimetype, main_filepath, resources
                 )
 
-        # set text replacements for export configuration
-        replacements = {
-            self.meta_path_placeholder: str(meta_path),
-            self.files_folder_placeholder: "{}{}".format(
-                get_valid_filename(ipynb_name), self.folder_suffix
-            ),
-        }
-
-        self.logger.debug("notebooks meta path: {}".format(meta_path))
-
-        # load configuration file
-        (
-            exporter_cls,
-            jinja_template,
-            econfig,
-            pprocs,
-            pconfig,
-        ) = self._load_config_file(replacements)
-
-        # run nbconvert
-        self.logger.info("running nbconvert")
-        exporter, stream, resources = self.export_notebook(
-            final_nb, exporter_cls, econfig, jinja_template
-        )
-
-        # postprocess results
-        main_filepath = os.path.join(outdir, ipynb_name + exporter.file_extension)
-
-        for post_proc_name in pprocs:
-            proc_class = find_entry_point(
-                post_proc_name, "ipypublish.postprocessors", self.logger, "ipypublish"
-            )
-            proc = proc_class(pconfig)
-            stream, main_filepath, resources = proc.postprocess(
-                stream, exporter.output_mimetype, main_filepath, resources
-            )
-
-        self.logger.info("process finished successfully")
-
-        # release log handlers
-        root_logger = logging.getLogger()
-        for handler in log_handlers:
-            handler.close()
-            root_logger.removeHandler(handler)
+            self.logger.info("process finished successfully")
 
         return {
             "outpath": outdir,
