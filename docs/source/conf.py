@@ -284,7 +284,7 @@ intersphinx_mapping = {
     "bibtexparser": ("https://bibtexparser.readthedocs.io/en/master/", None),
     # 'docutils': ("https://docutils.readthedocs.io/en/sphinx-docs", None),
     # # TODO docutils intersphinx
-    "sphinx": ("http://www.sphinx-doc.org/en/latest/", None),
+    "sphinx": ("https://www.sphinx-doc.org/en/2.0/", None),
 }
 
 intersphinx_aliases = {
