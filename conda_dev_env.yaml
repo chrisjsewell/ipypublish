@@ -30,7 +30,7 @@ dependencies:
 - tornado
 - traitlets
 # testing
-- pytest >=3.6
+- pytest >=4.4
 - pytest-regressions
 - nbsphinx
 - pillow

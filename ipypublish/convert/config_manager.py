@@ -163,7 +163,7 @@ def load_template(template_key, template_dict):
             logger,
             interp_ext=False,
         )
-        outline_name = os.path.join(
+        outline_name = "{0}/{1}".format(
             template_dict["outline"]["directory"], template_dict["outline"]["file"]
         )
     else:
@@ -174,7 +174,7 @@ def load_template(template_key, template_dict):
             logger,
             interp_ext=False,
         )
-        outline_name = os.path.join(
+        outline_name = "{0}/{1}".format(
             template_dict["outline"]["module"], template_dict["outline"]["file"]
         )
 

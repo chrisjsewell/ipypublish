@@ -169,13 +169,11 @@ $ nbpresent -f slides_ipypublish_nocode path/to/notebook.ipynb
 
 ## Troubleshooting
 
-For installation issues, [Travis
-CI](https://en.wikipedia.org/wiki/Travis_CI) is used to automatically
-test updates against python 2.7 and 3.6, for both Linux and OSX,
+For installation issues, GitHub Actions is used to automatically
+test updates against multiple Python versions, for Linux, Windows and OSX,
 Therefore, to troubleshoot any installation/run issues, it is best to
-first look at the [travis
-config](https://github.com/chrisjsewell/ipypublish/blob/master/.travis.yml)
-and [travis test runs](https://travis-ci.org/chrisjsewell/ipypublish)
+first look at the [test workflow](https://github.com/chrisjsewell/ipypublish/blob/master/.github/workflows/tests.yml)
+and [test runs](https://github.com/chrisjsewell/ipypublish/actions)
 for working configurations.
 
 The
