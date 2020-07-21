@@ -4,15 +4,13 @@ conda:
   environment: docs/environment.yaml
 
 python:
-  version: 3.6
+  version: 3.7
   install:
     - method: pip
       path: .
       extra_requirements:
           - rtd
 
-# default
-# sphinx:
-#   builder: html
-#   configuration: conf.py
-#   fail_on_warning: true
+sphinx:
+  builder: html
+  fail_on_warning: true
