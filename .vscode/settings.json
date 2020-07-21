@@ -1,6 +1,6 @@
 {
     "editor.rulers": [
-        80,
+        88,
         120
     ],
     "files.exclude": {
@@ -12,7 +12,7 @@
         "**/*.pyc": true,
         "**/__pycache__": true
     },
-    "python.pythonPath": "/anaconda/envs/ipypublish_dev/bin/python",
+    "python.pythonPath": "/Users/chrisjsewell/opt/miniconda3/envs/ipypublish/bin/python",
     "restructuredtext.confPath": "${workspaceFolder}/docs/source",
     "restructuredtext.builtDocumentationPath": "${workspaceFolder}/docs/build/html",
     "restructuredtext.preview.scrollEditorWithPreview": false,

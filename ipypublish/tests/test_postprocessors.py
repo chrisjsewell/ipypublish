@@ -1,8 +1,11 @@
 import os
+import pytest
+
 from ipypublish.postprocessors.pdfexport import PDFExport
 from ipypublish.postprocessors.reveal_serve import RevealServer
 
 
+@pytest.mark.requires_latexmk
 def test_pdf_export(temp_folder):
 
     tex_content = """

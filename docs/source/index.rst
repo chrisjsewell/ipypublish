@@ -109,10 +109,10 @@ Index and Search
 * :ref:`modindex`
 * :ref:`search`
 
-.. |Build Status| image:: https://travis-ci.org/chrisjsewell/ipypublish.svg?branch=master
-   :target: https://travis-ci.org/chrisjsewell/ipypublish
-.. |Coverage Status| image:: https://coveralls.io/repos/github/chrisjsewell/ipypublish/badge.svg?branch=master
-   :target: https://coveralls.io/github/chrisjsewell/ipypublish?branch=master
+.. |Build Status| image:: https://github.com/chrisjsewell/ipypublish/workflows/continuous-integration/badge.svg
+   :target: https://github.com/chrisjsewell/ipypublish/actions
+.. |Coverage Status| image:: https://codecov.io/gh/chrisjsewell/ipypublish/branch/develop/graph/badge.svg
+   :target: https://codecov.io/gh/chrisjsewell/ipypublish
 .. |PyPI| image:: https://img.shields.io/pypi/v/ipypublish.svg
    :target: https://pypi.python.org/pypi/ipypublish/
 .. |DOI| image:: https://zenodo.org/badge/96322423.svg

@@ -56,6 +56,10 @@ def extract_file_links(source, parent_path, redirect_path, replace_nonexistent=F
 
     Examples
     --------
+    >>> import os, pytest
+    >>> if os.name == 'nt':
+    ...     pytest.skip()
+
     >>> source = '''## Cell with Linked Image
     ... ![test_image](subdir/logo_example.png)
     ... a [test_link](other_doc#a-link)'''
