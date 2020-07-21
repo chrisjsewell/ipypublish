@@ -3,15 +3,23 @@
 Releases
 ========
 
-.. attention::
-
-   A major API improvement occurred in ``v0.7.0``.
-   This has not changed the general user interface,
-   but anyone using custom converter plugins will be required to update them
-   (see :ref:`convert_from_old_api`)
-
 Version 0.10
 ------------
+
+v0.10.11
+~~~~~~~~
+
+- Allow configuration of initial section numbering *via* notebook metadata:
+   - uses``toc.base_numbering`` as set by the toc2 notebook plugin
+     (thanks to @phelps-sg)
+- Allow configuration of initial section numbering via notebook metadata
+  (thanks to @phelps-sg)
+- Refactor testing and deployment:
+   - Move from Travis CI to GitHub Actions for CI and CD
+   - Introduce testing for Windows
+   - Ensure release of logging handlers after build finishes
+   - Move from Coveralls to Codecov for test coverage reporting
+   - Use RTD directly for docs CI, and make the build fail on warnings
 
 v0.10.10
 ~~~~~~~~

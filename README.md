@@ -5,8 +5,8 @@ from one or more Jupyter Notebooks.
 
 **Documentation**: [ipypublish.readthedocs.io](http://ipypublish.readthedocs.io)
 
-[![CI Build](https://travis-ci.org/chrisjsewell/ipypublish.svg?branch=master)](https://travis-ci.org/chrisjsewell/ipypublish)
-[![Coverage](https://coveralls.io/repos/github/chrisjsewell/ipypublish/badge.svg?branch=master)](https://coveralls.io/github/chrisjsewell/ipypublish?branch=master)
+[![CI Status](https://github.com/chrisjsewell/ipypublish/workflows/continuous-integration/badge.svg)](https://github.com/chrisjsewell/ipypublish/actions)
+[![Coverage Status](https://codecov.io/gh/chrisjsewell/ipypublish/branch/develop/graph/badge.svg)](https://codecov.io/gh/chrisjsewell/ipypublish)
 [![PyPI](https://img.shields.io/pypi/v/ipypublish.svg)](https://pypi.python.org/pypi/ipypublish/)
 [![DOI](https://zenodo.org/badge/96322423.svg)](https://zenodo.org/badge/latestdoi/96322423)
 [![Conda](https://anaconda.org/conda-forge/ipypublish/badges/version.svg)](https://anaconda.org/conda-forge/ipypublish)

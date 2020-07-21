@@ -1,3 +1,4 @@
+import os
 import pytest
 
 
@@ -18,6 +19,7 @@ def test_latex_and_pdf(ipynb_app):
     ipynb_app.assert_converted_equals_expected("latex_ipypublish_main.pandoc.2-2")
 
 
+@pytest.mark.skipif(os.name == "nt", reason="skipping")
 @pytest.mark.ipynb("nb_markdown_cells")
 def test_sphinx_rst(ipynb_app):
     ipynb_app.run({"conversion": "sphinx_ipypublish_main"})
@@ -28,6 +30,7 @@ def test_sphinx_rst(ipynb_app):
     ipynb_app.assert_converted_equals_expected("sphinx_ipypublish_main.pandoc.2-6")
 
 
+@pytest.mark.skipif(os.name == "nt", reason="skipping")
 @pytest.mark.ipynb("nb_with_mkdown_images")  # out_to_temp=False
 def test_sphinx_rst_with_mkdown_images(ipynb_app):
     """ test a notebook with multiple images """

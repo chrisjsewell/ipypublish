@@ -174,8 +174,20 @@ class MarkdownSlides(Preprocessor):
         latexdoc_tags = ["code", "error", "table", "equation", "figure", "text"]
         # break up titles
         cells_in_slide = 0
-        header_levels = []
         final_cells = FinalCells(self.header_slide)
+
+        header_levels = []
+        try:
+            base_numbering = nb.metadata.toc.base_numbering
+            header_levels = list(map(lambda x: int(x), base_numbering.split(".")))
+            header_levels[0] -= 1
+            logging.debug("base_numbering = " + base_numbering)
+            logging.debug("header_levels = " + str(header_levels))
+        except ValueError:
+            logging.warning("Invalid toc.base_numbering in notebook metadata")
+        except AttributeError:
+            logging.debug("No toc.base_numbering in notebook metadata; starting at 1")
+
         for i, cell in enumerate(nb.cells):
 
             # Make sure every cell has an ipub meta tag
