@@ -13,8 +13,8 @@ and presentations, from Jupyter Notebooks.
 
 .. attention::
 
-    IPyPublish is evolving!
-    Please see :ref:`releases` for all the exciting new feature.
+    This package is still maintained, but it is envisaged that it will eventually be superceeded by the `Executable Book Project toolchain <https://executablebooks.org/en/latest/tools.html>`__.
+    So definitely also check that out, and feedback any improvement suggestions! 😀
 
     Also see `pytest-notebook <https://pytest-notebook.readthedocs.io>`_,
     for a new tool to test and regenerate notebooks.
