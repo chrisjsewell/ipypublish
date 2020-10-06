@@ -1,4 +1,3 @@
-
 .. An html document created by ipypublish
    outline: ipypublish.templates.outline_schemas/rst_outline.rst.j2
    with segments:
@@ -8,6 +7,8 @@ a title
 =======
 
 some text
+
+This cell should be ignored
 
 .. code:: ipython3
 

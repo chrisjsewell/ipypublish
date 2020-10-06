@@ -1,9 +1,9 @@
-
-
 a title
 =======
 
 some text
+
+This cell should be ignored
 
 .. nbinput:: ipython3
     :execution-count: 2

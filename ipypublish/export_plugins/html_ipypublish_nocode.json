@@ -42,6 +42,10 @@
         }
       },
       {
+        "class": "ipypublish.preprocessors.skip_ignored.SkipIgnored",
+        "args": {}
+      },
+      {
         "class": "ipypublish.preprocessors.split_outputs.SplitOutputs",
         "args": {
           "split": true
