@@ -14,9 +14,7 @@ from one or more Jupyter Notebooks.
 <!-- [![Codacy Badge](https://api.codacy.com/project/badge/Grade/243d0038a2f543e7a9c47a781ca3cbf5)](https://www.codacy.com/app/chrisj_sewell/ipypublish?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=chrisjsewell/ipypublish&amp;utm_campaign=Badge_Grade) -->
 
 >**Attention**:
-A major API improvement occurred in `v0.7.0`. This has not changed the
-general user interface, but anyone using custom converter plugins will
-be required to update them (see [Plugin Conversion](https://ipypublish.readthedocs.io/en/latest/custom_export_config.html#conversion-of-plugins-from-old-api))
+This package is still maintained, but it is envisaged that it will eventually be superceeded by the [Executable Book Project toolchain](https://executablebooks.org/en/latest/tools.html). So definitely also check that out, and feedback any improvement suggestions! 😀
 
 ![Conversion Process](/docs/source/_static/main_image.png)
 
