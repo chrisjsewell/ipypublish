@@ -32,7 +32,7 @@ Optionally, this can be turned off by adding to the Document metadata
 meta["ipub"]["pandoc"]["at_notation"] = False
 
 """
-from panflute import Element, Doc, Cite, RawInline, Link  # noqa: F401
+from panflute import Element, Doc, Cite, RawInline, Link, Caption  # noqa: F401
 import panflute as pf
 
 
@@ -57,57 +57,65 @@ def process_citations(element, doc):
     if not initial_content:
         return None
 
-    final_content = []
-    skip = 0
-    for subel in initial_content:
-
-        if skip:
-            skip -= 1
-            continue
-
-        if not isinstance(subel, pf.Cite):
-            final_content.append(subel)
-            continue
-
-        classes = []
-        attributes = {}
-        append = None
-
-        # check if the cite has a valid prefix, if so extract it
-        if (
-            isinstance(subel.prev, pf.Str)
-            and subel.prev.text
-            and (subel.prev.text[-1] in dict(PREFIX_MAP))
-        ):
-
-            prefix = subel.prev.text[-1]
-            mapping = dict(dict(PREFIX_MAP)[prefix])
-            classes.extend(mapping["classes"])
-            attributes.update(mapping["attributes"])
-
-            # remove prefix from preceding string
-            string = final_content.pop()
-            if len(string.text) > 1:
-                final_content.append(pf.Str(string.text[:-1]))
-
-        # check if the cite has a preceding class/attribute container
-        attr_dict = find_attributes(subel, allow_space=True)
-        if attr_dict:
-            classes.extend(attr_dict["classes"])
-            attributes.update(attr_dict["attributes"])
-            skip = len(attr_dict["elements"])
-            append = attr_dict["append"]
-
-        if classes or attributes:
-            classes.append(ATTRIBUTE_CITE_CLASS)
-            final_content.append(
-                pf.Span(subel, classes=sorted(set(classes)), attributes=attributes)
-            )
+    if isinstance(initial_content, Caption):
+        processed_caption = process_citations(initial_content.content, doc)
+        processed_short_caption = process_citations(initial_content.short_caption, doc)
+        if processed_caption is None:
+            final_content = Caption()
         else:
-            final_content.append(subel)
+            final_content = Caption(processed_caption, processed_short_caption)
+    else:
+        final_content = []
+        skip = 0
+        for subel in initial_content:
 
-        if append:
-            final_content.append(append)
+            if skip:
+                skip -= 1
+                continue
+
+            if not isinstance(subel, pf.Cite):
+                final_content.append(subel)
+                continue
+
+            classes = []
+            attributes = {}
+            append = None
+
+            # check if the cite has a valid prefix, if so extract it
+            if (
+                isinstance(subel.prev, pf.Str)
+                and subel.prev.text
+                and (subel.prev.text[-1] in dict(PREFIX_MAP))
+            ):
+
+                prefix = subel.prev.text[-1]
+                mapping = dict(dict(PREFIX_MAP)[prefix])
+                classes.extend(mapping["classes"])
+                attributes.update(mapping["attributes"])
+
+                # remove prefix from preceding string
+                string = final_content.pop()
+                if len(string.text) > 1:
+                    final_content.append(pf.Str(string.text[:-1]))
+
+            # check if the cite has a preceding class/attribute container
+            attr_dict = find_attributes(subel, allow_space=True)
+            if attr_dict:
+                classes.extend(attr_dict["classes"])
+                attributes.update(attr_dict["attributes"])
+                skip = len(attr_dict["elements"])
+                append = attr_dict["append"]
+
+            if classes or attributes:
+                classes.append(ATTRIBUTE_CITE_CLASS)
+                final_content.append(
+                    pf.Span(subel, classes=sorted(set(classes)), attributes=attributes)
+                )
+            else:
+                final_content.append(subel)
+
+            if append:
+                final_content.append(append)
 
     setattr(element, content_attr, final_content)
     return element
