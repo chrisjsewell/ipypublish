@@ -60,9 +60,10 @@ def resolve_tables(element, doc):
     if element.caption:  # type: Inline
         # attributes = _find_attribute(element.caption[0],
         #                              allow_any=True, delete_preceding=False)
-        attributes = find_attributes(
-            element.caption[-1], search_left=True, include_element=True
-        )
+        # attributes = find_attributes(
+        #     element.caption[-1], search_left=True, include_element=True
+        # )
+       atributes = element.caption.short_caption
 
     if not attributes:
         return None
